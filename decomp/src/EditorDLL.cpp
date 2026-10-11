@@ -1402,3 +1402,697 @@ void EditorReloadMonsters()
         if (monster) monster->ReloadMonsters();
     }
 }
+
+static const std::wstring gTIMELINE_INTERP_TYPES[] = {
+    L"Linear", L"Linear Round", L"Linear Round Down", L"Linear Round Up",
+    L"Spline", L"Quaternion", L"No Interpolation", L"Use Timeline Default"
+};
+
+void EditorTimelineSetPropertyPointValue(long long timelineID, long long objectID,
+                                       int property, int point, void* value)
+{
+    if (!gEditor->isActive()) return;
+    CTimeline* timeline = dynamic_cast<CTimeline*>(GetObjectInScene(timelineID));
+    CEditorBaseObject* object = GetObjectInScene(objectID);
+    if (object && timeline) timeline->SetPropertyPointValue(objectID, property, point, value, 1);
+}
+
+void EditorTimelineSetPropertyPointValueArray(long long timelineID, long long objectID,
+                                            int property, int point, int count, UNIONDATA32BIT* value)
+{
+    if (!gEditor->isActive()) return;
+    CTimeline* timeline = dynamic_cast<CTimeline*>(GetObjectInScene(timelineID));
+    CEditorBaseObject* object = GetObjectInScene(objectID);
+    if (object && timeline) timeline->SetPropertyPointValue(objectID, property, point, value, count);
+}
+
+void EditorTimelineAddProperty(long long timelineID, long long objectID, int property, bool event)
+{
+    if (!gEditor->isActive()) return;
+    CTimeline* timeline = dynamic_cast<CTimeline*>(GetObjectInScene(timelineID));
+    CEditorBaseObject* object = GetObjectInScene(objectID);
+    if (object && timeline) timeline->AddProperty(object->getSceneOwner(), objectID, property, event);
+}
+
+wchar_t* EditorTimelineGetPropertyInterpType(long long timelineID, long long objectID, int property)
+{
+    STRINGS::StringCopyWCharArray(sEditorString, 1000, gTIMELINE_INTERP_TYPES[0].c_str());
+    if (!gEditor->isActive()) return sEditorString;
+    CTimeline* timeline = dynamic_cast<CTimeline*>(GetObjectInScene(timelineID));
+    CEditorBaseObject* object = GetObjectInScene(objectID);
+    if (object && timeline)
+        STRINGS::StringCopyWCharArray(sEditorString, 1000,
+            timeline->GetPropertyPointInterpolationType(objectID, property).c_str());
+    return sEditorString;
+}
+
+void EditorTimelineSetPropertyInterpType(long long timelineID, long long objectID,
+                                        int property, const wchar_t* name)
+{
+    if (!gEditor->isActive()) return;
+    CTimeline* timeline = dynamic_cast<CTimeline*>(GetObjectInScene(timelineID));
+    CEditorBaseObject* object = GetObjectInScene(objectID);
+    if (object && timeline) {
+        std::wstring text(name);
+        ETIMELINE_INTERP_TYPES type = static_cast<ETIMELINE_INTERP_TYPES>(0);
+        for (int i = 0; i < 8; ++i) {
+            if (text == gTIMELINE_INTERP_TYPES[i]) { type = static_cast<ETIMELINE_INTERP_TYPES>(i); break; }
+        }
+        timeline->SetPropertyPointInterpolationType(objectID, property, type);
+    }
+}
+
+unsigned int EditorCreateLogicLink(long long guid, unsigned int first, unsigned int second,
+                                  unsigned int output, unsigned int input)
+{
+    if (!gEditor->isActive()) return ~0u;
+    if (first == ~0u || guid == -1 || output == ~0u || second == ~0u || input == ~0u) return ~0u;
+    CLogicGroup* group = dynamic_cast<CLogicGroup*>(GetObjectInScene(guid));
+    if (!group) return ~0u;
+    CLogicObject* from = group->GetLogicObjectByIndex(first);
+    CLogicObject* to = group->GetLogicObjectByIndex(second);
+    if (to && from) return from->AddLogicLink(output, to, input);
+    return ~0u;
+}
+
+unsigned int EditorGetLogicFuncId(unsigned int sceneID, unsigned int descriptorID, wchar_t* name, bool input)
+{
+    if (!gEditor->isActive()) return 0;
+    if (!name || descriptorID == ~0u) return ~0u;
+    CEditorScene* scene = gEditor->GetEditorScene(sceneID);
+    if (!scene || !scene->getDescriptorManager()) return ~0u;
+    CDescriptor* descriptor = scene->getDescriptorManager()->GetDescriptor(descriptorID);
+    if (!descriptor) return ~0u;
+    return input ? descriptor->GetInputLogicWrapperIndex(std::wstring(name))
+                 : descriptor->GetOutputLogicWrapperIndex(std::wstring(name));
+}
+
+void EditorSetObjectPropertyArray(long long guid, int property, int count, UNIONDATA32BIT* data)
+{
+    if (!gEditor->isActive()) return;
+    CEditorBaseObject* object = GetObjectInScene(guid);
+    if (!object) return;
+    CDescriptor* descriptor = object->getDescriptor();
+    if (!descriptor || !descriptor->GetPropertyByIndex(property)) return;
+    if (descriptor->GetPropertyByIndex(property)->getVariableType() == static_cast<EVARIABLE_TYPES>(5)) return;
+    CUndo* undo = new CUndo(object, property);
+    gEditor->addUndo(undo, true);
+    descriptor->SetProperty(object, property, data, count);
+}
+
+void EditorSetObjectProperty(long long guid, unsigned int property, void* data)
+{
+    if (!gEditor->isActive()) return;
+    CEditorBaseObject* object = GetObjectInScene(guid);
+    if (!object) return;
+    CDescriptor* descriptor = object->getDescriptor();
+    if (!descriptor) return;
+    CUndo* undo = new CUndo(object, property);
+    gEditor->addUndo(undo, true);
+    if (descriptor->GetPropertyByIndex(property) &&
+        descriptor->GetPropertyByIndex(property)->getVariableType() == static_cast<EVARIABLE_TYPES>(5)) {
+        std::wstring text(static_cast<wchar_t*>(data));
+        descriptor->SetProperty(object, property, text.c_str(), text.size());
+    } else descriptor->SetProperty(object, property, data, 1);
+}
+
+bool EditorDeleteObject(long long guid)
+{
+    if (!gEditor->isActive()) return false;
+    CEditorBaseObject* object = GetObjectInScene(guid);
+    if (object) {
+        if (bGroupUndos) g_pGroupedUndos->AddObjectDeleted(object);
+        else {
+            CUndo* undo = new CUndo;
+            undo->AddObjectDeleted(object);
+            gEditor->addUndo(undo, true);
+        }
+    }
+    return true;
+}
+
+CEditorBaseObject* cloneObject(unsigned int descriptor, CEditorBaseObject* object, CEditorBaseObject* owner)
+{
+    if (!object || !object->getSceneOwner()) return NULL;
+    CEditorBaseObject* clone = object->getSceneOwner()->CreateObjectByDescriptor(descriptor, object, owner, true);
+    if (clone) {
+        gEditor->getObjectManager()->EditorObjectCreated(clone);
+        gEditor->getObjectManager()->EditorObjectSelected(clone);
+        if (bGroupUndos) g_pGroupedUndos->AddNewObject(clone);
+        else {
+            CUndo* undo = new CUndo;
+            undo->AddNewObject(clone);
+            gEditor->addUndo(undo, true);
+        }
+    }
+    return clone;
+}
+
+void EditorReloadMonster(wchar_t* path)
+{
+    if (!gEditor->isActive()) return;
+    CUnitResourceList::getSingleton()->loadFile(static_cast<ERESOURCE_GROUPS>(1),
+        std::wstring(L"MONSTERS"), std::wstring(path), true, NULL);
+    TArrayList<CEditorScene*>& scenes = gEditor->getEditorScenes();
+    for (unsigned int i = 0; i < scenes.size(); ++i) {
+        CDescriptor* descriptor = scenes[i]->GetDescriptorInSceneByName(L"Monster", false);
+        CMonsterDescriptor* monster = dynamic_cast<CMonsterDescriptor*>(descriptor);
+        if (monster) monster->ReloadMonsters();
+    }
+}
+
+long long* EditorPollObjects(unsigned int sceneID, unsigned int& count)
+{
+    long long* output = reinterpret_cast<long long*>(sEditorTmpMemory);
+    output[0] = -1;
+    count = 0;
+    if (!gEditor->isActive()) return output;
+    CEditorScene* scene = gEditor->GetEditorScene(sceneID);
+    if (!scene || scene->getObjects().size() > 500) return output;
+    std::map<long long, CEditorBaseObject*>& objects = scene->getObjects();
+    for (std::map<long long, CEditorBaseObject*>::iterator it = objects.begin(); it != objects.end(); ++it)
+        output[count++] = it->first;
+    output[count++] = -1;
+    return output;
+}
+
+#include "Layout.h"
+#include "FileUtilities.h"
+
+static const std::wstring KAutomapTileName[34] = {
+    L"right angle corner",
+    L"straight wall",
+    L"diag bottomleft-topright",
+    L"convex corner",
+    L"floor",
+    L"bottom-right diagonal floor",
+    L"bottom-left diagonal floor",
+    L"bridge ns 2",
+    L"double-bridge ns2",
+    L"bridge ns2 offset 1",
+    L"bridge ns2",
+    L"doublewide bridge",
+    L"top-left diagonal floor",
+    L"diagonal bridge",
+    L"top-right diagonal floor",
+    L"pet icon",
+    L"player icon",
+    L"triple exit",
+    L"triple-long bridge",
+    L"stairsup",
+    L"stairsdown",
+    L"question",
+    L"exclamation",
+    L"exclamation gray",
+    L"merchant",
+    L"question gray",
+    L"fixed map (static background)",
+    L"right angle corner rotated",
+    L"enchanter",
+    L"gemrecover",
+    L"gambler",
+    L"transmuter",
+    L"itemrecover",
+    L"waypoint"
+};
+
+long long EditorPollObjectIDByIndex(unsigned int sceneID, unsigned int index)
+{
+    if (!gEditor->isActive()) return -1;
+    CEditorObjectManager* manager = gEditor->getObjectManager();
+    CEditorScene* scene = gEditor->GetEditorScene(sceneID);
+    if (!scene) return -1;
+    CEditorObjectManager::ObjectMap* objects = manager->getObjects();
+    if (!objects || objects->empty()) return -1;
+    if (index == 0) iteratorOfObjectsInScene = objects->begin();
+    while (iteratorOfObjectsInScene != objects->end()) {
+        CEditorBaseObject* object = iteratorOfObjectsInScene->second;
+        if (object->getSceneOwner() == scene) {
+            long long result = object->getGuid();
+            ++iteratorOfObjectsInScene;
+            return result;
+        }
+        ++iteratorOfObjectsInScene;
+    }
+    return -1;
+}
+
+bool IsA(wchar_t* type, wchar_t* parent)
+{
+    if (!gEditor->isActive()) return false;
+    return gEditor->getResourceManager()->ISA(std::wstring(type), std::wstring(parent));
+}
+
+wchar_t* EditorGetDebugOutput()
+{
+    *reinterpret_cast<unsigned int*>(sEditorTmpMemory) = 0;
+    std::wstring result(EMPTY_WSTRING);
+    if (!gEditor->isActive()) return NULL;
+    unsigned int count = gEditor->m_sUnknown1A8.size();
+    if (count < 1000000) {
+        unsigned int bytes = count * 4;
+        std::memcpy(sEditorTmpMemory, gEditor->m_sUnknown1A8.c_str(), bytes);
+        *reinterpret_cast<wchar_t*>(sEditorTmpMemory + bytes) = 0;
+    }
+    gEditor->m_sUnknown1A8 = L"";
+    return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
+}
+
+wchar_t* EditorAutomapTiles()
+{
+    *reinterpret_cast<unsigned int*>(sEditorTmpMemory) = 0;
+    if (!gEditor->isActive()) return NULL;
+    std::wstring result(EMPTY_WSTRING);
+    for (unsigned int i = 0; i < 34; ++i) {
+        result += KAutomapTileName[i];
+        if (i < 33) result += L",";
+    }
+    unsigned int count = result.size();
+    if (count < 2000000) {
+        // Preserve the original two-byte copy length on the Linux build.
+        unsigned int bytes = count * 2;
+        std::memcpy(sEditorTmpMemory, result.c_str(), bytes);
+        *reinterpret_cast<wchar_t*>(sEditorTmpMemory + bytes) = 0;
+    }
+    return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
+}
+
+float* EditorGetObjectSnap(long long guid, unsigned int& count, bool position, bool orientation, bool scale)
+{
+    *reinterpret_cast<unsigned int*>(sEditorTmpMemory) = 0;
+    count = 0;
+    if (!gEditor->isActive()) return NULL;
+    CEditorBaseObject* object = GetObjectInScene(guid);
+    if (!object) return NULL;
+    iSnap* snap = dynamic_cast<iSnap*>(object);
+    if (!snap) return NULL;
+    TArrayList<float>* values = snap->getSnapValues(static_cast<ESNAP_TYPES>(position ? 0 : orientation ? 1 : 2));
+    if (!values) return NULL;
+    count = values->size();
+    if (count < 1000000) {
+        unsigned int bytes = count * 4;
+        std::memcpy(sEditorTmpMemory, &(*values)[0], bytes);
+        *reinterpret_cast<unsigned int*>(sEditorTmpMemory + bytes) = 0;
+    }
+    return reinterpret_cast<float*>(sEditorTmpMemory);
+}
+
+int EditorSaveScene(unsigned int sceneID, wchar_t* filename, bool selected)
+{
+    if (!gEditor->isActive()) return 0;
+    CEditorScene* scene = gEditor->GetEditorScene(sceneID);
+    if (!scene) return 1;
+    return scene->saveScene(std::wstring(filename), selected ? gEditor->getObjectManager()->getSelectedObjects() : NULL);
+}
+
+void reloadEditorLayoutLinks()
+{
+    if (!gEditor->isActive()) return;
+    CEditorObjectManager* manager = gEditor->getObjectManager();
+    if (!manager) return;
+    CEditorObjectManager::ObjectMap* objects = manager->getObjects();
+    bool first = true;
+    for (CEditorObjectManager::ObjectMap::iterator it = objects->begin(); it != objects->end(); ++it) {
+        CLayout* layout = dynamic_cast<CLayout*>(it->second);
+        if (!layout) continue;
+        if (first) layout->removeAllCloneableObjects();
+        std::wstring filename(layout->getLoadedFilename());
+        if (FILESYSTEM::FileExists(filename)) layout->loadLayoutFile(filename, false, NULL, false, true, 0);
+        first = false;
+    }
+}
+
+void EditorSetIngameRes(unsigned int width, unsigned int height)
+{
+    if (!gEditor->isActive()) return;
+    gEditor->getSettings()->SetInt(KSETTINGS_RES_WIDTH, width);
+    gEditor->getSettings()->SetInt(KSETTINGS_RES_HEIGHT, height);
+    gEditor->getSettings()->SetInt(KSETTINGS_WIN_WIDTH, width);
+    gEditor->getSettings()->SetInt(KSETTINGS_WIN_HEIGHT, height);
+    gEditor->getSettings()->SetFloat(KSETTINGS_XRATIO, float(width) * (1.0f / 1024.0f));
+    gEditor->getSettings()->SetFloat(KSETTINGS_YRATIO, float(height) / 768.0f);
+    gEditor->getEditorResourceManager()->updateAspectRatio(float(width), float(height));
+    gEditor->getEditorResourceManager()->getGameClient()->rescaleUI();
+}
+
+long long* EditorGetObjectsCreatedThisRender(unsigned int& count)
+{
+    *reinterpret_cast<unsigned int*>(sEditorTmpMemory) = 0;
+    count = 0;
+    if (!gEditor->isActive()) return NULL;
+    count = gEditor->getObjectManager()->getCreatedObjects().size();
+    if (!count) return NULL;
+    long long* ids = static_cast<long long*>(Ogre::NedAllocImpl::allocBytes(static_cast<size_t>(count) * 8, NULL, 0, NULL));
+    for (unsigned int i = 0; i < count; ++i)
+        ids[i] = gEditor->getObjectManager()->getCreatedObjects()[i]->getGuid();
+    if (count < 500000) {
+        unsigned int bytes = count * 8;
+        std::memcpy(sEditorTmpMemory, ids, bytes);
+        *reinterpret_cast<long long*>(sEditorTmpMemory + bytes) = 0;
+    }
+    if (ids) Ogre::NedAllocImpl::deallocBytes(ids);
+    gEditor->getObjectManager()->getCreatedObjects().clear();
+    return reinterpret_cast<long long*>(sEditorTmpMemory);
+}
+
+bool EditorFileExists(wchar_t* filename)
+{
+    if (!gEditor->isActive()) return false;
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(std::wstring(filename), info, false, true, false);
+    return info.m_bExists;
+}
+
+unsigned int EditorUpdate(int event)
+{
+    if (!gEditor->isActive() || !gEditor->getObjectManager()) return 0;
+    gEditor->getObjectManager()->EditorUpdateBeginning();
+    unsigned int oldCount = gEditor->getObjectManager()->getSelectedObjects()->size();
+    long long oldGuid = -1;
+    if (oldCount == 1) oldGuid = (*gEditor->getObjectManager()->getSelectedObjects())[0]->getGuid();
+    gEditor->getEditorResourceManager()->editorUpdateSceneOnce(event);
+    unsigned int result = 0;
+    CEditorObjectManager* manager = gEditor->getObjectManager();
+    if (manager) {
+        unsigned int count = manager->getSelectedObjects()->size();
+        bool changed = count == 1 && (*manager->getSelectedObjects())[0]->getGuid() != oldGuid;
+        if (oldCount != count || changed) result = 1;
+        if (manager->getChanged()) {
+            manager->clearChanged();
+            result |= 2;
+            manager = gEditor->getObjectManager();
+        }
+        if (manager->getCreatedObjects().size()) result |= 5;
+    }
+    if (gEditor->m_bUnknown164) {
+        gEditor->m_bUnknown164 = false;
+        gEditor->getObjectManager()->getCreatedObjects().clear();
+        result |= 8;
+        manager = gEditor->getObjectManager();
+    }
+    manager->EditorUpdateEnd();
+    return result;
+}
+
+wchar_t* EditorGetAnimationNameByPath(long long guid, wchar_t* path)
+{
+    *reinterpret_cast<unsigned int*>(sEditorTmpMemory) = 0;
+    std::wstring result(EMPTY_WSTRING);
+    if (!gEditor->isActive()) return NULL;
+    CEditorBaseObject* object = GetObjectInScene(guid);
+    if (!object) return NULL;
+    CGenericModel* model = dynamic_cast<CGenericModel*>(object);
+    if (!model) {
+        CCharacter* character = dynamic_cast<CCharacter*>(object);
+        if (!character) return NULL;
+        model = static_cast<CGenericModel*>(character->getUnitModel());
+    }
+    if (!model) return NULL;
+    result = STRINGS::StringConvertToWide(model->getAnimationNameByPath(std::wstring(path)));
+    unsigned int count = result.size();
+    if (count < 1000000) {
+        unsigned int bytes = count * 4;
+        std::memcpy(sEditorTmpMemory, result.c_str(), bytes);
+        *reinterpret_cast<wchar_t*>(sEditorTmpMemory + bytes) = 0;
+    }
+    return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
+}
+
+float EditorGetModelAnimationLengthSeconds(long long guid, char* name)
+{
+    *reinterpret_cast<unsigned int*>(sEditorTmpMemory) = 0;
+    if (!gEditor->isActive()) return -1.0f;
+    CEditorBaseObject* object = GetObjectInScene(guid);
+    if (!object) return -1.0f;
+    CGenericModel* model = dynamic_cast<CGenericModel*>(object);
+    if (!model) {
+        CCharacter* character = dynamic_cast<CCharacter*>(object);
+        if (!character) return -1.0f;
+        model = static_cast<CGenericModel*>(character->getUnitModel());
+    }
+    // The original exported char* parameter is passed to the wchar_t overload.
+    if (!model || !model->animationExists(STRINGS::StringConvertToNarrow(reinterpret_cast<wchar_t*>(name)))) return -1.0f;
+    return model->getAnimationLengthSeconds(STRINGS::StringConvertToNarrow(reinterpret_cast<wchar_t*>(name)));
+}
+
+#include <cstdlib>
+#include <unistd.h>
+#include "CameraControl.h"
+#include "CameraShake.h"
+#include "DataGroup.h"
+#include "EmptyStrings.h"
+#include "FileUtilities.h"
+#include "GraphManager.h"
+#include "Layout.h"
+#include "ParticleWrapper.h"
+#include "ParticleTechWrapper.h"
+#include "RoomPiece.h"
+#include "RoomPieceDataInformation.h"
+#include "SpawnClassParser.h"
+#include "UnitResourceList.h"
+#include "Utilities.h"
+#include "UTFConversion.h"
+
+namespace ParticleUniverse { class ParticleSystem { public: void _update(float elapsed); }; }
+static int gGlobalRandomScrubKey = 3473422;
+extern bool convertRoomPieces(CDataGroup*, TArrayList<CRoomPieceDataInformation::CRoomPieceCoreData*>&);
+
+void rollRoomPiece(long long guid)
+{
+    if (!gEditor->isActive()) return;
+    CEditorBaseObject* object = GetObjectInScene(guid);
+    CRoomPiece* piece = dynamic_cast<CRoomPiece*>(object);
+    if (!piece) return;
+    long long visualGuid = piece->m_iVisualIndex_140;
+    void* visual = piece->m_pRoomPieceName;
+    if (visualGuid != -1 && visual)
+    {
+        const char* core = *reinterpret_cast<const char**>(static_cast<char*>(visual) + 0x10);
+        if (core && core[0x31])
+        {
+            TArrayList<CEditorBaseObject*>* selection = gEditor->getObjectManager()->getSelectedObjects();
+            if (selection->find(object) == -1) return;
+            piece->selectNewVisualIndex();
+            visualGuid = piece->m_iVisualIndex_140;
+        }
+    }
+    piece->setRoomPieceGuid(visualGuid);
+}
+
+void EditorToggleDisplayCollision()
+{
+    if (!gEditor->isActive() || !gEditor->getResourceManager()) return;
+    int value = CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_DISPLAY_COLLISION);
+    CMasterResourceManager::getSingleton()->m_pSettings->SetInt(KSETTINGS_DISPLAY_COLLISION, value != 1);
+    CEditorScene* scene = gEditor->GetEditorScene(L"Layout");
+    if (!scene) return;
+    TArrayList<CEditorBaseObject*>* objects = scene->GetObjectsCreatedByADescriptor(L"Room Piece");
+    for (unsigned int i = 0; i < objects->size(); ++i)
+    {
+        CRoomPiece* piece = dynamic_cast<CRoomPiece*>((*objects)[i]);
+        if (piece) piece->setRoomPieceGuid(piece->m_iVisualIndex_140);
+    }
+}
+
+void EditorTestCameraShake(wchar_t* name, float duration)
+{
+    if (!gEditor->isActive() || !name) return;
+    std::wstring shakeName(name);
+    CCameraShake* shake = new CCameraShake(shakeName, Ogre::Vector3(0.0f, 1.0f, 0.0f), duration);
+    CCameraControl* camera = gEditor->getResourceManager()->getCameraControl();
+    TSafePointer<CCameraShake>* reference = OGRE_NEW_T(TSafePointer<CCameraShake>, Ogre::MEMCATEGORY_GENERAL)();
+    reference->setObject(shake);
+    reinterpret_cast<TArrayList<TSafePointer<CCameraShake>*>*>(camera->m_Unknown58)->add(reference);
+}
+
+void EditorPlaySound(wchar_t* name, float volume, float minimumDistance, float maximumDistance)
+{
+    if (!gEditor->isActive()) return;
+    CGameClient* client = gEditor->getEditorResourceManager()->getGameClient();
+    std::wstring path = FILESYSTEM::CleanPath(name);
+    std::wstring local = FILESYSTEM::GetLocalPath();
+    std::string localUtf8 = STRINGS::StringConvertToUTF8(local);
+    chdir(localUtf8.c_str());
+    if (!client) return;
+    CSoundManager* manager = CMasterResourceManager::getSingleton()->m_pSoundManager;
+    if (!manager) return;
+    CSoundInstance* sound = manager->createSound(path, static_cast<SOUND_TYPE>(3), false, minimumDistance, maximumDistance);
+    if (sound)
+    {
+        manager->playSound(sound, NULL, -1, volume);
+        manager->releaseSound(sound);
+    }
+}
+
+void EditorReloadAllAssets()
+{
+    if (!gEditor->isActive()) return;
+    if (CMasterResourceManager::getSingleton()->m_pParticlePreloader)
+        CMasterResourceManager::getSingleton()->m_pParticlePreloader->ReloadEditorParticles();
+    Ogre::TextureManager::getSingleton().setPreferredBitDepths(0, 1, true);
+    Ogre::TextureManager::getSingleton().reloadAll(true);
+    CGameClient* client = gEditor->getEditorResourceManager()->getGameClient();
+    if (client) client->reloadSoundBankData();
+    CMissilePreloader::getSinglelton()->reloadMissiles();
+    CQuestManager::getSingleton()->reloadQuests();
+    CUnitThemes::getSingleton()->reload();
+    if (CMasterResourceManager::getSingleton()->m_effectGroups)
+    {
+        CEffectGroupManager* groups = CMasterResourceManager::getSingleton()->m_effectGroups;
+        CSets::getSingleton()->reload(groups);
+    }
+    CRecipes::getSingleton()->reload();
+    CSpawnClassParser::getSingleton()->reloadFromDirectory(L"media/spawnclasses/");
+    CCinematics::getSingleton()->reload();
+    CMasterResourceManager::getSingleton()->m_effectGroups->reload();
+    CEditorObjectManager* manager = gEditor->getObjectManager();
+    if (!manager) return;
+    CEditorObjectManager::ObjectMap* objects = manager->getObjects();
+    bool first = true;
+    for (CEditorObjectManager::ObjectMap::iterator it = objects->begin(); it != objects->end(); ++it)
+    {
+        CLayout* layout = dynamic_cast<CLayout*>(it->second);
+        if (!layout) continue;
+        if (first) layout->removeAllCloneableObjects();
+        std::wstring filename = layout->getLoadedFilename();
+        if (FILESYSTEM::FileExists(filename)) layout->loadLayoutFile(filename, false, NULL, false, true, 0);
+        first = false;
+    }
+}
+
+float EditorTimelineSetPercentDone(long long guid, float percent)
+{
+    if (!gEditor->isActive()) return 0.0f;
+    CTimeline* timeline = dynamic_cast<CTimeline*>(GetObjectInScene(guid));
+    if (!timeline) return 0.0f;
+    float result = timeline->SetTimelinePercentDone(percent);
+    if (!gEditor->getResourceManager() || !CMasterResourceManager::getSingleton()->m_pParticlePreview ||
+        !CMasterResourceManager::getSingleton()->m_pParticlePreview->paused) return result;
+    UTILITIES::setSeed(gGlobalRandomScrubKey);
+    float duration = timeline->m_fSetTimelineDuration;
+    TArrayList<CEditorBaseObject*>* particles = timeline->getSceneOwner()->GetObjectsCreatedByADescriptor(L"Particle");
+    if (particles)
+        for (unsigned int i = 0; i < particles->size(); ++i)
+        {
+            CParticleTechWrapper* particle = dynamic_cast<CParticleTechWrapper*>((*particles)[i]);
+            if (!particle || !particle->isPlaying()) continue;
+            particle->stop();
+            particle->start();
+            float elapsed = percent * duration;
+            while (elapsed > 0.01666666753590107f)
+            {
+                particle->m_pParticleSystem->_update(0.01666666753590107f);
+                elapsed -= 0.01666666753590107f;
+            }
+            particle->m_pParticleSystem->_update(elapsed);
+        }
+    return result;
+}
+
+void EditorConvertLayoutToNewTileset(const wchar_t* tilesetName, const wchar_t* filename)
+{
+    if (!gEditor->isActive()) return;
+    std::wstring tileset(tilesetName), path(filename);
+    CRoomPieceDataInformation* information = CRoomPieceDataInformation::getSingleton();
+    TArrayList<CRoomPieceDataInformation::CRoomPieceCoreData*> pieces(10);
+    information->getRoomPieceCoreDataByTileset(STRINGS::StringUpper(tileset), pieces);
+    if (pieces.size())
+    {
+        CDataGroup group(EMPTY_WSTRING, NULL, 20, 10, NULL);
+        group.LoadFile(path, NULL);
+        CDataGroup* objects = group.GetDataGroupByName(L"OBJECTS", false);
+        if (objects && convertRoomPieces(objects, pieces)) group.SaveToFile(path);
+    }
+}
+
+wchar_t* EditorGetUnitsByUnittype(char* typeName)
+{
+    *reinterpret_cast<wchar_t*>(sEditorTmpMemory) = 0;
+    if (!gEditor->isActive()) return NULL;
+    std::wstring result = EMPTY_WSTRING;
+    UNITTYPES::EUNITTYPES type = gEditor->getResourceManager()->getUnitTypeByName(reinterpret_cast<wchar_t*>(typeName));
+    if (static_cast<unsigned int>(type) != 22)
+    {
+        TArrayList<CDataGroup*> groups(10);
+        gEditor->getResourceManager()->getMasterResourceList()->getDataGroupsByUnitType(type, groups);
+        for (unsigned int i = 0; i < groups.size(); ++i)
+            result += groups[i]->GetDataValue(L"NAME", EMPTY_WSTRING) + L",";
+    }
+    unsigned int length = result.length();
+    if (length <= 999999)
+    {
+        unsigned int bytes = length * 4;
+        std::memcpy(sEditorTmpMemory, result.c_str(), bytes);
+        *reinterpret_cast<wchar_t*>(sEditorTmpMemory + bytes) = 0;
+    }
+    return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
+}
+
+void EditorFireEvent(unsigned int sceneID, long long guid, unsigned int event)
+{
+    if (!gEditor->isActive() || event > 13) return;
+    if (sceneID != 0xffffffffu)
+    {
+        CEditorScene* scene = gEditor->GetEditorScene(sceneID);
+        if (scene) scene->fireEvent(static_cast<EEDITOR_EVENTS>(event), guid);
+    }
+    switch (event)
+    {
+    case 2: CMasterResourceManager::getSingleton()->m_pRoomPieceInformation->LoadRoomData(); break;
+    case 4:
+    {
+        CEditorObjectManager* manager = gEditor->getObjectManager();
+        manager->ClearSelectedObjects();
+        CEditorObjectManager::ObjectMap* objects = manager->getObjects();
+        for (CEditorObjectManager::ObjectMap::iterator it = objects->begin(); it != objects->end(); ++it)
+        {
+            CRoomPiece* piece = dynamic_cast<CRoomPiece*>(it->second);
+            if (!piece || !piece->m_bCollisionEnabled) continue;
+            // This primary-vtable entry returns the collision mesh pointer; the shared interface is still partial.
+            typedef void* (*GetMesh)(CRoomPiece*);
+            void** vtable = *reinterpret_cast<void***>(piece);
+            if (reinterpret_cast<GetMesh>(vtable[0x1e0 / sizeof(void*)])(piece)) manager->EditorObjectSelected(it->second);
+        }
+        break;
+    }
+    case 5:
+    case 6:
+        if (gEditor->getResourceManager() && CMasterResourceManager::getSingleton()->m_pParticlePreview)
+            CMasterResourceManager::getSingleton()->m_pParticlePreview->paused = event == 5;
+        if (event == 6) gGlobalRandomScrubKey = std::rand();
+        break;
+    case 7: gEditor->m_iUnknown68 = 0x3a; break;
+    case 8: gEditor->m_iUnknown68 = 2; break;
+    case 9: gEditor->m_iUnknown68 = 8; break;
+    case 10: gEditor->m_iUnknown68 = 0x10; break;
+    case 11: gEditor->m_iUnknown68 = 0x20; break;
+    case 12: CGraphManager::getSingleton()->reload(); break;
+    case 13: gEditor->getGameClient()->togglePlayerLight(); break;
+    }
+}
+
+wchar_t* EditorGetListOfItems(unsigned int sceneID, long long guid, unsigned int propertyID, wchar_t* separator)
+{
+    STRINGS::StringCopyWCharArray(sEditorString, 1000, EMPTY_WSTRING.c_str());
+    if (!gEditor->isActive()) return sEditorString;
+    *reinterpret_cast<wchar_t*>(sEditorTmpMemory) = 0;
+    CEditorScene* scene = gEditor->GetEditorScene(sceneID);
+    if (!scene) return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
+    CEditorBaseObject* object = GetObjectInScene(guid);
+    if (object && object->getDescriptor())
+    {
+        std::vector<std::wstring> values;
+        object->getDescriptor()->GetPropertyListOfValues(object, propertyID, values);
+        std::wstring result = EMPTY_WSTRING, delimiter(separator);
+        for (unsigned int i = 0; i < values.size(); ++i)
+            if (i) result = result + delimiter + values[i]; else result = values[i];
+        unsigned int length = result.length();
+        if (length <= 999999)
+        {
+            unsigned int bytes = length * 4;
+            std::memcpy(sEditorTmpMemory, result.c_str(), bytes);
+            *reinterpret_cast<wchar_t*>(sEditorTmpMemory + bytes) = 0;
+        }
+    }
+    return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
+}

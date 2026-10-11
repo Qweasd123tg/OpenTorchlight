@@ -17,9 +17,14 @@ class CEditorScene;
 class CEditorObjectManager : public CRunicCore
 {
 public:
+    void EditorObjectCreated(CEditorBaseObject* object);
     TArrayList<CEditorBaseObject*>& getCreatedObjects() { return m_CreatedObjects; }
 
     void markChanged() { m_bUnknown79 = true; }
+    bool getChanged() const { return m_bUnknown79; }
+    void clearChanged() { m_bUnknown79 = false; }
+    void EditorUpdateBeginning();
+    void EditorUpdateEnd();
 
     void flushKeyManager();
     Ogre::Vector3 getSelectedPivot();

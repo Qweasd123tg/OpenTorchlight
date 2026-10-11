@@ -131,6 +131,7 @@ public:
 
 protected:
     friend class CGameUI;
+    friend class CDieMenu;
     friend class CCharacter;
     unsigned int m_iUnitLevel;
     TArrayList<CUnitTheme*> m_ThemesToAdd;

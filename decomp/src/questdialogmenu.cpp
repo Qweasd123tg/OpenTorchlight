@@ -101,3 +101,52 @@ bool CQuestDialogMenu::handle_MouseOut(const CEGUI::EventArgs& event)
     }
     return true;
 }
+
+#include "StringTranslate.h"
+CQuestDialogMenu::CQuestDialogMenu(CGameUI& ui, CSettings& settings, Ogre::SceneManager* scene, CEGUI::Window* parent, CResourceManager* resources)
+    : CDropdownMenu(ui, settings, scene, parent, resources, 1), m_unit(NULL), m_dialogWindow(NULL), m_promptWindow(NULL), m_acceptWindow(NULL), m_declineWindow(NULL), m_rewardWindow(NULL), m_rewardTextWindow(NULL), m_detailWindow(NULL), m_iconWindow(NULL), m_iconParent(NULL), m_dialog(NULL), m_textIndex(0), m_textLength(0), m_dialogName(), m_displayedCharacters(0), m_hoveredReward(NULL), m_mouseThrough(false), m_dialogActive(true), m_acceptOnExit(false), m_resultBroadcast(false), m_safeOwner(), m_textSpeed(1.0f)
+{
+    static std::wstring g_Dialog;
+    if (g_Dialog.empty())
+        g_Dialog = CStringTranslate::getSinglton()->getTranslateString(L"Dialog");
+    setTitle(g_Dialog);
+    createMenus();
+}
+#include "BaseUnit.h"
+
+void CQuestDialogMenu::broadcastAcceptedOrDeclined(bool accepted, CBaseUnit* unit)
+{
+    if (!unit) unit = m_unit;
+    if (!unit) return;
+    if (m_dialog && !m_resultBroadcast) {
+        m_resultBroadcast = true;
+        unit->BroadcastEvent(accepted ? 93 : 94);
+    }
+    unit->BroadcastEvent(92);
+}
+
+#include "GameClient.h"
+#include "Item.h"
+void CQuestDialogMenu::setOpen(bool open)
+{
+    if (m_bUnknown30 != open) m_pGameUI->setInteractiveMenuVisible(open);
+    if (m_bUnknown30) {
+        if (!open) {
+            if (m_dialog) m_dialog->stopDialogSound();
+            CGameClient* client = m_pGameUI->getGameClient();
+            client->m_selectedItem.setObject(NULL); client->m_targetItem.setObject(NULL);
+            client->m_selectedCharacter.setObject(NULL); client->m_targetCharacter.setObject(NULL);
+            static_cast<CEGUI::Window*>(m_pUnknown10)->removeChildWindow(static_cast<CEGUI::Window*>(m_pUnknown18));
+            m_bUnknown31 = true; m_hoveredReward = NULL;
+            if (m_unit) m_unit->setEnabled(m_dialogActive);
+            m_unit = NULL;
+        }
+    } else if (open) {
+        m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_WIDTH);
+        m_pDynamicPropertyFile->GetInt(KSETTINGS_RES_HEIGHT);
+        static_cast<CEGUI::Window*>(m_pUnknown20)->setPosition(CEGUI::UVector2(CEGUI::UDim(0,0),CEGUI::UDim(0,0)));
+        static_cast<CEGUI::Window*>(m_pUnknown10)->addChildWindow(static_cast<CEGUI::Window*>(m_pUnknown18));
+        static_cast<CEGUI::Window*>(m_pUnknown18)->moveToBack();
+    }
+    m_bUnknown30 = open; m_resultBroadcast = false;
+}

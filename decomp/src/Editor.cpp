@@ -187,3 +187,10 @@ CEditor* CEditor::getSingleton()
     }
     return editor;
 }
+
+unsigned int CEditor::GetEditorSceneIDByName(const wchar_t* name)
+{
+    if (!name) return ~0u;
+    std::map<std::wstring, unsigned int>::iterator it = m_EditorSceneIDs.find(std::wstring(name));
+    return it == m_EditorSceneIDs.end() ? ~0u : it->second;
+}

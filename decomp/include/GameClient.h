@@ -28,6 +28,11 @@ class CGameClient : public CRunicCore, public Ogre::RenderTargetListener,
                     public Ogre::RenderQueue::RenderableListener
 {
 friend class CLevel;
+friend class CDropdownMenu;
+    friend class CWaypointMenu;
+    friend class CCinematicMenu;
+    friend class CQuestDialogMenu;
+friend class CDifficultyMenu;
 public:
     void destroyGameUI();
     void updateScreenInfo(void* window, int width, int height);
@@ -91,7 +96,8 @@ private:
     unsigned char m_gap9B[0x10d];
     std::wstring m_editorCreationClass;
     std::wstring m_editorCreationPet;
-    unsigned char m_gap1B8[0x10];
+    bool m_startHardcore; // +0x1b8
+    unsigned char m_gap1B9[0xf];
     TSafePointer<CCharacter> m_selectedCharacter;
     TSafePointer<CCharacter> m_targetCharacter;
     TSafePointer<CItem> m_targetItem;
@@ -111,6 +117,8 @@ private:
     unsigned char m_gap10BD[0x38d0-0x10bd];
     EGameState m_gameState;
     bool m_pendingPassClear;
-    unsigned char m_gap38D5[0x3b];
+    unsigned char m_gap38D5[0x17];
+    int m_startDifficulty; // +0x38ec
+    unsigned char m_gap38F0[0x20];
 };
 #endif

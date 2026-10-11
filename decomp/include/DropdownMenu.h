@@ -36,8 +36,8 @@ public:
     bool handle_CloseButton(const CEGUI::EventArgs&);
     void mapEventHandlers(CEGUI::Window*);
     void setTitle(const std::wstring&);
-    unsigned long handle_onDoubleClick(const CEGUI::EventArgs&);
-    unsigned long handle_onClick(const CEGUI::EventArgs&);
+    bool handle_onDoubleClick(const CEGUI::EventArgs&);
+    bool handle_onClick(const CEGUI::EventArgs&);
     void createMenus();
     CDropdownMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*, unsigned int);
 

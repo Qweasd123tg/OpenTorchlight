@@ -14,6 +14,7 @@ public:
     void queueGlobalSample(int,float,float);
     void update(float elapsed, Ogre::SceneNode* node);
     void stop(int sound);
+    void stop();
 private:
     unsigned char m_SoundBankData[0xd0-0x10];
 };

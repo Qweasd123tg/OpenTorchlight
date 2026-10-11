@@ -33,3 +33,19 @@ CDifficultyMenu::CDifficultyMenu(CGameUI& ui, CSettings& settings, Ogre::SceneMa
 {
     createMenus();
 }
+
+#include "GameClient.h"
+bool CDifficultyMenu::onClick(ELayoutFunction function, std::wstring)
+{
+    if (!m_bUnknown30 && m_bUnknown31) return true;
+    if (function == 7) {
+        setOpen(false);
+        m_pGameUI->requestSetGameState(static_cast<EGameState>(0), static_cast<EMenu>(m_bUnknownD0 ? 2 : 1));
+    } else if (function >= 14 && function <= 17) {
+        m_pGameUI->m_gameClient->m_startDifficulty = static_cast<int>(function) - 14;
+        setOpen(false);
+        m_pGameUI->m_gameClient->m_startHardcore = m_hardcoreCheckbox->isSelected();
+        m_pGameUI->requestSetGameState(static_cast<EGameState>(m_bUnknownD0 ? 4 : 3), static_cast<EMenu>(0));
+    }
+    return true;
+}

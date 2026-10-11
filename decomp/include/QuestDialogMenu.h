@@ -11,6 +11,7 @@ namespace CEGUI { class Window; }
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CQuestDialogMenu : public CDropdownMenu {
 public:
+    void createMenus();
     bool handle_MouseOver(const CEGUI::EventArgs& event);
     bool handle_MouseOut(const CEGUI::EventArgs& event);
 
@@ -28,19 +29,32 @@ public:
     virtual ~CQuestDialogMenu();
     CQuestDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
     CBaseUnit* m_unit; // +0xc0
-    unsigned char m_PaddingC8[0x58];
+    CEGUI::Window* m_dialogWindow;
+    CEGUI::Window* m_promptWindow;
+    CEGUI::Window* m_acceptWindow;
+    CEGUI::Window* m_declineWindow;
+    CEGUI::Window* m_rewardWindow;
+    CEGUI::Window* m_rewardTextWindow;
+    unsigned char m_PaddingF8[8];
+    CEGUI::Window* m_detailWindow;
+    CEGUI::Window* m_iconWindow;
+    CEGUI::Window* m_iconParent;
+    unsigned char m_Padding118[8];
     CQuestDialog* m_dialog; // +0x120
-    unsigned char m_Padding128[0x8];
+    int m_textIndex;
+    int m_textLength;
     std::string m_dialogName; // +0x130
-    unsigned char m_Padding138[0xa8];
+    int m_displayedCharacters;
+    unsigned char m_Padding13C[0xa4];
     CBaseUnit* m_hoveredReward; // +0x1e0
     bool m_mouseThrough; // +0x1e8
-    unsigned char m_Padding1E9[0x1];
+    bool m_dialogActive;
     bool m_acceptOnExit; // +0x1ea
     bool m_resultBroadcast; // +0x1eb
     unsigned char m_Padding1EC[0x4];
     TSafePointer<CRunicCore> m_safeOwner; // +0x1f0
-    unsigned char m_Padding200[0x8];
+    float m_textSpeed;
+    unsigned char m_Padding204[4];
 };
 typedef char check_CQuestDialogMenu_size[sizeof(CQuestDialogMenu)==0x208?1:-1];
 #endif

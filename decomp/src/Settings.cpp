@@ -25,3 +25,8 @@ void CSettings::addResolutionCombo(int width, int height, bool flag8, bool flagA
     resolution.flag9 = flag9;
     m_resolutions.add(resolution);
 }
+
+CSettings::~CSettings()
+{
+    if (m_pCmdLineParser) { delete m_pCmdLineParser; m_pCmdLineParser = NULL; }
+}
