@@ -197,7 +197,7 @@ public:
     void closeAll();
     void setInteractiveMenuVisible(bool visible);
     void setIngameUIVisible(bool visible);
-    int getUIIsInCinematic();
+    bool getUIIsInCinematic();
     void returnTextEventObject(CTextEvent* event);
     Ogre::Vector3 getScreenPosition(const Ogre::Vector3*, const Ogre::Vector3*, Ogre::Matrix4);
     void hideTextEvents();

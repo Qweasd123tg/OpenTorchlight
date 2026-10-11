@@ -26,7 +26,7 @@ void CQuestManager::update(float)
 {
 }
 
-long long CQuestManager::getPlayerHasQuest(CQuest* pQuest)
+bool CQuestManager::getPlayerHasQuest(CQuest* pQuest)
 {
     return reinterpret_cast<TArrayList<CQuest*>&>(m_Unknown18).find(pQuest) != -1;
 }
@@ -60,43 +60,19 @@ void CQuestManager::populate(CLevel* pLevel)
 
 char CQuestManager::getQuestComplete(const std::wstring& name)
 {
-    typedef std::map<std::wstring, char> QuestCompleteMap;
+    typedef std::map<std::wstring, bool> QuestCompleteMap;
     QuestCompleteMap& quests =
-        *reinterpret_cast<QuestCompleteMap*>(&m_iUnknown78);
+        *reinterpret_cast<QuestCompleteMap*>(&m_Unknown70);
     QuestCompleteMap::iterator i = quests.find(name);
     return i != quests.end() ? i->second : 0;
 }
 
 long long CQuestManager::getQuestByName(const std::wstring& name)
 {
-    struct Node
-    {
-        void* parent;
-        Node* left;
-        Node* right;
-        std::wstring key;
-        void* value;
-    };
-
-    Node* node = static_cast<Node*>(m_pUnknown50);
-    Node* candidate = 0;
-
-    while (node != 0)
-    {
-        if (node->key.compare(name) < 0)
-        {
-            node = node->left;
-        }
-        else
-        {
-            candidate = node;
-            node = node->right;
-        }
-    }
-
-    return candidate != 0 && candidate->key == name
-        ? reinterpret_cast<long long>(candidate->value)
-        : 0;
+    typedef std::map<std::wstring, CQuest*> QuestMap;
+    QuestMap& quests = *reinterpret_cast<QuestMap*>(&m_Unknown40);
+    QuestMap::iterator found = quests.find(name);
+    return found != quests.end() ? reinterpret_cast<long long>(found->second) : 0;
 }
 
 int CQuestManager::getNPCIcon(CCharacter* npc)
@@ -110,7 +86,10 @@ int CQuestManager::getNPCIcon(CCharacter* npc)
     if (!quest)
         return -1;
 
-    reinterpret_cast<TArrayList<CQuest*>&>(m_Unknown18).find(quest);
+    TArrayList<CQuest*>& quests = reinterpret_cast<TArrayList<CQuest*>&>(m_Unknown18);
+    for (unsigned int i = 0; i < quests.size(); ++i)
+        if (quests[i] == quest)
+            break;
 
     CQuestDialog* dialog = reinterpret_cast<CQuestDialog*>(
         quest->getQuestDialog(npc));
@@ -123,13 +102,13 @@ int CQuestManager::getNPCIcon(CCharacter* npc)
                 reinterpret_cast<char*>(dialog) + 0x70))
     {
         case 1:
-            return 0;
+            return 23;
         case 2:
-            return 1;
+            return 26;
         case 3:
-            return 2;
+            return 22;
         case 4:
-            return 3;
+            return -1;
         default:
             return -1;
     }
@@ -161,7 +140,12 @@ long long CQuestManager::calculateNPCIcon(CCharacter* pCharacter)
 
     TArrayList<CQuest*>* quests =
         reinterpret_cast<TArrayList<CQuest*>*>(&m_Unknown18);
-    bool questInList = quests->find(quest);
+    bool questInList = false;
+    for (unsigned int i = 0; i < quests->size(); ++i)
+        if ((*quests)[i] == quest) {
+            questInList = true;
+            break;
+        }
 
     CQuestDialog* dialog = reinterpret_cast<CQuestDialog*>(
         quest->getQuestDialog(pCharacter));
@@ -197,7 +181,7 @@ long long CQuestManager::calculateNPCIcon(CCharacter* pCharacter)
 
     if (questInList)
     {
-        if (quest->isComplete(false))
+        if (static_cast<unsigned char>(quest->isComplete(false)) != 0)
         {
             pCharacter->addUnitTheme(L"QUEST COMPLETE");
             pCharacter->removeUnitTheme(L"QUEST INCOMPLETE");
@@ -232,23 +216,16 @@ void CQuestManager::resetQuest(CQuest* quest)
 
     reinterpret_cast<std::map<std::wstring, bool>&>(m_Unknown70)[quest->m_sUnknown50] = false;
 
-    TArrayList<CQuestDialog*>& dialogs =
-        reinterpret_cast<TArrayList<CQuestDialog*>&>(quest->m_Unknown1B0);
+    // This array contains registered weak controller references, not dialogs.
+    TArrayList<TSafePointer<CQuestController>*>& controllers =
+        reinterpret_cast<TArrayList<TSafePointer<CQuestController>*>&>(quest->m_Unknown1B0);
 
-    for (unsigned int i = 0; i < dialogs.size(); ++i)
+    for (unsigned int i = 0; i < controllers.size(); ++i)
     {
-        CQuestDialog* dialog = dialogs[i];
-        CQuestController* controller =
-            *reinterpret_cast<CQuestController**>(dialog);
-
-        const std::wstring& questName =
-            *reinterpret_cast<const std::wstring*>(
-                reinterpret_cast<const char*>(controller) + 0xA8);
-
-        if (*reinterpret_cast<void**>(controller) != NULL &&
-            questName == quest->m_sUnknown50)
+        if (controllers[i]->getObject() != NULL &&
+            std::wstring(controllers[i]->getObject()->m_sQuestName) == quest->m_sUnknown50)
         {
-            controller->questHasBeenCompleted(false);
+            controllers[i]->getObject()->questHasBeenCompleted(false);
         }
     }
 }

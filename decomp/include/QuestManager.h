@@ -26,7 +26,7 @@ public:
     static CQuestManager* getSingleton();
     void setPlayer(CPlayer*);
     void update(float);
-    long long getPlayerHasQuest(CQuest*);
+    bool getPlayerHasQuest(CQuest*);
     void destroyIcons();
     void resetQuestManager(bool);
     CQuestManager* getDetailsForQuest(CQuest*);
