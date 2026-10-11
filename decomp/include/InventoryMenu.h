@@ -1,6 +1,7 @@
 // Partial: generated from symbols, RTTI and recovered layouts.
 #ifndef INVENTORYMENU_H
 #define INVENTORYMENU_H
+class CLevel;
 
 #include "GameUI.h"
 #include <CEGUIString.h>
@@ -76,6 +77,7 @@ public:
     bool handle_SetSpell(const CEGUI::EventArgs&);
     void setSlotIcon(CEquipment*, int, int);
 private:
+    friend class CGameUI;
     CEGUI::Window* m_pParent;
     CEGUI::Window* m_pBackground;
     CEGUI::Window* m_pPanel;
@@ -84,7 +86,7 @@ private:
     CEGUI::Window* m_pIconParent;
     CEGUI::Window* m_pForeground48;
     CCharacter* m_pCharacter;
-    char m_InventoryData58[8];
+    union { char m_InventoryData58[8]; CLevel* m_level; }; // +0x58
     bool m_bOpen;
     bool m_bFullyClosed;
     bool m_bCloseRequested;

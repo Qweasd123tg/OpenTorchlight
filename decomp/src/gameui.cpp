@@ -3434,3 +3434,98 @@ CGameUI::~CGameUI()
     if(m_soundBank) { delete m_soundBank; m_soundBank=NULL; }
     if(m_menuManager) { delete m_menuManager; m_menuManager=NULL; }
 }
+
+#include <OgreSceneNode.h>
+#include <OgreCEGUIRenderer.h>
+#include "FileSystem.h"
+#include "StringUtilities.h"
+#include "GameClient.h"
+#include "Player.h"
+#include "QuestDialogMenu.h"
+#include "CinematicMenu.h"
+#include "InventoryMenu.h"
+#include "PetMenu.h"
+#include "EquipmentTooltip.h"
+
+CGameUI* CGameUI::getSingleton() { return g_pGameUI; }
+
+void CGameUI::setLevel(CLevel* level)
+{
+    typedef char inventory_level_offset[__builtin_offsetof(CInventoryMenu,m_level)==0x58?1:-1];
+    typedef char pet_level_offset[__builtin_offsetof(CPetMenu,m_level)==0x60?1:-1];
+    m_level=level;
+    m_statsMenu->m_level=level;
+    m_inventoryMenu->m_level=level;
+}
+
+int CountChildren(Ogre::SceneNode* node)
+{
+    int count=0;
+    Ogre::Node::ChildNodeIterator children=node->getChildIterator();
+    while(children.hasMoreElements()) {
+        Ogre::SceneNode* child=static_cast<Ogre::SceneNode*>(children.getNext());
+        if(child) count+=1+CountChildren(child);
+    }
+    return count;
+}
+
+bool CGameUI::equipmentTooltipVisible()
+{
+    return m_equipmentTooltip && m_equipmentTooltip->m_pRoot->getParent()!=NULL;
+}
+
+void CGameUI::addMenuListener(EMENU_TYPE menu,iMenuListener* listener)
+{
+    if(menu==static_cast<EMENU_TYPE>(0)) m_questDialogMenu->addMenuListener(listener);
+    else if(menu==static_cast<EMENU_TYPE>(1)) m_cinematicMenu->addMenuListener(listener);
+}
+
+CBaseUnit* CGameUI::getQuestDialogNPC()
+{
+    return m_questDialogMenu?m_questDialogMenu->m_unit:NULL;
+}
+
+const Ogre::Vector3& CGameUI::getQuestDialogCameraOffset()
+{
+    return m_questDialogMenu?m_questDialogMenu->getCameraOffset():Ogre::Vector3::ZERO;
+}
+
+void CGameUI::hideUI() { m_renderer->setTargetSceneManager(NULL); }
+void CGameUI::showUI() { m_renderer->setTargetSceneManager(m_mainScene); }
+
+void CGameUI::setWindowActive(bool active)
+{
+    if(!active) { m_keys.flushAll(); m_mouse.flushAll(); }
+    if(m_menuManager) m_menuManager->setWindowActive(active);
+}
+
+extern bool gameuiMenuCanLoad(CMenuManager*) __asm__("_ZN12CMenuManager7canLoadEv");
+extern bool gameuiMenuCanContinue(CMenuManager*) __asm__("_ZN12CMenuManager11canContinueEv");
+bool CGameUI::canLoad() { return gameuiMenuCanLoad(m_menuManager); }
+bool CGameUI::canContinue() { return gameuiMenuCanContinue(m_menuManager); }
+
+void CEquipmentTooltip::load(CGameUI* ui,std::wstring path)
+{
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(path,info,false,true,false);
+    m_pRoot=CEGUI::WindowManager::getSingleton().loadWindowLayout(
+        CEGUI::String(info.m_sResourceName),CEGUI::String(STRINGS::uniqueName("gui_")),"",NULL,NULL);
+    m_pRoot->setAlwaysOnTop(true);
+    m_pRoot->setMutedState(true);
+    m_pRoot->setMousePassThroughEnabled(true);
+    ui->convertToScreenScale(m_pRoot,false);
+    m_pItemName=m_pRoot->recursiveChildSearch("ItemName");
+    m_pItemType=m_pRoot->recursiveChildSearch("ItemType");
+    m_pItemHanded=m_pRoot->recursiveChildSearch("ItemHanded");
+    m_pBigDPS=m_pRoot->recursiveChildSearch("BigDPS");
+    m_pDPS=m_pRoot->recursiveChildSearch("DPS");
+    m_pStats=m_pRoot->recursiveChildSearch("Stats");
+    m_pEffects=m_pRoot->recursiveChildSearch("Effects");
+    m_pLevelRequirement=m_pRoot->recursiveChildSearch("Level Requirements");
+    m_pStrengthRequirement=m_pRoot->recursiveChildSearch("Strength Requirements");
+    m_pDexterityRequirement=m_pRoot->recursiveChildSearch("Dexterity Requirements");
+    m_pMagicRequirement=m_pRoot->recursiveChildSearch("Magic Requirements");
+    m_pDefenseRequirement=m_pRoot->recursiveChildSearch("Defense Requirements");
+    m_pDescription=m_pRoot->recursiveChildSearch("Description");
+    m_pPrice=m_pRoot->recursiveChildSearch("Price");
+}
