@@ -3026,3 +3026,75 @@ void CGameUI::setCinematicOpen(std::wstring text)
         m_cinematicMenu->setOpen(true);
     }
 }
+
+// Five inclusive UI rectangles are stored as top, bottom, left, right.
+bool CGameUI::mouseOverPanel(int x, int y)
+{
+    using gameui_detail::field;
+    gameuiBoundaryWidth(this);
+    gameuiBoundaryHeight(this);
+    const float px = static_cast<float>(x);
+    const float py = static_cast<float>(y);
+    if (px >= field<float>(this,0x19d4) && px <= field<float>(this,0x19d8) &&
+        py >= field<float>(this,0x19cc) && py <= field<float>(this,0x19d0)) return true;
+    if (px >= field<float>(this,0x19e4) && px <= field<float>(this,0x19e8) &&
+        py >= field<float>(this,0x19dc) && py <= field<float>(this,0x19e0)) return true;
+    if (px >= field<float>(this,0x19c4) && px <= field<float>(this,0x19c8) &&
+        py >= field<float>(this,0x19bc) && py <= field<float>(this,0x19c0)) return true;
+    if (leftCovered() && px >= field<float>(this,0x19a4) && px <= field<float>(this,0x19a8) &&
+        py >= field<float>(this,0x199c) && py <= field<float>(this,0x19a0)) return true;
+    return rightCovered() && px >= field<float>(this,0x19b4) && px <= field<float>(this,0x19b8) &&
+        py >= field<float>(this,0x19ac) && py <= field<float>(this,0x19b0);
+}
+
+// Preserve the original boundary in flattened skill-load consumers.
+__attribute__((noinline))
+void CGameUI::convertToScreenScale(CEGUI::Window* window, bool horizontal)
+{
+    const int children = static_cast<int>(window->getChildCount());
+    for (int i = 0; i < children; ++i)
+        convertToScreenScale(window->getChildAtIdx(i), horizontal);
+    CEGUI::UVector2 position = window->getPosition();
+    if (horizontal) {
+        position.d_x.d_offset = gameuiBoundaryScaledX(this, position.d_x.d_offset);
+        position.d_y.d_offset = gameuiBoundaryScaledX(this, position.d_y.d_offset);
+    } else {
+        position.d_x.d_offset = gameuiBoundaryScaledY(this, position.d_x.d_offset);
+        position.d_y.d_offset = gameuiBoundaryScaledY(this, position.d_y.d_offset);
+    }
+    window->setPosition(position);
+    CEGUI::UVector2 size = window->getSize();
+    if (horizontal) {
+        size.d_x.d_offset = gameuiBoundaryScaledX(this, size.d_x.d_offset);
+        size.d_y.d_offset = gameuiBoundaryScaledX(this, size.d_y.d_offset);
+    } else {
+        size.d_x.d_offset = gameuiBoundaryScaledY(this, size.d_x.d_offset);
+        size.d_y.d_offset = gameuiBoundaryScaledY(this, size.d_y.d_offset);
+    }
+    window->setSize(size);
+}
+
+#include <elements/CEGUICombobox.h>
+#include <elements/CEGUIListboxItem.h>
+#include <elements/CEGUIEditbox.h>
+#include <elements/CEGUIComboDropList.h>
+#include <elements/CEGUIScrollbar.h>
+#include <falagard/CEGUIFalWidgetLookManager.h>
+#include <falagard/CEGUIFalWidgetLookFeel.h>
+#include <falagard/CEGUIFalNamedArea.h>
+void CGameUI::sizeComboList(CEGUI::Combobox* combo)
+{
+    float itemsHeight = 0.0f;
+    for (unsigned int i = 0; i < combo->getItemCount(); ++i)
+        itemsHeight += combo->getListboxItemFromIndex(i)->getPixelSize().d_height;
+    const CEGUI::Size editSize = combo->getEditbox()->getPixelSize();
+    CEGUI::ComboDropList* list = combo->getDropList();
+    CEGUI::String areaName(list->getHorzScrollbar()->isVisible(false) ?
+        "ItemRenderingAreaHScroll" : "ItemRenderingArea");
+    const CEGUI::WidgetLookFeel& look = CEGUI::WidgetLookManager::getSingleton().getWidgetLook(list->getLookNFeel());
+    const float listHeight = list->getPixelSize().d_height;
+    const float borderHeight = listHeight - look.getNamedArea(areaName).getArea().getPixelRect(*list).getHeight();
+    const float comboHeight = combo->getPixelSize().d_height;
+    const float offset = list->getYPosition().asAbsolute(comboHeight) - editSize.d_height;
+    combo->setHeight(CEGUI::UDim(0.0f, ((itemsHeight + editSize.d_height) + borderHeight) + offset));
+}
