@@ -81,9 +81,22 @@ def cv_suffix(f):
     return "".join(" " + word for word in ("const", "volatile") if word in words)
 
 
+def parameter_key(text):
+    """Lookup spelling; preserve word boundaries in callback type identities.
+
+    The separator is an internal key, not generated C++. Without it, for
+    example, callback argument types `unsigned int` and `unsignedint` collide.
+    Ordinary parameter normalization is intentionally unchanged.
+    """
+    text = cxx_type(text)
+    if "(" in text or ")" in text:
+        text = re.sub(r"(?<=\w)\s+(?=\w)", "|", text)
+    return re.sub(r"\s+", "", text)
+
+
 def signature_key(f):
     qualified = f.get("qualified") or elfdb.parse_demangled(f["demangled"])[0]
-    params = tuple(re.sub(r"\s+", "", cxx_type(t)) for t in split_args(f.get("params") or "") if t != "void")
+    params = tuple(parameter_key(t) for t in split_args(f.get("params") or "") if t != "void")
     return qualified, params, cv_suffix(f).strip(), f.get("static")
 
 TYPES = [

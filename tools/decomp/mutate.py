@@ -110,6 +110,8 @@ def canonical_parameter(parameter, named=False):
     unresolved aliases remain unmatched rather than selecting another body.
     """
     p = parameter.strip()
+    if "(" in p or ")" in p:
+        return ghidra_cpp.parameter_key(p)
     p = p.replace(autotest.WSTRING, "std::wstring")
     if named:
         p = re.sub(r"\s*=.*$", "", p)
