@@ -1327,7 +1327,7 @@ void CGameUI::toggleStatFill()
 
 CEquipment* CGameUI::getMouseOverItem()
 {
-    return m_mouseOverItem;
+    return reinterpret_cast<CEquipment*>(m_mouseOverItem.getObject());
 }
 
 void CGameUI::flushProcessInput()
@@ -3231,4 +3231,206 @@ void CGameUI::setLoadingVisible(bool visible)
         menu_item_click_detail::clearHoverAndTooltips(menu_item_click_detail::state(this));
         m_rootWindow->removeChildWindow(field<CEGUI::Window*>(this, 0x478));
     }
+}
+
+#include "GameUITextEventList.h"
+
+// All member initializers precede the constructor body, including scalar writes
+// observed by nested manager and string construction.
+CGameUI::CGameUI(CSettings& settings,CGameClient& client,void* window,
+    Ogre::RenderWindow* renderWindow,Ogre::Camera* camera,
+    Ogre::SceneManager* mainScene,Ogre::SceneManager* inventoryScene,
+    Ogre::SceneManager* petScene,CResourceManager* resources)
+: CRunicCore(),
+  m_camera(camera), // 0x10
+  m_mainScene(mainScene), // 0x18
+  m_inventoryScene(inventoryScene), // 0x20
+  m_petScene(petScene), // 0x28
+  m_soundManager(CMasterResourceManager::getSingleton()->m_pSoundManager), // 0x30
+  m_pCharacter(0), // 0x38
+  m_level(0), // 0x40
+  m_hoveredCharacter(), // 0x48
+  m_selectedCharacter(), // 0x58
+  m_mouseOverItem(), // 0x68
+  m_settings(&settings), // 0x78
+  m_targetedItem(), // 0x80
+  m_reference90(), // 0x90
+  m_referenceA0(), // 0xa0
+  m_guidB0(-1), // 0xb0
+  m_draggedItem(), // 0xb8
+  m_dragOwner(), // 0xc8
+  m_statsWindow(0), // 0xe0
+  m_targetName(0), // 0xe8
+  m_targetDescription(0), // 0xf0
+  m_targetLevel(0), // 0xf8
+  m_targetHealth(0), // 0x120
+  m_targetBar(0), // 0x128
+  m_topWindow(0), // 0x138
+  m_healthWindow(0), // 0x140
+  m_manaWindow(0), // 0x158
+  m_petWindow(0), // 0x170
+  m_petHealthWindow(0), // 0x180
+  m_petManaWindow(0), // 0x190
+  m_experienceWindow(0), // 0x1d0
+  m_leftGuid(-1), // 0x228
+  m_word230(0), // 0x230
+  m_word258(0), // 0x258
+  m_renderer(0), // 0x428
+  m_ceguiSystem(0), // 0x430
+  m_itemIconFiles(25), // 0x440
+  m_itemImagesets(5), // 0x458
+  m_equipmentTooltip(0), // 0x4a0
+  m_compareFirst(0), // 0x4a8
+  m_compareSecond(0), // 0x4b0
+  m_skillTooltip(0), // 0x4b8
+  m_renderWindow(renderWindow), // 0x4d0
+  m_statsMenu(0), // 0x4d8
+  m_characterStatsMenu(0), // 0x4e0
+  m_inventoryMenu(0), // 0x4e8
+  m_merchantMenu(0), // 0x4f0
+  m_enchantMenu(0), // 0x4f8
+  m_combineMenu(0), // 0x500
+  m_stashMenu(0), // 0x508
+  m_optionsMenu(0), // 0x510
+  m_dialogMenu(0), // 0x518
+  m_dieMenu(0), // 0x520
+  m_waypointMenu(0), // 0x528
+  m_dropdown530(0), // 0x530
+  m_questDialogMenu(0), // 0x538
+  m_cinematicMenu(0), // 0x540
+  m_dropdown548(0), // 0x548
+  m_tipMenu(0), // 0x550
+  m_skillsMenu(0), // 0x558
+  m_journalMenu(0), // 0x560
+  m_questMenu(0), // 0x568
+  m_interactiveMenu(0), // 0x570
+  m_fishingMenu(0), // 0x578
+  m_statsImageset(0), // 0x580
+  m_menuManager(0), // 0x588
+  m_keys(), // 0x590
+  m_mouse(), // 0x12a8
+  m_displayStats(false), // 0x12f8
+  m_bExitButtonPressed(false), // 0x12f9
+  m_gap12FA(0), // 0x12fa
+  m_mouseThrough(false), // 0x12fb
+  m_cursorState(static_cast<ECursorState>(5)), // 0x12fc
+  m_window(window), // 0x1300
+  m_resources(resources), // 0x1308
+  m_labelHovered(false), // 0x1640
+  m_itemHovered(false), // 0x1641
+  m_foldoutItemHovered(false), // 0x1642
+  m_skillHovered(false), // 0x1643
+  m_hoveredSkillGuid(-1), // 0x1648
+  m_hoveredItemGuid(-1), // 0x1650
+  m_foldoutSkillHovered(false), // 0x1660
+  m_foldoutSkillGuid(-1), // 0x1668
+  m_inputCaptured(false), // 0x1670
+  m_leftSlot(-1), // 0x1674
+  m_rightSlot(-1), // 0x1678
+  m_pendingRightSlot(-1), // 0x167c
+  m_usableWidthRatio(1.0f), // 0x1680
+  m_cachedWindowWidth(800.0f), // 0x1684
+  m_cachedWindowHeight(600.0f), // 0x1688
+  m_console(0), // 0x1690
+  m_freeEvents(0), // 0x1698
+  m_activeEvents(0), // 0x16a0
+  m_name16B0(L"Rourke"), // 0x16b0
+  m_name16B8(L"Spot"), // 0x16b8
+  m_text16C0(), // 0x16c0
+  m_cachedPetMode(1), // 0x16c8
+  m_interactiveMenuUsers(0), // 0x178c
+  m_requestedGameState(static_cast<EGameState>(6)), // 0x1914
+  m_requestedMenu(static_cast<EMenu>(6)), // 0x1918
+  m_gameClient(&client), // 0x1920
+  m_submenus(), // 0x1930
+  m_dropdowns(), // 0x1948
+  m_queuedTips(), // 0x1960
+  m_smallText(EMPTY_WSTRING), // 0x1978
+  m_smallDuration(0.0f), // 0x1980
+  m_smallElapsed(0.0f), // 0x1984
+  m_bigText(EMPTY_WSTRING), // 0x1988
+  m_bigDuration(0.0f), // 0x1990
+  m_bigElapsed(0.0f), // 0x1994
+  m_paused(false), // 0x1999
+  m_cursors() // 0x19f0
+{
+    if (!g_pGameUI) g_pGameUI=this;
+    for (int i=0;i<97;++i) m_slotIndices[i]=i;
+    KSkillSlotsKeys[0]=KSETTINGS_KEYMAP_1;
+    KSkillSlotsKeys[1]=KSETTINGS_KEYMAP_2;
+    KSkillSlotsKeys[2]=KSETTINGS_KEYMAP_3;
+    KSkillSlotsKeys[3]=KSETTINGS_KEYMAP_4;
+    KSkillSlotsKeys[4]=KSETTINGS_KEYMAP_5;
+    KSkillSlotsKeys[5]=KSETTINGS_KEYMAP_6;
+    KSkillSlotsKeys[6]=KSETTINGS_KEYMAP_7;
+    KSkillSlotsKeys[7]=KSETTINGS_KEYMAP_8;
+    KSkillSlotsKeys[8]=KSETTINGS_KEYMAP_9;
+    KSkillSlotsKeys[9]=KSETTINGS_KEYMAP_0;
+    KSkillSlotsFunctionKeys[0]=KSETTINGS_FKEYMAP_1;
+    KSkillSlotsFunctionKeys[1]=KSETTINGS_FKEYMAP_2;
+    KSkillSlotsFunctionKeys[2]=KSETTINGS_FKEYMAP_3;
+    KSkillSlotsFunctionKeys[3]=KSETTINGS_FKEYMAP_4;
+    KSkillSlotsFunctionKeys[4]=KSETTINGS_FKEYMAP_5;
+    KSkillSlotsFunctionKeys[5]=KSETTINGS_FKEYMAP_6;
+    KSkillSlotsFunctionKeys[6]=KSETTINGS_FKEYMAP_7;
+    KSkillSlotsFunctionKeys[7]=KSETTINGS_FKEYMAP_8;
+    KSkillSlotsFunctionKeys[8]=KSETTINGS_FKEYMAP_9;
+    KSkillSlotsFunctionKeys[9]=KSETTINGS_FKEYMAP_10;
+    KSkillSlotsFunctionKeys[10]=KSETTINGS_FKEYMAP_11;
+    KSkillSlotsFunctionKeys[11]=KSETTINGS_FKEYMAP_12;
+    create();
+}
+
+CGameUI::~CGameUI()
+{
+    SDL_SetCursor(NULL);
+    for (unsigned int i=0;i<5;++i) SDL_FreeCursor(m_cursors[i]);
+    m_cursors.clear();
+    g_pGameUI=NULL;
+    m_statsImageset=NULL;
+    m_guiLook=NULL;
+    m_itemImagesets.clear();
+
+    TLinkedListNode<CTextEvent*>* node=m_activeEvents->head;
+    while(node) {
+        CTextEvent* event=node->m_Data;
+        node=node->m_pNext;
+        CEGUI::Window* window=event->m_pWindow;
+        if(window && window->getParent()) window->getParent()->removeChildWindow(window);
+        delete event;
+    }
+    m_activeEvents->clearNodes();
+    node=m_freeEvents->head;
+    while(node) {
+        CTextEvent* event=node->m_Data;
+        node=node->m_pNext;
+        CEGUI::Window* window=event->m_pWindow;
+        if(window && window->getParent()) window->getParent()->removeChildWindow(window);
+        delete event;
+    }
+    m_freeEvents->clearNodes();
+
+    for(unsigned int i=0;i<m_submenus.size();++i) {
+        if(m_submenus[i]) { delete m_submenus[i]; m_submenus[i]=NULL; }
+    }
+    m_submenus.clear();
+    for(unsigned int i=0;i<m_dropdowns.size();++i) {
+        if(m_dropdowns[i]) { delete m_dropdowns[i]; m_dropdowns[i]=NULL; }
+    }
+    m_dropdowns.clear();
+    if(m_equipmentTooltip) { delete m_equipmentTooltip; m_equipmentTooltip=NULL; }
+    if(m_compareFirst) { delete m_compareFirst; m_compareFirst=NULL; }
+    if(m_compareSecond) { delete m_compareSecond; m_compareSecond=NULL; }
+    if(m_skillTooltip) { delete m_skillTooltip; m_skillTooltip=NULL; }
+    // Tooltip callbacks may have populated the shells again.
+    if(m_activeEvents) { delete m_activeEvents; m_activeEvents=NULL; }
+    if(m_freeEvents) { delete m_freeEvents; m_freeEvents=NULL; }
+    if(m_console) { delete m_console; m_console=NULL; }
+    delete m_draggedItem.getObject();
+    if(m_interactiveMenu) { delete m_interactiveMenu; m_interactiveMenu=NULL; }
+    if(m_fishingMenu) { delete m_fishingMenu; m_fishingMenu=NULL; }
+    delete m_ceguiSystem;
+    delete m_renderer;
+    if(m_soundBank) { delete m_soundBank; m_soundBank=NULL; }
+    if(m_menuManager) { delete m_menuManager; m_menuManager=NULL; }
 }
