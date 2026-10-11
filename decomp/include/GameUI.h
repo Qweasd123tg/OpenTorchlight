@@ -76,6 +76,13 @@ public:
     void keyEvent(unsigned int,unsigned int,long);
     void setWindowActive(bool);
 
+    void setLevel(CLevel*);
+    bool equipmentTooltipVisible();
+    CBaseUnit* getQuestDialogNPC();
+    const Ogre::Vector3& getQuestDialogCameraOffset();
+    void hideUI();
+    void showUI();
+    bool canContinue();
     void cleanupReferences();
     void setLoadingVisible(bool);
     void clearGameStateRequest();
