@@ -8,6 +8,7 @@ namespace CEGUI { class Window; }
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CModalMenu : public CDropdownMenu {
 public:
+    void createMenus();
     bool handle_ExitButton(const CEGUI::EventArgs& event);
     bool handle_CloseButton(const CEGUI::EventArgs& event);
     virtual bool onClick(ELayoutFunction function, std::wstring text);
@@ -19,7 +20,10 @@ public:
     virtual ~CModalMenu();
     CModalMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
     void* m_callbackData; // +0xc0
-    unsigned char m_PaddingC8[0x20];
+    CEGUI::Window* m_promptWindow;
+    CEGUI::Window* m_acceptWindow;
+    CEGUI::Window* m_declineWindow;
+    CEGUI::Window* m_extraWindow;
     void (*m_acceptCallback)(CCharacter*, void*); // +0xe8
     void (*m_declineCallback)(CCharacter*, void*); // +0xf0
 };

@@ -35,8 +35,8 @@ public:
     long long m_iUnknownD0;
     long long m_iUnknownD8;
     long long m_iUnknownE0;
-    long long m_iUnknownE8;
-    long long m_iUnknownF0;
+    CEGUI::Window* m_creditsWindow;
+    CEGUI::Window* m_extraWindow;
 };
 
 #endif

@@ -21,6 +21,7 @@ enum EEDITOROBJECT_FLAG
 // identity (guid, parent guid), owning scene and the descriptor that created it.
 class CEditorBaseObject : public CRunicCore
 {
+    friend class CEditorScene;
 public:
     CEditorBaseObject();
     virtual ~CEditorBaseObject();

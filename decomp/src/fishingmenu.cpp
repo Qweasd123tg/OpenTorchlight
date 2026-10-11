@@ -30,3 +30,25 @@ CFishingMenu::CFishingMenu(CGameUI& ui, CSettings&, Ogre::SceneManager*, CEGUI::
 {
     createMenus();
 }
+
+bool CFishingMenu::handle_onClick(const CEGUI::EventArgs& event)
+{
+    const CEGUI::MouseEventArgs& mouse = static_cast<const CEGUI::MouseEventArgs&>(event);
+    CEGUI::Window* window = mouse.window;
+    if (mouse.button == CEGUI::LeftButton && window)
+        return onClick(*static_cast<ELayoutFunction*>(window->getUserData()));
+    return true;
+}
+
+bool CFishingMenu::onClick(ELayoutFunction function)
+{
+    if (m_visible) {
+        if (function == 6) {
+            if (m_gameUI->getCharacter()->getAIState() != static_cast<EAIState>(34)) {
+                m_gameUI->getCharacter()->setTargetItem(NULL);
+                m_gameUI->getCharacter()->setAIState(AISTATE_IDLE);
+            }
+        } else if (function == 14) m_gameUI->getCharacter()->catchFish();
+    }
+    return true;
+}

@@ -8,6 +8,7 @@ namespace CEGUI { class Window; }
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CWaypointMenu : public CDropdownMenu {
 public:
+    virtual void update(float elapsed);
     bool handle_ExitButton(const CEGUI::EventArgs&);
     bool handle_CloseButton(const CEGUI::EventArgs&);
 

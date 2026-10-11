@@ -27,6 +27,9 @@ class iEditorResourceManager;
 class CEditor : public CRunicCore
 {
 public:
+    friend wchar_t* EditorGetDebugOutput();
+    friend unsigned int EditorUpdate(int);
+    friend void EditorFireEvent(unsigned int, long long, unsigned int);
     TArrayList<CEditorScene*>& getEditorScenes() { return m_EditorScenes; }
 
     CResourceManager* getResourceManager() { return m_pUnknown128; }

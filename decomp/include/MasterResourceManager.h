@@ -11,6 +11,9 @@ class CollisionModelRef;
 class CResourceSettings;
 class CGraph;
 class CSharedStash;
+class CRoomPieceDataInformation;
+// Partial state reached through +0xf0 by the editor particle controls.
+struct CEditorParticlePreviewState { unsigned char unknown[0x540]; bool paused; };
 
 namespace Ogre { class SceneManager; }
 class CHierarchy;
@@ -76,7 +79,10 @@ private:
 public:
     Ogre::SceneManager* m_pSceneManager;
 private:
-    unsigned char m_UnrecoveredD8[0xf8-0xd8];
+    unsigned char m_UnrecoveredD8[0xe8-0xd8];
+public:
+    CRoomPieceDataInformation* m_pRoomPieceInformation; // +0xe8
+    CEditorParticlePreviewState* m_pParticlePreview; // +0xf0
 public:
     CParticlePreloader* m_pParticlePreloader;
 public:

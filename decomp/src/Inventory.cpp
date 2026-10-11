@@ -397,3 +397,138 @@ bool CInventory::useEquipment(CEquipment* equipment, CCharacter* target)
     }
     return true;
 }
+
+void CInventory::addListener(iInventoryListener* listener)
+{
+    if (listener && m_listeners.find(listener) == -1) m_listeners.add(listener);
+}
+
+void CInventory::verifyEquipment()
+{
+    if (!m_pPositionableObject || m_bUnknown15) return;
+    for (unsigned int pass = 0; pass < 20; ++pass) {
+        bool valid = true;
+        for (int slot = 0; slot < 12; ++slot) {
+            CEquipmentRef* ref = getEquipmentRefInSlot(slot);
+            if (!ref) continue;
+            ref->m_effectsEnabled = false;
+            calculateEffectValues();
+            if (!canEquip(ref->m_pEquipment, false)) {
+                ref->m_effectsEnabled = true;
+                valid = false;
+                unequipEquipment(ref->m_pEquipment);
+            } else ref->m_effectsEnabled = true;
+            calculateEffectValues();
+        }
+        if (valid) break;
+    }
+    updateBonuses();
+}
+
+bool CInventory::removeEquipmentByGuid(long long guid, unsigned int count, bool destroy)
+{
+    bool removed = false;
+    for (int i = 0; i < static_cast<int>(m_equipmentRefs.size()); ++i) {
+        if (m_equipmentRefs[i]->m_pEquipment->getUnitGuid() != guid) continue;
+        CEquipment* equipment = m_equipmentRefs[i]->m_pEquipment;
+        unsigned int stack = equipment->m_iUnknown238;
+        if (stack > count) {
+            equipment->incrementStackBy(-count);
+            return true;
+        }
+        count -= stack;
+        removeEquipment(equipment);
+        if (destroy) delete equipment;
+        if (!count) return true;
+        --i;
+        removed = true;
+    }
+    return removed;
+}
+
+long long CInventory::removeEquipment(CEquipment* equipment)
+{
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i) {
+        CEquipmentRef* ref = m_equipmentRefs[i];
+        CEquipment* item = ref->m_pEquipment;
+        if (item != equipment) continue;
+        int index = m_equipmentRefs.find(ref);
+        if (index == -1) return false;
+        m_equipmentRefs.removeAt(index);
+        if (ref->m_iSlot <= 11) {
+            equipment->unequipped(this, m_pPositionableObject, static_cast<EEQUIP_LOCATIONS>(ref->m_iSlot));
+            for (unsigned int j = 0; j < m_listeners.size(); ++j)
+                m_listeners[j]->equipmentUnequipped(equipment);
+        }
+        ref->m_pEquipment = NULL;
+        delete ref;
+        item->removedFromInventory(this, m_pPositionableObject);
+        for (unsigned int j = 0; j < m_listeners.size(); ++j)
+            m_listeners[j]->equipmentDropped(equipment);
+        updateBonuses();
+        calculateEffectValues();
+        verifyEquipment();
+        return true;
+    }
+    return false;
+}
+
+void CInventory::freeInventory()
+{
+    for (unsigned int i = 0; i < m_listeners.size(); ++i)
+        m_listeners[i]->inventoryDestroyed();
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i) {
+        if (m_equipmentRefs[i] && m_equipmentRefs[i]->m_pEquipment) {
+            if (m_equipmentRefs[i]->m_pEquipment->getLevel())
+                m_equipmentRefs[i]->m_pEquipment->getLevel()->notifyOfDeletion(m_equipmentRefs[i]->m_pEquipment);
+            if (m_equipmentRefs[i]) {
+                delete m_equipmentRefs[i];
+                m_equipmentRefs[i] = NULL;
+            }
+        }
+    }
+    m_equipmentRefs.clear();
+}
+
+int CInventory::findFreeSlot(CEquipment* equipment)
+{
+    int end = m_iUnknown28;
+    unsigned int pane = getPaneIndex(static_cast<EINVENTORY_PANES>(getRequiredPane(equipment)));
+    int start = m_paneStarts[pane];
+    if (pane < m_paneStarts.size() - 1) end = m_paneStarts[pane + 1];
+    bool stacking = m_bUnknown14;
+    if (stacking && equipment->m_iUnknown23C > 0) {
+        CEquipment* chosen = NULL;
+        int result = -1;
+        for (int slot = start; slot < end; ++slot) {
+            CEquipment* item = getEquipmentInSlot(slot);
+            if (item && equipment->m_iUnknown23C != 1 && equipment->getUnitGuid() == item->getUnitGuid() &&
+                equipment->m_iUnknown238 + item->m_iUnknown238 <= item->m_iUnknown23C &&
+                (!chosen || item->m_iUnknown238 > chosen->m_iUnknown238)) {
+                // The original keeps the incoming equipment in this comparison.
+                chosen = equipment;
+                result = slot;
+            }
+        }
+        if (chosen) return result;
+    }
+    for (int slot = start; slot < end; ++slot) {
+        CEquipment* item = getEquipmentInSlot(slot);
+        if (!item || (stacking && equipment->m_iUnknown23C > 1 && equipment->getUnitGuid() == item->getUnitGuid() &&
+            equipment->m_iUnknown238 + item->m_iUnknown238 <= item->m_iUnknown23C)) return slot;
+    }
+    return -1;
+}
+
+CInventory::CInventory(CCharacter* owner, unsigned int capacity)
+    : m_iUnknown10(0), m_bUnknown14(true), m_bUnknown15(false), m_pEffectManager(NULL),
+      m_pPositionableObject(owner), m_iUnknown28(capacity + 19), m_equipmentRefs(1), m_listeners(1)
+{
+    if (!m_pEffectManager) m_pEffectManager = new CEffectManager(NULL);
+    m_panes.clear();
+    m_panes.push_back(static_cast<EINVENTORY_PANES>(0));
+    m_paneStarts.clear();
+    m_paneStarts.push_back(19);
+    freeInventory();
+    calculateEffectValues();
+}

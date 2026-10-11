@@ -152,3 +152,148 @@ void CShape::updatePositionAndOrientation(Ogre::Vector3& position,Ogre::Quaterni
     calculateOrientation(position,forward,up,right);
     orientation = Ogre::Quaternion(right,up,forward);
 }
+
+#include <cmath>
+float CShape::getAngleOffsetAtPercent(float percent)
+{
+    if (!m_angleOffset) return 0.0f;
+    if (m_shapeKind == 0) {
+        float offset = m_angleOffset->getValue(NULL, percent);
+        return getAngleOfReleaseAtPercent(percent) * -0.5f + offset;
+    }
+    return m_angleOffset->getValue(NULL, percent);
+}
+
+Ogre::Vector3 CShape::calculatePositionOnSphere(float percent, float)
+{
+    float radius = getRadiusAtPercent(percent);
+    float x = 0, y = 0, z = 0;
+    if (static_cast<int>(m_radiusMode) >= 0 && m_radiusMode <= 1) {
+        x = Ogre::Math::RangeRandom(-1,1) * radius;
+        y = Ogre::Math::RangeRandom(-1,1) * radius;
+        z = Ogre::Math::RangeRandom(-1,1) * radius;
+    } else if (m_radiusMode == 2) {
+        radius = Ogre::Math::RangeRandom(0, radius);
+        x = radius * Ogre::Math::RangeRandom(-1,1);
+        y = radius * Ogre::Math::RangeRandom(-1,1);
+        z = radius * Ogre::Math::RangeRandom(-1,1);
+    }
+    Ogre::Vector3 position = getPosition(true);
+    return Ogre::Vector3(x + position.x, y + position.y, position.z + z);
+}
+
+Ogre::Vector3 CShape::calculatePositionOnLineBetweenAngles(float percent, float radius)
+{
+    Ogre::Vector3 start(0,0,0), end(0,0,0);
+    calculateLineSequment(percent, start, end);
+    Ogre::Vector3 delta = end - start;
+    if (m_radiusMode == 0) delta *= radius;
+    else if (m_radiusMode == 1) delta *= 1.0f - radius;
+    else if (m_radiusMode == 2) delta *= Ogre::Math::RangeRandom(0,1);
+    return delta + start;
+}
+
+Ogre::Vector3 CShape::calculatePositionBetweenAnglesAndRadius(float percent, float amount)
+{
+    float radius = getRadiusAtPercent(percent);
+    float release = getAngleOfReleaseAtPercent(percent);
+    float part = amount * release;
+    float offset = getAngleOffsetAtPercent(percent);
+    float angle = release;
+    if (m_radiusMode == 0) angle = part + offset;
+    else if (m_radiusMode == 1) angle = (release - part) + offset;
+    else if (m_radiusMode == 2) {
+        float end = release + offset;
+        float low = end < offset ? end : offset;
+        float high = end > offset ? end : offset;
+        angle = Ogre::Math::RangeRandom(low, high);
+    }
+    angle = Ogre::Math::AngleUnitsToRadians(90.0f + angle);
+    Ogre::Vector3 local(::cosf(angle) * radius, 0.0f, ::sinf(angle) * radius);
+    local = getSceneNode()->_getDerivedOrientation() * local;
+    return getPosition(true) + local;
+}
+
+std::pair<bool,float> CShape::lineIntersectsPosition(float percent, const Ogre::Vector3& position, float radius)
+{
+    Ogre::Vector3 start(0,0,0), end(0,0,0), closest(0,0,0);
+    calculateLineSequment(percent, start, end);
+    MATH::closestPointOnLine(start, end, position, closest);
+    float x = closest.x - position.x;
+    float z = closest.z - position.z;
+    float distance = ::sqrtf((x * x + 0.0f) + z * z);
+    return std::pair<bool,float>(radius >= distance, distance);
+}
+
+std::pair<bool,float> CShape::positionWithRadiusIntersectsBox(float, const Ogre::Vector3& position, float radius)
+{
+    Ogre::Matrix4 inverse = getTransformation().inverse();
+    float reciprocal = 1.0f / (((inverse[3][0] * position.x + inverse[3][1] * position.y) + inverse[3][2] * position.z) + inverse[3][3]);
+    float x = (((inverse[0][0] * position.x + inverse[0][1] * position.y) + inverse[0][2] * position.z) + inverse[0][3]) * reciprocal;
+    float z = (((inverse[2][0] * position.x + inverse[2][1] * position.y) + inverse[2][2] * position.z) + inverse[2][3]) * reciprocal;
+    float halfX = 0.5f * m_boxSize.x;
+    float halfZ = 0.5f * m_boxSize.z;
+    float distance = (getPosition(true) - position).length();
+    float minX = x - radius, minZ = z - radius;
+    float maxX = radius + x, maxZ = radius + z;
+    bool intersects = (!(minX > halfX) && !(minZ > halfZ) && !(-halfX > maxX) && !(-halfZ > maxZ));
+    if (!intersects) intersects = minX >= -halfX && minZ >= -halfZ && halfX >= maxX && halfZ >= maxZ;
+    return std::pair<bool,float>(intersects, distance);
+}
+
+std::pair<bool,float> CShape::getPositionIsInShapeAtPercent(float percent, const Ogre::Vector3& position, float radius)
+{
+    switch (m_shapeKind) {
+    case 0: return positionIntersectsAngle(percent, position, radius);
+    case 1: return lineIntersectsPosition(percent, position, radius);
+    case 2: {
+        float distance = (getPosition(true) - position).length();
+        float maximum = getMaxRadiusAtPercent(percent);
+        return std::pair<bool,float>(maximum + radius >= distance, distance);
+    }
+    case 3: {
+        float distance = (getPosition(true) - position).length();
+        return std::pair<bool,float>(radius >= distance, distance);
+    }
+    default: return positionWithRadiusIntersectsBox(percent, position, radius);
+    }
+}
+
+#include "Utilities.h"
+
+void CShape::calculateLineSequment(float percent, Ogre::Vector3& start, Ogre::Vector3& end)
+{
+    float minimum = getMinRadiusAtPercent(percent);
+    float maximum = getMaxRadiusAtPercent(percent);
+    if (minimum == maximum) minimum = 0.0f;
+    float release = Ogre::Math::AngleUnitsToRadians(getAngleOfReleaseAtPercent(percent));
+    float offset = Ogre::Math::AngleUnitsToRadians(getAngleOffsetAtPercent(percent));
+    float angle = offset + release;
+    start = Ogre::Vector3(cosf(angle), 0.0f, sinf(angle));
+    end = start;
+    start *= minimum;
+    end *= maximum;
+    start = m_pSceneNode->_getDerivedOrientation() * start;
+    end = m_pSceneNode->_getDerivedOrientation() * end;
+    start += getPosition(true);
+    end += getPosition(true);
+}
+
+Ogre::Vector3 CShape::calculatePositionOnBox(float, float percent)
+{
+    Ogre::Vector3 point(0.0f, 0.0f, 0.0f);
+    if (m_radiusMode == 0 || m_radiusMode == 1)
+    {
+        bool reverse = m_radiusMode == 1;
+        float angle = static_cast<float>(static_cast<double>(percent) * 6.283185306);
+        point.x = (cosf(angle) * m_boxSize.x) * (reverse ? -0.5f : 0.5f);
+        point.z = (sinf(angle) * m_boxSize.z) * 0.5f;
+    }
+    else if (m_radiusMode == 2)
+    {
+        point.x = 0.5f * UTILITIES::randomBetweenVolatile(-m_boxSize.x, m_boxSize.x);
+        point.y = 0.5f * UTILITIES::randomBetweenVolatile(-m_boxSize.y, m_boxSize.y);
+        point.z = UTILITIES::randomBetweenVolatile(-m_boxSize.z, m_boxSize.z) * 0.5f;
+    }
+    return getTransformation() * point;
+}

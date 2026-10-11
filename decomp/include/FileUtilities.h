@@ -11,6 +11,7 @@ namespace FILESYSTEM
     std::wstring GetLocalPath();
     std::wstring GetApplicationPath();
     std::wstring GetAppDataPath();
+    std::wstring GetSaveDataPath();
     std::wstring AssembleAbsolutePath(const std::wstring& base, const std::wstring& path);
     std::wstring CleanPath(const std::wstring& path);
     std::string RemoveFileName(const std::string& path);

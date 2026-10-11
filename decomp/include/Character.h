@@ -55,6 +55,7 @@ enum EAIState
 class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
+    friend class CDieMenu;
 friend class CPlayer;
 friend class CGameClient;
 public:
@@ -368,6 +369,8 @@ public:
     int defense();
     bool performingSkillLoose();
     void giveGold(int amount);
+    void awardFame(CLevel& level, CCharacter* source, int amount, bool bonus);
+    void awardExperience(CLevel& level, CCharacter* source, int amount, bool bonus);
     void setPaperdollItem(EEQUIP_LOCATIONS,Ogre::Entity*);
     void setPaperdollItemSecondary(EEQUIP_LOCATIONS,Ogre::Entity*);
     int getGold() const { return m_iGold; }
@@ -482,7 +485,8 @@ private:
     int m_iGold;
     unsigned int m_experience; // +0x448
     unsigned int m_fame; // +0x44c
-    unsigned char m_Padding450[0xc];
+    int m_fameLevel; // +0x450
+    unsigned char m_Padding454[8];
     int m_iUnusedStatPoints;
     int m_iUnusedSkillPoints;
     int m_iUnusedPerkPoints;

@@ -62,6 +62,8 @@ public:
 
 
     bool animationExists(const std::string&) const;
+    const std::string& getAnimationNameByPath(const std::wstring&) const;
+    float getAnimationLengthSeconds(const std::string&) const;
 
     void generateExtremes(unsigned long,bool);
     virtual ~CGenericModel();

@@ -18,6 +18,9 @@ public:
     void calculateOrientation(const Ogre::Vector3& position,Ogre::Vector3& forward,Ogre::Vector3& up,Ogre::Vector3& right);
     void updatePositionAndOrientation(Ogre::Vector3& position,Ogre::Quaternion& orientation,float percent,float radius);
     std::pair<bool,float> lineIntersectsPosition(float percent,const Ogre::Vector3& position,float radius);
+    std::pair<bool,float> positionWithRadiusIntersectsBox(float percent,const Ogre::Vector3& position,float radius);
+    std::pair<bool,float> positionIntersectsAngle(float percent,const Ogre::Vector3& position,float radius);
+    std::pair<bool,float> getPositionIsInShapeAtPercent(float percent,const Ogre::Vector3& position,float radius);
 
     float getMaxRadiusAtPercent(float percent);
     float getMinRadiusAtPercent(float percent);

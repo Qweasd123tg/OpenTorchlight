@@ -81,6 +81,7 @@ public:
     void setActiveMenu(EMenu menu);
     void reloadMenuCharacters();
     bool handle_ToggleOptions(const CEGUI::EventArgs& event);
+    bool canLoad();
     void toggleSettings();
     bool handle_ToggleQuest(const CEGUI::EventArgs& event);
     bool handle_ToggleJournal(const CEGUI::EventArgs& event);
@@ -170,6 +171,7 @@ public:
     void addMenuListener(EMENU_TYPE menu, iMenuListener* listener);
     void setCinematicOpen(std::wstring cinematic);
 private:
+    friend class CDropdownMenu;
     friend class CDieMenu;
     friend class COptionsMenu;
     friend class CContinueGameMenu;
@@ -242,7 +244,8 @@ private:
     EMenu m_requestedMenu;
     unsigned char m_gap191C[4];
     CGameClient* m_gameClient;
-    unsigned char m_gap1928[8];
+    int m_returnToTownOption; // +0x1928
+    unsigned char m_gap192C[4];
     std::vector<CSubMenu*> m_submenus;
     std::vector<CDropdownMenu*> m_dropdowns;
     unsigned char m_gap1960[0x39];

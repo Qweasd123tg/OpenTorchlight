@@ -7,6 +7,8 @@
 
 // Property indices registered by CSettings.
 extern unsigned int KSETTINGS_SOUNDMUTE;
+extern unsigned int KSETTINGS_F_SOUNDVOLUME;
+extern unsigned int KSETTINGS_F_MUSICVOLUME;
 extern unsigned int KSETTINGS_MUSICMUTE;
 extern unsigned int KSETTINGS_DESTROY_MONSTERS_AFTER_DEATH;
 extern unsigned int KSETTINGS_SHOW_TIPS;
@@ -78,3 +80,5 @@ extern unsigned int KSETTINGS_WIN_WIDTH;
 extern unsigned int KSETTINGS_WIN_HEIGHT;
 extern unsigned int KSETTINGS_XRATIO;
 #endif
+
+extern unsigned int KSETTINGS_DISPLAY_COLLISION;
