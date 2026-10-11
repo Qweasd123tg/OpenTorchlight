@@ -38,6 +38,9 @@ class CItem;
 namespace Ogre { class RenderWindow; class Vector3; class Matrix4; }
 class CTextEvent;
 class CCharacter;
+class CPlayer;
+class CBaseUnit;
+class CQuest;
 class CEquipment;
 class CEquipmentTooltip;
 class iMenuListener;
@@ -159,6 +162,7 @@ public:
     void clearMenuMouseOvers();
     void setSmallText(std::wstring text, float duration);
     void setBigText(std::wstring text, float duration);
+    void forceInteractiveDialog(CPlayer*, CBaseUnit*, CQuest*);
     void openModalDialog(std::wstring,std::wstring,bool);
     void closeLeft();
     void closeRight();
