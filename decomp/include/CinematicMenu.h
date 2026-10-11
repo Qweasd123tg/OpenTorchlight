@@ -8,15 +8,25 @@ namespace CEGUI { class Window; }
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CCinematicMenu : public CDropdownMenu {
 public:
+    void createMenus();
+    void updateTextDisplay(float elapsed);
     virtual void update(float elapsed);
     virtual void setOpen(bool open);
     virtual bool onClick(ELayoutFunction function, std::wstring text);
 
     virtual ~CCinematicMenu();
     CCinematicMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
-    unsigned char m_PaddingC0[0x20];
+    CEGUI::Window* m_cinematicWindow;
+    CEGUI::Window* m_textWindow;
+    CEGUI::Window* m_skipWindow;
+    int m_textIndex;
+    float m_textDuration;
     std::string m_cinematicName; // +0xe0
-    unsigned char m_PaddingE8[0x18];
+    int m_displayedCharacters;
+    unsigned char m_PaddingEC[4];
+    void* m_cinematicData;
+    float m_textSpeed;
+    unsigned char m_PaddingFC[4];
 };
 typedef char check_CCinematicMenu_size[sizeof(CCinematicMenu)==0x100?1:-1];
 #endif

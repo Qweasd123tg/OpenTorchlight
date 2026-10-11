@@ -1,0 +1,1317 @@
+[
+  {
+    "address": "0xbc0ea0",
+    "original_bytes": 170,
+    "function": "CQuestMenu::~CQuestMenu()",
+    "mangled": "_ZN10CQuestMenuD1Ev",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "quest_destructor_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "86a1ec481a4dc99b7fda1bc937bdb764202b9936f9d0c0921ee47e0962916fa4",
+        "parameters": {
+          "fixtures": [
+            "quest_destructor_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xbc0f50",
+    "original_bytes": 18,
+    "function": "CQuestMenu::~CQuestMenu()",
+    "mangled": "_ZN10CQuestMenuD0Ev",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": null
+  },
+  {
+    "address": "0xbc1cb0",
+    "original_bytes": 392,
+    "function": "CQuestMenu::abandonQuest()",
+    "mangled": "_ZN10CQuestMenu12abandonQuestEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_more_abandon_quest"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "86a1ec481a4dc99b7fda1bc937bdb764202b9936f9d0c0921ee47e0962916fa4",
+        "parameters": {
+          "fixtures": [
+            "menu_more_abandon_quest"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xbd8650",
+    "original_bytes": 316,
+    "function": "CSettingsMenu::CSettingsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",
+    "mangled": "_ZN13CSettingsMenuC1ER7CGameUIR9CSettingsPN4Ogre12SceneManagerEPN5CEGUI6WindowEP16CResourceManager",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_constructors_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "72e0791c5679d337f3ec104907ed8689a3f9ce91667a772f7719b57cac5bfa7c",
+        "parameters": {
+          "fixtures": [
+            "menu_constructors_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc334e0",
+    "original_bytes": 156,
+    "function": "CContinueGameMenu::onDoubleClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "mangled": "_ZN17CContinueGameMenu13onDoubleClickE15ELayoutFunctionSbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_dispatch_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "02811b38e869cdfd302a8fe8a1cd6d365e1dd635cb3647b9847ab1ed4dd78c42",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_dispatch_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc3e2c0",
+    "original_bytes": 59,
+    "function": "CContinueGameMenu::scrollDown()",
+    "mangled": "_ZN17CContinueGameMenu10scrollDownEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_observed_scroll_down"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "02811b38e869cdfd302a8fe8a1cd6d365e1dd635cb3647b9847ab1ed4dd78c42",
+        "parameters": {
+          "fixtures": [
+            "menu_observed_scroll_down"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc3fd00",
+    "original_bytes": 377,
+    "function": "CContinueGameMenu::deleteCharacter()",
+    "mangled": "_ZN17CContinueGameMenu15deleteCharacterEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_more_delete_character"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "02811b38e869cdfd302a8fe8a1cd6d365e1dd635cb3647b9847ab1ed4dd78c42",
+        "parameters": {
+          "fixtures": [
+            "menu_more_delete_character"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc3fe80",
+    "original_bytes": 388,
+    "function": "CContinueGameMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "mangled": "_ZN17CContinueGameMenu7onClickE15ELayoutFunctionSbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_dispatch_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "02811b38e869cdfd302a8fe8a1cd6d365e1dd635cb3647b9847ab1ed4dd78c42",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_dispatch_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc40060",
+    "original_bytes": 1085,
+    "function": "CContinueGameMenu::~CContinueGameMenu()",
+    "mangled": "_ZN17CContinueGameMenuD1Ev",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": null
+  },
+  {
+    "address": "0xc404a0",
+    "original_bytes": 18,
+    "function": "CContinueGameMenu::~CContinueGameMenu()",
+    "mangled": "_ZN17CContinueGameMenuD0Ev",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": null
+  },
+  {
+    "address": "0xc42490",
+    "original_bytes": 406,
+    "function": "CContinueGameMenu::CContinueGameMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",
+    "mangled": "_ZN17CContinueGameMenuC1ER7CGameUIR9CSettingsPN4Ogre12SceneManagerEPN5CEGUI6WindowEP16CResourceManager",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": null
+  },
+  {
+    "address": "0xc42cb0",
+    "original_bytes": 281,
+    "function": "CDifficultyMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "mangled": "_ZN15CDifficultyMenu7onClickE15ELayoutFunctionSbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_dispatch_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "d3f7b4e270a3564685199eaba68bec35072bb2decefc13da8f7a5a2d559cfc0f",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_dispatch_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc4ae80",
+    "original_bytes": 370,
+    "function": "CMainMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "mangled": "_ZN9CMainMenu7onClickE15ELayoutFunctionSbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_dispatch_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "800b6d57ce7c69bf899a37d77180bad1bd7f52515d29b7403fe2da50c6750123",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_dispatch_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc72960",
+    "original_bytes": 294,
+    "function": "CFileReader::ReadLine(wchar_t)",
+    "mangled": "_ZN11CFileReader8ReadLineEw",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "reader_observed_line"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "8f96546714f7f8b3d3c677c7972d643d025d0fe6523b357532b6babdb4f060d3",
+        "parameters": {
+          "fixtures": [
+            "reader_observed_line"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc72b70",
+    "original_bytes": 66,
+    "function": "CFileReader::CFileReader()",
+    "mangled": "_ZN11CFileReaderC1Ev",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "reader_observed_construct"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "8f96546714f7f8b3d3c677c7972d643d025d0fe6523b357532b6babdb4f060d3",
+        "parameters": {
+          "fixtures": [
+            "reader_observed_construct"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc72c40",
+    "original_bytes": 564,
+    "function": "CFileReader::ReadLineTokenize(std::queue<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::deque<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >*, wchar_t const*, wchar_t)",
+    "mangled": "_ZN11CFileReader16ReadLineTokenizeEPSt5queueISbIwSt11char_traitsIwESaIwEESt5dequeIS4_SaIS4_EEEPKww",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "reader_observed_tokenize"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "8f96546714f7f8b3d3c677c7972d643d025d0fe6523b357532b6babdb4f060d3",
+        "parameters": {
+          "fixtures": [
+            "reader_observed_tokenize"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc72e80",
+    "original_bytes": 866,
+    "function": "CFileReader::ConvertFileToUnicode(_IO_FILE*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+    "mangled": "_ZN11CFileReader20ConvertFileToUnicodeEP8_IO_FILERKSbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "reader_observed_encoding"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "8f96546714f7f8b3d3c677c7972d643d025d0fe6523b357532b6babdb4f060d3",
+        "parameters": {
+          "fixtures": [
+            "reader_observed_encoding"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc731f0",
+    "original_bytes": 1615,
+    "function": "CFileReader::ReadFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+    "mangled": "_ZN11CFileReader8ReadFileERKSbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "reader_file_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "8f96546714f7f8b3d3c677c7972d643d025d0fe6523b357532b6babdb4f060d3",
+        "parameters": {
+          "fixtures": [
+            "reader_file_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc8a2c0",
+    "original_bytes": 162,
+    "function": "CRandomizer::removeChoice(unsigned int)",
+    "mangled": "_ZN11CRandomizer12removeChoiceEj",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "randomizer_remove_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "1d9435c984b2c40ae946bec6b127fc0bf13b20a44e377efd5d0afe69522dc713",
+        "parameters": {
+          "fixtures": [
+            "randomizer_remove_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc8a8f0",
+    "original_bytes": 286,
+    "function": "CRandomizer::getRandom(int&)",
+    "mangled": "_ZN11CRandomizer9getRandomERi",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "randomizer_index_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "1d9435c984b2c40ae946bec6b127fc0bf13b20a44e377efd5d0afe69522dc713",
+        "parameters": {
+          "fixtures": [
+            "randomizer_index_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc8aa10",
+    "original_bytes": 254,
+    "function": "CRandomizer::getRandom()",
+    "mangled": "_ZN11CRandomizer9getRandomEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "randomizer_get_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "1d9435c984b2c40ae946bec6b127fc0bf13b20a44e377efd5d0afe69522dc713",
+        "parameters": {
+          "fixtures": [
+            "randomizer_get_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xc92cd0",
+    "original_bytes": 81,
+    "function": "UTILITIES::GetEnvironmentVar(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "mangled": "_ZN9UTILITIES17GetEnvironmentVarESbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "small_environment_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "6f2bc42dc6bb65d4da658b9c22e2659876ea6050de44aed85be9a324c57acc81",
+        "parameters": {
+          "fixtures": [
+            "small_environment_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xd574f0",
+    "original_bytes": 669,
+    "function": "CAIManager::initalize()",
+    "mangled": "_ZN10CAIManager9initalizeEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "ai_manager_initialize_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "96c24cc4eecb5c6f56293044be1ca45a51fafffe06fceccc4307eacfa6627fb5",
+        "parameters": {
+          "fixtures": [
+            "ai_manager_initialize_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xd5e7c0",
+    "original_bytes": 4437,
+    "function": "CAIStatWatcher::CAIStatWatcher(CDataGroup*, CAIManager*)",
+    "mangled": "_ZN14CAIStatWatcherC1EP10CDataGroupP10CAIManager",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "ai_watcher_construct_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "cf0e697ba34de8f1d3af5c190c9188a064ac3ddd1b40884e92618dae11eb55e1",
+        "parameters": {
+          "fixtures": [
+            "ai_watcher_construct_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xd5f920",
+    "original_bytes": 1210,
+    "function": "CAIStatWatcher::getTargets(TArrayList<CCharacter*>&)",
+    "mangled": "_ZN14CAIStatWatcher10getTargetsER10TArrayListIP10CCharacterE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "ai_watcher_targets_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "cf0e697ba34de8f1d3af5c190c9188a064ac3ddd1b40884e92618dae11eb55e1",
+        "parameters": {
+          "fixtures": [
+            "ai_watcher_targets_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xd5fde0",
+    "original_bytes": 775,
+    "function": "CAIStatWatcher::addFlag()",
+    "mangled": "_ZN14CAIStatWatcher7addFlagEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "ai_watcher_flag_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "cf0e697ba34de8f1d3af5c190c9188a064ac3ddd1b40884e92618dae11eb55e1",
+        "parameters": {
+          "fixtures": [
+            "ai_watcher_flag_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xd600f0",
+    "original_bytes": 729,
+    "function": "CAIStatWatcher::update(float)",
+    "mangled": "_ZN14CAIStatWatcher6updateEf",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "ai_watcher_update_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "cf0e697ba34de8f1d3af5c190c9188a064ac3ddd1b40884e92618dae11eb55e1",
+        "parameters": {
+          "fixtures": [
+            "ai_watcher_update_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xd796e0",
+    "original_bytes": 104,
+    "function": "CRunicCore::removeSafePointer(TSafePointer<void*>*, unsigned int)",
+    "mangled": "_ZN10CRunicCore17removeSafePointerEP12TSafePointerIPvEj",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "runic_remove_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fb19f0a671f346aac9a7dc39e48241f08d1b3e70267091b81315540f9fdbeaf2",
+        "parameters": {
+          "fixtures": [
+            "runic_remove_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xd797c0",
+    "original_bytes": 342,
+    "function": "CRunicCore::addSafePointer(TSafePointer<void*>*)",
+    "mangled": "_ZN10CRunicCore14addSafePointerEP12TSafePointerIPvE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "runic_add_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fb19f0a671f346aac9a7dc39e48241f08d1b3e70267091b81315540f9fdbeaf2",
+        "parameters": {
+          "fixtures": [
+            "runic_add_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xd79920",
+    "original_bytes": 149,
+    "function": "CRunicCore::~CRunicCore()",
+    "mangled": "_ZN10CRunicCoreD1Ev",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "runic_destroy_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fb19f0a671f346aac9a7dc39e48241f08d1b3e70267091b81315540f9fdbeaf2",
+        "parameters": {
+          "fixtures": [
+            "runic_destroy_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xd864a0",
+    "original_bytes": 158,
+    "function": "CSettings::~CSettings()",
+    "mangled": "_ZN9CSettingsD1Ev",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "transforms_settings_destroy_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "984c7e61fc045236e6b753d824e1409f1f4c2b22a58303391e3ee3c409172780",
+        "parameters": {
+          "fixtures": [
+            "transforms_settings_destroy_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xd86540",
+    "original_bytes": 18,
+    "function": "CSettings::~CSettings()",
+    "mangled": "_ZN9CSettingsD0Ev",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": null
+  },
+  {
+    "address": "0xdd3b40",
+    "original_bytes": 203,
+    "function": "CGameStateController::broadcastPlayerHPThreshholdEvents(float, float, float)",
+    "mangled": "_ZN20CGameStateController33broadcastPlayerHPThreshholdEventsEfff",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "game_state_hp_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "aacaf9efd9a4a8a432c75bf86e915d1296b99f64bac5697dba06e439e054aed2",
+        "parameters": {
+          "fixtures": [
+            "game_state_hp_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xdd3ca0",
+    "original_bytes": 556,
+    "function": "CGameStateController::doActualGameState(bool)",
+    "mangled": "_ZN20CGameStateController17doActualGameStateEb",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "game_state_switch_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "aacaf9efd9a4a8a432c75bf86e915d1296b99f64bac5697dba06e439e054aed2",
+        "parameters": {
+          "fixtures": [
+            "game_state_switch_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xdd3fc0",
+    "original_bytes": 174,
+    "function": "CGameStateController::update(float)",
+    "mangled": "_ZN20CGameStateController6updateEf",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "game_state_update_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "aacaf9efd9a4a8a432c75bf86e915d1296b99f64bac5697dba06e439e054aed2",
+        "parameters": {
+          "fixtures": [
+            "game_state_update_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe170b0",
+    "original_bytes": 1950,
+    "function": "CStringTranslate::reload()",
+    "mangled": "_ZN16CStringTranslate6reloadEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "string_translate_reload_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "1283c7668b63fd524d2f6f2838934e81eabaa551443f7a7445bbdb32bb8a17e1",
+        "parameters": {
+          "fixtures": [
+            "string_translate_reload_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe448c0",
+    "original_bytes": 100,
+    "function": "CTipMenu::update(float)",
+    "mangled": "_ZN8CTipMenu6updateEf",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_next_tip_update"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "3bfa808fb2ac34daca07e42b9bc47406454dca0730907cbabbee66cf5909f401",
+        "parameters": {
+          "fixtures": [
+            "menu_next_tip_update"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe44950",
+    "original_bytes": 284,
+    "function": "CTipMenu::setOpen(bool)",
+    "mangled": "_ZN8CTipMenu7setOpenEb",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_next_tip_open"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "3bfa808fb2ac34daca07e42b9bc47406454dca0730907cbabbee66cf5909f401",
+        "parameters": {
+          "fixtures": [
+            "menu_next_tip_open"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe4d090",
+    "original_bytes": 332,
+    "function": "CTipMenu::CTipMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",
+    "mangled": "_ZN8CTipMenuC1ER7CGameUIR9CSettingsPN4Ogre12SceneManagerEPN5CEGUI6WindowEP16CResourceManager",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_constructors_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "3bfa808fb2ac34daca07e42b9bc47406454dca0730907cbabbee66cf5909f401",
+        "parameters": {
+          "fixtures": [
+            "menu_constructors_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe4d650",
+    "original_bytes": 611,
+    "function": "CFileSystem::fileIsNewerOrEqualTo(CFileInfo&, CFileInfo&)",
+    "mangled": "_ZN11CFileSystem20fileIsNewerOrEqualToER9CFileInfoS1_",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "filesystem_newer_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "4de686cda32a9ee9b31dbb167af4166211e12dc29c339e2d483b63490fc61fb8",
+        "parameters": {
+          "fixtures": [
+            "filesystem_newer_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe4d8c0",
+    "original_bytes": 245,
+    "function": "CFileSystem::reload()",
+    "mangled": "_ZN11CFileSystem6reloadEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "filesystem_reload_next"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "4de686cda32a9ee9b31dbb167af4166211e12dc29c339e2d483b63490fc61fb8",
+        "parameters": {
+          "fixtures": [
+            "filesystem_reload_next"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe4dc50",
+    "original_bytes": 517,
+    "function": "CFileSystem::~CFileSystem()",
+    "mangled": "_ZN11CFileSystemD1Ev",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "filesystem_destroy_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "4de686cda32a9ee9b31dbb167af4166211e12dc29c339e2d483b63490fc61fb8",
+        "parameters": {
+          "fixtures": [
+            "filesystem_destroy_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe4de80",
+    "original_bytes": 1297,
+    "function": "CFileSystem::getAbsolutePath(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CFileInfo&, bool)",
+    "mangled": "_ZN11CFileSystem15getAbsolutePathERKSbIwSt11char_traitsIwESaIwEER9CFileInfob",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "filesystem_absolute_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "4de686cda32a9ee9b31dbb167af4166211e12dc29c339e2d483b63490fc61fb8",
+        "parameters": {
+          "fixtures": [
+            "filesystem_absolute_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe4e3a0",
+    "original_bytes": 3394,
+    "function": "CFileSystem::getFileInfo(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CFileInfo&, bool, bool, bool)",
+    "mangled": "_ZN11CFileSystem11getFileInfoERKSbIwSt11char_traitsIwESaIwEER9CFileInfobbb",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "filesystem_info_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "4de686cda32a9ee9b31dbb167af4166211e12dc29c339e2d483b63490fc61fb8",
+        "parameters": {
+          "fixtures": [
+            "filesystem_info_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe4f0f0",
+    "original_bytes": 3087,
+    "function": "CFileSystem::getFilesInDirectory(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, bool, bool, bool, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+    "mangled": "_ZN11CFileSystem19getFilesInDirectoryER10TArrayListISbIwSt11char_traitsIwESaIwEEERSsS7_bbbRKSs",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "filesystem_directory_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "4de686cda32a9ee9b31dbb167af4166211e12dc29c339e2d483b63490fc61fb8",
+        "parameters": {
+          "fixtures": [
+            "filesystem_directory_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe4fd00",
+    "original_bytes": 822,
+    "function": "CFileSystem::getFileList(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool, bool, bool, bool)",
+    "mangled": "_ZN11CFileSystem11getFileListERKSbIwSt11char_traitsIwESaIwEER10TArrayListIS3_ES3_bbbb",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "filesystem_list_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "4de686cda32a9ee9b31dbb167af4166211e12dc29c339e2d483b63490fc61fb8",
+        "parameters": {
+          "fixtures": [
+            "filesystem_list_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe98e50",
+    "original_bytes": 455,
+    "function": "CCinematicMenu::setOpen(bool)",
+    "mangled": "_ZN14CCinematicMenu7setOpenEb",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_more_cinematic_open"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "25703b2424183e39fed5c669fd9458201f8d2ecd936679483c90e36fa528fd8e",
+        "parameters": {
+          "fixtures": [
+            "menu_more_cinematic_open"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe99800",
+    "original_bytes": 572,
+    "function": "CCinematicMenu::update(float)",
+    "mangled": "_ZN14CCinematicMenu6updateEf",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_more_cinematic_update"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "25703b2424183e39fed5c669fd9458201f8d2ecd936679483c90e36fa528fd8e",
+        "parameters": {
+          "fixtures": [
+            "menu_more_cinematic_update"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xe9b920",
+    "original_bytes": 392,
+    "function": "CCinematicMenu::CCinematicMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",
+    "mangled": "_ZN14CCinematicMenuC1ER7CGameUIR9CSettingsPN4Ogre12SceneManagerEPN5CEGUI6WindowEP16CResourceManager",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_constructors_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "25703b2424183e39fed5c669fd9458201f8d2ecd936679483c90e36fa528fd8e",
+        "parameters": {
+          "fixtures": [
+            "menu_constructors_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xea34b0",
+    "original_bytes": 210,
+    "function": "CWaypointMenu::update(float)",
+    "mangled": "_ZN13CWaypointMenu6updateEf",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_next_waypoint_update"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "df2052023870f1f1181c231778cd5b7b17b205adf9274bab34f42bd06212bb36",
+        "parameters": {
+          "fixtures": [
+            "menu_next_waypoint_update"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  }
+]

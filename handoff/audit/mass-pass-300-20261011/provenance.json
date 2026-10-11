@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "kind": "receipt-backed-pro-handoff-refresh",
+  "notice": "Metadata refresh verified against actual PR83 Stage execution receipts and the merged PR82/PR83 source trees. No game code, build or test was executed during this refresh. PR83 passed 611 tests in one full Stage suite; same-instance unmodified Stage.publish verified 279 root production objects and equal root/Stage input fingerprints. No second root runtime test was executed. PR82 historical raw receipts are not reconstructed; its report remains immutable, and the current full suite revalidates all carried 100 targets.",
+  "main_commit": "bc1008191fbbcfc76ad40fcf69b9b0ec84c5a679",
+  "main_tree": "2a14e06fb35d4ede5b491c81ba7af13c0ebbd640",
+  "old_handoff": "b0d9c15fc963596c5583e8fcc240f86889ca3a17",
+  "old_handoff_tree": "5ca1cc3784db502dc19ba1e237d1e1872fe2d203",
+  "merged_prs": [
+    82,
+    83
+  ],
+  "reports": {
+    "research/MASS_PASS_100_INTEGRATION_20261010.md": {
+      "blob": "24b2f4ce188267c0e28a8e85513c25e1bd721986",
+      "sha256": "46368a6c652508a7e84abc181efac8f07ce4b8e43e5df576c5ca9bdd4e11df4a"
+    },
+    "research/MASS_PASS_200_INTEGRATION_20261011.md": {
+      "blob": "2c0d2227f6e10905f7f483974934dcedab62cbe5",
+      "sha256": "867dd695d7f16490093437130f92d0d430ce874dc0808dedd7b339990d1634be"
+    }
+  },
+  "receipt_archive": {
+    "filename": "OpenTorchlight-mass-pass-200-verified-receipts-20261011.zip",
+    "sha256": "9500e35c37eb785b50de01efa329c618c42438652856b93746d6fd452cad9aab"
+  },
+  "original_package_sha256": "8379b35d624f3596c9b9c3ace62104bc3c3420badb21107e471449191aeba981",
+  "verified_receipt_sha256": {
+    "acceptance.json": "c9fb6aa6dc508a238566ed30c164df35b8911341e2c03d4463531d10f61dc9f7",
+    "publication.json": "8fe90a9275c7a01308bb75e2c8ed9677e37e81166c977909cf01b7bbe68ee2ee",
+    "preservation.json": "d9b2ff4559b6b7d9b94cef95d006e60d798cb4e16ad3804e23e930f3c376b569",
+    "final-stage-identity.json": "dd77bb4e74a3a5dc743082f4a15f0ac41591f6d12198fae3a389a06a19b786fc",
+    "final-stage-report.log": "53d3a6dbd7ba8f9b9ae4264c5f746a9b7491d5013a59038ef45b199d9d2d31bd",
+    "root-input-identity.json": "a020884e65b98895dfe33e2c3d27c4d1bbd01c6231a698d2d9a3251bb5efe3be",
+    "manifest.json": "6ca8f2d7fd6f9dc5a147afe0e491c3ce3fa6da356543a60911556b9e05eccacf",
+    "baseline-provenance.json": "7f145c7b5c6e511650cc6e5656a43251675e3fc9b2d27f03126a97a7f0e14c77",
+    "independent-review/final-receipt-audit.json": "7631b65b1b78dbeae706c967dee2098aab6593b81973b6f849d2ce230b4c799b"
+  },
+  "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "full_suite_origin": "stage",
+  "full_suite_tests": 611,
+  "root_runtime_execution": false,
+  "production_objects_verified": 279,
+  "new_accepted_addresses": 300,
+  "previously_accepted_addresses_preserved": 2380,
+  "pr83_prior_addresses_promoted_to_match": [
+    "0x91b7a0",
+    "0x923730"
+  ],
+  "primary_MATCH_targets_without_comparison_rows": [
+    "0x7412d0",
+    "0x74ba50",
+    "0x74ead0",
+    "0x926000",
+    "0xbc0f50",
+    "0xc40060",
+    "0xc404a0",
+    "0xc42490",
+    "0xd86540"
+  ],
+  "previously_unlisted_addresses": [
+    "0xb05ec0",
+    "0xb060c0",
+    "0xb060f0",
+    "0xb06110",
+    "0xb100c0"
+  ],
+  "prior_indexed_rows_preserved": 7663,
+  "updated_existing_rows": 295,
+  "total_indexed_rows": 7668,
+  "historical_pro_definitions": 401,
+  "historical_pro_fields_unchanged": true,
+  "tests_executed_by_this_refresh": false
+}

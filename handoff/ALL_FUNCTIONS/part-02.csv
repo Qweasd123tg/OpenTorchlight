@@ -589,31 +589,31 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x6f8e80,ParticleWrapperDescriptor.cpp,"CParticleWrapperDescriptor::Set_setVisible(CEditorBaseObject*, UNIONDATA8BIT const*, unsigned int)",MATCH,False,False,,False
 0x6f8ea0,ParticleWrapperDescriptor.cpp,"CParticleWrapperDescriptor::Get_getVisible(CEditorBaseObject*, unsigned int&)",MATCH,False,False,,False
 0x6f90a0,Descriptor.cpp,CDescriptor::GetInputLogicWrapper(unsigned int),MATCH,True,False,,False
-0x6f90e0,Descriptor.cpp,CDescriptor::GetInputLogicFuncIndexByWrapper(CLogicWrapper*),DIFF,False,False,,False
+0x6f90e0,Descriptor.cpp,CDescriptor::GetInputLogicFuncIndexByWrapper(CLogicWrapper*),DIFF,True,False,,False
 0x6f9150,Descriptor.cpp,CDescriptor::GetOutputLogicWrapper(unsigned int),MATCH,True,False,,False
-0x6f9190,Descriptor.cpp,CDescriptor::GetOutputLogicFuncIndexByWrapper(CLogicWrapper*),DIFF,False,False,,False
+0x6f9190,Descriptor.cpp,CDescriptor::GetOutputLogicFuncIndexByWrapper(CLogicWrapper*),DIFF,True,False,,False
 0x6f9200,Descriptor.cpp,CDescriptor::GetPropertyByIndex(unsigned int),MATCH,True,False,,False
 0x6f9240,Descriptor.cpp,CDescriptor::GetProperty(unsigned int),MATCH,True,False,,False
 0x6f9280,Descriptor.cpp,CDescriptor::deleteAllObjects(),DIFF,False,False,,False
-0x6f92c0,Descriptor.cpp,"CDescriptor::LinkProperty(unsigned int, unsigned int)",DIFF,False,False,,False
+0x6f92c0,Descriptor.cpp,"CDescriptor::LinkProperty(unsigned int, unsigned int)",DIFF,True,False,,False
 0x6f9420,Descriptor.cpp,CDescriptor::EditorSceneCreatedObject(CEditorBaseObject*),MATCH,True,False,,False
-0x6f9540,Descriptor.cpp,"CDescriptor::SetProperty(CEditorBaseObject*, unsigned int, void const*, unsigned int)",DIFF,False,False,,False
+0x6f9540,Descriptor.cpp,"CDescriptor::SetProperty(CEditorBaseObject*, unsigned int, void const*, unsigned int)",DIFF,True,False,,False
 0x6f95a0,Descriptor.cpp,"CDescriptor::GetPropertyValue(CEditorBaseObject*, unsigned int, unsigned int&)",MATCH,True,False,,False
-0x6f95f0,Descriptor.cpp,"CDescriptor::loadObject(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,False,False,,False
-0x6f98a0,Descriptor.cpp,"CDescriptor::loadObjects(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,False,False,,False
-0x6f9960,Descriptor.cpp,"CDescriptor::saveObjects(CDataGroup*, CDescriptorSaveConfiguration*)",DIFF,False,False,,False
+0x6f95f0,Descriptor.cpp,"CDescriptor::loadObject(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,True,False,,False
+0x6f98a0,Descriptor.cpp,"CDescriptor::loadObjects(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,True,False,,False
+0x6f9960,Descriptor.cpp,"CDescriptor::saveObjects(CDataGroup*, CDescriptorSaveConfiguration*)",DIFF,True,False,,False
 0x6f9a20,Descriptor.cpp,CDescriptor::EditorSceneRemovingObject(CEditorBaseObject*),MATCH,True,False,,False
 0x6f9b20,Descriptor.cpp,CDescriptor::cleanForQuickShutDown(),MATCH,True,False,,False
-0x6f9c10,Descriptor.cpp,"CDescriptor::AddInputLogic(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, unsigned int)",DIFF,False,False,,False
-0x6f9d70,Descriptor.cpp,CDescriptor::getUniqueNumericValueRepresentation(),DIFF,False,False,,False
-0x6f9e70,Descriptor.cpp,CDescriptor::CDescriptor(int),DIFF,False,False,,False
+0x6f9c10,Descriptor.cpp,"CDescriptor::AddInputLogic(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, unsigned int)",DIFF,True,False,,False
+0x6f9d70,Descriptor.cpp,CDescriptor::getUniqueNumericValueRepresentation(),DIFF,True,False,,False
+0x6f9e70,Descriptor.cpp,CDescriptor::CDescriptor(int),DIFF,True,False,,False
 0x6fa080,Descriptor.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
 0x6fceb0,Descriptor.cpp,global constructors keyed to CDescriptor::CDescriptor(int),MATCH,False,False,,False
 0x6fcec0,Descriptor.cpp,"CDescriptor::GetOutputLogicWrapperIndex(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
 0x6fcf70,Descriptor.cpp,"CDescriptor::GetInputLogicWrapperIndex(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
 0x6fd020,Descriptor.cpp,"CDescriptor::OutputLogicObjectRemove(CEditorBaseObject*, CLogicObject*)",MATCH,True,False,,False
-0x6fd150,Descriptor.cpp,"CDescriptor::Clone(CEditorBaseObject*, CEditorBaseObject*, CEditorBaseObject*)",DIFF,False,False,,False
-0x6fd280,Descriptor.cpp,CDescriptor::calculateDefaultValues(CEditorBaseObject*),DIFF,False,False,,False
+0x6fd150,Descriptor.cpp,"CDescriptor::Clone(CEditorBaseObject*, CEditorBaseObject*, CEditorBaseObject*)",DIFF,True,False,,False
+0x6fd280,Descriptor.cpp,CDescriptor::calculateDefaultValues(CEditorBaseObject*),DIFF,True,False,,False
 0x6fd480,Descriptor.cpp,"CDescriptor::AddOutputLogic(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, unsigned int)",MATCH,True,False,,False
 0x6fd5e0,Descriptor.cpp,"CDescriptor::GetPropertyID(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
 0x6fd6f0,Descriptor.cpp,"CDescriptor::GetPropertyByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
@@ -628,16 +628,16 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x6fe200,Descriptor.cpp,CDescriptor::~CDescriptor(),MATCH,True,False,,False
 0x6fe220,Descriptor.cpp,CDescriptor::AddOutputLogic(EOUTPUT_EVENTS),MATCH,True,False,,False
 0x6fe2d0,Descriptor.cpp,CDescriptor::AddInputLogic(EINPUT_EVENTS),MATCH,True,False,,False
-0x6fe380,Descriptor.cpp,"CDescriptor::postProcessObject(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,False,False,,False
-0x6fe530,Descriptor.cpp,"CDescriptor::postProcessObjects(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,False,False,,False
-0x6fe5c0,Descriptor.cpp,"CDescriptor::saveObjectInBinaryFile(std::basic_ofstream<char, std::char_traits<char> >&, CEditorBaseObject*, CDescriptorSaveConfiguration*)",DIFF,False,False,,False
-0x6fe870,Descriptor.cpp,"CDescriptor::AddProperty(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, void*, void*, EVARIABLE_TYPES, int)",DIFF,False,False,,False
-0x6fede0,Descriptor.cpp,"CDescriptor::AddPropertyWithInterpreterFunctions(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, void*, void*, unsigned int (*)(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*), std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > (*)(CEditorScene*, CEditorBaseObject*, unsigned int, void*), void*, EVARIABLE_TYPES, int)",DIFF,False,False,,False
-0x6ff040,Descriptor.cpp,"CDescriptor::loadObjectFromBinaryFile(COgreReader&, CEditorBaseObject*, CDescriptorLoadConfiguration&)",DIFF,False,False,,False
-0x6ff300,Descriptor.cpp,"CDescriptor::SerializeDescriptor(CDataGroup*, unsigned int)",DIFF,False,False,,False
-0x700110,Descriptor.cpp,"CDescriptor::GetPropertyListOfValues(CEditorBaseObject*, unsigned int, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >&)",DIFF,False,False,,False
-0x700410,Descriptor.cpp,"CDescriptor::BroadcastEventFromObject(CEditorBaseObject*, unsigned int)",DIFF,False,False,,False
-0x700c40,Descriptor.cpp,"CDescriptor::saveObject(CEditorBaseObject*, CDataGroup*, CDescriptorSaveConfiguration*)",DIFF,False,False,,False
+0x6fe380,Descriptor.cpp,"CDescriptor::postProcessObject(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,True,False,,False
+0x6fe530,Descriptor.cpp,"CDescriptor::postProcessObjects(CDataGroup*, CDescriptorLoadConfiguration*)",DIFF,True,False,,False
+0x6fe5c0,Descriptor.cpp,"CDescriptor::saveObjectInBinaryFile(std::basic_ofstream<char, std::char_traits<char> >&, CEditorBaseObject*, CDescriptorSaveConfiguration*)",DIFF,True,False,,False
+0x6fe870,Descriptor.cpp,"CDescriptor::AddProperty(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, void*, void*, EVARIABLE_TYPES, int)",DIFF,True,False,,False
+0x6fede0,Descriptor.cpp,"CDescriptor::AddPropertyWithInterpreterFunctions(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, void*, void*, unsigned int (*)(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*), std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > (*)(CEditorScene*, CEditorBaseObject*, unsigned int, void*), void*, EVARIABLE_TYPES, int)",DIFF,True,False,,False
+0x6ff040,Descriptor.cpp,"CDescriptor::loadObjectFromBinaryFile(COgreReader&, CEditorBaseObject*, CDescriptorLoadConfiguration&)",DIFF,True,False,,False
+0x6ff300,Descriptor.cpp,"CDescriptor::SerializeDescriptor(CDataGroup*, unsigned int)",DIFF,True,False,,False
+0x700110,Descriptor.cpp,"CDescriptor::GetPropertyListOfValues(CEditorBaseObject*, unsigned int, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >&)",DIFF,True,False,,False
+0x700410,Descriptor.cpp,"CDescriptor::BroadcastEventFromObject(CEditorBaseObject*, unsigned int)",DIFF,True,False,,False
+0x700c40,Descriptor.cpp,"CDescriptor::saveObject(CEditorBaseObject*, CDataGroup*, CDescriptorSaveConfiguration*)",DIFF,True,False,,False
 0x701140,Descriptor.cpp,"CDescriptor::OutputLogicObjectAdd(CEditorBaseObject*, CLogicObject*)",MATCH,True,False,,False
 0x701470,Descriptor.cpp,"std::_Rb_tree<CEditorBaseObject*, std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*>, std::_Select1st<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> >, std::less<CEditorBaseObject*>, std::allocator<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> > >::_M_erase(std::_Rb_tree_node<std::pair<CEditorBaseObject* const, TArrayList<CLogicObject*>*> >*)",MATCH,False,False,,False
 0x7014b0,Descriptor.cpp,"std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > std::operator+<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, wchar_t const*)",MATCH,False,False,,False
@@ -726,25 +726,25 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x70d5e0,Editor.cpp,CEditor::SetPovVelocityMult(float),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d5e0.cpp,False
 0x70d600,Editor.cpp,CEditor::SetRenderWindowHasFocus(bool),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d600.cpp,False
 0x70d620,Editor.cpp,CEditor::GetEditorScene(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d620.cpp,False
-0x70d660,Editor.cpp,CEditor::getCamera(),MISSING,False,False,,False
+0x70d660,Editor.cpp,CEditor::getCamera(),DIFF,True,False,,False
 0x70d690,Editor.cpp,CEditor::getUndoSize(),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d690.cpp,False
 0x70d6c0,Editor.cpp,CEditor::getRedoSize(),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d6c0.cpp,False
 0x70d6f0,Editor.cpp,CEditor::deleteAllUndos(),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d6f0.cpp,False
 0x70d770,Editor.cpp,CEditor::doRedo(),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d770.cpp,False
 0x70d7e0,Editor.cpp,CEditor::doUndo(),MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d7e0.cpp,False
-0x70d850,Editor.cpp,"CEditor::addUndo(CUndo*, bool)",MISSING,False,False,,False
+0x70d850,Editor.cpp,"CEditor::addUndo(CUndo*, bool)",DIFF,True,False,,False
 0x70d940,Editor.cpp,"CEditor::FlyToPositionLookingAtPos(Ogre::Vector3, Ogre::Vector3)",MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70d940.cpp,False
 0x70d980,Editor.cpp,CEditor::UpdatePlayerInput(float),MISSING,False,False,,False
-0x70dd10,Editor.cpp,"CEditor::setDirectionalColor(int, int, int)",MISSING,False,False,,False
-0x70ddb0,Editor.cpp,"CEditor::setMaterialAmbientColor(int, int, int)",MISSING,False,False,,False
-0x70de50,Editor.cpp,"CEditor::setAmbientColor(int, int, int)",MISSING,False,False,,False
+0x70dd10,Editor.cpp,"CEditor::setDirectionalColor(int, int, int)",DIFF,True,False,,False
+0x70ddb0,Editor.cpp,"CEditor::setMaterialAmbientColor(int, int, int)",DIFF,True,False,,False
+0x70de50,Editor.cpp,"CEditor::setAmbientColor(int, int, int)",DIFF,True,False,,False
 0x70def0,Editor.cpp,"CEditor::mouseEvent(unsigned int, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70def0.cpp,False
 0x70df10,Editor.cpp,"CEditor::keyEvent(unsigned int, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Editor.cpp/0x70df10.cpp,False
 0x70df30,Editor.cpp,"CEditor::SetBackgroundColor(float, float, float)",MATCH,True,False,,False
-0x70dfb0,Editor.cpp,CEditor::setDirectionalIntensity(float),MISSING,False,False,,False
+0x70dfb0,Editor.cpp,CEditor::setDirectionalIntensity(float),DIFF,True,False,,False
 0x70dff0,Editor.cpp,CEditor::flushKeyManager(),MATCH,True,False,,False
 0x714ff0,Editor.cpp,"std::basic_iostream<char, std::char_traits<char> >::~basic_iostream() [clone .clone.2]",MISSING,False,False,,False
-0x715050,Editor.cpp,CEditor::addRedo(CUndo*),MISSING,False,False,,False
+0x715050,Editor.cpp,CEditor::addRedo(CUndo*),DIFF,True,False,,False
 0x7156b0,Editor.cpp,__tcf_2,MATCH,False,False,,False
 0x715740,Editor.cpp,__tcf_1,MATCH,False,False,,False
 0x7157b0,Editor.cpp,__tcf_0,MATCH,False,False,,False

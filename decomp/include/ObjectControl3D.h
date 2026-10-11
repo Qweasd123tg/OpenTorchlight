@@ -19,6 +19,9 @@ class CObjectControl3D : public CRunicCore
 {
 public:
     void createUndo(TArrayList<CEditorBaseObject*>& objects);
+    void ApplyRotationNoise(float amount, TArrayList<CEditorBaseObject*>& objects);
+    void ApplyNormalNoise(float amount, TArrayList<CEditorBaseObject*>& objects);
+    void ApplyScaleNoise(float amount, bool uniform, TArrayList<CEditorBaseObject*>& objects);
     void ResetScale(TArrayList<CEditorBaseObject*>& objects);
     void ResetOrientation(TArrayList<CEditorBaseObject*>& objects);
     void snapObjectsToGround(bool orient, TArrayList<CEditorBaseObject*>& objects);

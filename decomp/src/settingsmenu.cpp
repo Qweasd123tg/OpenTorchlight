@@ -9,3 +9,14 @@ bool CSettingsMenu::onClick(ELayoutFunction function,std::wstring)
     }
     return true;
 }
+
+#include "StringTranslate.h"
+CSettingsMenu::CSettingsMenu(CGameUI& ui, CSettings& settings, Ogre::SceneManager* scene, CEGUI::Window* parent, CResourceManager* resources)
+    : CDropdownMenu(ui, settings, scene, parent, resources, 0), m_applyChanges(false)
+{
+    createMenus();
+    static std::wstring g_Settings;
+    if (g_Settings.empty())
+        g_Settings = CStringTranslate::getSinglton()->getTranslateString(L"Settings");
+    setTitle(g_Settings);
+}

@@ -199,13 +199,13 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xdd2cd0,AnimationPlayer.cpp,CAnimationPlayer::playAnimation(bool),MISSING,False,False,,False
 0xdd3470,AnimationPlayer.cpp,CAnimationPlayer::playAnimation(),MISSING,False,False,,False
 0xdd3ac0,AnimationPlayer.cpp,CAnimationPlayer::update(float),MATCH,True,False,,False
-0xdd3b40,GameStateController.cpp,"CGameStateController::broadcastPlayerHPThreshholdEvents(float, float, float)",DIFF,False,False,,False
+0xdd3b40,GameStateController.cpp,"CGameStateController::broadcastPlayerHPThreshholdEvents(float, float, float)",DIFF,True,False,,False
 0xdd3c10,GameStateController.cpp,CGameStateController::showHelp(),MATCH,True,False,,False
 0xdd3c40,GameStateController.cpp,CGameStateController::healPlayer(),MATCH,True,False,,False
-0xdd3ca0,GameStateController.cpp,CGameStateController::doActualGameState(bool),DIFF,False,False,,False
+0xdd3ca0,GameStateController.cpp,CGameStateController::doActualGameState(bool),DIFF,True,False,,False
 0xdd3ed0,GameStateController.cpp,CGameStateController::performStateControl(),MATCH,True,False,,False
 0xdd3fa0,GameStateController.cpp,CGameStateController::setInitialized(),MATCH,True,False,,False
-0xdd3fc0,GameStateController.cpp,CGameStateController::update(float),DIFF,False,False,,False
+0xdd3fc0,GameStateController.cpp,CGameStateController::update(float),DIFF,True,False,,False
 0xdd4070,GameStateController.cpp,CGameStateController::~CGameStateController(),MATCH,True,False,,False
 0xdd40c0,GameStateController.cpp,CGameStateController::~CGameStateController(),MATCH,True,False,,False
 0xdd40e0,GameStateController.cpp,CGameStateController::CGameStateController(CResourceManager*),MATCH,True,False,,False
@@ -372,7 +372,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xe16ef0,StringTranslate.cpp,CStringTranslate::getTranslateString(wchar_t const*),MATCH,True,False,,False
 0xe16fa0,StringTranslate.cpp,CStringTranslate::~CStringTranslate(),MATCH,True,False,,False
 0xe17090,StringTranslate.cpp,CStringTranslate::~CStringTranslate(),MATCH,True,False,,False
-0xe170b0,StringTranslate.cpp,CStringTranslate::reload(),DIFF,False,False,,False
+0xe170b0,StringTranslate.cpp,CStringTranslate::reload(),DIFF,True,False,,False
 0xe17850,StringTranslate.cpp,"CStringTranslate::CStringTranslate(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
 0xe17910,SkillController.cpp,CSkillController::getSkillTarget(),DIFF,False,False,,False
 0xe17970,SkillController.cpp,CSkillController::CSkillController(CResourceManager*),DIFF,False,False,,False
@@ -475,9 +475,9 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xe44820,journalmenu.cpp,CEGUI::MemberFunctionSlot<CJournalMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
 0xe44830,tipmenu.cpp,CTipMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xe44840,tipmenu.cpp,"CTipMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
-0xe448c0,tipmenu.cpp,CTipMenu::update(float),MISSING,False,False,,False
+0xe448c0,tipmenu.cpp,CTipMenu::update(float),DIFF,True,False,,False
 0xe44930,tipmenu.cpp,CTipMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
-0xe44950,tipmenu.cpp,CTipMenu::setOpen(bool),MISSING,False,False,,False
+0xe44950,tipmenu.cpp,CTipMenu::setOpen(bool),DIFF,True,False,,False
 0xe44a70,tipmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
 0xe4b5c0,tipmenu.cpp,__tcf_16,DIFF,False,False,,False
 0xe4b630,tipmenu.cpp,__tcf_15,DIFF,False,False,,False
@@ -499,7 +499,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xe4c670,tipmenu.cpp,__tcf_1,DIFF,False,False,,False
 0xe4c770,tipmenu.cpp,__tcf_5,DIFF,False,False,,False
 0xe4c800,tipmenu.cpp,CTipMenu::createMenus(),MISSING,False,False,,False
-0xe4d090,tipmenu.cpp,"CTipMenu::CTipMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xe4d090,tipmenu.cpp,"CTipMenu::CTipMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
 0xe4d210,FileSystem.cpp,CFileSystem::getNeedsToRecompressEverything(),MATCH,True,False,,False
 0xe4d230,FileSystem.cpp,CFileSystem::clean(),MATCH,True,False,,False
 0xe4d250,FileSystem.cpp,CFileSystem::getSingleton(),MATCH,True,False,,False
@@ -508,15 +508,15 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xe4d2a0,FileSystem.cpp,"CFileSystem::getModNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",MATCH,True,False,,False
 0xe4d2c0,FileSystem.cpp,CFileSystem::getDataStream(CFileInfo&),MATCH,True,False,,False
 0xe4d360,FileSystem.cpp,global constructors keyed to g_pFileSystem,DIFF,False,False,,False
-0xe4d650,FileSystem.cpp,"CFileSystem::fileIsNewerOrEqualTo(CFileInfo&, CFileInfo&)",DIFF,False,False,,False
-0xe4d8c0,FileSystem.cpp,CFileSystem::reload(),DIFF,False,False,,False
+0xe4d650,FileSystem.cpp,"CFileSystem::fileIsNewerOrEqualTo(CFileInfo&, CFileInfo&)",DIFF,True,False,,False
+0xe4d8c0,FileSystem.cpp,CFileSystem::reload(),DIFF,True,False,,False
 0xe4d9c0,FileSystem.cpp,"CFileSystem::getDataGroup(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
-0xe4dc50,FileSystem.cpp,CFileSystem::~CFileSystem(),DIFF,False,False,,False
+0xe4dc50,FileSystem.cpp,CFileSystem::~CFileSystem(),DIFF,True,False,,False
 0xe4de60,FileSystem.cpp,CFileSystem::~CFileSystem(),MATCH,True,False,,False
-0xe4de80,FileSystem.cpp,"CFileSystem::getAbsolutePath(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CFileInfo&, bool)",DIFF,False,False,,False
-0xe4e3a0,FileSystem.cpp,"CFileSystem::getFileInfo(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CFileInfo&, bool, bool, bool)",DIFF,False,False,,False
-0xe4f0f0,FileSystem.cpp,"CFileSystem::getFilesInDirectory(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, bool, bool, bool, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",DIFF,False,False,,False
-0xe4fd00,FileSystem.cpp,"CFileSystem::getFileList(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool, bool, bool, bool)",DIFF,False,False,,False
+0xe4de80,FileSystem.cpp,"CFileSystem::getAbsolutePath(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CFileInfo&, bool)",DIFF,True,False,,False
+0xe4e3a0,FileSystem.cpp,"CFileSystem::getFileInfo(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CFileInfo&, bool, bool, bool)",DIFF,True,False,,False
+0xe4f0f0,FileSystem.cpp,"CFileSystem::getFilesInDirectory(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, bool, bool, bool, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",DIFF,True,False,,False
+0xe4fd00,FileSystem.cpp,"CFileSystem::getFileList(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool, bool, bool, bool)",DIFF,True,False,,False
 0xe50040,FileSystem.cpp,CFileSystem::buildMassiveDataGroup(),DIFF,False,False,,False
 0xe50b00,FileSystem.cpp,CFileSystem::CFileSystem(bool),DIFF,False,False,,False
 0xe52cc0,FileSystem.cpp,Ogre::MeshSerializerListener::~MeshSerializerListener(),MATCH,False,False,,False
@@ -694,7 +694,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xe90ed0,MoneyTaker.cpp,__tcf_8,DIFF,False,False,,False
 0xe90f60,cinematicmenu.cpp,"CCinematicMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
 0xe90fa0,cinematicmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
-0xe98e50,cinematicmenu.cpp,CCinematicMenu::setOpen(bool),MISSING,False,False,,False
+0xe98e50,cinematicmenu.cpp,CCinematicMenu::setOpen(bool),DIFF,True,False,,False
 0xe99020,cinematicmenu.cpp,__tcf_15,DIFF,False,False,,False
 0xe99090,cinematicmenu.cpp,__tcf_14,DIFF,False,False,,False
 0xe99100,cinematicmenu.cpp,__tcf_16,DIFF,False,False,,False
@@ -703,7 +703,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xe99270,cinematicmenu.cpp,CCinematicMenu::~CCinematicMenu(),MATCH,True,False,,False
 0xe992d0,cinematicmenu.cpp,CCinematicMenu::~CCinematicMenu(),MATCH,True,False,,False
 0xe992f0,cinematicmenu.cpp,CCinematicMenu::updateTextDisplay(float),MISSING,False,False,,False
-0xe99800,cinematicmenu.cpp,CCinematicMenu::update(float),MISSING,False,False,,False
+0xe99800,cinematicmenu.cpp,CCinematicMenu::update(float),DIFF,True,False,,False
 0xe99ad0,cinematicmenu.cpp,__tcf_4,DIFF,False,False,,False
 0xe99b60,cinematicmenu.cpp,__tcf_3,DIFF,False,False,,False
 0xe99bf0,cinematicmenu.cpp,__tcf_2,DIFF,False,False,,False
@@ -719,10 +719,10 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xe9a510,cinematicmenu.cpp,__tcf_5,DIFF,False,False,,False
 0xe9a5a0,cinematicmenu.cpp,"CCinematicMenu::setText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
 0xe9b180,cinematicmenu.cpp,CCinematicMenu::createMenus(),MISSING,False,False,,False
-0xe9b920,cinematicmenu.cpp,"CCinematicMenu::CCinematicMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xe9b920,cinematicmenu.cpp,"CCinematicMenu::CCinematicMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
 0xe9bab0,waypointmenu.cpp,CWaypointMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xe9bad0,waypointmenu.cpp,CWaypointMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
-0xea34b0,waypointmenu.cpp,CWaypointMenu::update(float),MISSING,False,False,,False
+0xea34b0,waypointmenu.cpp,CWaypointMenu::update(float),DIFF,True,False,,False
 0xea45d0,waypointmenu.cpp,"CWaypointMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
 0xea4970,waypointmenu.cpp,CWaypointMenu::setOpen(bool),MISSING,False,False,,False
 0xea58b0,waypointmenu.cpp,CWaypointMenu::createMenus(),MISSING,False,False,,False

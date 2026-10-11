@@ -249,7 +249,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xafbee0,Console.cpp,"CConsole::CConsole(CGameUI*, CResourceManager*, CEGUI::Window*)",MISSING,False,False,,False
 0xafc9b0,StringTranslate.cpp,"std::_Rb_tree<unsigned int, std::pair<unsigned int const, unsigned short>, std::_Select1st<std::pair<unsigned int const, unsigned short> >, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned short> > >::_M_erase(std::_Rb_tree_node<std::pair<unsigned int const, unsigned short> >*)",MATCH,False,False,,False
 0xafcce0,dialogmenu.cpp,CDialogMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
-0xafcd10,dialogmenu.cpp,"CDialogMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xafcd10,dialogmenu.cpp,"CDialogMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xafce10,dialogmenu.cpp,CDialogMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xafce80,dialogmenu.cpp,CDialogMenu::update(float),MATCH,True,False,,False
 0xafcec0,dialogmenu.cpp,CDialogMenu::setOpen(bool),MATCH,True,False,,False
@@ -274,20 +274,20 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xb04950,dialogmenu.cpp,__tcf_5,DIFF,False,False,,False
 0xb04b00,dialogmenu.cpp,CDialogMenu::setNPC(CCharacter*),MISSING,False,False,,False
 0xb05390,dialogmenu.cpp,CDialogMenu::createMenus(),MISSING,False,False,,False
-0xb05cf0,dialogmenu.cpp,"CDialogMenu::CDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xb05cf0,dialogmenu.cpp,"CDialogMenu::CDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
 0xb102a0,dropdownmenu.cpp,"CDropdownMenu::processInput(void*, float, bool)",MATCH,True,False,,False
-0xb102d0,dropdownmenu.cpp,"CDropdownMenu::broadcastEvent(EMENU_TYPE, EMENU_EVENT)",MISSING,False,False,,False
-0xb10430,dropdownmenu.cpp,CDropdownMenu::addMenuListener(iMenuListener*),MISSING,False,False,,False
+0xb102d0,dropdownmenu.cpp,"CDropdownMenu::broadcastEvent(EMENU_TYPE, EMENU_EVENT)",DIFF,True,False,,False
+0xb10430,dropdownmenu.cpp,CDropdownMenu::addMenuListener(iMenuListener*),DIFF,True,False,,False
 0xb17140,dropdownmenu.cpp,CDropdownMenu::~CDropdownMenu(),MATCH,True,False,,False
 0xb17240,dropdownmenu.cpp,CDropdownMenu::~CDropdownMenu(),MATCH,True,False,,False
-0xb17260,dropdownmenu.cpp,CDropdownMenu::removeMenuListener(iMenuListener*),MISSING,False,False,,False
-0xb17380,dropdownmenu.cpp,CDropdownMenu::handle_CloseButton(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xb17260,dropdownmenu.cpp,CDropdownMenu::removeMenuListener(iMenuListener*),MATCH,True,False,,False
+0xb17380,dropdownmenu.cpp,CDropdownMenu::handle_CloseButton(CEGUI::EventArgs const&),DIFF,True,False,,False
 0xb176b0,dropdownmenu.cpp,CDropdownMenu::update(float),MISSING,False,False,,False
 0xb179e0,dropdownmenu.cpp,CDropdownMenu::mapEventHandlers(CEGUI::Window*),MISSING,False,False,,False
 0xb17e70,dropdownmenu.cpp,"CDropdownMenu::setTitle(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
 0xb18e50,dropdownmenu.cpp,CDropdownMenu::setOpen(bool),MISSING,False,False,,False
-0xb192e0,dropdownmenu.cpp,CDropdownMenu::handle_onDoubleClick(CEGUI::EventArgs const&),MISSING,False,False,,False
-0xb194e0,dropdownmenu.cpp,CDropdownMenu::handle_onClick(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xb192e0,dropdownmenu.cpp,CDropdownMenu::handle_onDoubleClick(CEGUI::EventArgs const&),MATCH,True,False,,False
+0xb194e0,dropdownmenu.cpp,CDropdownMenu::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
 0xb196f0,dropdownmenu.cpp,CDropdownMenu::createMenus(),MISSING,False,False,,False
 0xb1b6f0,dropdownmenu.cpp,"CDropdownMenu::CDropdownMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*, unsigned int)",MISSING,False,False,,False
 0xb1ba10,dropdownmenu.cpp,TArrayList<iMenuListener*>::~TArrayList(),MATCH,False,False,,False
@@ -350,8 +350,8 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xb342b0,enchantmenu.cpp,CEGUI::MemberFunctionSlot<CEnchantMenu>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False
 0xb342e0,enchantmenu.cpp,CEGUI::MemberFunctionSlot<CEnchantMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
 0xb343b0,fishingmenu.cpp,"CFishingMenu::processInput(void*, float, bool)",MATCH,True,False,,False
-0xb343d0,fishingmenu.cpp,CFishingMenu::handle_onClick(CEGUI::EventArgs const&),MISSING,False,False,,False
-0xb34400,fishingmenu.cpp,CFishingMenu::onClick(ELayoutFunction),MISSING,False,False,,False
+0xb343d0,fishingmenu.cpp,CFishingMenu::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb34400,fishingmenu.cpp,CFishingMenu::onClick(ELayoutFunction),DIFF,True,False,,False
 0xb34470,fishingmenu.cpp,CFishingMenu::setVisible(bool),MATCH,True,False,,False
 0xb344d0,fishingmenu.cpp,CFishingMenu::~CFishingMenu(),MATCH,True,False,,False
 0xb344e0,fishingmenu.cpp,CFishingMenu::~CFishingMenu(),MATCH,True,False,,False
@@ -531,7 +531,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xb775f0,merchantmenu.cpp,CEGUI::MemberFunctionSlot<CMerchantMenu>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False
 0xb77620,merchantmenu.cpp,CEGUI::MemberFunctionSlot<CMerchantMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
 0xb77630,modalmenu.cpp,CModalMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
-0xb77660,modalmenu.cpp,"CModalMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xb77660,modalmenu.cpp,"CModalMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xb776f0,modalmenu.cpp,CModalMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xb77760,modalmenu.cpp,CModalMenu::update(float),MATCH,True,False,,False
 0xb77770,modalmenu.cpp,CModalMenu::setOpen(bool),MATCH,True,False,,False
@@ -556,8 +556,8 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xb7f3d0,modalmenu.cpp,__tcf_2,DIFF,False,False,,False
 0xb7f4f0,modalmenu.cpp,__tcf_5,DIFF,False,False,,False
 0xb7f580,modalmenu.cpp,CModalMenu::createMenus(),MISSING,False,False,,False
-0xb7fef0,modalmenu.cpp,"CModalMenu::CModalMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
-0xb800a0,optionsmenu.cpp,"COptionsMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xb7fef0,modalmenu.cpp,"CModalMenu::CModalMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
+0xb800a0,optionsmenu.cpp,"COptionsMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xb80100,optionsmenu.cpp,COptionsMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xb80130,optionsmenu.cpp,COptionsMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xb80140,optionsmenu.cpp,COptionsMenu::update(float),MATCH,True,False,,False
@@ -582,7 +582,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xb87e60,optionsmenu.cpp,__tcf_1,DIFF,False,False,,False
 0xb87f60,optionsmenu.cpp,__tcf_5,DIFF,False,False,,False
 0xb87ff0,optionsmenu.cpp,COptionsMenu::createMenus(),MISSING,False,False,,False
-0xb885b0,optionsmenu.cpp,"COptionsMenu::COptionsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xb885b0,optionsmenu.cpp,"COptionsMenu::COptionsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
 0xb88720,petmenu.cpp,non-virtual thunk to CPetMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
 0xb88730,petmenu.cpp,CPetMenu::equipmentDropped(CEquipment*),MATCH,True,False,,False
 0xb88740,petmenu.cpp,non-virtual thunk to CPetMenu::equipmentEquipped(CEquipment*),MATCH,True,False,,False
@@ -653,7 +653,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xba51e0,petmenu.cpp,CEGUI::MemberFunctionSlot<CPetMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
 0xba51f0,petmenu.cpp,CEGUI::MemberFunctionSlot<CPetMenu>::operator()(CEGUI::EventArgs const&),MATCH,False,False,,False
 0xba5220,petmenu.cpp,CEGUI::MemberFunctionSlot<CPetMenu>::~MemberFunctionSlot(),MATCH,False,False,,False
-0xba5230,questdialogmenu.cpp,"CQuestDialogMenu::broadcastAcceptedOrDeclined(bool, CBaseUnit*)",MISSING,False,False,,False
+0xba5230,questdialogmenu.cpp,"CQuestDialogMenu::broadcastAcceptedOrDeclined(bool, CBaseUnit*)",DIFF,True,False,,False
 0xba52b0,questdialogmenu.cpp,CQuestDialogMenu::getCameraOffset(),MATCH,True,False,,False
 0xba52d0,questdialogmenu.cpp,CQuestDialogMenu::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xba52e0,questdialogmenu.cpp,CQuestDialogMenu::handle_MouseOut(CEGUI::EventArgs const&),MATCH,True,False,,False
@@ -662,7 +662,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xba5490,questdialogmenu.cpp,CQuestDialogMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xba5510,questdialogmenu.cpp,CQuestDialogMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xba55b0,questdialogmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
-0xbae150,questdialogmenu.cpp,CQuestDialogMenu::setOpen(bool),MISSING,False,False,,False
+0xbae150,questdialogmenu.cpp,CQuestDialogMenu::setOpen(bool),DIFF,True,False,,False
 0xbae3b0,questdialogmenu.cpp,__tcf_16,DIFF,False,False,,False
 0xbae420,questdialogmenu.cpp,__tcf_15,DIFF,False,False,,False
 0xbae490,questdialogmenu.cpp,__tcf_14,DIFF,False,False,,False
@@ -688,7 +688,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xbb0140,questdialogmenu.cpp,CQuestDialogMenu::update(float),MISSING,False,False,,False
 0xbb04c0,questdialogmenu.cpp,CQuestDialogMenu::updateDialogTags(),MISSING,False,False,,False
 0xbb08f0,questdialogmenu.cpp,CQuestDialogMenu::createMenus(),MISSING,False,False,,False
-0xbb5480,questdialogmenu.cpp,"CQuestDialogMenu::CQuestDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xbb5480,questdialogmenu.cpp,"CQuestDialogMenu::CQuestDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
 0xbb56d0,questdialogmenu.cpp,"CQuestDialogMenu::setSlotIcon(int, CEquipment*)",MISSING,False,False,,False
 0xbb70b0,questdialogmenu.cpp,"CQuestDialogMenu::setNPC(CBaseUnit*, bool, CQuest*)",MISSING,False,False,,False
 0xbba030,questmenu.cpp,CQuestMenu::setOwner(CCharacter*),MATCH,True,False,,False
@@ -696,12 +696,12 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xbba060,questmenu.cpp,CQuestMenu::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xbba070,questmenu.cpp,CQuestMenu::handle_QuestClick(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xbba0a0,questmenu.cpp,"CQuestMenu::processInput(void*, float, bool)",MATCH,True,False,,False
-0xbba0f0,questmenu.cpp,CQuestMenu::handle_onClick(CEGUI::EventArgs const&),MISSING,False,False,,False
-0xbba120,questmenu.cpp,CQuestMenu::handle_MouseOut(CEGUI::EventArgs const&),MISSING,False,False,,False
-0xbba1e0,questmenu.cpp,CQuestMenu::handle_MouseOver(CEGUI::EventArgs const&),MISSING,False,False,,False
+0xbba0f0,questmenu.cpp,CQuestMenu::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xbba120,questmenu.cpp,CQuestMenu::handle_MouseOut(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xbba1e0,questmenu.cpp,CQuestMenu::handle_MouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
 0xbba2a0,questmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
-0xbc0ea0,questmenu.cpp,CQuestMenu::~CQuestMenu(),MISSING,False,False,,False
-0xbc0f50,questmenu.cpp,CQuestMenu::~CQuestMenu(),MISSING,False,False,,False
+0xbc0ea0,questmenu.cpp,CQuestMenu::~CQuestMenu(),DIFF,True,False,,False
+0xbc0f50,questmenu.cpp,CQuestMenu::~CQuestMenu(),MATCH,True,False,,False
 0xbc0f70,questmenu.cpp,__tcf_15,DIFF,False,False,,False
 0xbc1000,questmenu.cpp,__tcf_10,DIFF,False,False,,False
 0xbc1070,questmenu.cpp,__tcf_9,DIFF,False,False,,False
@@ -719,7 +719,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xbc1b20,questmenu.cpp,__tcf_3,DIFF,False,False,,False
 0xbc1bb0,questmenu.cpp,__tcf_2,DIFF,False,False,,False
 0xbc1c40,questmenu.cpp,__tcf_1,DIFF,False,False,,False
-0xbc1cb0,questmenu.cpp,CQuestMenu::abandonQuest(),MISSING,False,False,,False
+0xbc1cb0,questmenu.cpp,CQuestMenu::abandonQuest(),DIFF,True,False,,False
 0xbc1e40,questmenu.cpp,CQuestMenu::onClick(ELayoutFunction),MATCH,True,False,,False
 0xbc1f00,questmenu.cpp,__tcf_5,DIFF,False,False,,False
 0xbc2020,questmenu.cpp,CQuestMenu::update(float),MISSING,False,False,,False
@@ -733,7 +733,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xbd47e0,settingsmenu.cpp,CSettingsMenu::update(float),MISSING,False,False,,False
 0xbd5560,settingsmenu.cpp,CSettingsMenu::setOpen(bool),MISSING,False,False,,False
 0xbd6ea0,settingsmenu.cpp,CSettingsMenu::createMenus(),MISSING,False,False,,False
-0xbd8650,settingsmenu.cpp,"CSettingsMenu::CSettingsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
+0xbd8650,settingsmenu.cpp,"CSettingsMenu::CSettingsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False
 0xbd87c0,skillmenu.cpp,CSkillMenu::setOwner(CCharacter*),MATCH,True,False,,False
 0xbd87d0,skillmenu.cpp,CSkillMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xbd87f0,skillmenu.cpp,CSkillMenu::clearSkillTooltip(),MATCH,True,False,,False

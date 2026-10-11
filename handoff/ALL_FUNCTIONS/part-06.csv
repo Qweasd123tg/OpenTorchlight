@@ -78,11 +78,11 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa01c90,SceneNodeObject.cpp,CSceneNodeObject::sceneNodeRemoveFromParent(),MATCH,True,False,,False
 0xa01cb0,SceneNodeObject.cpp,CSceneNodeObject::setVisible(bool),MATCH,True,False,,False
 0xa01d40,SceneNodeObject.cpp,CSceneNodeObject::sceneNodeCreate(),MATCH,True,False,,False
-0xa01d90,SceneNodeObject.cpp,CSceneNodeObject::setResourceManager(CResourceManager*),DIFF,False,False,,False
+0xa01d90,SceneNodeObject.cpp,CSceneNodeObject::setResourceManager(CResourceManager*),DIFF,True,False,,False
 0xa01e10,SceneNodeObject.cpp,"CSceneNodeObject::sceneNodeSetParent(Ogre::SceneNode*, bool)",MATCH,True,False,,False
 0xa01eb0,SceneNodeObject.cpp,CSceneNodeObject::sceneNodeAddChild(CSceneNodeObject*),MATCH,True,False,,False
 0xa01ee0,SceneNodeObject.cpp,CSceneNodeObject::SetSceneOwner(CEditorScene*),MATCH,True,False,,False
-0xa01f30,SceneNodeObject.cpp,CSceneNodeObject::setParentPositionableObject(CPositionableObject*),DIFF,False,False,,False
+0xa01f30,SceneNodeObject.cpp,CSceneNodeObject::setParentPositionableObject(CPositionableObject*),DIFF,True,False,,False
 0xa01f50,SceneNodeObject.cpp,CSceneNodeObject::~CSceneNodeObject(),MATCH,True,False,,False
 0xa01fa0,SceneNodeObject.cpp,CSceneNodeObject::~CSceneNodeObject(),MATCH,True,False,,False
 0xa01fc0,SceneNodeObject.cpp,"CSceneNodeObject::CSceneNodeObject(CResourceManager*, Ogre::SceneManager*)",MATCH,True,False,,False
@@ -94,7 +94,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa02bb0,Shape.cpp,CShape::getMaxRadiusAtPercent(float),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02bb0.cpp,False
 0xa02bf0,Shape.cpp,CShape::getMinRadiusAtPercent(float),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02bf0.cpp,False
 0xa02c30,Shape.cpp,CShape::getAngleOfReleaseAtPercent(float),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02c30.cpp,False
-0xa02c60,Shape.cpp,CShape::getAngleOffsetAtPercent(float),MISSING,False,False,,False
+0xa02c60,Shape.cpp,CShape::getAngleOffsetAtPercent(float),DIFF,True,False,,False
 0xa02ce0,Shape.cpp,CShape::setShape(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02ce0.cpp,False
 0xa02cf0,Shape.cpp,"CShape::setAngleOffset(float const*, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02cf0.cpp,False
 0xa02d50,Shape.cpp,"CShape::setAngleOfRelease(float const*, unsigned int)",MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02d50.cpp,False
@@ -105,19 +105,19 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa02e90,Shape.cpp,CShape::getMinRadius(unsigned int&),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02e90.cpp,False
 0xa02ea0,Shape.cpp,CShape::getMaxRadius(unsigned int&),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02ea0.cpp,False
 0xa02eb0,Shape.cpp,CShape::getRadiusAtPercent(float),MATCH,True,True,handoff/recovered-pass10/snippets/Shape.cpp/0xa02eb0.cpp,False
-0xa02f10,Shape.cpp,"CShape::calculatePositionOnSphere(float, float)",MISSING,False,False,,False
+0xa02f10,Shape.cpp,"CShape::calculatePositionOnSphere(float, float)",DIFF,True,False,,False
 0xa030e0,Shape.cpp,CShape::~CShape(),MATCH,True,False,,False
 0xa03200,Shape.cpp,CShape::~CShape(),MATCH,True,False,,False
 0xa03220,Shape.cpp,CShape::CShape(CResourceManager*),MATCH,True,False,,False
-0xa04a20,Shape.cpp,"CShape::positionWithRadiusIntersectsBox(float, Ogre::Vector3 const&, float)",MISSING,False,False,,False
-0xa04c70,Shape.cpp,"CShape::calculatePositionBetweenAnglesAndRadius(float, float)",MISSING,False,False,,False
-0xa04e50,Shape.cpp,"CShape::calculateLineSequment(float, Ogre::Vector3&, Ogre::Vector3&)",MISSING,False,False,,False
-0xa05110,Shape.cpp,"CShape::calculatePositionOnLineBetweenAngles(float, float)",MISSING,False,False,,False
-0xa05260,Shape.cpp,"CShape::lineIntersectsPosition(float, Ogre::Vector3 const&, float)",MISSING,False,False,,False
-0xa05330,Shape.cpp,"CShape::calculatePositionOnBox(float, float)",MISSING,False,False,,False
+0xa04a20,Shape.cpp,"CShape::positionWithRadiusIntersectsBox(float, Ogre::Vector3 const&, float)",DIFF,True,False,,False
+0xa04c70,Shape.cpp,"CShape::calculatePositionBetweenAnglesAndRadius(float, float)",DIFF,True,False,,False
+0xa04e50,Shape.cpp,"CShape::calculateLineSequment(float, Ogre::Vector3&, Ogre::Vector3&)",MATCH,True,False,,False
+0xa05110,Shape.cpp,"CShape::calculatePositionOnLineBetweenAngles(float, float)",DIFF,True,False,,False
+0xa05260,Shape.cpp,"CShape::lineIntersectsPosition(float, Ogre::Vector3 const&, float)",MATCH,True,False,,False
+0xa05330,Shape.cpp,"CShape::calculatePositionOnBox(float, float)",DIFF,True,False,,False
 0xa055d0,Shape.cpp,"CShape::calculatePositionFromPercent(float, float)",MATCH,True,False,,False
 0xa056b0,Shape.cpp,"CShape::positionIntersectsAngle(float, Ogre::Vector3 const&, float)",MISSING,False,False,,False
-0xa05cc0,Shape.cpp,"CShape::getPositionIsInShapeAtPercent(float, Ogre::Vector3 const&, float)",MISSING,False,False,,False
+0xa05cc0,Shape.cpp,"CShape::getPositionIsInShapeAtPercent(float, Ogre::Vector3 const&, float)",DIFF,True,False,,False
 0xa06700,Shape.cpp,"CShape::calculateOrientation(Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&)",MISSING,False,False,,False
 0xa06a30,Shape.cpp,"CShape::updatePositionAndOrientation(Ogre::Vector3&, Ogre::Quaternion&, float, float)",MATCH,True,False,,False
 0xa06b30,Shape.cpp,"CShape::updateVisual(bool, float)",MISSING,False,False,,False
@@ -228,7 +228,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa1c3e0,CollisionAvoiderWrapper.cpp,non-virtual thunk to CCollisionAvoiderWrapper::~CCollisionAvoiderWrapper(),MATCH,True,False,,False
 0xa1c3f0,CollisionAvoiderWrapper.cpp,non-virtual thunk to CCollisionAvoiderWrapper::~CCollisionAvoiderWrapper(),MATCH,True,False,,False
 0xa1c400,CollisionAvoiderWrapper.cpp,CCollisionAvoiderWrapper::~CCollisionAvoiderWrapper(),MATCH,True,False,,False
-0xa1ced0,CollisionAvoiderWrapper.cpp,CCollisionAvoiderWrapper::CCollisionAvoiderWrapper(CResourceManager*),MISSING,False,False,,False
+0xa1ced0,CollisionAvoiderWrapper.cpp,CCollisionAvoiderWrapper::CCollisionAvoiderWrapper(CResourceManager*),MATCH,True,False,,False
 0xa1d480,ColorWrapper.cpp,"CColorWrapper::setColors(float*, unsigned int)",MISSING,False,False,,False
 0xa1d520,ColorWrapper.cpp,CColorWrapper::~CColorWrapper(),MATCH,True,False,,False
 0xa1d560,ColorWrapper.cpp,non-virtual thunk to CColorWrapper::~CColorWrapper(),MATCH,True,False,,False
@@ -547,8 +547,8 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa51e00,GraphManager.cpp,CGraphManager::clear(),MATCH,True,False,,False
 0xa51ea0,GraphManager.cpp,"CGraphManager::getGraphByFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
 0xa51fa0,GraphManager.cpp,"CGraphManager::getGraph(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
-0xa520a0,GraphManager.cpp,"CGraphManager::loadGraph(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,False,False,,False
-0xa52480,GraphManager.cpp,CGraphManager::reload(),DIFF,False,False,,False
+0xa520a0,GraphManager.cpp,"CGraphManager::loadGraph(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
+0xa52480,GraphManager.cpp,CGraphManager::reload(),DIFF,True,False,,False
 0xa52720,GraphManager.cpp,"CGraphManager::CGraphManager(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MATCH,True,False,,False
 0xa52920,GraphManager.cpp,CGraphManager::~CGraphManager(),MATCH,True,False,,False
 0xa52a90,GraphManager.cpp,CGraphManager::~CGraphManager(),MATCH,True,False,,False
@@ -595,7 +595,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa600f0,ResourceSettings.cpp,global constructors keyed to KRESOURCESETTING_S_MASTERRESOURCEFILE,MATCH,False,False,,False
 0xa60160,ResourceSettings.cpp,CResourceSettings::~CResourceSettings(),MATCH,True,False,,False
 0xa60170,ResourceSettings.cpp,CResourceSettings::~CResourceSettings(),MATCH,True,False,,False
-0xa60190,ResourceSettings.cpp,CResourceSettings::CResourceSettings(),DIFF,False,False,,False
+0xa60190,ResourceSettings.cpp,CResourceSettings::CResourceSettings(),DIFF,True,False,,False
 0xa60e90,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::getSingleton(),MATCH,True,False,,False
 0xa60ea0,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::_GetRoomPieceCoreDataByGuid(long long),DIFF,False,False,,False
 0xa60f00,RoomPieceDataInformation.cpp,CRoomPieceDataInformation::getDefaultGuid(),MATCH,True,False,,False

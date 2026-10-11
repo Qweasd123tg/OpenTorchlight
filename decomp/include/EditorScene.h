@@ -28,6 +28,8 @@ public:
     unsigned int getNumberOfTimelinesUpdating(bool excludeLooping);
 
     void DeleteAllObjectsFromScene();
+    void getChildren(long long parent, TArrayList<CEditorBaseObject*>& objects, CDescriptor* exclude);
+    void cloneLayout(CEditorScene* scene, TArrayList<CEditorBaseObject*>* objects, CTimerStatics* timers);
     int saveScene(std::wstring filename, TArrayList<CEditorBaseObject*>* objects);
 
     std::map<long long, CEditorBaseObject*>& getObjects() { return m_Objects; }
@@ -61,12 +63,12 @@ public:
     virtual CEditorBaseObject* CreateObjectByDescriptor(CDescriptor* descriptor, CEditorBaseObject* parent,
                                                         CEditorBaseObject* owner, bool load);
     virtual void DeleteObjectInScene(CEditorBaseObject* object);
-    virtual bool loadScene(std::wstring file, bool merge, TArrayList<CEditorBaseObject*>* objects, long long guid,
+    virtual unsigned int loadScene(std::wstring file, bool merge, TArrayList<CEditorBaseObject*>* objects, long long guid,
                            bool create, CTimerStatics* timers);
-    virtual bool loadScene(std::wstring file, CDataGroup& data, TArrayList<CEditorBaseObject*>* objects,
+    virtual unsigned int loadScene(std::wstring file, CDataGroup& data, TArrayList<CEditorBaseObject*>* objects,
                            long long guid, CTimerStatics* timers);
-    virtual void clone(CEditorScene* scene, TArrayList<CEditorBaseObject*>* objects, CTimerStatics* timers);
-    virtual void merge(CEditorScene* scene, TArrayList<CEditorBaseObject*>* objects, long long guid,
+    virtual unsigned int clone(CEditorScene* scene, TArrayList<CEditorBaseObject*>* objects, CTimerStatics* timers);
+    virtual unsigned int merge(CEditorScene* scene, TArrayList<CEditorBaseObject*>* objects, long long guid,
                        CTimerStatics* timers);
     virtual void update(float elapsed);
     virtual void eventFiredByDescriptor(unsigned int event, CDescriptor* descriptor, CEditorBaseObject* object);
@@ -83,6 +85,7 @@ public:
     void GetObjectsCreatedByADescriptor(const std::wstring& name, TArrayList<CEditorBaseObject*>* objects);
     void EditorBaseObjectChangedID(CEditorBaseObject* object, long long oldGuid, long long newGuid);
 
+    const std::wstring& getLoadedFilename() const { return m_sFileLoaded; }
     CDescriptorManager* getDescriptorManager() { return m_pDescriptorManager; }
     // Settings file read by CDescriptor::BroadcastEventFromObject (Descriptor.cpp).
     CDynamicPropertyFile* getSettings() { return static_cast<CDynamicPropertyFile*>(m_pUnknown170); }

@@ -239,54 +239,54 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x91af30,Inventory.cpp,CInventory::refreshEquipped(),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91af30.cpp,False
 0x91af80,Inventory.cpp,CInventory::removeListener(iInventoryListener*),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91af80.cpp,False
 0x91afe0,Inventory.cpp,CInventory::updateBonuses(),MATCH,True,False,,False
-0x91b050,Inventory.cpp,CInventory::getPaneIndex(EINVENTORY_PANES),MISSING,False,False,,False
+0x91b050,Inventory.cpp,CInventory::getPaneIndex(EINVENTORY_PANES),DIFF,True,False,,False
 0x91b0b0,Inventory.cpp,CInventory::getPaneSize(EINVENTORY_PANES),MATCH,True,False,,False
 0x91b0f0,Inventory.cpp,"CInventory::slotIsInPane(unsigned int, int)",MATCH,True,False,,False
 0x91b130,Inventory.cpp,CInventory::itemsInPane(EINVENTORY_PANES),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b130.cpp,False
 0x91b1c0,Inventory.cpp,CInventory::getItemPane(unsigned int),MATCH,True,False,,False
 0x91b220,Inventory.cpp,CInventory::isEquipmentInInventory(CEquipment*),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b220.cpp,False
-0x91b280,Inventory.cpp,CInventory::EquipmentsInSlot(unsigned int),MISSING,False,False,,False
+0x91b280,Inventory.cpp,CInventory::EquipmentsInSlot(unsigned int),DIFF,True,False,,False
 0x91b340,Inventory.cpp,CInventory::getEquipmentInSlot(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b340.cpp,False
 0x91b3a0,Inventory.cpp,CInventory::getEquipmentRefInSlot(unsigned int),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b3a0.cpp,False
-0x91b3f0,Inventory.cpp,CInventory::findEquipmentSlot(CEquipment*),MISSING,False,False,,False
+0x91b3f0,Inventory.cpp,CInventory::findEquipmentSlot(CEquipment*),DIFF,True,False,,False
 0x91b460,Inventory.cpp,CInventory::getEquipmentEquippedAt(EEQUIP_LOCATIONS),MATCH,True,False,,False
-0x91b4c0,Inventory.cpp,CInventory::getEquipmentsEquippedLocation(CEquipment*),MISSING,False,False,,False
+0x91b4c0,Inventory.cpp,CInventory::getEquipmentsEquippedLocation(CEquipment*),DIFF,True,False,,False
 0x91b540,Inventory.cpp,CInventory::isEquipmentEquipped(CEquipment*),MATCH,True,False,,False
-0x91b5b0,Inventory.cpp,CInventory::getEquipmentCountOfGuid(long long),MISSING,False,False,,False
-0x91b680,Inventory.cpp,CInventory::getEquipmentOfGuid(long long),MISSING,False,False,,False
+0x91b5b0,Inventory.cpp,CInventory::getEquipmentCountOfGuid(long long),MATCH,True,False,,False
+0x91b680,Inventory.cpp,CInventory::getEquipmentOfGuid(long long),MATCH,True,False,,False
 0x91b780,Inventory.cpp,CInventory::getStackSizeOfEquipment(CEquipment*),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b780.cpp,False
 0x91b790,Inventory.cpp,CInventory::getMaxStackSizeOfEquipment(CEquipment*),MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b790.cpp,False
-0x91b7a0,Inventory.cpp,CInventory::forceRecalculationOfEquipmentStats(),MISSING,False,False,,False
+0x91b7a0,Inventory.cpp,CInventory::forceRecalculationOfEquipmentStats(),MATCH,True,False,,False
 0x91b850,Inventory.cpp,"CInventory::canUseEquipment(CEquipment*, CCharacter*)",MATCH,True,True,handoff/recovered-pass10/snippets/Inventory.cpp/0x91b850.cpp,False
-0x91b890,Inventory.cpp,CInventory::addListener(iInventoryListener*),MISSING,False,False,,False
+0x91b890,Inventory.cpp,CInventory::addListener(iInventoryListener*),DIFF,True,False,,False
 0x91b9c0,Inventory.cpp,CInventory::getRequiredPane(CEquipment*),MATCH,True,False,,False
-0x91ba50,Inventory.cpp,CInventory::findFreeSlot(CEquipment*),MISSING,False,False,,False
-0x91bc50,Inventory.cpp,"CInventory::canPickup(CEquipment*, bool)",MISSING,False,False,,False
+0x91ba50,Inventory.cpp,CInventory::findFreeSlot(CEquipment*),DIFF,True,False,,False
+0x91bc50,Inventory.cpp,"CInventory::canPickup(CEquipment*, bool)",DIFF,True,False,,False
 0x91bd10,Inventory.cpp,"CInventory::canEquipIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS, bool)",MATCH,True,False,,False
 0x91bdc0,Inventory.cpp,"CInventory::canEquip(CEquipment*, bool)",MISSING,False,False,,False
 0x91c2a0,Inventory.cpp,"CInventory::getComparisonItems(CEquipment*, CEquipment**, CEquipment**)",MISSING,False,False,,False
-0x91c640,Inventory.cpp,"CInventory::getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",MISSING,False,False,,False
+0x91c640,Inventory.cpp,"CInventory::getEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",DIFF,True,False,,False
 0x91c720,Inventory.cpp,"CInventory::executeProcs(EEFFECT_TYPE, CBaseUnit*)",MISSING,False,False,,False
 0x91c9d0,Inventory.cpp,CInventory::updateSkillManagers(float),MATCH,True,False,,False
-0x91ca60,Inventory.cpp,"CInventory::getEffectValue(EEFFECT_TYPE, float, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
-0x91cbb0,Inventory.cpp,"CInventory::getEffectValueFromEquipmentSlot(EEFFECT_TYPE, EEQUIP_LOCATIONS, EDAMAGE_TYPES)",MISSING,False,False,,False
-0x91ccd0,Inventory.cpp,"CInventory::getEffectValueMinusEquipmentSlot(EEFFECT_TYPE, EEQUIP_LOCATIONS, EDAMAGE_TYPES)",MISSING,False,False,,False
+0x91ca60,Inventory.cpp,"CInventory::getEffectValue(EEFFECT_TYPE, float, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,True,False,,False
+0x91cbb0,Inventory.cpp,"CInventory::getEffectValueFromEquipmentSlot(EEFFECT_TYPE, EEQUIP_LOCATIONS, EDAMAGE_TYPES)",DIFF,True,False,,False
+0x91ccd0,Inventory.cpp,"CInventory::getEffectValueMinusEquipmentSlot(EEFFECT_TYPE, EEQUIP_LOCATIONS, EDAMAGE_TYPES)",MATCH,True,False,,False
 0x91cd60,Inventory.cpp,"CInventory::transferEffects(CCharacter*, EEFFECT_ACTIVATION, EEFFECT_TYPE)",MATCH,True,False,,False
-0x91ce00,Inventory.cpp,"CInventory::calculateEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",MISSING,False,False,,False
-0x91cf50,Inventory.cpp,CInventory::identifyAll(),MISSING,False,False,,False
-0x91cfe0,Inventory.cpp,CInventory::freeInventory(),MISSING,False,False,,False
+0x91ce00,Inventory.cpp,"CInventory::calculateEffectValue(EEFFECT_TYPE, EDAMAGE_TYPES)",DIFF,True,False,,False
+0x91cf50,Inventory.cpp,CInventory::identifyAll(),DIFF,True,False,,False
+0x91cfe0,Inventory.cpp,CInventory::freeInventory(),DIFF,True,False,,False
 0x91d180,Inventory.cpp,CInventory::~CInventory(),MATCH,True,False,,False
 0x91d2e0,Inventory.cpp,CInventory::~CInventory(),MATCH,True,False,,False
-0x91d300,Inventory.cpp,CInventory::destroyIcons(),MISSING,False,False,,False
+0x91d300,Inventory.cpp,CInventory::destroyIcons(),DIFF,True,False,,False
 0x91d3a0,Inventory.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
 0x9231c0,Inventory.cpp,__tcf_15,DIFF,False,False,,False
 0x923250,Inventory.cpp,__tcf_5,DIFF,False,False,,False
 0x9232c0,Inventory.cpp,__tcf_2,DIFF,False,False,,False
 0x923330,Inventory.cpp,__tcf_1,DIFF,False,False,,False
 0x9233a0,Inventory.cpp,__tcf_0,DIFF,False,False,,False
-0x923410,Inventory.cpp,"CInventory::getEquipmentsOfQuestID(long long, TArrayList<CEquipmentRef*>&)",MISSING,False,False,,False
-0x9235a0,Inventory.cpp,"CInventory::getEquipmentsOfUnitGuid(long long, TArrayList<CEquipmentRef*>&)",MISSING,False,False,,False
-0x923730,Inventory.cpp,"CInventory::getEquipmentsOfUnitType(UNITTYPES::EUNITTYPES, TArrayList<CEquipmentRef*>&)",MISSING,False,False,,False
+0x923410,Inventory.cpp,"CInventory::getEquipmentsOfQuestID(long long, TArrayList<CEquipmentRef*>&)",DIFF,True,False,,False
+0x9235a0,Inventory.cpp,"CInventory::getEquipmentsOfUnitGuid(long long, TArrayList<CEquipmentRef*>&)",DIFF,True,False,,False
+0x923730,Inventory.cpp,"CInventory::getEquipmentsOfUnitType(UNITTYPES::EUNITTYPES, TArrayList<CEquipmentRef*>&)",MATCH,True,False,,False
 0x9238a0,Inventory.cpp,__tcf_23,MATCH,False,False,,False
 0x923910,Inventory.cpp,__tcf_22,MATCH,False,False,,False
 0x9239a0,Inventory.cpp,__tcf_21,MATCH,False,False,,False
@@ -309,17 +309,17 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x924320,Inventory.cpp,__tcf_10,DIFF,False,False,,False
 0x9243b0,Inventory.cpp,"CInventory::addSection(EINVENTORY_PANES, unsigned int)",MATCH,True,False,,False
 0x924440,Inventory.cpp,CInventory::calculateEffectValues(),MISSING,False,False,,False
-0x924810,Inventory.cpp,CInventory::removeEquipment(CEquipment*),MISSING,False,False,,False
+0x924810,Inventory.cpp,CInventory::removeEquipment(CEquipment*),DIFF,True,False,,False
 0x9249b0,Inventory.cpp,CInventory::unequipEquipment(CEquipment*),MATCH,True,False,,False
-0x924ab0,Inventory.cpp,CInventory::verifyEquipment(),MISSING,False,False,,False
+0x924ab0,Inventory.cpp,CInventory::verifyEquipment(),DIFF,True,False,,False
 0x924bd0,Inventory.cpp,"CInventory::pickupEquipment(CEquipment*, int, bool)",MISSING,False,False,,False
 0x9251b0,Inventory.cpp,"CInventory::pickupEquipment(CEquipment*, bool)",MISSING,False,False,,False
-0x9254b0,Inventory.cpp,"CInventory::useEquipment(CEquipment*, CCharacter*)",MISSING,False,False,,False
-0x925580,Inventory.cpp,"CInventory::removeEquipmentByGuid(long long, unsigned int, bool)",MISSING,False,False,,False
+0x9254b0,Inventory.cpp,"CInventory::useEquipment(CEquipment*, CCharacter*)",DIFF,True,False,,False
+0x925580,Inventory.cpp,"CInventory::removeEquipmentByGuid(long long, unsigned int, bool)",DIFF,True,False,,False
 0x9256a0,Inventory.cpp,"CInventory::equipEquipmentIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS)",MISSING,False,False,,False
 0x925970,Inventory.cpp,CInventory::equipEquipmentIntoFirstFreeLocation(CEquipment*),MISSING,False,False,,False
 0x925d30,Inventory.cpp,CInventory::swapWeaponSet(),MISSING,False,False,,False
-0x926000,Inventory.cpp,"CInventory::CInventory(CCharacter*, unsigned int)",MISSING,False,False,,False
+0x926000,Inventory.cpp,"CInventory::CInventory(CCharacter*, unsigned int)",MATCH,True,False,,False
 0x926370,Inventory.cpp,"std::_Rb_tree<EEFFECT_TYPE, std::pair<EEFFECT_TYPE const, float>, std::_Select1st<std::pair<EEFFECT_TYPE const, float> >, std::less<EEFFECT_TYPE>, std::allocator<std::pair<EEFFECT_TYPE const, float> > >::_M_erase(std::_Rb_tree_node<std::pair<EEFFECT_TYPE const, float> >*)",MATCH,False,False,,False
 0x9266a0,Inventory.cpp,"std::vector<EINVENTORY_PANES, std::allocator<EINVENTORY_PANES> >::_M_insert_aux(__gnu_cxx::__normal_iterator<EINVENTORY_PANES*, std::vector<EINVENTORY_PANES, std::allocator<EINVENTORY_PANES> > >, EINVENTORY_PANES const&)",MATCH,False,False,,False
 0x9269b0,automap.cpp,CAutomap::clear(),MATCH,True,False,,False
@@ -549,9 +549,9 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x9711b0,levelstate.cpp,CLevelState::~CLevelState(),MISSING,False,False,,False
 0x9711d0,levelstate.cpp,"std::vector<CLogicNodeState*, std::allocator<CLogicNodeState*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CLogicNodeState**, std::vector<CLogicNodeState*, std::allocator<CLogicNodeState*> > >, CLogicNodeState* const&)",MATCH,False,False,,False
 0x971360,leveltemplatedata.cpp,CLevelTemplateData::getRandomChunk(unsigned int),MATCH,True,False,,False
-0x9713c0,leveltemplatedata.cpp,CLevelTemplateData::getRandomLayout(),MISSING,False,False,,False
-0x971410,leveltemplatedata.cpp,CLevelTemplateData::resetOdds(),MISSING,False,False,,False
-0x971530,leveltemplatedata.cpp,"CLevelTemplateData::getNumberOfUnitsToCreate(ELEVELLAYOUT_CREATION, unsigned int)",MISSING,False,False,,False
+0x9713c0,leveltemplatedata.cpp,CLevelTemplateData::getRandomLayout(),DIFF,True,False,,False
+0x971410,leveltemplatedata.cpp,CLevelTemplateData::resetOdds(),DIFF,True,False,,False
+0x971530,leveltemplatedata.cpp,"CLevelTemplateData::getNumberOfUnitsToCreate(ELEVELLAYOUT_CREATION, unsigned int)",DIFF,True,False,,False
 0x9725d0,leveltemplatedata.cpp,"CLevelTemplateData::exitsMatch(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)",MISSING,False,False,,False
 0x972980,leveltemplatedata.cpp,"CLevelTemplateData::intersectsChunks(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)",MISSING,False,False,,False
 0x972b80,leveltemplatedata.cpp,CLevelTemplateData::deleteLayouts(),MISSING,False,False,,False
@@ -585,7 +585,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x987d90,Interact.cpp,CInteract::~CInteract(),MATCH,True,False,,False
 0x987db0,Interact.cpp,CInteract::CInteract(CResourceManager*),DIFF,False,False,,False
 0x987fe0,LogicTimer.cpp,CLogicTimer::resetTimer(),MATCH,True,False,,False
-0x988020,LogicTimer.cpp,CLogicTimer::update(float),DIFF,False,False,,False
+0x988020,LogicTimer.cpp,CLogicTimer::update(float),DIFF,True,False,,False
 0x9880b0,LogicTimer.cpp,CLogicTimer::setEnabled(bool),MATCH,True,False,,False
 0x988120,LogicTimer.cpp,CLogicTimer::~CLogicTimer(),MATCH,True,False,,False
 0x988130,LogicTimer.cpp,CLogicTimer::~CLogicTimer(),MATCH,True,False,,False
@@ -603,7 +603,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x991d00,LogicTrigger.cpp,__tcf_0,DIFF,False,False,,False
 0x991e00,LogicTrigger.cpp,CLogicTrigger::setEnabled(bool),MATCH,False,False,,False
 0x991e10,LogicTrigger.cpp,CLogicTrigger::getEnabled(),MATCH,False,False,,False
-0x991e20,OutputIncrementor.cpp,COutputIncrementor::increment(),DIFF,False,False,,False
+0x991e20,OutputIncrementor.cpp,COutputIncrementor::increment(),DIFF,True,False,,False
 0x991f20,OutputIncrementor.cpp,COutputIncrementor::setEnabled(bool),MATCH,True,False,,False
 0x991f70,OutputIncrementor.cpp,COutputIncrementor::~COutputIncrementor(),MATCH,True,False,,False
 0x991f80,OutputIncrementor.cpp,COutputIncrementor::~COutputIncrementor(),MATCH,True,False,,False
@@ -644,7 +644,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x9a3bf0,Teleport.cpp,CTeleport::getEnabled(),MATCH,False,False,,False
 0x9a3c00,TriggerBox.cpp,CTriggerBox::setDimensions(Ogre::Vector3 const&),MATCH,True,False,,False
 0x9a3c70,TriggerBox.cpp,CTriggerBox::scaleUpdated(Ogre::Vector3 const&),MATCH,True,False,,False
-0x9a3cc0,TriggerBox.cpp,"CTriggerBox::updateTrigger(float, CEditorScene*)",DIFF,False,False,,False
+0x9a3cc0,TriggerBox.cpp,"CTriggerBox::updateTrigger(float, CEditorScene*)",DIFF,True,False,,False
 0x9a3e70,TriggerBox.cpp,CTriggerBox::~CTriggerBox(),MATCH,True,False,,False
 0x9a3e80,TriggerBox.cpp,CTriggerBox::~CTriggerBox(),MATCH,True,False,,False
 0x9a3ea0,TriggerBox.cpp,CTriggerBox::CTriggerBox(CResourceManager*),MATCH,True,False,,False
@@ -669,7 +669,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x9aa590,TriggerBox.cpp,__tcf_0,DIFF,False,False,,False
 0x9aa620,TriggerBox.cpp,__tcf_6,DIFF,False,False,,False
 0x9aa6b0,TriggerSphere.cpp,CTriggerSphere::scaleUpdated(Ogre::Vector3 const&),MATCH,True,False,,False
-0x9aa6e0,TriggerSphere.cpp,"CTriggerSphere::updateTrigger(float, CEditorScene*)",DIFF,False,False,,False
+0x9aa6e0,TriggerSphere.cpp,"CTriggerSphere::updateTrigger(float, CEditorScene*)",DIFF,True,False,,False
 0x9aa830,TriggerSphere.cpp,CTriggerSphere::~CTriggerSphere(),MATCH,True,False,,False
 0x9aa840,TriggerSphere.cpp,CTriggerSphere::~CTriggerSphere(),MATCH,True,False,,False
 0x9aa860,TriggerSphere.cpp,CTriggerSphere::CTriggerSphere(CResourceManager*),MATCH,True,False,,False

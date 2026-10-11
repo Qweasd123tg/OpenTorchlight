@@ -130,23 +130,23 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0x5922e0,astarpathfinder.cpp,CAstarPathfinder::getNodeY(),MATCH,True,False,,False
 0x592310,astarpathfinder.cpp,CAstarPathfinder::getNextNodeX(),MATCH,True,False,,False
 0x592340,astarpathfinder.cpp,CAstarPathfinder::getNextNodeY(),MATCH,True,False,,False
-0x592370,astarpathfinder.cpp,CAstarPathfinder::reverseNodes(CAstarPathfinder::CAstarNode*),DIFF,False,False,,False
+0x592370,astarpathfinder.cpp,CAstarPathfinder::reverseNodes(CAstarPathfinder::CAstarNode*),DIFF,True,False,,False
 0x5923c0,astarpathfinder.cpp,CAstarPathfinder::returnBestNode(),MATCH,True,False,,False
 0x592400,astarpathfinder.cpp,CAstarPathfinder::openNode(unsigned int),MATCH,True,False,,False
 0x592430,astarpathfinder.cpp,CAstarPathfinder::closedNode(unsigned int),MATCH,True,False,,False
 0x592460,astarpathfinder.cpp,CAstarPathfinder::insert(CAstarPathfinder::CAstarNode*),MATCH,True,False,,False
 0x5924b0,astarpathfinder.cpp,"global constructors keyed to CAstarPathfinder::CAstarPathfinder(float, float, unsigned int, unsigned int, short**, short**, float)",MATCH,False,False,,False
 0x592520,astarpathfinder.cpp,CAstarPathfinder::pop(),MATCH,True,False,,False
-0x592540,astarpathfinder.cpp,CAstarPathfinder::freeNodes(),DIFF,False,False,,False
+0x592540,astarpathfinder.cpp,CAstarPathfinder::freeNodes(),DIFF,True,False,,False
 0x5925a0,astarpathfinder.cpp,CAstarPathfinder::push(CAstarPathfinder::CAstarNode*),MATCH,True,False,,False
-0x5925f0,astarpathfinder.cpp,CAstarPathfinder::propagateDown(CAstarPathfinder::CAstarNode*),DIFF,False,False,,False
-0x592710,astarpathfinder.cpp,"CAstarPathfinder::generateSuccessor(CAstarPathfinder::CAstarNode*, unsigned int, unsigned int, unsigned int, unsigned int)",DIFF,False,False,,False
-0x592900,astarpathfinder.cpp,"CAstarPathfinder::generateSuccessors(CAstarPathfinder::CAstarNode*, unsigned int, unsigned int)",DIFF,False,False,,False
-0x592da0,astarpathfinder.cpp,"CAstarPathfinder::createPath(int, int, int, int, bool)",DIFF,False,False,,False
-0x592f70,astarpathfinder.cpp,"CAstarPathfinder::findNearestWideOpen(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int&, unsigned int&)",DIFF,False,False,,False
-0x593160,astarpathfinder.cpp,"CAstarPathfinder::findNearestOpen(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int&, unsigned int&)",DIFF,False,False,,False
-0x5932e0,astarpathfinder.cpp,"CAstarPathfinder::findNearestOpenDirected(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int&, unsigned int&)",DIFF,False,False,,False
-0x593530,astarpathfinder.cpp,"CAstarPathfinder::findPath(float, float, float, float)",DIFF,False,False,,False
+0x5925f0,astarpathfinder.cpp,CAstarPathfinder::propagateDown(CAstarPathfinder::CAstarNode*),DIFF,True,False,,False
+0x592710,astarpathfinder.cpp,"CAstarPathfinder::generateSuccessor(CAstarPathfinder::CAstarNode*, unsigned int, unsigned int, unsigned int, unsigned int)",DIFF,True,False,,False
+0x592900,astarpathfinder.cpp,"CAstarPathfinder::generateSuccessors(CAstarPathfinder::CAstarNode*, unsigned int, unsigned int)",DIFF,True,False,,False
+0x592da0,astarpathfinder.cpp,"CAstarPathfinder::createPath(int, int, int, int, bool)",DIFF,True,False,,False
+0x592f70,astarpathfinder.cpp,"CAstarPathfinder::findNearestWideOpen(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int&, unsigned int&)",DIFF,True,False,,False
+0x593160,astarpathfinder.cpp,"CAstarPathfinder::findNearestOpen(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int&, unsigned int&)",DIFF,True,False,,False
+0x5932e0,astarpathfinder.cpp,"CAstarPathfinder::findNearestOpenDirected(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int&, unsigned int&)",DIFF,True,False,,False
+0x593530,astarpathfinder.cpp,"CAstarPathfinder::findPath(float, float, float, float)",DIFF,True,False,,False
 0x593810,astarpathfinder.cpp,CAstarPathfinder::~CAstarPathfinder(),MATCH,True,False,,False
 0x593860,astarpathfinder.cpp,CAstarPathfinder::~CAstarPathfinder(),MATCH,True,False,,False
 0x593880,astarpathfinder.cpp,"CAstarPathfinder::CAstarPathfinder(float, float, unsigned int, unsigned int, short**, short**, float)",MATCH,True,False,,False

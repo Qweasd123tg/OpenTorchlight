@@ -162,3 +162,8 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xf632d0,ShellUtils.cpp,"ShellUtils::LaunchProgram(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, std::vector<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::allocator<std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > const&)",MATCH,True,False,,False
 0xf63380,ShellUtils.cpp,"ShellUtils::LaunchBrowser(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",MATCH,True,False,,False
 0xf633c0,ShellUtils.cpp,lodepng_read32bitInt(unsigned char const*),MISSING,False,False,,False
+0xb05ec0,diemenu.cpp,"CDieMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
+0xb060c0,diemenu.cpp,CDieMenu::handle_ExitButton(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb060f0,diemenu.cpp,CDieMenu::handle_CloseButton(CEGUI::EventArgs const&),DIFF,True,False,,False
+0xb06110,diemenu.cpp,CDieMenu::update(float),MATCH,True,False,,False
+0xb100c0,diemenu.cpp,"CDieMenu::CDieMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",DIFF,True,False,,False

@@ -9,6 +9,7 @@ namespace CEGUI { class Window; }
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CTipMenu : public CDropdownMenu {
 public:
+    void createMenus();
     virtual bool onClick(ELayoutFunction function,std::wstring text);
     virtual void update(float elapsed);
     virtual void setOpen(bool open);
@@ -18,7 +19,8 @@ public:
 
     virtual ~CTipMenu();
     CTipMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
-    unsigned char m_PaddingC0[0x10];
+    CEGUI::Window* m_tipText; // +0xc0
+    CEGUI::Window* m_tipImage; // +0xc8
     CEGUI::Checkbox* m_showTipsCheckbox; // +0xd0
     unsigned char m_PaddingD8[0x10];
 };

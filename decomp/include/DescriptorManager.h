@@ -10,6 +10,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 class CDescriptorManager : public CRunicCore
 {
@@ -34,6 +35,11 @@ public:
     CDescriptor* GetDescriptorByCreated(unsigned int uiCreatedIndex,
                                         bool bCreateIfMissing);
     void deleteUnusedDescriptors();
+    // The shipped manager stores vector begin/end/capacity in these 24 bytes.
+    std::vector<CDescriptor*>& getDescriptorVector()
+    {
+        return *reinterpret_cast<std::vector<CDescriptor*>*>(&m_descriptors);
+    }
 
     std::map<std::wstring, unsigned int> m_descriptorIndices;
     TArrayList<CDescriptor*> m_descriptors;

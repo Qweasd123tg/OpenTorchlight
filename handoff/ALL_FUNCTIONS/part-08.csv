@@ -210,7 +210,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xc332e0,menumanager.cpp,__tcf_0,DIFF,False,False,,False
 0xc33370,menumanager.cpp,__tcf_7,MATCH,False,False,,False
 0xc33490,continuegamemenu.cpp,CContinueGameMenu::canContinue(),MATCH,True,False,,False
-0xc334e0,continuegamemenu.cpp,"CContinueGameMenu::onDoubleClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xc334e0,continuegamemenu.cpp,"CContinueGameMenu::onDoubleClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xc33580,continuegamemenu.cpp,CContinueGameMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xc335a0,continuegamemenu.cpp,CContinueGameMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xc335b0,continuegamemenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
@@ -234,18 +234,18 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xc3b280,continuegamemenu.cpp,__tcf_1,DIFF,False,False,,False
 0xc3b2f0,continuegamemenu.cpp,CContinueGameMenu::updateCharacterList(),MISSING,False,False,,False
 0xc3e2a0,continuegamemenu.cpp,CContinueGameMenu::scrollUp(),MATCH,True,False,,False
-0xc3e2c0,continuegamemenu.cpp,CContinueGameMenu::scrollDown(),MISSING,False,False,,False
+0xc3e2c0,continuegamemenu.cpp,CContinueGameMenu::scrollDown(),DIFF,True,False,,False
 0xc3e300,continuegamemenu.cpp,__tcf_5,DIFF,False,False,,False
 0xc3e420,continuegamemenu.cpp,CContinueGameMenu::reloadFiles(bool),MISSING,False,False,,False
 0xc3f8c0,continuegamemenu.cpp,"CContinueGameMenu::selectCharacter(int, bool)",MISSING,False,False,,False
-0xc3fd00,continuegamemenu.cpp,CContinueGameMenu::deleteCharacter(),MISSING,False,False,,False
-0xc3fe80,continuegamemenu.cpp,"CContinueGameMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xc3fd00,continuegamemenu.cpp,CContinueGameMenu::deleteCharacter(),DIFF,True,False,,False
+0xc3fe80,continuegamemenu.cpp,"CContinueGameMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xc40010,continuegamemenu.cpp,CContinueGameMenu::setOpen(bool),MATCH,True,False,,False
-0xc40060,continuegamemenu.cpp,CContinueGameMenu::~CContinueGameMenu(),MISSING,False,False,,False
-0xc404a0,continuegamemenu.cpp,CContinueGameMenu::~CContinueGameMenu(),MISSING,False,False,,False
+0xc40060,continuegamemenu.cpp,CContinueGameMenu::~CContinueGameMenu(),MATCH,True,False,,False
+0xc404a0,continuegamemenu.cpp,CContinueGameMenu::~CContinueGameMenu(),MATCH,True,False,,False
 0xc404c0,continuegamemenu.cpp,CContinueGameMenu::createMenus(),MISSING,False,False,,False
-0xc42490,continuegamemenu.cpp,"CContinueGameMenu::CContinueGameMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MISSING,False,False,,False
-0xc42cb0,difficultymenu.cpp,"CDifficultyMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xc42490,continuegamemenu.cpp,"CContinueGameMenu::CContinueGameMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MATCH,True,False,,False
+0xc42cb0,difficultymenu.cpp,"CDifficultyMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xc42dd0,difficultymenu.cpp,CDifficultyMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xc42df0,difficultymenu.cpp,CDifficultyMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xc42e00,difficultymenu.cpp,CDifficultyMenu::update(float),MATCH,True,False,,False
@@ -271,7 +271,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xc4a6f0,difficultymenu.cpp,__tcf_5,DIFF,False,False,,False
 0xc4a810,difficultymenu.cpp,CDifficultyMenu::createMenus(),MISSING,False,False,,False
 0xc4adf0,difficultymenu.cpp,"CDifficultyMenu::CDifficultyMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",MATCH,True,False,,False
-0xc4ae80,mainmenu.cpp,"CMainMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xc4ae80,mainmenu.cpp,"CMainMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xc4b000,mainmenu.cpp,CMainMenu::handle_ExitButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xc4b020,mainmenu.cpp,CMainMenu::handle_CloseButton(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xc4b030,mainmenu.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
@@ -452,13 +452,13 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xc728d0,FileReader.cpp,CFileReader::ResetFile(),MATCH,True,False,,False
 0xc728e0,FileReader.cpp,CFileReader::EndOfFile(),MATCH,True,False,,False
 0xc728f0,FileReader.cpp,global constructors keyed to CFileReader::CFileReader(),MATCH,False,False,,False
-0xc72960,FileReader.cpp,CFileReader::ReadLine(wchar_t),DIFF,False,False,,False
+0xc72960,FileReader.cpp,CFileReader::ReadLine(wchar_t),DIFF,True,False,,False
 0xc72a90,FileReader.cpp,CFileReader::ReadFile(_IO_FILE*),MATCH,True,False,,False
-0xc72b70,FileReader.cpp,CFileReader::CFileReader(),DIFF,False,False,,False
+0xc72b70,FileReader.cpp,CFileReader::CFileReader(),DIFF,True,False,,False
 0xc72bc0,FileReader.cpp,CFileReader::~CFileReader(),MATCH,True,False,,False
-0xc72c40,FileReader.cpp,"CFileReader::ReadLineTokenize(std::queue<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::deque<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >*, wchar_t const*, wchar_t)",DIFF,False,False,,False
-0xc72e80,FileReader.cpp,"CFileReader::ConvertFileToUnicode(_IO_FILE*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
-0xc731f0,FileReader.cpp,"CFileReader::ReadFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xc72c40,FileReader.cpp,"CFileReader::ReadLineTokenize(std::queue<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::deque<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > > >*, wchar_t const*, wchar_t)",DIFF,True,False,,False
+0xc72e80,FileReader.cpp,"CFileReader::ConvertFileToUnicode(_IO_FILE*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,True,False,,False
+0xc731f0,FileReader.cpp,"CFileReader::ReadFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,True,False,,False
 0xc738b0,FileUtilities.cpp,FILESYSTEM::ReadByte(_IO_FILE*),MISSING,False,False,,False
 0xc738e0,FileUtilities.cpp,FILESYSTEM::ReadFloat(_IO_FILE*),MATCH,True,True,handoff/recovered-pass10/snippets/FileUtilities.cpp/0xc738e0.cpp,False
 0xc73910,FileUtilities.cpp,FILESYSTEM::ReadShort(_IO_FILE*),MATCH,True,False,,False
@@ -624,7 +624,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xc89880,path.cpp,CPath::CPath(CPath&),DIFF,False,False,,False
 0xc8a210,randomizer.cpp,CRandomizer::getOdds(int),MATCH,True,False,,False
 0xc8a240,randomizer.cpp,"CRandomizer::setChoiceOdds(int, int)",MATCH,True,False,,False
-0xc8a2c0,randomizer.cpp,CRandomizer::removeChoice(unsigned int),DIFF,False,False,,False
+0xc8a2c0,randomizer.cpp,CRandomizer::removeChoice(unsigned int),DIFF,True,False,,False
 0xc8a370,randomizer.cpp,global constructors keyed to CRandomizer::CRandomizer(ERANDOMIZER_TYPE),MATCH,False,False,,False
 0xc8a3e0,randomizer.cpp,CRandomizer::setRandomSeed(unsigned int),MATCH,True,False,,False
 0xc8a3f0,randomizer.cpp,CRandomizer::clear(),MATCH,True,False,,False
@@ -632,8 +632,8 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xc8a600,randomizer.cpp,CRandomizer::CRandomizer(ERANDOMIZER_TYPE),MATCH,True,False,,False
 0xc8a6a0,randomizer.cpp,CRandomizer::computeOdds(),MATCH,True,False,,False
 0xc8a890,randomizer.cpp,CRandomizer::setRandomizerToNormal(float),MATCH,True,False,,False
-0xc8a8f0,randomizer.cpp,CRandomizer::getRandom(int&),DIFF,False,False,,False
-0xc8aa10,randomizer.cpp,CRandomizer::getRandom(),DIFF,False,False,,False
+0xc8a8f0,randomizer.cpp,CRandomizer::getRandom(int&),DIFF,True,False,,False
+0xc8aa10,randomizer.cpp,CRandomizer::getRandom(),DIFF,True,False,,False
 0xc8ab10,randomizer.cpp,CRandomizer::hasValidChoices(),MATCH,True,False,,False
 0xc8abf0,CmdLineParser.cpp,"CCmdLineParser::HasCommand(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
 0xc8acf0,CmdLineParser.cpp,"CCmdLineParser::GetStringParam(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
@@ -712,7 +712,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xc92c70,utilities.cpp,UTILITIES::setSeed(int),MATCH,True,False,,False
 0xc92cb0,utilities.cpp,UTILITIES::getAvailableRAM(),MATCH,True,False,,False
 0xc92cc0,utilities.cpp,UTILITIES::getProcessorSpeed(),MATCH,True,False,,False
-0xc92cd0,utilities.cpp,"UTILITIES::GetEnvironmentVar(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,False,False,,False
+0xc92cd0,utilities.cpp,"UTILITIES::GetEnvironmentVar(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xc92d30,utilities.cpp,UTILITIES::doubleRand(),MATCH,True,False,,False
 0xc92d90,utilities.cpp,"UTILITIES::VerifyDouble(double, double)",MATCH,True,False,,False
 0xc92dd0,utilities.cpp,"UTILITIES::VerifyFloat(float, float)",MATCH,True,False,,False

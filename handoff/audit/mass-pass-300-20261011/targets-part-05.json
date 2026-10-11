@@ -1,0 +1,1385 @@
+[
+  {
+    "address": "0x9254b0",
+    "original_bytes": 201,
+    "function": "CInventory::useEquipment(CEquipment*, CCharacter*)",
+    "mangled": "_ZN10CInventory12useEquipmentEP10CEquipmentP10CCharacter",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "inventory_mass_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "d521cfadca8dffeb73eed355aa1c135d357619329b6c054b092498356e722904",
+        "parameters": {
+          "fixtures": [
+            "inventory_mass_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x925580",
+    "original_bytes": 278,
+    "function": "CInventory::removeEquipmentByGuid(long long, unsigned int, bool)",
+    "mangled": "_ZN10CInventory21removeEquipmentByGuidExjb",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "inventory_next_remove_guid"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "d521cfadca8dffeb73eed355aa1c135d357619329b6c054b092498356e722904",
+        "parameters": {
+          "fixtures": [
+            "inventory_next_remove_guid"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x926000",
+    "original_bytes": 604,
+    "function": "CInventory::CInventory(CCharacter*, unsigned int)",
+    "mangled": "_ZN10CInventoryC1EP10CCharacterj",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": null
+  },
+  {
+    "address": "0x9713c0",
+    "original_bytes": 74,
+    "function": "CLevelTemplateData::getRandomLayout()",
+    "mangled": "_ZN18CLevelTemplateData15getRandomLayoutEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "level_template_random_layout"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "6228f76ddae5d79282f8ec5e610168b5c2323790d29a3c57ca67b8ddb41c18a9",
+        "parameters": {
+          "fixtures": [
+            "level_template_random_layout"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x971410",
+    "original_bytes": 275,
+    "function": "CLevelTemplateData::resetOdds()",
+    "mangled": "_ZN18CLevelTemplateData9resetOddsEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "level_template_reset_odds"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "6228f76ddae5d79282f8ec5e610168b5c2323790d29a3c57ca67b8ddb41c18a9",
+        "parameters": {
+          "fixtures": [
+            "level_template_reset_odds"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x971530",
+    "original_bytes": 175,
+    "function": "CLevelTemplateData::getNumberOfUnitsToCreate(ELEVELLAYOUT_CREATION, unsigned int)",
+    "mangled": "_ZN18CLevelTemplateData24getNumberOfUnitsToCreateE21ELEVELLAYOUT_CREATIONj",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "level_template_unit_count"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "6228f76ddae5d79282f8ec5e610168b5c2323790d29a3c57ca67b8ddb41c18a9",
+        "parameters": {
+          "fixtures": [
+            "level_template_unit_count"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x988020",
+    "original_bytes": 142,
+    "function": "CLogicTimer::update(float)",
+    "mangled": "_ZN11CLogicTimer6updateEf",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "logic_timer_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "08d51d11b752fc8bcad2f8fd3bd4a75ca977d30ae137c9552d133142c1a7d8d9",
+        "parameters": {
+          "fixtures": [
+            "logic_timer_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x991e20",
+    "original_bytes": 245,
+    "function": "COutputIncrementor::increment()",
+    "mangled": "_ZN18COutputIncrementor9incrementEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "logic_incrementor_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "c5a9632dc0178e48e477998f63b301d3ef1395d84a6b8900037b07d4d3228bd0",
+        "parameters": {
+          "fixtures": [
+            "logic_incrementor_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x9a3cc0",
+    "original_bytes": 422,
+    "function": "CTriggerBox::updateTrigger(float, CEditorScene*)",
+    "mangled": "_ZN11CTriggerBox13updateTriggerEfP12CEditorScene",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "trigger_box_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "61ee99f6ac9787a5eeb1bc2204ea202da48de43164c48ac74a0e753f6fb579a0",
+        "parameters": {
+          "fixtures": [
+            "trigger_box_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x9aa6e0",
+    "original_bytes": 333,
+    "function": "CTriggerSphere::updateTrigger(float, CEditorScene*)",
+    "mangled": "_ZN14CTriggerSphere13updateTriggerEfP12CEditorScene",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "trigger_sphere_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "b143498fad64e35e103f5da644edc3a14f0bbf6ae8117e0f074f87bd442146b4",
+        "parameters": {
+          "fixtures": [
+            "trigger_sphere_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa01d90",
+    "original_bytes": 115,
+    "function": "CSceneNodeObject::setResourceManager(CResourceManager*)",
+    "mangled": "_ZN16CSceneNodeObject18setResourceManagerEP16CResourceManager",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "scenenode_resource_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "30c5860f6d1bf2496653a97b303c3edf486a0d1dfc8ac1146179db828b7f2997",
+        "parameters": {
+          "fixtures": [
+            "scenenode_resource_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa01f30",
+    "original_bytes": 20,
+    "function": "CSceneNodeObject::setParentPositionableObject(CPositionableObject*)",
+    "mangled": "_ZN16CSceneNodeObject27setParentPositionableObjectEP19CPositionableObject",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "scenenode_parent_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "30c5860f6d1bf2496653a97b303c3edf486a0d1dfc8ac1146179db828b7f2997",
+        "parameters": {
+          "fixtures": [
+            "scenenode_parent_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa02c60",
+    "original_bytes": 115,
+    "function": "CShape::getAngleOffsetAtPercent(float)",
+    "mangled": "_ZN6CShape23getAngleOffsetAtPercentEf",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "shape_next_angle_offset"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fc128e7757d97ae6691a1381ec208362401db1bf1550acb3e7a584a85f506abd",
+        "parameters": {
+          "fixtures": [
+            "shape_next_angle_offset"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa02f10",
+    "original_bytes": 457,
+    "function": "CShape::calculatePositionOnSphere(float, float)",
+    "mangled": "_ZN6CShape25calculatePositionOnSphereEff",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "shape_next_sphere"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fc128e7757d97ae6691a1381ec208362401db1bf1550acb3e7a584a85f506abd",
+        "parameters": {
+          "fixtures": [
+            "shape_next_sphere"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa04a20",
+    "original_bytes": 578,
+    "function": "CShape::positionWithRadiusIntersectsBox(float, Ogre::Vector3 const&, float)",
+    "mangled": "_ZN6CShape31positionWithRadiusIntersectsBoxEfRKN4Ogre7Vector3Ef",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "shape_next_box_intersection"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fc128e7757d97ae6691a1381ec208362401db1bf1550acb3e7a584a85f506abd",
+        "parameters": {
+          "fixtures": [
+            "shape_next_box_intersection"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa04c70",
+    "original_bytes": 479,
+    "function": "CShape::calculatePositionBetweenAnglesAndRadius(float, float)",
+    "mangled": "_ZN6CShape39calculatePositionBetweenAnglesAndRadiusEff",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "shape_next_arc"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fc128e7757d97ae6691a1381ec208362401db1bf1550acb3e7a584a85f506abd",
+        "parameters": {
+          "fixtures": [
+            "shape_next_arc"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa04e50",
+    "original_bytes": 693,
+    "function": "CShape::calculateLineSequment(float, Ogre::Vector3&, Ogre::Vector3&)",
+    "mangled": "_ZN6CShape21calculateLineSequmentEfRN4Ogre7Vector3ES2_",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [
+      "shape_next_segment"
+    ],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fc128e7757d97ae6691a1381ec208362401db1bf1550acb3e7a584a85f506abd",
+        "parameters": {
+          "fixtures": [
+            "shape_next_segment"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa05110",
+    "original_bytes": 333,
+    "function": "CShape::calculatePositionOnLineBetweenAngles(float, float)",
+    "mangled": "_ZN6CShape36calculatePositionOnLineBetweenAnglesEff",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "shape_next_line"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fc128e7757d97ae6691a1381ec208362401db1bf1550acb3e7a584a85f506abd",
+        "parameters": {
+          "fixtures": [
+            "shape_next_line"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa05260",
+    "original_bytes": 202,
+    "function": "CShape::lineIntersectsPosition(float, Ogre::Vector3 const&, float)",
+    "mangled": "_ZN6CShape22lineIntersectsPositionEfRKN4Ogre7Vector3Ef",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [
+      "shape_next_line_intersection"
+    ],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fc128e7757d97ae6691a1381ec208362401db1bf1550acb3e7a584a85f506abd",
+        "parameters": {
+          "fixtures": [
+            "shape_next_line_intersection"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa05330",
+    "original_bytes": 665,
+    "function": "CShape::calculatePositionOnBox(float, float)",
+    "mangled": "_ZN6CShape22calculatePositionOnBoxEff",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "shape_next_box"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fc128e7757d97ae6691a1381ec208362401db1bf1550acb3e7a584a85f506abd",
+        "parameters": {
+          "fixtures": [
+            "shape_next_box"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa05cc0",
+    "original_bytes": 469,
+    "function": "CShape::getPositionIsInShapeAtPercent(float, Ogre::Vector3 const&, float)",
+    "mangled": "_ZN6CShape29getPositionIsInShapeAtPercentEfRKN4Ogre7Vector3Ef",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "shape_next_contains"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "fc128e7757d97ae6691a1381ec208362401db1bf1550acb3e7a584a85f506abd",
+        "parameters": {
+          "fixtures": [
+            "shape_next_contains"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa1ced0",
+    "original_bytes": 221,
+    "function": "CCollisionAvoiderWrapper::CCollisionAvoiderWrapper(CResourceManager*)",
+    "mangled": "_ZN24CCollisionAvoiderWrapperC1EP16CResourceManager",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [
+      "collision_avoider_constructor_observed"
+    ],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "e05adf7529b3a8c100bb8fe863968b0dd9c70768c06c07836c42cdd0aa24dec6",
+        "parameters": {
+          "fixtures": [
+            "collision_avoider_constructor_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa520a0",
+    "original_bytes": 978,
+    "function": "CGraphManager::loadGraph(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "mangled": "_ZN13CGraphManager9loadGraphESbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "graph_manager_load_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "0d65cf949f09e6d46a8525a6c0fd1308cf9a6ca0cec094e1ec417dc6ae700bb6",
+        "parameters": {
+          "fixtures": [
+            "graph_manager_load_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa52480",
+    "original_bytes": 666,
+    "function": "CGraphManager::reload()",
+    "mangled": "_ZN13CGraphManager6reloadEv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "graph_manager_reload_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "0d65cf949f09e6d46a8525a6c0fd1308cf9a6ca0cec094e1ec417dc6ae700bb6",
+        "parameters": {
+          "fixtures": [
+            "graph_manager_reload_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xa60190",
+    "original_bytes": 3324,
+    "function": "CResourceSettings::CResourceSettings()",
+    "mangled": "_ZN17CResourceSettingsC1Ev",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "small_resource_settings_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "47e5d718a0786dd6c418203db0bf6f5b78661ef16f12c17191640aaf43eb1d98",
+        "parameters": {
+          "fixtures": [
+            "small_resource_settings_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xafcd10",
+    "original_bytes": 243,
+    "function": "CDialogMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "mangled": "_ZN11CDialogMenu7onClickE15ELayoutFunctionSbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_dispatch_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "4091f0df294b3008f3bc8bd2813de62064abaebaec1446c43857aebe26cdc719",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_dispatch_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb05cf0",
+    "original_bytes": 372,
+    "function": "CDialogMenu::CDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",
+    "mangled": "_ZN11CDialogMenuC1ER7CGameUIR9CSettingsPN4Ogre12SceneManagerEPN5CEGUI6WindowEP16CResourceManager",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_constructors_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "4091f0df294b3008f3bc8bd2813de62064abaebaec1446c43857aebe26cdc719",
+        "parameters": {
+          "fixtures": [
+            "menu_constructors_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb05ec0",
+    "original_bytes": 502,
+    "function": "CDieMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "mangled": "_ZN8CDieMenu7onClickE15ELayoutFunctionSbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_more_die_click"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "b8595f36594b2b3374462604b98a4e382ac14a10bc373a53e803aa9b00fab1c4",
+        "parameters": {
+          "fixtures": [
+            "menu_more_die_click"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb060c0",
+    "original_bytes": 37,
+    "function": "CDieMenu::handle_ExitButton(CEGUI::EventArgs const&)",
+    "mangled": "_ZN8CDieMenu17handle_ExitButtonERKN5CEGUI9EventArgsE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_buttons_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "b8595f36594b2b3374462604b98a4e382ac14a10bc373a53e803aa9b00fab1c4",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_buttons_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb060f0",
+    "original_bytes": 21,
+    "function": "CDieMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+    "mangled": "_ZN8CDieMenu18handle_CloseButtonERKN5CEGUI9EventArgsE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_buttons_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "b8595f36594b2b3374462604b98a4e382ac14a10bc373a53e803aa9b00fab1c4",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_buttons_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb06110",
+    "original_bytes": 265,
+    "function": "CDieMenu::update(float)",
+    "mangled": "_ZN8CDieMenu6updateEf",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [
+      "menu_next_die_update"
+    ],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "b8595f36594b2b3374462604b98a4e382ac14a10bc373a53e803aa9b00fab1c4",
+        "parameters": {
+          "fixtures": [
+            "menu_next_die_update"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb100c0",
+    "original_bytes": 429,
+    "function": "CDieMenu::CDieMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",
+    "mangled": "_ZN8CDieMenuC1ER7CGameUIR9CSettingsPN4Ogre12SceneManagerEPN5CEGUI6WindowEP16CResourceManager",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_constructors_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "b8595f36594b2b3374462604b98a4e382ac14a10bc373a53e803aa9b00fab1c4",
+        "parameters": {
+          "fixtures": [
+            "menu_constructors_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb102d0",
+    "original_bytes": 348,
+    "function": "CDropdownMenu::broadcastEvent(EMENU_TYPE, EMENU_EVENT)",
+    "mangled": "_ZN13CDropdownMenu14broadcastEventE10EMENU_TYPE11EMENU_EVENT",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_observed_broadcast"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "723635eceffcf7db8ee53c1536da1da44f0f7b3c0d695a754ce1ee79dd32613c",
+        "parameters": {
+          "fixtures": [
+            "menu_observed_broadcast"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb10430",
+    "original_bytes": 444,
+    "function": "CDropdownMenu::addMenuListener(iMenuListener*)",
+    "mangled": "_ZN13CDropdownMenu15addMenuListenerEP13iMenuListener",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_observed_add_listener"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "723635eceffcf7db8ee53c1536da1da44f0f7b3c0d695a754ce1ee79dd32613c",
+        "parameters": {
+          "fixtures": [
+            "menu_observed_add_listener"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb17260",
+    "original_bytes": 273,
+    "function": "CDropdownMenu::removeMenuListener(iMenuListener*)",
+    "mangled": "_ZN13CDropdownMenu18removeMenuListenerEP13iMenuListener",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [
+      "menu_observed_remove_listener"
+    ],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "723635eceffcf7db8ee53c1536da1da44f0f7b3c0d695a754ce1ee79dd32613c",
+        "parameters": {
+          "fixtures": [
+            "menu_observed_remove_listener"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb17380",
+    "original_bytes": 214,
+    "function": "CDropdownMenu::handle_CloseButton(CEGUI::EventArgs const&)",
+    "mangled": "_ZN13CDropdownMenu18handle_CloseButtonERKN5CEGUI9EventArgsE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_dispatch_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "723635eceffcf7db8ee53c1536da1da44f0f7b3c0d695a754ce1ee79dd32613c",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_dispatch_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb192e0",
+    "original_bytes": 503,
+    "function": "CDropdownMenu::handle_onDoubleClick(CEGUI::EventArgs const&)",
+    "mangled": "_ZN13CDropdownMenu20handle_onDoubleClickERKN5CEGUI9EventArgsE",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [
+      "menu_more_double_click"
+    ],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "723635eceffcf7db8ee53c1536da1da44f0f7b3c0d695a754ce1ee79dd32613c",
+        "parameters": {
+          "fixtures": [
+            "menu_more_double_click"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb194e0",
+    "original_bytes": 526,
+    "function": "CDropdownMenu::handle_onClick(CEGUI::EventArgs const&)",
+    "mangled": "_ZN13CDropdownMenu14handle_onClickERKN5CEGUI9EventArgsE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_more_click"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "723635eceffcf7db8ee53c1536da1da44f0f7b3c0d695a754ce1ee79dd32613c",
+        "parameters": {
+          "fixtures": [
+            "menu_more_click"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb343d0",
+    "original_bytes": 46,
+    "function": "CFishingMenu::handle_onClick(CEGUI::EventArgs const&)",
+    "mangled": "_ZN12CFishingMenu14handle_onClickERKN5CEGUI9EventArgsE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_buttons_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "209890d61cdffb38955ab6ca9a0b14497761b9a7ee8a00b5de35ac662dae74f4",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_buttons_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb34400",
+    "original_bytes": 112,
+    "function": "CFishingMenu::onClick(ELayoutFunction)",
+    "mangled": "_ZN12CFishingMenu7onClickE15ELayoutFunction",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_buttons_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "209890d61cdffb38955ab6ca9a0b14497761b9a7ee8a00b5de35ac662dae74f4",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_buttons_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb77660",
+    "original_bytes": 134,
+    "function": "CModalMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "mangled": "_ZN10CModalMenu7onClickE15ELayoutFunctionSbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_buttons_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "b53904324540121d1c26f001f6a75bfd9954fdad6fc82169e381692344de43f1",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_buttons_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb7fef0",
+    "original_bytes": 377,
+    "function": "CModalMenu::CModalMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",
+    "mangled": "_ZN10CModalMenuC1ER7CGameUIR9CSettingsPN4Ogre12SceneManagerEPN5CEGUI6WindowEP16CResourceManager",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_constructors_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "b53904324540121d1c26f001f6a75bfd9954fdad6fc82169e381692344de43f1",
+        "parameters": {
+          "fixtures": [
+            "menu_constructors_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb800a0",
+    "original_bytes": 84,
+    "function": "COptionsMenu::onClick(ELayoutFunction, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "mangled": "_ZN12COptionsMenu7onClickE15ELayoutFunctionSbIwSt11char_traitsIwESaIwEE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_buttons_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "464d870b549d720e6a6b9fcb854f23348c1eb38f5a95e5adf05ddc69e6558988",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_buttons_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xb885b0",
+    "original_bytes": 316,
+    "function": "COptionsMenu::COptionsMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",
+    "mangled": "_ZN12COptionsMenuC1ER7CGameUIR9CSettingsPN4Ogre12SceneManagerEPN5CEGUI6WindowEP16CResourceManager",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_constructors_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "464d870b549d720e6a6b9fcb854f23348c1eb38f5a95e5adf05ddc69e6558988",
+        "parameters": {
+          "fixtures": [
+            "menu_constructors_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xba5230",
+    "original_bytes": 121,
+    "function": "CQuestDialogMenu::broadcastAcceptedOrDeclined(bool, CBaseUnit*)",
+    "mangled": "_ZN16CQuestDialogMenu27broadcastAcceptedOrDeclinedEbP9CBaseUnit",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_next_quest_dialog_broadcast"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "1b885cd979a9b6916ece405222dedf6cbf4151cc99b2e50dd26339e2aa22ebd9",
+        "parameters": {
+          "fixtures": [
+            "menu_next_quest_dialog_broadcast"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xbae150",
+    "original_bytes": 492,
+    "function": "CQuestDialogMenu::setOpen(bool)",
+    "mangled": "_ZN16CQuestDialogMenu7setOpenEb",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_more_quest_open"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "1b885cd979a9b6916ece405222dedf6cbf4151cc99b2e50dd26339e2aa22ebd9",
+        "parameters": {
+          "fixtures": [
+            "menu_more_quest_open"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xbb5480",
+    "original_bytes": 581,
+    "function": "CQuestDialogMenu::CQuestDialogMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*)",
+    "mangled": "_ZN16CQuestDialogMenuC1ER7CGameUIR9CSettingsPN4Ogre12SceneManagerEPN5CEGUI6WindowEP16CResourceManager",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_constructors_observed"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "1b885cd979a9b6916ece405222dedf6cbf4151cc99b2e50dd26339e2aa22ebd9",
+        "parameters": {
+          "fixtures": [
+            "menu_constructors_observed"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xbba0f0",
+    "original_bytes": 46,
+    "function": "CQuestMenu::handle_onClick(CEGUI::EventArgs const&)",
+    "mangled": "_ZN10CQuestMenu14handle_onClickERKN5CEGUI9EventArgsE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_mass_buttons_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "86a1ec481a4dc99b7fda1bc937bdb764202b9936f9d0c0921ee47e0962916fa4",
+        "parameters": {
+          "fixtures": [
+            "menu_mass_buttons_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xbba120",
+    "original_bytes": 189,
+    "function": "CQuestMenu::handle_MouseOut(CEGUI::EventArgs const&)",
+    "mangled": "_ZN10CQuestMenu15handle_MouseOutERKN5CEGUI9EventArgsE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_observed_quest_out"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "86a1ec481a4dc99b7fda1bc937bdb764202b9936f9d0c0921ee47e0962916fa4",
+        "parameters": {
+          "fixtures": [
+            "menu_observed_quest_out"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0xbba1e0",
+    "original_bytes": 187,
+    "function": "CQuestMenu::handle_MouseOver(CEGUI::EventArgs const&)",
+    "mangled": "_ZN10CQuestMenu16handle_MouseOverERKN5CEGUI9EventArgsE",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "menu_observed_quest_over"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "86a1ec481a4dc99b7fda1bc937bdb764202b9936f9d0c0921ee47e0962916fa4",
+        "parameters": {
+          "fixtures": [
+            "menu_observed_quest_over"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  }
+]

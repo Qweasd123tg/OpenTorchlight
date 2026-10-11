@@ -1,0 +1,1385 @@
+[
+  {
+    "address": "0x731f20",
+    "original_bytes": 164,
+    "function": "EditorGetLogicLinkInputFunctionID(long long, unsigned int, unsigned int)",
+    "mangled": "_Z33EditorGetLogicLinkInputFunctionIDxjj",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x731fd0",
+    "original_bytes": 164,
+    "function": "EditorGetLogicLinkOutputFunctionID(long long, unsigned int, unsigned int)",
+    "mangled": "_Z34EditorGetLogicLinkOutputFunctionIDxjj",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x732190",
+    "original_bytes": 200,
+    "function": "EditorGetLogicObjectIDLinkingTo(long long, unsigned int, unsigned int)",
+    "mangled": "_Z31EditorGetLogicObjectIDLinkingToxjj",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x732260",
+    "original_bytes": 163,
+    "function": "EditorGetLogicObjectPosition(long long, unsigned int, int&, int&)",
+    "mangled": "_Z28EditorGetLogicObjectPositionxjRiS_",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x732310",
+    "original_bytes": 178,
+    "function": "EditorSetLogicObjectPosition(long long, unsigned int, int, int)",
+    "mangled": "_Z28EditorSetLogicObjectPositionxjii",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x7323d0",
+    "original_bytes": 137,
+    "function": "EditorDeleteLogicLink(long long, unsigned int, unsigned int)",
+    "mangled": "_Z21EditorDeleteLogicLinkxjj",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x732460",
+    "original_bytes": 84,
+    "function": "EditorDeleteLogicObject(long long, int)",
+    "mangled": "_Z23EditorDeleteLogicObjectxi",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x7324c0",
+    "original_bytes": 151,
+    "function": "EditorInvokeOutputFunction(long long, unsigned int, unsigned int)",
+    "mangled": "_Z26EditorInvokeOutputFunctionxjj",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x732560",
+    "original_bytes": 636,
+    "function": "EditorGetListOfItems(unsigned int, long long, unsigned int, wchar_t*)",
+    "mangled": "_Z20EditorGetListOfItemsjxjPw",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_more_values"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_more_values"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x7327e0",
+    "original_bytes": 244,
+    "function": "EditorCreateLogicLink(long long, unsigned int, unsigned int, unsigned int, unsigned int)",
+    "mangled": "_Z21EditorCreateLogicLinkxjjjj",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_next_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_next_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x7328e0",
+    "original_bytes": 103,
+    "function": "EditorTimelineUpdate(long long, float)",
+    "mangled": "_Z20EditorTimelineUpdatexf",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x732950",
+    "original_bytes": 515,
+    "function": "EditorTimelineSetPercentDone(long long, float)",
+    "mangled": "_Z28EditorTimelineSetPercentDonexf",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_more_timeline"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_more_timeline"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x732b60",
+    "original_bytes": 243,
+    "function": "EditorTimelineSetPropertyPointValue(long long, long long, int, int, void*)",
+    "mangled": "_Z35EditorTimelineSetPropertyPointValuexxiiPv",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_next_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_next_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x732c60",
+    "original_bytes": 244,
+    "function": "EditorTimelineSetPropertyPointValueArray(long long, long long, int, int, int, UNIONDATA32BIT*)",
+    "mangled": "_Z40EditorTimelineSetPropertyPointValueArrayxxiiiP14UNIONDATA32BIT",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_next_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_next_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x732d60",
+    "original_bytes": 336,
+    "function": "EditorTimelineSetPropertyInterpType(long long, long long, int, wchar_t const*)",
+    "mangled": "_Z35EditorTimelineSetPropertyInterpTypexxiPKw",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_next_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_next_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x732eb0",
+    "original_bytes": 253,
+    "function": "EditorTimelineGetPropertyInterpType(long long, long long, int)",
+    "mangled": "_Z35EditorTimelineGetPropertyInterpTypexxi",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_next_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_next_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x732fb0",
+    "original_bytes": 201,
+    "function": "EditorTimelineRemovePointFromProperty(long long, long long, int, int, bool)",
+    "mangled": "_Z37EditorTimelineRemovePointFromPropertyxxiib",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x733080",
+    "original_bytes": 185,
+    "function": "EditorTimelineRemoveProperty(long long, long long, int, bool)",
+    "mangled": "_Z28EditorTimelineRemovePropertyxxib",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x733140",
+    "original_bytes": 227,
+    "function": "EditorTimelineAddProperty(long long, long long, int, bool)",
+    "mangled": "_Z25EditorTimelineAddPropertyxxib",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_next_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_next_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x733230",
+    "original_bytes": 243,
+    "function": "EditorTimelineGetTimePercentAtPoint(long long, long long, int, int, bool)",
+    "mangled": "_Z35EditorTimelineGetTimePercentAtPointxxiib",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x733330",
+    "original_bytes": 251,
+    "function": "EditorTimelineSetPropertyPointTimePercent(long long, long long, int, int, float, bool)",
+    "mangled": "_Z41EditorTimelineSetPropertyPointTimePercentxxiifb",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_logic_timeline_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_logic_timeline_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x733680",
+    "original_bytes": 340,
+    "function": "EditorFileExists(wchar_t*)",
+    "mangled": "_Z16EditorFileExistsPw",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_operations_resources"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_operations_resources"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x733890",
+    "original_bytes": 516,
+    "function": "EditorPlaySound(wchar_t*, float, float, float)",
+    "mangled": "_Z15EditorPlaySoundPwfff",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_more_sound"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_more_sound"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x733db0",
+    "original_bytes": 472,
+    "function": "EditorGetModelAnimationLengthSeconds(long long, char*)",
+    "mangled": "_Z36EditorGetModelAnimationLengthSecondsxPc",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_next_animation_resources"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_next_animation_resources"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x733f90",
+    "original_bytes": 439,
+    "function": "EditorGetSoundNames()",
+    "mangled": "_Z19EditorGetSoundNamesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x734150",
+    "original_bytes": 295,
+    "function": "EditorGetSoundCategories()",
+    "mangled": "_Z24EditorGetSoundCategoriesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x734280",
+    "original_bytes": 359,
+    "function": "EditorGetDungeons()",
+    "mangled": "_Z17EditorGetDungeonsv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x7343f0",
+    "original_bytes": 294,
+    "function": "EditorGetGraphNames()",
+    "mangled": "_Z19EditorGetGraphNamesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x734520",
+    "original_bytes": 386,
+    "function": "EditorGetAlignments()",
+    "mangled": "_Z19EditorGetAlignmentsv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x7346b0",
+    "original_bytes": 354,
+    "function": "EditorGetUnitThemes()",
+    "mangled": "_Z19EditorGetUnitThemesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x734820",
+    "original_bytes": 418,
+    "function": "EditorGetQuests()",
+    "mangled": "_Z15EditorGetQuestsv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x7349d0",
+    "original_bytes": 386,
+    "function": "EditorGetAIFlags()",
+    "mangled": "_Z16EditorGetAIFlagsv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x734b60",
+    "original_bytes": 434,
+    "function": "EditorGetUnits()",
+    "mangled": "_Z14EditorGetUnitsv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x734d20",
+    "original_bytes": 418,
+    "function": "EditorGetAffixes()",
+    "mangled": "_Z16EditorGetAffixesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x734ed0",
+    "original_bytes": 311,
+    "function": "EditorGetDamageTypes()",
+    "mangled": "_Z20EditorGetDamageTypesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x735010",
+    "original_bytes": 418,
+    "function": "EditorGetMissiles()",
+    "mangled": "_Z17EditorGetMissilesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x7351c0",
+    "original_bytes": 418,
+    "function": "GetModNames()",
+    "mangled": "_Z11GetModNamesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x735370",
+    "original_bytes": 535,
+    "function": "EditorGetSoundNamesByCategory(wchar_t*)",
+    "mangled": "_Z29EditorGetSoundNamesByCategoryPw",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x735590",
+    "original_bytes": 290,
+    "function": "EditorGetSpawnClasses()",
+    "mangled": "_Z21EditorGetSpawnClassesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x7356c0",
+    "original_bytes": 450,
+    "function": "EditorGetUnitTypes()",
+    "mangled": "_Z18EditorGetUnitTypesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x735890",
+    "original_bytes": 311,
+    "function": "EditorGetAnimationKeyTypes()",
+    "mangled": "_Z26EditorGetAnimationKeyTypesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x7359d0",
+    "original_bytes": 418,
+    "function": "EditorGetSets()",
+    "mangled": "_Z13EditorGetSetsv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x735b80",
+    "original_bytes": 418,
+    "function": "GetEnabledModNames()",
+    "mangled": "_Z18GetEnabledModNamesv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x735d30",
+    "original_bytes": 418,
+    "function": "EditorGetSkills()",
+    "mangled": "_Z15EditorGetSkillsv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x735ee0",
+    "original_bytes": 580,
+    "function": "EditorGetUnitsByUnittype(char*)",
+    "mangled": "_Z24EditorGetUnitsByUnittypePc",
+    "batch": "PR83-new200",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_more_units"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_more_units"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x736130",
+    "original_bytes": 298,
+    "function": "EditorGetCinematics()",
+    "mangled": "_Z19EditorGetCinematicsv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_lists_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_lists_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x736db0",
+    "original_bytes": 94,
+    "function": "EditorGetObjectPropertyString(long long, unsigned int)",
+    "mangled": "_Z29EditorGetObjectPropertyStringxj",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_mass_animation_resources_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+        "parameters": {
+          "fixtures": [
+            "editor_mass_animation_resources_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x7412d0",
+    "original_bytes": 187,
+    "function": "saveBinaryGroup(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >&, CRandomGroup*, CDescriptor*, CDescriptorSaveConfiguration*)",
+    "mangled": "_Z15saveBinaryGroupP12CEditorSceneRSt14basic_ofstreamIcSt11char_traitsIcEEP12CRandomGroupP11CDescriptorP28CDescriptorSaveConfiguration",
+    "batch": "PR83-new200",
+    "current_status": "MATCH",
+    "full_suite_fixtures": [],
+    "acceptance_method": "primary-MATCH",
+    "comparison_evidence": null
+  },
+  {
+    "address": "0x741530",
+    "original_bytes": 232,
+    "function": "CEditorScene::getNumberOfParticlesUpdating()",
+    "mangled": "_ZN12CEditorScene28getNumberOfParticlesUpdatingEv",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_core_mass_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "981dfee726547fc66c74d1672ec551bc42a1db0213439d202d65d0dcec9244b6",
+        "parameters": {
+          "fixtures": [
+            "editor_core_mass_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  },
+  {
+    "address": "0x741620",
+    "original_bytes": 139,
+    "function": "CEditorScene::getNumberOfTimelinesUpdating(bool)",
+    "mangled": "_ZN12CEditorScene28getNumberOfTimelinesUpdatingEb",
+    "batch": "PR82-carried100",
+    "current_status": "DIFF",
+    "full_suite_fixtures": [
+      "editor_core_mass_differential"
+    ],
+    "acceptance_method": "executed-comparison",
+    "comparison_evidence": {
+      "evidence": {
+        "inputs_digest": "df6bea6b8d32c572333ad3661f7ae84942c23677deae2ff6d3b90144741c3eab",
+        "object_digest": "981dfee726547fc66c74d1672ec551bc42a1db0213439d202d65d0dcec9244b6",
+        "parameters": {
+          "fixtures": [
+            "editor_core_mass_differential"
+          ],
+          "runtime_abi": 2
+        },
+        "schema": 1
+      },
+      "method": "executed-call-pair",
+      "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+      "policy": 1
+    }
+  }
+]
