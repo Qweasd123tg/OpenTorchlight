@@ -3174,3 +3174,61 @@ void CGameUI::queueTip(EContextTip tip)
         return;
     reinterpret_cast<gameui_tip_queue_detail::State*>(this)->tips.push_back(tip);
 }
+
+#include <OgreRoot.h>
+
+__attribute__((noinline))
+void CGameUI::cleanupReferences()
+{
+    menu_item_click_detail::UIState& menus = menu_item_click_detail::state(this);
+    gameui_slots_detail::UIState& slots = gameui_slots_detail::state(this);
+    menu_item_click_detail::clearHoverAndTooltips(menus);
+    slots.leftGuid = -1;
+    slots.rightGuid = -1;
+    slots.attackGuid = -1;
+    slots.leftIcon->setProperty("Image", "");
+    slots.rightIcon->setProperty("Image", "");
+    slots.attackIcon->setProperty("Image", CEGUI::PropertyHelper::imageToString(
+        getImageFromImageSet(reinterpret_cast<const unsigned char*>("skill_attack"))));
+    gameui_item_hover_detail::references(this).selectedCharacter.setObject(NULL);
+    setMouseOverItem(NULL, true);
+    menus.merchantMenu->setOwner(NULL);
+    menus.merchantMenu->setPlayer(NULL);
+    menus.enchantMenu->setOwner(NULL);
+    menus.enchantMenu->setPlayer(NULL);
+    menus.combineMenu->setOwner(NULL);
+    menus.combineMenu->setPlayer(NULL);
+    // The original rebinds the merchant a second time after clearing combine owner.
+    menus.merchantMenu->setPlayer(NULL);
+    menus.stashMenu->setOwner(NULL);
+    menus.stashMenu->setPlayer(NULL);
+    m_questMenu->setOwner(NULL);
+    if (m_cursorState == 3 || m_cursorState == 4)
+        gameuiBoundaryCursor(this, static_cast<ECursorState>(0));
+    menus.selectedSkill = -1;
+    menus.targetedItem.setObject(NULL);
+    menus.targetCharacter.setObject(NULL);
+    menus.itemUser.setObject(NULL);
+}
+
+__attribute__((noinline))
+void CGameUI::setLoadingVisible(bool visible)
+{
+    using gameui_detail::field;
+    if (!field<unsigned char>(CMasterResourceManager::getSingleton(), 0xc1))
+        return;
+    if (visible) {
+        if (!m_rootWindow->isChild(field<CEGUI::Window*>(this, 0x478))) {
+            menu_item_click_detail::clearHoverAndTooltips(menu_item_click_detail::state(this));
+            m_rootWindow->addChildWindow(field<CEGUI::Window*>(this, 0x478));
+            field<CEGUI::Window*>(this, 0x480)->setText(reinterpret_cast<const unsigned char*>(
+                STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getRandomTip()).c_str()));
+        }
+        field<unsigned char>(CMasterResourceManager::getSingleton(), 0xc0) = 1;
+        Ogre::Root::getSingletonPtr()->renderOneFrame();
+        field<unsigned char>(CMasterResourceManager::getSingleton(), 0xc0) = 0;
+    } else if (m_rootWindow->isChild(field<CEGUI::Window*>(this, 0x478))) {
+        menu_item_click_detail::clearHoverAndTooltips(menu_item_click_detail::state(this));
+        m_rootWindow->removeChildWindow(field<CEGUI::Window*>(this, 0x478));
+    }
+}
