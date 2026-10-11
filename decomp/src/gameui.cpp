@@ -3098,3 +3098,79 @@ void CGameUI::sizeComboList(CEGUI::Combobox* combo)
     const float offset = list->getYPosition().asAbsolute(comboHeight) - editSize.d_height;
     combo->setHeight(CEGUI::UDim(0.0f, ((itemsHeight + editSize.d_height) + borderHeight) + offset));
 }
+
+#include "ModalMenu.h"
+#include "QuestDialogMenu.h"
+#include "Quest.h"
+#include "QuestDialog.h"
+#include "QuestManager.h"
+#include "Player.h"
+#include "Item.h"
+
+// The retirement phase is flattened into updateIngameUI, but the original
+// still calls this public entry (as does onClick).
+__attribute__((noinline))
+void CGameUI::openModalDialog(std::wstring title, std::wstring text, bool choice)
+{
+    if (!m_dropdown548)
+        return;
+    gameuiBoundaryUnPause(this);
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    CEGUI::Window* parent = window->getParent();
+    if (parent)
+        parent->removeChildWindow(window);
+    m_dropdown548->setOpen(true);
+    m_dropdown548->setTitle(title);
+    m_dropdown548->setContents(text, choice, NULL, NULL);
+}
+
+void CGameUI::forceInteractiveDialog(CPlayer* player, CBaseUnit* unit, CQuest* quest)
+{
+    if (!unit || !player || m_questDialogMenu->m_bUnknown30)
+        return;
+    gameuiBoundaryCloseAll(this);
+    if (CCharacter* character = dynamic_cast<CCharacter*>(unit))
+        player->setTarget(character);
+    else if (CItem* item = dynamic_cast<CItem*>(unit))
+        player->setTargetItem(item);
+    else
+    {
+        player->setTarget(NULL);
+        player->setTargetItem(NULL);
+    }
+    if (quest)
+    {
+        CQuestDialog* dialog = reinterpret_cast<CQuestDialog*>(quest->getQuestDialog(unit));
+        if (dialog && reinterpret_cast<unsigned char*>(dialog)[0x74])
+        {
+            dialog->playDialogSound();
+            m_questDialogMenu->setNPC(unit, true, quest);
+            return;
+        }
+    }
+    else
+    {
+        // The lookup has side effects; its returned quest is not used here.
+        CQuestManager::getSingleton()->getQuestForNPC(unit);
+    }
+    m_questDialogMenu->setNPC(unit, false, quest);
+    player->setAIState(AISTATE_IDLE);
+    player->stopPathing();
+}
+
+namespace gameui_tip_queue_detail {
+struct State {
+    unsigned char prefix[0x1960];
+    std::vector<EContextTip> tips;
+};
+typedef char check_tip_queue_offset[__builtin_offsetof(State, tips)==0x1960?1:-1];
+}
+
+void CGameUI::queueTip(EContextTip tip)
+{
+    if (!m_pCharacter || (reinterpret_cast<unsigned char*>(m_pCharacter) + 0xa17)[static_cast<int>(tip)])
+        return;
+    if (m_settings->GetInt(KSETTINGS_SHOW_TIPS) != 1)
+        return;
+    reinterpret_cast<gameui_tip_queue_detail::State*>(this)->tips.push_back(tip);
+}

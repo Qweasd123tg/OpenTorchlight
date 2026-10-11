@@ -10,4 +10,6 @@ extern float gameuiBoundaryScaledY(CGameUI*, float) __asm__("_ZN7CGameUI7scaledY
 extern void gameuiBoundaryCursor(CGameUI*, ECursorState) __asm__("_ZN7CGameUI14setCursorStateE12ECursorState");
 extern void gameuiBoundaryCloseLeft(CGameUI*) __asm__("_ZN7CGameUI9closeLeftEv");
 extern void gameuiBoundaryCloseRight(CGameUI*) __asm__("_ZN7CGameUI10closeRightEv");
+extern void gameuiBoundaryUnPause(CGameUI*) __asm__("_ZN7CGameUI7unPauseEv");
+extern void gameuiBoundaryCloseAll(CGameUI*) __asm__("_ZN7CGameUI8closeAllEv");
 #endif
