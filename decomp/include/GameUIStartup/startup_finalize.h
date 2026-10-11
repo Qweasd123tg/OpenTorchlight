@@ -7,7 +7,7 @@
 #include "SkillTooltip.h"
 #include "SkillFoldout.h"
 #include "TextEvent.h"
-#include "TLinkedList.h"
+#include "GameUITextEventList.h"
 #include "Console.h"
 #include "MenuManager.h"
 // These convenience constructor signatures represent inlined source operations;
@@ -24,20 +24,6 @@ inline __attribute__((always_inline)) CTextEvent::CTextEvent(const std::string& 
     :m_Value10(0.f),m_Value14(0.f),m_Value18(0.f),m_Text(text),m_Colour28(first),m_Colour40(second),
      m_Value60(1.f),m_Value64(1.f),m_Value68(1.f),m_Value70(0.1f),m_pWindow(NULL),m_Flag80(true),m_Flag81(true),m_Flag82(false){}
 namespace gameui_create_detail {
-// Exact inlined one-pointer list shell. Do not expand the shared partial list
-// declaration or initialize bytes the original leaves untouched.
-struct TextEventList : Ogre::GeneralAllocatedObject {
-    TLinkedListNode<CTextEvent*>* head;
-    TextEventList():head(NULL){}
-    inline __attribute__((always_inline)) void prepend(CTextEvent* event) {
-        TLinkedListNode<CTextEvent*>* node=new TLinkedListNode<CTextEvent*>;
-        node->m_Data=event;node->m_pNext=NULL;node->m_pPrevious=NULL;
-        if(!head) {head=node;node->m_pNext=NULL;head->m_pPrevious=NULL;}
-        else {node->m_pNext=head;head->m_pPrevious=node;head=node;}
-    }
-};
-typedef char event_list_size[sizeof(TextEventList)==8?1:-1];
-typedef char event_node_size[sizeof(TLinkedListNode<CTextEvent*>)==0x18?1:-1];
 struct FinalState {
     char prefix[0x4a0];
     CEquipmentTooltip* equipment;

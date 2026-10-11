@@ -1081,6 +1081,106 @@ class PacketContextTests(TestCase):
         self.window_array(); self.add_function(function(0x3000,"CUnrelated","missing",tu=2))
         self.assertTrue(self.index().build(self.target,"1000: call 2000\n1005: call 3000").gaps)
 
+    def pinned_destructor(self, variant):
+        if variant == "wstring":
+            f = self.window_array()
+            scope = "TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >"
+            address, size = 0x5f8e90, 155
+            prefix, method = "_ZN10TArrayListISbIwSt11char_traitsIwESaIwEEE", "~TArrayList"
+        else:
+            f = self.safe_pointer(variant)
+            scope = "TSafePointer<" + variant + ">"
+            address, size = {"CCharacter": (0x591b50, 47), "CEquipment": (0xacbc90, 47)}[variant]
+            prefix, method = "_ZN12TSafePointerI10" + variant + "E", "~TSafePointer"
+        self.db["functions"].pop("0x2000")
+        names = [prefix + "D1Ev", prefix + "D2Ev"]
+        f.update(address=hex(address), size=size, scope=scope, method=method,
+                 qualified=scope + "::" + method, params="", cv="", names=names, mangled=names[0])
+        self.add_function(f)
+        self.image.symbols = [SimpleNamespace(type=2, bind=2, defined=True, value=address, name=n, size=size) for n in names]
+        return f
+
+    def test_pinned_destructors_supply_existing_headers(self):
+        for variant in ("wstring", "CCharacter", "CEquipment"):
+            with self.subTest(variant=variant):
+                f = self.pinned_destructor(variant)
+                result = self.index().build(self.target, "1000: call " + f["address"]).require_complete()
+                expected = ("TArrayList.h",) if variant == "wstring" else ("Node.h", "SafePointer.h")
+                self.assertEqual(result.headers, expected)
+                self.assertIn("No specialization or prototype synthesized", result.text)
+
+    def test_pinned_destructors_reject_db_mutations(self):
+        mutations = {"kind": "function", "bind": ["global"], "method": "clear", "params": "int",
+                     "cv": "const", "mangled": "_fake", "names": ["_fake"], "qualified": "Other::~Other",
+                     "scope": "TArrayList<CNode*>", "size": 99, "address": "0x2222"}
+        for variant in ("wstring", "CCharacter", "CEquipment"):
+            for field, value in mutations.items():
+                with self.subTest(variant=variant, field=field):
+                    f = self.pinned_destructor(variant); address = f["address"]
+                    f[field] = value
+                    self.assertTrue(self.index().build(self.target, "1000: call " + address).gaps)
+
+    def test_pinned_destructors_require_both_weak_elf_aliases(self):
+        for variant in ("wstring", "CCharacter", "CEquipment"):
+            for change in ("absent", "name", "size", "address", "binding", "type", "undefined", "D0"):
+                with self.subTest(variant=variant, change=change):
+                    f = self.pinned_destructor(variant); symbol = self.image.symbols[1]
+                    if change == "absent": self.image.symbols.pop()
+                    elif change == "name": symbol.name = "_fake"
+                    elif change == "size": symbol.size += 1
+                    elif change == "address": symbol.value += 1
+                    elif change == "binding": symbol.bind = 1
+                    elif change == "type": symbol.type = 1
+                    elif change == "undefined": symbol.defined = False
+                    else:
+                        name = symbol.name.replace("D2Ev", "D0Ev")
+                        symbol.name = name; f["names"][1] = name
+                    self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
+
+    def test_pinned_destructors_reject_coherent_unreviewed_instantiations(self):
+        for variant in ("wstring", "CCharacter", "CEquipment"):
+            with self.subTest(variant=variant):
+                f = self.pinned_destructor(variant)
+                if variant == "wstring":
+                    scope, prefix = "TArrayList<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >", "_ZN10TArrayListISsE"
+                else:
+                    scope, prefix = "TSafePointer<CNode>", "_ZN12TSafePointerI5CNodeE"
+                    self.write_header("Unreviewed.h", "class CNode { public: int value; };\n")
+                    self.mapping["CNode"] = ["Unreviewed.h"]
+                names = [prefix + "D1Ev", prefix + "D2Ev"]
+                f.update(scope=scope, qualified=scope + "::" + f["method"], names=names, mangled=names[0])
+                for symbol, name in zip(self.image.symbols, names): symbol.name = name
+                self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
+
+    def test_pinned_destructors_reject_changed_template(self):
+        for variant in ("wstring", "CCharacter", "CEquipment"):
+            with self.subTest(variant=variant):
+                f = self.pinned_destructor(variant)
+                header = "TArrayList.h" if variant == "wstring" else "SafePointer.h"
+                with (self.include/header).open("a") as out: out.write("// changed\n")
+                self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
+
+    def test_pinned_safe_destructors_require_unique_complete_type(self):
+        for variant in ("CCharacter", "CEquipment"):
+            for change in ("unmapped", "forward", "ambiguous"):
+                with self.subTest(variant=variant, change=change):
+                    f = self.pinned_destructor(variant)
+                    if change == "unmapped": self.mapping.pop(variant)
+                    elif change == "forward": self.write_header("Node.h", "class " + variant + ";\n")
+                    else:
+                        self.write_header("OtherNode.h", "class " + variant + " { int other; };\n")
+                        self.mapping[variant].append("OtherNode.h")
+                    self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
+
+    def test_pinned_destructors_do_not_hide_unknown_callee(self):
+        for variant in ("wstring", "CCharacter", "CEquipment"):
+            with self.subTest(variant=variant):
+                f = self.pinned_destructor(variant)
+                self.add_function(function(0x3000, "CUnrelated", "missing", tu=2))
+                result = self.index().build(self.target, "1000: call " + f["address"] + "\n1005: call 3000")
+                self.assertEqual(len(result.gaps), 1)
+                self.assertIn("CUnrelated::missing", result.gaps[0])
+
     def implicit_destructor(self):
         self.write_header("FileInfo.h", "class CFileInfo { public: CFileInfo() {} int value; };\n")
         self.mapping["CFileInfo"] = ["FileInfo.h"]

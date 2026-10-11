@@ -714,6 +714,53 @@ class ContextIndex:
             return set()
         return {header}
 
+    def _pinned_destructor_headers(self, callee, scope):
+        """Three reviewed existing template bodies, never a generic exemption.
+
+        Original ASM: wstring delete[] destroys elements using the array cookie,
+        then frees and clears data; safe pointers unregister and reset both fields.
+        Only the reviewed address, size, D1/D2 aliases and unmodified source count.
+        """
+        wide = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
+        reviewed = {
+            "TArrayList<" + wide + " >":
+                (0x5f8e90, 155, "_ZN10TArrayListISbIwSt11char_traitsIwESaIwEEE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TSafePointer<CCharacter>":
+                (0x591b50, 47, "_ZN12TSafePointerI10CCharacterE",
+                 "~TSafePointer", "SafePointer.h", self.SAFE_POINTER_HEADER_SHA256, "CCharacter"),
+            "TSafePointer<CEquipment>":
+                (0xacbc90, 47, "_ZN12TSafePointerI10CEquipmentE",
+                 "~TSafePointer", "SafePointer.h", self.SAFE_POINTER_HEADER_SHA256, "CEquipment"),
+        }
+        entry = reviewed.get(scope)
+        if entry is None:
+            return set()
+        address, size, prefix, method, header, digest, pointee = entry
+        names = {prefix + "D1Ev", prefix + "D2Ev"}
+        if (callee.get("kind") != "inline_or_template"
+                or set(callee.get("bind", ())) != {"weak"}
+                or _address(callee["address"]) != address or callee.get("size") != size
+                or callee.get("method") != method
+                or callee.get("qualified") != scope + "::" + method
+                or callee.get("params") != "" or callee.get("cv", "")
+                or set(callee.get("names", ())) != names or callee.get("mangled") not in names
+                or any((address, name, size) not in self.elf_weak_functions for name in names)):
+            return set()
+        if header not in self.sources:
+            return set()
+        raw = self._path("include", header).read_bytes()
+        if hashlib.sha256(raw).hexdigest() != digest or raw.decode("utf-8") != self.sources[header]:
+            return set()
+        headers = {header}
+        if pointee:
+            complete = {h for h in self._mapped(pointee)
+                        if pointee in self.header_classes.get(h, ())}
+            if len(complete) != 1:
+                return set()
+            headers.update(complete)
+        return headers
+
     def _implicit_destructor_headers(self, callee, scope, candidates):
         """C++98 implicitly declares complete/base D1/D2 destructors.
 
@@ -839,6 +886,7 @@ class ContextIndex:
             implicit_headers = self._implicit_destructor_headers(callee, scope, candidates)
             template_headers = self._safe_pointer_headers(callee, scope)
             window_array_headers = self._window_array_headers(callee, scope)
+            pinned_destructor_headers = self._pinned_destructor_headers(callee, scope)
             if matched_headers:
                 wanted.update(matched_headers)
             elif implicit_headers:
@@ -853,6 +901,12 @@ class ContextIndex:
                 wanted.update(window_array_headers)
                 notes.append(f"{address:#x}: existing pinned TArrayList<CEGUI::Window*> D1/D2 destructor body; "
                              f"both weak ELF/DB identities; TArrayList.h SHA256 {self.WINDOW_ARRAY_HEADER_SHA256}. "
+                             "No specialization or prototype synthesized.")
+            elif pinned_destructor_headers:
+                wanted.update(pinned_destructor_headers)
+                notes.append(f"{address:#x}: existing pinned {scope} D1/D2 destructor body; "
+                             "exact reviewed address/size and both weak ELF/DB identities; "
+                             f"template source SHA256 {self.SAFE_POINTER_HEADER_SHA256 if scope.startswith('TSafePointer<') else self.WINDOW_ARRAY_HEADER_SHA256}. "
                              "No specialization or prototype synthesized.")
             elif scope in local_types and self._tu(callee, None) == tu:
                 local_names.add(scope)
