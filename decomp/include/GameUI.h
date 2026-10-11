@@ -30,7 +30,7 @@ enum ELayoutFunction { LAYOUT_FUNCTION_EXIT_GAME = 0 };
 
 // Partial: size 0x1a08 is the allocation at 0x5790e2. Complete vtable shape.
 // onClick returns bool through the original CEGUI callback (consumed as AL).
-namespace CEGUI { class Image; class Window; class EventArgs; class colour; }
+namespace CEGUI { class Imageset; class Image; class Window; class EventArgs; class colour; }
 class CGameClient;
 class CLevel;
 class CSubMenu;
@@ -151,6 +151,8 @@ public:
     CCharacter* getCharacter() { return m_pCharacter; }
     void queueTip(EContextTip tip);
     float scaledY(float value);
+    void addImageSet(CEGUI::Imageset* imageset);
+    CEGUI::Imageset* getImageSetForIcon(const unsigned char* name);
     const CEGUI::Image* getImageFromImageSet(const unsigned char* name);
     void clearMenuMouseOvers();
     void openModalDialog(std::wstring,std::wstring,bool);

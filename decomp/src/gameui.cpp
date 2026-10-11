@@ -2942,3 +2942,40 @@ void CGameUI::setPlayer(CCharacter* character)
         m_inventoryMenu->setOwner(NULL);
     gameui_detail::service::slots(this);
 }
+
+void CGameUI::addImageSet(CEGUI::Imageset* imageset)
+{
+    if (imageset)
+        reinterpret_cast<gameui_create_detail::ImagesetState*>(this)->itemImagesets.add(imageset);
+}
+
+CEGUI::Imageset* CGameUI::getImageSetForIcon(const unsigned char* name)
+{
+    TArrayList<CEGUI::Imageset*>& imagesets =
+        reinterpret_cast<gameui_create_detail::ImagesetState*>(this)->itemImagesets;
+    if (!imagesets.size())
+        return 0;
+    for (unsigned i = 0; i < imagesets.size(); ++i)
+        if (imagesets[i]->isImageDefined(name))
+            return imagesets[i];
+    return imagesets[0];
+}
+
+// Preserve the original out-of-line boundary inside flattened skill consumers.
+__attribute__((noinline))
+const CEGUI::Image* CGameUI::getImageFromImageSet(const unsigned char* name)
+{
+    TArrayList<CEGUI::Imageset*>& imagesets =
+        reinterpret_cast<gameui_create_detail::ImagesetState*>(this)->itemImagesets;
+    if (!imagesets.size())
+        return 0;
+    CEGUI::String imageName(name);
+    for (unsigned i = 0; i < imagesets.size(); ++i) {
+        if (imagesets[i]->isImageDefined(name)) {
+            const CEGUI::Image* image = &imagesets[i]->getImage(name);
+            if (image)
+                return image;
+        }
+    }
+    return 0;
+}
