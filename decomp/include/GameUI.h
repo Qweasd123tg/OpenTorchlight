@@ -155,6 +155,8 @@ public:
     CEGUI::Imageset* getImageSetForIcon(const unsigned char* name);
     const CEGUI::Image* getImageFromImageSet(const unsigned char* name);
     void clearMenuMouseOvers();
+    void setSmallText(std::wstring text, float duration);
+    void setBigText(std::wstring text, float duration);
     void openModalDialog(std::wstring,std::wstring,bool);
     void closeLeft();
     void closeRight();
