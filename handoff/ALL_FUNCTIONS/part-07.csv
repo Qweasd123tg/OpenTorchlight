@@ -2,21 +2,21 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa834d0,gameui.cpp,CGameUI::refreshQuestMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa834d0.cpp,False
 0xa83520,gameui.cpp,CGameUI::isCinematicMenuOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83520.cpp,False
 0xa83550,gameui.cpp,CGameUI::closeCinematicMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83550.cpp,False
-0xa83580,gameui.cpp,CGameUI::getUIIsInCinematic(),MISSING,False,False,,False
-0xa83650,gameui.cpp,CGameUI::equipmentTooltipVisible(),MISSING,False,False,,False
+0xa83580,gameui.cpp,CGameUI::getUIIsInCinematic(),MISSING,False,False,,True
+0xa83650,gameui.cpp,CGameUI::equipmentTooltipVisible(),MATCH,True,False,,False
 0xa83670,gameui.cpp,CGameUI::clickLeft(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83670.cpp,False
 0xa83680,gameui.cpp,CGameUI::handle_MouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83680.cpp,False
 0xa83690,gameui.cpp,CGameUI::handle_onClick(CEGUI::EventArgs const&),DIFF,True,False,,False
 0xa836c0,gameui.cpp,CGameUI::handle_SkillMouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa836c0.cpp,False
 0xa83700,gameui.cpp,CGameUI::handle_SkillSelectMouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83700.cpp,False
-0xa83740,gameui.cpp,"CGameUI::addMenuListener(EMENU_TYPE, iMenuListener*)",MISSING,False,False,,False
+0xa83740,gameui.cpp,"CGameUI::addMenuListener(EMENU_TYPE, iMenuListener*)",DIFF,True,False,,False
 0xa83790,gameui.cpp,"CGameUI::removeMenuListener(EMENU_TYPE, iMenuListener*)",MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83790.cpp,False
-0xa837e0,gameui.cpp,CGameUI::getQuestDialogNPC(),MISSING,False,False,,False
-0xa83800,gameui.cpp,CGameUI::getQuestDialogCameraOffset(),MISSING,False,False,,False
+0xa837e0,gameui.cpp,CGameUI::getQuestDialogNPC(),MATCH,True,False,,False
+0xa83800,gameui.cpp,CGameUI::getQuestDialogCameraOffset(),MATCH,True,False,,False
 0xa83820,gameui.cpp,CGameUI::handle_SkillMouseOver(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xa838e0,gameui.cpp,CGameUI::getWindowHeight(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa838e0.cpp,False
 0xa83900,gameui.cpp,CGameUI::getWindowWidth(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83900.cpp,False
-0xa83920,gameui.cpp,"CGameUI::mouseOverPanel(int, int)",MISSING,False,False,,False
+0xa83920,gameui.cpp,"CGameUI::mouseOverPanel(int, int)",DIFF,True,False,,False
 0xa83ad0,gameui.cpp,CGameUI::getAspectRatio(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83ad0.cpp,False
 0xa83b00,gameui.cpp,CGameUI::handle_ToggleItemNames(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xa83b30,gameui.cpp,CGameUI::setInteractiveMenuVisible(bool),DIFF,True,False,,False
@@ -28,7 +28,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa83e20,gameui.cpp,CGameUI::handle_MouseThrough(CEGUI::EventArgs const&),MATCH,True,False,,False
 0xa83e70,gameui.cpp,CGameUI::scaledY(float),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83e70.cpp,False
 0xa83ea0,gameui.cpp,CGameUI::scaledX(float),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83ea0.cpp,False
-0xa83ed0,gameui.cpp,"CGameUI::convertToScreenScale(CEGUI::Window*, bool)",MISSING,False,False,,False
+0xa83ed0,gameui.cpp,"CGameUI::convertToScreenScale(CEGUI::Window*, bool)",MATCH,True,False,,False
 0xa84050,gameui.cpp,CGameUI::notifyOfDeletion(CItem*),MATCH,True,False,,False
 0xa84140,gameui.cpp,CGameUI::getConsoleIsOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84140.cpp,False
 0xa84160,gameui.cpp,"CGameUI::processMenuInput(void*, float, bool)",MATCH,True,False,,False
@@ -38,25 +38,25 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa842c0,gameui.cpp,"CGameUI::mouseEvent(unsigned int, unsigned int)",MATCH,True,False,,False
 0xa843a0,gameui.cpp,"CGameUI::keyEvent(unsigned int, unsigned int, long)",MATCH,True,False,,False
 0xa844d0,gameui.cpp,"CGameUI::updateMenuUI(float, CGameClient*, Ogre::RenderWindow*)",MATCH,True,False,,False
-0xa84740,gameui.cpp,CGameUI::addImageSet(CEGUI::Imageset*),MISSING,False,False,,False
+0xa84740,gameui.cpp,CGameUI::addImageSet(CEGUI::Imageset*),DIFF,True,False,,False
 0xa84870,gameui.cpp,CGameUI::setIngameUIVisible(bool),MATCH,True,False,,False
-0xa849d0,gameui.cpp,CGameUI::sizeComboList(CEGUI::Combobox*),MISSING,False,False,,False
-0xa84c00,gameui.cpp,CGameUI::hideUI(),MISSING,False,False,,False
-0xa84c10,gameui.cpp,CGameUI::showUI(),MISSING,False,False,,False
+0xa849d0,gameui.cpp,CGameUI::sizeComboList(CEGUI::Combobox*),DIFF,True,False,,False
+0xa84c00,gameui.cpp,CGameUI::hideUI(),MATCH,True,False,,False
+0xa84c10,gameui.cpp,CGameUI::showUI(),MATCH,True,False,,False
 0xa84c20,gameui.cpp,CGameUI::closeMenus(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84c20.cpp,False
 0xa84c80,gameui.cpp,CGameUI::setActiveMenu(EMenu),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84c80.cpp,False
-0xa84ca0,gameui.cpp,CGameUI::setWindowActive(bool),MISSING,False,False,,False
-0xa84d20,gameui.cpp,CGameUI::canLoad(),MISSING,False,False,,False
-0xa84d30,gameui.cpp,CGameUI::canContinue(),MISSING,False,False,,False
+0xa84ca0,gameui.cpp,CGameUI::setWindowActive(bool),MATCH,True,False,,False
+0xa84d20,gameui.cpp,CGameUI::canLoad(),MATCH,True,False,,False
+0xa84d30,gameui.cpp,CGameUI::canContinue(),MATCH,True,False,,False
 0xa84d40,gameui.cpp,CGameUI::reloadMenuCharacters(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa84d40.cpp,False
 0xa84d50,gameui.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
-0xa8dd00,gameui.cpp,"CGameUI::setSmallText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",MISSING,False,False,,False
-0xa8de80,gameui.cpp,"CGameUI::setBigText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",MISSING,False,False,,False
+0xa8dd00,gameui.cpp,"CGameUI::setSmallText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",DIFF,True,False,,False
+0xa8de80,gameui.cpp,"CGameUI::setBigText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",DIFF,True,False,,False
 0xa8e010,gameui.cpp,CGameUI::handle_TogglePet(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e010.cpp,False
 0xa8e050,gameui.cpp,CGameUI::handle_ToggleStats(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e050.cpp,False
 0xa8e090,gameui.cpp,CGameUI::handle_ClickThrough(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e090.cpp,False
 0xa8e0d0,gameui.cpp,CGameUI::closeAll(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e0d0.cpp,False
-0xa8e140,gameui.cpp,"CGameUI::forceInteractiveDialog(CPlayer*, CBaseUnit*, CQuest*)",MISSING,False,False,,False
+0xa8e140,gameui.cpp,"CGameUI::forceInteractiveDialog(CPlayer*, CBaseUnit*, CQuest*)",DIFF,True,False,,False
 0xa8e2d0,gameui.cpp,CGameUI::togglePause(),MATCH,True,False,,False
 0xa8e440,gameui.cpp,CGameUI::unPause(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e440.cpp,False
 0xa8e460,gameui.cpp,CGameUI::handle_ToggleOptions(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8e460.cpp,False
@@ -75,14 +75,14 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa8eb50,gameui.cpp,CGameUI::handle_ToggleInventory(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8eb50.cpp,False
 0xa8eb90,gameui.cpp,CGameUI::toggleOptions(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8eb90.cpp,False
 0xa8ec10,gameui.cpp,CGameUI::toggleDeath(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8ec10.cpp,False
-0xa8ec90,gameui.cpp,"CGameUI::openModalDialog(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",MISSING,False,False,,False
+0xa8ec90,gameui.cpp,"CGameUI::openModalDialog(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",MATCH,True,False,,False
 0xa8ed60,gameui.cpp,CGameUI::toggleDialog(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8ed60.cpp,False
 0xa8edc0,gameui.cpp,CGameUI::toggleWaypointMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa8edc0.cpp,False
 0xa8ee40,gameui.cpp,CGameUI::hideTextEvents(),DIFF,True,False,,False
 0xa8efa0,gameui.cpp,CGameUI::returnTextEventObject(CTextEvent*),DIFF,True,False,,False
 0xa8f100,gameui.cpp,"CGameUI::updateTextEvents(float, Ogre::Vector3&, Ogre::Matrix4&, bool)",DIFF,True,False,,False
 0xa8f390,gameui.cpp,"CGameUI::setMouseOverItem(CItem*, bool)",MATCH,True,False,,False
-0xa8f450,gameui.cpp,CGameUI::queueTip(EContextTip),MISSING,False,False,,False
+0xa8f450,gameui.cpp,CGameUI::queueTip(EContextTip),MATCH,True,False,,False
 0xa8f4e0,gameui.cpp,CGameUI::returnDraggedItem(),MATCH,True,False,,False
 0xa8f780,gameui.cpp,"CGameUI::menuItemClick(CCharacter*, CSubMenu*, int, bool)",DIFF,True,False,,False
 0xa92080,gameui.cpp,"CGameUI::performItemUse(CLevel&, CEquipment*, CCharacter*, CCharacter*, CCharacter*)",MATCH,True,False,,False
@@ -112,9 +112,9 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa93830,gameui.cpp,__tcf_0,DIFF,False,False,,False
 0xa94120,gameui.cpp,__tcf_27,DIFF,False,False,,False
 0xa941b0,gameui.cpp,__tcf_7,DIFF,False,False,,False
-0xa94240,gameui.cpp,CGameUI::~CGameUI(),MISSING,False,False,,False
-0xa94c60,gameui.cpp,CGameUI::~CGameUI(),MISSING,False,False,,False
-0xa94c80,gameui.cpp,"CGameUI::setCinematicOpen(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xa94240,gameui.cpp,CGameUI::~CGameUI(),DIFF,True,False,,False
+0xa94c60,gameui.cpp,CGameUI::~CGameUI(),MATCH,True,False,,False
+0xa94c80,gameui.cpp,"CGameUI::setCinematicOpen(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xa94d30,gameui.cpp,CGameUI::handle_SkillSelectMouseOver(CEGUI::EventArgs const&),DIFF,True,False,,False
 0xa94e60,gameui.cpp,CGameUI::handle_SkillSelectClick(CEGUI::EventArgs const&),DIFF,True,False,,False
 0xa951e0,gameui.cpp,__tcf_18,DIFF,False,False,,False
@@ -124,21 +124,21 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa954c0,gameui.cpp,__tcf_2,DIFF,False,False,,False
 0xa95530,gameui.cpp,"CSkillFoldout::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xa96270,gameui.cpp,"CSkillTooltip::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
-0xa976a0,gameui.cpp,"CEquipmentTooltip::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,False
+0xa976a0,gameui.cpp,"CEquipmentTooltip::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",DIFF,True,False,,False
 0xa97e00,gameui.cpp,CGameUI::mapEventHandlers(CEGUI::Window*),DIFF,True,False,,False
 0xa980e0,gameui.cpp,CGameUI::mapToFunctions(CEGUI::Window*),DIFF,True,False,,False
-0xa98460,gameui.cpp,CGameUI::getImageSetForIcon(unsigned char const*),MISSING,False,False,,False
-0xa98630,gameui.cpp,CGameUI::getImageFromImageSet(unsigned char const*),MISSING,False,False,,False
-0xa988b0,gameui.cpp,CGameUI::cleanupReferences(),MISSING,False,False,,False
+0xa98460,gameui.cpp,CGameUI::getImageSetForIcon(unsigned char const*),DIFF,True,False,,False
+0xa98630,gameui.cpp,CGameUI::getImageFromImageSet(unsigned char const*),DIFF,True,False,,False
+0xa988b0,gameui.cpp,CGameUI::cleanupReferences(),DIFF,True,False,,False
 0xa98c20,gameui.cpp,CGameUI::updateSlots(),DIFF,True,False,,False
 0xa9b420,gameui.cpp,CGameUI::setPlayer(CCharacter*),DIFF,True,False,,False
 0xa9ba60,gameui.cpp,"CGameUI::getTextEventObject(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour, bool)",DIFF,True,False,,False
 0xa9c2a0,gameui.cpp,"CGameUI::addTextEvent(Ogre::Vector3 const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, float, float, CEGUI::colour, CEGUI::colour)",MATCH,True,False,,False
-0xa9c3b0,gameui.cpp,CGameUI::setLoadingVisible(bool),MISSING,False,False,,False
+0xa9c3b0,gameui.cpp,CGameUI::setLoadingVisible(bool),DIFF,True,False,,False
 0xa9c680,gameui.cpp,"CSkillFoldout::showFoldout(CBaseUnit*, float, float, bool, bool)",DIFF,True,False,,False
 0xa9dff0,gameui.cpp,CGameUI::handle_SkillClick(CEGUI::EventArgs const&),DIFF,True,False,,False
 0xa9e4a0,gameui.cpp,CGameUI::create(),DIFF,True,False,,False
-0xaa6380,gameui.cpp,"CGameUI::CGameUI(CSettings&, CGameClient&, void*, Ogre::RenderWindow*, Ogre::Camera*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CResourceManager*)",MISSING,False,False,,False
+0xaa6380,gameui.cpp,"CGameUI::CGameUI(CSettings&, CGameClient&, void*, Ogre::RenderWindow*, Ogre::Camera*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CResourceManager*)",DIFF,True,False,,False
 0xaa6bf0,gameui.cpp,"CGameUI::showEquipmentTooltip(CCharacter*, CEquipment*, CEquipmentTooltip*, CEquipmentTooltip*, CEquipmentTooltip*)",DIFF,True,False,,False
 0xaaeeb0,gameui.cpp,"CSkillTooltip::showTooltip(CBaseUnit*, CSkill*, float, float)",DIFF,True,False,,False
 0xab4f80,gameui.cpp,CGameUI::handleKeyPresses(),DIFF,True,False,,False

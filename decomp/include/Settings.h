@@ -1,6 +1,30 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+extern unsigned int KSETTINGS_KEYMAP_0;
+extern unsigned int KSETTINGS_KEYMAP_1;
+extern unsigned int KSETTINGS_KEYMAP_2;
+extern unsigned int KSETTINGS_KEYMAP_3;
+extern unsigned int KSETTINGS_KEYMAP_4;
+extern unsigned int KSETTINGS_KEYMAP_5;
+extern unsigned int KSETTINGS_KEYMAP_6;
+extern unsigned int KSETTINGS_KEYMAP_7;
+extern unsigned int KSETTINGS_KEYMAP_8;
+extern unsigned int KSETTINGS_KEYMAP_9;
+extern unsigned int KSETTINGS_FKEYMAP_1;
+extern unsigned int KSETTINGS_FKEYMAP_2;
+extern unsigned int KSETTINGS_FKEYMAP_3;
+extern unsigned int KSETTINGS_FKEYMAP_4;
+extern unsigned int KSETTINGS_FKEYMAP_5;
+extern unsigned int KSETTINGS_FKEYMAP_6;
+extern unsigned int KSETTINGS_FKEYMAP_7;
+extern unsigned int KSETTINGS_FKEYMAP_8;
+extern unsigned int KSETTINGS_FKEYMAP_9;
+extern unsigned int KSETTINGS_FKEYMAP_10;
+extern unsigned int KSETTINGS_FKEYMAP_11;
+extern unsigned int KSETTINGS_FKEYMAP_12;
+
+
 #include "CmdLineParser.h"
 #include "DynamicPropertyFile.h"
 #include "TArrayList.h"

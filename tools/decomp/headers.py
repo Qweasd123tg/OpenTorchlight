@@ -158,6 +158,37 @@ def vtable_mismatch(db, cls, dump):
     return None
 
 
+def _callback_type(text):
+    """A deliberately small, unnamed type-id grammar, with no alias expansion.
+
+    Function/member pointers, arrays, templates, attributes, calling conventions
+    and parameter names are outside this grammar. Identifiers stay nominal.
+    """
+    text = text.strip()
+    if re.search(r"\b(?:__\w+|decltype|typename|class|struct|enum)\b", text):
+        return False
+    match = re.fullmatch(
+        r"(?:(?:const|volatile)\s+)*"
+        r"(?P<base>[A-Za-z_]\w*(?:::[A-Za-z_]\w*)*(?:\s+[A-Za-z_]\w*)*)"
+        r"(?P<tail>(?:\s*\*\s*(?:(?:const|volatile)\b\s*)*)*(?:\s*&)?\s*)", text)
+    if not match:
+        return False
+    base = re.sub(r"\s+(?:const|volatile)\b", "", match['base']).strip()
+    return base in PRIMITIVE or bool(re.fullmatch(r"[A-Za-z_]\w*(?:::[A-Za-z_]\w*)*", base))
+
+
+def _unnamed_callback(text):
+    """Accept only R (*)(A, B), never a named or nested callback declarator."""
+    match = re.fullmatch(r"([^()]+?)\s*\(\s*\*\s*\)\s*\(([^()]*)\)", text.strip())
+    if not match or not _callback_type(match[1]):
+        return False
+    args = match[2].strip()
+    if not args or args == "void":
+        return True
+    parts = args.split(",")
+    return all(part.strip() != "void" and _callback_type(part) for part in parts)
+
+
 def declared_signatures(text, name):
     """Parameter/cv/static identities of simple declarations at this scope.
 
@@ -169,7 +200,7 @@ def declared_signatures(text, name):
     for ch in code:
         if ch == "{":
             depth += 1
-            direct.append(";" if depth == 1 else " ")
+            direct.append("\0" if depth == 1 else " ")
         elif ch == "}":
             depth -= 1
             direct.append(" ")
@@ -179,12 +210,38 @@ def declared_signatures(text, name):
     result = set()
     keywords = {"void", "bool", "char", "short", "int", "long", "float", "double",
                 "signed", "unsigned", "const", "volatile", "wchar_t"}
-    for m in re.finditer(rf"(?P<prefix>[^;{{}}]*?)(?<![\w~]){re.escape(name)}\s*\((?P<params>[^()]*)\)\s*"
+    for m in re.finditer(rf"(?P<prefix>[^;{{}}\0]*?)(?<![\w~]){re.escape(name)}\s*\((?P<params>(?:[^();{{}}\0]|\([^();{{}}\0]*\))*)\)\s*"
                          r"(?P<cv>(?:(?:const|volatile)\s*)*)\s*(?:;|=)", direct):
+        raw = m.group("params")
+        has_callback = "(" in raw or ")" in raw
+        if has_callback:
+            # Require a declaration prefix, not a field initializer or call.
+            prefix = re.sub(r"\b(?:public|protected|private)\s*:", "", m.group("prefix")).strip()
+            prefix = re.sub(r"^(?:(?:virtual|static|inline|extern)\s+)+", "", prefix)
+            if not _callback_type(prefix):
+                continue
+            # No defaults or malformed empty parameters on the callback path.
+            if ("=" in raw or not raw.strip() or raw.rstrip().endswith(",")
+                    or (direct[m.end() - 1] == "=" and not re.match(r"\s*0\s*;", direct[m.end():]))
+                    or len(m.group("cv").split()) != len(set(m.group("cv").split()))):
+                continue
         params = []
-        for p in ghidra_cpp.split_args(m.group("params")):
+        valid = True
+        for p in ghidra_cpp.split_args(raw):
+            if has_callback and not p.strip():
+                valid = False
+                break
+            if "(" in p or ")" in p:
+                if not _unnamed_callback(p):
+                    valid = False
+                    break
+                params.append(ghidra_cpp.parameter_key(p))
+                continue
             p = p.split("=", 1)[0].strip()
             if p == "void":
+                if has_callback:
+                    valid = False
+                    break
                 continue
             named = re.fullmatch(r"(.+?)[\s*&]+([A-Za-z_]\w*)", p)
             if named and named.group(2) not in keywords and named.group(1).strip() not in keywords:
@@ -192,7 +249,12 @@ def declared_signatures(text, name):
                 p = p[:p.rfind(named.group(2))].strip()
             elif named and named.group(2) not in keywords and named.group(1).strip() in keywords - {"const", "volatile"}:
                 p = p[:p.rfind(named.group(2))].strip()
-            params.append(re.sub(r"\s+", "", ghidra_cpp.cxx_type(p)))
+            if has_callback and not _callback_type(p):
+                valid = False
+                break
+            params.append(ghidra_cpp.parameter_key(p))
+        if not valid:
+            continue
         cv = ghidra_cpp.cv_suffix({"cv": m.group("cv")}).strip()
         result.add((tuple(params), cv, bool(re.search(r"\bstatic\b", m.group("prefix")))))
     return result
@@ -365,7 +427,7 @@ class Gen:
         return f"{'virtual ' if virtual else static}{rt} {name}({', '.join(out)}){cv};"
 
     def virtual_signature(self, f):
-        return (f["method"], tuple(re.sub(r"\s+", "", ghidra_cpp.cxx_type(p))
+        return (f["method"], tuple(ghidra_cpp.parameter_key(p)
                                   for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void"),
                 ghidra_cpp.cv_suffix(f).strip())
 

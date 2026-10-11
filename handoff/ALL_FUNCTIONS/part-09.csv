@@ -330,7 +330,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xd264a0,QuestManager.cpp,CQuestManager::getSingleton(),MATCH,True,False,,False
 0xd264b0,QuestManager.cpp,CQuestManager::setPlayer(CPlayer*),MATCH,True,False,,False
 0xd264c0,QuestManager.cpp,CQuestManager::update(float),MATCH,True,False,,False
-0xd264d0,QuestManager.cpp,CQuestManager::getPlayerHasQuest(CQuest*),DIFF,False,False,,False
+0xd264d0,QuestManager.cpp,CQuestManager::getPlayerHasQuest(CQuest*),DIFF,False,False,,True
 0xd26520,QuestManager.cpp,CQuestManager::destroyIcons(),MATCH,True,False,,False
 0xd26560,QuestManager.cpp,CQuestManager::resetQuestManager(bool),MISSING,False,False,,False
 0xd265f0,QuestManager.cpp,CQuestManager::getDetailsForQuest(CQuest*),MISSING,False,False,,False
@@ -343,8 +343,8 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xd2da70,QuestManager.cpp,__tcf_4,DIFF,False,False,,False
 0xd2dbc0,QuestManager.cpp,__tcf_17,DIFF,False,False,,False
 0xd2dc30,QuestManager.cpp,__tcf_16,DIFF,False,False,,False
-0xd2dca0,QuestManager.cpp,"CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
-0xd2dda0,QuestManager.cpp,"CQuestManager::getQuestByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,False
+0xd2dca0,QuestManager.cpp,"CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,True
+0xd2dda0,QuestManager.cpp,"CQuestManager::getQuestByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",DIFF,False,False,,True
 0xd2df30,QuestManager.cpp,__tcf_13,DIFF,False,False,,False
 0xd2dfc0,QuestManager.cpp,__tcf_12,DIFF,False,False,,False
 0xd2e050,QuestManager.cpp,__tcf_11,DIFF,False,False,,False
@@ -366,15 +366,15 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xd2f470,QuestManager.cpp,"CQuestManager::questEventUpdate(EQUEST_EVENTS, CCharacter*, CBaseUnit*)",MISSING,False,False,,False
 0xd2f8a0,QuestManager.cpp,"CQuestManager::load(_IO_FILE*, unsigned int, CResourceManager*)",MISSING,False,False,,False
 0xd300e0,QuestManager.cpp,CQuestManager::getQuestForNPC(CBaseUnit*),MISSING,False,False,,False
-0xd30830,QuestManager.cpp,CQuestManager::getNPCIcon(CCharacter*),DIFF,False,False,,False
-0xd30900,QuestManager.cpp,CQuestManager::calculateNPCIcon(CCharacter*),DIFF,False,False,,False
+0xd30830,QuestManager.cpp,CQuestManager::getNPCIcon(CCharacter*),DIFF,False,False,,True
+0xd30900,QuestManager.cpp,CQuestManager::calculateNPCIcon(CCharacter*),DIFF,False,False,,True
 0xd31140,QuestManager.cpp,"CQuestManager::getDialogsForNPC(TArrayList<CQuestDialog*>&, CBaseUnit*, bool)",MISSING,False,False,,False
 0xd31410,QuestManager.cpp,CQuestManager::loadQuests(),MISSING,False,False,,False
 0xd321f0,QuestManager.cpp,CQuestManager::reloadQuests(),MISSING,False,False,,False
 0xd32300,QuestManager.cpp,CQuestManager::CQuestManager(CResourceManager*),MISSING,False,False,,False
 0xd32600,QuestManager.cpp,CQuestManager::completeQuest(CQuest*),MISSING,False,False,,False
 0xd33150,QuestManager.cpp,"CQuestManager::giveQuest(CQuest*, CBaseUnit*, bool)",MISSING,False,False,,False
-0xd339d0,QuestManager.cpp,CQuestManager::resetQuest(CQuest*),DIFF,False,False,,False
+0xd339d0,QuestManager.cpp,CQuestManager::resetQuest(CQuest*),DIFF,False,False,,True
 0xd344d0,QuestManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> > >::_M_insert_(std::_Rb_tree_node_base const*, std::_Rb_tree_node_base const*, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> const&)",DIFF,False,False,,False
 0xd345f0,QuestManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> > >::_M_insert_unique(std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> const&)",MATCH,False,False,,False
 0xd34730,QuestManager.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> > >::_M_insert_unique_(std::_Rb_tree_const_iterator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, bool> const&)",MATCH,False,False,,False

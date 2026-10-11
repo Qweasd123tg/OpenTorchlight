@@ -723,7 +723,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa81b90,SpawnClassParser.cpp,CSpawnClassParser::CSpawnClassParser(),MISSING,False,False,,False
 0xa81c40,SpawnClassParser.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClassData*> >*)",MATCH,False,False,,False
 0xa81ce0,SpawnClassParser.cpp,"std::_Rb_tree<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*>, std::_Select1st<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*> >, std::less<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >, std::allocator<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const, CSpawnClass*> >*)",MATCH,False,False,,False
-0xa828e0,gameui.cpp,CGameUI::getSingleton(),MISSING,False,False,,False
+0xa828e0,gameui.cpp,CGameUI::getSingleton(),MATCH,True,False,,False
 0xa828f0,gameui.cpp,"CGameUI::requestSetGameState(EGameState, EMenu)",MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa828f0.cpp,False
 0xa82900,gameui.cpp,CGameUI::clearGameStateRequest(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82900.cpp,False
 0xa82920,gameui.cpp,CGameUI::statsChanged(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82920.cpp,False
@@ -741,9 +741,9 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa82dc0,gameui.cpp,CGameUI::leftScreenEdge(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82dc0.cpp,False
 0xa82e60,gameui.cpp,CGameUI::rightScreenEdge(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82e60.cpp,False
 0xa82f10,gameui.cpp,CGameUI::toggleStatFill(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa82f10.cpp,False
-0xa82f20,gameui.cpp,CGameUI::setLevel(CLevel*),MISSING,False,False,,False
+0xa82f20,gameui.cpp,CGameUI::setLevel(CLevel*),MATCH,True,False,,False
 0xa82f40,gameui.cpp,"CGameUI::getScreenPosition(Ogre::Vector3 const*, Ogre::Vector3 const*, Ogre::Matrix4)",MATCH,True,False,,False
-0xa83250,gameui.cpp,CountChildren(Ogre::SceneNode*),MISSING,False,False,,False
+0xa83250,gameui.cpp,CountChildren(Ogre::SceneNode*),DIFF,True,False,,False
 0xa832f0,gameui.cpp,CGameUI::getMouseOverItem(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa832f0.cpp,False
 0xa83300,gameui.cpp,CGameUI::clearMenuMouseOvers(),MATCH,True,False,,False
 0xa833a0,gameui.cpp,CGameUI::flushProcessInput(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa833a0.cpp,False

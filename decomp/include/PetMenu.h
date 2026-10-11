@@ -1,6 +1,7 @@
 // Partial: generated from symbols, RTTI and recovered layouts.
 #ifndef PETMENU_H
 #define PETMENU_H
+class CLevel;
 
 #include "GameUI.h"
 #include <CEGUIString.h>
@@ -76,6 +77,7 @@ public:
     bool handle_SetSpell(const CEGUI::EventArgs&);
     void setSlotIcon(CEquipment*, int, int);
 private:
+    friend class CGameUI;
     CEGUI::Window* m_pParent;
     CEGUI::Window* m_pBackground;
     CEGUI::Window* m_pPanel;
@@ -85,7 +87,7 @@ private:
     CEGUI::Window* m_pForeground48;
     char m_Data50[8];
     CCharacter* m_pCharacter;
-    char m_Data60[8];
+    union { char m_Data60[8]; CLevel* m_level; }; // +0x60
     bool m_bOpenPartial;
     bool m_bFullyClosed;
     char m_Data6a[2];

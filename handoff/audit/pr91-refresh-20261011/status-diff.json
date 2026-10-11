@@ -1,0 +1,853 @@
+[
+  {
+    "address": "0xa828e0",
+    "before": {
+      "address": "0xa828e0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getSingleton()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa828e0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getSingleton()",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa82f20",
+    "before": {
+      "address": "0xa82f20",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setLevel(CLevel*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa82f20",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setLevel(CLevel*)",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa83250",
+    "before": {
+      "address": "0xa83250",
+      "tu": "gameui.cpp",
+      "name": "CountChildren(Ogre::SceneNode*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa83250",
+      "tu": "gameui.cpp",
+      "name": "CountChildren(Ogre::SceneNode*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa83580",
+    "before": {
+      "address": "0xa83580",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getUIIsInCinematic()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa83580",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getUIIsInCinematic()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xa83650",
+    "before": {
+      "address": "0xa83650",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::equipmentTooltipVisible()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa83650",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::equipmentTooltipVisible()",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa83740",
+    "before": {
+      "address": "0xa83740",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::addMenuListener(EMENU_TYPE, iMenuListener*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa83740",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::addMenuListener(EMENU_TYPE, iMenuListener*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa837e0",
+    "before": {
+      "address": "0xa837e0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getQuestDialogNPC()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa837e0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getQuestDialogNPC()",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa83800",
+    "before": {
+      "address": "0xa83800",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getQuestDialogCameraOffset()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa83800",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getQuestDialogCameraOffset()",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa83920",
+    "before": {
+      "address": "0xa83920",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::mouseOverPanel(int, int)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa83920",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::mouseOverPanel(int, int)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa83ed0",
+    "before": {
+      "address": "0xa83ed0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::convertToScreenScale(CEGUI::Window*, bool)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa83ed0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::convertToScreenScale(CEGUI::Window*, bool)",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa84740",
+    "before": {
+      "address": "0xa84740",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::addImageSet(CEGUI::Imageset*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa84740",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::addImageSet(CEGUI::Imageset*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa849d0",
+    "before": {
+      "address": "0xa849d0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::sizeComboList(CEGUI::Combobox*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa849d0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::sizeComboList(CEGUI::Combobox*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa84c00",
+    "before": {
+      "address": "0xa84c00",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::hideUI()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa84c00",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::hideUI()",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa84c10",
+    "before": {
+      "address": "0xa84c10",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::showUI()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa84c10",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::showUI()",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa84ca0",
+    "before": {
+      "address": "0xa84ca0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setWindowActive(bool)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa84ca0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setWindowActive(bool)",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa84d20",
+    "before": {
+      "address": "0xa84d20",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::canLoad()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa84d20",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::canLoad()",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa84d30",
+    "before": {
+      "address": "0xa84d30",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::canContinue()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa84d30",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::canContinue()",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa8dd00",
+    "before": {
+      "address": "0xa8dd00",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setSmallText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa8dd00",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setSmallText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa8de80",
+    "before": {
+      "address": "0xa8de80",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setBigText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa8de80",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setBigText(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa8e140",
+    "before": {
+      "address": "0xa8e140",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::forceInteractiveDialog(CPlayer*, CBaseUnit*, CQuest*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa8e140",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::forceInteractiveDialog(CPlayer*, CBaseUnit*, CQuest*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa8ec90",
+    "before": {
+      "address": "0xa8ec90",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::openModalDialog(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa8ec90",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::openModalDialog(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa8f450",
+    "before": {
+      "address": "0xa8f450",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::queueTip(EContextTip)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa8f450",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::queueTip(EContextTip)",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa94240",
+    "before": {
+      "address": "0xa94240",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::~CGameUI()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa94240",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::~CGameUI()",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa94c60",
+    "before": {
+      "address": "0xa94c60",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::~CGameUI()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa94c60",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::~CGameUI()",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa94c80",
+    "before": {
+      "address": "0xa94c80",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setCinematicOpen(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa94c80",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setCinematicOpen(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa976a0",
+    "before": {
+      "address": "0xa976a0",
+      "tu": "gameui.cpp",
+      "name": "CEquipmentTooltip::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa976a0",
+      "tu": "gameui.cpp",
+      "name": "CEquipmentTooltip::load(CGameUI*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa98460",
+    "before": {
+      "address": "0xa98460",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getImageSetForIcon(unsigned char const*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa98460",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getImageSetForIcon(unsigned char const*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa98630",
+    "before": {
+      "address": "0xa98630",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getImageFromImageSet(unsigned char const*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa98630",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::getImageFromImageSet(unsigned char const*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa988b0",
+    "before": {
+      "address": "0xa988b0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::cleanupReferences()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa988b0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::cleanupReferences()",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xa9c3b0",
+    "before": {
+      "address": "0xa9c3b0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setLoadingVisible(bool)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xa9c3b0",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::setLoadingVisible(bool)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xaa6380",
+    "before": {
+      "address": "0xaa6380",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::CGameUI(CSettings&, CGameClient&, void*, Ogre::RenderWindow*, Ogre::Camera*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CResourceManager*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xaa6380",
+      "tu": "gameui.cpp",
+      "name": "CGameUI::CGameUI(CSettings&, CGameClient&, void*, Ogre::RenderWindow*, Ogre::Camera*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CResourceManager*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xd264d0",
+    "before": {
+      "address": "0xd264d0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::getPlayerHasQuest(CQuest*)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd264d0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::getPlayerHasQuest(CQuest*)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd2dca0",
+    "before": {
+      "address": "0xd2dca0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd2dca0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd2dda0",
+    "before": {
+      "address": "0xd2dda0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::getQuestByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd2dda0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::getQuestByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd30830",
+    "before": {
+      "address": "0xd30830",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::getNPCIcon(CCharacter*)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd30830",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::getNPCIcon(CCharacter*)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd30900",
+    "before": {
+      "address": "0xd30900",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::calculateNPCIcon(CCharacter*)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd30900",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::calculateNPCIcon(CCharacter*)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd339d0",
+    "before": {
+      "address": "0xd339d0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::resetQuest(CQuest*)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd339d0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::resetQuest(CQuest*)",
+      "status": "DIFF",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  }
+]

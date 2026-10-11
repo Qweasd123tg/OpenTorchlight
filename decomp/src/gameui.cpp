@@ -1327,7 +1327,7 @@ void CGameUI::toggleStatFill()
 
 CEquipment* CGameUI::getMouseOverItem()
 {
-    return m_mouseOverItem;
+    return reinterpret_cast<CEquipment*>(m_mouseOverItem.getObject());
 }
 
 void CGameUI::flushProcessInput()
@@ -2941,4 +2941,591 @@ void CGameUI::setPlayer(CCharacter* character)
     else
         m_inventoryMenu->setOwner(NULL);
     gameui_detail::service::slots(this);
+}
+
+void CGameUI::addImageSet(CEGUI::Imageset* imageset)
+{
+    if (imageset)
+        reinterpret_cast<gameui_create_detail::ImagesetState*>(this)->itemImagesets.add(imageset);
+}
+
+CEGUI::Imageset* CGameUI::getImageSetForIcon(const unsigned char* name)
+{
+    TArrayList<CEGUI::Imageset*>& imagesets =
+        reinterpret_cast<gameui_create_detail::ImagesetState*>(this)->itemImagesets;
+    if (!imagesets.size())
+        return 0;
+    for (unsigned i = 0; i < imagesets.size(); ++i)
+        if (imagesets[i]->isImageDefined(name))
+            return imagesets[i];
+    return imagesets[0];
+}
+
+// Preserve the original out-of-line boundary inside flattened skill consumers.
+__attribute__((noinline))
+const CEGUI::Image* CGameUI::getImageFromImageSet(const unsigned char* name)
+{
+    TArrayList<CEGUI::Imageset*>& imagesets =
+        reinterpret_cast<gameui_create_detail::ImagesetState*>(this)->itemImagesets;
+    if (!imagesets.size())
+        return 0;
+    CEGUI::String imageName(name);
+    for (unsigned i = 0; i < imagesets.size(); ++i) {
+        if (imagesets[i]->isImageDefined(name)) {
+            const CEGUI::Image* image = &imagesets[i]->getImage(name);
+            if (image)
+                return image;
+        }
+    }
+    return 0;
+}
+
+// Preserve the original out-of-line message setters in the flattened UI update.
+__attribute__((noinline))
+void CGameUI::setSmallText(std::wstring text, float duration)
+{
+    using gameui_detail::field;
+    if (text.empty()) {
+        field<float>(this,0x1994) = 0;
+        field<CEGUI::Window*>(this,0x118)->setVisible(false);
+    } else {
+        field<std::wstring>(this,0x1988) = text;
+        field<float>(this,0x1994) = 1;
+        field<float>(this,0x1990) = duration;
+        field<CEGUI::Window*>(this,0x118)->setProperty("TextColour",
+            CEGUI::PropertyHelper::colourToString(CEGUI::colour(1,1,1,1)));
+        field<CEGUI::Window*>(this,0x118)->setProperty("DropTextColour",
+            CEGUI::PropertyHelper::colourToString(CEGUI::colour(0,0,0,1)));
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::setBigText(std::wstring text, float duration)
+{
+    using gameui_detail::field;
+    if (text.empty()) {
+        field<float>(this,0x1984) = 0;
+        field<CEGUI::Window*>(this,0x110)->setVisible(false);
+    } else {
+        field<CEGUI::Window*>(this,0x110)->setVisible(true);
+        field<std::wstring>(this,0x1978) = text;
+        field<float>(this,0x1984) = 1;
+        field<float>(this,0x1980) = duration;
+        field<CEGUI::Window*>(this,0x110)->setProperty("TextColour",
+            CEGUI::PropertyHelper::colourToString(CEGUI::colour(1,1,1,1)));
+        field<CEGUI::Window*>(this,0x110)->setProperty("DropTextColour",
+            CEGUI::PropertyHelper::colourToString(CEGUI::colour(0,0,0,1)));
+    }
+}
+
+__attribute__((noinline))
+void CGameUI::setCinematicOpen(std::wstring text)
+{
+    if (m_cinematicMenu) {
+        m_cinematicMenu->setText(text);
+        m_cinematicMenu->setOpen(true);
+    }
+}
+
+// Five inclusive UI rectangles are stored as top, bottom, left, right.
+bool CGameUI::mouseOverPanel(int x, int y)
+{
+    using gameui_detail::field;
+    gameuiBoundaryWidth(this);
+    gameuiBoundaryHeight(this);
+    const float px = static_cast<float>(x);
+    const float py = static_cast<float>(y);
+    if (px >= field<float>(this,0x19d4) && px <= field<float>(this,0x19d8) &&
+        py >= field<float>(this,0x19cc) && py <= field<float>(this,0x19d0)) return true;
+    if (px >= field<float>(this,0x19e4) && px <= field<float>(this,0x19e8) &&
+        py >= field<float>(this,0x19dc) && py <= field<float>(this,0x19e0)) return true;
+    if (px >= field<float>(this,0x19c4) && px <= field<float>(this,0x19c8) &&
+        py >= field<float>(this,0x19bc) && py <= field<float>(this,0x19c0)) return true;
+    if (leftCovered() && px >= field<float>(this,0x19a4) && px <= field<float>(this,0x19a8) &&
+        py >= field<float>(this,0x199c) && py <= field<float>(this,0x19a0)) return true;
+    return rightCovered() && px >= field<float>(this,0x19b4) && px <= field<float>(this,0x19b8) &&
+        py >= field<float>(this,0x19ac) && py <= field<float>(this,0x19b0);
+}
+
+// Preserve the original boundary in flattened skill-load consumers.
+__attribute__((noinline))
+void CGameUI::convertToScreenScale(CEGUI::Window* window, bool horizontal)
+{
+    const int children = static_cast<int>(window->getChildCount());
+    for (int i = 0; i < children; ++i)
+        convertToScreenScale(window->getChildAtIdx(i), horizontal);
+    CEGUI::UVector2 position = window->getPosition();
+    if (horizontal) {
+        position.d_x.d_offset = gameuiBoundaryScaledX(this, position.d_x.d_offset);
+        position.d_y.d_offset = gameuiBoundaryScaledX(this, position.d_y.d_offset);
+    } else {
+        position.d_x.d_offset = gameuiBoundaryScaledY(this, position.d_x.d_offset);
+        position.d_y.d_offset = gameuiBoundaryScaledY(this, position.d_y.d_offset);
+    }
+    window->setPosition(position);
+    CEGUI::UVector2 size = window->getSize();
+    if (horizontal) {
+        size.d_x.d_offset = gameuiBoundaryScaledX(this, size.d_x.d_offset);
+        size.d_y.d_offset = gameuiBoundaryScaledX(this, size.d_y.d_offset);
+    } else {
+        size.d_x.d_offset = gameuiBoundaryScaledY(this, size.d_x.d_offset);
+        size.d_y.d_offset = gameuiBoundaryScaledY(this, size.d_y.d_offset);
+    }
+    window->setSize(size);
+}
+
+#include <elements/CEGUICombobox.h>
+#include <elements/CEGUIListboxItem.h>
+#include <elements/CEGUIEditbox.h>
+#include <elements/CEGUIComboDropList.h>
+#include <elements/CEGUIScrollbar.h>
+#include <falagard/CEGUIFalWidgetLookManager.h>
+#include <falagard/CEGUIFalWidgetLookFeel.h>
+#include <falagard/CEGUIFalNamedArea.h>
+void CGameUI::sizeComboList(CEGUI::Combobox* combo)
+{
+    float itemsHeight = 0.0f;
+    for (unsigned int i = 0; i < combo->getItemCount(); ++i)
+        itemsHeight += combo->getListboxItemFromIndex(i)->getPixelSize().d_height;
+    const CEGUI::Size editSize = combo->getEditbox()->getPixelSize();
+    CEGUI::ComboDropList* list = combo->getDropList();
+    CEGUI::String areaName(list->getHorzScrollbar()->isVisible(false) ?
+        "ItemRenderingAreaHScroll" : "ItemRenderingArea");
+    const CEGUI::WidgetLookFeel& look = CEGUI::WidgetLookManager::getSingleton().getWidgetLook(list->getLookNFeel());
+    const float listHeight = list->getPixelSize().d_height;
+    const float borderHeight = listHeight - look.getNamedArea(areaName).getArea().getPixelRect(*list).getHeight();
+    const float comboHeight = combo->getPixelSize().d_height;
+    const float offset = list->getYPosition().asAbsolute(comboHeight) - editSize.d_height;
+    combo->setHeight(CEGUI::UDim(0.0f, ((itemsHeight + editSize.d_height) + borderHeight) + offset));
+}
+
+#include "ModalMenu.h"
+#include "QuestDialogMenu.h"
+#include "Quest.h"
+#include "QuestDialog.h"
+#include "QuestManager.h"
+#include "Player.h"
+#include "Item.h"
+
+// The retirement phase is flattened into updateIngameUI, but the original
+// still calls this public entry (as does onClick).
+__attribute__((noinline))
+void CGameUI::openModalDialog(std::wstring title, std::wstring text, bool choice)
+{
+    if (!m_dropdown548)
+        return;
+    gameuiBoundaryUnPause(this);
+    CEGUI::Window* window = m_foldout->m_pWindow;
+    CEGUI::Window* parent = window->getParent();
+    if (parent)
+        parent->removeChildWindow(window);
+    m_dropdown548->setOpen(true);
+    m_dropdown548->setTitle(title);
+    m_dropdown548->setContents(text, choice, NULL, NULL);
+}
+
+void CGameUI::forceInteractiveDialog(CPlayer* player, CBaseUnit* unit, CQuest* quest)
+{
+    if (!unit || !player || m_questDialogMenu->m_bUnknown30)
+        return;
+    gameuiBoundaryCloseAll(this);
+    if (CCharacter* character = dynamic_cast<CCharacter*>(unit))
+        player->setTarget(character);
+    else if (CItem* item = dynamic_cast<CItem*>(unit))
+        player->setTargetItem(item);
+    else
+    {
+        player->setTarget(NULL);
+        player->setTargetItem(NULL);
+    }
+    if (quest)
+    {
+        CQuestDialog* dialog = reinterpret_cast<CQuestDialog*>(quest->getQuestDialog(unit));
+        if (dialog && reinterpret_cast<unsigned char*>(dialog)[0x74])
+        {
+            dialog->playDialogSound();
+            m_questDialogMenu->setNPC(unit, true, quest);
+            return;
+        }
+    }
+    else
+    {
+        // The lookup has side effects; its returned quest is not used here.
+        CQuestManager::getSingleton()->getQuestForNPC(unit);
+    }
+    m_questDialogMenu->setNPC(unit, false, quest);
+    player->setAIState(AISTATE_IDLE);
+    player->stopPathing();
+}
+
+namespace gameui_tip_queue_detail {
+struct State {
+    unsigned char prefix[0x1960];
+    std::vector<EContextTip> tips;
+};
+typedef char check_tip_queue_offset[__builtin_offsetof(State, tips)==0x1960?1:-1];
+}
+
+void CGameUI::queueTip(EContextTip tip)
+{
+    if (!m_pCharacter || (reinterpret_cast<unsigned char*>(m_pCharacter) + 0xa17)[static_cast<int>(tip)])
+        return;
+    if (m_settings->GetInt(KSETTINGS_SHOW_TIPS) != 1)
+        return;
+    reinterpret_cast<gameui_tip_queue_detail::State*>(this)->tips.push_back(tip);
+}
+
+#include <OgreRoot.h>
+
+__attribute__((noinline))
+void CGameUI::cleanupReferences()
+{
+    menu_item_click_detail::UIState& menus = menu_item_click_detail::state(this);
+    gameui_slots_detail::UIState& slots = gameui_slots_detail::state(this);
+    menu_item_click_detail::clearHoverAndTooltips(menus);
+    slots.leftGuid = -1;
+    slots.rightGuid = -1;
+    slots.attackGuid = -1;
+    slots.leftIcon->setProperty("Image", "");
+    slots.rightIcon->setProperty("Image", "");
+    slots.attackIcon->setProperty("Image", CEGUI::PropertyHelper::imageToString(
+        getImageFromImageSet(reinterpret_cast<const unsigned char*>("skill_attack"))));
+    gameui_item_hover_detail::references(this).selectedCharacter.setObject(NULL);
+    setMouseOverItem(NULL, true);
+    menus.merchantMenu->setOwner(NULL);
+    menus.merchantMenu->setPlayer(NULL);
+    menus.enchantMenu->setOwner(NULL);
+    menus.enchantMenu->setPlayer(NULL);
+    menus.combineMenu->setOwner(NULL);
+    menus.combineMenu->setPlayer(NULL);
+    // The original rebinds the merchant a second time after clearing combine owner.
+    menus.merchantMenu->setPlayer(NULL);
+    menus.stashMenu->setOwner(NULL);
+    menus.stashMenu->setPlayer(NULL);
+    m_questMenu->setOwner(NULL);
+    if (m_cursorState == 3 || m_cursorState == 4)
+        gameuiBoundaryCursor(this, static_cast<ECursorState>(0));
+    menus.selectedSkill = -1;
+    menus.targetedItem.setObject(NULL);
+    menus.targetCharacter.setObject(NULL);
+    menus.itemUser.setObject(NULL);
+}
+
+__attribute__((noinline))
+void CGameUI::setLoadingVisible(bool visible)
+{
+    using gameui_detail::field;
+    if (!field<unsigned char>(CMasterResourceManager::getSingleton(), 0xc1))
+        return;
+    if (visible) {
+        if (!m_rootWindow->isChild(field<CEGUI::Window*>(this, 0x478))) {
+            menu_item_click_detail::clearHoverAndTooltips(menu_item_click_detail::state(this));
+            m_rootWindow->addChildWindow(field<CEGUI::Window*>(this, 0x478));
+            field<CEGUI::Window*>(this, 0x480)->setText(reinterpret_cast<const unsigned char*>(
+                STRINGS::StringConvertToUTF8(CGameGlobals::getSingleton()->getRandomTip()).c_str()));
+        }
+        field<unsigned char>(CMasterResourceManager::getSingleton(), 0xc0) = 1;
+        Ogre::Root::getSingletonPtr()->renderOneFrame();
+        field<unsigned char>(CMasterResourceManager::getSingleton(), 0xc0) = 0;
+    } else if (m_rootWindow->isChild(field<CEGUI::Window*>(this, 0x478))) {
+        menu_item_click_detail::clearHoverAndTooltips(menu_item_click_detail::state(this));
+        m_rootWindow->removeChildWindow(field<CEGUI::Window*>(this, 0x478));
+    }
+}
+
+#include "GameUITextEventList.h"
+
+// All member initializers precede the constructor body, including scalar writes
+// observed by nested manager and string construction.
+CGameUI::CGameUI(CSettings& settings,CGameClient& client,void* window,
+    Ogre::RenderWindow* renderWindow,Ogre::Camera* camera,
+    Ogre::SceneManager* mainScene,Ogre::SceneManager* inventoryScene,
+    Ogre::SceneManager* petScene,CResourceManager* resources)
+: CRunicCore(),
+  m_camera(camera), // 0x10
+  m_mainScene(mainScene), // 0x18
+  m_inventoryScene(inventoryScene), // 0x20
+  m_petScene(petScene), // 0x28
+  m_soundManager(CMasterResourceManager::getSingleton()->m_pSoundManager), // 0x30
+  m_pCharacter(0), // 0x38
+  m_level(0), // 0x40
+  m_hoveredCharacter(), // 0x48
+  m_selectedCharacter(), // 0x58
+  m_mouseOverItem(), // 0x68
+  m_settings(&settings), // 0x78
+  m_targetedItem(), // 0x80
+  m_reference90(), // 0x90
+  m_referenceA0(), // 0xa0
+  m_guidB0(-1), // 0xb0
+  m_draggedItem(), // 0xb8
+  m_dragOwner(), // 0xc8
+  m_statsWindow(0), // 0xe0
+  m_targetName(0), // 0xe8
+  m_targetDescription(0), // 0xf0
+  m_targetLevel(0), // 0xf8
+  m_targetHealth(0), // 0x120
+  m_targetBar(0), // 0x128
+  m_topWindow(0), // 0x138
+  m_healthWindow(0), // 0x140
+  m_manaWindow(0), // 0x158
+  m_petWindow(0), // 0x170
+  m_petHealthWindow(0), // 0x180
+  m_petManaWindow(0), // 0x190
+  m_experienceWindow(0), // 0x1d0
+  m_leftGuid(-1), // 0x228
+  m_word230(0), // 0x230
+  m_word258(0), // 0x258
+  m_renderer(0), // 0x428
+  m_ceguiSystem(0), // 0x430
+  m_itemIconFiles(25), // 0x440
+  m_itemImagesets(5), // 0x458
+  m_equipmentTooltip(0), // 0x4a0
+  m_compareFirst(0), // 0x4a8
+  m_compareSecond(0), // 0x4b0
+  m_skillTooltip(0), // 0x4b8
+  m_renderWindow(renderWindow), // 0x4d0
+  m_statsMenu(0), // 0x4d8
+  m_characterStatsMenu(0), // 0x4e0
+  m_inventoryMenu(0), // 0x4e8
+  m_merchantMenu(0), // 0x4f0
+  m_enchantMenu(0), // 0x4f8
+  m_combineMenu(0), // 0x500
+  m_stashMenu(0), // 0x508
+  m_optionsMenu(0), // 0x510
+  m_dialogMenu(0), // 0x518
+  m_dieMenu(0), // 0x520
+  m_waypointMenu(0), // 0x528
+  m_dropdown530(0), // 0x530
+  m_questDialogMenu(0), // 0x538
+  m_cinematicMenu(0), // 0x540
+  m_dropdown548(0), // 0x548
+  m_tipMenu(0), // 0x550
+  m_skillsMenu(0), // 0x558
+  m_journalMenu(0), // 0x560
+  m_questMenu(0), // 0x568
+  m_interactiveMenu(0), // 0x570
+  m_fishingMenu(0), // 0x578
+  m_statsImageset(0), // 0x580
+  m_menuManager(0), // 0x588
+  m_keys(), // 0x590
+  m_mouse(), // 0x12a8
+  m_displayStats(false), // 0x12f8
+  m_bExitButtonPressed(false), // 0x12f9
+  m_gap12FA(0), // 0x12fa
+  m_mouseThrough(false), // 0x12fb
+  m_cursorState(static_cast<ECursorState>(5)), // 0x12fc
+  m_window(window), // 0x1300
+  m_resources(resources), // 0x1308
+  m_labelHovered(false), // 0x1640
+  m_itemHovered(false), // 0x1641
+  m_foldoutItemHovered(false), // 0x1642
+  m_skillHovered(false), // 0x1643
+  m_hoveredSkillGuid(-1), // 0x1648
+  m_hoveredItemGuid(-1), // 0x1650
+  m_foldoutSkillHovered(false), // 0x1660
+  m_foldoutSkillGuid(-1), // 0x1668
+  m_inputCaptured(false), // 0x1670
+  m_leftSlot(-1), // 0x1674
+  m_rightSlot(-1), // 0x1678
+  m_pendingRightSlot(-1), // 0x167c
+  m_usableWidthRatio(1.0f), // 0x1680
+  m_cachedWindowWidth(800.0f), // 0x1684
+  m_cachedWindowHeight(600.0f), // 0x1688
+  m_console(0), // 0x1690
+  m_freeEvents(0), // 0x1698
+  m_activeEvents(0), // 0x16a0
+  m_name16B0(L"Rourke"), // 0x16b0
+  m_name16B8(L"Spot"), // 0x16b8
+  m_text16C0(), // 0x16c0
+  m_cachedPetMode(1), // 0x16c8
+  m_interactiveMenuUsers(0), // 0x178c
+  m_requestedGameState(static_cast<EGameState>(6)), // 0x1914
+  m_requestedMenu(static_cast<EMenu>(6)), // 0x1918
+  m_gameClient(&client), // 0x1920
+  m_submenus(), // 0x1930
+  m_dropdowns(), // 0x1948
+  m_queuedTips(), // 0x1960
+  m_smallText(EMPTY_WSTRING), // 0x1978
+  m_smallDuration(0.0f), // 0x1980
+  m_smallElapsed(0.0f), // 0x1984
+  m_bigText(EMPTY_WSTRING), // 0x1988
+  m_bigDuration(0.0f), // 0x1990
+  m_bigElapsed(0.0f), // 0x1994
+  m_paused(false), // 0x1999
+  m_cursors() // 0x19f0
+{
+    if (!g_pGameUI) g_pGameUI=this;
+    for (int i=0;i<97;++i) m_slotIndices[i]=i;
+    KSkillSlotsKeys[0]=KSETTINGS_KEYMAP_1;
+    KSkillSlotsKeys[1]=KSETTINGS_KEYMAP_2;
+    KSkillSlotsKeys[2]=KSETTINGS_KEYMAP_3;
+    KSkillSlotsKeys[3]=KSETTINGS_KEYMAP_4;
+    KSkillSlotsKeys[4]=KSETTINGS_KEYMAP_5;
+    KSkillSlotsKeys[5]=KSETTINGS_KEYMAP_6;
+    KSkillSlotsKeys[6]=KSETTINGS_KEYMAP_7;
+    KSkillSlotsKeys[7]=KSETTINGS_KEYMAP_8;
+    KSkillSlotsKeys[8]=KSETTINGS_KEYMAP_9;
+    KSkillSlotsKeys[9]=KSETTINGS_KEYMAP_0;
+    KSkillSlotsFunctionKeys[0]=KSETTINGS_FKEYMAP_1;
+    KSkillSlotsFunctionKeys[1]=KSETTINGS_FKEYMAP_2;
+    KSkillSlotsFunctionKeys[2]=KSETTINGS_FKEYMAP_3;
+    KSkillSlotsFunctionKeys[3]=KSETTINGS_FKEYMAP_4;
+    KSkillSlotsFunctionKeys[4]=KSETTINGS_FKEYMAP_5;
+    KSkillSlotsFunctionKeys[5]=KSETTINGS_FKEYMAP_6;
+    KSkillSlotsFunctionKeys[6]=KSETTINGS_FKEYMAP_7;
+    KSkillSlotsFunctionKeys[7]=KSETTINGS_FKEYMAP_8;
+    KSkillSlotsFunctionKeys[8]=KSETTINGS_FKEYMAP_9;
+    KSkillSlotsFunctionKeys[9]=KSETTINGS_FKEYMAP_10;
+    KSkillSlotsFunctionKeys[10]=KSETTINGS_FKEYMAP_11;
+    KSkillSlotsFunctionKeys[11]=KSETTINGS_FKEYMAP_12;
+    create();
+}
+
+CGameUI::~CGameUI()
+{
+    SDL_SetCursor(NULL);
+    for (unsigned int i=0;i<5;++i) SDL_FreeCursor(m_cursors[i]);
+    m_cursors.clear();
+    g_pGameUI=NULL;
+    m_statsImageset=NULL;
+    m_guiLook=NULL;
+    m_itemImagesets.clear();
+
+    TLinkedListNode<CTextEvent*>* node=m_activeEvents->head;
+    while(node) {
+        CTextEvent* event=node->m_Data;
+        node=node->m_pNext;
+        CEGUI::Window* window=event->m_pWindow;
+        if(window && window->getParent()) window->getParent()->removeChildWindow(window);
+        delete event;
+    }
+    m_activeEvents->clearNodes();
+    node=m_freeEvents->head;
+    while(node) {
+        CTextEvent* event=node->m_Data;
+        node=node->m_pNext;
+        CEGUI::Window* window=event->m_pWindow;
+        if(window && window->getParent()) window->getParent()->removeChildWindow(window);
+        delete event;
+    }
+    m_freeEvents->clearNodes();
+
+    for(unsigned int i=0;i<m_submenus.size();++i) {
+        if(m_submenus[i]) { delete m_submenus[i]; m_submenus[i]=NULL; }
+    }
+    m_submenus.clear();
+    for(unsigned int i=0;i<m_dropdowns.size();++i) {
+        if(m_dropdowns[i]) { delete m_dropdowns[i]; m_dropdowns[i]=NULL; }
+    }
+    m_dropdowns.clear();
+    if(m_equipmentTooltip) { delete m_equipmentTooltip; m_equipmentTooltip=NULL; }
+    if(m_compareFirst) { delete m_compareFirst; m_compareFirst=NULL; }
+    if(m_compareSecond) { delete m_compareSecond; m_compareSecond=NULL; }
+    if(m_skillTooltip) { delete m_skillTooltip; m_skillTooltip=NULL; }
+    // Tooltip callbacks may have populated the shells again.
+    if(m_activeEvents) { delete m_activeEvents; m_activeEvents=NULL; }
+    if(m_freeEvents) { delete m_freeEvents; m_freeEvents=NULL; }
+    if(m_console) { delete m_console; m_console=NULL; }
+    delete m_draggedItem.getObject();
+    if(m_interactiveMenu) { delete m_interactiveMenu; m_interactiveMenu=NULL; }
+    if(m_fishingMenu) { delete m_fishingMenu; m_fishingMenu=NULL; }
+    delete m_ceguiSystem;
+    delete m_renderer;
+    if(m_soundBank) { delete m_soundBank; m_soundBank=NULL; }
+    if(m_menuManager) { delete m_menuManager; m_menuManager=NULL; }
+}
+
+#include <OgreSceneNode.h>
+#include <OgreCEGUIRenderer.h>
+#include "FileSystem.h"
+#include "StringUtilities.h"
+#include "GameClient.h"
+#include "Player.h"
+#include "QuestDialogMenu.h"
+#include "CinematicMenu.h"
+#include "InventoryMenu.h"
+#include "PetMenu.h"
+#include "EquipmentTooltip.h"
+
+CGameUI* CGameUI::getSingleton() { return g_pGameUI; }
+
+void CGameUI::setLevel(CLevel* level)
+{
+    typedef char inventory_level_offset[__builtin_offsetof(CInventoryMenu,m_level)==0x58?1:-1];
+    typedef char pet_level_offset[__builtin_offsetof(CPetMenu,m_level)==0x60?1:-1];
+    m_level=level;
+    m_statsMenu->m_level=level;
+    m_inventoryMenu->m_level=level;
+}
+
+int CountChildren(Ogre::SceneNode* node)
+{
+    int count=0;
+    Ogre::Node::ChildNodeIterator children=node->getChildIterator();
+    while(children.hasMoreElements()) {
+        Ogre::SceneNode* child=static_cast<Ogre::SceneNode*>(children.getNext());
+        if(child) count+=1+CountChildren(child);
+    }
+    return count;
+}
+
+bool CGameUI::equipmentTooltipVisible()
+{
+    return m_equipmentTooltip && m_equipmentTooltip->m_pRoot->getParent()!=NULL;
+}
+
+void CGameUI::addMenuListener(EMENU_TYPE menu,iMenuListener* listener)
+{
+    if(menu==static_cast<EMENU_TYPE>(0)) m_questDialogMenu->addMenuListener(listener);
+    else if(menu==static_cast<EMENU_TYPE>(1)) m_cinematicMenu->addMenuListener(listener);
+}
+
+CBaseUnit* CGameUI::getQuestDialogNPC()
+{
+    return m_questDialogMenu?m_questDialogMenu->m_unit:NULL;
+}
+
+const Ogre::Vector3& CGameUI::getQuestDialogCameraOffset()
+{
+    return m_questDialogMenu?m_questDialogMenu->getCameraOffset():Ogre::Vector3::ZERO;
+}
+
+void CGameUI::hideUI() { m_renderer->setTargetSceneManager(NULL); }
+void CGameUI::showUI() { m_renderer->setTargetSceneManager(m_mainScene); }
+
+void CGameUI::setWindowActive(bool active)
+{
+    if(!active) { m_keys.flushAll(); m_mouse.flushAll(); }
+    if(m_menuManager) m_menuManager->setWindowActive(active);
+}
+
+extern bool gameuiMenuCanLoad(CMenuManager*) __asm__("_ZN12CMenuManager7canLoadEv");
+extern bool gameuiMenuCanContinue(CMenuManager*) __asm__("_ZN12CMenuManager11canContinueEv");
+bool CGameUI::canLoad() { return gameuiMenuCanLoad(m_menuManager); }
+bool CGameUI::canContinue() { return gameuiMenuCanContinue(m_menuManager); }
+
+void CEquipmentTooltip::load(CGameUI* ui,std::wstring path)
+{
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(path,info,false,true,false);
+    m_pRoot=CEGUI::WindowManager::getSingleton().loadWindowLayout(
+        CEGUI::String(info.m_sResourceName),CEGUI::String(STRINGS::uniqueName("gui_")),"",NULL,NULL);
+    m_pRoot->setAlwaysOnTop(true);
+    m_pRoot->setMutedState(true);
+    m_pRoot->setMousePassThroughEnabled(true);
+    ui->convertToScreenScale(m_pRoot,false);
+    m_pItemName=m_pRoot->recursiveChildSearch("ItemName");
+    m_pItemType=m_pRoot->recursiveChildSearch("ItemType");
+    m_pItemHanded=m_pRoot->recursiveChildSearch("ItemHanded");
+    m_pBigDPS=m_pRoot->recursiveChildSearch("BigDPS");
+    m_pDPS=m_pRoot->recursiveChildSearch("DPS");
+    m_pStats=m_pRoot->recursiveChildSearch("Stats");
+    m_pEffects=m_pRoot->recursiveChildSearch("Effects");
+    m_pLevelRequirement=m_pRoot->recursiveChildSearch("Level Requirements");
+    m_pStrengthRequirement=m_pRoot->recursiveChildSearch("Strength Requirements");
+    m_pDexterityRequirement=m_pRoot->recursiveChildSearch("Dexterity Requirements");
+    m_pMagicRequirement=m_pRoot->recursiveChildSearch("Magic Requirements");
+    m_pDefenseRequirement=m_pRoot->recursiveChildSearch("Defense Requirements");
+    m_pDescription=m_pRoot->recursiveChildSearch("Description");
+    m_pPrice=m_pRoot->recursiveChildSearch("Price");
 }

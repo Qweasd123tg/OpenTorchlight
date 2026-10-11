@@ -53,7 +53,6 @@ private:
     float m_workingHeight; // +0x1fc
     Ogre::Plane m_workingPlane; // +0x200
     CKeyManager m_keys;
-    unsigned char m_unrecoveredKeys[0xd18-sizeof(CKeyManager)];
     CMouseManager m_mouse;
     unsigned char m_unrecoveredMouse[0x50-sizeof(CMouseManager)];
     CUndo* m_undo; // +0xf78

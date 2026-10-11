@@ -4,6 +4,7 @@
 #include "SafePointer.h"
 class CBaseUnit;
 class CQuestDialog;
+class CQuest;
 class CGameUI; class CSettings; class CResourceManager;
 namespace Ogre { class RenderWindow; class SceneManager; }
 namespace CEGUI { class Window; }
@@ -12,6 +13,7 @@ namespace CEGUI { class Window; }
 class CQuestDialogMenu : public CDropdownMenu {
 public:
     void createMenus();
+    void setNPC(CBaseUnit*, bool, CQuest*);
     bool handle_MouseOver(const CEGUI::EventArgs& event);
     bool handle_MouseOut(const CEGUI::EventArgs& event);
 

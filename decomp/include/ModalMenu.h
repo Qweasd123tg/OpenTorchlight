@@ -1,7 +1,7 @@
 #ifndef OTL_MODALMENU_H
 #define OTL_MODALMENU_H
 #include "DropdownMenu.h"
-class CGameUI; class CSettings; class CResourceManager;
+class CBaseUnit; class CGameUI; class CSettings; class CResourceManager;
 namespace Ogre { class RenderWindow; class SceneManager; }
 namespace CEGUI { class Window; }
 // Partial: RTTI base and allocation size from the original GameUI create call.
@@ -9,6 +9,7 @@ namespace CEGUI { class Window; }
 class CModalMenu : public CDropdownMenu {
 public:
     void createMenus();
+    void setContents(std::wstring&, bool, bool (*)(CBaseUnit*, CBaseUnit*), bool (*)(CBaseUnit*, CBaseUnit*));
     bool handle_ExitButton(const CEGUI::EventArgs& event);
     bool handle_CloseButton(const CEGUI::EventArgs& event);
     virtual bool onClick(ELayoutFunction function, std::wstring text);

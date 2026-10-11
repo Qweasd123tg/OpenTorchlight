@@ -8,6 +8,7 @@ namespace CEGUI { class Window; }
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CCinematicMenu : public CDropdownMenu {
 public:
+    void setText(std::wstring);
     void createMenus();
     void updateTextDisplay(float elapsed);
     virtual void update(float elapsed);

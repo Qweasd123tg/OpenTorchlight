@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "main_commit": "381ceb903ed7776e5cde5ef096a20e7823f1351b",
+  "main_tree": "a87d11661b76393918abaf2c85bbac977df09d3a",
+  "prior_handoff": "f1bd62a7dfc6c46c25f69ff66c12e7b96a464f7f",
+  "prior_handoff_tree": "a20ac3cf4be6559168f180cfc7b3e8baeb42cfe0",
+  "accepted": 2710,
+  "matched": 2170,
+  "behavioral": 540,
+  "tests": 651,
+  "accepted_delta": 30,
+  "prior_rows_preserved": 7668,
+  "historical_pro_definitions": 401,
+  "all_prior_paths_preserved": true,
+  "historical_finding_fields_preserved": true,
+  "changed_index_rows": 37,
+  "source_files_verified": 1121,
+  "full_suite_origin": "stage",
+  "tests_executed_by_refresh": false,
+  "remote_mutation_performed": false,
+  "private_proof_sha256": "7f44e90054256fe4e9a29eda1599512cc4fcec08739c2bc0967611b9003d8cbe",
+  "durable_archive_receipts_verified": true,
+  "proof_sha256": {
+    "FROZEN-HANDOFF.json": "e44196aac79955421210ba2ec689d0ff071533c72402ff7f278848da7539127c",
+    "acceptance.json": "28892f4e7c1cf484c7488559e6ce73d47cb9f1447139646f2880a3917579da2b",
+    "publication.json": "8efbf30e2669deeee3a4ad8bbc07d94afc18b05351470000aae255f3509713a0",
+    "preservation.json": "f999985ef3a1841ed194eec366d28354647295e6db5c70c0f5c9d32745a5fdeb",
+    "final-stage-identity.json": "46636eb57db3575b03110687b71840c8df33ebcd8b0f2883f26d8db6565ab3a3",
+    "final-stage-units.json": "cc181ab6263c7cf29df9e48f3b929b04f5f8423a02c6c9bd3e840c05c9716300",
+    "private-proof-local.json": "f4fc7780934f9f1a3612dab76ee9f35760e540755e15287f65fd90ac9e469a12"
+  },
+  "inputs_digest": "2707875e831d251df4af90c4c8715a7b8fc363f1e95213de395abd3b5f102284",
+  "active_scope_not_accepted": [
+    "0xd264d0",
+    "0xd2dca0",
+    "0xd2dda0",
+    "0xd30830",
+    "0xd30900",
+    "0xd339d0",
+    "0xa83580"
+  ],
+  "status_policy": "Refresh represented primary function statuses from actual final units; retain historical status where no authoritative primary row exists. Acceptance exactly equals canonical progress accepted set."
+}
