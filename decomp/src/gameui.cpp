@@ -3529,3 +3529,26 @@ void CEquipmentTooltip::load(CGameUI* ui,std::wstring path)
     m_pDescription=m_pRoot->recursiveChildSearch("Description");
     m_pPrice=m_pRoot->recursiveChildSearch("Price");
 }
+
+namespace gameui_cinematic_detail {
+// Original client state at +0x390c; retained as a narrow view because that TU
+// belongs to another worker and its public header leaves this word opaque.
+struct ClientState { unsigned char prefix[0x10bc]; bool control; unsigned char gap[0x390c-0x10bd]; int mode; };
+}
+bool CGameUI::getUIIsInCinematic()
+{
+    CGameClient* client=m_resources->getGameClient();
+    if(client && client->getPlayer()) {
+        if(reinterpret_cast<gameui_cinematic_detail::ClientState*>(client)->control ||
+           reinterpret_cast<gameui_cinematic_detail::ClientState*>(client)->mode==1)
+            return true;
+        if(m_cinematicMenu && (m_cinematicMenu->m_bUnknown30 || !m_cinematicMenu->m_bUnknown31))
+            return true;
+        if(!client->getPlayer()->getEnabled()) return true;
+        if(m_resources->getGameClient()->getPlayer()->m_pathToFollow.getObject() &&
+           m_resources->getGameClient()->getPlayer()->m_isPathing)
+            return true;
+    }
+    return m_interactiveMenuUsers>0;
+}
+

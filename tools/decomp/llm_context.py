@@ -400,6 +400,62 @@ class ContextIndex:
             return "std::basic_string<%s>; pinned GNU-unique STT_OBJECT in both ELF tables, 32-byte BSS, reviewed basic_string.h/tcc" % ctype
         return None
 
+    def _quest_icon_switch_data(self, obj, f, asm, tu):
+        """One pinned compiler-generated result table, not a game declaration.
+
+        GCC lowered getNPCIcon's switch to a bounded signed-int lookup. Require
+        both ELF/DB identity, local STT_OBJECT ownership, exact immutable bytes
+        and the actual indexed consumer instructions. Unknown CSWTCH objects
+        remain ordinary unresolved data; no synthetic C++ extern is emitted.
+        """
+        original = "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b"
+        name, base, symbol = "CSWTCH.4688", 0xff77d0, "_ZN13CQuestManager10getNPCIconEP10CCharacter"
+        if (self.db.get("original_elf_sha256") != original
+                or getattr(self.image, "sha256", None) != original
+                or tu != "QuestManager.cpp" or self._tu(f, None) != tu
+                or _address(f["address"]) != 0xd30830 or f.get("size") != 202
+                or f.get("names") != [symbol] or f.get("mangled") != symbol
+                or f.get("qualified") != "CQuestManager::getNPCIcon"
+                or obj.get("name") != name or obj.get("demangled") != name
+                or _address(obj["address"]) != base or obj.get("size") != 16
+                or obj.get("file") != tu or obj.get("bind") != "local"
+                or obj.get("section") != ".rodata"):
+            return None
+        found = [s for s in getattr(self.image, "symbols", ()) if s.name == name]
+        if (len(found) != 1 or not found[0].defined or found[0].type != 1
+                or found[0].bind != 0 or found[0].value != base
+                or found[0].size != 16 or found[0].file != tu):
+            return None
+        sec = self.image.section_at(base)
+        if (not sec or sec.name != ".rodata" or sec.type != 1
+                or sec.flags & 7 != 2 or base + 16 > sec.addr + sec.size
+                or base in self.copy_data):
+            return None
+        try:
+            if (self._read_bytes(base, 16) != bytes.fromhex("170000001a00000016000000ffffffff")
+                    or hashlib.sha256(self._read_bytes(0xd30830, 202)).hexdigest()
+                    != "779ab1c7b0f0a6766221424fd1ed0dca53980ebd135c746fe6bd9eedf8a36c66"):
+                return None
+        except (ValueError, OSError):
+            return None
+        actual = {address: (op, args.split("<", 1)[0].split("#", 1)[0].strip())
+                  for address, op, args in _instructions(f, asm)}
+        expected = {
+            0xd308d7: ("or", "$0xffffffff,%eax"),
+            0xd308e5: ("mov", "0x70(%rdx),%edx"),
+            0xd308e8: ("add", "%eax,%edx"),
+            0xd308ea: ("cmp", "$0x3,%edx"),
+            0xd308ed: ("ja", "d308bd"),
+            0xd308ef: ("mov", "%edx,%edx"),
+            0xd308f1: ("mov", "0xff77d0(,%rdx,4),%eax"),
+        }
+        if any(actual.get(address) != value for address, value in expected.items()):
+            return None
+        return ("pinned GCC switch result table; local read-only STT_OBJECT; "
+                "four complete little-endian signed 32-bit entries [23, 26, 22, -1]; "
+                "getNPCIcon subtracts one from state, unsigned-checks index <= 3, "
+                "then loads one 32-bit entry; default is -1; no game declaration synthesized")
+
     def _dso_registration_handle(self, obj, f, asm):
         """Recognize only the pinned compiler's immediate __cxa_atexit triple.
 
@@ -937,6 +993,10 @@ class ContextIndex:
                     notes.append(f"{address:#x}: ELF-proven DSO destruction registration handle; "
                                  "all references are compiler __cxa_atexit argument triples; "
                                  "no game declaration required or synthesized.")
+                    continue
+                switch = self._quest_icon_switch_data(obj, f, asm, tu)
+                if switch:
+                    notes.append(f"{address:#x}: {switch}.")
                     continue
                 library = self._library_data(obj) or self._string_template_data(obj) or self._cegui_data(obj) or self._ogre_data(obj) or self._ogre_value_data(obj)
                 if library:
