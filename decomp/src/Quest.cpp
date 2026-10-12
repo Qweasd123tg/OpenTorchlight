@@ -382,3 +382,144 @@ void CQuest::load(_IO_FILE* file, CResourceManager*, unsigned int version)
     }
     m_questAccepted = true;
 }
+
+long long CQuest::isComplete(bool requireObjectives)
+{
+    if (!requireObjectives && m_complete)
+        return true;
+    if (m_bUnknown2A)
+        return false;
+
+    bool hasObjectives = false;
+    for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+    {
+        for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+        {
+            if (!(*m_Unknown130[i])[j]->isComplete(false))
+                return false;
+            hasObjectives = true;
+        }
+    }
+    for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+    {
+        for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+        {
+            if (!(*m_Unknown148[i])[j]->isComplete(false))
+                return false;
+            hasObjectives = true;
+        }
+    }
+    for (unsigned int i = 0; i < 2; ++i)
+    {
+        for (unsigned int j = 0; j < m_UnknownF8[i].size(); ++j)
+        {
+            if (!m_UnknownF8[i][j])
+                return false;
+            hasObjectives = true;
+        }
+    }
+    if (!hasObjectives)
+    {
+        if (requireObjectives)
+            return false;
+        bool interacted = m_acceptDialogs.size() == 0;
+        for (unsigned int i = 0; i < m_acceptDialogs.size(); ++i)
+        {
+            if (m_acceptDialogs[i]->m_bDialogInitialized)
+            {
+                interacted = true;
+                break;
+            }
+        }
+        if (!interacted)
+            return false;
+    }
+    setIsComplete(true);
+    return true;
+}
+
+void CQuest::questEventUpdate(EQUEST_EVENTS event, CBaseUnit* actor,
+                              CBaseUnit* target)
+{
+    switch (static_cast<unsigned int>(event))
+    {
+    case 0:
+        for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+                if (static_cast<unsigned char>((*m_Unknown130[i])[j]->unitPickedUp(target)))
+                {
+                    isComplete(false);
+                    break;
+                }
+        for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+                if (static_cast<unsigned char>((*m_Unknown148[i])[j]->unitPickedUp(target)))
+                {
+                    isComplete(false);
+                    break;
+                }
+        break;
+    case 1:
+        for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+                if ((*m_Unknown130[i])[j]->unitDefeated(target))
+                {
+                    isComplete(false);
+                    break;
+                }
+        for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+                if ((*m_Unknown148[i])[j]->unitDefeated(target))
+                {
+                    isComplete(false);
+                    break;
+                }
+        break;
+    case 2:
+        if (actor != m_pQuestManager->m_pPlayer)
+            break;
+        for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+                if ((*m_Unknown130[i])[j]->unitInteracted(target))
+                {
+                    isComplete(false);
+                    break;
+                }
+        for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+                if ((*m_Unknown148[i])[j]->unitInteracted(target))
+                {
+                    isComplete(false);
+                    break;
+                }
+        break;
+    case 3:
+        for (unsigned int i = 0; i < m_UnknownC8.size(); ++i)
+            if (!m_UnknownF8[0][i] && m_pQuestManager->getQuestIsActive(m_UnknownC8[i]))
+                m_UnknownF8[0][i] = true;
+        isComplete(false);
+        break;
+    case 4:
+        for (unsigned int i = 0; i < m_UnknownE0.size(); ++i)
+            if (!m_UnknownF8[1][i] && m_pQuestManager->getQuestComplete(m_UnknownE0[i]))
+                m_UnknownF8[1][i] = true;
+        isComplete(false);
+        break;
+    case 5:
+        for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+                if ((*m_Unknown130[i])[j]->unitDropped(target))
+                {
+                    m_complete = false;
+                    break;
+                }
+        for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+                if ((*m_Unknown148[i])[j]->unitDropped(target))
+                {
+                    m_complete = false;
+                    break;
+                }
+        break;
+    }
+}
