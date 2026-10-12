@@ -34,6 +34,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import elfdb  # noqa: E402
 import elfimage  # noqa: E402
 import objdiff  # noqa: E402
+import hybrid_disasm  # noqa: E402
 import toolchain  # noqa: E402
 import resource_slots  # noqa: E402
 import selftest_schedule  # noqa: E402
@@ -263,9 +264,13 @@ def patch_window_ok(ctx, address):
     if nxt - address < 5:
         return "function slot shorter than 5 bytes"
     f = ctx.functions[address]
-    insns = objdiff.parse_insns(objdiff.run_objdump([f"--start-address={address:#x}",
-                                                     f"--stop-address={address + f['size']:#x}",
-                                                     str(ctx.image.path)]))
+    if int(f["address"], 16) != address:
+        raise RuntimeError("original function address disagrees with patch-window address")
+    if not hasattr(ctx, "_patch_window_instructions"):
+        ctx._patch_window_instructions = hybrid_disasm.PatchWindowInstructions(
+            ctx.db, ctx.image, objdiff.run_objdump, objdiff.parse_insns)
+    insns = ctx._patch_window_instructions.instructions(
+        ctx.image, f, objdiff.run_objdump, objdiff.parse_insns)
     for _, mnemonic, operands in insns:
         m = re.match(r"^([0-9a-f]+) <", operands)
         if m and mnemonic.startswith(("j", "loop", "call")):

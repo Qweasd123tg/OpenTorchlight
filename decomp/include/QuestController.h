@@ -9,6 +9,7 @@
 #include "GameEnums.h"
 #include "iLevelUpdate.h"
 #include "iMenuListener.h"
+#include "SafePointer.h"
 
 class CResourceManager;
 class CDataGroup;
@@ -43,18 +44,12 @@ public:
 
     CResourceManager* m_pResourceManager;
     CDataGroup* m_pDataGroup;
-    CBaseUnit* m_pUnit;
-    int m_iUnitSafePointer;
-
-    unsigned char m_padding84[4];
+    TSafePointer<CBaseUnit> m_unit;
 
     std::wstring m_sCategory;
     std::wstring m_sUnitInteractWith;
 
-    CQuest* m_pQuest;
-    int m_iQuestSafePointer;
-
-    unsigned char m_paddingA4[4];
+    TSafePointer<CQuest> m_quest;
 
     std::wstring m_sQuestName;
     bool m_bFirstUpdate;
