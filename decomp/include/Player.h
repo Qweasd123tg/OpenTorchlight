@@ -22,6 +22,7 @@ public:
     CQuestManager* getQuestManager() { return m_questManager; }
 
     int getDungeonRank(std::wstring dungeon);
+    int getMaxDepth(std::wstring dungeon);
     CLevelState* getLevelSavedState(std::wstring dungeon,int level);
     bool hasLevelSavedState(std::wstring dungeon,int level);
     bool hasDungeonHistory(std::wstring dungeon);
