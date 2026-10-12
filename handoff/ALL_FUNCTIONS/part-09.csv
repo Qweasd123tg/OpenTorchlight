@@ -287,9 +287,9 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xd16a00,Quest.cpp,__tcf_3,DIFF,False,False,,False
 0xd16a90,Quest.cpp,__tcf_2,DIFF,False,False,,False
 0xd16b20,Quest.cpp,__tcf_11,DIFF,False,False,,False
-0xd16bb0,Quest.cpp,CQuest::save(_IO_FILE*),MISSING,False,False,,False
-0xd17200,Quest.cpp,"CQuest::reinitializeQuest(bool, bool)",MISSING,False,False,,False
-0xd17b20,Quest.cpp,"CQuest::load(_IO_FILE*, CResourceManager*, unsigned int)",MISSING,False,False,,False
+0xd16bb0,Quest.cpp,CQuest::save(_IO_FILE*),MISSING,False,False,,True
+0xd17200,Quest.cpp,"CQuest::reinitializeQuest(bool, bool)",DIFF,True,False,,False
+0xd17b20,Quest.cpp,"CQuest::load(_IO_FILE*, CResourceManager*, unsigned int)",DIFF,True,False,,False
 0xd181a0,Quest.cpp,"CQuest::replaceStringTags(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
 0xd19710,Quest.cpp,CQuest::getQuestDetails(),MATCH,True,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd19710.cpp,False
 0xd197d0,Quest.cpp,CQuest::initializeQuestWithNPC(CBaseUnit*),MISSING,False,False,,False

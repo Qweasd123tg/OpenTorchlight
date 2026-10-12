@@ -4,11 +4,11 @@
 
 ## Текущая проверенная база
 
-Проверенная база: PR99, main 99369a3d43c2067159dc443d219b0bf4bc4ae4a8, дерево 8832e4e71933b29e9128670c0752d3ad75ce8e67. Принято 2749 игровых адресов: 2186 MATCH и 563 по сравнениям поведения. Полный Stage-прогон: 735 тестов без ошибок; публикация подтвердила 279 production-объектов. При этом обновлении код, компилятор и тесты не запускались.
+Проверенная база: PR101, main cd9af3912a1117937655a5db023569c98f268142, дерево a7f818c0197a6847482641d57361651155169ac5. Принято 2751 игровых адресов: 2186 MATCH и 565 по сравнениям поведения. Полный recovery Stage-прогон: 740 тестов без ошибок; сохранён первый PASS и документирован wrapper-only сбой после него, затем выполнены поддерживаемая повторная валидация и same-instance публикация. При обновлении этой сводки код и тесты не запускались.
 
-Сохранены все 7668 находок, 11 CSV-частей, 401 историческое определение Pro, прежние исследования и ускорения. decomp/ и tools/ точно соответствуют указанному main. Статусы индекса сверены с фактическими final units и приёмкой; исторические сведения не удалены. Предыдущие метаданные: handoff/history/before-pr99-refresh-20261012/. Проверка: handoff/audit/pr99-refresh-20261012/provenance.json.
+Сохранены все 7668 находок, 11 CSV-частей, 401 историческое определение Pro, исходники, исследования и ускорения. decomp/ и tools/ точно соответствуют main. История метаданных: handoff/history/before-pr101-refresh-20261012/; доказательства: handoff/audit/pr101-refresh-20261012/provenance.json.
 
-Пять адресов CQuest slice A приняты. Далее ожидает slice B: loadQuestData, calculateUnitsFromTag и getQuestStrings, 9532 исходных байта. Source/tools/owners соответствуют PR99, включая владение Quest.cpp и narrow destructor context support. B/C parser/reset/persistence пока original-only; populated original reset/save/load transitions остаются integration debt. Сохраняются ограничения для nonempty NPC dialog parsing, packaged .adm decoding, EditorReloadAllAssets, GameClient/world и живой игры. Эти три адреса не включены в принятую базу PR99; подробности в handoff/IN_PROGRESS.json.
+Приняты только reset 0xd17200 и load 0xd17b20. Save 0xd16bb0 из PR100 остаётся draft HOLD, не слит и не принят; исторический Graph failure не отменён отдельным успешным reset/load прогоном. B definition/parser остаётся на паузе, без приёмки. Подробности: handoff/IN_PROGRESS.json. Hybrid/headless PASS не означает standalone, полную проверку GameClient/world или живой игры.
 
 Все 401 определения из накопительного снимка ChatGPT Pro интегрированы в обычные decomp/src и decomp/include. Исторический результат интеграции первичных определений: 396 MATCH и пять поведенческих сравнений. В текущей базе все 401 первичное определение приняты: 399 MATCH и два по сравнениям поведения. Проверены также испускаемые ABI-варианты. Заголовки восстановлены и согласованы с остальным кодом; подробности в research/pro-401-integration-2026-10-10.md.
 

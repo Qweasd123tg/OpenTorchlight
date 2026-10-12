@@ -1,0 +1,71 @@
+[
+  {
+    "address": "0xd16bb0",
+    "before": {
+      "address": "0xd16bb0",
+      "tu": "Quest.cpp",
+      "name": "CQuest::save(_IO_FILE*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd16bb0",
+      "tu": "Quest.cpp",
+      "name": "CQuest::save(_IO_FILE*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd17200",
+    "before": {
+      "address": "0xd17200",
+      "tu": "Quest.cpp",
+      "name": "CQuest::reinitializeQuest(bool, bool)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd17200",
+      "tu": "Quest.cpp",
+      "name": "CQuest::reinitializeQuest(bool, bool)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xd17b20",
+    "before": {
+      "address": "0xd17b20",
+      "tu": "Quest.cpp",
+      "name": "CQuest::load(_IO_FILE*, CResourceManager*, unsigned int)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd17b20",
+      "tu": "Quest.cpp",
+      "name": "CQuest::load(_IO_FILE*, CResourceManager*, unsigned int)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  }
+]

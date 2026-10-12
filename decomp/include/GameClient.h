@@ -34,6 +34,7 @@ friend class CDropdownMenu;
     friend class CQuestDialogMenu;
 friend class CDifficultyMenu;
 public:
+    void resetGameSeed(int);
     void destroyGameUI();
     void updateScreenInfo(void* window, int width, int height);
     void handleFunctionKeys();
