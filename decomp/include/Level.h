@@ -24,6 +24,7 @@ class CItem;
 class CGameClient;
 class CCharacter;
 class CBaseUnit;
+class CDataGroup;
 class CSkill;
 class CEditorScene;
 class CLevelTemplateData;
@@ -34,6 +35,7 @@ class CLevel : public CRunicCore
 {
 public:
     void addUpdateObject(iLevelUpdate* object);
+    CBaseUnit* getBaseUnitByDataGroup(CDataGroup* dataGroup);
     void removeListenerFromUnit(long long guid, iUnitObserver* observer);
     void removeListenerFromUnit(CBaseUnit* unit, iUnitObserver* observer);
     bool addListenerToUnit(CBaseUnit* unit, iUnitObserver* observer);
