@@ -1,3 +1,4 @@
+#include "StringUtilities.h"
 #include "Dungeon.h"
 #include "DungeonManager.h"
 #include "GameClient.h"
@@ -522,4 +523,62 @@ void CQuest::questEventUpdate(EQUEST_EVENTS event, CBaseUnit* actor,
                 }
         break;
     }
+}
+
+inline std::wstring getAcquireTags(CQuestUnitData* unit, std::wstring prefix,
+                                  unsigned int index, std::wstring& text)
+{
+    if (!unit)
+        return text;
+    std::wstring tag = prefix + STRINGS::GetValueAsWString(index + 1);
+    text = STRINGS::replaceWString(text, tag + L"COUNT]",
+                                  STRINGS::GetValueAsWString(static_cast<unsigned int>(unit->m_requiredUnitCount)));
+    text = STRINGS::replaceWString(text, tag + L"DEPTH]",
+                                  STRINGS::GetValueAsWString(unit->getDungeonFloorActiveOn() + 1));
+    text = STRINGS::replaceWString(text, tag + L"COMPLETE]",
+                                  unit->isComplete(false) ? L"Complete" : L"Incomplete");
+    text = STRINGS::replaceWString(text, tag + L"]", unit->getUnitName());
+    return text;
+}
+
+std::wstring CQuest::replaceStringTags(const std::wstring& input)
+{
+    std::wstring text = input;
+    unsigned int acquireCompleteCount = 0;
+    for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+            acquireCompleteCount += (*m_Unknown130[i])[j]->m_currentUnitCount;
+    unsigned int defeatCompleteCount = 0;
+    for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+            defeatCompleteCount += (*m_Unknown148[i])[j]->m_currentUnitCount;
+
+    text = STRINGS::replaceWString(text, L"[DEPTH]", STRINGS::GetValueAsWString(m_iUnknown20 + 1));
+    text = STRINGS::replaceWString(text, L"[DEFEATCOMPLETECOUNT]", STRINGS::GetValueAsWString(defeatCompleteCount));
+    text = STRINGS::replaceWString(text, L"[ACQUIRECOMPLETECOUNT]", STRINGS::GetValueAsWString(acquireCompleteCount));
+
+    for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+        text = getAcquireTags((*m_Unknown130[i])[0], L"[ACQUIRE", i, text);
+
+    CDungeon* dungeon = m_pResourceManager->getDungeonByName(m_pUnknown30);
+    if (dungeon)
+        text = STRINGS::replaceWString(text, L"[DUNEGONNAME]", dungeon->m_sDisplayName);
+
+    for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+    {
+        CQuestUnitData* unit = (*m_Unknown148[i])[0];
+        if (!unit)
+            continue;
+        std::wstring tag = L"[DEFEAT" + STRINGS::GetValueAsWString(i + 1);
+        text = STRINGS::replaceWString(text, tag + L"COUNT]",
+                                      STRINGS::GetValueAsWString(static_cast<unsigned int>(unit->m_requiredUnitCount)));
+        text = STRINGS::replaceWString(text, tag + L"DEPTH]",
+                                      STRINGS::GetValueAsWString(unit->getDungeonFloorActiveOn() + 1));
+        text = STRINGS::replaceWString(text, tag + L"COMPLETE]",
+                                      unit->isComplete(true) ? L"Complete" : L"Incomplete");
+        text = STRINGS::replaceWString(text, tag + L"]", unit->getUnitName());
+        for (unsigned int j = 0; j < unit->m_children.size(); ++j)
+            text = getAcquireTags(unit->m_children[j], tag + L"ACQUIRE", j, text);
+    }
+    return text;
 }
