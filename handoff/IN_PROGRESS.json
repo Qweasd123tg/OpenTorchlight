@@ -1,48 +1,48 @@
 {
   "schema": 1,
-  "snapshot_main": "cabb9a8d8d66f8149637a09d9e553c25c6d53dbc",
+  "snapshot_main": "1fb711ca0f9695f602320e7299c2279ab0294e60",
   "status": "remaining-unaccepted",
   "assigned_to": null,
   "groups": [
-    "QuestManager.cpp five remaining lifecycle methods, 5279 original bytes, pending and unaccepted"
+    "CQuest lifetime slice A: five addresses, 7148 original bytes, pending and unaccepted"
   ],
   "functions": [
     {
-      "address": "0xd2e930",
-      "tu": "QuestManager.cpp",
-      "name": "CQuestManager::~CQuestManager()",
+      "address": "0xd16280",
+      "tu": "Quest.cpp",
+      "name": "CQuest::CQuest(CResourceManager*, CQuestManager*)",
       "status": "pending-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd2ebf0",
-      "tu": "QuestManager.cpp",
-      "name": "CQuestManager::~CQuestManager()",
+      "address": "0xd1a390",
+      "tu": "Quest.cpp",
+      "name": "CQuest::~CQuest()",
       "status": "pending-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd31410",
-      "tu": "QuestManager.cpp",
-      "name": "CQuestManager::loadQuests()",
+      "address": "0xd1b5c0",
+      "tu": "Quest.cpp",
+      "name": "CQuest::~CQuest()",
       "status": "pending-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd321f0",
-      "tu": "QuestManager.cpp",
-      "name": "CQuestManager::reloadQuests()",
+      "address": "0xd14860",
+      "tu": "Quest.cpp",
+      "name": "CQuest::addQuestControllerListerner(CQuestController*)",
       "status": "pending-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd32300",
-      "tu": "QuestManager.cpp",
-      "name": "CQuestManager::CQuestManager(CResourceManager*)",
+      "address": "0xd14b30",
+      "tu": "Quest.cpp",
+      "name": "CQuest::removeQuestControllerListerner(CQuestController*)",
       "status": "pending-not-accepted",
       "accepted_current": false
     }
   ],
   "next_gate": "Fresh full Stage validation and same-instance publication; no acceptance claimed before merged proof.",
-  "notice": "QuestManager persistence save/load are accepted in PR97. Five manager lifecycle methods remain pending and unaccepted; this metadata does not assign ownership or claim work started. Actual original Quest serialization boundary tested; full GameClient/world execution remains untested. Source/tools retain all reviewed optimizations. Snapshot pinned to PR97."
+  "notice": "Five QuestManager lifecycle methods are accepted in PR98. CQuest slice A five addresses remain pending and unaccepted; owner pc2 has not been transferred and this metadata does not claim work started. Original cached CDataGroup/Quest parser and lifetimes plus Console wrapper were tested with resource writes blocked. Nonempty NPC dialog parsing, packaged .adm decoding, EditorReloadAllAssets, GameClient/world and live play remain untested. Snapshot pinned to PR98."
 }

@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "main_commit": "1fb711ca0f9695f602320e7299c2279ab0294e60",
+  "main_tree": "d4c4d903e553fdd90decfeed1de5e6c35e7e7653",
+  "prior_handoff": "ed9e0593d514f74aed416b859d2e78e9b3282ff4",
+  "prior_handoff_tree": "4c71eeb1aa5d96d37019edd81fcb788cface0a10",
+  "accepted": 2744,
+  "matched": 2185,
+  "behavioral": 559,
+  "tests": 726,
+  "accepted_delta": 5,
+  "prior_rows_preserved": 7668,
+  "historical_pro_definitions": 401,
+  "all_prior_paths_preserved": true,
+  "historical_finding_fields_preserved": true,
+  "changed_index_rows": 13,
+  "source_files_verified": 1142,
+  "full_suite_origin": "stage",
+  "tests_executed_by_refresh": false,
+  "remote_mutation_performed": false,
+  "private_proof_sha256": "fa4c9ae3dfbf25e499cf9fac54f566c8c6fbdeb324a26f40449cffcd95e588bb",
+  "durable_archive_receipts_verified": true,
+  "proof_sha256": {
+    "FROZEN-HANDOFF.json": "720a9b2203623eb3b4d8a3da1db4ae45ca61dd4632ca785b292c9a8107f1cb0d",
+    "acceptance.json": "1fcd2da3c2dd0d07a24175a7a7057f06c2110df02119a79e8a15dd9f496805ed",
+    "publication.json": "11c6bcda0e5b435cac4bcc58e6f906efc0fb73533ddb35887fc6d3eb612ee5b3",
+    "preservation.json": "192ad01cfb1d366691631920bd0e5209a7662c5a57e2e364116a802747813acb",
+    "final-stage-identity.json": "0201bf5f35e09681c1b2aaf27bcfa835cad1706e1a870a89f203dd4a29e137fd",
+    "final-stage-units.json": "0a3179f206627b73723a0826ec52a036f439add6fa81d0d84d0ff0c7dbf6d2b8",
+    "INDEPENDENT-REVIEW.json": "5b83d6b6de629a1826177dd6dd95fbd807aff1e570bb2eed1dfb4a2669a3e214",
+    "private-proof-local.json": "95597703cdd84d13fd4db516596aa8e629307c7a43c051d7c153478d173491bb"
+  },
+  "inputs_digest": "fd0d6855a22d79a49433225f22d59b3ab472aa3479f5947c3c5d15b6ca997944",
+  "active_scope_not_accepted": [
+    "0xd16280",
+    "0xd1a390",
+    "0xd1b5c0",
+    "0xd14860",
+    "0xd14b30"
+  ],
+  "runtime_scope": "Five previously MISSING QuestManager lifecycle/loading addresses,5279 original bytes. Original cached CDataGroup/Quest parser and lifetimes plus Console wrapper tested with resource writes blocked. Nonempty NPC dialog parsing, packaged .adm decoding, EditorReloadAllAssets, GameClient/world and live play untested. Two changed production objects fully revalidated; all prior acceptance/MATCH preserved.",
+  "status_policy": "Refresh represented primary function statuses from actual final units; retain historical status where no authoritative primary row exists. Acceptance exactly equals canonical progress accepted set."
+}

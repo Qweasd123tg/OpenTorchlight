@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "snapshot_main": "cabb9a8d8d66f8149637a09d9e553c25c6d53dbc",
+  "status": "remaining-unaccepted",
+  "assigned_to": null,
+  "groups": [
+    "QuestManager.cpp five remaining lifecycle methods, 5279 original bytes, pending and unaccepted"
+  ],
+  "functions": [
+    {
+      "address": "0xd2e930",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::~CQuestManager()",
+      "status": "pending-not-accepted",
+      "accepted_current": false
+    },
+    {
+      "address": "0xd2ebf0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::~CQuestManager()",
+      "status": "pending-not-accepted",
+      "accepted_current": false
+    },
+    {
+      "address": "0xd31410",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::loadQuests()",
+      "status": "pending-not-accepted",
+      "accepted_current": false
+    },
+    {
+      "address": "0xd321f0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::reloadQuests()",
+      "status": "pending-not-accepted",
+      "accepted_current": false
+    },
+    {
+      "address": "0xd32300",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::CQuestManager(CResourceManager*)",
+      "status": "pending-not-accepted",
+      "accepted_current": false
+    }
+  ],
+  "next_gate": "Fresh full Stage validation and same-instance publication; no acceptance claimed before merged proof.",
+  "notice": "QuestManager persistence save/load are accepted in PR97. Five manager lifecycle methods remain pending and unaccepted; this metadata does not assign ownership or claim work started. Actual original Quest serialization boundary tested; full GameClient/world execution remains untested. Source/tools retain all reviewed optimizations. Snapshot pinned to PR97."
+}
