@@ -1,0 +1,186 @@
+[
+  {
+    "address": "0xd14860",
+    "before": {
+      "address": "0xd14860",
+      "tu": "Quest.cpp",
+      "name": "CQuest::addQuestControllerListerner(CQuestController*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    },
+    "after": {
+      "address": "0xd14860",
+      "tu": "Quest.cpp",
+      "name": "CQuest::addQuestControllerListerner(CQuestController*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xd14b30",
+    "before": {
+      "address": "0xd14b30",
+      "tu": "Quest.cpp",
+      "name": "CQuest::removeQuestControllerListerner(CQuestController*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    },
+    "after": {
+      "address": "0xd14b30",
+      "tu": "Quest.cpp",
+      "name": "CQuest::removeQuestControllerListerner(CQuestController*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xd16280",
+    "before": {
+      "address": "0xd16280",
+      "tu": "Quest.cpp",
+      "name": "CQuest::CQuest(CResourceManager*, CQuestManager*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    },
+    "after": {
+      "address": "0xd16280",
+      "tu": "Quest.cpp",
+      "name": "CQuest::CQuest(CResourceManager*, CQuestManager*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xd167a0",
+    "before": {
+      "address": "0xd167a0",
+      "tu": "Quest.cpp",
+      "name": "CQuest::getQuestStrings(CDataGroup*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CQuestDialog*>&)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd167a0",
+      "tu": "Quest.cpp",
+      "name": "CQuest::getQuestStrings(CDataGroup*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CQuestDialog*>&)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd19a10",
+    "before": {
+      "address": "0xd19a10",
+      "tu": "Quest.cpp",
+      "name": "CQuest::calculateUnitsFromTag(CDataGroup*, TArrayList<TArrayList<CQuestUnitData*>*>*, TArrayList<CQuestUnitData*>*, unsigned int)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd19a10",
+      "tu": "Quest.cpp",
+      "name": "CQuest::calculateUnitsFromTag(CDataGroup*, TArrayList<TArrayList<CQuestUnitData*>*>*, TArrayList<CQuestUnitData*>*, unsigned int)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd1a390",
+    "before": {
+      "address": "0xd1a390",
+      "tu": "Quest.cpp",
+      "name": "CQuest::~CQuest()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    },
+    "after": {
+      "address": "0xd1a390",
+      "tu": "Quest.cpp",
+      "name": "CQuest::~CQuest()",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xd1b5c0",
+    "before": {
+      "address": "0xd1b5c0",
+      "tu": "Quest.cpp",
+      "name": "CQuest::~CQuest()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    },
+    "after": {
+      "address": "0xd1b5c0",
+      "tu": "Quest.cpp",
+      "name": "CQuest::~CQuest()",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xd1b5e0",
+    "before": {
+      "address": "0xd1b5e0",
+      "tu": "Quest.cpp",
+      "name": "CQuest::loadQuestData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd1b5e0",
+      "tu": "Quest.cpp",
+      "name": "CQuest::loadQuestData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  }
+]

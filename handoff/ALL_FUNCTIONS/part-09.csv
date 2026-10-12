@@ -262,8 +262,8 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xd0d810,Quest.cpp,CQuest::destroyIcons(),MATCH,True,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd0d810.cpp,False
 0xd0d830,Quest.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
 0xd14510,Quest.cpp,CQuest::populate(CLevel*),MISSING,False,False,,False
-0xd14860,Quest.cpp,CQuest::addQuestControllerListerner(CQuestController*),MISSING,False,False,,True
-0xd14b30,Quest.cpp,CQuest::removeQuestControllerListerner(CQuestController*),MISSING,False,False,,True
+0xd14860,Quest.cpp,CQuest::addQuestControllerListerner(CQuestController*),DIFF,True,False,,False
+0xd14b30,Quest.cpp,CQuest::removeQuestControllerListerner(CQuestController*),DIFF,True,False,,False
 0xd14df0,Quest.cpp,__tcf_17,DIFF,False,False,,False
 0xd14e60,Quest.cpp,__tcf_16,DIFF,False,False,,False
 0xd14ef0,Quest.cpp,__tcf_6,DIFF,False,False,,False
@@ -282,8 +282,8 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xd160d0,Quest.cpp,__tcf_4,DIFF,False,False,,False
 0xd16160,Quest.cpp,__tcf_1,MATCH,False,False,,False
 0xd161f0,Quest.cpp,__tcf_0,MATCH,False,False,,False
-0xd16280,Quest.cpp,"CQuest::CQuest(CResourceManager*, CQuestManager*)",MISSING,False,False,,True
-0xd167a0,Quest.cpp,"CQuest::getQuestStrings(CDataGroup*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CQuestDialog*>&)",MISSING,False,False,,False
+0xd16280,Quest.cpp,"CQuest::CQuest(CResourceManager*, CQuestManager*)",DIFF,True,False,,False
+0xd167a0,Quest.cpp,"CQuest::getQuestStrings(CDataGroup*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CQuestDialog*>&)",MISSING,False,False,,True
 0xd16a00,Quest.cpp,__tcf_3,DIFF,False,False,,False
 0xd16a90,Quest.cpp,__tcf_2,DIFF,False,False,,False
 0xd16b20,Quest.cpp,__tcf_11,DIFF,False,False,,False
@@ -293,10 +293,10 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xd181a0,Quest.cpp,"CQuest::replaceStringTags(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
 0xd19710,Quest.cpp,CQuest::getQuestDetails(),MATCH,True,True,handoff/recovered-pass10/snippets/Quest.cpp/0xd19710.cpp,False
 0xd197d0,Quest.cpp,CQuest::initializeQuestWithNPC(CBaseUnit*),MISSING,False,False,,False
-0xd19a10,Quest.cpp,"CQuest::calculateUnitsFromTag(CDataGroup*, TArrayList<TArrayList<CQuestUnitData*>*>*, TArrayList<CQuestUnitData*>*, unsigned int)",MISSING,False,False,,False
-0xd1a390,Quest.cpp,CQuest::~CQuest(),MISSING,False,False,,True
-0xd1b5c0,Quest.cpp,CQuest::~CQuest(),MISSING,False,False,,True
-0xd1b5e0,Quest.cpp,"CQuest::loadQuestData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,False
+0xd19a10,Quest.cpp,"CQuest::calculateUnitsFromTag(CDataGroup*, TArrayList<TArrayList<CQuestUnitData*>*>*, TArrayList<CQuestUnitData*>*, unsigned int)",MISSING,False,False,,True
+0xd1a390,Quest.cpp,CQuest::~CQuest(),DIFF,True,False,,False
+0xd1b5c0,Quest.cpp,CQuest::~CQuest(),MATCH,True,False,,False
+0xd1b5e0,Quest.cpp,"CQuest::loadQuestData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",MISSING,False,False,,True
 0xd1cf40,Quest.cpp,CQuest::cleanUp(bool),MISSING,False,False,,False
 0xd1d270,Quest.cpp,CQuest::giveRewardForQuest(),MISSING,False,False,,False
 0xd1de30,QuestDialog.cpp,CQuestDialog::dialogIsForNPC(CBaseUnit*),MISSING,False,False,,False

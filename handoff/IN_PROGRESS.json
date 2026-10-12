@@ -1,48 +1,34 @@
 {
   "schema": 1,
-  "snapshot_main": "1fb711ca0f9695f602320e7299c2279ab0294e60",
+  "snapshot_main": "99369a3d43c2067159dc443d219b0bf4bc4ae4a8",
   "status": "remaining-unaccepted",
   "assigned_to": null,
   "groups": [
-    "CQuest lifetime slice A: five addresses, 7148 original bytes, pending and unaccepted"
+    "CQuest definition/parser slice B: three addresses, 9532 original bytes, pending and unaccepted"
   ],
   "functions": [
     {
-      "address": "0xd16280",
+      "address": "0xd1b5e0",
       "tu": "Quest.cpp",
-      "name": "CQuest::CQuest(CResourceManager*, CQuestManager*)",
+      "name": "CQuest::loadQuestData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
       "status": "pending-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd1a390",
+      "address": "0xd19a10",
       "tu": "Quest.cpp",
-      "name": "CQuest::~CQuest()",
+      "name": "CQuest::calculateUnitsFromTag(CDataGroup*, TArrayList<TArrayList<CQuestUnitData*>*>*, TArrayList<CQuestUnitData*>*, unsigned int)",
       "status": "pending-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd1b5c0",
+      "address": "0xd167a0",
       "tu": "Quest.cpp",
-      "name": "CQuest::~CQuest()",
-      "status": "pending-not-accepted",
-      "accepted_current": false
-    },
-    {
-      "address": "0xd14860",
-      "tu": "Quest.cpp",
-      "name": "CQuest::addQuestControllerListerner(CQuestController*)",
-      "status": "pending-not-accepted",
-      "accepted_current": false
-    },
-    {
-      "address": "0xd14b30",
-      "tu": "Quest.cpp",
-      "name": "CQuest::removeQuestControllerListerner(CQuestController*)",
+      "name": "CQuest::getQuestStrings(CDataGroup*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CQuestDialog*>&)",
       "status": "pending-not-accepted",
       "accepted_current": false
     }
   ],
   "next_gate": "Fresh full Stage validation and same-instance publication; no acceptance claimed before merged proof.",
-  "notice": "Five QuestManager lifecycle methods are accepted in PR98. CQuest slice A five addresses remain pending and unaccepted; owner pc2 has not been transferred and this metadata does not claim work started. Original cached CDataGroup/Quest parser and lifetimes plus Console wrapper were tested with resource writes blocked. Nonempty NPC dialog parsing, packaged .adm decoding, EditorReloadAllAssets, GameClient/world and live play remain untested. Snapshot pinned to PR98."
+  "notice": "CQuest slice A five addresses are accepted in PR99. Slice B loadQuestData/calculateUnitsFromTag/getQuestStrings is pending, with no acceptance credit. Source/tools/owners exactly match reviewed PR99, including Quest.cpp ownership and narrow destructor context support. B/C parser/reset/persistence remain original-only boundaries; populated original reset/save/load transitions remain integration debt. Prior GameClient/world and live-play limitations remain. No whole-game claim."
 }

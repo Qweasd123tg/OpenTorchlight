@@ -130,7 +130,7 @@
   "PropertyNodeDescriptor.cpp": "opencode",
   "PuzzleRandomizer.cpp": "opencode",
   "PuzzleRandomizerDescriptor.cpp": "opencode",
-  "Quest.cpp": "pc2",
+  "Quest.cpp": "dot",
   "QuestController.cpp": "dot",
   "QuestControllerDescriptor.cpp": "opencode",
   "QuestDialog.cpp": "opencode",

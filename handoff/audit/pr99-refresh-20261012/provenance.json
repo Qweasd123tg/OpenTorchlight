@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "main_commit": "99369a3d43c2067159dc443d219b0bf4bc4ae4a8",
+  "main_tree": "8832e4e71933b29e9128670c0752d3ad75ce8e67",
+  "prior_handoff": "eb4c43d9872692ce6a8a1cad2c37d4a0bdfa5b22",
+  "prior_handoff_tree": "e5ebc46f22b258671f985fef1091bdb3c86a64af",
+  "accepted": 2749,
+  "matched": 2186,
+  "behavioral": 563,
+  "tests": 735,
+  "accepted_delta": 5,
+  "prior_rows_preserved": 7668,
+  "historical_pro_definitions": 401,
+  "all_prior_paths_preserved": true,
+  "historical_finding_fields_preserved": true,
+  "changed_index_rows": 8,
+  "source_files_verified": 1145,
+  "full_suite_origin": "stage",
+  "tests_executed_by_refresh": false,
+  "remote_mutation_performed": false,
+  "private_proof_sha256": "928d34bd9fd2a42dd69061f52aabbae1a466a0f49737a8eef2e3dca07f751d71",
+  "durable_archive_receipts_verified": true,
+  "proof_sha256": {
+    "FROZEN-HANDOFF.json": "ce7c3a3901f1a1d9f4943d1a5b72dc204d1351ec93cfe5864af9f561c4cb4557",
+    "acceptance.json": "73daaf9fe667437705090b7291d8a5a2be3854ad8b2fbc89bb0cd212decc6b51",
+    "publication.json": "e2597a07792d217f3c92c2baa9259d7c813c04c9626ecc264bf508aed8383c2f",
+    "preservation.json": "2e5a1c43225bbec84f9f63260839e7d390f3d8b6d4876fd6b472e8efef3a4bd0",
+    "final-stage-identity.json": "e272c3bd35439bf69d937472413b8dec020c7693884a3c97c5d5cfa11f544129",
+    "final-stage-units.json": "5c592a9f88083a56416618d16f25f236a8537370c7e57e98dbdf21f007262f73",
+    "independent-final-review.json": "0d94ed6a95f6f40e2c65790729021c4fa2a03076ee5867c7b61ee5dad02d8faa",
+    "private-proof-local.json": "a822f3064cf2a77dfd5da0b8ad678682bd36e659d0936a30132ecb26f1fef173"
+  },
+  "inputs_digest": "044e6205f0ac89b829b8f2a56ed424c9297c529c126f4ba0d9da96a371381f7a",
+  "active_scope_not_accepted": [
+    "0xd1b5e0",
+    "0xd19a10",
+    "0xd167a0"
+  ],
+  "runtime_scope": "CQuest slice A: five unique addresses,7148 original bytes. B/C parser/reset/persistence original boundaries. All owned categories and true listener invalidation exercised. Populated original reset/save/load transitions remain integration debt; no whole-game claim.",
+  "status_policy": "Refresh represented primary function statuses from actual final units; retain historical status where no authoritative primary row exists. Acceptance exactly equals canonical progress accepted set."
+}
