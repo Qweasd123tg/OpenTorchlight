@@ -14,6 +14,7 @@ extern "C" long long qaeNewGive(void*,void*,void*,bool) __asm__("_ZN13CQuestMana
 TL_ORIGINAL(void, qaeOldEvent, (void*,int,void*,void*), "_ZN13CQuestManager16questEventUpdateE13EQUEST_EVENTSP10CCharacterP9CBaseUnit")
 extern "C" void qaeNewEvent(void*,int,void*,void*) __asm__("_ZN13CQuestManager16questEventUpdateE13EQUEST_EVENTSP10CCharacterP9CBaseUnit");
 TL_ORIGINAL(void, qaeOldControllerAccept, (void*,bool), "_ZN16CQuestController16setQuestAcceptedEb")
+extern "C" void qaeNewControllerAccept(void*,bool) __asm__("_ZN16CQuestController16setQuestAcceptedEb");
 TL_ORIGINAL(void, qaeOldClientEvent, (void*,int,void*,void*), "_ZN11CGameClient14questEventFireE13EQUEST_EVENTSP10CCharacterP9CBaseUnit")
 TL_FUNCTION(qaeManagerSingleton,"_ZN13CQuestManager12getSingletonEv")
 TL_FUNCTION(qaeAccepted,"_ZN6CQuest16setQuestAcceptedEb")
@@ -325,7 +326,7 @@ void side(void* p,autotest::Capture& out,bool candidate){cs=(Case*)p;cap=&out;se
   if(candidate)eventRoute.redirect(reinterpret_cast<char*>(&qaeOldEvent),reinterpret_cast<char*>(&qaeOldEvent),&qaeNewEvent);
   if(candidate&&(cs->mode&4))giveRoute.redirect(reinterpret_cast<char*>(&qaeOldGive),reinterpret_cast<char*>(&qaeOldGive),&qaeNewGive);
   if(d.failed()||eventRoute.failed()||giveRoute.failed()){out.issue=autotest::Capture::InvalidReport;return;}
-  if(cs->mode&4){if(!autotest::beginInvocation(out,&qaeOldControllerAccept))return;qaeOldControllerAccept(controller[0],true);out.callCompleted=1;}
+  if(cs->mode&4){typedef void(*ControllerFn)(void*,bool);ControllerFn controllerFn=candidate&&(cs->variant&4)?&qaeNewControllerAccept:&qaeOldControllerAccept;if(!autotest::beginInvocation(out,controllerFn))return;controllerFn(controller[0],true);out.callCompleted=1;}
   else{if(!autotest::beginInvocation(out,fn))return;long long r=fn(owner,quest[0],cs->variant?(void*)1:unit,false);out.callCompleted=1;need(r==1);}}
  need(active->count==0);need(at<unsigned char>(quest[0],0x26)==0);need(at<unsigned char>(quest[0],0x24)==!(cs->mode&1));need(at<unsigned char>(quest[0],0x209)==0);need(completed->size()==1&&completed->begin()->first==L"Quest Mixed Case"&&completed->begin()->second==!(cs->mode&1));for(unsigned i=0;i<2;++i){need(at<unsigned char>(dialogs[i],0x76)==((cs->mode&4)&&!(cs->mode&2)));need(at<unsigned char>(alternateDialogs[i],0x76)==((cs->mode&4)&&(cs->mode&2)));}need(!at<unsigned char>(quest[1],0x26));
  n(active->count);n(at<unsigned char>(quest[0],0x24));n(at<unsigned char>(quest[0],0x26));n(completed->size());n(completed->begin()->second);tail(false);
@@ -352,4 +353,12 @@ TL_TEST(questmanager_original_client_event_consumer){using namespace qae;const u
   bool ok=good(x)&&good(y)&&x.capture.callStarted&&y.capture.callStarted&&x.capture.callCompleted&&y.capture.callCompleted&&x.capture.callTarget==0x56e890&&y.capture.callTarget==0x56e890&&x.capture.length==y.capture.length&&!std::memcmp(x.capture.data,y.capture.data,x.capture.length);
   if(!ok){host->log(" original client event consumer mode=%u oracle=%u/%u status=%d/%d\n",c.mode,good(x),good(y),x.childStatus,y.childStatus);return 1;}}
  host->log(" original client event: 12 manager boundary comparisons; no consumer replacement acceptance claimed\n");return 0;
+}
+
+// New controller acceptance. Existing original-only consumer stays original-only.
+// Real manager give, quest setter/event, complete/remove and dialog setter remain
+// active; external effects only retain the already-reviewed PR94 interceptors.
+TL_TEST(questcontroller_real_acquisition_chain){using namespace qae;autotest::Coverage cov("questcontroller_real_acquisition_chain",0xde6c00);
+ for(unsigned mode=4;mode<8;++mode)for(unsigned variant=4;variant<6;++variant){Case c={mode,variant,0};if(!pair(host,cov,qae_chain::a,qae_chain::b,c)){cov.report(host);return 1;}}
+ cov.report(host);return cov.completed!=8||cov.different||cov.missing;
 }

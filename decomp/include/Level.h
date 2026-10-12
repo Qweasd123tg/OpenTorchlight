@@ -19,6 +19,7 @@ namespace Ogre { class Billboard; }
 #include "QuestDefines.h"
 #include "iUnitObserver.h"
 
+class iLevelUpdate;
 class CItem;
 class CGameClient;
 class CCharacter;
@@ -32,6 +33,7 @@ class CLevelTemplateData;
 class CLevel : public CRunicCore
 {
 public:
+    void addUpdateObject(iLevelUpdate* object);
     void removeListenerFromUnit(long long guid, iUnitObserver* observer);
     void removeListenerFromUnit(CBaseUnit* unit, iUnitObserver* observer);
     bool addListenerToUnit(CBaseUnit* unit, iUnitObserver* observer);
