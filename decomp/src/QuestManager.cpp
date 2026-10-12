@@ -1,3 +1,5 @@
+#include "FileUtilities.h"
+#include "UTFConversion.h"
 #include "Achievement.h"
 #include "Achievements.h"
 #include "GameClient.h"
@@ -681,4 +683,88 @@ long long CQuestManager::giveQuest(CQuest* quest, CBaseUnit*, bool announce)
         }
     }
     return 1;
+}
+
+void CQuestManager::save(_IO_FILE* file)
+{
+    typedef std::map<std::wstring, bool> CompleteMap;
+    typedef std::map<std::wstring, CQuest*> QuestMap;
+    CompleteMap& completed = *reinterpret_cast<CompleteMap*>(&m_Unknown70);
+    QuestMap& quests = *reinterpret_cast<QuestMap*>(&m_Unknown40);
+    TArrayList<CQuest*>& active = reinterpret_cast<TArrayList<CQuest*>&>(m_Unknown18);
+    unsigned int count = 0;
+    for (CompleteMap::iterator i = completed.begin(); i != completed.end(); ++i)
+        if (i->second)
+            ++count;
+    fwrite(&count, 4, 1, file);
+    for (QuestMap::iterator i = quests.begin(); i != quests.end(); ++i) {
+        unsigned short length = i->first.length();
+        if (completed.find(i->second->m_sUnknown50)->second) {
+            fwrite(&length, 2, 1, file);
+            WriteUTF32ToUTF16(file, i->first, length);
+        }
+    }
+    int activeCount = active.size();
+    fwrite(&activeCount, 4, 1, file);
+    for (int i = 0; i < static_cast<int>(active.size()); ++i) {
+        unsigned int start = ftell(file);
+        fwrite(&start, 4, 1, file);
+        CQuest* quest = active[i];
+        std::wstring name = quest->m_sUnknown50;
+        unsigned short length = name.length();
+        fwrite(&length, 2, 1, file);
+        utf16string encoded = UTF32ToUTF16(name);
+        fwrite(encoded.c_str(), length * 2, 1, file);
+        quest->save(file);
+        unsigned int end = ftell(file);
+        fseek(file, start, SEEK_SET);
+        fwrite(&end, 4, 1, file);
+        fseek(file, 0, SEEK_END);
+    }
+}
+
+void CQuestManager::load(_IO_FILE* file, unsigned int version, CResourceManager* resources)
+{
+    typedef std::map<std::wstring, bool> CompleteMap;
+    typedef std::map<std::wstring, CQuest*> QuestMap;
+    CompleteMap& completed = *reinterpret_cast<CompleteMap*>(&m_Unknown70);
+    QuestMap& quests = *reinterpret_cast<QuestMap*>(&m_Unknown40);
+    TArrayList<CQuest*>& active = reinterpret_cast<TArrayList<CQuest*>&>(m_Unknown18);
+    resetQuestManager(false);
+    unsigned int count = 0;
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i) {
+        unsigned short length = 0;
+        fread(&length, 2, 1, file);
+        std::wstring name = FILESYSTEM::ReadWString(file, length);
+        CompleteMap::iterator found = completed.find(name);
+        if (found != completed.end())
+            found->second = true;
+    }
+    int activeCount;
+    fread(&activeCount, 4, 1, file);
+    for (int i = 0; i < activeCount; ++i) {
+        unsigned int end = 0;
+        unsigned short length = 0;
+        fread(&end, 4, 1, file);
+        fread(&length, 2, 1, file);
+        std::wstring name = FILESYSTEM::ReadWString(file, length);
+        QuestMap::iterator found = quests.find(name);
+        if (found != quests.end() && found->second) {
+            CQuest* quest = found->second;
+            quest->load(file, resources, version);
+            active.add(quest);
+            if (!quest->m_questAccepted && quest->getQuestHasRandomPieces())
+                quest->reinitializeQuest(true, false);
+        } else {
+            fseek(file, end, SEEK_SET);
+        }
+    }
+    if (version <= 20) {
+        CQuest* quest = reinterpret_cast<CQuest*>(getQuestByName(L"COMPLETEGAME"));
+        if (quest) {
+            quest->reinitializeQuest(true, false);
+            completed[L"COMPLETEGAME"] = false;
+        }
+    }
 }
