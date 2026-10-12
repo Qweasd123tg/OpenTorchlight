@@ -1,3 +1,4 @@
+
 #include "GameClient.h"
 #include "Player.h"
 #include "CameraShake.h"
@@ -91,5 +92,17 @@ void CConsole::addSpeedToPlayer()
     } else {
         player->addAffix(L"PLAYER_SPEED_UP", 1, player, -1.0f);
         addTextNoHistory(L"\tAdded speed boost to player.");
+    }
+}
+
+void CConsole::setVisible(bool visible)
+{
+    if (m_window) {
+        if (visible) {
+            m_window->setVisible(true);
+            m_window->activate();
+            m_window->moveToFront();
+            m_inputWindow->setText("");
+        } else m_window->setVisible(false);
     }
 }

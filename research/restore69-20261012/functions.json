@@ -1,0 +1,1087 @@
+[
+  {
+    "address": "0xaed310",
+    "symbol": "_ZN8CConsole10setVisibleEb",
+    "name": "CConsole::setVisible(bool)",
+    "tu": "Console.cpp",
+    "cpp_definition": true,
+    "original_bytes": 447,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_aed310",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8cb030",
+    "symbol": "_ZN14CItemSaveStateC1Ev",
+    "name": "CItemSaveState::CItemSaveState()",
+    "tu": "Itemsavestate.cpp",
+    "cpp_definition": true,
+    "original_bytes": 311,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x8d2080",
+    "symbol": "_ZN14CItemSaveStateD1Ev",
+    "name": "CItemSaveState::~CItemSaveState()",
+    "tu": "Itemsavestate.cpp",
+    "cpp_definition": true,
+    "original_bytes": 742,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x8d2370",
+    "symbol": "_ZN14CItemSaveStateD0Ev",
+    "name": "CItemSaveState::~CItemSaveState()",
+    "tu": "Itemsavestate.cpp",
+    "cpp_definition": false,
+    "original_bytes": 18,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0xa06700",
+    "symbol": "_ZN6CShape20calculateOrientationERKN4Ogre7Vector3ERS1_S4_S4_",
+    "name": "CShape::calculateOrientation(Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&)",
+    "tu": "Shape.cpp",
+    "cpp_definition": true,
+    "original_bytes": 804,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_a06700",
+        "completed": 140,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80e930",
+    "symbol": "_ZN10CCharacter15performingSkillEv",
+    "name": "CCharacter::performingSkill()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 65,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_80e930",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80ec70",
+    "symbol": "_ZN10CCharacter9removePetEPS_",
+    "name": "CCharacter::removePet(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 210,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_80ec70",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80eef0",
+    "symbol": "_ZN10CCharacter31getArmorAndTrinketLevelCanEquipEb",
+    "name": "CCharacter::getArmorAndTrinketLevelCanEquip(bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 81,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_80eef0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80ef50",
+    "symbol": "_ZN10CCharacter22getWeaponLevelCanEquipEb",
+    "name": "CCharacter::getWeaponLevelCanEquip(bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 81,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_80ef50",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80f2e0",
+    "symbol": "_ZN10CCharacter13stopParticlesEb",
+    "name": "CCharacter::stopParticles(bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 165,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_80f2e0",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80f410",
+    "symbol": "_ZN10CCharacter14setActiveSkillEP6CSkillb",
+    "name": "CCharacter::setActiveSkill(CSkill*, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 236,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_80f410",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80f500",
+    "symbol": "_ZN10CCharacter10cycleSkillEi",
+    "name": "CCharacter::cycleSkill(int)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 424,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_80f500",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80f710",
+    "symbol": "_ZN10CCharacter10setAIStateE8EAIState",
+    "name": "CCharacter::setAIState(EAIState)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 165,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_80f710",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80f800",
+    "symbol": "_ZN10CCharacter13getKnownSpellEj",
+    "name": "CCharacter::getKnownSpell(unsigned int)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 127,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_80f800",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x810170",
+    "symbol": "_ZN10CCharacter9alignmentEv",
+    "name": "CCharacter::alignment()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 71,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_810170",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x810200",
+    "symbol": "_ZN10CCharacter7isEnemyEPS_",
+    "name": "CCharacter::isEnemy(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 196,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_810200",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8102d0",
+    "symbol": "_ZN10CCharacter8isFriendEPS_",
+    "name": "CCharacter::isFriend(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 152,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8102d0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x812580",
+    "symbol": "_ZN10CCharacter11attackRangeEv",
+    "name": "CCharacter::attackRange()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 348,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_812580",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8138a0",
+    "symbol": "_ZN10CCharacter9viewAngleEv",
+    "name": "CCharacter::viewAngle()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 142,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8138a0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8139a0",
+    "symbol": "_ZN10CCharacter9dexterityEv",
+    "name": "CCharacter::dexterity()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 103,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x813a10",
+    "symbol": "_ZN10CCharacter7maxManaEv",
+    "name": "CCharacter::maxMana()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 127,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x814440",
+    "symbol": "_ZN10CCharacter14isPetNearDeathEv",
+    "name": "CCharacter::isPetNearDeath()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 124,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_814440",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8144c0",
+    "symbol": "_ZN10CCharacter5magicEv",
+    "name": "CCharacter::magic()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 103,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x815a20",
+    "symbol": "_ZN10CCharacter12walkingSpeedEv",
+    "name": "CCharacter::walkingSpeed()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 166,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_815a20",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x815ad0",
+    "symbol": "_ZN10CCharacter12runningSpeedEv",
+    "name": "CCharacter::runningSpeed()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 166,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_815ad0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x815c90",
+    "symbol": "_ZN10CCharacter10updateManaEf",
+    "name": "CCharacter::updateMana(float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 175,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_815c90",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x816330",
+    "symbol": "_ZN10CCharacter7blockedEv",
+    "name": "CCharacter::blocked()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 44,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_816330",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8163a0",
+    "symbol": "_ZN10CCharacter26getDmgToReflectFromMissileEv",
+    "name": "CCharacter::getDmgToReflectFromMissile()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 405,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8163a0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x822ce0",
+    "symbol": "_ZN10CCharacter17addToAvoidanceMapER6CLevel",
+    "name": "CCharacter::addToAvoidanceMap(CLevel&)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 303,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_822ce0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x823bf0",
+    "symbol": "_ZN10CCharacter12unLearnSpellESbIwSt11char_traitsIwESaIwEEi",
+    "name": "CCharacter::unLearnSpell(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 482,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_823bf0",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x823ee0",
+    "symbol": "_ZN10CCharacter18inDamageReactRangeEPS_",
+    "name": "CCharacter::inDamageReactRange(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 175,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_823ee0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8244a0",
+    "symbol": "_ZN10CCharacter18inInteractionRangeEv",
+    "name": "CCharacter::inInteractionRange()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 282,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8244a0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x824920",
+    "symbol": "_ZN10CCharacter13setTargetItemEP5CItem",
+    "name": "CCharacter::setTargetItem(CItem*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 229,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_824920",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x824a10",
+    "symbol": "_ZN10CCharacter16notifyOfDeletionEP5CItem",
+    "name": "CCharacter::notifyOfDeletion(CItem*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 55,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x824e00",
+    "symbol": "_ZN10CCharacter13inStrikeRangeEv",
+    "name": "CCharacter::inStrikeRange()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 81,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x825d40",
+    "symbol": "_ZN10CCharacter8updateAIEfb",
+    "name": "CCharacter::updateAI(float, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 548,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_825d40",
+        "completed": 184,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x825f80",
+    "symbol": "_ZN10CCharacter16notifyOfDeletionEPS_",
+    "name": "CCharacter::notifyOfDeletion(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 23,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x825fa0",
+    "symbol": "_ZN10CCharacter9setMasterEPS_",
+    "name": "CCharacter::setMaster(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 199,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_825fa0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x827010",
+    "symbol": "_ZN10CCharacter13doWeaponProcsEP10CEquipmentP9CBaseUnit",
+    "name": "CCharacter::doWeaponProcs(CEquipment*, CBaseUnit*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 540,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_827010",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x827720",
+    "symbol": "_ZN10CCharacter18playStrikeParticleERKN4Ogre7Vector3ES3_fbb",
+    "name": "CCharacter::playStrikeParticle(Ogre::Vector3 const&, Ogre::Vector3 const&, float, bool, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 357,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_827720",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x82a4e0",
+    "symbol": "_ZN10CCharacter11interruptAIEfR6CLevel",
+    "name": "CCharacter::interruptAI(float, CLevel&)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 184,
+    "acceptance": "MATCH",
+    "comparisons": [
+      {
+        "fixture": "restore69_82a4e0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x831ee0",
+    "symbol": "_ZN10CCharacter22getMaximumPetInstancesEv",
+    "name": "CCharacter::getMaximumPetInstances()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 170,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_831ee0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8325e0",
+    "symbol": "_ZN10CCharacter14getDescriptionEv",
+    "name": "CCharacter::getDescription()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 184,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8325e0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8326a0",
+    "symbol": "_ZN10CCharacter10diesOnWarpEv",
+    "name": "CCharacter::diesOnWarp()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 168,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8326a0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x832750",
+    "symbol": "_ZN10CCharacter17getSpawnInvisibleEv",
+    "name": "CCharacter::getSpawnInvisible()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 168,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_832750",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x832800",
+    "symbol": "_ZN10CCharacter17getDestroyOnDeathEv",
+    "name": "CCharacter::getDestroyOnDeath()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 168,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_832800",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8328b0",
+    "symbol": "_ZN10CCharacter16attachesToMasterEv",
+    "name": "CCharacter::attachesToMaster()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 168,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8328b0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x834700",
+    "symbol": "_ZN10CCharacter12getMimicNameEv",
+    "name": "CCharacter::getMimicName()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 184,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_834700",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8347c0",
+    "symbol": "_ZN10CCharacter21getDefaultMerchantTabEv",
+    "name": "CCharacter::getDefaultMerchantTab()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 167,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8347c0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x834870",
+    "symbol": "_ZN10CCharacter15getSkillTabNameEi",
+    "name": "CCharacter::getSkillTabName(int)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 278,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_834870",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x834990",
+    "symbol": "_ZN10CCharacter14baseArmorBonusEv",
+    "name": "CCharacter::baseArmorBonus()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 228,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_834990",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x834ad0",
+    "symbol": "_ZN10CCharacter17getIntroCinematicEv",
+    "name": "CCharacter::getIntroCinematic()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 184,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_834ad0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x834b90",
+    "symbol": "_ZN10CCharacter31playerLevelForMerchantInventoryEv",
+    "name": "CCharacter::playerLevelForMerchantInventory()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 170,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_834b90",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x835ba0",
+    "symbol": "_ZN10CCharacter17setAltSkillByNameESbIwSt11char_traitsIwESaIwEE",
+    "name": "CCharacter::setAltSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 191,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x835c60",
+    "symbol": "_ZN10CCharacter20setActiveSkillByNameESbIwSt11char_traitsIwESaIwEE",
+    "name": "CCharacter::setActiveSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 191,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x837060",
+    "symbol": "_ZN10CCharacter16deactivateEffectEP7CEffect",
+    "name": "CCharacter::deactivateEffect(CEffect*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 449,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_837060",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x837b00",
+    "symbol": "_ZN10CCharacter18setLeftSkillByNameESbIwSt11char_traitsIwESaIwEE",
+    "name": "CCharacter::setLeftSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 256,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x83c670",
+    "symbol": "_ZN10CCharacter23handInteractiveSequenceEf",
+    "name": "CCharacter::handInteractiveSequence(float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 192,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_83c670",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x83dc70",
+    "symbol": "_ZN10CCharacter12unLearnSpellEi",
+    "name": "CCharacter::unLearnSpell(int)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 220,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x848790",
+    "symbol": "_ZN10CCharacter12updateAttackER6CLevel",
+    "name": "CCharacter::updateAttack(CLevel&)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 215,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_848790",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8c2760",
+    "symbol": "_ZN9CItemGold6updateEPN4Ogre6CameraERKNS0_7Vector3Ef",
+    "name": "CItemGold::update(Ogre::Camera*, Ogre::Vector3 const&, float)",
+    "tu": "itemgold.cpp",
+    "cpp_definition": true,
+    "original_bytes": 248,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8c2760",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e3ff0",
+    "symbol": "_ZN7CPlayer10setAIStateE8EAIState",
+    "name": "CPlayer::setAIState(EAIState)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 112,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8e3ff0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e41c0",
+    "symbol": "_ZN7CPlayer25incrementJournalStatisticE17EJournalStatistici",
+    "name": "CPlayer::incrementJournalStatistic(EJournalStatistic, int)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 466,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8e41c0",
+        "completed": 252,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e47d0",
+    "symbol": "_ZN7CPlayer3dieEP10CCharacterPKN4Ogre7Vector3Efb",
+    "name": "CPlayer::die(CCharacter*, Ogre::Vector3 const*, float, bool)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 204,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8e47d0",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8ef600",
+    "symbol": "_ZN7CPlayer18getLevelSavedStateESbIwSt11char_traitsIwESaIwEEi",
+    "name": "CPlayer::getLevelSavedState(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 184,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8ef600",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8ef6c0",
+    "symbol": "_ZN7CPlayer18hasLevelSavedStateESbIwSt11char_traitsIwESaIwEEi",
+    "name": "CPlayer::hasLevelSavedState(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 123,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8ef6c0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8efa70",
+    "symbol": "_ZN7CPlayer11addWaypointESbIwSt11char_traitsIwESaIwEEi",
+    "name": "CPlayer::addWaypoint(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 326,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x8f4d90",
+    "symbol": "_ZN7CPlayer11getMaxDepthESbIwSt11char_traitsIwESaIwEE",
+    "name": "CPlayer::getMaxDepth(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 334,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x8f52a0",
+    "symbol": "_ZN7CPlayer18getPlayerClassNameEv",
+    "name": "CPlayer::getPlayerClassName()",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 209,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8f52a0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f8510",
+    "symbol": "_ZN7CPlayer21calculateNaturalArmorEv",
+    "name": "CPlayer::calculateNaturalArmor()",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 364,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "restore69_8f8510",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  }
+]

@@ -1,3 +1,4 @@
+
 #include <utility>
 #include "OgreMath.h"
 #include "ParticlePropertyConversions.h"
@@ -296,4 +297,41 @@ Ogre::Vector3 CShape::calculatePositionOnBox(float, float percent)
         point.z = UTILITIES::randomBetweenVolatile(-m_boxSize.z, m_boxSize.z) * 0.5f;
     }
     return getTransformation() * point;
+}
+
+void CShape::calculateOrientation(const Ogre::Vector3& position, Ogre::Vector3& forward,
+                                  Ogre::Vector3& up, Ogre::Vector3& right)
+{
+    switch (m_orientationMode) {
+    case 0:
+        forward = getForwardAbsolute();
+        up = getUpAbsolute();
+        right = getRightAbsolute();
+        break;
+    case 3:
+        forward = position - getPosition(true);
+        forward.y = 0.0f;
+        forward.normalise();
+        up = Ogre::Vector3(0.0f, 1.0f, 0.0f);
+        right = up.crossProduct(forward);
+        break;
+    case 4:
+        forward = getPosition(true) - position;
+        forward.y = 0.0f;
+        forward.normalise();
+        up = Ogre::Vector3(0.0f, 1.0f, 0.0f);
+        right = up.crossProduct(forward);
+        break;
+    case 1:
+        forward = Ogre::Vector3(0.0f, -1.0f, 0.0f);
+        up = Ogre::Vector3(0.0f, 0.0f, 1.0f);
+        right = Ogre::Vector3(1.0f, 0.0f, 0.0f);
+        break;
+    case 2:
+        forward = Ogre::Vector3(0.0f, 1.0f, 0.0f);
+        up = Ogre::Vector3(0.0f, 0.0f, -1.0f);
+        right = Ogre::Vector3(1.0f, 0.0f, 0.0f);
+        break;
+    default: break;
+    }
 }

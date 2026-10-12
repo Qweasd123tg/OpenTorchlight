@@ -104,3 +104,7 @@
 | `0x8f4ad0` | `CDungeonTracker::load(_IO_FILE*, unsigned int)` | BEHAVIORAL | 395 |
 | `0x8f4fd0` | `CPlayer::resetStatPoints()` | BEHAVIORAL | 716 |
 | `0x8f5380` | `CPlayer::resetSkills()` | BEHAVIORAL | 741 |
+
+## Продолжение: восстановлен потерянный пакет
+
+Следующий коммит PR #102 заново восстанавливает прежние 69 определений (70 адресов). Их свежая приёмка и исходники описаны в [отчёте Restore69](../restore69-20261012/README.md). Числа выше относятся к первоначальному пакету Smallmass2 из 44 адресов.
