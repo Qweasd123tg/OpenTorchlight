@@ -1087,6 +1087,13 @@ class PacketContextTests(TestCase):
             scope = "TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >"
             address, size = 0x5f8e90, 155
             prefix, method = "_ZN10TArrayListISbIwSt11char_traitsIwESaIwEEE", "~TArrayList"
+        elif variant in ("quest_dialog", "quest_unit_arrays"):
+            f = self.window_array()
+            scope, address, prefix = {
+                "quest_dialog": ("TArrayList<CQuestDialog*>", 0xd1d3f0, "_ZN10TArrayListIP12CQuestDialogE"),
+                "quest_unit_arrays": ("TArrayList<TArrayList<CQuestUnitData*>*>", 0xd1d3d0, "_ZN10TArrayListIPS_IP14CQuestUnitDataEE"),
+            }[variant]
+            size, method = 26, "~TArrayList"
         else:
             f = self.safe_pointer(variant)
             scope = "TSafePointer<" + variant + ">"
@@ -1101,11 +1108,11 @@ class PacketContextTests(TestCase):
         return f
 
     def test_pinned_destructors_supply_existing_headers(self):
-        for variant in ("wstring", "CCharacter", "CEquipment"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 result = self.index().build(self.target, "1000: call " + f["address"]).require_complete()
-                expected = ("TArrayList.h",) if variant == "wstring" else ("Node.h", "SafePointer.h")
+                expected = ("TArrayList.h",) if variant in ("wstring", "quest_dialog", "quest_unit_arrays") else ("Node.h", "SafePointer.h")
                 self.assertEqual(result.headers, expected)
                 self.assertIn("No specialization or prototype synthesized", result.text)
 
@@ -1113,7 +1120,7 @@ class PacketContextTests(TestCase):
         mutations = {"kind": "function", "bind": ["global"], "method": "clear", "params": "int",
                      "cv": "const", "mangled": "_fake", "names": ["_fake"], "qualified": "Other::~Other",
                      "scope": "TArrayList<CNode*>", "size": 99, "address": "0x2222"}
-        for variant in ("wstring", "CCharacter", "CEquipment"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
             for field, value in mutations.items():
                 with self.subTest(variant=variant, field=field):
                     f = self.pinned_destructor(variant); address = f["address"]
@@ -1121,7 +1128,7 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + address).gaps)
 
     def test_pinned_destructors_require_both_weak_elf_aliases(self):
-        for variant in ("wstring", "CCharacter", "CEquipment"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
             for change in ("absent", "name", "size", "address", "binding", "type", "undefined", "D0"):
                 with self.subTest(variant=variant, change=change):
                     f = self.pinned_destructor(variant); symbol = self.image.symbols[1]
@@ -1138,11 +1145,13 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_reject_coherent_unreviewed_instantiations(self):
-        for variant in ("wstring", "CCharacter", "CEquipment"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 if variant == "wstring":
                     scope, prefix = "TArrayList<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >", "_ZN10TArrayListISsE"
+                elif variant in ("quest_dialog", "quest_unit_arrays"):
+                    scope, prefix = "TArrayList<CQuestUnitData*>", "_ZN10TArrayListIP14CQuestUnitDataE"
                 else:
                     scope, prefix = "TSafePointer<CNode>", "_ZN12TSafePointerI5CNodeE"
                     self.write_header("Unreviewed.h", "class CNode { public: int value; };\n")
@@ -1153,10 +1162,10 @@ class PacketContextTests(TestCase):
                 self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_reject_changed_template(self):
-        for variant in ("wstring", "CCharacter", "CEquipment"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
-                header = "TArrayList.h" if variant == "wstring" else "SafePointer.h"
+                header = "TArrayList.h" if variant in ("wstring", "quest_dialog", "quest_unit_arrays") else "SafePointer.h"
                 with (self.include/header).open("a") as out: out.write("// changed\n")
                 self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
@@ -1173,13 +1182,37 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_do_not_hide_unknown_callee(self):
-        for variant in ("wstring", "CCharacter", "CEquipment"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 self.add_function(function(0x3000, "CUnrelated", "missing", tu=2))
                 result = self.index().build(self.target, "1000: call " + f["address"] + "\n1005: call 3000")
                 self.assertEqual(len(result.gaps), 1)
                 self.assertIn("CUnrelated::missing", result.gaps[0])
+
+    def test_quest_array_destructors_require_exact_header_and_snapshot(self):
+        for variant in ("quest_dialog", "quest_unit_arrays"):
+            for change in ("missing", "renamed", "body", "hash", "snapshot"):
+                with self.subTest(variant=variant, change=change):
+                    f = self.pinned_destructor(variant)
+                    self.index().build(self.target, "1000: call " + f["address"]).require_complete()
+                    header = self.include / "TArrayList.h"
+                    index = self.index() if change == "snapshot" else None
+                    if change == "missing":
+                        header.unlink()
+                    elif change == "renamed":
+                        header.rename(self.include / "OtherArray.h")
+                    elif change == "body":
+                        header.write_text(header.read_text().replace("delete[] data", "delete data"))
+                    elif change == "hash":
+                        pin = mock.patch.object(ContextIndex, "WINDOW_ARRAY_HEADER_SHA256", "0" * 64)
+                        with pin:
+                            self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
+                        continue
+                    else:
+                        index.sources["TArrayList.h"] += "// stale scanned snapshot\n"
+                    result = (index or self.index()).build(self.target, "1000: call " + f["address"])
+                    self.assertTrue(result.gaps)
 
     def implicit_destructor(self):
         self.write_header("FileInfo.h", "class CFileInfo { public: CFileInfo() {} int value; };\n")
