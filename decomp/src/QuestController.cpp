@@ -17,6 +17,7 @@
 #include "GameUI.h"
 #include "Level.h"
 #include "Player.h"
+#include "UnitResourceList.h"
 
 typedef char QuestControllerLayout[(sizeof(CQuestController) == 0xb8 &&
     __builtin_offsetof(CQuestController, m_pResourceManager) == 0x68 &&
@@ -129,4 +130,80 @@ CQuestController::~CQuestController()
     if (CGameUI::getSingleton())
         CGameUI::getSingleton()->removeMenuListener(static_cast<EMENU_TYPE>(0), this);
     m_quest.setObject(NULL);
+}
+
+void CQuestController::setQuestComplete(bool bIsComplete)
+{
+    CQuest* quest = m_quest.getObject();
+    if (!quest)
+        return;
+    if (bIsComplete)
+    {
+        if (CQuestManager::getSingleton()->getQuestComplete(quest->m_sUnknown50))
+            return;
+        quest = m_quest.getObject();
+        if (!quest->m_questAccepted)
+        {
+            CQuestManager::getSingleton()->giveQuest(quest, NULL, false);
+            quest = m_quest.getObject();
+        }
+        quest->setIsComplete(true);
+        quest = m_quest.getObject();
+        quest->m_pQuestManager->completeQuest(quest);
+    }
+    else
+    {
+        quest->setIsComplete(false);
+        quest = m_quest.getObject();
+        quest->m_pQuestManager->resetQuest(quest);
+    }
+}
+
+void CQuestController::interactWithUnit()
+{
+    if (!m_unit.getObject())
+    {
+        if (!m_pDataGroup)
+            return;
+        CBaseUnit* unit = m_pResourceManager->getLevel()->getBaseUnitByDataGroup(m_pDataGroup);
+        m_unit.setObject(unit);
+        if (!unit)
+            return;
+    }
+    CGameUI::getSingleton()->removeMenuListener(static_cast<EMENU_TYPE>(0), this);
+    CGameUI::getSingleton()->addMenuListener(static_cast<EMENU_TYPE>(0), this);
+    CGameUI::getSingleton()->closeAll();
+    CPlayer* player = m_pResourceManager->getGameClient()->getPlayer();
+    m_bPlayerEnabled = player->getEnabled();
+    if (m_bPlayerGetsDisabled)
+        player->setEnabled(false);
+    CQuest* quest = m_quest.getObject();
+    CBaseUnit* unit = m_unit.getObject();
+    CGameUI::getSingleton()->forceInteractiveDialog(player, unit, quest);
+    BroadcastEvent(0x5b);
+}
+
+void CQuestController::initQuestController()
+{
+    m_bFirstUpdate = true;
+    CQuest* quest = reinterpret_cast<CQuest*>(CQuestManager::getSingleton()->getQuestByName(m_sQuestName));
+    m_quest.setObject(quest);
+    if (quest)
+    {
+        quest->addQuestControllerListerner(this);
+        if (m_bBroadcastEventsOnLoad)
+        {
+            m_bFirstUpdate = true;
+            m_pResourceManager->getLevel()->addUpdateObject(this);
+        }
+    }
+}
+
+void CQuestController::setUnitInteractWith(std::wstring sUnitInteractWith)
+{
+    if (!m_pResourceManager)
+        return;
+    m_sUnitInteractWith = sUnitInteractWith;
+    m_pDataGroup = CUnitResourceList::getSingleton()->getDataGroupByObjectName(sUnitInteractWith);
+    m_unit.setObject(NULL);
 }
