@@ -43,7 +43,7 @@ void semanticFailure(){++semanticErrors;}
 bool oracleGood(const autotest::Capture& o){unsigned footer[2];if(o.length<sizeof(footer))return false;std::memcpy(footer,o.data+o.length-sizeof(footer),sizeof(footer));return footer[0]==0xadac105eu&&footer[1]==0;}
 void* raw(unsigned n){unsigned char* p=(unsigned char*)autotest::allocate(n+32);if(!p||blockCount==32)_exit(71);std::memset(p,0xd3,16);std::memset(p+16,0xa5,n);std::memset(p+16+n,0x6c,16);blocks[blockCount].p=p;blocks[blockCount++].size=n;return p+16;}
 void event(unsigned n,void* self){number(n);pointer(self);++callbackCount;}
-bool playerReady(void* self){event(1,self);switch(c->mutation){case 1:at<void*>(ui,0x1308)=safe[1];break;case 2:at<void*>(cell[0],0)=client[1];break;case 3:at<void*>(client[0],0x58)=player[1];break;case 4:at<int>(ui,0x178c)=1;break;case 5:at<int>(ui,0x178c)=-1;break;}return (c->bits&128)==0;}
+bool playerReady(void* self){if(self!=player[0])semanticFailure();event(1,self);switch(c->mutation){case 1:at<void*>(ui,0x1308)=safe[1];break;case 2:at<void*>(cell[0],0)=client[1];break;case 3:at<void*>(client[0],0x58)=player[1];break;case 4:at<int>(ui,0x178c)=1;break;case 5:at<int>(ui,0x178c)=-1;break;}return (c->bits&128)==0;}
 bool wrongPlayer(void* self){event(0xf001,self);semanticFailure();return false;}
 void wrongMenu(void* self,void* arg){event(0xf002,self);pointer(arg);semanticFailure();}
 void listen(void* self,void* p){event(2,self);pointer(p);at<void*>(self,0x80)=p;}
@@ -78,7 +78,17 @@ void side(void* context,autotest::Capture& out,bool candidate){c=(Case*)context;
  switch(c->target){
  case Singleton:{void* expected=c->bits&1?ui:0;*reinterpret_cast<void**>(0x14b9c68)=expected;typedef void*(*Fn)();Fn fn=candidate?&newSingleton:&oldSingleton;if(!autotest::beginInvocation(out,fn))return;void* result=fn();out.callCompleted=1;pointer(result);if(result!=expected)semanticFailure();pointer(*reinterpret_cast<void**>(0x14b9c68));break;}
  case Level:autotest::invoke(out,candidate?&newLevel:&oldLevel,ui,c->bits&1?token:(void*)0);break;
- case Cinematic:autotest::invoke(out,candidate?&newCinematic:&oldCinematic,ui);break;
+ case Cinematic:{
+  unsigned b=c->bits;bool expected=c->users>0;unsigned callbacks=0;
+  if(!(b&7)) {
+   if((b&8)||(b&16)||c->value==1||(!(b&1024)&&((b&32)||(b&64))))expected=true;
+   else {callbacks=1;if(b&128)expected=true;
+    else {bool path=(c->mutation>=1&&c->mutation<=3)||((b&256)&&(b&512));int users=c->mutation==4?1:c->mutation==5?-1:c->users;expected=path||users>0;}}
+  }
+  typedef bool(*Fn)(void*);Fn fn=candidate?&newCinematic:&oldCinematic;
+  if(!autotest::beginInvocation(out,fn))return;bool result=fn(ui);out.callCompleted=1;number(result);
+  if(result!=expected||callbackCount!=callbacks)semanticFailure();break;
+ }
  case Tooltip:autotest::invoke(out,candidate?&newTooltip:&oldTooltip,ui);break;
  case Listener:autotest::invoke(out,candidate?&newListener:&oldListener,ui,c->value,c->bits&1?(c->bits&4?scene:token):(void*)0);break;
  case NPC:{typedef void*(*Fn)(void*);Fn fn=candidate?&newNPC:&oldNPC;if(!autotest::beginInvocation(out,fn))return;void* result=fn(ui);out.callCompleted=1;pointer(result);if(result!=(c->bits&3?(void*)0:token))semanticFailure();break;}
@@ -103,7 +113,7 @@ int run(const tlhybrid_host* host,Target target){autotest::Coverage cov(names[ta
 }
 TL_TEST(gameui_adapter_singleton){return run(host,Singleton);}
 TL_TEST(gameui_adapter_level){return run(host,Level);}
-// Cinematic predicate deferred: shared return declaration affects reserved QuestManager source.
+TL_TEST(gameui_adapter_cinematic){return run(host,Cinematic);}
 TL_TEST(gameui_adapter_tooltip){return run(host,Tooltip);}
 TL_TEST(gameui_adapter_listener){return run(host,Listener);}
 TL_TEST(gameui_adapter_npc){return run(host,NPC);}

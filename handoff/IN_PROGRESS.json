@@ -1,63 +1,41 @@
 {
   "schema": 1,
-  "snapshot_main": "381ceb903ed7776e5cde5ef096a20e7823f1351b",
+  "snapshot_main": "0107c9a7fe833232cd302c489e48eb4b7f946b81",
   "status": "in-progress",
   "assigned_to": "dot",
   "groups": [
-    "QuestManager.cpp six-method correctness and comparison closure",
-    "gameui.cpp cinematic predicate and bool return ABI"
+    "QuestManager.cpp four state-transition methods: removeQuest, questEventUpdate, completeQuest, giveQuest"
   ],
   "functions": [
     {
-      "address": "0xd264d0",
+      "address": "0xd2f020",
       "tu": "QuestManager.cpp",
-      "name": "CQuestManager::getPlayerHasQuest(CQuest*)",
+      "name": "CQuestManager::removeQuest(CQuest*, bool)",
       "status": "in-progress-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd2dca0",
+      "address": "0xd2f470",
       "tu": "QuestManager.cpp",
-      "name": "CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "name": "CQuestManager::questEventUpdate(EQUEST_EVENTS, CCharacter*, CBaseUnit*)",
       "status": "in-progress-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd2dda0",
+      "address": "0xd32600",
       "tu": "QuestManager.cpp",
-      "name": "CQuestManager::getQuestByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "name": "CQuestManager::completeQuest(CQuest*)",
       "status": "in-progress-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd30830",
+      "address": "0xd33150",
       "tu": "QuestManager.cpp",
-      "name": "CQuestManager::getNPCIcon(CCharacter*)",
-      "status": "in-progress-not-accepted",
-      "accepted_current": false
-    },
-    {
-      "address": "0xd30900",
-      "tu": "QuestManager.cpp",
-      "name": "CQuestManager::calculateNPCIcon(CCharacter*)",
-      "status": "in-progress-not-accepted",
-      "accepted_current": false
-    },
-    {
-      "address": "0xd339d0",
-      "tu": "QuestManager.cpp",
-      "name": "CQuestManager::resetQuest(CQuest*)",
-      "status": "in-progress-not-accepted",
-      "accepted_current": false
-    },
-    {
-      "address": "0xa83580",
-      "tu": "gameui.cpp",
-      "name": "CGameUI::getUIIsInCinematic()",
+      "name": "CQuestManager::giveQuest(CQuest*, CBaseUnit*, bool)",
       "status": "in-progress-not-accepted",
       "accepted_current": false
     }
   ],
   "next_gate": "Fresh full Stage validation and same-instance publication; no acceptance claimed before merged proof.",
-  "notice": "Separate active work. Source snapshot and accepted counters remain pinned to PR91."
+  "notice": "Separate active work. Source snapshot and accepted counters remain pinned to PR93."
 }

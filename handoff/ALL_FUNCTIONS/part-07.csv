@@ -2,7 +2,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa834d0,gameui.cpp,CGameUI::refreshQuestMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa834d0.cpp,False
 0xa83520,gameui.cpp,CGameUI::isCinematicMenuOpen(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83520.cpp,False
 0xa83550,gameui.cpp,CGameUI::closeCinematicMenu(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83550.cpp,False
-0xa83580,gameui.cpp,CGameUI::getUIIsInCinematic(),MISSING,False,False,,True
+0xa83580,gameui.cpp,CGameUI::getUIIsInCinematic(),DIFF,True,False,,False
 0xa83650,gameui.cpp,CGameUI::equipmentTooltipVisible(),MATCH,True,False,,False
 0xa83670,gameui.cpp,CGameUI::clickLeft(),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83670.cpp,False
 0xa83680,gameui.cpp,CGameUI::handle_MouseOut(CEGUI::EventArgs const&),MATCH,True,True,handoff/recovered-pass10/snippets/gameui.cpp/0xa83680.cpp,False
@@ -38,7 +38,7 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xa842c0,gameui.cpp,"CGameUI::mouseEvent(unsigned int, unsigned int)",MATCH,True,False,,False
 0xa843a0,gameui.cpp,"CGameUI::keyEvent(unsigned int, unsigned int, long)",MATCH,True,False,,False
 0xa844d0,gameui.cpp,"CGameUI::updateMenuUI(float, CGameClient*, Ogre::RenderWindow*)",MATCH,True,False,,False
-0xa84740,gameui.cpp,CGameUI::addImageSet(CEGUI::Imageset*),DIFF,True,False,,False
+0xa84740,gameui.cpp,CGameUI::addImageSet(CEGUI::Imageset*),MATCH,True,False,,False
 0xa84870,gameui.cpp,CGameUI::setIngameUIVisible(bool),MATCH,True,False,,False
 0xa849d0,gameui.cpp,CGameUI::sizeComboList(CEGUI::Combobox*),DIFF,True,False,,False
 0xa84c00,gameui.cpp,CGameUI::hideUI(),MATCH,True,False,,False
