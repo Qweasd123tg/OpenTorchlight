@@ -250,21 +250,21 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xde6ab0,QuestController.cpp,CQuestController::questHasBeenAccepted(bool),MATCH,True,False,,False
 0xde6ae0,QuestController.cpp,CQuestController::questHasBeenAbandoned(),MATCH,True,False,,False
 0xde6af0,QuestController.cpp,CQuestController::questHasBeenCompleted(bool),MATCH,True,False,,False
-0xde6b20,QuestController.cpp,CQuestController::setQuestComplete(bool),MISSING,False,False,,True
+0xde6b20,QuestController.cpp,CQuestController::setQuestComplete(bool),MATCH,True,False,,False
 0xde6c00,QuestController.cpp,CQuestController::setQuestAccepted(bool),MATCH,True,False,,False
 0xde6cb0,QuestController.cpp,"non-virtual thunk to CQuestController::menuEventOccured(void*, EMENU_TYPE, EMENU_EVENT)",MATCH,True,False,,False
 0xde6cc0,QuestController.cpp,"CQuestController::menuEventOccured(void*, EMENU_TYPE, EMENU_EVENT)",DIFF,True,False,,False
-0xde6d40,QuestController.cpp,CQuestController::interactWithUnit(),MISSING,False,False,,True
+0xde6d40,QuestController.cpp,CQuestController::interactWithUnit(),DIFF,True,False,,False
 0xde6eb0,QuestController.cpp,"non-virtual thunk to CQuestController::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",MATCH,True,False,,False
 0xde6ec0,QuestController.cpp,"CQuestController::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",DIFF,True,False,,False
 0xde6f90,QuestController.cpp,"__static_initialization_and_destruction_0(int, int) [clone .clone.0]",DIFF,False,False,,False
-0xdee380,QuestController.cpp,CQuestController::initQuestController(),MISSING,False,False,,True
+0xdee380,QuestController.cpp,CQuestController::initQuestController(),MATCH,True,False,,False
 0xdee460,QuestController.cpp,__tcf_17,DIFF,False,False,,False
 0xdee4d0,QuestController.cpp,__tcf_16,DIFF,False,False,,False
 0xdee540,QuestController.cpp,__tcf_15,DIFF,False,False,,False
 0xdee5b0,QuestController.cpp,__tcf_14,DIFF,False,False,,False
 0xdee640,QuestController.cpp,__tcf_1,DIFF,False,False,,False
-0xdee6b0,QuestController.cpp,"CQuestController::setUnitInteractWith(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MISSING,False,False,,True
+0xdee6b0,QuestController.cpp,"CQuestController::setUnitInteractWith(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",MATCH,True,False,,False
 0xdee8d0,QuestController.cpp,__tcf_18,DIFF,False,False,,False
 0xdee960,QuestController.cpp,__tcf_13,DIFF,False,False,,False
 0xdee9f0,QuestController.cpp,__tcf_12,DIFF,False,False,,False

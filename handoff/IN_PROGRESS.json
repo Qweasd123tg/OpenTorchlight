@@ -1,41 +1,27 @@
 {
   "schema": 1,
-  "snapshot_main": "b7d161cb42d2133a741657d3a7d01dfef8f7e1c6",
+  "snapshot_main": "1a41c9ece3cc849aa7474494bbb52c43d68dc607",
   "status": "remaining-unaccepted",
   "assigned_to": null,
   "groups": [
-    "QuestController.cpp four remaining missing methods, 913 original bytes"
+    "QuestManager.cpp persistence save and load remain pending and unaccepted"
   ],
   "functions": [
     {
-      "address": "0xde6b20",
-      "tu": "QuestController.cpp",
-      "name": "CQuestController::setQuestComplete(bool)",
+      "address": "0xd2ec10",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::save(_IO_FILE*)",
       "status": "pending-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xde6d40",
-      "tu": "QuestController.cpp",
-      "name": "CQuestController::interactWithUnit()",
-      "status": "pending-not-accepted",
-      "accepted_current": false
-    },
-    {
-      "address": "0xdee380",
-      "tu": "QuestController.cpp",
-      "name": "CQuestController::initQuestController()",
-      "status": "pending-not-accepted",
-      "accepted_current": false
-    },
-    {
-      "address": "0xdee6b0",
-      "tu": "QuestController.cpp",
-      "name": "CQuestController::setUnitInteractWith(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "address": "0xd2f8a0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::load(_IO_FILE*, unsigned int, CResourceManager*)",
       "status": "pending-not-accepted",
       "accepted_current": false
     }
   ],
   "next_gate": "Fresh full Stage validation and same-instance publication; no acceptance claimed before merged proof.",
-  "notice": "Six prior controller prerequisites are accepted in PR95. Four missing methods remain unaccepted; this metadata does not assign ownership or claim work started. Source/tools include the reviewed nine-file union, owner transfer and tooling optimization. Source snapshot and accepted counters remain pinned to PR95."
+  "notice": "All four previously missing controller methods are accepted in PR96. QuestManager persistence save/load remain unaccepted; this metadata does not assign ownership or claim work started. Source/tools include all carried reviewed optimizations. Source snapshot and accepted counters remain pinned to PR96."
 }

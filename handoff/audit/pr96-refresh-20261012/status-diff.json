@@ -1,0 +1,140 @@
+[
+  {
+    "address": "0xd2ec10",
+    "before": {
+      "address": "0xd2ec10",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::save(_IO_FILE*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd2ec10",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::save(_IO_FILE*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd2f8a0",
+    "before": {
+      "address": "0xd2f8a0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::load(_IO_FILE*, unsigned int, CResourceManager*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd2f8a0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::load(_IO_FILE*, unsigned int, CResourceManager*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xde6b20",
+    "before": {
+      "address": "0xde6b20",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::setQuestComplete(bool)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    },
+    "after": {
+      "address": "0xde6b20",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::setQuestComplete(bool)",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xde6d40",
+    "before": {
+      "address": "0xde6d40",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::interactWithUnit()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    },
+    "after": {
+      "address": "0xde6d40",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::interactWithUnit()",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xdee380",
+    "before": {
+      "address": "0xdee380",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::initQuestController()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    },
+    "after": {
+      "address": "0xdee380",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::initQuestController()",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xdee6b0",
+    "before": {
+      "address": "0xdee6b0",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::setUnitInteractWith(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    },
+    "after": {
+      "address": "0xdee6b0",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::setUnitInteractWith(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  }
+]

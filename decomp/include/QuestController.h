@@ -38,7 +38,7 @@ public:
 
     void interactWithUnit();
     void initQuestController();
-    void setUnitInteractWith(const std::wstring& sUnitInteractWith);
+    void setUnitInteractWith(std::wstring sUnitInteractWith);
 
     CQuestController(CResourceManager* pResourceManager);
 

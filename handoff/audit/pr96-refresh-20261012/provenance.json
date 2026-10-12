@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "main_commit": "1a41c9ece3cc849aa7474494bbb52c43d68dc607",
+  "main_tree": "4e89a209741f397f5b80e7bda08277b62978ef88",
+  "prior_handoff": "f15be853331d6e3aa429ccf7cab469dbcfdc7110",
+  "prior_handoff_tree": "67d29f4e80b3f9e53ed771d23cb5072885358499",
+  "accepted": 2737,
+  "matched": 2178,
+  "behavioral": 559,
+  "tests": 704,
+  "accepted_delta": 4,
+  "prior_rows_preserved": 7668,
+  "historical_pro_definitions": 401,
+  "all_prior_paths_preserved": true,
+  "historical_finding_fields_preserved": true,
+  "changed_index_rows": 6,
+  "source_files_verified": 1136,
+  "full_suite_origin": "stage",
+  "tests_executed_by_refresh": false,
+  "remote_mutation_performed": false,
+  "private_proof_sha256": "c34df464929ee6d87ccedbb4792ba15f3245d2e0414070c9e1546b804d695305",
+  "durable_archive_receipts_verified": true,
+  "proof_sha256": {
+    "FROZEN-HANDOFF.json": "7f07e18baed0acb72eb92908d683090824551952347ce9f61aa7ebfb25936aec",
+    "acceptance.json": "90819c188828dbb68eb53202a096ce28d6ffba042db141fd7a3201c0d637d85d",
+    "publication.json": "293279f1585765cb61e602e963e1becc390cfec09a3987888f0a64b05a77169e",
+    "preservation.json": "18b883e9e89492e733434be3a867a9ee7ca2f3cabf284c890eec7c4fda365ede",
+    "final-stage-identity.json": "94cc19a4f7f602b460748290c5685f2619d32dd0b3397fbbe6683c60b8cdb84d",
+    "final-stage-units.json": "88198f75907dc969c18d051eba561444ea94cbd08fa503d6a8510685bd2e55d7",
+    "INDEPENDENT-REVIEW.json": "48daab9700634b221eb3ea4e4d3a3d52330e6e4c4f0c6a77737e91deaa7c8bf3",
+    "private-proof-local.json": "841ace67aa40ce0aa88dc2f32cff8670c8314d2b9b8030f1c11958b00f8c98c2"
+  },
+  "inputs_digest": "45420e98bff326fc9e40d9848473bd94d228ccc04243f3ad167c121964aaa2c3",
+  "active_scope_not_accepted": [
+    "0xd2ec10",
+    "0xd2f8a0"
+  ],
+  "status_policy": "Refresh represented primary function statuses from actual final units; retain historical status where no authoritative primary row exists. Acceptance exactly equals canonical progress accepted set."
+}

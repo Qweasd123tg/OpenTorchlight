@@ -358,13 +358,13 @@ address,tu,name,status,accepted_current,pro_source,pro_snippet,pending
 0xd2e700,QuestManager.cpp,"CQuestManager::getQuestNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)",DIFF,True,False,,False
 0xd2e930,QuestManager.cpp,CQuestManager::~CQuestManager(),MISSING,False,False,,False
 0xd2ebf0,QuestManager.cpp,CQuestManager::~CQuestManager(),MISSING,False,False,,False
-0xd2ec10,QuestManager.cpp,CQuestManager::save(_IO_FILE*),MISSING,False,False,,False
+0xd2ec10,QuestManager.cpp,CQuestManager::save(_IO_FILE*),MISSING,False,False,,True
 0xd2f020,QuestManager.cpp,"CQuestManager::removeQuest(CQuest*, bool)",DIFF,True,False,,False
 0xd2f2c0,QuestManager.cpp,__tcf_3,DIFF,False,False,,False
 0xd2f350,QuestManager.cpp,__tcf_2,DIFF,False,False,,False
 0xd2f3e0,QuestManager.cpp,__tcf_9,DIFF,False,False,,False
 0xd2f470,QuestManager.cpp,"CQuestManager::questEventUpdate(EQUEST_EVENTS, CCharacter*, CBaseUnit*)",DIFF,True,False,,False
-0xd2f8a0,QuestManager.cpp,"CQuestManager::load(_IO_FILE*, unsigned int, CResourceManager*)",MISSING,False,False,,False
+0xd2f8a0,QuestManager.cpp,"CQuestManager::load(_IO_FILE*, unsigned int, CResourceManager*)",MISSING,False,False,,True
 0xd300e0,QuestManager.cpp,CQuestManager::getQuestForNPC(CBaseUnit*),DIFF,True,False,,False
 0xd30830,QuestManager.cpp,CQuestManager::getNPCIcon(CCharacter*),DIFF,True,False,,False
 0xd30900,QuestManager.cpp,CQuestManager::calculateNPCIcon(CCharacter*),DIFF,True,False,,False
