@@ -216,10 +216,12 @@ class ComparativeOutcomes(unittest.TestCase):
         build.start()
         self.addCleanup(build.stop)
 
-    def check_report(self, code, report, negative=False):
+    def check_report(self, code, report, negative=False, *, label='focused', begin=True):
         import hybrid
+        if begin:
+            report = ['tlhybrid: begin compare_a'] + report
         with patch.object(hybrid, 'selftest', return_value=(code, report)):
-            return self.cycle._tests('focused', ['Control.cpp'], self.spec['controls'][0] if negative else None)
+            return self.cycle._tests(label, ['Control.cpp'], self.spec['controls'][0] if negative else None)
 
     def test_complete_equal_original_candidate_passes(self):
         self.check_report(0, ['    coverage compare_a 0x100 completed 3 different 0 incomplete 0',
@@ -467,14 +469,93 @@ class ReviewRegressions(Continuation):
 
 
 class CoverageReviewRegressions(ComparativeOutcomes):
-    def test_contradictory_incomplete_duplicate_coverage_rejected(self):
+    def test_contradictory_incomplete_zero_coverage_rejected(self):
         for bad in ['    coverage compare_a 0x100 completed 1 different 0 incomplete 1',
                     '    coverage compare_a 0x100 completed 1 different 1 incomplete 0',
-                    '    coverage compare_a 0x100 completed 3 different 0 incomplete 0',
-                    '    coverage unknown_test 0x100 completed 3 different 0 incomplete 0']:
+                    '    coverage compare_a 0x100 completed 0 different 0 incomplete 0']:
             with self.assertRaises(RuntimeError):
                 self.check_report(0, ['    coverage compare_a 0x100 completed 3 different 0 incomplete 0',
                                       bad, 'tlhybrid: compare_a PASS (0)'])
+
+
+class FramedCoverage(ComparativeOutcomes):
+    def test_positive_alias_repeats_and_child_labels_are_diagnostics(self):
+        rows = ['    coverage compare_a 0x100 completed 3 different 0 incomplete 0',
+                '    coverage compare_a 0x100 completed 3 different 0 incomplete 0',
+                '    coverage child_lane 0x200 completed 2 different 0 incomplete 0',
+                '    coverage listener accepted-controller integration (supplemental) 0x300 completed 4 different 0 incomplete 0',
+                'tlhybrid: compare_a PASS (0)']
+        self.check_report(0, rows)
+        self.check_report(0, rows, label='regression')
+
+    def test_supplemental_free_label_counts_are_checked(self):
+        for counts in ('completed 0 different 0 incomplete 0', 'completed 4 different 1 incomplete 0',
+                       'completed 4 different 0 incomplete 1'):
+            with self.subTest(counts=counts), self.assertRaises(RuntimeError):
+                self.check_report(0, ['    coverage compare_a 0x100 completed 3 different 0 incomplete 0',
+                                      '    coverage listener accepted-controller integration (supplemental) 0x300 ' + counts,
+                                      'tlhybrid: compare_a PASS (0)'], label='regression')
+
+    def test_child_label_does_not_satisfy_focused_target(self):
+        with self.assertRaises(RuntimeError):
+            self.check_report(0, ['    coverage child_lane 0x100 completed 3 different 0 incomplete 0',
+                                  'tlhybrid: compare_a PASS (0)'])
+
+    def test_child_label_does_not_kill_control(self):
+        with self.assertRaises(RuntimeError):
+            self.check_report(1, ['    coverage child_lane 0x100 completed 3 different 1 incomplete 0',
+                                  'tlhybrid: compare_a FAIL (1)'], True)
+
+    def test_each_repeated_control_row_is_checked(self):
+        for bad in ['completed 0 different 0 incomplete 0',
+                    'completed 1 different 0 incomplete 1',
+                    'completed 1 different 2 incomplete 0']:
+            with self.subTest(bad=bad), self.assertRaises(RuntimeError):
+                self.check_report(1, ['    coverage compare_a 0x100 completed 3 different 1 incomplete 0',
+                                      '    coverage compare_a 0x100 ' + bad,
+                                      'tlhybrid: compare_a FAIL (1)'], True)
+
+    def test_control_witness_must_belong_to_failing_enclosing_test(self):
+        fixture = self.stage.path / 'decomp/hybrid/tests/Control.cpp'
+        fixture.write_text(fixture.read_text() + '\nTL_TEST(other_test) {}\n')
+        report = ['tlhybrid: begin compare_a', 'tlhybrid: compare_a FAIL (1)',
+                  'tlhybrid: begin other_test',
+                  '    coverage compare_a 0x100 completed 3 different 1 incomplete 0',
+                  'tlhybrid: other_test PASS (0)']
+        with self.assertRaises(RuntimeError):
+            self.check_report(1, report, True, begin=False)
+
+    def test_invalid_framing_fails_closed(self):
+        coverage = '    coverage compare_a 0x100 completed 3 different 0 incomplete 0'
+        begin, end = 'tlhybrid: begin compare_a', 'tlhybrid: compare_a PASS (0)'
+        for rows in [[coverage, end], [begin, coverage], [begin, begin, coverage, end],
+                     [begin, coverage, end, end], [begin, coverage, end, begin, end],
+                     [begin, coverage, 'tlhybrid: other PASS (0)'],
+                     ['tlhybrid: begin other', coverage, 'tlhybrid: other PASS (0)'],
+                     [begin, coverage, end, coverage], [begin, '    coverage malformed', end]]:
+            with self.subTest(rows=rows), self.assertRaises(RuntimeError):
+                self.check_report(0, rows, begin=False)
+
+
+class LoaderFrameParser(unittest.TestCase):
+    def test_legacy_descriptive_child_and_alias_rows_are_not_summed(self):
+        report = [
+            'tlhybrid: begin quest_destructor_owned_lifetime',
+            '    coverage quest_destructor_owned_lifetime 0xd1a390 completed 22 different 0 incomplete 0',
+            '    coverage quest_deleting_lifetime 0xd1b5c0 completed 10 different 0 incomplete 0',
+            'tlhybrid: timing quest_destructor_owned_lifetime 0.223 seconds',
+            'tlhybrid: quest_destructor_owned_lifetime PASS (0)',
+            'tlhybrid: begin questmanager_lifecycle_destructor',
+            '    coverage questmanager_lifecycle_destructor 0xd2e930 completed 72 different 0 incomplete 0',
+            '    coverage questmanager_lifecycle_destructor 0xd2e930 completed 72 different 0 incomplete 0',
+            'tlhybrid: questmanager_lifecycle_destructor PASS (0)']
+        finished, rows = candidate._comparison_frames(report, ['quest_destructor_owned_lifetime',
+                                                               'questmanager_lifecycle_destructor'])
+        self.assertEqual(2, len(finished))
+        self.assertEqual(4, len(rows))
+        self.assertEqual(('quest_destructor_owned_lifetime', 'quest_deleting_lifetime'), rows[1][:2])
+        self.assertEqual(rows[2], rows[3])
+        self.assertEqual('72', rows[2][3])
 
 
 if __name__ == '__main__':
