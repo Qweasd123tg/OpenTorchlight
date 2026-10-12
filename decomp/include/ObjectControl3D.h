@@ -3,6 +3,7 @@
 #include "RunicCore.h"
 #include "KeyManager.h"
 #include "MouseManager.h"
+#include "LinuxUtils.h"
 #include <OgreQuaternion.h>
 #include <OgrePlane.h>
 #include <vector>
@@ -18,6 +19,9 @@ namespace Ogre { class SceneManager; class SceneNode; }
 class CObjectControl3D : public CRunicCore
 {
 public:
+    Ogre::Vector3 getMousePlaneInstersect(POINT point, Ogre::Plane plane);
+    Ogre::Vector3 getCameraPlaneIntersect(Ogre::Plane plane);
+    void UpdateChunkTemplate();
     void createUndo(TArrayList<CEditorBaseObject*>& objects);
     void ApplyRotationNoise(float amount, TArrayList<CEditorBaseObject*>& objects);
     void ApplyNormalNoise(float amount, TArrayList<CEditorBaseObject*>& objects);
@@ -49,7 +53,13 @@ private:
     std::vector<CGenericModel*> m_models; // +0xc8
     unsigned char m_unrecoveredE0[0xc];
     float m_planeScale; // +0xec
-    unsigned char m_unrecoveredF0[0x10c];
+    unsigned char m_unrecoveredF0[8];
+    float m_chunkSize; // +0xf8
+    float m_chunkWidth; // +0xfc
+    float m_chunkDepth; // +0x100
+    Ogre::Vector3 m_chunkPositions[20]; // +0x104
+    int m_chunkCount; // +0x1f4
+    unsigned char m_unrecovered1F8[4];
     float m_workingHeight; // +0x1fc
     Ogre::Plane m_workingPlane; // +0x200
     CKeyManager m_keys;

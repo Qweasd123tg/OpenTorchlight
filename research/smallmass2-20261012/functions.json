@@ -1,0 +1,629 @@
+[
+  {
+    "address": "0xaef6b0",
+    "tu": "Console.cpp",
+    "name": "CConsole::cameraShake(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "original_bytes": 506,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_console_shake",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0xaef980",
+    "tu": "Console.cpp",
+    "name": "CConsole::spawnClassCreate(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "original_bytes": 558,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_console_spawn",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0xaf15c0",
+    "tu": "Console.cpp",
+    "name": "CConsole::equipSkillToPlayer(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "original_bytes": 298,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_console_skill",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0xaf16f0",
+    "tu": "Console.cpp",
+    "name": "CConsole::addSpeedToPlayer()",
+    "original_bytes": 598,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_console_speed",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0xa51440",
+    "tu": "GameGlobals.cpp",
+    "name": "CGameGlobals::CGameGlobals(wchar_t const*)",
+    "original_bytes": 710,
+    "cpp_definition": true,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0xa51710",
+    "tu": "GameGlobals.cpp",
+    "name": "CGameGlobals::~CGameGlobals()",
+    "original_bytes": 1543,
+    "cpp_definition": true,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0xa51d20",
+    "tu": "GameGlobals.cpp",
+    "name": "CGameGlobals::~CGameGlobals()",
+    "original_bytes": 18,
+    "cpp_definition": false,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x91c720",
+    "tu": "Inventory.cpp",
+    "name": "CInventory::executeProcs(EEFFECT_TYPE, CBaseUnit*)",
+    "original_bytes": 688,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_procs",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x9256a0",
+    "tu": "Inventory.cpp",
+    "name": "CInventory::equipEquipmentIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS)",
+    "original_bytes": 715,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_equip_specific",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x925d30",
+    "tu": "Inventory.cpp",
+    "name": "CInventory::swapWeaponSet()",
+    "original_bytes": 710,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_swap",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x774330",
+    "tu": "ObjectControl3D.cpp",
+    "name": "CObjectControl3D::UpdateChunkTemplate()",
+    "original_bytes": 470,
+    "cpp_definition": true,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x774b80",
+    "tu": "ObjectControl3D.cpp",
+    "name": "CObjectControl3D::getMousePlaneInstersect(POINT, Ogre::Plane)",
+    "original_bytes": 474,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_mouse_plane",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x7750e0",
+    "tu": "ObjectControl3D.cpp",
+    "name": "CObjectControl3D::getCameraPlaneIntersect(Ogre::Plane)",
+    "original_bytes": 498,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_camera_plane",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80f930",
+    "tu": "character.cpp",
+    "name": "CCharacter::learnSpell(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+    "original_bytes": 342,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_learn",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80feb0",
+    "tu": "character.cpp",
+    "name": "CCharacter::dropToGround(CLevel&, float, bool)",
+    "original_bytes": 554,
+    "cpp_definition": true,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x813ba0",
+    "tu": "character.cpp",
+    "name": "CCharacter::updateActiveSkill(float)",
+    "original_bytes": 693,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_update_active",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x815910",
+    "tu": "character.cpp",
+    "name": "CCharacter::damageDefense(EDAMAGE_TYPES)",
+    "original_bytes": 265,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_defense",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x825310",
+    "tu": "character.cpp",
+    "name": "CCharacter::setTarget(CCharacter*)",
+    "original_bytes": 408,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_target",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x827310",
+    "tu": "character.cpp",
+    "name": "CCharacter::playHitParticle(Ogre::Vector3 const&, Ogre::Vector3 const&, float)",
+    "original_bytes": 461,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_hit",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8274e0",
+    "tu": "character.cpp",
+    "name": "CCharacter::facingTarget(CCharacter*, CItem*)",
+    "original_bytes": 524,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_facing",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x827890",
+    "tu": "character.cpp",
+    "name": "CCharacter::teleportToMaster(float)",
+    "original_bytes": 650,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_teleport",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x829f60",
+    "tu": "character.cpp",
+    "name": "CCharacter::moveToPosition(Ogre::Vector3 const&, bool, bool)",
+    "original_bytes": 584,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_move",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x82a750",
+    "tu": "character.cpp",
+    "name": "CCharacter::fishingSplash()",
+    "original_bytes": 484,
+    "cpp_definition": true,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x82e750",
+    "tu": "character.cpp",
+    "name": "CCharacter::setAIPlayAnimation(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, float, float)",
+    "original_bytes": 589,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_animation",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x835520",
+    "tu": "character.cpp",
+    "name": "CCharacter::removePet(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "original_bytes": 436,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_remove_pet",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x836820",
+    "tu": "character.cpp",
+    "name": "CCharacter::spawningAI(float, CLevel&)",
+    "original_bytes": 607,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_spawning",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x836a80",
+    "tu": "character.cpp",
+    "name": "CCharacter::setPathToFollowByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+    "original_bytes": 549,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_path",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x83c4f0",
+    "tu": "character.cpp",
+    "name": "CCharacter::attemptStopOfActiveSkill()",
+    "original_bytes": 375,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_stop_active",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x83c730",
+    "tu": "character.cpp",
+    "name": "CCharacter::performingSkillAI(float)",
+    "original_bytes": 641,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_perform_active",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x83e570",
+    "tu": "character.cpp",
+    "name": "CCharacter::createNewCharacter(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "original_bytes": 375,
+    "cpp_definition": true,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x85ba70",
+    "tu": "charactersavestate.cpp",
+    "name": "CCharacterSaveState::CCharacterSaveState()",
+    "original_bytes": 494,
+    "cpp_definition": true,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x8644f0",
+    "tu": "charactersavestate.cpp",
+    "name": "CCharacterSaveState::~CCharacterSaveState()",
+    "original_bytes": 1032,
+    "cpp_definition": true,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x864900",
+    "tu": "charactersavestate.cpp",
+    "name": "CCharacterSaveState::~CCharacterSaveState()",
+    "original_bytes": 18,
+    "cpp_definition": false,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x8d4bf0",
+    "tu": "monster.cpp",
+    "name": "CMonster::hasOffensiveSkill()",
+    "original_bytes": 366,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_offensive",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8d4d60",
+    "tu": "monster.cpp",
+    "name": "CMonster::hasDefensiveSkill()",
+    "original_bytes": 501,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_defensive",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8d4f60",
+    "tu": "monster.cpp",
+    "name": "CMonster::selectOffensiveSkill(bool)",
+    "original_bytes": 622,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_select_offensive",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8d51e0",
+    "tu": "monster.cpp",
+    "name": "CMonster::selectDefensiveSkill()",
+    "original_bytes": 644,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_select_defensive",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e1390",
+    "tu": "monster.cpp",
+    "name": "CMonster::fidgetAI(float, CLevel&)",
+    "original_bytes": 495,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_fidget",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e2ae0",
+    "tu": "monster.cpp",
+    "name": "CMonster::unitInit(CDataGroup*, bool)",
+    "original_bytes": 218,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_monster_init",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e43a0",
+    "tu": "player.cpp",
+    "name": "CDungeonTracker::save(_IO_FILE*)",
+    "original_bytes": 230,
+    "cpp_definition": true,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x8e5020",
+    "tu": "player.cpp",
+    "name": "CPlayer::firstTimeSetup()",
+    "original_bytes": 418,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_first_setup",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f4ad0",
+    "tu": "player.cpp",
+    "name": "CDungeonTracker::load(_IO_FILE*, unsigned int)",
+    "original_bytes": 395,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_dungeon_load",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f4fd0",
+    "tu": "player.cpp",
+    "name": "CPlayer::resetStatPoints()",
+    "original_bytes": 716,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_reset_stats",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f5380",
+    "tu": "player.cpp",
+    "name": "CPlayer::resetSkills()",
+    "original_bytes": 741,
+    "cpp_definition": true,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_reset_skills",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  }
+]

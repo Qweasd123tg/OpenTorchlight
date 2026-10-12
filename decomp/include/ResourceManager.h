@@ -14,6 +14,7 @@ class CEquipment;
 class CSpawnClass;
 namespace Ogre { class TextureManager; }
 class CBaseUnit;
+class CCharacter;
 class CGameClient;
 class CParticle;
 class CGenericModel;
@@ -44,6 +45,8 @@ public:
     CGameUI* getGameUI();
     CEquipment* createEquipment(const wchar_t*,bool,bool);
     CSpawnClass* getSpawnClassByName(const std::wstring&);
+    void createUnitsBySpawnClassAtPositionInLevel(CSpawnClass* spawn, unsigned int count,
+        const Ogre::Vector3& position, CLevel* level, CCharacter* owner, CCharacter* source, int unitLevel);
     CMissilePreloader* getMissilePreloader();
     CMissile* createMissile(const std::wstring& name);
     std::map<long long, CDataGroup*>* getGroupByName(const std::wstring& name);

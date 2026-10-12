@@ -1,3 +1,8 @@
+#include "FileUtilities.h"
+#include "Inventory.h"
+#include "SkillManager.h"
+#include "GameUI.h"
+
 #include <cmath>
 #include "DataGroup.h"
 #include "DungeonTracker.h"
@@ -216,4 +221,81 @@ void CPlayer::catchFish()
     setAIState(static_cast<EAIState>(34));
     blendAnimation("FISHING_CATCH", false, 0.2f, 1, -1);
     m_pUnitModel->queueBlendAnimation("IDLE", true, 0.2f, 1);
+}
+
+void CDungeonTracker::save(FILE* file)
+{
+    unsigned short length = static_cast<unsigned short>(m_name.length());
+    fwrite(&length, 2, 1, file);
+    WriteUTF32ToUTF16(file, m_name, length);
+    fwrite(&m_rank, 4, 1, file);
+    fwrite(&m_value8, 4, 1, file);
+    fwrite(&m_value10, 4, 1, file);
+    unsigned int count = m_levels.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i)
+        fwrite(&m_levels[i], 4, 1, file);
+}
+
+void CPlayer::firstTimeSetup()
+{
+    if (!m_pInventory) return;
+    const wchar_t* names[] = {L"Health Potion", L"Health Potion", L"Mana Potion",
+        L"Mana Potion", L"Town Portal Scroll", L"Town Portal Scroll",
+        L"Identify Scroll", L"Identify Scroll"};
+    for (unsigned int i = 0; i < 8; ++i) {
+        CEquipment* equipment = m_pResourceManager->createEquipment(names[i], false, true);
+        if (equipment) m_pInventory->pickupEquipment(equipment, true);
+    }
+    m_pResourceManager->getGameUI()->queueTip(static_cast<EContextTip>(9));
+}
+
+void CDungeonTracker::load(FILE* file, unsigned int version)
+{
+    unsigned short length;
+    fread(&length, 2, 1, file);
+    m_name = FILESYSTEM::ReadWString(file, length);
+    fread(&m_rank, 4, 1, file);
+    fread(&m_value8, 4, 1, file);
+    if (version > 2) {
+        fread(&m_value10, 4, 1, file);
+        if (version > 5) {
+            unsigned int count;
+            fread(&count, 4, 1, file);
+            for (unsigned int i = 0; i < count; ++i) {
+                int level;
+                fread(&level, 4, 1, file);
+                m_levels.push_back(level);
+            }
+        }
+    }
+}
+
+void CPlayer::resetStatPoints()
+{
+    m_iUnusedStatPoints = 0;
+    m_iUnusedSkillPoints = 0;
+    m_iMeleeStat = m_pDataGroup->GetDataValue(L"STRENGTH", 10);
+    m_rangedStat = m_pDataGroup->GetDataValue(L"DEXTERITY", 10);
+    m_magicStat = m_pDataGroup->GetDataValue(L"MAGIC", 10);
+    m_defenseStat = m_pDataGroup->GetDataValue(L"DEFENSE", 10);
+    m_naturalArmor = m_pDataGroup->GetDataValue(L"ARMOR", 0);
+}
+
+void CPlayer::resetSkills()
+{
+    if (!m_pSkillManager) return;
+    int points = m_pSkillManager->getSkillPoints();
+    m_pSkillManager->stopAllSkills(true, false, true);
+    m_pSkillManager->resetSkillLevels();
+    std::vector<CDataGroup*> groups;
+    unsigned int count = m_pDataGroup->GetDataGroupsMatchingName(L"SKILL", &groups);
+    for (unsigned int i = 0; i < count; ++i) {
+        CDataGroup* group = groups[i];
+        std::wstring name = STRINGS::StringUpper(group->GetDataValue(L"NAME", L""));
+        unsigned int level = group->GetDataValue(L"LEVEL", 0u);
+        points -= level;
+        m_pSkillManager->setSkillLevel(name, level);
+    }
+    m_iUnusedSkillPoints += std::max(0, points);
 }

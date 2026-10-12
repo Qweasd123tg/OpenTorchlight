@@ -15,10 +15,14 @@ public:
     virtual void huntAI(float,CLevel&);
     virtual void approachAI(float,CLevel&);
     virtual void attackAI(float,CLevel&);
+    void fidgetAI(float,CLevel&);
     virtual bool canAttackWithCurrentWeapon();
     virtual void notifyAISkillComplete();
     void getRangeAI(float,CLevel&);
-    int selectOffensiveSkill(bool);
+    void selectOffensiveSkill(bool);
+    void selectDefensiveSkill();
+    bool hasOffensiveSkill();
+    bool hasDefensiveSkill();
     void idleAINormal(float,CLevel&,bool);
     void idleAIResurrecter(float,CLevel&,bool);
     void idleAIDefender(float,CLevel&,bool);

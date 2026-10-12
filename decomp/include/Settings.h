@@ -38,6 +38,7 @@ extern unsigned int KSETTINGS_F_MUSICVOLUME;
 extern unsigned int KSETTINGS_MUSICMUTE;
 extern unsigned int KSETTINGS_DESTROY_MONSTERS_AFTER_DEATH;
 extern unsigned int KSETTINGS_SHOW_TIPS;
+extern unsigned int KSETTINGS_SHOW_BLOOD;
 extern unsigned int KSETTINGS_KEYMAP_AUTOMAP;
 extern unsigned int KSETTINGS_KEYMAP_AUTOMAPZOOMIN;
 extern unsigned int KSETTINGS_KEYMAP_AUTOMAPZOOMOUT;

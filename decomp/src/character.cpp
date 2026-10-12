@@ -1,3 +1,7 @@
+#include "StringUtilities.h"
+#include <OgreLogManager.h>
+#include "EditorScene.h"
+
 #include <CEGUIWindowManager.h>
 #include <OgreCamera.h>
 #include <OgreEntity.h>
@@ -1423,4 +1427,356 @@ void CCharacter::dyingAI(float elapsed, CLevel& level)
     }
     else if (!m_pUnitModel->animationPlaying())
         completeDeath(level);
+}
+
+void CCharacter::learnSpell(std::wstring name, int level)
+{
+    for (unsigned int i = 0; i < 4; ++i) {
+        if (!m_knownSpells[i].empty()) continue;
+        m_knownSpells[i] = name;
+        m_knownSpellLevels[i] = level;
+        CSkill* skill = addSkillByName(name, false);
+        if (skill) {
+            skill->m_iRequiredLevel = 1;
+            skill->m_iColumn = -1;
+            skill->m_iCharges = -1;
+            m_pSkillManager->setSkillLevel(skill, level);
+        } else {
+            Ogre::LogManager::getSingleton().logMessage(
+                STRINGS::StringConvertToNarrow((L"Skill not found : " + name).c_str()),
+                Ogre::LML_NORMAL, false);
+        }
+        return;
+    }
+}
+
+void CCharacter::dropToGround(CLevel& level, float height, bool force)
+{
+    Ogre::Vector3 end = m_vPosition;
+    float originalY = m_vPosition.y;
+    m_vPosition.y = 100.0f;
+    end.y = -100.0f;
+    m_groundFlag = false;
+    Ogre::Vector3 hit, normal, extra;
+    unsigned int type;
+    if (force) {
+        if (level.rayCollision(m_vPosition, end, hit, normal, type, extra, false) && type != 100) {
+            m_vPosition = hit;
+            m_vPosition.y += m_fBaseUnitValue194;
+        } else {
+            m_vPosition.y = originalY;
+        }
+    } else {
+        float radius = 0.1f;
+        for (unsigned int i = 0; i < 30; ++i) {
+            if (level.rayCollision(m_vPosition, end, hit, normal, type, extra, false) && type != 100) {
+                m_vPosition = hit;
+                m_vPosition.y += m_fBaseUnitValue194;
+                break;
+            }
+            m_vPosition = level.randomOpenPosition(m_vPosition, radius, false);
+            radius += 0.1f;
+            end = m_vPosition;
+            m_vPosition.y = 100.0f;
+            end.y = -100.0f;
+            radius = std::min(radius, height);
+        }
+    }
+    setPosition(m_vPosition);
+    extractOrientationVectors();
+}
+
+void CCharacter::updateActiveSkill(float elapsed)
+{
+    if (!m_activeSkill ||
+        (m_activeSkill->m_animationIndexLoopInto != static_cast<unsigned int>(-1) &&
+         !m_activeSkill->m_interruptible) || (!m_skillLooping && !(m_skillTime > 0.0f))) {
+        m_skillLooping = false;
+        m_skillTime = 0.0f;
+        m_skillInterrupted = true;
+        return;
+    }
+    if (static_cast<float>(m_activeSkill->getManaCostOT()) > 0.0f &&
+        (m_activeSkill->m_animationIndexLoopInto == static_cast<unsigned int>(-1) ||
+         m_skillInterrupted)) {
+        float mana = m_fManaFloat;
+        if (static_cast<float>(m_activeSkill->getManaCostOT()) * elapsed > mana) {
+            int animation = m_activeSkill->getAnimationIndexLoopEnd();
+            if (animation != -1) {
+                blendAnimation(animation, true, 0.2f, 1.0f, -1.0f);
+                queueBlendAnimation("IDLE", true, 0.2f, 1.0f);
+            }
+            m_skillLooping = false;
+            m_skillTime = 0.0f;
+            if (m_pSkillManager) m_pSkillManager->stopAllSkills(false, false, false);
+            return;
+        }
+        modifyMana(static_cast<float>(m_activeSkill->getManaCostOT()) * -elapsed);
+    }
+    if (m_skillTime > 0.0f) {
+        m_skillTime -= elapsed;
+        if (m_skillTime <= 0.0f) {
+            m_skillInterrupted = true;
+            for (unsigned int i = 0; i < 2; ++i)
+                if (m_weaponTrails[i]) {
+                    m_weaponTrails[i]->setActive(false);
+                    m_weaponTrails[i]->setVisible(false);
+                }
+            m_skillTime = 0.0f;
+            if (m_activeSkill->m_animationIndexLoopInto == static_cast<unsigned int>(-1))
+                m_skillLooping = false;
+        }
+    }
+}
+
+int CCharacter::damageDefense(EDAMAGE_TYPES type)
+{
+    float base = static_cast<float>(m_damageDefense[type]);
+    float percent = getEffectValue(static_cast<EEFFECT_TYPE>(23), type);
+    percent += getEffectValue(static_cast<EEFFECT_TYPE>(23), static_cast<EDAMAGE_TYPES>(6));
+    float value = std::max(0.0f, base + base * (percent / 100.0f));
+    value += getEffectValue(gDAMAGE_DEFENSE_EFFECT_TYPES[type], static_cast<EDAMAGE_TYPES>(7));
+    int bonus = static_cast<int>(ceilf((static_cast<float>(defense()) / 100.0f) * value));
+    int penalty = static_cast<int>(ceilf(getEffectValue(static_cast<EEFFECT_TYPE>(66), static_cast<EDAMAGE_TYPES>(7))));
+    return static_cast<int>(ceilf(static_cast<float>(bonus) + value - static_cast<float>(penalty)));
+}
+
+void CCharacter::setTarget(CCharacter* target)
+{
+    if (m_eAIState == AISTATE_DEAD) {
+        if (!target) m_targetCharacter.setObject(NULL);
+        return;
+    }
+    if (m_targetLocked) return;
+    CCharacter* previous = m_targetCharacter.getObject();
+    if (previous && m_pAIManager &&
+        m_pAIManager->hasAIFlag(static_cast<EAIFLAG_TYPES>(5)) &&
+        m_targetCharacter.getObject()->alive()) return;
+    m_targetCharacter.setObject(target);
+    m_targetItem.setObject(NULL);
+    if (m_bBaseUnitFlag0 && previous != target && target && target->isPlayer())
+        broadcastAlerted();
+}
+
+void CCharacter::playHitParticle(const Ogre::Vector3& from, const Ogre::Vector3& to, float distance)
+{
+    CSettings* settings = m_pResourceManager ? CMasterResourceManager::getSingleton()->m_pSettings : NULL;
+    CParticle* particle = m_equipmentParticles[settings->GetInt(KSETTINGS_SHOW_BLOOD) == 1 ? 1 : 2];
+    if (particle) {
+        Ogre::Vector3 direction = from - to;
+        direction.y = 0.0f;
+        direction.normalise();
+        Ogre::Vector3 position = to + direction * distance + Ogre::Vector3::UNIT_Y * 1.25f;
+        particle->setPosition(position);
+        particle->Start();
+    }
+}
+
+bool CCharacter::facingTarget(CCharacter* character, CItem* item)
+{
+    if (!character && !item) return false;
+    CBaseUnit* target = character ? static_cast<CBaseUnit*>(character) : item;
+    Ogre::Vector3 position = getPosition(true);
+    Ogre::Vector3 direction = target->getPosition(true) - position;
+    direction.y = 0.0f;
+    direction.normalise();
+    float facing = atan2f(m_vForward.x, m_vForward.z);
+    float angle = atan2f(direction.x, direction.z);
+    const float degrees = 180.0f / 3.14159f;
+    return !(fabsf(angle * degrees - facing * degrees) > m_facingAngle * 0.5f);
+}
+
+void CCharacter::teleportToMaster(float distance)
+{
+    if (!m_pMaster && getLevel()) return;
+    Ogre::Vector3 position = getPosition(true);
+    Ogre::Vector3 direction = m_pMaster->getPosition(true) - position;
+    direction.y = 0.0f;
+    direction.normalise();
+    direction *= distance;
+    Ogre::Vector3 destination = m_pMaster->getPosition(true) - direction;
+    bool wasInAvoidanceMap = m_bBaseUnitFlag19B;
+    removeFromAvoidanceMap(*getLevel());
+    setPosition(getLevel()->randomOpenPosition(destination, 8.0f, false));
+    dropToGround(*getLevel(), 4.0f, false);
+    if (wasInAvoidanceMap) addToAvoidanceMap(*getLevel());
+}
+
+bool CCharacter::moveToPosition(const Ogre::Vector3& position, bool passabilityFlag, bool force)
+{
+    bool wasInAvoidanceMap = m_bBaseUnitFlag19B;
+    removeFromAvoidanceMap(*getLevel());
+    Ogre::Vector3 start = getPosition(true);
+    bool move = force || getLevel()->passableBetween(start, position, passabilityFlag);
+    if (!move) {
+        Ogre::Vector3 direction = position - start;
+        direction.normalise();
+        start += direction * 0.4f;
+        move = getLevel()->passableBetween(start, position, passabilityFlag);
+    }
+    if (move) {
+        setPosition(position);
+        dropToGround(*getLevel(), 4.0f, force);
+        const Ogre::Vector3& forward = getForward();
+        m_targetPosition.x = position.x + forward.x;
+        m_targetPosition.y = 0.0f;
+        m_targetPosition.z = position.z + forward.z;
+    }
+    if (wasInAvoidanceMap) addToAvoidanceMap(*getLevel());
+    return move;
+}
+
+void CCharacter::fishingSplash()
+{
+    if (!m_pUnitModel->animationPlayingSubstring("FISHING_BITE")) {
+        blendAnimation("FISHING_BITE", false, 0.2f, 0.5f, -1.0f);
+        m_pUnitModel->queueBlendAnimation("FISHING_IDLE", true, 0.2f, 1.0f);
+    }
+}
+
+void CCharacter::setAIPlayAnimation(const std::string& animation, bool loop,
+                                   float blendTime, float speed)
+{
+    m_aiAnimation = -1;
+    if (!m_pUnitModel) return;
+    m_aiAnimation = m_pUnitModel->getAnimationIndex(animation);
+    if (m_aiAnimation == -1) return;
+    setAIState(static_cast<EAIState>(35));
+    if (blendTime != 0.0f && m_pUnitModel->getAnimationLengthSeconds(m_aiAnimation) != 0.0f)
+        m_pUnitModel->blendAnimation(m_aiAnimation, loop, blendTime, 1.0f, -1.0f);
+    else
+        m_pUnitModel->playAnimation(m_aiAnimation, loop, speed, -1.0f);
+    if (!loop && STRINGS::StringUpper(animation) != "IDLE")
+        m_pUnitModel->queueBlendAnimation("IDLE", true, 0.2f, speed);
+}
+
+void CCharacter::removePet(std::wstring name)
+{
+    name = STRINGS::StringUpper(name);
+    for (int i = 0; i < static_cast<int>(m_Followers.size()); ++i) {
+        if (STRINGS::StringUpper(m_Followers[i]->getName()) == name) {
+            CCharacter* pet = m_Followers[i];
+            removePet(pet);
+            pet->die(NULL, NULL, 0.0f, false);
+            --i;
+        }
+    }
+}
+
+void CCharacter::spawningAI(float elapsed, CLevel& level)
+{
+    std::string animation = STRINGS::StringConvertToNarrow(
+        STRINGS::StringUpper(m_pDataGroup->GetDataValue(L"SPAWN_ANIM", L"SPAWN")).c_str());
+    if (!m_pUnitModel->animationPlayingSubstring(animation)) {
+        setRenderBehind(m_pDataGroup->GetDataValue(L"RENDERBEHIND", true));
+        setAIState(static_cast<EAIState>(m_targetCharacter.getObject() ? 4 : 0));
+    }
+}
+
+void CCharacter::setPathToFollowByName(const std::wstring& name)
+{
+    m_pathName = name;
+    if (getSceneOwner() && !m_pathName.empty()) {
+        TArrayList<CEditorBaseObject*>* paths =
+            getSceneOwner()->GetObjectsCreatedByADescriptor(L"Pathing");
+        if (paths) {
+            for (unsigned int i = 0; i < paths->size(); ++i) {
+                CPathController* path = static_cast<CPathController*>((*paths)[i]);
+                if (path->m_pathName == name) {
+                    m_pathToFollow.setObject(static_cast<CPathController*>((*paths)[i]));
+                    return;
+                }
+            }
+        }
+    }
+    m_pathToFollow.setObject(NULL);
+}
+
+bool CCharacter::attemptStopOfActiveSkill()
+{
+    if (!m_activeSkill || !m_pSkillManager)
+    {
+        m_skillLooping = false;
+        return true;
+    }
+    if (m_activeSkill->m_animationIndexLoopInto != static_cast<unsigned int>(-1) && m_activeSkill->getCanStop())
+    {
+        m_skillLooping = false;
+        m_skillTime = 0.0f;
+        m_pSkillManager->stopSkillsByName(m_activeSkill->getName(), true);
+        return true;
+    }
+    if (!m_skillLooping && m_skillInterrupted)
+    {
+        m_skillLooping = false;
+        m_skillTime = 0.0f;
+        m_pSkillManager->stopAllSkills(false, false, false);
+        return true;
+    }
+    return false;
+}
+
+void CCharacter::performingSkillAI(float elapsed)
+{
+    if (!m_activeSkill ||
+        (m_activeSkill->m_animationIndexLoopInto != static_cast<unsigned int>(-1) &&
+         !m_activeSkill->m_interruptible) || (!m_skillLooping && !(m_skillTime > 0.0f)) ||
+        static_cast<float>(HP()) <= 0.0f) {
+        if (attemptStopOfActiveSkill()) {
+            notifyAISkillComplete();
+            setAIState(AISTATE_IDLE);
+            updateAI(elapsed, true);
+        }
+    }
+    if (!m_activeSkill || (m_skillTime > 0.0f && !m_skillInterrupted) ||
+        m_activeSkill->getTargetType() != 2) return;
+    bool stop = !m_targetCharacter.getObject() && !m_targetItem.getObject();
+    if (!stop) stop = !validLineOfSight(*getLevel(), false);
+    if (!stop) {
+        CBaseUnit* target = m_targetCharacter.getObject();
+        if (!target) target = m_targetItem.getObject();
+        // The original reads the character reference here even for an item target.
+        Ogre::Vector3 targetPosition = m_targetCharacter.getObject()->getPosition(true);
+        Ogre::Vector3 position = getPosition(true);
+        stop = !m_activeSkill->getIsInRange(position, targetPosition, this, target);
+    }
+    if (!stop) {
+        stop = m_activeSkill->m_animationIndexLoopInto != static_cast<unsigned int>(-1) &&
+               !m_activeSkill->m_interruptible;
+        if (!stop && m_targetCharacter.getObject())
+            stop = m_activeSkill->m_targetsDead ? m_targetCharacter.getObject()->alive()
+                                                : !m_targetCharacter.getObject()->alive();
+    }
+    if (stop && attemptStopOfActiveSkill()) {
+        notifyAISkillComplete();
+        setAIState(AISTATE_IDLE);
+        updateAI(elapsed, true);
+    }
+}
+
+void CCharacter::createNewCharacter(std::wstring name)
+{
+    if (name.empty()) return;
+    bool visible = m_bVisible;
+    setVisible(false, true);
+    if (m_pInventory) {
+        CEquipment* right = getWeaponInRightHand();
+        if (right) {
+            m_pInventory->removeEquipment(right);
+            delete right;
+        }
+        CEquipment* left = getWeaponInLeftHand();
+        if (left) {
+            m_pInventory->removeEquipment(left);
+            delete left;
+        }
+        m_pInventory->removeListener(this);
+        m_pInventory->freeInventory();
+        if (m_pInventory) {
+            delete m_pInventory;
+            m_pInventory = NULL;
+        }
+    }
+    convertCharacter(name, false);
+    setVisible(visible, true);
 }

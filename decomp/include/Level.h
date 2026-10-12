@@ -89,6 +89,7 @@ public:
     void toggleAutomap();
     void zoomAutomap(float);
     Ogre::Vector3 randomOpenPosition(const Ogre::Vector3& position, float radius, bool flag);
+    bool passableBetween(Ogre::Vector3 start, const Ogre::Vector3& end, bool flag);
     bool rayCollision(const Ogre::Vector3& start, const Ogre::Vector3& end, Ogre::Vector3& hit,
                       Ogre::Vector3& normal, unsigned int& type, Ogre::Vector3& extra, bool flag);
     CCharacter* getCharacterByGuid(long long guid);
