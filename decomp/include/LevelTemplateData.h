@@ -20,6 +20,7 @@ class CLevelTemplateData : public CRunicCore
 public:
     bool permitsPortal() const { return m_permitsPortal; }
     bool isTown() const { return m_isTown; }
+    bool getQuestSelectionExcluded() const { return m_questSelectionExcluded; }
 
     float getSightRangeModifier() const { return m_sightRangeModifier; }
 
@@ -38,7 +39,8 @@ private:
     bool m_permitsPortal; // +0x84
     bool m_permitsPetDeparture; // +0x85, checked by CGameUI::onClick
     bool m_isTown; // +0x86
-    unsigned char m_Padding87[0x11];
+    bool m_questSelectionExcluded; // +0x87, checked by CQuest::reinitializeQuest
+    unsigned char m_Padding88[0x10];
     float m_sightRangeModifier; // +0x98
     unsigned char m_Padding9C[0x1c];
     TArrayList<CLevelLayout*> m_layouts; // +0xb8

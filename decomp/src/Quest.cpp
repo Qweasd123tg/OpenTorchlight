@@ -1,3 +1,8 @@
+#include "Dungeon.h"
+#include "DungeonManager.h"
+#include "GameClient.h"
+#include "LevelTemplateData.h"
+#include "Utilities.h"
 #include <new>
 #include "EmptyStrings.h"
 #include "Quest.h"
@@ -238,4 +243,142 @@ CQuest::~CQuest()
     m_Unknown130.clear();
     m_Unknown148.clear();
     m_pQuestManager = NULL;
+}
+
+void CQuest::reinitializeQuest(bool resolveUnitData, bool preserveDungeon)
+{
+    m_complete = false;
+    m_questAccepted = false;
+    m_bUnknown209 = false;
+    m_iUnknown1E8 = 0;
+    m_bUnknown210 = false;
+    if (!preserveDungeon)
+    {
+        if (m_iUnknown1C != -1)
+            UTILITIES::setSeed(m_iUnknown1C);
+        m_Unknown10 = 0;
+        CGameClient* client = m_pResourceManager->getGameClient();
+        CDungeon* dungeon = CDungeonManager::getSingleton()->getDungeonByName(m_pUnknown30);
+        if (dungeon)
+        {
+            for (unsigned int attempt = 0; attempt < 10 && m_Unknown10 == 0; ++attempt)
+            {
+                if (m_pQuestManager->m_pPlayer)
+                    m_iUnknown20 = m_pQuestManager->m_pPlayer->getMaxDepth(m_pUnknown30) + attempt + 1;
+                else
+                    m_iUnknown20 = attempt + 1;
+                if (!dungeon->m_bBottomless && m_bUnknown20B &&
+                    static_cast<int>(dungeon->m_levelTemplateData.size()) <= m_iUnknown20)
+                {
+                    m_bUnknown210 = true;
+                    break;
+                }
+                if (m_iUnknown20 < 0)
+                    m_iUnknown20 = 0;
+                client->resetGameSeed(m_iUnknown20);
+                CLevelTemplateData* data = dungeon->getLevelTemplateDataForDepth(
+                    m_pResourceManager->getGameClient(), m_iUnknown20);
+                m_Unknown10 = reinterpret_cast<long long>(data);
+                if (data->getQuestSelectionExcluded())
+                    m_Unknown10 = 0;
+            }
+        }
+    }
+
+    unsigned int firstCount = m_Unknown178.size();
+    unsigned int secondCount = UTILITIES::randomIntegerBetween(m_iUnknown1A8, m_Unknown190.size());
+    if (m_gap27)
+        firstCount = m_Unknown178.size();
+    m_Unknown130.clear();
+    m_Unknown148.clear();
+    for (unsigned int i = 0; i < m_Unknown160.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown160[i]->size(); ++j)
+            (*m_Unknown160[i])[j]->reinitialize(resolveUnitData);
+    for (unsigned int i = 0; i < firstCount; ++i)
+    {
+        m_Unknown130.add(m_Unknown178[i]);
+        for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+            (*m_Unknown130[i])[j]->reinitialize(resolveUnitData);
+    }
+    for (unsigned int i = 0; i < secondCount; ++i)
+    {
+        m_Unknown148.add(m_Unknown190[i]);
+        for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+            (*m_Unknown148[i])[j]->reinitialize(resolveUnitData);
+    }
+    for (unsigned int i = 0; i < 2; ++i)
+        for (unsigned int j = 0; j < m_UnknownF8[i].size(); ++j)
+            m_UnknownF8[i][j] = false;
+    for (unsigned int i = 0; i < m_acceptDialogs.size(); ++i)
+        m_acceptDialogs[i]->reinitialize();
+    for (unsigned int i = 0; i < m_Unknown78.size(); ++i)
+        m_Unknown78[i]->reinitialize();
+    for (unsigned int i = 0; i < m_Unknown90.size(); ++i)
+        m_Unknown90[i]->reinitialize();
+    for (unsigned int i = 0; i < m_UnknownA8.size(); ++i)
+        m_UnknownA8[i]->reinitialize();
+}
+
+void CQuest::load(_IO_FILE* file, CResourceManager*, unsigned int version)
+{
+    long long guid = -1;
+    fread(&guid, 8, 1, file);
+    if (guid != -1)
+        m_iUnknown1E8 = reinterpret_cast<long long>(m_pResourceManager->getUnitDataByGuid(guid));
+    fread(&m_iUnknown1C, 4, 1, file);
+    fread(&m_iUnknown20, 4, 1, file);
+    if (version > 19)
+        fread(&m_iUnknown20C, 4, 1, file);
+    m_pResourceManager->getGameClient()->resetGameSeed(m_iUnknown20);
+    CDungeon* dungeon = CDungeonManager::getSingleton()->getDungeonByName(m_pUnknown30);
+    if (dungeon)
+        m_Unknown10 = reinterpret_cast<long long>(dungeon->getLevelTemplateDataForDepth(
+            m_pResourceManager->getGameClient(), m_iUnknown20));
+    long long unitData = m_iUnknown1E8;
+    reinitializeQuest(true, true);
+    m_iUnknown1E8 = unitData;
+
+    unsigned int count;
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i)
+        if (i < m_acceptDialogs.size())
+            m_acceptDialogs[i]->load(file);
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i)
+        if (i < m_Unknown78.size())
+            m_Unknown78[i]->load(file);
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i)
+        if (i < m_Unknown90.size())
+            m_Unknown90[i]->load(file);
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i)
+        if (i < m_UnknownA8.size())
+            m_UnknownA8[i]->load(file);
+    unsigned int innerCount;
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        fread(&innerCount, 4, 1, file);
+        for (unsigned int j = 0; j < innerCount; ++j)
+            if (m_Unknown130.size() >= count && m_Unknown130[i]->size() >= innerCount)
+                (*m_Unknown130[i])[j]->load(file, version);
+    }
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        fread(&innerCount, 4, 1, file);
+        for (unsigned int j = 0; j < innerCount; ++j)
+            if (m_Unknown148.size() >= count && m_Unknown148[i]->size() >= innerCount)
+                (*m_Unknown148[i])[j]->load(file, version);
+    }
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        fread(&innerCount, 4, 1, file);
+        for (unsigned int j = 0; j < innerCount; ++j)
+            if (m_Unknown160.size() >= count && m_Unknown160[i]->size() >= innerCount)
+                (*m_Unknown160[i])[j]->load(file, version);
+    }
+    m_questAccepted = true;
 }
