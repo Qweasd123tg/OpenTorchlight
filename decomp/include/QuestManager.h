@@ -29,10 +29,10 @@ public:
     bool getPlayerHasQuest(CQuest*);
     void destroyIcons();
     void resetQuestManager(bool);
-    CQuestManager* getDetailsForQuest(CQuest*);
+    std::wstring getDetailsForQuest(CQuest*);
     void giveRewardForQuest(CQuest*);
     void populate(CLevel*);
-    long long getQuestIsActive(const std::wstring&);
+    bool getQuestIsActive(const std::wstring&);
     char getQuestComplete(const std::wstring&);
     long long getQuestByName(const std::wstring&);
     void getQuestNames(TArrayList<std::wstring >&);
