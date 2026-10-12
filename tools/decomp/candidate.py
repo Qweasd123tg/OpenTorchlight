@@ -176,13 +176,516 @@ def preserve_existing(before, after, prior, definitions, db, *, before_object=No
     return True
 
 
+class Cycle:
+    """Continue one prepared attempt using the existing build and publication APIs.
+
+    The journal is operational evidence, never authority to restore Stage.validated.
+    No model calls, commands, scheduler changes, automatic retries or rebases.
+    """
+    SCHEMA = 1
+
+    def __init__(self, stage, spec):
+        import time
+        if not isinstance(spec, dict):
+            raise ValueError('cycle specification must be an object')
+        self.stage, self.spec = stage, json.loads(json.dumps(spec))
+        self.work = stage.path / 'build-decomp/candidate-cycle'
+        self.work.mkdir(parents=True, exist_ok=True)
+        self.path = self.work / 'checkpoint.json'
+        self.live_gate = False
+        self._validate_spec()
+        loaded = self.path.exists()
+        self.state = json.loads(self.path.read_text()) if loaded else {
+            'schema': self.SCHEMA, 'status': 'READY', 'phases': {}, 'published': False}
+        if (not isinstance(self.state, dict) or self.state.get('schema') != self.SCHEMA
+                or not isinstance(self.state.get('phases'), dict)):
+            raise RuntimeError('invalid cycle checkpoint')
+        if loaded:
+            checksum = self.state.get('checkpoint_sha256')
+            if checksum != self._digest({k: v for k, v in self.state.items() if k != 'checkpoint_sha256'}):
+                raise RuntimeError('corrupt cycle checkpoint checksum')
+            if self.state.get('identity', {}).get('spec') != self.spec:
+                raise RuntimeError('cycle specification changed; refusing recovery or resume')
+        self._recover_mutant()
+        import autotest
+        autotest.write_runtime(stage.path / "build-decomp/hybrid/autotests")
+        identity = self._identity()
+        if 'identity' in self.state and self.state['identity'] != identity:
+            raise RuntimeError('cycle inputs changed; prepare a new attempt')
+        self.state['identity'] = identity
+        self.state['identity_sha256'] = self._digest(identity)
+        self.state['execution'] = {key: os.environ.get(key) for key in (
+            'OTL_JOBS', 'OTL_COMPARE_JOBS', 'OTL_BUILD_JOBS', 'OTL_SELFTEST_JOBS',
+            'OTL_SELFTEST_SHARDS', 'OTL_SELFTEST_TIMEOUT', 'OTL_COMPILER_SLOTS', 'OTL_SELFTEST_SLOTS')}
+        self.state['stage_copy'] = {'reused_existing_stage': True, 'files_copied': 0, 'bytes_copied': 0}
+        self._check_phases()
+        for row in self.state['phases'].values():
+            for name, digest in row.get('artifacts', {}).items():
+                path = self._local(name, self.work)
+                if not path.is_file() or toolchain.sha256(path) != digest:
+                    raise RuntimeError('missing or corrupt cycle artifact: ' + name)
+        # A saved success cannot re-create the in-memory publication capability.
+        if 'gate' in self.state['phases'] and not self.state.get('published'):
+            self.state['status'] = 'REVALIDATION_REQUIRED'
+        self._save()
+
+    @staticmethod
+    def _digest(value):
+        return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+
+    @staticmethod
+    def _local(name, base):
+        path = Path(name)
+        if not isinstance(name, str) or path.is_absolute() or '..' in path.parts or path.as_posix() != name:
+            raise ValueError('invalid relative cycle path')
+        result = base / path
+        if not result.resolve().is_relative_to(base.resolve()):
+            raise ValueError('cycle path escapes attempt')
+        return result
+
+    def _validate_spec(self):
+        s = self.spec
+        if set(s) != {'schema', 'tu', 'addresses', 'focused', 'regression', 'controls'} or s['schema'] != 1:
+            raise ValueError('unsupported cycle specification')
+        if not isinstance(s['tu'], str) or not re.fullmatch(r'[A-Za-z0-9_.-]+\.cpp', s['tu']):
+            raise ValueError('invalid TU')
+        if (not isinstance(s['addresses'], list) or not s['addresses']
+                or not all(isinstance(a, str) for a in s['addresses'])
+                or len(set(s['addresses'])) != len(s['addresses']) or
+                any(not re.fullmatch(r'0x[0-9a-f]+', a) for a in s['addresses'])):
+            raise ValueError('explicit unique target addresses required')
+        tests = self.stage.path / 'decomp/hybrid/tests'
+        for group in ('focused', 'regression'):
+            if (not isinstance(s[group], list) or not s[group]
+                    or not all(isinstance(n, str) for n in s[group])
+                    or len(set(s[group])) != len(s[group])):
+                raise ValueError('nonempty unique ' + group + ' fixtures required')
+            for name in s[group]:
+                if (not re.fullmatch(r'[A-Za-z0-9_.-]+\.cpp', name)
+                        or Path(name).stem == 'AutoTestRuntime' or not self._local(name, tests).is_file()):
+                    raise ValueError('missing fixture: ' + name)
+        names = set()
+        if not isinstance(s['controls'], list) or not s['controls']:
+            raise ValueError('negative controls required')
+        for c in s['controls']:
+            if (not isinstance(c, dict) or set(c) != {'name', 'old', 'new', 'count', 'test', 'address'}
+                    or not all(isinstance(c[k], str) for k in ('name', 'old', 'new', 'test', 'address')) or
+                    not re.fullmatch(r'[a-z0-9][a-z0-9-]*', c['name']) or c['name'] in names or
+                    not isinstance(c['old'], str) or not c['old'] or c['old'] == c['new'] or
+                    not isinstance(c['new'], str) or type(c['count']) is not int or c['count'] < 1 or
+                    not re.fullmatch(r'\w+', c['test']) or c['address'] not in s['addresses']):
+                raise ValueError('invalid negative control')
+            names.add(c['name'])
+
+    def _identity(self):
+        import llm_loop
+        stage = self.stage
+        tree = publication.tree_state(stage.path)
+        if publication.tree_state(stage.root) != stage.baseline:
+            raise RuntimeError('live baseline changed; prepare a new attempt')
+        if {n: h for n, h in tree.items() if n.startswith('tools/')} != {
+                n: h for n, h in stage.baseline.items() if n.startswith('tools/')}:
+            raise RuntimeError('staged tools differ from baseline')
+        # activate redirects paths, not imported Python. Reject old attempts under new tools.
+        runtime = Path(__file__).resolve().parent
+        for name, digest in tree.items():
+            if name.startswith('tools/decomp/') and toolchain.sha256(runtime / Path(name).relative_to('tools/decomp')) != digest:
+                raise RuntimeError('loaded tools differ from attempt')
+        packet = stage.path / 'build-decomp/llm-loop' / self.spec['tu']
+        prepared = json.loads((packet / 'result.json').read_text())
+        checkpoint = json.loads((packet / 'checkpoint.json').read_text())
+        selected = {f['address'] for f in checkpoint['settings']['selected']}
+        if not prepared.get('prepared') or prepared.get('blocked') or not set(self.spec['addresses']) <= selected:
+            raise RuntimeError('matching unblocked --prepare-only packet required')
+        packet_hashes = {n: toolchain.sha256(packet / n) for n in ('result.json', 'checkpoint.json')}
+        for address in self.spec['addresses']:
+            prompt = packet / 'prompts' / (address + '.md')
+            if not prompt.is_file() or not prompt.stat().st_size:
+                raise RuntimeError('missing prepared prompt: ' + address)
+            packet_hashes['prompts/' + prompt.name] = toolchain.sha256(prompt)
+        with stage.activate():
+            context = llm_loop.packet_inputs(stage.path)
+        if checkpoint.get('inputs') != context:
+            raise RuntimeError('prepared context changed; prepare a new attempt')
+        # The worker supplies this TU and fixtures; changed headers/tools need fresh packets.
+        stable = lambda t: {n: h for n, h in t.items()
+                            if n != 'decomp/src/' + self.spec['tu']
+                            and not n.startswith('decomp/hybrid/tests/')}
+        if stable(checkpoint.get('tree', {})) != stable(tree):
+            raise RuntimeError('prepared source/header/tool context changed')
+        return {'spec': self.spec, 'tree': tree, 'baseline': stage.baseline,
+                'inputs': stage._input_digest(), 'packet': packet_hashes, 'context': context,
+                'generated': stage._generated_tests_state()}
+
+    def _check_phases(self):
+        order = ['compare', 'focused'] + ['control-' + c['name'] for c in self.spec['controls']] + ['regression', 'gate']
+        phases = self.state['phases']
+        if set(phases) != set(order[:len(phases)]):
+            raise RuntimeError('invalid or out-of-order cycle phases')
+        for index, name in enumerate(order[:len(phases)]):
+            row = phases[name]
+            if (not isinstance(row, dict) or row.get('status') not in ('RUNNING', 'PASS', 'FAIL')
+                    or not isinstance(row.get('artifacts', {}), dict)):
+                raise RuntimeError('invalid phase state: ' + name)
+            if row['status'] != 'PASS' and index != len(phases) - 1:
+                raise RuntimeError('cycle continued after incomplete phase: ' + name)
+            required = {name + '.json'} if name in ('compare', 'gate') else {name + '.json', name + '.log'}
+            if row['status'] == 'PASS' and not required <= set(row.get('artifacts', {})):
+                raise RuntimeError('missing successful phase receipts: ' + name)
+
+    def _save(self):
+        self.state['checkpoint_sha256'] = self._digest({k: v for k, v in self.state.items() if k != 'checkpoint_sha256'})
+        publication._replace_file(self.work, self.path.name,
+                                  json.dumps(self.state, indent=2, sort_keys=True).encode())
+
+    def _artifact(self, name, data):
+        data = data if isinstance(data, bytes) else json.dumps(data, sort_keys=True, indent=2).encode()
+        publication._replace_file(self.work, name, data)
+        return {name: hashlib.sha256(data).hexdigest()}
+
+    def _recover_mutant(self):
+        mutation = self.state.get('mutation')
+        if not mutation:
+            return
+        name = 'decomp/src/' + self.spec['tu']
+        if (mutation.get('identity_sha256') != self.state.get('identity_sha256')
+                or mutation.get('source') != name
+                or mutation.get('golden') != self.state.get('identity', {}).get('tree', {}).get(name)
+                or mutation.get('backup') != 'golden-source.bin'):
+            raise RuntimeError('mutant journal does not match saved source identity')
+        source = self._local(name, self.stage.path)
+        backup = self._local(mutation['backup'], self.work)
+        if toolchain.sha256(backup) != mutation['golden']:
+            raise RuntimeError('corrupt mutant recovery backup; manual repair required')
+        if toolchain.sha256(source) not in (mutation['golden'], mutation['mutant']):
+            raise RuntimeError('source changed during mutant recovery; manual repair required')
+        publication._replace_file(source.parent, source.name, backup.read_bytes())
+        self.state.pop('mutation')
+        self._save()
+
+    def _step(self, name, action):
+        import time
+        old = self.state['phases'].get(name)
+        if old and old.get('status') == 'PASS':
+            return
+        if old:
+            raise RuntimeError('interrupted or failed phase requires diagnosis: ' + name)
+        row = self.state['phases'][name] = {'status': 'RUNNING'}
+        self.state['status'] = 'RUNNING'
+        self.state['phase'] = name
+        self._save()
+        start = time.monotonic()
+        compiler, cache = toolchain.compiler_stats(), toolchain.shared_cache_stats()
+        try:
+            row.update(action() or {})
+            row['status'] = 'PASS'
+        except BaseException as error:
+            row.update(status='FAIL', error=str(error), error_type=type(error).__name__)
+            try:
+                row.setdefault('artifacts', {}).update(self._artifact(name + '-error.log', str(error).encode()))
+            except OSError:
+                pass
+            self.state['status'] = 'STOPPED'
+            raise
+        finally:
+            row['seconds'] = time.monotonic() - start
+            # Diagnostic counters cannot invalidate successful canonical validation.
+            try:
+                row['compiler'] = {k: v - compiler.get(k, 0) for k, v in toolchain.compiler_stats().items()}
+                row['cache'] = {k: v - cache.get(k, 0) for k, v in toolchain.shared_cache_stats().items()}
+                label = 'final' if name == 'gate' else 'cycle-' + name
+                for filename in ('build-timings.json', 'selftest-timing.json'):
+                    timing = self.stage.path / 'build-decomp/hybrid' / label / filename
+                    if timing.is_file():
+                        row.setdefault('artifacts', {}).update(self._artifact(name + '-' + filename, timing.read_bytes()))
+            except Exception as error:
+                row['telemetry_error'] = str(error)
+            self._save()
+
+    def _compare(self):
+        import difflib
+        stage = self.stage
+        name = 'decomp/src/' + self.spec['tu']
+        before = (stage.root / name).read_text().splitlines(True) if (stage.root / name).exists() else []
+        after = (stage.path / name).read_text().splitlines(True)
+        artifacts = self._artifact('candidate.diff', ''.join(difflib.unified_diff(
+            before, after, fromfile='a/' + name, tofile='b/' + name)).encode())
+        self.state['phases']['compare']['artifacts'] = artifacts
+        with stage.activate():
+            os.environ.pop('OTL_EXTRA_INCLUDE', None)
+            original = objdiff.Original()
+            row = objdiff.compare_source(stage.path / 'decomp/src' / self.spec['tu'], original, quiet=True)
+        addresses = {f.get('address') for f in row['functions'] if f['status'] not in ('MISSING', 'EXTRA')}
+        artifacts.update(self._artifact('compare.json', row))
+        self.state['phases']['compare']['artifacts'] = artifacts
+        if row.get('unknown') or not set(self.spec['addresses']) <= addresses:
+            raise RuntimeError('candidate has unknown signatures or missing targets')
+        return {'artifacts': artifacts}
+
+    def _tests(self, label, fixtures, control=None):
+        import autotest
+        import hybrid
+        stage = self.stage
+        with stage.activate():
+            os.environ.pop('OTL_EXTRA_INCLUDE', None)
+            tests = [stage.path / 'decomp/hybrid/tests' / n for n in fixtures]
+            names = [n for p in tests for n in re.findall(r'TL_TEST\s*\(\s*(\w+)\s*\)', p.read_text())]
+            if not names or len(set(names)) != len(names):
+                raise RuntimeError('empty or duplicated test inventory')
+            tests.append(autotest.write_runtime(stage.path / 'build-decomp/hybrid/autotests'))
+            blob, loader = hybrid.build(out=stage.path / 'build-decomp/hybrid' / ('cycle-' + label),
+                                        src=stage.path / 'decomp/src', tests=tests, verbose=False)
+            code, report = hybrid.selftest(blob, loader)
+        artifacts = self._artifact(label + '.log', ('\n'.join(report) + '\n').encode())
+        finished = re.findall(r'^tlhybrid: (\w+)\s+(PASS|FAIL) \((-?\d+)\)$', '\n'.join(report), re.M)
+        complete = sorted(n for n, _, _ in finished) == sorted(names)
+        coverage = [m.groups() for line in report if (m := re.fullmatch(
+            r'\s+coverage (\w+) (0x[0-9a-f]+) completed (\d+) different (\d+) incomplete (\d+)', line))]
+        unique_coverage = len({(n, a) for n, a, _, _, _ in coverage}) == len(coverage)
+        known_coverage = all(n in names for n, _, _, _, _ in coverage)
+        if control:
+            killed = (control['test'] in names and code == 1 and complete and unique_coverage and known_coverage and all(status == ('FAIL' if n == control['test'] else 'PASS')
+                      for n, status, _ in finished) and any(n == control['test'] and a == control['address']
+                      and int(c) > 0 and int(d) > 0 and int(i) == 0 for n, a, c, d, i in coverage)
+                      and all(int(i) == 0 for _, _, _, _, i in coverage))
+            good = killed
+        else:
+            covered = {a for _, a, c, d, i in coverage if int(c) > 0 and int(d) == 0 and int(i) == 0}
+            good = (code == 0 and complete and unique_coverage and known_coverage
+                    and all(s == 'PASS' and c == '0' for _, s, c in finished)
+                    and all(int(c) > 0 and int(d) == 0 and int(i) == 0 for _, _, c, d, i in coverage))
+            if label == 'focused':
+                good = good and set(self.spec['addresses']) <= covered
+        row = {'code': code, 'complete': complete, 'coverage': coverage,
+               'blob_sha256': toolchain.sha256(blob), 'loader_sha256': toolchain.sha256(loader)}
+        artifacts.update(self._artifact(label + '.json', row))
+        # Persist failure logs before returning the concrete failure.
+        self.state['phases'][self.state['phase']]['artifacts'] = artifacts
+        if not good:
+            raise RuntimeError(label + ': failed/incomplete comparative outcome; see ' + label + '.log')
+        return {'artifacts': artifacts, 'code': code, 'complete': complete}
+
+    def _control(self, control):
+        source = self.stage.path / 'decomp/src' / self.spec['tu']
+        golden = source.read_bytes()
+        text = golden.decode('utf-8')
+        if text.count(control['old']) != control['count']:
+            raise RuntimeError('negative control replacement count mismatch: ' + control['name'])
+        mutant = text.replace(control['old'], control['new']).encode()
+        backup = 'golden-source.bin'
+        self._artifact(backup, golden)
+        self.state['mutation'] = {'backup': backup, 'source': 'decomp/src/' + self.spec['tu'],
+                                  'identity_sha256': self.state['identity_sha256'],
+                                  'golden': hashlib.sha256(golden).hexdigest(),
+                                  'mutant': hashlib.sha256(mutant).hexdigest()}
+        self._save()
+        try:
+            publication._replace_file(source.parent, source.name, mutant)
+            return self._tests('control-' + control['name'], self.spec['focused'], control)
+        finally:
+            if toolchain.sha256(source) not in (hashlib.sha256(golden).hexdigest(), hashlib.sha256(mutant).hexdigest()):
+                raise RuntimeError('source changed during control; journal retained for manual recovery')
+            publication._replace_file(source.parent, source.name, golden)
+            if toolchain.sha256(source) != hashlib.sha256(golden).hexdigest():
+                raise RuntimeError('mutant cleanup failed')
+            self.state.pop('mutation', None)
+            self._save()
+
+    def _gate(self):
+        self.stage.validate()  # The single unchanged canonical gate.
+        self.live_gate = True  # Set before optional report/accounting work.
+        return self._gate_receipt()
+
+    def _gate_receipt(self):
+        return {'artifacts': self._artifact('gate.json', {
+            'inputs': self.stage.validated_inputs, 'tree': self.stage.validated,
+            'objects': self.stage.final_objects, 'fixtures': self.stage.validated_fixtures,
+            'report': self.stage.report, 'covered': sorted(self.stage.covered),
+            'units': self.stage.final_units, 'baseline_units': self.stage.baseline_units})}
+
+    def run(self, allow_gate=False):
+        if self.state['status'] in ('STOPPED', 'REVALIDATION_REQUIRED', 'PUBLISHED', 'CANCELLED',
+                                    'PUBLICATION_FAILED', 'PUBLISHED_RECEIPT_ERROR'):
+            return self.state
+        try:
+            self._step('compare', self._compare)
+            self._step('focused', lambda: self._tests('focused', self.spec['focused']))
+            for control in self.spec['controls']:
+                self._step('control-' + control['name'], lambda c=control: self._control(c))
+            self._step('regression', lambda: self._tests('regression', self.spec['regression']))
+            self.state['phase'] = 'input-verification'
+            if self._identity() != self.state['identity']:
+                raise RuntimeError('cycle inputs changed during checks')
+            if allow_gate:
+                self._step('gate', self._gate)
+                self.state['status'] = 'AWAITING_RELEASE'
+            else:
+                self.state['status'] = 'READY_FOR_GATE'
+            self._save()
+        except BaseException as error:
+            self.state.update(status='RECEIPT_ERROR' if self.live_gate else 'STOPPED', error=str(error))
+            try:
+                self._save()
+            except OSError:
+                pass
+            if isinstance(error, KeyboardInterrupt):
+                raise
+        return self.state
+
+    def persist_gate_receipt(self):
+        # Safe persistence retry retains the same completed validation; no build rerun.
+        if not self.live_gate or self.state['status'] != 'RECEIPT_ERROR':
+            raise RuntimeError('no live validated receipt to persist')
+        row = self.state['phases']['gate']
+        row.update(self._gate_receipt())
+        row['status'] = 'PASS'
+        row.pop('error', None)
+        row.pop('error_type', None)
+        self.state.pop('error', None)
+        self.state['status'] = 'AWAITING_RELEASE'
+        self._save()
+
+    def release(self, request):
+        """Called only with an explicit existing release; never reconstruct validation."""
+        if (not self.state.get('published') and self.state['status'] in ('AWAITING_RELEASE', 'RECEIPT_ERROR', 'PUBLICATION_FAILED')
+                and request == {'action': 'cancel', 'identity_sha256': self.state['identity_sha256']}):
+            self.state['status'] = 'CANCELLED'
+            self._save()
+            return self.state
+        expected = {'action': 'publish', 'identity_sha256': self.state['identity_sha256'],
+                    'inputs_digest': self.stage.validated_inputs if self.live_gate else None}
+        if request != expected or not self.live_gate or self.state['status'] != 'AWAITING_RELEASE':
+            raise RuntimeError('exact release and live canonical validation required')
+        try:
+            changed = self.stage.publish()  # Same live Stage. No validate(), rebase(), or retry.
+        except (Exception, SystemExit) as error:
+            # publish() can fail during cleanup after its committed marker. Do not
+            # infer rollback or repeat a possibly completed publication.
+            self.state.update(status='PUBLICATION_FAILED', published=None,
+                              publication_outcome='unknown; verify existing publication journal and live tree',
+                              error=str(error))
+            try:
+                self._save()
+            except OSError:
+                pass
+            raise RuntimeError('publication stopped; live Stage retained: ' + str(error)) from error
+        self.state.update(status='PUBLISHED', published=True, files=changed)
+        try:
+            self._save()
+        except OSError as error:
+            self.state.update(status='PUBLISHED_RECEIPT_ERROR', error=str(error))
+            raise
+        return self.state
+
+    def summary(self):
+        summary = {k: self.state[k] for k in ('status', 'phase', 'identity_sha256', 'published', 'publication_outcome', 'error')
+                   if k in self.state}
+        packet = self.stage.path / 'build-decomp/llm-loop' / self.spec['tu']
+        summary.update(checkpoint=str(self.path), prepared_packet=str(packet / 'result.json'),
+                       prompts=str(packet / 'prompts'), source=str(self.stage.path / 'decomp/src' / self.spec['tu']))
+        summary['phases'] = {name: {'status': row['status'], 'seconds': row.get('seconds')}
+                             for name, row in self.state['phases'].items()}
+        row = self.state['phases'].get(self.state.get('phase'), {})
+        summary['evidence'] = [str(self.work / n) for n in sorted(row.get('artifacts', {}))]
+        summary['failure_package'] = {'minimized_seed': None, 'automatic_minimization': False,
+                                      'input_identity_sha256': self.state['identity_sha256'],
+                                      'candidate_diff': str(self.work / 'candidate.diff')
+                                      if (self.work / 'candidate.diff').is_file() else None}
+        if 'error' in summary:
+            summary['error'] = summary['error'][:2000]
+        return summary
+
+
+def continue_cycle(tu, attempt, spec_path, gate=False, release_request=None):
+    """CLI adapter; retain validated Stage while polling an explicit release file."""
+    import fcntl
+    import time
+    import parallel
+    if not re.fullmatch(r'[A-Za-z0-9_.-]+\.cpp', tu):
+        raise ValueError('invalid TU')
+    if owner := parallel.owned_by_others(tu):
+        raise RuntimeError(tu + ' belongs to ' + owner + '; set OTL_OWNER')
+    if gate and release_request is None:
+        raise ValueError('--gate requires --release-request to retain live validated Stage')
+    spec = json.loads(spec_path.read_text())
+    if not isinstance(spec, dict) or spec.get('tu') != tu:
+        raise ValueError('cycle spec TU mismatch')
+    stage = publication.Stage.resume(attempt, root=elfdb.ROOT)
+    locks = stage.root / 'build-decomp/llm-loop-locks'
+    locks.mkdir(parents=True, exist_ok=True)
+    with (locks / (tu + '.lock')).open('a+') as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        cycle = Cycle(stage, spec)
+        cycle.run(allow_gate=gate)
+        try:
+            print(json.dumps(cycle.summary()), flush=True)
+        except BrokenPipeError:
+            pass
+        seen_request, last_error = None, None
+        retry_at, retry_delay = 0.0, 1.0
+        def notice(error):
+            nonlocal last_error
+            message = str(error)
+            if message != last_error:
+                last_error = message
+                try:
+                    print(json.dumps({'status': cycle.state['status'], 'release_error': message}), flush=True)
+                except BrokenPipeError:
+                    pass
+        while cycle.live_gate and cycle.state['status'] in ('AWAITING_RELEASE', 'RECEIPT_ERROR', 'PUBLICATION_FAILED'):
+            try:
+                # Cancellation has priority even if disk exhaustion blocks optional receipts.
+                try:
+                    raw = release_request.read_bytes() if release_request.exists() else None
+                    request = json.loads(raw) if raw is not None else None
+                except (OSError, ValueError) as error:
+                    notice(error)
+                    raw, request = None, None
+                if request == {'action': 'cancel', 'identity_sha256': cycle.state['identity_sha256']}:
+                    cycle.release(request)
+                    break
+                if cycle.state['status'] == 'RECEIPT_ERROR' and time.monotonic() >= retry_at:
+                    retry_at = time.monotonic() + retry_delay
+                    retry_delay = min(60.0, retry_delay * 2)
+                    cycle.persist_gate_receipt()
+                    try:
+                        print(json.dumps(cycle.summary()), flush=True)
+                    except BrokenPipeError:
+                        pass
+                if raw is not None and raw != seen_request and cycle.state['status'] == 'AWAITING_RELEASE':
+                    seen_request = raw
+                    cycle.release(request)
+                    break
+            except (OSError, ValueError, RuntimeError) as error:
+                # Neither persistence nor a malformed release destroys live validation.
+                notice(error)
+            time.sleep(1)
+        return cycle.summary()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("tu")
     parser.add_argument("--input", type=Path)
     parser.add_argument("--provider", choices=("trial",), help="use the converted TU from draft_trial.py")
     parser.add_argument("--publish", action="store_true")
+    parser.add_argument("--cycle-spec", type=Path, help="continue an existing prepared Stage without model calls")
+    parser.add_argument("--attempt", type=Path)
+    parser.add_argument("--gate", action="store_true", help="run the canonical gate once, after scheduler admission")
+    parser.add_argument("--release-request", type=Path, help="wait for an exact publish/cancel request, retaining live Stage")
     args = parser.parse_args()
+    if args.cycle_spec:
+        if not args.attempt or args.input or args.provider or args.publish:
+            parser.error("--cycle-spec requires --attempt; do not combine with provider or --publish")
+        try:
+            result = continue_cycle(args.tu, args.attempt, args.cycle_spec, args.gate, args.release_request)
+        except (ValueError, RuntimeError, OSError, SystemExit) as error:
+            result = {'status': 'STOPPED', 'phase': 'admission', 'error': str(error),
+                      'attempt': str(args.attempt), 'published': False}
+        print(json.dumps(result, sort_keys=True))
+        return 0 if result["status"] in ("READY_FOR_GATE", "PUBLISHED") else 1
+    if args.attempt or args.gate or args.release_request:
+        parser.error("cycle options require --cycle-spec")
     if bool(args.input) == bool(args.provider):
         parser.error("choose exactly one deterministic provider: --input or --provider trial")
     import parallel
