@@ -1,0 +1,186 @@
+[
+  {
+    "address": "0xd2dca0",
+    "before": {
+      "address": "0xd2dca0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd2dca0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::getQuestComplete(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "status": "MATCH",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xd2e930",
+    "before": {
+      "address": "0xd2e930",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::~CQuestManager()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd2e930",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::~CQuestManager()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd2ebf0",
+    "before": {
+      "address": "0xd2ebf0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::~CQuestManager()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd2ebf0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::~CQuestManager()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd2ec10",
+    "before": {
+      "address": "0xd2ec10",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::save(_IO_FILE*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    },
+    "after": {
+      "address": "0xd2ec10",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::save(_IO_FILE*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xd2f8a0",
+    "before": {
+      "address": "0xd2f8a0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::load(_IO_FILE*, unsigned int, CResourceManager*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    },
+    "after": {
+      "address": "0xd2f8a0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::load(_IO_FILE*, unsigned int, CResourceManager*)",
+      "status": "DIFF",
+      "accepted_current": "True",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    }
+  },
+  {
+    "address": "0xd31410",
+    "before": {
+      "address": "0xd31410",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::loadQuests()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd31410",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::loadQuests()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd321f0",
+    "before": {
+      "address": "0xd321f0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::reloadQuests()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd321f0",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::reloadQuests()",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  },
+  {
+    "address": "0xd32300",
+    "before": {
+      "address": "0xd32300",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::CQuestManager(CResourceManager*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "False"
+    },
+    "after": {
+      "address": "0xd32300",
+      "tu": "QuestManager.cpp",
+      "name": "CQuestManager::CQuestManager(CResourceManager*)",
+      "status": "MISSING",
+      "accepted_current": "False",
+      "pro_source": "False",
+      "pro_snippet": "",
+      "pending": "True"
+    }
+  }
+]

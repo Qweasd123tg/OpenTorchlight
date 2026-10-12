@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "main_commit": "cabb9a8d8d66f8149637a09d9e553c25c6d53dbc",
+  "main_tree": "272e8d6ce354c5b64b7a3e9d5b2ed18c80d04528",
+  "prior_handoff": "1688126d60b5c7478b1cdc4dbc64fe78d5e1b43e",
+  "prior_handoff_tree": "ae0b5ca782cb22b9c42749ff6f1cb64703f30e03",
+  "accepted": 2739,
+  "matched": 2179,
+  "behavioral": 560,
+  "tests": 713,
+  "accepted_delta": 2,
+  "prior_rows_preserved": 7668,
+  "historical_pro_definitions": 401,
+  "all_prior_paths_preserved": true,
+  "historical_finding_fields_preserved": true,
+  "changed_index_rows": 8,
+  "source_files_verified": 1139,
+  "full_suite_origin": "stage",
+  "tests_executed_by_refresh": false,
+  "remote_mutation_performed": false,
+  "private_proof_sha256": "c992c0d784205009a4886ae54e77a8dfc42063a44cb15619e0a0d8797d027f0e",
+  "durable_archive_receipts_verified": true,
+  "proof_sha256": {
+    "FROZEN-HANDOFF.json": "88892e3a54417d47fcb5d29418376c9dbe3298f615732eaa36eccbe25aa75987",
+    "acceptance.json": "ba8cf87943c116101f6ac946b6a4c2e0e7bb1880b7c3b17e6a32050a709da02b",
+    "publication.json": "c6aa43ef4186218237db102871cbcc61d1e5e7d5c1b41f604a0273c43f755793",
+    "preservation.json": "9c519988fd446c80720542a316b6c0c4865c84e42e59f238fea44cc24522d554",
+    "final-stage-identity.json": "122931a3866b2e7c9e4fa01d3638d00ea43bb8ff713a37747ac9054d4a70060d",
+    "final-stage-units.json": "8c66f76fce38add4ba9d8a79cbedd29d52c584dc0c48c8b02ca09319a7b8e97a",
+    "INDEPENDENT-REVIEW.json": "371b22c353331134b628e66643b991020d2814e7a60a5abef43be8a868d887ed",
+    "private-proof-local.json": "84844b67cb1a78287e33828245457a094fd8f755eff2875e02cc17b33ed3bd59"
+  },
+  "inputs_digest": "d1482801c7ea8b329b31c31418d63bb4b01bfcb9ee6d99a7dc1e1edfd3dab4bc",
+  "active_scope_not_accepted": [
+    "0xd2e930",
+    "0xd2ebf0",
+    "0xd31410",
+    "0xd321f0",
+    "0xd32300"
+  ],
+  "runtime_scope": "Actual original Quest serialization tested; full GameClient/world execution untested.",
+  "status_policy": "Refresh represented primary function statuses from actual final units; retain historical status where no authoritative primary row exists. Acceptance exactly equals canonical progress accepted set."
+}

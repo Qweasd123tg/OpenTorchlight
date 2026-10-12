@@ -7,6 +7,7 @@
 // Partial: declarations from FileUtilities.cpp used by recovered TUs.
 namespace FILESYSTEM
 {
+    std::wstring ReadWString(_IO_FILE*, unsigned int);
     bool FileExists(const wchar_t*);
     std::wstring GetLocalPath();
     std::wstring GetApplicationPath();
