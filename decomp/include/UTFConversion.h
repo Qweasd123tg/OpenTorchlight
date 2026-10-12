@@ -8,6 +8,7 @@
 // they are linked in the ParticleUniverseSphere.cpp group.
 typedef std::basic_string<unsigned short> utf16string;
 
+void WriteUTF32ToUTF16(_IO_FILE*, const std::wstring&, unsigned long);
 utf16string UTF32ToUTF16(const std::wstring& text);
 int ReadUTF16ToUTF32(const unsigned short* source, wchar_t* destination, unsigned long length);
 int ReadUTF16ToUTF32(FILE* source, wchar_t* destination, unsigned long length);
