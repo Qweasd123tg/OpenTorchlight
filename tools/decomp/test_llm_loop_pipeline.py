@@ -498,3 +498,134 @@ class Pipeline(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ExternalHandoff(unittest.TestCase):
+    """Real saved Stage metadata and CLI parsing, with no compiler/model/game."""
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name).resolve()
+        (self.root / 'decomp/src').mkdir(parents=True)
+        (self.root / 'decomp/include').mkdir()
+        (self.root / 'decomp/src/Probe.cpp').write_text('existing definition\n')
+        with patch.object(publication.Stage, '_link_external_inputs'):
+            self.stage = publication.Stage(self.root)
+        self.loop = llm_loop.Loop.__new__(llm_loop.Loop)
+        self.loop.tu = {'name': 'Probe.cpp'}
+        self.loop.funcs = [function('0x2')]
+        self.loop.status = {}
+        self.loop.accepted = {}
+        self.loop.items = {'0x2': {'feedback': None}}
+        self.loop.source = self.stage.path / 'decomp/src/Probe.cpp'
+        self.loop.work = self.stage.path / 'build-decomp/llm-loop/Probe.cpp'
+        (self.loop.work / 'prompts').mkdir(parents=True)
+        (self.loop.work / 'checkpoint.json').write_text('{"pinned":"context"}')
+        (self.loop.work / 'prompts/0x2.md').write_text('complete packet')
+        self.root_patch = patch.object(llm_loop, 'ROOT', self.stage.path)
+        self.root_patch.start()
+        self.addCleanup(self.root_patch.stop)
+
+    def test_snapshot_and_full_tu_submission_before_edit(self):
+        import hashlib
+        h = self.loop.external_handoff(True)
+        self.assertEqual('ready', h['status'])
+        self.assertEqual('full_tu_candidate', h['submission']['kind'])
+        self.assertEqual(str(self.loop.source), h['submission']['source'])
+        self.assertEqual(hashlib.sha256(b'existing definition\n').hexdigest(),
+                         h['submission']['prepared_source_sha256'])
+        self.loop.source.write_text('candidate preserving existing definition\n')
+        self.assertNotEqual(hashlib.sha256(self.loop.source.read_bytes()).hexdigest(),
+                            h['submission']['prepared_source_sha256'])
+        self.assertEqual(hashlib.sha256((self.loop.work / 'checkpoint.json').read_bytes()).hexdigest(),
+                         h['prepared_checkpoint_sha256'])
+        self.assertEqual(hashlib.sha256(b'complete packet').hexdigest(), h['targets'][0]['sha256'])
+        self.assertNotIn('identity_sha256', h)
+
+    def test_absent_source_is_an_explicit_creation_target(self):
+        self.loop.source.unlink()
+        h = self.loop.external_handoff(True)
+        self.assertEqual('ready', h['status'])
+        self.assertFalse(h['submission']['prepared_source_exists'])
+        self.assertIsNone(h['submission']['prepared_source_sha256'])
+
+    def test_nonready_states_have_no_command(self):
+        for prepared, error in [(False, None), (True, 'preparation failed')]:
+            h = self.loop.external_handoff(prepared, error)
+            self.assertEqual('unprepared', h['status'])
+            self.assertIsNone(h['cycle_argv_template'])
+        self.loop.status = {'0x2': 'blocked'}
+        self.loop.items['0x2']['feedback'] = 'missing ABI'
+        h = self.loop.external_handoff(True)
+        self.assertEqual('blocked', h['status'])
+        self.assertIsNone(h['cycle_argv_template'])
+        self.assertIn('0x2: missing ABI', h['blockers'])
+
+    def test_existing_target_is_not_assigned_again(self):
+        self.loop.status = {'0x2': 'existing'}
+        h = self.loop.external_handoff(True)
+        self.assertEqual('blocked', h['status'])
+        self.assertEqual(['0x2'], h['existing_addresses'])
+        self.assertEqual([], h['targets'])
+        self.assertIsNone(h['cycle_argv_template'])
+
+    def test_missing_prompt_and_stage_metadata_block(self):
+        (self.loop.work / 'prompts/0x2.md').write_text('')
+        (self.stage.path / 'stage.json').unlink()
+        h = self.loop.external_handoff(True)
+        self.assertEqual('blocked', h['status'])
+        self.assertIsNone(h['cycle_argv_template'])
+        self.assertTrue(any('Stage unavailable' in b for b in h['blockers']))
+
+    def test_argv_matches_actual_candidate_cli_and_saved_root(self):
+        import candidate
+        h = self.loop.external_handoff(True)
+        spec = self.root / 'worker-spec.json'
+        argv = [str(spec) if a == '{cycle_spec_path}' else a for a in h['cycle_argv_template']]
+        self.assertEqual(str(self.root), h['cwd'])
+        self.assertEqual(str(self.root / 'tools/decomp/candidate.py'), argv[1])
+        self.assertNotIn('--input', argv)
+        self.assertNotIn('--gate', argv)
+        with patch.object(candidate, 'continue_cycle', return_value={'status': 'READY_FOR_GATE'}) as invoke, \
+             patch('sys.argv', argv[1:]), redirect_stdout(io.StringIO()):
+            self.assertEqual(0, candidate.main())
+        invoke.assert_called_once_with('Probe.cpp', self.stage.path, spec, False, None)
+
+    def test_external_symlink_write_and_packet_paths_are_blocked(self):
+        for relative in ('decomp/src/Probe.cpp', 'decomp/hybrid/tests',
+                         'build-decomp/llm-loop/Probe.cpp/checkpoint.json',
+                         'build-decomp/llm-loop/Probe.cpp/prompts/0x2.md'):
+            with self.subTest(relative=relative):
+                path = self.stage.path / relative
+                outside = self.root / ('outside-' + str(len(relative)))
+                old = path.read_bytes() if path.is_file() else None
+                if path.exists():
+                    path.unlink()
+                path.parent.mkdir(parents=True, exist_ok=True)
+                outside.write_bytes(old or b'external')
+                path.symlink_to(outside)
+                h = self.loop.external_handoff(True)
+                self.assertEqual('blocked', h['status'])
+                self.assertIsNone(h['cycle_argv_template'])
+                self.assertNotIn(str(outside), str(h.get('submission', {})))
+                path.unlink()
+                if old is not None:
+                    path.write_bytes(old)
+
+    def test_prepared_resume_does_not_reassign_staged_implementations(self):
+        for status in ('MATCH', 'tested'):
+            with self.subTest(status=status):
+                self.loop.status = {'0x2': status}
+                h = self.loop.external_handoff(True)
+                self.assertEqual('blocked', h['status'])
+                self.assertEqual([], h['targets'])
+                self.assertEqual(['0x2'], h['staged_implemented_addresses'])
+                self.assertIsNone(h['cycle_argv_template'])
+
+    def test_restored_accepted_body_without_status_is_not_reassigned(self):
+        self.loop.accepted = {'0x2': 'existing staged definition'}
+        h = self.loop.external_handoff(True)
+        self.assertEqual('blocked', h['status'])
+        self.assertEqual([], h['targets'])
+        self.assertEqual(['0x2'], h['staged_implemented_addresses'])
+        self.assertIsNone(h['cycle_argv_template'])

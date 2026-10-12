@@ -750,9 +750,94 @@ class Loop:
         else:
             self.source.unlink(missing_ok=True)
 
+    def external_handoff(self, prepared=False, error=None):
+        """Describe external submission, never schedule an agent or authorize execution.
+
+        These hashes snapshot preparation before the external worker edits its TU.
+        They are not a cycle identity or acceptance receipt; Cycle checks current inputs.
+        """
+        result = {"schema": 1, "status": "unprepared", "blockers": [], "cycle_argv_template": None}
+        if not prepared or error:
+            result["blockers"] = [error or "prepare-only result required"]
+            return result
+        stage = ROOT.resolve()
+        checkpoint = self.work / "checkpoint.json"
+        metadata_path = stage / "stage.json"
+        blockers = result["blockers"]
+        expected_work = stage / "build-decomp/llm-loop" / self.tu["name"]
+        expected_source = stage / "decomp/src" / self.tu["name"]
+        fixtures = stage / "decomp/hybrid/tests"
+        # Do not hand an external editor a path redirected outside its assigned Stage.
+        for path, expected in ((self.source, expected_source), (self.work, expected_work),
+                               (checkpoint, expected_work / "checkpoint.json"),
+                               (metadata_path, stage / "stage.json"), (fixtures, fixtures)):
+            if path.absolute() != expected or path.resolve() != expected:
+                blockers.append("unsafe handoff path: " + str(path))
+        if blockers:
+            result["status"] = "blocked"
+            return result
+        targets = []
+        for f in self.funcs:
+            address = f["address"]
+            status = self.status.get(address)
+            prompt = self.work / "prompts" / (address + ".md")
+            if status == "blocked":
+                blockers.append(address + ": " + str(self.items[address].get("feedback") or "blocked"))
+            elif status not in ("existing", "MATCH", "tested") and address not in self.accepted:
+                if prompt.resolve() != expected_work / "prompts" / (address + ".md"):
+                    blockers.append(address + ": unsafe prepared prompt path")
+                elif not prompt.is_file() or not prompt.stat().st_size:
+                    blockers.append(address + ": missing nonempty prepared prompt")
+                else:
+                    targets.append({"address": address, "prompt": str(prompt.resolve()),
+                                    "sha256": hashlib.sha256(prompt.read_bytes()).hexdigest()})
+        if not targets:
+            blockers.append("no unimplemented prepared targets")
+        root = None
+        try:
+            metadata = json.loads(metadata_path.read_text())
+            root = Path(metadata["root"]).resolve()
+            if (metadata.get("schema") != 1 or not isinstance(metadata.get("baseline"), dict)
+                    or stage.parent != (root / "build-decomp/attempts").resolve()):
+                raise ValueError("Stage metadata/location mismatch")
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            blockers.append("saved Stage unavailable: " + str(exc))
+        if not checkpoint.is_file():
+            blockers.append("prepared checkpoint missing")
+        source = self.source.resolve()
+        result.update(status="blocked" if blockers else "ready", attempt=str(stage),
+                      targets=targets, existing_addresses=[f["address"] for f in self.funcs
+                                                          if self.status.get(f["address"]) == "existing"],
+                      staged_implemented_addresses=[f["address"] for f in self.funcs
+                                                    if f["address"] in self.accepted
+                                                    or self.status.get(f["address"]) in ("MATCH", "tested")],
+                      checkpoint=str(checkpoint.resolve()),
+                      prepared_checkpoint_sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest()
+                                                if checkpoint.is_file() else None,
+                      stage_metadata_sha256=hashlib.sha256(metadata_path.read_bytes()).hexdigest()
+                                            if metadata_path.is_file() else None,
+                      submission={"kind": "full_tu_candidate", "source": str(source),
+                                  "prepared_source_exists": source.is_file(),
+                                  "prepared_source_sha256": hashlib.sha256(source.read_bytes()).hexdigest()
+                                                            if source.is_file() else None,
+                                  "preserve_existing_definitions": True,
+                                  "fixtures_directory": str(stage / "decomp/hybrid/tests"),
+                                  "cycle_spec": "worker_supplied",
+                                  "headers_or_tools_changes": "prepare_new_attempt"})
+        if not blockers:
+            result.update(cwd=str(root),
+                          cycle_argv_template=[sys.executable, str(root / "tools/decomp/candidate.py"),
+                                               self.tu["name"], "--attempt", str(stage),
+                                               "--cycle-spec", "{cycle_spec_path}"],
+                          substitutions={"cycle_spec_path": "absolute path to worker-supplied cycle spec"},
+                          owner_environment="OTL_OWNER must match the assigned TU owner",
+                          gate_release="separate explicit resource admission and release; not included")
+        return result
+
     def write_result(self, prepared=False, error=None):
         atomic_json(self.work / "result.json", {
             "status": self.status, "prepared": prepared, "error": error,
+            "external_handoff": self.external_handoff(prepared, error),
             "published": [], "existing": [a for a, s in self.status.items() if s == "existing"],
             "diagnostics": {a: s for a, s in self.status.items() if s in ("MATCH", "tested")},
             "rejected": {a: {"reason": item.get("feedback"), "error": item.get("error")}
