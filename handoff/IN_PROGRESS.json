@@ -1,55 +1,41 @@
 {
   "schema": 1,
-  "snapshot_main": "5a87e4f0c3921098b28d274359ed8f9ffc316cb4",
-  "status": "pending-prerequisite-debt",
+  "snapshot_main": "b7d161cb42d2133a741657d3a7d01dfef8f7e1c6",
+  "status": "remaining-unaccepted",
   "assigned_to": null,
   "groups": [
-    "QuestController.cpp six-method whole-class prerequisite debt; original source unchanged"
+    "QuestController.cpp four remaining missing methods, 913 original bytes"
   ],
   "functions": [
     {
-      "address": "0xde6c00",
+      "address": "0xde6b20",
       "tu": "QuestController.cpp",
-      "name": "CQuestController::setQuestAccepted(bool)",
-      "status": "deferred-prerequisite-not-accepted",
+      "name": "CQuestController::setQuestComplete(bool)",
+      "status": "pending-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xde6af0",
+      "address": "0xde6d40",
       "tu": "QuestController.cpp",
-      "name": "CQuestController::questHasBeenCompleted(bool)",
-      "status": "deferred-prerequisite-not-accepted",
+      "name": "CQuestController::interactWithUnit()",
+      "status": "pending-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xde6cc0",
+      "address": "0xdee380",
       "tu": "QuestController.cpp",
-      "name": "CQuestController::menuEventOccured(void*, EMENU_TYPE, EMENU_EVENT)",
-      "status": "deferred-prerequisite-not-accepted",
+      "name": "CQuestController::initQuestController()",
+      "status": "pending-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xde6ec0",
+      "address": "0xdee6b0",
       "tu": "QuestController.cpp",
-      "name": "CQuestController::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",
-      "status": "deferred-prerequisite-not-accepted",
-      "accepted_current": false
-    },
-    {
-      "address": "0xdef0a0",
-      "tu": "QuestController.cpp",
-      "name": "CQuestController::CQuestController(CResourceManager*)",
-      "status": "deferred-prerequisite-not-accepted",
-      "accepted_current": false
-    },
-    {
-      "address": "0xdef220",
-      "tu": "QuestController.cpp",
-      "name": "CQuestController::~CQuestController()",
-      "status": "deferred-prerequisite-not-accepted",
+      "name": "CQuestController::setUnitInteractWith(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "status": "pending-not-accepted",
       "accepted_current": false
     }
   ],
   "next_gate": "Fresh full Stage validation and same-instance publication; no acceptance claimed before merged proof.",
-  "notice": "Six-method controller prerequisite remains deferred and unaccepted. Existing source and ownership are unchanged; this metadata does not assign or transfer ownership. Source snapshot and accepted counters remain pinned to PR94."
+  "notice": "Six prior controller prerequisites are accepted in PR95. Four missing methods remain unaccepted; this metadata does not assign ownership or claim work started. Source/tools include the reviewed nine-file union, owner transfer and tooling optimization. Source snapshot and accepted counters remain pinned to PR95."
 }

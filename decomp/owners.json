@@ -131,7 +131,7 @@
   "PuzzleRandomizer.cpp": "opencode",
   "PuzzleRandomizerDescriptor.cpp": "opencode",
   "Quest.cpp": "pc2",
-  "QuestController.cpp": "opencode",
+  "QuestController.cpp": "dot",
   "QuestControllerDescriptor.cpp": "opencode",
   "QuestDialog.cpp": "opencode",
   "QuestDialogItem.cpp": "opencode",
