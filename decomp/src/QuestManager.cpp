@@ -1,5 +1,9 @@
 #include "FileUtilities.h"
 #include "UTFConversion.h"
+#include <OgreLogManager.h>
+#include "FileSystem.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
 #include "Achievement.h"
 #include "Achievements.h"
 #include "GameClient.h"
@@ -26,6 +30,11 @@
 #include "Utilities.h"
 
 namespace {
+typedef char QuestManagerSize[sizeof(CQuestManager)==0xd0?1:-1];
+typedef char QuestManagerSoundOffset[__builtin_offsetof(CQuestManager,m_pSoundBank)==0x30?1:-1];
+typedef char QuestManagerResourceOffset[__builtin_offsetof(CQuestManager,m_pResourceManager)==0x38?1:-1];
+typedef char QuestManagerNameOffset[__builtin_offsetof(CQuestManager,m_Unknown40)==0x40?1:-1];
+typedef char QuestManagerCompleteOffset[__builtin_offsetof(CQuestManager,m_Unknown70)==0x70?1:-1];
 typedef char QuestManagerNPCMapOffset[__builtin_offsetof(CQuestManager,m_UnknownA0)==0xa0?1:-1];
 typedef char QuestManagerActiveOffset[__builtin_offsetof(CQuestManager,m_Unknown18)==0x18?1:-1];
 typedef char QuestThresholdOffset[__builtin_offsetof(CQuest,m_Unknown10)+0x10==0x20?1:-1];
@@ -76,7 +85,7 @@ void CQuestManager::populate(CLevel* pLevel)
 {
     std::map<std::wstring, CQuest*>& quests =
         *reinterpret_cast<std::map<std::wstring, CQuest*>*>(
-            reinterpret_cast<char*>(&m_iUnknown48) - 8);
+            reinterpret_cast<char*>(&m_Unknown40));
 
     for (std::map<std::wstring, CQuest*>::iterator it = quests.begin();
          it != quests.end(); ++it)
@@ -765,6 +774,117 @@ void CQuestManager::load(_IO_FILE* file, unsigned int version, CResourceManager*
         if (quest) {
             quest->reinitializeQuest(true, false);
             completed[L"COMPLETEGAME"] = false;
+        }
+    }
+}
+
+
+CQuestManager::CQuestManager(CResourceManager* resources)
+    : m_pPlayer(NULL), m_Unknown18(10), m_pResourceManager(resources)
+{
+    if (g_pQuestManager == NULL)
+    {
+        g_pQuestManager = this;
+        m_pSoundBank = new CSoundBank(
+            *CMasterResourceManager::getSingleton()->m_pSoundManager, false);
+        CSoundBankDataInformation* soundData =
+            CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+        CSoundData* sample = soundData->getSoundDataObject(L"QUESTRECEIVED");
+        if (sample)
+            m_pSoundBank->addSample(31, sample->m_iGuid);
+        sample = soundData->getSoundDataObject(L"QUESTCOMPLETED");
+        if (sample)
+            m_pSoundBank->addSample(32, sample->m_iGuid);
+        loadQuests();
+    }
+}
+
+CQuestManager::~CQuestManager()
+{
+    m_Unknown18.clear();
+    for (std::map<std::wstring, CQuest*>::iterator i = m_Unknown40.begin();
+         i != m_Unknown40.end(); ++i)
+    {
+        if (i->second)
+        {
+            delete i->second;
+            i->second = NULL;
+        }
+    }
+    m_Unknown40.clear();
+    m_UnknownA0.clear();
+    m_Unknown70.clear();
+    if (m_pSoundBank)
+    {
+        delete m_pSoundBank;
+        m_pSoundBank = NULL;
+    }
+    g_pQuestManager = NULL;
+}
+
+void CQuestManager::reloadQuests()
+{
+    m_Unknown18.clear();
+    for (std::map<std::wstring, CQuest*>::iterator i = m_Unknown40.begin();
+         i != m_Unknown40.end(); ++i)
+    {
+        if (i->second)
+        {
+            delete i->second;
+            i->second = NULL;
+        }
+    }
+    m_Unknown40.clear();
+    m_UnknownA0.clear();
+    m_Unknown70.clear();
+    loadQuests();
+}
+
+void CQuestManager::loadQuests()
+{
+    TArrayList<std::wstring> files(10);
+    CFileSystem::getSingleton()->getFileList(
+        L"media/quests/", files, L"*.dat", true, true, false, false);
+    TArrayList<CDataGroup*> npcData(100);
+    for (unsigned int i = 0; i < files.size(); ++i)
+    {
+        CQuest* quest = new CQuest(m_pResourceManager, this);
+        if (static_cast<unsigned char>(quest->loadQuestData(files[i])) == 0)
+        {
+            delete quest;
+            std::string message = "Unable to load quest from file: " +
+                STRINGS::StringConvertToNarrow(files[i].c_str());
+            Ogre::LogManager::getSingleton().logMessage(
+                message.c_str(), Ogre::LML_CRITICAL, false);
+        }
+        else if (m_Unknown70.find(quest->m_sUnknown50) != m_Unknown70.end())
+        {
+            std::string message = "There appears to be two quests named the samething. " +
+                STRINGS::StringConvertToNarrow(quest->m_sUnknown50.c_str());
+            Ogre::LogManager::getSingleton().logMessage(
+                message.c_str(), Ogre::LML_CRITICAL, false);
+            delete quest;
+        }
+        else
+        {
+            m_Unknown40[quest->m_sUnknown50] = quest;
+            m_Unknown70[quest->m_sUnknown50] = false;
+            npcData.clear();
+            quest->getAllNPCUnitDataInvolvedInQuest(npcData);
+            for (unsigned int j = 0; j < npcData.size(); ++j)
+            {
+                std::map<CDataGroup*, TArrayList<CQuest*>*>::iterator found =
+                    m_UnknownA0.find(npcData[j]);
+                TArrayList<CQuest*>* quests;
+                if (found != m_UnknownA0.end())
+                    quests = found->second;
+                else
+                {
+                    quests = new TArrayList<CQuest*>;
+                    m_UnknownA0[npcData[j]] = quests;
+                }
+                quests->add(quest);
+            }
         }
     }
 }
