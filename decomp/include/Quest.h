@@ -113,4 +113,6 @@ public:
     bool m_bUnknown210;
 };
 
+std::wstring getAcquireTags(CQuestUnitData*, std::wstring, unsigned int, std::wstring&);
+
 #endif

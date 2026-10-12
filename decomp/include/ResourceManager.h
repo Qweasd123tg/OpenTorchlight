@@ -30,6 +30,7 @@ namespace Ogre
 // layout follows the constructor.
 class CMissilePreloader;
 class CDungeonManager;
+class CDungeon;
 class CUnitResourceList;
 class CGameUI;
 class CCameraControl;
@@ -49,6 +50,7 @@ public:
     std::map<long long, CDataGroup*>* getGroupByName(const std::wstring& name);
     Ogre::TextureManager* getTextureManager();
     CDungeonManager* getDungeonManager();
+    CDungeon* getDungeonByName(const std::wstring&);
     CUnitResourceList* getMasterResourceList();
     CCameraControl* getCameraControl();
     CParticle* createParticle(const wchar_t* name);
