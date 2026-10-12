@@ -1,41 +1,55 @@
 {
   "schema": 1,
-  "snapshot_main": "0107c9a7fe833232cd302c489e48eb4b7f946b81",
-  "status": "in-progress",
-  "assigned_to": "dot",
+  "snapshot_main": "5a87e4f0c3921098b28d274359ed8f9ffc316cb4",
+  "status": "pending-prerequisite-debt",
+  "assigned_to": null,
   "groups": [
-    "QuestManager.cpp four state-transition methods: removeQuest, questEventUpdate, completeQuest, giveQuest"
+    "QuestController.cpp six-method whole-class prerequisite debt; original source unchanged"
   ],
   "functions": [
     {
-      "address": "0xd2f020",
-      "tu": "QuestManager.cpp",
-      "name": "CQuestManager::removeQuest(CQuest*, bool)",
-      "status": "in-progress-not-accepted",
+      "address": "0xde6c00",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::setQuestAccepted(bool)",
+      "status": "deferred-prerequisite-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd2f470",
-      "tu": "QuestManager.cpp",
-      "name": "CQuestManager::questEventUpdate(EQUEST_EVENTS, CCharacter*, CBaseUnit*)",
-      "status": "in-progress-not-accepted",
+      "address": "0xde6af0",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::questHasBeenCompleted(bool)",
+      "status": "deferred-prerequisite-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd32600",
-      "tu": "QuestManager.cpp",
-      "name": "CQuestManager::completeQuest(CQuest*)",
-      "status": "in-progress-not-accepted",
+      "address": "0xde6cc0",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::menuEventOccured(void*, EMENU_TYPE, EMENU_EVENT)",
+      "status": "deferred-prerequisite-not-accepted",
       "accepted_current": false
     },
     {
-      "address": "0xd33150",
-      "tu": "QuestManager.cpp",
-      "name": "CQuestManager::giveQuest(CQuest*, CBaseUnit*, bool)",
-      "status": "in-progress-not-accepted",
+      "address": "0xde6ec0",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",
+      "status": "deferred-prerequisite-not-accepted",
+      "accepted_current": false
+    },
+    {
+      "address": "0xdef0a0",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::CQuestController(CResourceManager*)",
+      "status": "deferred-prerequisite-not-accepted",
+      "accepted_current": false
+    },
+    {
+      "address": "0xdef220",
+      "tu": "QuestController.cpp",
+      "name": "CQuestController::~CQuestController()",
+      "status": "deferred-prerequisite-not-accepted",
       "accepted_current": false
     }
   ],
   "next_gate": "Fresh full Stage validation and same-instance publication; no acceptance claimed before merged proof.",
-  "notice": "Separate active work. Source snapshot and accepted counters remain pinned to PR93."
+  "notice": "Six-method controller prerequisite remains deferred and unaccepted. Existing source and ownership are unchanged; this metadata does not assign or transfer ownership. Source snapshot and accepted counters remain pinned to PR94."
 }

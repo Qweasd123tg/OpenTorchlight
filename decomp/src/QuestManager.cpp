@@ -1,3 +1,10 @@
+#include "Achievement.h"
+#include "Achievements.h"
+#include "GameClient.h"
+#include "MasterResourceManager.h"
+#include "Settings.h"
+#include "SteamStats.h"
+#include "StringTranslate.h"
 #include "EmptyStrings.h"
 #include "GameEnums.h"
 #include "GameVariables.h"
@@ -363,4 +370,315 @@ void CQuestManager::getDialogsForNPC(TArrayList<CQuestDialog*>& dialogs, CBaseUn
                 dialogs.add(dialog);
         }
     }
+}
+
+
+namespace {
+typedef char QuestManagerCompleteMapOffset[__builtin_offsetof(CQuestManager,m_Unknown70)==0x70?1:-1];
+typedef char QuestManagerResourcesOffset[__builtin_offsetof(CQuestManager,m_pResourceManager)==0x38?1:-1];
+typedef char QuestTitleOffset[__builtin_offsetof(CQuest,m_pUnknown38)==0x38?1:-1];
+typedef char QuestSubtitleOffset[__builtin_offsetof(CQuest,m_pUnknown40)==0x40?1:-1];
+typedef char QuestControllerListOffset[__builtin_offsetof(CQuest,m_Unknown1B0)==0x1b0?1:-1];
+typedef char QuestNotificationOffset[__builtin_offsetof(CQuest,m_bUnknown209)==0x209?1:-1];
+typedef char QuestRepeatabilityOffset[__builtin_offsetof(CQuest,m_bUnknown20B)==0x20b?1:-1];
+typedef char QuestControllerNameOffset[__builtin_offsetof(CQuestController,m_sQuestName)==0xa8?1:-1];
+typedef char QuestManagerWideStringSize[sizeof(std::wstring)==8?1:-1];
+}
+
+long long CQuestManager::removeQuest(CQuest* quest, bool abandoned)
+{
+    if (!quest)
+        return 0;
+
+    reinterpret_cast<TArrayList<CQuest*>&>(m_Unknown18).remove(quest);
+    quest->initializeQuestWithNPC(NULL);
+    quest->setQuestAccepted(false);
+    if (abandoned)
+    {
+        quest->cleanUp(false);
+        quest->reinitializeQuest(true, false);
+    }
+
+    TArrayList<TSafePointer<CQuestController>*>& controllers =
+        reinterpret_cast<TArrayList<TSafePointer<CQuestController>*>&>(quest->m_Unknown1B0);
+    for (unsigned int i = 0; i < controllers.size(); ++i)
+    {
+        if (controllers[i]->getObject() != NULL &&
+            std::wstring(controllers[i]->getObject()->m_sQuestName) == quest->m_sUnknown50)
+        {
+            controllers[i]->getObject()->questHasBeenAccepted(false);
+            if (abandoned)
+                controllers[i]->getObject()->questHasBeenAbandoned();
+        }
+    }
+
+    m_pResourceManager->getLevel()->updateNPCIcons();
+    m_pResourceManager->getLevel()->updateAutomapIcons();
+    return 1;
+}
+
+void CQuestManager::questEventUpdate(EQUEST_EVENTS event, CCharacter* character,
+                                     CBaseUnit* target)
+{
+    if (!m_pPlayer)
+        return;
+
+    TArrayList<CQuest*>& active = reinterpret_cast<TArrayList<CQuest*>&>(m_Unknown18);
+    bool refresh = false;
+    for (unsigned int i = 0; i < active.size(); ++i)
+    {
+        CQuest* quest = active[i];
+        if (!quest)
+            continue;
+
+        const unsigned char wasComplete = static_cast<unsigned char>(quest->isComplete(false));
+        if (wasComplete != 0 && event != static_cast<EQUEST_EVENTS>(5))
+            continue;
+
+        quest->questEventUpdate(event, character, target);
+        if (static_cast<unsigned char>(quest->isComplete(false)) != 0 &&
+            wasComplete == 0 && !quest->m_bUnknown209)
+        {
+            if (!quest->getQuestDetails().empty())
+            {
+                // Character's sound bank is an opaque/private field at +0x298.
+                CSoundBank* playerSound = *reinterpret_cast<CSoundBank**>(
+                    reinterpret_cast<char*>(m_pPlayer) + 0x298);
+                if (playerSound)
+                    playerSound->queueGlobalSample(32, 1.0f, 1.0f);
+                if (m_pSoundBank)
+                    m_pSoundBank->playSample(32, NULL, 0.0f, 0.0f, false);
+            }
+
+            CLevel* level = m_pPlayer->getLevel();
+            if (level && quest->m_bUnknown29)
+            {
+                static std::wstring g_QuestComplete;
+                if (g_QuestComplete.empty())
+                    g_QuestComplete = CStringTranslate::getSinglton()->getTranslateString(L"Quest Complete");
+
+                // Keep this level, but re-read its GameClient/UI after each callback.
+                (*reinterpret_cast<CGameClient**>(reinterpret_cast<char*>(level) + 0x220))->
+                    getGameUI()->setBigText(g_QuestComplete, 2.0f);
+                {
+                    std::wstring text = quest->replaceStringTags(quest->m_sUnknown58);
+                    (*reinterpret_cast<CGameClient**>(reinterpret_cast<char*>(level) + 0x220))->
+                        getGameUI()->setSmallText(text, 2.0f);
+                }
+                if (quest->m_bUnknown2C || quest->m_bUnknown208)
+                    CGameUI::getSingleton()->queueTip(static_cast<EContextTip>(20));
+            }
+
+            quest->m_bUnknown209 = true;
+            refresh = true;
+        }
+        else if (static_cast<unsigned char>(quest->isComplete(false)) == wasComplete)
+        {
+            // The original third query refreshes on equal low bytes, not a change.
+            refresh = true;
+        }
+    }
+
+    if (refresh)
+        CGameUI::getSingleton()->refreshQuestMenu();
+}
+
+long long CQuestManager::completeQuest(CQuest* quest)
+{
+    if (!quest)
+        return 0;
+
+    if (m_pPlayer)
+        giveRewardForQuest(quest);
+    quest->setQuestAccepted(false);
+    quest->initializeQuestWithNPC(NULL);
+    quest->setIsComplete(!quest->m_bUnknown20B);
+    reinterpret_cast<TArrayList<CQuest*>&>(m_Unknown18).remove(quest);
+
+    typedef std::map<std::wstring, bool> CompleteMap;
+    CompleteMap& completed = *reinterpret_cast<CompleteMap*>(&m_Unknown70);
+    bool& complete = completed[quest->m_sUnknown50];
+    complete = !quest->m_bUnknown20B;
+
+    TArrayList<TSafePointer<CQuestController>*>& controllers =
+        reinterpret_cast<TArrayList<TSafePointer<CQuestController>*>&>(quest->m_Unknown1B0);
+    for (unsigned int i = 0; i < controllers.size(); ++i)
+    {
+        if (controllers[i]->getObject() != NULL &&
+            std::wstring(controllers[i]->getObject()->m_sQuestName) == quest->m_sUnknown50)
+        {
+            controllers[i]->getObject()->questHasBeenCompleted(true);
+        }
+    }
+
+    if (m_pResourceManager->getLevel())
+    {
+        m_pResourceManager->getLevel()->updateNPCIcons();
+        m_pResourceManager->getLevel()->updateAutomapIcons();
+    }
+
+    bool palaceComplete;
+    {
+        const std::wstring palaceAlric = STRINGS::StringUpper(L"PalaceAlricDead");
+        const std::wstring questName = STRINGS::StringUpper(quest->m_sUnknown50);
+        palaceComplete = questName == palaceAlric;
+        if (!palaceComplete)
+        {
+            const std::wstring palacePT2 = STRINGS::StringUpper(L"PalacePT2");
+            const std::wstring nextQuestName = STRINGS::StringUpper(quest->m_sUnknown50);
+            palaceComplete = nextQuestName == palacePT2;
+        }
+    }
+    if (palaceComplete)
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(13))->forceComplete();
+
+    if (m_pPlayer)
+    {
+        bool retireeQuest;
+        {
+            const unsigned int property = KSETTINGS_RETIREE_QUEST;
+            CSettings* settings = CMasterResourceManager::getSingleton()->m_pSettings;
+            const std::wstring retireeName = STRINGS::StringUpper(settings->GetString(property));
+            const std::wstring questName = STRINGS::StringUpper(quest->m_sUnknown50);
+            retireeQuest = questName == retireeName;
+        }
+        if (retireeQuest)
+        {
+            const unsigned int property = KSETTINGS_GAME_COMPLETED_ONCE;
+            CMasterResourceManager::getSingleton()->m_pSettings->SetInt(property, 1);
+
+            CGameClient* client = m_pResourceManager->getGameClient();
+            if (client && client->getGameState() == static_cast<EGameState>(1))
+            {
+                int destroyer = CSteamStats::getSingleton()->getStatInt(static_cast<ESTATS>(23));
+                int alchemist = CSteamStats::getSingleton()->getStatInt(static_cast<ESTATS>(22));
+                int vanquisher = CSteamStats::getSingleton()->getStatInt(static_cast<ESTATS>(21));
+
+                if (m_pPlayer->getPlayerClassName() == L"DESTROYER" && destroyer == 0)
+                {
+                    CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(23), 1);
+                    ++destroyer;
+                }
+                else if (m_pPlayer->getPlayerClassName() == L"ALCHEMIST" && alchemist == 0)
+                {
+                    CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(22), 1);
+                    ++alchemist;
+                }
+                else if (m_pPlayer->getPlayerClassName() == L"VANQUISHER" && vanquisher == 0)
+                {
+                    CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(21), 1);
+                    ++vanquisher;
+                }
+
+                if (destroyer != 0 && vanquisher != 0 && alchemist != 0)
+                    CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(23))->forceComplete();
+            }
+        }
+    }
+    return 1;
+}
+
+long long CQuestManager::giveQuest(CQuest* quest, CBaseUnit*, bool announce)
+{
+    if (!quest || quest->m_questAccepted)
+        return 0;
+
+    TArrayList<CQuest*>& active = reinterpret_cast<TArrayList<CQuest*>&>(m_Unknown18);
+    for (unsigned int i = 0; i < active.size(); ++i)
+        if (active[i] == quest)
+            return 0;
+
+    static std::wstring g_NewQuest;
+    if (g_NewQuest.empty())
+        g_NewQuest = CStringTranslate::getSinglton()->getTranslateString(L"New Quest");
+
+    active.add(quest);
+    quest->setQuestAccepted(true);
+    if (m_pPlayer)
+    {
+        if (announce && !quest->m_gap25)
+        {
+            if (!quest->getQuestDetails().empty() &&
+                !quest->replaceStringTags(quest->m_sUnknown58).empty())
+            {
+                CSoundBank* playerSound = *reinterpret_cast<CSoundBank**>(
+                    reinterpret_cast<char*>(m_pPlayer) + 0x298);
+                if (playerSound)
+                    playerSound->queueGlobalSample(31, 1.0f, 1.0f);
+                if (m_pSoundBank)
+                    m_pSoundBank->playSample(31, NULL, 0.0f, 0.0f, false);
+            }
+
+            if (!quest->m_gap25)
+            {
+                CLevel* level = m_pPlayer->getLevel();
+                if (level)
+                {
+                    const std::wstring& title = *reinterpret_cast<const std::wstring*>(&quest->m_pUnknown38);
+                    const std::wstring& subtitle = *reinterpret_cast<const std::wstring*>(&quest->m_pUnknown40);
+                    if (!quest->replaceStringTags(title).empty() &&
+                        quest->replaceStringTags(subtitle).empty())
+                    {
+                        std::wstring text = quest->replaceStringTags(title);
+                        (*reinterpret_cast<CGameClient**>(reinterpret_cast<char*>(level) + 0x220))->
+                            getGameUI()->setBigText(text, 2.0f);
+                    }
+                    else if (quest->replaceStringTags(title).empty() &&
+                             !quest->replaceStringTags(subtitle).empty())
+                    {
+                        std::wstring text = quest->replaceStringTags(subtitle);
+                        (*reinterpret_cast<CGameClient**>(reinterpret_cast<char*>(level) + 0x220))->
+                            getGameUI()->setSmallText(text, 2.0f);
+                    }
+                    else if (!quest->replaceStringTags(title).empty() &&
+                             !quest->replaceStringTags(subtitle).empty())
+                    {
+                        {
+                            std::wstring text = quest->replaceStringTags(title);
+                            (*reinterpret_cast<CGameClient**>(reinterpret_cast<char*>(level) + 0x220))->
+                                getGameUI()->setBigText(text, 2.0f);
+                        }
+                        {
+                            std::wstring text = quest->replaceStringTags(subtitle);
+                            (*reinterpret_cast<CGameClient**>(reinterpret_cast<char*>(level) + 0x220))->
+                                getGameUI()->setSmallText(text, 2.0f);
+                        }
+                    }
+                    else if (!quest->replaceStringTags(quest->m_sUnknown58).empty())
+                    {
+                        (*reinterpret_cast<CGameClient**>(reinterpret_cast<char*>(level) + 0x220))->
+                            getGameUI()->setBigText(g_NewQuest, 2.0f);
+                        std::wstring text = quest->replaceStringTags(quest->m_sUnknown58);
+                        (*reinterpret_cast<CGameClient**>(reinterpret_cast<char*>(level) + 0x220))->
+                            getGameUI()->setSmallText(text, 2.0f);
+                    }
+                }
+            }
+        }
+
+        if (quest->m_bUnknown2B &&
+            static_cast<unsigned char>(quest->isComplete(false)) != 0)
+        {
+            completeQuest(quest);
+            removeQuest(quest, false);
+        }
+    }
+
+    if (m_pResourceManager->getLevel())
+    {
+        m_pResourceManager->getLevel()->updateNPCIcons();
+        m_pResourceManager->getLevel()->updateAutomapIcons();
+    }
+
+    TArrayList<TSafePointer<CQuestController>*>& controllers =
+        reinterpret_cast<TArrayList<TSafePointer<CQuestController>*>&>(quest->m_Unknown1B0);
+    for (unsigned int i = 0; i < controllers.size(); ++i)
+    {
+        if (controllers[i]->getObject() != NULL &&
+            std::wstring(controllers[i]->getObject()->m_sQuestName) == quest->m_sUnknown50)
+        {
+            controllers[i]->getObject()->questHasBeenAccepted(true);
+        }
+    }
+    return 1;
 }
