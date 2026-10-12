@@ -176,6 +176,39 @@ def preserve_existing(before, after, prior, definitions, db, *, before_object=No
     return True
 
 
+def _comparison_frames(report, names):
+    """Bind diagnostics to loader frames, not the freely chosen Coverage label.
+
+    Repeated rows are retained individually; neither aliases nor counts are inferred.
+    Framing is operational evidence only and does not change canonical acceptance.
+    """
+    active, seen, finished, coverage = None, set(), [], []
+    for line in report:
+        begin = re.fullmatch(r'tlhybrid: begin (\w+)', line)
+        end = re.fullmatch(r'tlhybrid: (\w+)\s+(PASS|FAIL) \((-?\d+)\)', line)
+        row = re.fullmatch(r'\s+coverage ([^\r\n]+?) (0x[0-9a-f]+) completed (\d+) different (\d+) incomplete (\d+)', line)
+        if begin:
+            name = begin[1]
+            if active is not None or name not in names or name in seen:
+                raise ValueError('unknown, nested or duplicated test begin: ' + name)
+            active = name
+            seen.add(name)
+        elif end:
+            if active is None or end[1] != active:
+                raise ValueError('unmatched or duplicated test verdict: ' + end[1])
+            finished.append(end.groups())
+            active = None
+        elif row:
+            if active is None:
+                raise ValueError('coverage outside a test frame')
+            coverage.append((active, *row.groups()))
+        elif line.startswith('tlhybrid: begin ') or line.lstrip().startswith('coverage '):
+            raise ValueError('malformed test/coverage record')
+    if active is not None or seen != set(names) or len(finished) != len(names):
+        raise ValueError('incomplete test frames')
+    return finished, coverage
+
+
 class Cycle:
     """Continue one prepared attempt using the existing build and publication APIs.
 
@@ -437,26 +470,37 @@ class Cycle:
                                         src=stage.path / 'decomp/src', tests=tests, verbose=False)
             code, report = hybrid.selftest(blob, loader)
         artifacts = self._artifact(label + '.log', ('\n'.join(report) + '\n').encode())
-        finished = re.findall(r'^tlhybrid: (\w+)\s+(PASS|FAIL) \((-?\d+)\)$', '\n'.join(report), re.M)
-        complete = sorted(n for n, _, _ in finished) == sorted(names)
-        coverage = [m.groups() for line in report if (m := re.fullmatch(
-            r'\s+coverage (\w+) (0x[0-9a-f]+) completed (\d+) different (\d+) incomplete (\d+)', line))]
-        unique_coverage = len({(n, a) for n, a, _, _, _ in coverage}) == len(coverage)
-        known_coverage = all(n in names for n, _, _, _, _ in coverage)
+        framing_error = None
+        try:
+            finished, framed = _comparison_frames(report, names)
+        except ValueError as error:
+            finished, framed = [], []
+            framing_error = str(error)
+        complete = framing_error is None
+        coverage = [row[1:] for row in framed]
+        valid_rows = all(int(c) > 0 and int(d) <= int(c) and int(i) == 0
+                         for _, _, _, c, d, i in framed)
         if control:
-            killed = (control['test'] in names and code == 1 and complete and unique_coverage and known_coverage and all(status == ('FAIL' if n == control['test'] else 'PASS')
-                      for n, status, _ in finished) and any(n == control['test'] and a == control['address']
-                      and int(c) > 0 and int(d) > 0 and int(i) == 0 for n, a, c, d, i in coverage)
-                      and all(int(i) == 0 for _, _, _, _, i in coverage))
-            good = killed
+            good = (control['test'] in names and code == 1 and complete and valid_rows
+                    and all(status == ('FAIL' if n == control['test'] else 'PASS')
+                            and (int(count) != 0 if n == control['test'] else count == '0')
+                            for n, status, count in finished)
+                    and any(owner == control['test'] and n == control['test'] and a == control['address']
+                            and int(c) > 0 and int(d) > 0 and int(i) == 0
+                            for owner, n, a, c, d, i in framed)
+                    and all(int(d) == 0 for owner, _, _, _, d, _ in framed if owner != control['test']))
         else:
-            covered = {a for _, a, c, d, i in coverage if int(c) > 0 and int(d) == 0 and int(i) == 0}
-            good = (code == 0 and complete and unique_coverage and known_coverage
+            # Child labels can describe successful regression lanes, but cannot widen
+            # target coverage beyond a matching registered/passed test name.
+            covered = {a for owner, n, a, c, d, i in framed if owner == n
+                       and int(c) > 0 and int(d) == 0 and int(i) == 0}
+            good = (code == 0 and complete and valid_rows
                     and all(s == 'PASS' and c == '0' for _, s, c in finished)
-                    and all(int(c) > 0 and int(d) == 0 and int(i) == 0 for _, _, c, d, i in coverage))
+                    and all(int(d) == 0 for _, _, _, _, d, _ in framed))
             if label == 'focused':
                 good = good and set(self.spec['addresses']) <= covered
         row = {'code': code, 'complete': complete, 'coverage': coverage,
+               'framed_coverage': framed, 'framing_error': framing_error,
                'blob_sha256': toolchain.sha256(blob), 'loader_sha256': toolchain.sha256(loader)}
         artifacts.update(self._artifact(label + '.json', row))
         # Persist failure logs before returning the concrete failure.
