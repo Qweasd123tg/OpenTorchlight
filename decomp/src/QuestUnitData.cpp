@@ -68,7 +68,7 @@ void CQuestUnitData::save(_IO_FILE* file)
 }
 
 void CQuestUnitData::spawnChildrenUnits(CResourceManager* resourceManager,
-                                        const Ogre::Vector3& position)
+                                        Ogre::Vector3 const& position)
 {
     CLevel* level = resourceManager != NULL ? resourceManager->getLevel() : NULL;
     if (level == NULL || m_children.size() == 0)
@@ -84,8 +84,8 @@ void CQuestUnitData::spawnChildrenUnits(CResourceManager* resourceManager,
             level->randomOpenPosition(position, radius, false);
         spawnPosition.y += 1.5f;
 
-        CBaseUnit* unit = spawnUnit(resourceManager, spawnPosition);
-        reinterpret_cast<unsigned char*>(unit)[0xb9] = 1;
+        m_children[i]->spawnUnit(resourceManager, spawnPosition);
+        m_children[i]->m_trackUnitEvents = true;
     }
 }
 
@@ -191,7 +191,8 @@ bool CQuestUnitData::unitInteracted(CBaseUnit* unit)
         m_pBaseUnitDataGroup == unit->getDataGroup() ||
         unit->ISA(unitType);
 
-    bool belongsToQuest = m_unitType == 0x16 || unit->ISA(unitType);
+    bool belongsToQuest = m_unitType != 22 &&
+        unit->ISA(static_cast<UNITTYPES::EUNITTYPES>(m_unitType));
 
     if (!belongsToQuest)
     {
@@ -207,14 +208,16 @@ bool CQuestUnitData::unitInteracted(CBaseUnit* unit)
 
         belongsToQuest =
             unitQuestId == questId &&
-            unitBaseUnitId == static_cast<unsigned int>(m_baseUnitGuid);
+            unitBaseUnitId == static_cast<unsigned int>(m_questUnitDataId);
     }
 
     if (!m_completed && matchesUnit)
     {
-        ++m_currentUnitCount;
+        m_currentUnitCount = static_cast<int>(
+            static_cast<unsigned int>(m_currentUnitCount) + 1u);
 
-        if (m_currentUnitCount >= m_requiredUnitCount)
+        if (static_cast<unsigned int>(m_currentUnitCount) >=
+            static_cast<unsigned int>(m_requiredUnitCount))
         {
             spawnChildrenUnits(unit->getResourceManager(),
                                unit->getPosition(true));
