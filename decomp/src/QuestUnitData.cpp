@@ -657,3 +657,107 @@ void CQuestUnitData::load(_IO_FILE* file, int version)
         if (m_children.size() >= count)
             m_children[i]->load(file, version);
 }
+
+#include "LevelTemplateData.h"
+#include "QuestUnitSpawnClassNames.h"
+#include "SpawnClass.h"
+#include "SpawnClassParser.h"
+
+CDataGroup* CQuestUnitData::getSpawnClassUnitDataLookingFor()
+{
+    if (m_spawnClassPreset == 0)
+    {
+        const std::wstring* presetNames =
+            reinterpret_cast<const std::wstring*>(g_QUESTUNIT_SPAWNCLASS_PREDEFINE_NAMES);
+        for (int i = 1; i < 4; ++i)
+        {
+            if (presetNames[i] == m_spawnClass)
+                m_spawnClassPreset = i;
+        }
+        if (m_spawnClassPreset == 0 && m_spawnClass == EMPTY_WSTRING)
+            return NULL;
+    }
+
+    if (m_pQuest->m_Unknown10 == 0 || m_pQuest->getPlayer() == NULL ||
+        m_pQuest->getPlayer()->getLevel() == NULL)
+        return NULL;
+
+    CQuest* quest = m_pQuest;
+    CLevelTemplateData* levelTemplate =
+        reinterpret_cast<CLevelTemplateData*>(quest->m_Unknown10);
+    CGameClient* client = quest->m_pResourceManager->getGameClient();
+    int floor = m_specificFloor;
+    if (m_relativeFloor != 0)
+    {
+        floor = static_cast<int>(static_cast<unsigned int>(quest->m_iUnknown20) +
+                                 static_cast<unsigned int>(m_relativeFloor));
+        if (floor < 0)
+            floor = quest->m_iUnknown20;
+    }
+    else if (floor == -1)
+        floor = quest->m_iUnknown20;
+    client->resetGameSeed(static_cast<int>(static_cast<unsigned int>(quest->m_iUnknown1C) +
+                                          static_cast<unsigned int>(floor)));
+    levelTemplate->chooseUnitSpawners(m_pQuest->m_pResourceManager);
+
+    std::wstring spawnName(m_spawnClass);
+    CSpawnClass* spawnClass = NULL;
+    if (spawnName != EMPTY_WSTRING)
+    {
+        spawnClass = CSpawnClassParser::getSingleton()->getSpawnClass(spawnName);
+        if (spawnClass == NULL)
+            spawnName = EMPTY_WSTRING;
+    }
+
+    bool itemPreset = false;
+    if (spawnName == EMPTY_WSTRING)
+    {
+        switch (m_spawnClassPreset)
+        {
+        case 1:
+            spawnName = std::wstring(levelTemplate->m_selectedUnitSpawners[8]);
+            if (spawnName == L"MONSTERSET")
+                spawnName = std::wstring(levelTemplate->m_selectedUnitSpawners[0]);
+            if (spawnName == L"NONE" || spawnName.empty())
+                spawnName = L"MONSTERSET";
+            break;
+        case 2:
+            spawnName = std::wstring(levelTemplate->m_selectedUnitSpawners[10]);
+            if (spawnName == L"MONSTERSETCHAMPION")
+                spawnName = std::wstring(levelTemplate->m_selectedUnitSpawners[1]);
+            if (spawnName == L"NONE" || spawnName.empty())
+                spawnName = L"MONSTERSETCHAMPION";
+            break;
+        case 3:
+            spawnName = std::wstring(levelTemplate->m_selectedUnitSpawners[9]);
+            itemPreset = true;
+            break;
+        }
+    }
+    if (spawnName == EMPTY_WSTRING)
+        return NULL;
+    if (spawnClass == NULL)
+        spawnClass = CSpawnClassParser::getSingleton()->getSpawnClass(spawnName);
+    if (spawnClass == NULL)
+        return NULL;
+
+    quest = m_pQuest;
+    floor = m_specificFloor;
+    if (m_relativeFloor != 0)
+    {
+        floor = static_cast<int>(static_cast<unsigned int>(quest->m_iUnknown20) +
+                                 static_cast<unsigned int>(m_relativeFloor));
+        if (floor < 0)
+            floor = quest->m_iUnknown20;
+    }
+    else if (floor == -1)
+        floor = quest->m_iUnknown20;
+    const int level = static_cast<int>(static_cast<unsigned int>(quest->m_iUnknown20C) +
+                                       static_cast<unsigned int>(floor) -
+                                       static_cast<unsigned int>(quest->m_iUnknown20));
+    TArrayList<CDataGroup*> groups(10);
+    spawnClass->rollSpawnClass(groups, NULL, NULL, NULL, level,
+                               static_cast<unsigned int>(-1),
+                               itemPreset ? -1 : 0, itemPreset ? 1 : -1, 0, 0);
+    return groups.size() != 0 ? groups[0] : NULL;
+}

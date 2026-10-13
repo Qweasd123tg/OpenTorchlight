@@ -6,6 +6,7 @@
 #include "Randomizer.h"
 #include "GameEnums.h"
 class CLevelLayout;
+class CResourceManager;
 class CChunk : public CRunicCore
 {
 public:
@@ -27,12 +28,14 @@ public:
     CChunk* getRandomChunk(unsigned int index);
     CLevelLayout* getRandomLayout();
     void resetOdds();
+    void chooseUnitSpawners(CResourceManager* resourceManager);
     unsigned int getNumberOfUnitsToCreate(ELEVELLAYOUT_CREATION creation,unsigned int area);
 
     virtual ~CLevelTemplateData();
     bool getUnitLightFade() const { return m_bUnitLightFade; }
 private:
     friend class CGameUI;
+    friend class CQuestUnitData;
     unsigned char m_Padding10[0x18];
     TArrayList<CChunk*> m_chunks; // +0x28
     unsigned char m_Padding40[0x44];
@@ -47,7 +50,9 @@ private:
     unsigned char m_PaddingD0[0x18];
     CRandomizer* m_layoutRandomizer; // +0xe8
     TArrayList<CRandomizer*> m_chunkRandomizers; // +0xf0
-    unsigned char m_Padding108[0x4d4];
+    unsigned char m_Padding108[0x470];
+    std::wstring m_selectedUnitSpawners[11]; // +0x578, owning selection results
+    unsigned char m_Padding5D0[0x0c];
     CLevelCreationRange m_densityRanges[11]; // +0x5dc
     CLevelCreationRange m_countRanges[11]; // +0x634
     unsigned char m_Padding68C[0x4c];
