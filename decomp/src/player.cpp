@@ -1,3 +1,12 @@
+#include "Achievements.h"
+#include "Achievement.h"
+#include "EmptyStrings.h"
+
+#include "FileUtilities.h"
+#include "Inventory.h"
+#include "SkillManager.h"
+#include "GameUI.h"
+
 #include <cmath>
 #include "DataGroup.h"
 #include "DungeonTracker.h"
@@ -216,4 +225,176 @@ void CPlayer::catchFish()
     setAIState(static_cast<EAIState>(34));
     blendAnimation("FISHING_CATCH", false, 0.2f, 1, -1);
     m_pUnitModel->queueBlendAnimation("IDLE", true, 0.2f, 1);
+}
+
+void CDungeonTracker::save(FILE* file)
+{
+    unsigned short length = static_cast<unsigned short>(m_name.length());
+    fwrite(&length, 2, 1, file);
+    WriteUTF32ToUTF16(file, m_name, length);
+    fwrite(&m_rank, 4, 1, file);
+    fwrite(&m_value8, 4, 1, file);
+    fwrite(&m_value10, 4, 1, file);
+    unsigned int count = m_levels.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i)
+        fwrite(&m_levels[i], 4, 1, file);
+}
+
+void CPlayer::firstTimeSetup()
+{
+    if (!m_pInventory) return;
+    const wchar_t* names[] = {L"Health Potion", L"Health Potion", L"Mana Potion",
+        L"Mana Potion", L"Town Portal Scroll", L"Town Portal Scroll",
+        L"Identify Scroll", L"Identify Scroll"};
+    for (unsigned int i = 0; i < 8; ++i) {
+        CEquipment* equipment = m_pResourceManager->createEquipment(names[i], false, true);
+        if (equipment) m_pInventory->pickupEquipment(equipment, true);
+    }
+    m_pResourceManager->getGameUI()->queueTip(static_cast<EContextTip>(9));
+}
+
+void CDungeonTracker::load(FILE* file, unsigned int version)
+{
+    unsigned short length;
+    fread(&length, 2, 1, file);
+    m_name = FILESYSTEM::ReadWString(file, length);
+    fread(&m_rank, 4, 1, file);
+    fread(&m_value8, 4, 1, file);
+    if (version > 2) {
+        fread(&m_value10, 4, 1, file);
+        if (version > 5) {
+            unsigned int count;
+            fread(&count, 4, 1, file);
+            for (unsigned int i = 0; i < count; ++i) {
+                int level;
+                fread(&level, 4, 1, file);
+                m_levels.push_back(level);
+            }
+        }
+    }
+}
+
+void CPlayer::resetStatPoints()
+{
+    m_iUnusedStatPoints = 0;
+    m_iUnusedSkillPoints = 0;
+    m_iMeleeStat = m_pDataGroup->GetDataValue(L"STRENGTH", 10);
+    m_rangedStat = m_pDataGroup->GetDataValue(L"DEXTERITY", 10);
+    m_magicStat = m_pDataGroup->GetDataValue(L"MAGIC", 10);
+    m_defenseStat = m_pDataGroup->GetDataValue(L"DEFENSE", 10);
+    m_naturalArmor = m_pDataGroup->GetDataValue(L"ARMOR", 0);
+}
+
+void CPlayer::resetSkills()
+{
+    if (!m_pSkillManager) return;
+    int points = m_pSkillManager->getSkillPoints();
+    m_pSkillManager->stopAllSkills(true, false, true);
+    m_pSkillManager->resetSkillLevels();
+    std::vector<CDataGroup*> groups;
+    unsigned int count = m_pDataGroup->GetDataGroupsMatchingName(L"SKILL", &groups);
+    for (unsigned int i = 0; i < count; ++i) {
+        CDataGroup* group = groups[i];
+        std::wstring name = STRINGS::StringUpper(group->GetDataValue(L"NAME", L""));
+        unsigned int level = group->GetDataValue(L"LEVEL", 0u);
+        points -= level;
+        m_pSkillManager->setSkillLevel(name, level);
+    }
+    m_iUnusedSkillPoints += std::max(0, points);
+}
+
+void CPlayer::setAIState(EAIState state)
+{
+    if (m_eAIState >= 32 && m_eAIState <= 34 && state != 32 && state != 33 && state != 34)
+        if (m_fishingNode) m_fishingNode->setVisible(false, true);
+    m_eAIState = state;
+}
+
+void CPlayer::incrementJournalStatistic(EJournalStatistic statistic, int amount)
+{
+    switch (statistic) {
+    case 1:
+        CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(13), amount);
+        if (m_iGold + amount > 99999)
+            CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(35))->forceComplete();
+        break;
+    case 3: CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(15), amount); break;
+    case 4: CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(10), amount); break;
+    case 5:
+        CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(0), amount);
+        if (m_saveOnDeath) CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(18), amount);
+        break;
+    case 6: CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(4), amount); break;
+    case 11: CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(1), amount); break;
+    case 12: CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(16), amount); break;
+    case 14: CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(6), amount); break;
+    case 15: CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(9), amount); break;
+    case 16: CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(8), amount); break;
+    default: break;
+    }
+    m_journalStats[statistic] += amount;
+}
+
+void CPlayer::die(CCharacter* killer, const Ogre::Vector3* direction, float force, bool silent)
+{
+    if (alive() && m_pResourceManager->getGameClient()->getGameState() == static_cast<EGameState>(1)) {
+        CCharacter::die(killer, direction, force, silent);
+        if (m_saveOnDeath) m_pResourceManager->getGameClient()->saveCharacter(true, true);
+    }
+}
+
+CLevelState* CPlayer::getLevelSavedState(std::wstring dungeon, int level)
+{
+    for (unsigned int i = 0; i < m_savedLevels.size(); ++i)
+        if (m_savedLevels[i]->m_iLevelId == level && m_savedLevels[i]->m_sLevelName == dungeon)
+            return m_savedLevels[i];
+    return NULL;
+}
+
+bool CPlayer::hasLevelSavedState(std::wstring dungeon, int level)
+{
+    for (unsigned int i = 0; i < m_savedLevels.size(); ++i)
+        if (m_savedLevels[i]->m_iLevelId == level && m_savedLevels[i]->m_sLevelName == dungeon)
+            return true;
+    return false;
+}
+
+bool CPlayer::addWaypoint(std::wstring dungeon, int depth)
+{
+    for (unsigned int i = 0; i < m_dungeonTrackers.size(); ++i) {
+        if (m_dungeonTrackers[i]->m_name == dungeon) {
+            for (unsigned int j = 0; j < m_dungeonTrackers[i]->m_levels.size(); ++j)
+                if (m_dungeonTrackers[i]->m_levels[j] == depth) return false;
+            m_dungeonTrackers[i]->m_levels.push_back(depth);
+            return true;
+        }
+    }
+    return false;
+}
+
+int CPlayer::getMaxDepth(std::wstring dungeon)
+{
+    dungeon = STRINGS::StringUpper(dungeon);
+    for (unsigned int i = 0; i < m_dungeonTrackers.size(); ++i)
+        if (m_dungeonTrackers[i]->m_name == dungeon) return m_dungeonTrackers[i]->m_value8;
+    return -1;
+}
+
+std::wstring CPlayer::getPlayerClassName()
+{
+    if (m_pDataGroup) return STRINGS::StringUpper(m_pDataGroup->GetDataValue(L"NAME", L"NOT SPECIFIED"));
+    return EMPTY_WSTRING;
+}
+
+void CPlayer::calculateNaturalArmor()
+{
+    m_naturalArmor = m_pDataGroup->GetDataValue(L"ARMOR", 0);
+    if (m_naturalArmor) {
+        CGraph* graph = CGraphManager::getSingleton()->getGraph(L"ARMOR_MONSTER_BYLEVEL");
+        if (graph) {
+            float value = graph->getValue(float(m_iUnitLevel), 0);
+            m_naturalArmor = int(ceilf(value * (float(m_naturalArmor) / 100.0f)));
+        }
+    }
 }

@@ -56,6 +56,7 @@ public:
     TArrayList<CAffix*>& getAffixes() { return *reinterpret_cast<TArrayList<CAffix*>*>(m_EffectData10); }
 private:
     friend class CEquipment;
+    friend class CInventory;
     unsigned char m_EffectData10[0x2c8-0x10];
     TArrayList<CUnitTheme*> m_UnitThemes;
     std::wstring m_EffectString2E0;

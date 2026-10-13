@@ -47,6 +47,7 @@ class CBaseUnit : public CPositionableObject
     friend struct SmallmatchLayoutProbe;
 friend class CInventory;
 public:
+    bool isPlayer();
     long long getQuestGuid() const { return m_iQuestGuid; }
     long long getUnitGuid() const { return m_iUnitValue1A0; }
 

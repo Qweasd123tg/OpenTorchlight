@@ -1,3 +1,7 @@
+#include "Effect.h"
+#include "Utilities.h"
+#include <OgreSceneNode.h>
+
 #include <cmath>
 #include "Equipment.h"
 #include "EquipmentRef.h"
@@ -531,4 +535,106 @@ CInventory::CInventory(CCharacter* owner, unsigned int capacity)
     m_paneStarts.push_back(19);
     freeInventory();
     calculateEffectValues();
+}
+
+void CInventory::executeProcs(EEFFECT_TYPE type, CBaseUnit* target)
+{
+    for (unsigned int slot = 0; slot < 12; ++slot) {
+        CEquipment* equipment = getEquipmentInSlot(slot);
+        if (!equipment || !equipment->hasEffect(type) || !equipment->getSkillManager()) continue;
+        for (int activation = 0; activation < 3; ++activation) {
+            TArrayList<CEffect*>& effects = reinterpret_cast<TArrayList<CEffect*>*>(
+                equipment->m_pEffectManager->m_EffectData10 + 0x18)[activation];
+            for (unsigned int i = 0; i < effects.size(); ++i) {
+                if (effects[i]->m_eType != type) continue;
+                int roll = UTILITIES::randomIntegerBetweenVolatile(0, 100);
+                if (!(effects[i]->value(static_cast<EEFFECT_VALUES>(0)) >= static_cast<float>(roll))) continue;
+                CSkill* skill = equipment->getSkillManager()->getSkill(effects[i]->m_sName, effects[i]->m_iLevel);
+                if (!skill) continue;
+                Ogre::Vector3 targetPosition = target ? target->getPosition(true) : m_pPositionableObject->getPosition(true);
+                const Ogre::Quaternion& orientation = m_pPositionableObject->getSceneNode()->getOrientation();
+                Ogre::Vector3 position = m_pPositionableObject->getPosition(true);
+                equipment->getSkillManager()->executeSkill(skill, m_pPositionableObject,
+                    static_cast<ESKILL_ACTIVATION_TYPE>(1), position, orientation, targetPosition, target);
+            }
+        }
+    }
+}
+
+bool CInventory::equipEquipmentIntoSpecificLocation(CEquipment* equipment, EEQUIP_LOCATIONS location)
+{
+    if (!canEquipIntoSpecificLocation(equipment, location, false)) return false;
+    if (equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(9)) &&
+        (location == static_cast<EEQUIP_LOCATIONS>(0) || location == static_cast<EEQUIP_LOCATIONS>(1))) {
+        CEquipment* opposite = getEquipmentInSlot(location == static_cast<EEQUIP_LOCATIONS>(0) ? 1 : 0);
+        if (opposite && opposite->ISA(static_cast<UNITTYPES::EUNITTYPES>(10))) {
+            removeEquipment(opposite);
+            if (!pickupEquipment(opposite, true)) {
+                Ogre::Vector3 position = m_pPositionableObject->getPosition(true);
+                opposite->getLevel()->addItem(opposite, position, true);
+                opposite->setPosition(m_pPositionableObject->getPosition(true));
+                opposite->drop();
+            }
+        }
+    }
+    CEquipmentRef* reference = NULL;
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i) {
+        if (m_equipmentRefs[i] && m_equipmentRefs[i]->m_pEquipment == equipment) {
+            reference = m_equipmentRefs[i];
+            break;
+        }
+    }
+    if (reference) {
+        reference->m_slot = location;
+    } else {
+        reference = new CEquipmentRef;
+        reference->m_pEquipment = equipment;
+        reference->m_slot = location;
+        reference->m_originalSlot = location;
+        reference->m_flag20 = false;
+        reference->m_effectsEnabled = true;
+        m_equipmentRefs.add(reference);
+    }
+    equipment->equipped(this, m_pPositionableObject, location);
+    updateBonuses();
+    calculateEffectValues();
+    verifyEquipment();
+    for (unsigned int i = 0; i < m_listeners.size(); ++i)
+        m_listeners[i]->equipmentEquipped(equipment);
+    return true;
+}
+
+void CInventory::swapWeaponSet()
+{
+    CEquipmentRef* right = getEquipmentRefInSlot(0);
+    CEquipmentRef* left = getEquipmentRefInSlot(1);
+    CEquipmentRef* secondaryRight = getEquipmentRefInSlot(12);
+    CEquipmentRef* secondaryLeft = getEquipmentRefInSlot(13);
+    if (right) {
+        right->m_slot = 12;
+        right->m_pEquipment->unequipped(this, m_pPositionableObject, static_cast<EEQUIP_LOCATIONS>(0));
+        for (unsigned int i = 0; i < m_listeners.size(); ++i)
+            m_listeners[i]->equipmentUnequipped(right->m_pEquipment);
+    }
+    if (left) {
+        left->m_slot = 13;
+        left->m_pEquipment->unequipped(this, m_pPositionableObject, static_cast<EEQUIP_LOCATIONS>(1));
+        for (unsigned int i = 0; i < m_listeners.size(); ++i)
+            m_listeners[i]->equipmentUnequipped(left->m_pEquipment);
+    }
+    if (secondaryRight) {
+        secondaryRight->m_slot = 0;
+        secondaryRight->m_pEquipment->equipped(this, m_pPositionableObject, static_cast<EEQUIP_LOCATIONS>(0));
+        for (unsigned int i = 0; i < m_listeners.size(); ++i)
+            m_listeners[i]->equipmentEquipped(secondaryRight->m_pEquipment);
+    }
+    if (secondaryLeft) {
+        secondaryLeft->m_slot = 1;
+        secondaryLeft->m_pEquipment->equipped(this, m_pPositionableObject, static_cast<EEQUIP_LOCATIONS>(1));
+        for (unsigned int i = 0; i < m_listeners.size(); ++i)
+            m_listeners[i]->equipmentEquipped(secondaryLeft->m_pEquipment);
+    }
+    updateBonuses();
+    calculateEffectValues();
+    verifyEquipment();
 }

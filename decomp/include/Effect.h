@@ -51,5 +51,6 @@ private:
     friend class CBaseUnit;
     friend class CCharacter;
     friend class CEquipment;
+    friend class CInventory;
 };
 #endif

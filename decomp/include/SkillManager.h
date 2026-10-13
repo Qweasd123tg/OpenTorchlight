@@ -17,8 +17,11 @@ class CSkillManager : public CRunicCore
 
 friend class CEquipment;
 friend class CCharacter;
+friend class CMonster;
 public:
     void deleteSpecificSkill(CSkill* skill);
+    bool getSkillIsCooling(CSkill* skill);
+    void stopSkillsByName(std::wstring name, bool flag);
     CSkill* getSkillByIndex(int index)
     {
         if (index < static_cast<int>(m_OtherSkills.size()))
@@ -42,6 +45,9 @@ public:
     CSkill* getSkill(const std::wstring& name,int level);
     void update(float elapsed);
     void setSkillLevel(CSkill* skill,unsigned int level);
+    void setSkillLevel(const std::wstring& name, unsigned int level);
+    int getSkillPoints();
+    void resetSkillLevels();
     unsigned int getSkillLevel(CSkill* skill);
     int knownSkills(ESKILL_ACTIVATION_TYPE activation);
     void stopAllSkills(bool flag1,bool flag2,bool flag3);

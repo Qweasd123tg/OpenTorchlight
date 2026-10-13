@@ -1,3 +1,8 @@
+#include <OgreRay.h>
+#include <OgreCamera.h>
+#include "UtilitiesMath.h"
+#include "Settings.h"
+
 #include <OgreSceneNode.h>
 #include <algorithm>
 #include "Editor.h"
@@ -237,4 +242,55 @@ void CObjectControl3D::UpdateWorkingPlane()
         float scale = m_planeScale < 1.0f ? 1.0f : m_planeScale;
         m_models[8]->setScale(scale, 0.001f, scale);
     }
+}
+
+void CObjectControl3D::UpdateChunkTemplate()
+{
+    if (m_models.size() <= 19) return;
+    for (unsigned int i = 10; i < 20; ++i) m_models[i]->setVisible(false);
+    if (m_chunkDepth == 0.0f) {
+        m_models[9]->setVisible(false);
+        return;
+    }
+    m_models[9]->setVisible(true);
+    m_models[9]->setPosition(Ogre::Vector3(0.0f, 0.0f,
+        m_chunkDepth * 0.5f + m_chunkSize * -0.5f));
+    m_models[9]->setScale(m_chunkWidth, 0.001f, m_chunkDepth);
+    for (int i = 0; i < m_chunkCount; ++i) {
+        m_models[i + 10]->setVisible(true);
+        Ogre::Vector3 position = m_chunkPositions[i];
+        m_models[i + 10]->setPosition(position);
+        m_models[i + 10]->setScale(m_chunkSize, 0.001f, m_chunkSize);
+    }
+}
+
+Ogre::Vector3 CObjectControl3D::getMousePlaneInstersect(POINT point, Ogre::Plane plane)
+{
+    Ogre::Camera* camera = CEditor::getSingleton()->getCamera();
+    if (!camera) return Ogre::Vector3::ZERO;
+    m_mouseHandler->MousePosition();
+    CSettings* settings = CEditor::getSingleton()->getSettings();
+    int height = settings->GetInt(KSETTINGS_WIN_HEIGHT);
+    int width = settings->GetInt(KSETTINGS_WIN_WIDTH);
+    Ogre::Vector3 direction = MATH::screenToWorldRay(camera, static_cast<float>(point.x),
+        static_cast<float>(point.y), static_cast<float>(width), static_cast<float>(height));
+    Ogre::Ray ray(camera->getPosition(), direction);
+    std::pair<bool, float> hit = ray.intersects(plane);
+    return camera->getPosition() + direction * hit.second;
+}
+
+Ogre::Vector3 CObjectControl3D::getCameraPlaneIntersect(Ogre::Plane plane)
+{
+    Ogre::Camera* camera = CEditor::getSingleton()->getCamera();
+    if (!camera) return Ogre::Vector3::ZERO;
+    CSettings* settings = CEditor::getSingleton()->getSettings();
+    int height = settings->GetInt(KSETTINGS_WIN_HEIGHT);
+    int width = settings->GetInt(KSETTINGS_WIN_WIDTH);
+    int centerHeight = settings->GetInt(KSETTINGS_WIN_HEIGHT);
+    int centerWidth = settings->GetInt(KSETTINGS_WIN_WIDTH);
+    Ogre::Vector3 direction = MATH::screenToWorldRay(camera, centerWidth * 0.5f,
+        centerHeight * 0.5f, static_cast<float>(width), static_cast<float>(height));
+    Ogre::Ray ray(camera->getPosition(), direction);
+    std::pair<bool, float> hit = ray.intersects(plane);
+    return camera->getPosition() + direction * hit.second;
 }

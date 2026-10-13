@@ -10,6 +10,8 @@
 class CGameGlobals : public CRunicCore
 {
 public:
+    explicit CGameGlobals(const wchar_t* path);
+    void reload();
     const std::wstring& getContextTip(EContextTip tip);
     const std::wstring& getRandomTip();
 
@@ -30,7 +32,10 @@ private:
     friend class CEquipment;
     friend class CCharacter;
     friend class CEnchantMenu;
-    unsigned char m_GlobalsData10[0x24-0x10];
+    std::wstring m_globalsPath; // +0x10
+    int m_normalItemWeight;
+    int m_magicItemWeight;
+    int m_uniqueItemWeight;
     float m_fRandomEnchantChance;
     float m_fRandomSocketChance;
     float m_fSecondSocketChance;
@@ -40,7 +45,10 @@ private:
     int m_iMaxMagicItemSlots;
     int m_iMinUniqueItemSlots;
     int m_iMaxUniqueItemSlots;
-    unsigned char m_Padding48[0x18];
+    int m_retirementAge; // +0x48
+    float m_magicFindMagicInfluence;
+    float m_magicFindUniqueInfluence;
+    unsigned char m_Padding54[0xc];
     float m_manaRegeneration; // +0x60
     float m_fEnchanterSocketChance;
     float m_fEnchanterEnchantChance;
@@ -61,7 +69,8 @@ private:
     float m_fTriggerNearRange;
     float m_fIndoorUnitActiveRange;
     float m_fOutdoorUnitActiveRange;
-    unsigned char m_PaddingBC[0x1c];
+    unsigned char m_PaddingBC[4];
+    TArrayList<std::wstring> m_configStrings; // +0xc0
     std::vector<std::wstring> m_tips; // +0xd8
     std::wstring m_contextTips[34]; // +0xf0
     CRandomizer m_tipRandomizer; // +0x200
@@ -76,6 +85,9 @@ private:
     std::wstring m_sSetColorUnselected;
     std::wstring m_sQuestColorUnselected;
     std::wstring m_sGlobalsString2B8;
-    unsigned char m_GlobalsData2C0[0x10];
+    int m_maxLevelMemory; // +0x2c0
+    int m_levelRespawnTime;
+    int m_merchantRespawnTime;
+    unsigned char m_Padding2CC[4];
 };
 #endif

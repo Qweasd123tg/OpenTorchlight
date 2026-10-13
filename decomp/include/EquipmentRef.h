@@ -17,7 +17,8 @@ public:
     // fields
     union { CEquipment* m_pUnknown10; CEquipment* m_pEquipment; };
     union { int m_iSlot; unsigned int m_slot; };
-    unsigned char m_gap1C[5];
+    int m_originalSlot; // +0x1c
+    bool m_flag20;
     bool m_effectsEnabled; // +0x21
     unsigned char m_gap22[6];
 };

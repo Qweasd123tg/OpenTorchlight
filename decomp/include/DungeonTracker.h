@@ -8,6 +8,7 @@ class CDungeonTracker
 {
 public:
     void save(FILE* file);
+    void load(FILE* file, unsigned int version);
     std::wstring m_name;
     int m_value8;
     int m_rank;
