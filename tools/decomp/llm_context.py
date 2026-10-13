@@ -834,15 +834,18 @@ class ContextIndex:
         return {header}
 
     def _pinned_destructor_headers(self, callee, scope):
-        """Five reviewed existing template bodies, never a generic exemption.
+        """Six reviewed existing template bodies, never a generic exemption.
 
         Original ASM: wstring delete[] destroys elements using the array cookie,
         then frees and clears data; safe pointers unregister and reset both fields.
-        Quest pointer arrays free only the array storage and clear its pointer.
+        Quest/BaseUnit pointer arrays free only the array storage and clear its pointer.
         Only the reviewed address, size, D1/D2 aliases and unmodified source count.
         """
         wide = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
         reviewed = {
+            "TArrayList<CBaseUnit*>":
+                (0xd49940, 26, "_ZN10TArrayListIP9CBaseUnitE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<CQuestDialog*>":
                 (0xd1d3f0, 26, "_ZN10TArrayListIP12CQuestDialogE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
