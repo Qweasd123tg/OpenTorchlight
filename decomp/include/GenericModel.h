@@ -20,6 +20,7 @@ class CGenericModel : public CPositionableObject, public iRandomWeight, public i
 {
 friend class CEquipment;
 friend class CCharacter;
+friend class CMonster;
 friend void EditorSetActiveAnimationPaused(long long, bool);
 friend class CStatsMenu;
 friend class CPetMenu;
@@ -105,6 +106,7 @@ private:
     unsigned char m_ModelData23D[3];
     float m_animationSpeed;
     unsigned int m_animationPlaying;
-    unsigned char m_ModelData248[8];
+    unsigned char m_ModelData248[4];
+    float m_animationStep; // +0x24c
 };
 #endif

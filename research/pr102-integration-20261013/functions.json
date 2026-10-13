@@ -1,0 +1,2063 @@
+[
+  {
+    "address": "0x774330",
+    "name": "CObjectControl3D::UpdateChunkTemplate()",
+    "tu": "ObjectControl3D.cpp",
+    "cpp_definition": true,
+    "original_bytes": 470,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "f8dfa4fa62f9b5ba9795f6f1803e5e0010f17f8c50cb72d7d95d6e28e8b521e9",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": []
+  },
+  {
+    "address": "0x774b80",
+    "name": "CObjectControl3D::getMousePlaneInstersect(POINT, Ogre::Plane)",
+    "tu": "ObjectControl3D.cpp",
+    "cpp_definition": true,
+    "original_bytes": 474,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "f8dfa4fa62f9b5ba9795f6f1803e5e0010f17f8c50cb72d7d95d6e28e8b521e9",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_mouse_plane",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x7750e0",
+    "name": "CObjectControl3D::getCameraPlaneIntersect(Ogre::Plane)",
+    "tu": "ObjectControl3D.cpp",
+    "cpp_definition": true,
+    "original_bytes": 498,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "f8dfa4fa62f9b5ba9795f6f1803e5e0010f17f8c50cb72d7d95d6e28e8b521e9",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_camera_plane",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80e930",
+    "name": "CCharacter::performingSkill()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 65,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_80e930",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter15performingSkillEv"
+  },
+  {
+    "address": "0x80ec70",
+    "name": "CCharacter::removePet(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 210,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_80ec70",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter9removePetEPS_"
+  },
+  {
+    "address": "0x80eef0",
+    "name": "CCharacter::getArmorAndTrinketLevelCanEquip(bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 81,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_80eef0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter31getArmorAndTrinketLevelCanEquipEb"
+  },
+  {
+    "address": "0x80ef50",
+    "name": "CCharacter::getWeaponLevelCanEquip(bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 81,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_80ef50",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter22getWeaponLevelCanEquipEb"
+  },
+  {
+    "address": "0x80f2e0",
+    "name": "CCharacter::stopParticles(bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 165,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_80f2e0",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter13stopParticlesEb"
+  },
+  {
+    "address": "0x80f410",
+    "name": "CCharacter::setActiveSkill(CSkill*, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 236,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_80f410",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter14setActiveSkillEP6CSkillb"
+  },
+  {
+    "address": "0x80f500",
+    "name": "CCharacter::cycleSkill(int)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 424,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_80f500",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter10cycleSkillEi"
+  },
+  {
+    "address": "0x80f710",
+    "name": "CCharacter::setAIState(EAIState)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 165,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_80f710",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter10setAIStateE8EAIState"
+  },
+  {
+    "address": "0x80f800",
+    "name": "CCharacter::getKnownSpell(unsigned int)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 127,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_80f800",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter13getKnownSpellEj"
+  },
+  {
+    "address": "0x80f930",
+    "name": "CCharacter::learnSpell(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 342,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_learn",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x80feb0",
+    "name": "CCharacter::dropToGround(CLevel&, float, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 554,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": []
+  },
+  {
+    "address": "0x810170",
+    "name": "CCharacter::alignment()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 71,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_810170",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter9alignmentEv"
+  },
+  {
+    "address": "0x810200",
+    "name": "CCharacter::isEnemy(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 196,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_810200",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter7isEnemyEPS_"
+  },
+  {
+    "address": "0x8102d0",
+    "name": "CCharacter::isFriend(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 152,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8102d0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter8isFriendEPS_"
+  },
+  {
+    "address": "0x812580",
+    "name": "CCharacter::attackRange()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 348,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_812580",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter11attackRangeEv"
+  },
+  {
+    "address": "0x8138a0",
+    "name": "CCharacter::viewAngle()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 142,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8138a0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter9viewAngleEv"
+  },
+  {
+    "address": "0x8139a0",
+    "name": "CCharacter::dexterity()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 103,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN10CCharacter9dexterityEv"
+  },
+  {
+    "address": "0x813a10",
+    "name": "CCharacter::maxMana()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 127,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN10CCharacter7maxManaEv"
+  },
+  {
+    "address": "0x813ba0",
+    "name": "CCharacter::updateActiveSkill(float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 693,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_update_active",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x814440",
+    "name": "CCharacter::isPetNearDeath()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 124,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_814440",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter14isPetNearDeathEv"
+  },
+  {
+    "address": "0x8144c0",
+    "name": "CCharacter::magic()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 103,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN10CCharacter5magicEv"
+  },
+  {
+    "address": "0x815910",
+    "name": "CCharacter::damageDefense(EDAMAGE_TYPES)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 265,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_defense",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x815a20",
+    "name": "CCharacter::walkingSpeed()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 166,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_815a20",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter12walkingSpeedEv"
+  },
+  {
+    "address": "0x815ad0",
+    "name": "CCharacter::runningSpeed()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 166,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_815ad0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter12runningSpeedEv"
+  },
+  {
+    "address": "0x815c90",
+    "name": "CCharacter::updateMana(float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 175,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_815c90",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter10updateManaEf"
+  },
+  {
+    "address": "0x816330",
+    "name": "CCharacter::blocked()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 44,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_816330",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter7blockedEv"
+  },
+  {
+    "address": "0x8163a0",
+    "name": "CCharacter::getDmgToReflectFromMissile()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 405,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8163a0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter26getDmgToReflectFromMissileEv"
+  },
+  {
+    "address": "0x822ce0",
+    "name": "CCharacter::addToAvoidanceMap(CLevel&)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 303,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_822ce0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter17addToAvoidanceMapER6CLevel"
+  },
+  {
+    "address": "0x823bf0",
+    "name": "CCharacter::unLearnSpell(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 482,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_823bf0",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter12unLearnSpellESbIwSt11char_traitsIwESaIwEEi"
+  },
+  {
+    "address": "0x823ee0",
+    "name": "CCharacter::inDamageReactRange(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 175,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_823ee0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter18inDamageReactRangeEPS_"
+  },
+  {
+    "address": "0x8244a0",
+    "name": "CCharacter::inInteractionRange()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 282,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8244a0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter18inInteractionRangeEv"
+  },
+  {
+    "address": "0x824920",
+    "name": "CCharacter::setTargetItem(CItem*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 229,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_824920",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter13setTargetItemEP5CItem"
+  },
+  {
+    "address": "0x824a10",
+    "name": "CCharacter::notifyOfDeletion(CItem*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 55,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN10CCharacter16notifyOfDeletionEP5CItem"
+  },
+  {
+    "address": "0x824e00",
+    "name": "CCharacter::inStrikeRange()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 81,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN10CCharacter13inStrikeRangeEv"
+  },
+  {
+    "address": "0x825310",
+    "name": "CCharacter::setTarget(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 408,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_target",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x825d40",
+    "name": "CCharacter::updateAI(float, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 548,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_825d40",
+        "completed": 184,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter8updateAIEfb"
+  },
+  {
+    "address": "0x825f80",
+    "name": "CCharacter::notifyOfDeletion(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 23,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN10CCharacter16notifyOfDeletionEPS_"
+  },
+  {
+    "address": "0x825fa0",
+    "name": "CCharacter::setMaster(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 199,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_825fa0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter9setMasterEPS_"
+  },
+  {
+    "address": "0x827010",
+    "name": "CCharacter::doWeaponProcs(CEquipment*, CBaseUnit*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 540,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_827010",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter13doWeaponProcsEP10CEquipmentP9CBaseUnit"
+  },
+  {
+    "address": "0x827310",
+    "name": "CCharacter::playHitParticle(Ogre::Vector3 const&, Ogre::Vector3 const&, float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 461,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_hit",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8274e0",
+    "name": "CCharacter::facingTarget(CCharacter*, CItem*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 524,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_facing",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x827720",
+    "name": "CCharacter::playStrikeParticle(Ogre::Vector3 const&, Ogre::Vector3 const&, float, bool, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 357,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_827720",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter18playStrikeParticleERKN4Ogre7Vector3ES3_fbb"
+  },
+  {
+    "address": "0x827890",
+    "name": "CCharacter::teleportToMaster(float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 650,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_teleport",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x829f60",
+    "name": "CCharacter::moveToPosition(Ogre::Vector3 const&, bool, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 584,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_move",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x82a4e0",
+    "name": "CCharacter::interruptAI(float, CLevel&)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 184,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_82a4e0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter11interruptAIEfR6CLevel"
+  },
+  {
+    "address": "0x82a750",
+    "name": "CCharacter::fishingSplash()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 484,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": []
+  },
+  {
+    "address": "0x82e750",
+    "name": "CCharacter::setAIPlayAnimation(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool, float, float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 589,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_animation",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x831ee0",
+    "name": "CCharacter::getMaximumPetInstances()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 170,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_831ee0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter22getMaximumPetInstancesEv"
+  },
+  {
+    "address": "0x8325e0",
+    "name": "CCharacter::getDescription()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 184,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8325e0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter14getDescriptionEv"
+  },
+  {
+    "address": "0x8326a0",
+    "name": "CCharacter::diesOnWarp()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 168,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8326a0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter10diesOnWarpEv"
+  },
+  {
+    "address": "0x832750",
+    "name": "CCharacter::getSpawnInvisible()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 168,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_832750",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter17getSpawnInvisibleEv"
+  },
+  {
+    "address": "0x832800",
+    "name": "CCharacter::getDestroyOnDeath()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 168,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_832800",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter17getDestroyOnDeathEv"
+  },
+  {
+    "address": "0x8328b0",
+    "name": "CCharacter::attachesToMaster()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 168,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8328b0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter16attachesToMasterEv"
+  },
+  {
+    "address": "0x834700",
+    "name": "CCharacter::getMimicName()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 184,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_834700",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter12getMimicNameEv"
+  },
+  {
+    "address": "0x8347c0",
+    "name": "CCharacter::getDefaultMerchantTab()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 167,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8347c0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter21getDefaultMerchantTabEv"
+  },
+  {
+    "address": "0x834870",
+    "name": "CCharacter::getSkillTabName(int)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 278,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_834870",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter15getSkillTabNameEi"
+  },
+  {
+    "address": "0x834990",
+    "name": "CCharacter::baseArmorBonus()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 228,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_834990",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter14baseArmorBonusEv"
+  },
+  {
+    "address": "0x834ad0",
+    "name": "CCharacter::getIntroCinematic()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 184,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_834ad0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter17getIntroCinematicEv"
+  },
+  {
+    "address": "0x834b90",
+    "name": "CCharacter::playerLevelForMerchantInventory()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 170,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_834b90",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter31playerLevelForMerchantInventoryEv"
+  },
+  {
+    "address": "0x835520",
+    "name": "CCharacter::removePet(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 436,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_remove_pet",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x835ba0",
+    "name": "CCharacter::setAltSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 191,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN10CCharacter17setAltSkillByNameESbIwSt11char_traitsIwESaIwEE"
+  },
+  {
+    "address": "0x835c60",
+    "name": "CCharacter::setActiveSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 191,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN10CCharacter20setActiveSkillByNameESbIwSt11char_traitsIwESaIwEE"
+  },
+  {
+    "address": "0x836820",
+    "name": "CCharacter::spawningAI(float, CLevel&)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 607,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_spawning",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x836a80",
+    "name": "CCharacter::setPathToFollowByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 549,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_path",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x837060",
+    "name": "CCharacter::deactivateEffect(CEffect*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 449,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_837060",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter16deactivateEffectEP7CEffect"
+  },
+  {
+    "address": "0x837b00",
+    "name": "CCharacter::setLeftSkillByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 256,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN10CCharacter18setLeftSkillByNameESbIwSt11char_traitsIwESaIwEE"
+  },
+  {
+    "address": "0x83c4f0",
+    "name": "CCharacter::attemptStopOfActiveSkill()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 375,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_stop_active",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x83c670",
+    "name": "CCharacter::handInteractiveSequence(float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 192,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_83c670",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter23handInteractiveSequenceEf"
+  },
+  {
+    "address": "0x83c730",
+    "name": "CCharacter::performingSkillAI(float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 641,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_perform_active",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x83dc70",
+    "name": "CCharacter::unLearnSpell(int)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 220,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN10CCharacter12unLearnSpellEi"
+  },
+  {
+    "address": "0x83e570",
+    "name": "CCharacter::createNewCharacter(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 375,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": []
+  },
+  {
+    "address": "0x848790",
+    "name": "CCharacter::updateAttack(CLevel&)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 215,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "3085f8c7bd50d0b067b862086498324fd05f14c96b4a9af5bf0a5e3fbef517bc",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_848790",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN10CCharacter12updateAttackER6CLevel"
+  },
+  {
+    "address": "0x85ba70",
+    "name": "CCharacterSaveState::CCharacterSaveState()",
+    "tu": "charactersavestate.cpp",
+    "cpp_definition": true,
+    "original_bytes": 494,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "6711e4c21cf401e0dc4cbf92ab250eb6d9f213c36400026a79c60cefbdd7f9f1",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": []
+  },
+  {
+    "address": "0x8644f0",
+    "name": "CCharacterSaveState::~CCharacterSaveState()",
+    "tu": "charactersavestate.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1032,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "6711e4c21cf401e0dc4cbf92ab250eb6d9f213c36400026a79c60cefbdd7f9f1",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": []
+  },
+  {
+    "address": "0x864900",
+    "name": "CCharacterSaveState::~CCharacterSaveState()",
+    "tu": "charactersavestate.cpp",
+    "cpp_definition": false,
+    "original_bytes": 18,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "6711e4c21cf401e0dc4cbf92ab250eb6d9f213c36400026a79c60cefbdd7f9f1",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": []
+  },
+  {
+    "address": "0x8c2760",
+    "name": "CItemGold::update(Ogre::Camera*, Ogre::Vector3 const&, float)",
+    "tu": "itemgold.cpp",
+    "cpp_definition": true,
+    "original_bytes": 248,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "61bd185d701cc227b6f44d30675b233de98b41f7d30e2d5987403d8482a7ce60",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8c2760",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN9CItemGold6updateEPN4Ogre6CameraERKNS0_7Vector3Ef"
+  },
+  {
+    "address": "0x8cb030",
+    "name": "CItemSaveState::CItemSaveState()",
+    "tu": "Itemsavestate.cpp",
+    "cpp_definition": true,
+    "original_bytes": 311,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "bcf39aa84279b7aac63333586b5b5dbac0add96784b0442d4217ac18a400ae90",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN14CItemSaveStateC1Ev"
+  },
+  {
+    "address": "0x8d2080",
+    "name": "CItemSaveState::~CItemSaveState()",
+    "tu": "Itemsavestate.cpp",
+    "cpp_definition": true,
+    "original_bytes": 742,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "bcf39aa84279b7aac63333586b5b5dbac0add96784b0442d4217ac18a400ae90",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN14CItemSaveStateD1Ev"
+  },
+  {
+    "address": "0x8d2370",
+    "name": "CItemSaveState::~CItemSaveState()",
+    "tu": "Itemsavestate.cpp",
+    "cpp_definition": false,
+    "original_bytes": 18,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "bcf39aa84279b7aac63333586b5b5dbac0add96784b0442d4217ac18a400ae90",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN14CItemSaveStateD0Ev"
+  },
+  {
+    "address": "0x8d4bf0",
+    "name": "CMonster::hasOffensiveSkill()",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 366,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "98998ef9888c1f1710194bd394d9f0360546df39198257bbc458414ed6d8b88f",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_offensive",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8d4d60",
+    "name": "CMonster::hasDefensiveSkill()",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 501,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "98998ef9888c1f1710194bd394d9f0360546df39198257bbc458414ed6d8b88f",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_defensive",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8d4f60",
+    "name": "CMonster::selectOffensiveSkill(bool)",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 622,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "98998ef9888c1f1710194bd394d9f0360546df39198257bbc458414ed6d8b88f",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_select_offensive",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8d51e0",
+    "name": "CMonster::selectDefensiveSkill()",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 644,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "98998ef9888c1f1710194bd394d9f0360546df39198257bbc458414ed6d8b88f",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_skill_select_defensive",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e1390",
+    "name": "CMonster::fidgetAI(float, CLevel&)",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 495,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "98998ef9888c1f1710194bd394d9f0360546df39198257bbc458414ed6d8b88f",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_fidget",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e2ae0",
+    "name": "CMonster::unitInit(CDataGroup*, bool)",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 218,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "98998ef9888c1f1710194bd394d9f0360546df39198257bbc458414ed6d8b88f",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_action_monster_init",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e3ff0",
+    "name": "CPlayer::setAIState(EAIState)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 112,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8e3ff0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN7CPlayer10setAIStateE8EAIState"
+  },
+  {
+    "address": "0x8e41c0",
+    "name": "CPlayer::incrementJournalStatistic(EJournalStatistic, int)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 466,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8e41c0",
+        "completed": 252,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN7CPlayer25incrementJournalStatisticE17EJournalStatistici"
+  },
+  {
+    "address": "0x8e43a0",
+    "name": "CDungeonTracker::save(_IO_FILE*)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 230,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_guard_8e43a0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e47d0",
+    "name": "CPlayer::die(CCharacter*, Ogre::Vector3 const*, float, bool)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 204,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8e47d0",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN7CPlayer3dieEP10CCharacterPKN4Ogre7Vector3Efb"
+  },
+  {
+    "address": "0x8e5020",
+    "name": "CPlayer::firstTimeSetup()",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 418,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_first_setup",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8ef600",
+    "name": "CPlayer::getLevelSavedState(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 184,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8ef600",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN7CPlayer18getLevelSavedStateESbIwSt11char_traitsIwESaIwEEi"
+  },
+  {
+    "address": "0x8ef6c0",
+    "name": "CPlayer::hasLevelSavedState(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 123,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8ef6c0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN7CPlayer18hasLevelSavedStateESbIwSt11char_traitsIwESaIwEEi"
+  },
+  {
+    "address": "0x8efa70",
+    "name": "CPlayer::addWaypoint(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 326,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN7CPlayer11addWaypointESbIwSt11char_traitsIwESaIwEEi"
+  },
+  {
+    "address": "0x8f4ad0",
+    "name": "CDungeonTracker::load(_IO_FILE*, unsigned int)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 395,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_dungeon_load",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f4d90",
+    "name": "CPlayer::getMaxDepth(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 334,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [],
+    "symbol": "_ZN7CPlayer11getMaxDepthESbIwSt11char_traitsIwESaIwEE"
+  },
+  {
+    "address": "0x8f4fd0",
+    "name": "CPlayer::resetStatPoints()",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 716,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_reset_stats",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f52a0",
+    "name": "CPlayer::getPlayerClassName()",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 209,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8f52a0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN7CPlayer18getPlayerClassNameEv"
+  },
+  {
+    "address": "0x8f5380",
+    "name": "CPlayer::resetSkills()",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 741,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_record_reset_skills",
+        "completed": 96,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f8510",
+    "name": "CPlayer::calculateNaturalArmor()",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 364,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "10aebdb917984ab81a4119d2d4e3ac26906e7002b6caeb231d423688916b15e7",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_8f8510",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN7CPlayer21calculateNaturalArmorEv"
+  },
+  {
+    "address": "0x91c720",
+    "name": "CInventory::executeProcs(EEFFECT_TYPE, CBaseUnit*)",
+    "tu": "Inventory.cpp",
+    "cpp_definition": true,
+    "original_bytes": 688,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "00ce55e39e4bc9e0e9679dcf7b1e841d3e43ec9c4801de7dcfbde8c1ca546636",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_procs",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x9256a0",
+    "name": "CInventory::equipEquipmentIntoSpecificLocation(CEquipment*, EEQUIP_LOCATIONS)",
+    "tu": "Inventory.cpp",
+    "cpp_definition": true,
+    "original_bytes": 715,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "00ce55e39e4bc9e0e9679dcf7b1e841d3e43ec9c4801de7dcfbde8c1ca546636",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_equip_specific",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x925d30",
+    "name": "CInventory::swapWeaponSet()",
+    "tu": "Inventory.cpp",
+    "cpp_definition": true,
+    "original_bytes": 710,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "00ce55e39e4bc9e0e9679dcf7b1e841d3e43ec9c4801de7dcfbde8c1ca546636",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_swap",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0xa06700",
+    "name": "CShape::calculateOrientation(Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&)",
+    "tu": "Shape.cpp",
+    "cpp_definition": true,
+    "original_bytes": 804,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "f35607979fdb65d580210a1f0b989d3e55bbcaed997a1b3df61039629c278c9c",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_a06700",
+        "completed": 140,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN6CShape20calculateOrientationERKN4Ogre7Vector3ERS1_S4_S4_"
+  },
+  {
+    "address": "0xa51440",
+    "name": "CGameGlobals::CGameGlobals(wchar_t const*)",
+    "tu": "GameGlobals.cpp",
+    "cpp_definition": true,
+    "original_bytes": 710,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "8795d3ed035b57400a8f0778c47450ffa407dc2790e96fe4250000a9c364901f",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": []
+  },
+  {
+    "address": "0xa51710",
+    "name": "CGameGlobals::~CGameGlobals()",
+    "tu": "GameGlobals.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1543,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "8795d3ed035b57400a8f0778c47450ffa407dc2790e96fe4250000a9c364901f",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": []
+  },
+  {
+    "address": "0xa51d20",
+    "name": "CGameGlobals::~CGameGlobals()",
+    "tu": "GameGlobals.cpp",
+    "cpp_definition": false,
+    "original_bytes": 18,
+    "acceptance": "MATCH",
+    "compiled_status": "MATCH",
+    "compiled_object_sha256": "8795d3ed035b57400a8f0778c47450ffa407dc2790e96fe4250000a9c364901f",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": []
+  },
+  {
+    "address": "0xaed310",
+    "name": "CConsole::setVisible(bool)",
+    "tu": "Console.cpp",
+    "cpp_definition": true,
+    "original_bytes": 447,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "885905698bee5ee29d976b7c5fefe396f6d46d3d92a69ab6941aaed037e7c6e2",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "restore69_aed310",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ],
+    "symbol": "_ZN8CConsole10setVisibleEb"
+  },
+  {
+    "address": "0xaef6b0",
+    "name": "CConsole::cameraShake(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "Console.cpp",
+    "cpp_definition": true,
+    "original_bytes": 506,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "885905698bee5ee29d976b7c5fefe396f6d46d3d92a69ab6941aaed037e7c6e2",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_console_shake",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0xaef980",
+    "name": "CConsole::spawnClassCreate(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "Console.cpp",
+    "cpp_definition": true,
+    "original_bytes": 558,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "885905698bee5ee29d976b7c5fefe396f6d46d3d92a69ab6941aaed037e7c6e2",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_console_spawn",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0xaf15c0",
+    "name": "CConsole::equipSkillToPlayer(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "Console.cpp",
+    "cpp_definition": true,
+    "original_bytes": 298,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "885905698bee5ee29d976b7c5fefe396f6d46d3d92a69ab6941aaed037e7c6e2",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_console_skill",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0xaf16f0",
+    "name": "CConsole::addSpeedToPlayer()",
+    "tu": "Console.cpp",
+    "cpp_definition": true,
+    "original_bytes": 598,
+    "acceptance": "BEHAVIORAL",
+    "compiled_status": "DIFF",
+    "compiled_object_sha256": "885905698bee5ee29d976b7c5fefe396f6d46d3d92a69ab6941aaed037e7c6e2",
+    "inputs_digest": "842cf75885cad13f05db27685829123454cc497a05bb31fbf583faf01f9a671e",
+    "comparisons": [
+      {
+        "fixture": "smallmass2_inventory_console_speed",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  }
+]

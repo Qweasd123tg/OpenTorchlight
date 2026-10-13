@@ -1,3 +1,4 @@
+
 #include <OgreEntity.h>
 #include <algorithm>
 #include "GenericModel.h"
@@ -82,4 +83,24 @@ void CItemGold::applySaveState(CItemSaveState& state)
     setOrientation(state.m_mOrientation,false);
     m_sItemName = std::wstring(state.m_sItemName);
     m_goldAmount = state.m_iStackSize;
+}
+
+void CItemGold::update(Ogre::Camera* camera, const Ogre::Vector3& cameraPosition, float elapsed)
+{
+    CItem::update(camera, cameraPosition, elapsed);
+    if (m_bRequestedVisible) {
+        if (m_bVisible) {
+            if (m_goldParticle && !m_goldParticle->getVisible()) {
+                m_goldParticle->Start();
+                m_goldParticle->setVisible(true);
+            }
+            if (m_scaleTime > 0.0f) {
+                m_scaleTime -= elapsed;
+                setScale(std::min(1.0f - m_scaleTime / 0.35f, 1.0f) * m_goldScale);
+            }
+        }
+    } else if (m_goldParticle && m_goldParticle->getVisible()) {
+        m_goldParticle->Stop(false);
+        m_goldParticle->setVisible(false);
+    }
 }

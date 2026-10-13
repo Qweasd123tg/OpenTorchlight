@@ -81,6 +81,11 @@ public:
     void updateCameraOpacity(Ogre::Camera* camera, float elapsed);
 
     bool canLearnSpell(std::wstring name, int level);
+    void learnSpell(std::wstring name, int level);
+    void createNewCharacter(std::wstring name);
+    void convertCharacter(std::wstring name, bool);
+    void removePet(std::wstring name);
+    void setPathToFollowByName(const std::wstring& name);
     float rangedRange();
     float meleeRange();
     float attackRange();
@@ -88,6 +93,8 @@ public:
     float sightRange();
     void updateAttack(CLevel& level);
     bool attemptStopOfActiveSkill();
+    bool canCastCurrentSkill(CBaseUnit* target, bool, bool);
+    bool validLineOfSight(CLevel& level, bool);
     void performAttack(CEquipment* equipment, unsigned int attack, float damage, float effects, EDAMAGE_TYPES type);
 
     void updateOpacity(float elapsed, bool force);
@@ -379,6 +386,9 @@ public:
     void setInvulnerable(bool value) { m_bInvulnerable = value; }
     void stopPathing();
     void dropToGround(CLevel& level, float height, bool force);
+    bool moveToPosition(const Ogre::Vector3& position, bool passabilityFlag, bool force);
+    void playHitParticle(const Ogre::Vector3& from, const Ogre::Vector3& to, float distance);
+    void fishingSplash();
     void teleportToMaster(float distance);
     unsigned int getFollowerCount() { return m_Followers.size(); }
     CCharacter* getFollower(unsigned int index) { return m_Followers.size() == 0 ? NULL : m_Followers[index]; }
@@ -400,7 +410,9 @@ private:
     friend class CPlayer;
     friend class CMonster;
     float m_pathTime; // +0x1e8
-    unsigned char m_Padding1EC[0x14];
+    unsigned char m_Padding1EC[8];
+    bool m_groundFlag; // +0x1f4
+    unsigned char m_Padding1F5[0xb];
 public:
     CGenericModel* m_pUnitModel;
     CGenericModel* m_pPaperdollModel;
@@ -540,7 +552,8 @@ private:
     CWeaponTrail* m_weaponTrails[4]; // +0x698
     unsigned char m_Padding6B8[0x4d];
     bool m_weaponsHidden; // +0x705
-    unsigned char m_Padding706[0x7];
+    unsigned char m_Padding706[0x6];
+    bool m_targetLocked; // +0x70c
     bool m_forcedHidden; // +0x70d
     bool m_bSecondaryWeaponSet;
     char m_CharacterData70f;
@@ -555,7 +568,8 @@ private:
     TSafePointer<CPathController> m_pathToFollow;
     std::wstring m_pathName;
     int m_savedPathIterations;
-    unsigned char m_Padding76C[5];
+    float m_facingAngle; // +0x76c
+    unsigned char m_Padding770;
     bool m_keepPathWhenAIChanges; // +0x771
     unsigned char m_Padding772[6];
 };

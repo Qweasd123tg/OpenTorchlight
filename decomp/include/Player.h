@@ -16,6 +16,9 @@ class CPlayer : public CCharacter
 {
 friend class CGameClient;
 public:
+    void firstTimeSetup();
+    void resetStatPoints();
+    void resetSkills();
     void calculateNaturalArmor();
     void createPortals(CLevel& level);
 

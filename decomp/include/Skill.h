@@ -2,6 +2,7 @@
 #define SKILL_H
 
 #include <string>
+#include <OgreVector3.h>
 #include "RunicCore.h"
 #include "SkillDefines.h"
 #include "iUnitObserver.h"
@@ -24,6 +25,8 @@ public:
     unsigned int getManaCostOT();
     bool getRequiresPathable();
     int getTargetType();
+    bool getIsInRange(const Ogre::Vector3& from, const Ogre::Vector3& to,
+                      CBaseUnit* caster, CBaseUnit* target);
     int getAnimationIndex();
     unsigned int getAnimationIndexDW();
     unsigned int getAnimationIndexLoopInto();
@@ -76,11 +79,13 @@ public:
 
 private:
     friend class CCharacter;
+    friend class CMonster;
     CResourceManager* m_resources;
     CSkillManager* m_pSkillManager;
     char m_SkillData28[0x30 - 0x28];
     CBaseUnit* m_pOwner;
-    char m_SkillData38[0x60 - 0x38];
+    char m_SkillData38[0x5c - 0x38];
+    int m_skillType; // +0x5c, indexes gSKILL_TYPE_NAMES
     ESKILL_ACTIVATION_TYPE m_eActivationType; // 0x60
     bool m_interruptible; // +0x64
     unsigned char m_Padding65[0x1];
@@ -93,7 +98,8 @@ private:
     bool m_bExecutedByProperty;
     char m_SkillData6C;
     bool m_bEnabled;
-    char m_SkillData6E[0x90-0x6e];
+    bool m_targetsDead; // +0x6e
+    char m_SkillData6F[0x90-0x6f];
     CSkillProperty* m_property;
     char m_SkillData98[8];
     CSkillProperty** m_levelPropertyData;

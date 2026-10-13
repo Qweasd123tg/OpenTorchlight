@@ -53,7 +53,7 @@ public:
     unsigned char m_Unknown168[0x18] __attribute__((aligned(8)));
     float m_fUnknown180;
     unsigned char m_gap184[0x4] __attribute__((aligned(4)));
-    void* m_pPathName;
+    std::wstring m_pathName; // +0x188
     int m_iNumberOfPathPoints;
     bool m_bEnableUnitOnStart;
 
