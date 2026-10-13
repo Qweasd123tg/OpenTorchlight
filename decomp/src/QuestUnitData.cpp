@@ -418,3 +418,66 @@ bool CQuestUnitData::unitPickedUp(CBaseUnit* unit)
     }
     return pickedUp;
 }
+
+#include "PropertyNode.h"
+#include "Utilities.h"
+
+CPositionableObject* CQuestUnitData::createUnit(CLevel* level)
+{
+    if (!m_createUnit || level == NULL)
+        return NULL;
+
+    TArrayList<CPropertyNode*>* nodes = NULL;
+    if (m_unitSearchMode == 0)
+        nodes = &level->m_propertyNodesF0;
+    else if (m_unitSearchMode == 1)
+        nodes = &level->m_propertyNodes108;
+
+    if (nodes != NULL && nodes->size() != 0)
+    {
+        const unsigned int index = static_cast<unsigned int>(
+            UTILITIES::randomBetween(1.0f, static_cast<float>(nodes->size())) - 1.0f);
+        CBaseUnit* unit = spawnUnit(m_pQuest->m_pResourceManager,
+                                    (*nodes)[index]->getPosition(true));
+        if (unit != NULL)
+        {
+            unit->setOrientation((*nodes)[index]->getOrientationQuaternion());
+            CCharacter* character = dynamic_cast<CCharacter*>(unit);
+            if (character != NULL)
+            {
+                m_pQuest->m_pQuestManager->calculateNPCIcon(character);
+                if (m_uniqueUnitName != EMPTY_WSTRING)
+                    character->m_characterDisplayName = std::wstring(m_uniqueUnitName);
+                character->dropToGround(*level, 4.0f, false);
+            }
+            else
+            {
+                CItem* item = dynamic_cast<CItem*>(unit);
+                if (item != NULL)
+                    item->snapToGround();
+            }
+        }
+        return unit;
+    }
+
+    TArrayList<CBaseUnit*> units(10);
+    level->getUnitsByUnitType(static_cast<UNITTYPES::EUNITTYPES>(0), units);
+    CBaseUnit* unit = units[UTILITIES::randomIntegerBetween(0, units.size() - 1)];
+    if (unit != NULL)
+    {
+        Ogre::Vector3 position = unit->getLevel()->randomOpenPosition(
+            unit->getPosition(true), 10.0f, false);
+        int attempts = 0;
+        float radius = 10.0f;
+        while (unit->getLevel()->isInNoSpawnRegion(position, 0.0f) && attempts != 41)
+        {
+            unit = units[UTILITIES::randomIntegerBetween(0, units.size() - 1)];
+            position = unit->getLevel()->randomOpenPosition(
+                unit->getPosition(true), radius, false);
+            ++attempts;
+            radius += 0.25f;
+        }
+        spawnUnit(unit->getResourceManager(), position);
+    }
+    return unit;
+}

@@ -28,6 +28,7 @@ class CDataGroup;
 class CSkill;
 class CEditorScene;
 class CLevelTemplateData;
+class CPropertyNode;
 
 // Partial: members used by recovered TUs; unnamed regions are padding until
 // level.cpp is recovered. Size 0x2f0 follows CGameClient::loadMenuLevel allocation.
@@ -36,6 +37,8 @@ class CLevel : public CRunicCore
 public:
     void addUpdateObject(iLevelUpdate* object);
     CBaseUnit* getBaseUnitByDataGroup(CDataGroup* dataGroup);
+    void getUnitsByUnitType(UNITTYPES::EUNITTYPES type, TArrayList<CBaseUnit*>& units);
+    bool isInNoSpawnRegion(const Ogre::Vector3& position, float radius);
     void removeListenerFromUnit(long long guid, iUnitObserver* observer);
     void removeListenerFromUnit(CBaseUnit* unit, iUnitObserver* observer);
     bool addListenerToUnit(CBaseUnit* unit, iUnitObserver* observer);
@@ -119,7 +122,10 @@ private:
     TLinkedList<CItem*>* m_activeItems;
     TLinkedList<CCharacter*>* m_pCharacters;
     TLinkedList<CItem*>* m_items;
-    char m_LevelDataA8[0x1a4-0xa8];
+    char m_LevelDataA8[0xf0-0xa8];
+    TArrayList<CPropertyNode*> m_propertyNodesF0; // +0xf0, createUnit mode 0
+    TArrayList<CPropertyNode*> m_propertyNodes108; // +0x108, createUnit mode 1
+    char m_LevelData120[0x1a4-0x120];
     int m_iLevelDepth;
     int m_dungeonDepth; // +0x1a8
     char m_LevelData1AC[0x1d8 - 0x1ac];
