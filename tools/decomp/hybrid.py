@@ -167,6 +167,25 @@ def rewrite_assembly(text, redirect, drop_ctors):
 # --------------------------------------------------------------------------
 
 
+
+def export_local_functions(text, owned, tu_id):
+    """Expose recovered file-local functions to hooks without changing their linkage.
+
+    Hook records live in a separate object, so a local symbol cannot satisfy
+    their relocation. A TU-specific alias names the same code and avoids
+    collisions between static helpers with identical names in different TUs.
+    """
+    labels = set(re.findall(r"^([^\s:.][^\s:]*):\s*$", text, re.M))
+    aliases = {}
+    for name, function in sorted(owned.items()):
+        bindings = dict(zip(function["names"], function.get("bind", [])))
+        if bindings.get(name) != "local" or name not in labels:
+            continue
+        alias = "__tlhybrid_local_%s_%s" % (tu_id, name)
+        text += "\n\t.globl %s\n\t.set %s, %s\n" % (alias, alias, name)
+        aliases[name] = alias
+    return text, aliases
+
 def defined_functions(obj_path):
     obj = elfimage.load_object(obj_path)
     return [(s.name, s.bind) for s in obj.symbols if s.type == elfimage.STT_FUNC and s.defined]
@@ -510,6 +529,9 @@ def _build_impl(out, verbose, src, tests, timing):
         if tu:
             redirect.update(ctx.local_data.get(tu["name"], {}))
         text, redirected = rewrite_assembly(asm.read_text(), redirect, drop_ctors=not is_test)
+        local_aliases = {}
+        if tu:
+            text, local_aliases = export_local_functions(text, ctx.tu_functions(tu), tu["id"])
         source_sha256 = None
         omitted = []
         if not is_test:
@@ -524,7 +546,7 @@ def _build_impl(out, verbose, src, tests, timing):
             symbols = object_symbols(obj)
         except (Exception, SystemExit) as error:
             return {"error": error, "diagnostics": diagnostics}
-        return dict(tu=tu, obj=obj, symbols=symbols, redirected=redirected,
+        return dict(tu=tu, obj=obj, symbols=symbols, redirected=redirected, local_aliases=local_aliases,
                     source_sha256=source_sha256, omitted=omitted, diagnostics=diagnostics)
 
     stems = [("test_" if is_test else "") + source.stem for source, is_test in units]
@@ -571,7 +593,7 @@ def _build_impl(out, verbose, src, tests, timing):
                 if problem:
                     notes.append(f"not hooked {f['demangled']}: {problem}")
                     continue
-                hooks.append({"original": address, "symbol": name, "demangled": f["demangled"],
+                hooks.append({"original": address, "symbol": result["local_aliases"].get(name, name), "demangled": f["demangled"],
                               "expected": list(ctx.image.read(address, 8)), "unit": str(source.relative_to(ROOT))})
                 unit_hooks += 1
         if verbose:

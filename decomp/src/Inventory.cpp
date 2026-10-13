@@ -1,3 +1,37 @@
+#include "EmptyStrings.h"
+#include "Inventory.h"
+#include "Sets.h"
+#include <algorithm>
+#include "Constants.h"
+static const UNITTYPES::EUNITTYPES gEQUIP_UNITTYPES_DISALLOWED[12][2] = {
+    { static_cast<UNITTYPES::EUNITTYPES>(36), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) }
+};
+static const UNITTYPES::EUNITTYPES gEQUIP_UNITTYPES_ALLOWED[12][2] = {
+    { static_cast<UNITTYPES::EUNITTYPES>(8), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(8), static_cast<UNITTYPES::EUNITTYPES>(21) },
+    { static_cast<UNITTYPES::EUNITTYPES>(23), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(12), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(15), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(20), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(16), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(18), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(17), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(17), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(24), static_cast<UNITTYPES::EUNITTYPES>(22) },
+    { static_cast<UNITTYPES::EUNITTYPES>(22), static_cast<UNITTYPES::EUNITTYPES>(22) }
+};
+
 #include "Effect.h"
 #include "Utilities.h"
 #include <OgreSceneNode.h>
@@ -637,4 +671,221 @@ void CInventory::swapWeaponSet()
     updateBonuses();
     calculateEffectValues();
     verifyEquipment();
+}
+
+bool CInventory::canEquip(CEquipment* equipment, bool ignoreCapacity)
+{
+    if (!canPickup(equipment, ignoreCapacity) || !equipment->canEquip(m_pPositionableObject, true))
+        return false;
+    if (equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(10)))
+    {
+        if (getEquipmentInSlot(0) && getEquipmentInSlot(0) != equipment) return false;
+        if (getEquipmentInSlot(1) && getEquipmentInSlot(1) != equipment) return false;
+    }
+    if (equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(8)) || equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(21)))
+    {
+        if (getEquipmentInSlot(1) && getEquipmentInSlot(1) != equipment &&
+            getEquipmentInSlot(1)->ISA(static_cast<UNITTYPES::EUNITTYPES>(10))) return false;
+        if (getEquipmentInSlot(0) && getEquipmentInSlot(0) != equipment &&
+            getEquipmentInSlot(0)->ISA(static_cast<UNITTYPES::EUNITTYPES>(10))) return false;
+    }
+    for (int slot = 0; slot < 12; ++slot)
+    {
+        if (equipment->ISA(gEQUIP_UNITTYPES_DISALLOWED[slot][0]) || equipment->ISA(gEQUIP_UNITTYPES_DISALLOWED[slot][1])) continue;
+        if ((equipment->ISA(gEQUIP_UNITTYPES_ALLOWED[slot][0]) || equipment->ISA(gEQUIP_UNITTYPES_ALLOWED[slot][1])) &&
+            (!getEquipmentInSlot(slot) || getEquipmentInSlot(slot) == equipment)) return true;
+    }
+    return false;
+}
+
+void CInventory::getComparisonItems(CEquipment* equipment, CEquipment** first, CEquipment** second)
+{
+    for (int slot = 0; slot < 12; ++slot)
+    {
+        if (equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(8)) && getEquipmentInSlot(slot) &&
+            getEquipmentInSlot(slot)->ISA(static_cast<UNITTYPES::EUNITTYPES>(8)) && getEquipmentInSlot(slot) != equipment)
+        {
+            if (!*first) *first = getEquipmentInSlot(slot);
+            else if (!*second) *second = getEquipmentInSlot(slot);
+            continue;
+        }
+        if (equipment->ISA(gEQUIP_UNITTYPES_DISALLOWED[slot][0]) || equipment->ISA(gEQUIP_UNITTYPES_DISALLOWED[slot][1])) continue;
+        if ((equipment->ISA(gEQUIP_UNITTYPES_ALLOWED[slot][0]) || equipment->ISA(gEQUIP_UNITTYPES_ALLOWED[slot][1])) &&
+            getEquipmentInSlot(slot) && getEquipmentInSlot(slot) != equipment)
+        {
+            if (!*first) *first = getEquipmentInSlot(slot);
+            else if (!*second) *second = getEquipmentInSlot(slot);
+        }
+    }
+}
+
+void CInventory::calculateEffectValues()
+{
+    m_pEffectManager->clearOutAffixEffects();
+    m_pEffectManager->clearEffects(false);
+    std::vector<CSet*> appliedSets;
+    for (int slot = 0; slot < 12; ++slot)
+    {
+        CEquipmentRef* reference = getEquipmentRefInSlot(slot);
+        if (!reference || !reference->m_effectsEnabled) continue;
+        std::wstring name = reference->m_pEquipment->getSet();
+        if (name == EMPTY_WSTRING) continue;
+        CSet* set = CSets::getSingleton()->getSet(name.c_str());
+        if (!set || std::find(appliedSets.begin(), appliedSets.end(), set) != appliedSets.end()) continue;
+        appliedSets.push_back(set);
+        int count = getSetCount(set);
+        for (unsigned int i = 0; i < set->m_Affixes.size(); ++i)
+            if (count >= set->m_Affixes[i]->m_iRequiredCount)
+                m_pEffectManager->addAffix(set->m_Affixes[i]->m_sAffixName, set->m_Affixes[i]->m_iLevel,
+                    NULL, m_pPositionableObject->getResourceManager(), -1.0f);
+    }
+    m_pEffectManager->calculateEffectValues();
+    for (int damage = 0; damage < 8; ++damage)
+    {
+        m_effectValues[damage].clear();
+        for (int effect = 0; effect < 145; ++effect)
+        {
+            float value = calculateEffectValue(static_cast<EEFFECT_TYPE>(effect), static_cast<EDAMAGE_TYPES>(damage));
+            if (value != 0.0f) m_effectValues[damage][static_cast<EEFFECT_TYPE>(effect)] = value;
+        }
+    }
+}
+
+CEquipment* CInventory::pickupEquipment(CEquipment* equipment, int slot, bool)
+{
+    if (slot == -1 || slot == 999) return pickupEquipment(equipment, true);
+    if (slot > 19 && !slotIsInPane(getPaneIndex(static_cast<EINVENTORY_PANES>(getRequiredPane(equipment))), slot)) return NULL;
+    if (static_cast<unsigned int>(slot) <= 11 &&
+        !equipment->ISA(gEQUIP_UNITTYPES_DISALLOWED[slot][0]) && !equipment->ISA(gEQUIP_UNITTYPES_DISALLOWED[slot][1]) &&
+        !equipment->ISA(gEQUIP_UNITTYPES_ALLOWED[slot][0]) && !equipment->ISA(gEQUIP_UNITTYPES_ALLOWED[slot][1])) return NULL;
+    if (m_pPositionableObject && m_pPositionableObject->ISA(static_cast<UNITTYPES::EUNITTYPES>(28))) equipment->reskinByClass(m_pPositionableObject->getName());
+    if (!equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(10)) && (slot == 0 || slot == 1))
+    {
+        CEquipment* opposite = getEquipmentInSlot(slot == 0 ? 1 : 0);
+        if (opposite && opposite->ISA(static_cast<UNITTYPES::EUNITTYPES>(10)))
+        {
+            removeEquipment(opposite);
+            if (!pickupEquipment(opposite, true))
+            {
+                Ogre::Vector3 position = m_pPositionableObject->getPosition(true);
+                opposite->getLevel()->addItem(opposite, position, true);
+                opposite->setPosition(m_pPositionableObject->getPosition(true));
+                opposite->drop();
+            }
+        }
+    }
+    CEquipment* existing = getEquipmentInSlot(slot);
+    if (existing == equipment) return NULL;
+    bool merged = false;
+    if (m_bUnknown14 && equipment->m_iUnknown23C > 1)
+    {
+        if (existing)
+        {
+            if (equipment->getUnitGuid() != existing->getUnitGuid()) return NULL;
+            if (equipment->m_iUnknown238 + existing->m_iUnknown238 <= existing->m_iUnknown23C)
+            {
+                existing->incrementStackBy(equipment->m_iUnknown238);
+                merged = true;
+            }
+            else if (existing->m_iUnknown238 < existing->m_iUnknown23C)
+            {
+                int transferred = existing->m_iUnknown23C - existing->m_iUnknown238;
+                existing->incrementStackBy(transferred);
+                equipment->incrementStackBy(-transferred);
+                return NULL;
+            }
+        }
+    }
+    else if (existing) return NULL;
+    if (!merged)
+    {
+        CEquipmentRef* reference = new CEquipmentRef;
+        reference->m_pEquipment = equipment;
+        reference->m_slot = slot;
+        reference->m_originalSlot = slot;
+        reference->m_flag20 = false;
+        reference->m_effectsEnabled = true;
+        m_equipmentRefs.add(reference);
+    }
+    equipment->addedToInventory(this, m_pPositionableObject);
+    for (unsigned int i = 0; i < m_listeners.size(); ++i) m_listeners[i]->equipmentPickedUp(equipment);
+    if (merged)
+    {
+        if (equipment->getLevel()) equipment->getLevel()->deleteItem(equipment);
+        else delete equipment;
+        return existing;
+    }
+    if (slot <= 11) equipment->equipped(this, m_pPositionableObject, static_cast<EEQUIP_LOCATIONS>(slot));
+    updateBonuses();
+    calculateEffectValues();
+    verifyEquipment();
+    if (slot <= 11)
+        for (unsigned int i = 0; i < m_listeners.size(); ++i) m_listeners[i]->equipmentEquipped(equipment);
+    return equipment;
+}
+
+CEquipment* CInventory::pickupEquipment(CEquipment* equipment, bool allowEquipping)
+{
+    int slot = findFreeSlot(equipment);
+    if (equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(10)) && (getEquipmentInSlot(0) || getEquipmentInSlot(1))) allowEquipping = false;
+    if (equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(9)))
+    {
+        CEquipment* right = getEquipmentInSlot(0);
+        if (right && right->ISA(static_cast<UNITTYPES::EUNITTYPES>(10))) allowEquipping = false;
+        CEquipment* left = getEquipmentInSlot(1);
+        if (left && left->ISA(static_cast<UNITTYPES::EUNITTYPES>(10))) allowEquipping = false;
+    }
+    if (slot != -1) return pickupEquipment(equipment, slot, true);
+    if (allowEquipping)
+        for (int location = 0; location < 12; ++location)
+        {
+            if (equipment->ISA(gEQUIP_UNITTYPES_DISALLOWED[location][0]) || equipment->ISA(gEQUIP_UNITTYPES_DISALLOWED[location][1])) continue;
+            if ((equipment->ISA(gEQUIP_UNITTYPES_ALLOWED[location][0]) || equipment->ISA(gEQUIP_UNITTYPES_ALLOWED[location][1])) &&
+                !getEquipmentInSlot(location) && canEquipIntoSpecificLocation(equipment, static_cast<EEQUIP_LOCATIONS>(location), true))
+                return pickupEquipment(equipment, location, true);
+        }
+    return NULL;
+}
+
+bool CInventory::equipEquipmentIntoFirstFreeLocation(CEquipment* equipment)
+{
+    if (!canEquip(equipment, true)) return false;
+    CEquipmentRef* reference = NULL;
+    for (unsigned int i = 0; i < m_equipmentRefs.size(); ++i)
+        if (m_equipmentRefs[i] && m_equipmentRefs[i]->m_pEquipment == equipment)
+        {
+            reference = m_equipmentRefs[i];
+            break;
+        }
+    if (equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(9)))
+    {
+        CEquipment* right = getEquipmentInSlot(0);
+        if (right && right->ISA(static_cast<UNITTYPES::EUNITTYPES>(10))) return false;
+        CEquipment* left = getEquipmentInSlot(1);
+        if (left && left->ISA(static_cast<UNITTYPES::EUNITTYPES>(10))) return false;
+    }
+    if (equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(10)) && (getEquipmentInSlot(0) || getEquipmentInSlot(1))) return false;
+    for (int slot = 0; slot < 12; ++slot)
+    {
+        if (equipment->ISA(gEQUIP_UNITTYPES_DISALLOWED[slot][0]) || equipment->ISA(gEQUIP_UNITTYPES_DISALLOWED[slot][1])) continue;
+        if (!(equipment->ISA(gEQUIP_UNITTYPES_ALLOWED[slot][0]) || equipment->ISA(gEQUIP_UNITTYPES_ALLOWED[slot][1])) || getEquipmentInSlot(slot)) continue;
+        if (reference) reference->m_slot = slot;
+        else
+        {
+            reference = new CEquipmentRef;
+            reference->m_pEquipment = equipment;
+            reference->m_slot = slot;
+            reference->m_originalSlot = slot;
+            reference->m_flag20 = false;
+            reference->m_effectsEnabled = true;
+            m_equipmentRefs.add(reference);
+        }
+        equipment->equipped(this, m_pPositionableObject, static_cast<EEQUIP_LOCATIONS>(slot));
+        updateBonuses();
+        calculateEffectValues();
+        verifyEquipment();
+        for (unsigned int i = 0; i < m_listeners.size(); ++i) m_listeners[i]->equipmentEquipped(equipment);
+        return true;
+    }
+    return false;
 }

@@ -208,6 +208,7 @@ public:
     void addMenuListener(EMENU_TYPE menu, iMenuListener* listener);
     void setCinematicOpen(std::wstring cinematic);
 private:
+    friend class CPlayer;
     friend class CDropdownMenu;
     friend class CDieMenu;
     friend class COptionsMenu;

@@ -34,6 +34,7 @@ public:
     CEffect* cloneEffect(CBaseUnit* source,CEffect* effect);
     bool removeEffect(const std::wstring& name, bool flag);
     bool deleteAffix(const std::wstring& name);
+    void removeNonSavedEffects();
     bool deleteAffix(CAffix*);
     void clearOutDescriptions();
     void deleteDeadEffects();
@@ -52,6 +53,7 @@ public:
     unsigned int createEffects(CDataGroup* data,bool flag);
     CAffix* getAffix(const std::wstring& name);
     TArrayList<CUnitTheme*>* getUnitThemes() { return &m_UnitThemes; }
+    TArrayList<CEffect*>& getActiveEffects(unsigned int group) { return *reinterpret_cast<TArrayList<CEffect*>*>(m_EffectData10 + 0x18 + group * 0x18); }
     // Partial layout: the affix list occupies the beginning of the opaque region.
     TArrayList<CAffix*>& getAffixes() { return *reinterpret_cast<TArrayList<CAffix*>*>(m_EffectData10); }
 private:

@@ -6,6 +6,7 @@
 #include "EffectDefines.h"
 #include "Constants.h"
 class CBaseUnit;
+class CCharacter;
 class CResourceManager;
 class CParticle;
 #include <OgreVector3.h>
@@ -34,9 +35,12 @@ private:
     EEFFECT_TYPE m_eType;
     EEFFECT_ACTIVATION m_activation; // +0x20
     float m_fValue24;
-    unsigned char m_EffectData28[0x48-0x28];
+    unsigned char m_EffectData28[0x33-0x28];
+    bool m_flag33;
+    unsigned char m_EffectData34[0x48-0x34];
     TSafePointer<CBaseUnit> m_Owner;
-    unsigned char m_EffectData58[0x80-0x58];
+    CCharacter* m_sourceCharacter; // +0x58
+    unsigned char m_EffectData60[0x80-0x60];
     std::wstring m_sName;
     unsigned char m_EffectData88[0xa8-0x88];
     CParticle* m_particle;
@@ -50,6 +54,7 @@ private:
     unsigned char m_EffectDataD4[0x138-0xd4];
     friend class CBaseUnit;
     friend class CCharacter;
+    friend class CPlayer;
     friend class CEquipment;
     friend class CInventory;
 };

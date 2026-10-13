@@ -67,6 +67,7 @@ public:
     int getDungeonDepth() const { return m_dungeonDepth; }
     void notifyOfDeletion(CItem* item);
     void addItem(CItem*,const Ogre::Vector3&,bool);
+    void deleteItem(CItem*);
     // Original removal symbols; used by typed descriptor notifications.
     bool removeItem(CItem* item, bool deactivate);
     void removeCharacter(CCharacter* character, bool clearReferences);
@@ -107,6 +108,9 @@ public:
 
 private:
     friend struct SmallmatchPass7Probe;
+    friend class CCharacter;
+    friend class CPlayer;
+    friend class CMonster;
     TArrayList<CEditorScene*> m_RoomScenes;
     TArrayList<Ogre::AxisAlignedBox> m_roomBounds;
     short** m_mapPassability;
@@ -118,7 +122,12 @@ private:
     TLinkedList<CItem*>* m_activeItems;
     TLinkedList<CCharacter*>* m_pCharacters;
     TLinkedList<CItem*>* m_items;
-    char m_LevelDataA8[0x1a4-0xa8];
+    char m_LevelDataA8[0x140-0xa8];
+    Ogre::Vector3 m_playerStart; // +0x140
+    Ogre::Vector3 m_returnPortalPosition; // +0x14c
+    Ogre::Vector3 m_waypointPosition; // +0x158
+    Ogre::Vector3 m_startDirection; // +0x164
+    char m_LevelData170[0x1a4-0x170];
     int m_iLevelDepth;
     int m_dungeonDepth; // +0x1a8
     char m_LevelData1AC[0x1d8 - 0x1ac];

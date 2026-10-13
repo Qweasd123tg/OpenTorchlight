@@ -30,6 +30,7 @@ extern unsigned int KSETTINGS_FKEYMAP_12;
 #include "TArrayList.h"
 
 // Property indices registered by CSettings.
+extern unsigned int KSETTINGS_PLAYER_UNTARGETABLE;
 extern unsigned int KSETTINGS_RETIREE_QUEST;
 extern unsigned int KSETTINGS_GAME_COMPLETED_ONCE;
 extern unsigned int KSETTINGS_SOUNDMUTE;

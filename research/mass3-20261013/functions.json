@@ -1,0 +1,743 @@
+[
+  {
+    "address": "0xaec900",
+    "symbol": "_ZL14SetPetsEnabledP10CCharacterb",
+    "name": "SetPetsEnabled(CCharacter*, bool)",
+    "tu": "Console.cpp",
+    "cpp_definition": true,
+    "original_bytes": 167,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_aec900",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x91bdc0",
+    "symbol": "_ZN10CInventory8canEquipEP10CEquipmentb",
+    "name": "CInventory::canEquip(CEquipment*, bool)",
+    "tu": "Inventory.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1241,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_91bdc0",
+        "completed": 384,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x91c2a0",
+    "symbol": "_ZN10CInventory18getComparisonItemsEP10CEquipmentPS1_S2_",
+    "name": "CInventory::getComparisonItems(CEquipment*, CEquipment**, CEquipment**)",
+    "tu": "Inventory.cpp",
+    "cpp_definition": true,
+    "original_bytes": 924,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_91c2a0",
+        "completed": 384,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x924440",
+    "symbol": "_ZN10CInventory21calculateEffectValuesEv",
+    "name": "CInventory::calculateEffectValues()",
+    "tu": "Inventory.cpp",
+    "cpp_definition": true,
+    "original_bytes": 970,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_924440",
+        "completed": 80,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x924bd0",
+    "symbol": "_ZN10CInventory15pickupEquipmentEP10CEquipmentib",
+    "name": "CInventory::pickupEquipment(CEquipment*, int, bool)",
+    "tu": "Inventory.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1503,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_924bd0",
+        "completed": 448,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x9251b0",
+    "symbol": "_ZN10CInventory15pickupEquipmentEP10CEquipmentb",
+    "name": "CInventory::pickupEquipment(CEquipment*, bool)",
+    "tu": "Inventory.cpp",
+    "cpp_definition": true,
+    "original_bytes": 766,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_9251b0",
+        "completed": 384,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x925970",
+    "symbol": "_ZN10CInventory35equipEquipmentIntoFirstFreeLocationEP10CEquipment",
+    "name": "CInventory::equipEquipmentIntoFirstFreeLocation(CEquipment*)",
+    "tu": "Inventory.cpp",
+    "cpp_definition": true,
+    "original_bytes": 951,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_925970",
+        "completed": 384,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x811230",
+    "symbol": "_ZN10CCharacter9interruptEb",
+    "name": "CCharacter::interrupt(bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1010,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_811230",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x811650",
+    "symbol": "_ZN10CCharacter15updateSkillKeysEf",
+    "name": "CCharacter::updateSkillKeys(float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 905,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_811650",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x812950",
+    "symbol": "_ZN10CCharacter10setVisibleEbb",
+    "name": "CCharacter::setVisible(bool, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1307,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_812950",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x812e70",
+    "symbol": "_ZN10CCharacter13updateOpacityEfb",
+    "name": "CCharacter::updateOpacity(float, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 756,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_812e70",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8132f0",
+    "symbol": "_ZL23createEquipmentAndEquipP10CCharacterP10CDataGroupPKw16EEQUIP_LOCATIONSb",
+    "name": "createEquipmentAndEquip(CCharacter*, CDataGroup*, wchar_t const*, EEQUIP_LOCATIONS, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 253,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8132f0",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x822850",
+    "symbol": "_ZN10CCharacter15awardExperienceER6CLevelPS_ib",
+    "name": "CCharacter::awardExperience(CLevel&, CCharacter*, int, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 764,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_822850",
+        "completed": 384,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8245c0",
+    "symbol": "_ZN10CCharacter13doWeaponSkillEP10CEquipment",
+    "name": "CCharacter::doWeaponSkill(CEquipment*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 852,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8245c0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x824a50",
+    "symbol": "_ZN10CCharacter13inStrikeRangeEPS_P5CItemP10CEquipment",
+    "name": "CCharacter::inStrikeRange(CCharacter*, CItem*, CEquipment*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 934,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_824a50",
+        "completed": 384,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x824e60",
+    "symbol": "_ZN10CCharacter16validLineOfSightER6CLevelb",
+    "name": "CCharacter::validLineOfSight(CLevel&, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 927,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_824e60",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x826140",
+    "symbol": "_ZN10CCharacter13inAttackRangeE18EATTACK_RANGE_TYPE",
+    "name": "CCharacter::inAttackRange(EATTACK_RANGE_TYPE)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 813,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_826140",
+        "completed": 384,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x826470",
+    "symbol": "_ZN10CCharacter12inSkillRangeExb",
+    "name": "CCharacter::inSkillRange(long long, bool)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 872,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_826470",
+        "completed": 384,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x827b20",
+    "symbol": "_ZN10CCharacter12performSkillEv",
+    "name": "CCharacter::performSkill()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 908,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_827b20",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x82e4b0",
+    "symbol": "_ZN10CCharacter12startFishingEv",
+    "name": "CCharacter::startFishing()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 670,
+    "acceptance": "MATCH",
+    "comparisons": []
+  },
+  {
+    "address": "0x831f90",
+    "symbol": "_ZN10CCharacter6addPetEPS_",
+    "name": "CCharacter::addPet(CCharacter*)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 708,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_831f90",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x836cb0",
+    "symbol": "_ZN10CCharacter25generateMerchantInventoryEv",
+    "name": "CCharacter::generateMerchantInventory()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 940,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_836cb0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x837630",
+    "symbol": "_ZN10CCharacter6fameUpEv",
+    "name": "CCharacter::fameUp()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1229,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_837630",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x83bd10",
+    "symbol": "_ZL22loadAndEquipSpawnClassP10CCharacterP10CDataGroupPKw16EEQUIP_LOCATIONS",
+    "name": "loadAndEquipSpawnClass(CCharacter*, CDataGroup*, wchar_t const*, EEQUIP_LOCATIONS)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1058,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_83bd10",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x83c140",
+    "symbol": "_ZN10CCharacter14fishingAICatchEfR6CLevel",
+    "name": "CCharacter::fishingAICatch(float, CLevel&)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 943,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_83c140",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x83d930",
+    "symbol": "_ZN10CCharacter8updateHPER6CLevelf",
+    "name": "CCharacter::updateHP(CLevel&, float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 819,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_83d930",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x83e6f0",
+    "symbol": "_ZL12loadAndEquipP10CCharacterP10CDataGroupPKw16EEQUIP_LOCATIONS",
+    "name": "loadAndEquip(CCharacter*, CDataGroup*, wchar_t const*, EEQUIP_LOCATIONS)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 424,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_83e6f0",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x83e8a0",
+    "symbol": "_ZN10CCharacter22createDefaultEquipmentEv",
+    "name": "CCharacter::createDefaultEquipment()",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 546,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_83e8a0",
+        "completed": 64,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x842150",
+    "symbol": "_ZN10CCharacter18transformCharacterESbIwSt11char_traitsIwESaIwEEf",
+    "name": "CCharacter::transformCharacter(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",
+    "tu": "character.cpp",
+    "cpp_definition": true,
+    "original_bytes": 844,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_842150",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8d59a0",
+    "symbol": "_ZN8CMonster6fleeAIEfR6CLevel",
+    "name": "CMonster::fleeAI(float, CLevel&)",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 667,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8d59a0",
+        "completed": 384,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e02b0",
+    "symbol": "_ZN8CMonster12idleAINormalEfR6CLevelb",
+    "name": "CMonster::idleAINormal(float, CLevel&, bool)",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1026,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8e02b0",
+        "completed": 512,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e06e0",
+    "symbol": "_ZN8CMonster13idleAICirclerEfR6CLevelb",
+    "name": "CMonster::idleAICircler(float, CLevel&, bool)",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1188,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8e06e0",
+        "completed": 512,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e0b90",
+    "symbol": "_ZN8CMonster18idleAIRangedCasterEfR6CLevelb",
+    "name": "CMonster::idleAIRangedCaster(float, CLevel&, bool)",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 796,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8e0b90",
+        "completed": 512,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e0eb0",
+    "symbol": "_ZN8CMonster20idleAIRangedDefenderEfR6CLevelb",
+    "name": "CMonster::idleAIRangedDefender(float, CLevel&, bool)",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 649,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8e0eb0",
+        "completed": 512,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e1580",
+    "symbol": "_ZN8CMonster10jumpDownAIEfR6CLevel",
+    "name": "CMonster::jumpDownAI(float, CLevel&)",
+    "tu": "monster.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1021,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8e1580",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8e4490",
+    "symbol": "_ZN7CPlayer13createPortalsER6CLevel",
+    "name": "CPlayer::createPortals(CLevel&)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 581,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8e4490",
+        "completed": 384,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f0d10",
+    "symbol": "_ZN7CPlayer15updateAnimationEf",
+    "name": "CPlayer::updateAnimation(float)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 585,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8f0d10",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f1380",
+    "symbol": "_ZN7CPlayer44removeItemFromInventoryOrPetsInventoryByGuidExbbN9UNITTYPES10EUNITTYPESE",
+    "name": "CPlayer::removeItemFromInventoryOrPetsInventoryByGuid(long long, bool, bool, UNITTYPES::EUNITTYPES)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 850,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8f1380",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f16e0",
+    "symbol": "_ZN7CPlayer49removeQuestItemFromInventoryOrPetsInventoryByGuidExxbbN9UNITTYPES10EUNITTYPESE",
+    "name": "CPlayer::removeQuestItemFromInventoryOrPetsInventoryByGuid(long long, long long, bool, bool, UNITTYPES::EUNITTYPES)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1042,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8f16e0",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f4780",
+    "symbol": "_ZN7CPlayer9loadModelESbIwSt11char_traitsIwESaIwEES3_",
+    "name": "CPlayer::loadModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 842,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8f4780",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f5670",
+    "symbol": "_ZN7CPlayer13openMapPortalESbIwSt11char_traitsIwESaIwEER6CLevel",
+    "name": "CPlayer::openMapPortal(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CLevel&)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 416,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8f5670",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f5810",
+    "symbol": "_ZN7CPlayer14levelResettingEv",
+    "name": "CPlayer::levelResetting()",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1082,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8f5810",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f5c50",
+    "symbol": "_ZN7CPlayer21updateDungeonTrackingESbIwSt11char_traitsIwESaIwEEi",
+    "name": "CPlayer::updateDungeonTracking(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 1058,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8f5c50",
+        "completed": 256,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  },
+  {
+    "address": "0x8f8260",
+    "symbol": "_ZN7CPlayer15setQuestManagerEP13CQuestManager",
+    "name": "CPlayer::setQuestManager(CQuestManager*)",
+    "tu": "player.cpp",
+    "cpp_definition": true,
+    "original_bytes": 684,
+    "acceptance": "BEHAVIORAL",
+    "comparisons": [
+      {
+        "fixture": "mass3_8f8260",
+        "completed": 192,
+        "different": 0,
+        "incomplete": 0
+      }
+    ]
+  }
+]

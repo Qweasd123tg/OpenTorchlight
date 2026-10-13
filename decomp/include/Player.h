@@ -16,6 +16,10 @@ class CPlayer : public CCharacter
 {
 friend class CGameClient;
 public:
+    bool removeItemFromInventoryOrPetsInventoryByGuid(long long guid, bool wholeStack, bool destroy, UNITTYPES::EUNITTYPES type);
+    bool removeQuestItemFromInventoryOrPetsInventoryByGuid(long long quest, long long guid, bool wholeStack, bool destroy, UNITTYPES::EUNITTYPES type);
+    void setQuestManager(CQuestManager* manager);
+    void updateFishingLine(float elapsed);
     void firstTimeSetup();
     void resetStatPoints();
     void resetSkills();
@@ -74,6 +78,7 @@ public:
 
     void clearDungeonHistory(std::wstring dungeon);
     void updateStoredLevels(CLevel& level);
+    void updateDungeonTracking(std::wstring name, int depth);
 
 private:
     unsigned char m_Padding778[0x8];
@@ -94,9 +99,11 @@ private:
         // absolute alignment of pointer fields at +0x830 and +0x868.
         struct __attribute__((packed)) {
     int m_journalPrefix[18]; // +0x7dc
-    unsigned char m_Padding824[0xc];
-    CParticle* m_fishingParticle; // +0x830
-    unsigned char m_Padding838[0x18];
+    unsigned char m_Padding824[4];
+    CGenericModel* m_fishingPole; // +0x828
+    CGenericModel* m_fishingParticle; // +0x830, the animated fish model
+    unsigned char m_Padding838[0x10];
+    Ogre::SceneNode* m_fishingLineNode; // +0x848
     float m_fishingTime; // +0x850
     float m_fishingValue854; // +0x854
     float m_fishingDelay; // +0x858
@@ -105,7 +112,8 @@ private:
     float m_fishingValue860; // +0x860
     unsigned char m_Padding864[0x4];
     CQuestManager* m_questManager; // +0x868
-    unsigned char m_Padding870[0x18];
+    unsigned char m_Padding870[0x14];
+    float m_deathDelay; // +0x884
         };
     };
     std::wstring m_manaGraph; // +0x888
@@ -119,7 +127,8 @@ private:
     long long m_leftFunctionSkills[12]; // +0x9b0
     unsigned char m_PaddingA10[0x5];
     bool m_saveOnDeath; // +0xa15
-    unsigned char m_PaddingA16[0x2a];
+    bool m_followersEnabled; // +0xa16
+    unsigned char m_PaddingA17[0x29];
     TArrayList<CDungeonTracker*> m_dungeonTrackers; // +0xa40
     unsigned char m_PaddingA58[0x18];
 };

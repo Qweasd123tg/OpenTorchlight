@@ -1,4 +1,5 @@
 
+
 #include "GameClient.h"
 #include "Player.h"
 #include "CameraShake.h"
@@ -104,5 +105,17 @@ void CConsole::setVisible(bool visible)
             m_window->moveToFront();
             m_inputWindow->setText("");
         } else m_window->setVisible(false);
+    }
+}
+
+static void __attribute__((used)) SetPetsEnabled(CCharacter* character, bool enabled)
+{
+    if (!character)
+        return;
+    unsigned int count = character->getFollowerCount();
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        character->getFollower(i)->setEnabled(enabled);
+        SetPetsEnabled(character->getFollower(i), enabled);
     }
 }

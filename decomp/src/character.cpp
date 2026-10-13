@@ -1,3 +1,8 @@
+#include "SteamStats.h"
+#include "SpawnClass.h"
+#include "StringTranslate.h"
+#include "GameClient.h"
+
 
 #include "StringUtilities.h"
 #include <OgreLogManager.h>
@@ -2341,4 +2346,711 @@ void CCharacter::updateAttack(CLevel& level)
             performAttack(NULL, 0, 1.0f, 1.0f, static_cast<EDAMAGE_TYPES>(7));
         }
     }
+}
+
+void CCharacter::interrupt(bool force)
+{
+    if (m_pAIManager && m_pAIManager->hasAIFlag(static_cast<EAIFLAG_TYPES>(2)))
+        return;
+    if (m_eAIState == 0x10 || m_eAIState == 0x29 || m_eAIState == 0x28 || m_eAIState == 0x23)
+        return;
+    if (m_activeSkill && (m_skillLooping || (m_skillTime > 0.0f && !m_skillInterrupted)))
+    {
+        if (!m_skillCanInterrupt)
+            return;
+        if (!m_pUnitModel->animationExists("HIT"))
+        {
+            blendAnimation(m_pUnitModel->findRandomAnimation("IDLE"), true, 0.2f, 1.0f, -1.0f);
+            setAIState(static_cast<EAIState>(0));
+            force = false;
+        }
+    }
+    if (force && !m_pUnitModel->animationExists("HIT"))
+        return;
+    if (m_eAIState == 0x10 || m_eAIState == 0x28 || m_eAIState == 0x29 ||
+        m_eAIState == AISTATE_DYING || m_eAIState == AISTATE_DEAD)
+        return;
+    m_attackTime = 0.0f;
+    m_skillLooping = false;
+    m_skillTime = 0.0f;
+    if (m_pSkillManager)
+        m_pSkillManager->stopAllSkills(false, false, false);
+    if (force)
+    {
+        if (m_pUnitModel->animationExists("HIT"))
+            blendAnimation(m_pUnitModel->findRandomAnimation("HIT"), false, 0.2f, 1.0f, -1.0f);
+        m_pUnitModel->queueBlendAnimation("IDLE", true, 0.2f, 1.0f);
+        setAIState(static_cast<EAIState>(0x1d));
+    }
+    if (m_isPathing)
+        m_pathGraceTime = 10.0f;
+    m_isPathing = false;
+    m_pathDestination = m_vPosition;
+    for (int i = 0; i < 2; ++i)
+    {
+        if (m_weaponTrails[i])
+        {
+            m_weaponTrails[i]->setActive(false);
+            m_weaponTrails[i]->setVisible(false);
+        }
+    }
+}
+
+void CCharacter::updateSkillKeys(float)
+{
+    if (!m_activeSkill || (m_activeSkill->m_animationIndexLoopInto != static_cast<unsigned int>(-1) && !m_activeSkill->m_interruptible))
+        return;
+    if ((!m_skillLooping && !(m_skillTime > 0.0f)) || !m_pSkillManager ||
+        m_eAIState == AISTATE_DYING || m_eAIState == AISTATE_DEAD)
+        return;
+    for (unsigned int i = 0; i < m_pUnitModel->getAnimationEvents().size(); ++i)
+    {
+        CKeyframe* key = m_pUnitModel->getAnimationEvents()[i];
+        int event = key->getEventCode();
+        if (event == 0 || event == 0x1c)
+        {
+            unsigned int animation = key->getAnimationIndex();
+            if (animation == static_cast<unsigned int>(m_activeSkill->getAnimationIndexLoopEnd()) ||
+                animation == static_cast<unsigned int>(m_activeSkill->getAnimationIndex()) ||
+                animation == m_activeSkill->getAnimationIndexDW() ||
+                animation == m_activeSkill->getAnimationIndexLoopInto() ||
+                animation == m_activeSkill->getAnimationIndexDWLoopInto())
+            {
+                m_skillEventTriggered = true;
+                const Ogre::Quaternion& orientation = m_pSceneNode->getOrientation();
+                Ogre::Vector3 position = getPosition(true) + Ogre::Vector3(0.0f, -m_fBaseUnitValue194, 0.0f);
+                m_pSkillManager->triggerSkillEvent(static_cast<ESKILL_EVENT_TYPE>(event == 0 ? 2 : 3), position, orientation, NULL);
+            }
+        }
+        if (m_pUnitModel->getAnimationEvents()[i]->getEventCode() == 0xf)
+            m_skillInterrupted = true;
+    }
+}
+
+void CCharacter::setVisible(bool visible, bool immediate)
+{
+    visible = visible && !m_forcedHidden;
+    if (visible == m_bVisible)
+        return;
+    for (unsigned int i = 0; i < m_particleTriggers.size(); ++i)
+    {
+        CParticleAnimationTrigger* trigger = m_particleTriggers[i];
+        if ((!trigger->m_stopFlag59 && !trigger->m_stopFlag5A) || !trigger->m_particle)
+            continue;
+        if (trigger->m_stopFlag5A)
+        {
+            if (trigger->m_theme && !hasUnitTheme(trigger->m_theme))
+                continue;
+            if ((!trigger->m_stopOnDeath || (m_eAIState != AISTATE_DYING && m_eAIState != AISTATE_DEAD)) && visible)
+                trigger->m_particle->Start();
+            else
+                trigger->m_particle->Stop(immediate);
+        }
+        if (!visible && trigger->m_stopFlag59)
+            trigger->m_particle->setPosition(Ogre::Vector3(0.0f, -99999.0f, 0.0f));
+    }
+    if (!immediate)
+    {
+        setVisible(visible);
+        return;
+    }
+    if (visible)
+        m_characterVisible = true;
+    else
+    {
+        for (unsigned int i = 0; i < m_particleTriggers.size(); ++i)
+        {
+            CParticleAnimationTrigger* trigger = m_particleTriggers[i];
+            if (!trigger->m_stopFlag59 && !trigger->m_stopFlag5A && trigger->m_particle &&
+                !trigger->m_particle->looping() && trigger->m_stopWhenHidden)
+                trigger->m_particle->Stop(true);
+        }
+        m_characterVisible = false;
+        for (int i = 0; i < 4; ++i)
+        {
+            if (m_weaponTrails[i])
+            {
+                m_weaponTrails[i]->setActive(false);
+                m_weaponTrails[i]->setVisible(false);
+            }
+        }
+        if (m_currentOpacity != 0.0f)
+        {
+            m_currentOpacity = 0.0f;
+            updateOpacity(0.0f, true);
+        }
+    }
+    CSceneNodeObject::setVisible(visible);
+}
+
+void CCharacter::updateOpacity(float elapsed, bool force)
+{
+    if (!m_pUnitModel)
+        return;
+    bool fadingIn = m_characterVisible;
+    if (fadingIn && m_deathPathSilent && m_deathPathDistance / m_deathPath->m_fPathLength > 0.6f)
+        fadingIn = false;
+    if (!m_bInFadeRange)
+        fadingIn = false;
+    if (fadingIn)
+    {
+        if (!m_bVisible)
+            setVisible(true, true);
+        if (!(m_currentOpacity < 1.0f) && !force)
+            return;
+        m_currentOpacity += elapsed * 1.5f;
+        if (m_currentOpacity > 1.0f)
+            m_currentOpacity = 1.0f;
+    }
+    else
+    {
+        if (!(m_currentOpacity > 0.0f) && !force)
+        {
+            if (m_bVisible)
+                setVisible(false, true);
+            return;
+        }
+        if (!m_bInFadeRange)
+            m_currentOpacity = 0.0f;
+        if (m_deathPathSilent)
+            m_currentOpacity += elapsed * -4.0f;
+        else
+            m_currentOpacity -= elapsed;
+        if (m_currentOpacity < 0.0f)
+            m_currentOpacity = 0.0f;
+    }
+    m_pUnitModel->setOpacity(m_currentOpacity);
+    if (m_pInventory)
+    {
+        for (int i = 0; i < 12; ++i)
+        {
+            CEquipment* equipment = m_pInventory->getEquipmentEquippedAt(static_cast<EEQUIP_LOCATIONS>(i));
+            if (equipment)
+            {
+                if (equipment->getUnitModel())
+                    static_cast<CGenericModel*>(equipment->getUnitModel())->setOpacity(m_currentOpacity);
+                if (equipment->getUnitModelSecondary())
+                    static_cast<CGenericModel*>(equipment->getUnitModelSecondary())->setOpacity(m_currentOpacity);
+            }
+        }
+    }
+    if (!fadingIn && force && m_bVisible)
+        setVisible(false, true);
+}
+
+static void createEquipmentAndEquip(CCharacter* character, CDataGroup* data, const wchar_t* name, EEQUIP_LOCATIONS location, bool enchant)
+{
+    if (!name || !character || !data)
+        return;
+    CResourceManager* resources = character->getResourceManager();
+    CInventory* inventory = character->getInventory();
+    if (!resources || !inventory)
+        return;
+    CEquipment* equipment = resources->createEquipment(name, false, false);
+    if (!equipment)
+        return;
+    inventory->pickupEquipment(equipment, true);
+    if (enchant)
+        equipment->enchant(true);
+    if (location == 12)
+        inventory->equipEquipmentIntoFirstFreeLocation(equipment);
+    else
+        inventory->equipEquipmentIntoSpecificLocation(equipment, location);
+    static_cast<CGenericModel*>(equipment->getUnitModel())->getEntity()->setRenderQueueGroup(70);
+}
+
+void CCharacter::awardExperience(CLevel& level, CCharacter* source, int amount, bool fromMaster)
+{
+    if (m_experienceDisabled || ((m_eAIState == AISTATE_DYING || m_eAIState == AISTATE_DEAD) && amount > 0))
+        return;
+    if (!fromMaster)
+    {
+        int bonus = static_cast<int>(ceilf(static_cast<float>(amount) *
+            (getEffectValue(static_cast<EEFFECT_TYPE>(0x44), static_cast<EDAMAGE_TYPES>(7)) / 100.0f)));
+        amount = static_cast<unsigned int>(amount) + static_cast<unsigned int>(bonus);
+    }
+    if (source && source->HP() <= 0 && isPlayer())
+    {
+        incrementJournalStatistic(static_cast<EJournalStatistic>(6), 1);
+        if (source->m_champion)
+        {
+            incrementJournalStatistic(static_cast<EJournalStatistic>(7), 1);
+            if (source->getName() == L"Troll" || source->getName() == L"Troll Juggernaut")
+                CSteamStats::getSingleton()->incrementStat(static_cast<ESTATS>(0x13), 1);
+        }
+    }
+    for (unsigned int i = 0; i < static_cast<unsigned int>(m_Followers.size()); ++i)
+        m_Followers[i]->awardExperience(level, source, amount, true);
+    if (m_pMaster && !fromMaster)
+        m_pMaster->awardExperience(level, source, amount, false);
+    else
+    {
+        int previous = static_cast<int>(m_experience);
+        int total = m_experience + static_cast<unsigned int>(amount);
+        if (amount > 0 && previous > total)
+            m_experience = 0x7fffffff;
+        else
+            m_experience = total < 0 ? 0 : total;
+        ISA(static_cast<UNITTYPES::EUNITTYPES>(0x1c));
+    }
+    if (static_cast<int>(m_experience) >= CMasterResourceManager::getSingleton()->experienceGate(m_iUnitLevel) &&
+        m_iUnitLevel < static_cast<unsigned int>(CMasterResourceManager::getSingleton()->getMaxLevel()))
+    {
+        levelUp();
+        return;
+    }
+    if (static_cast<int>(m_experience) >= CMasterResourceManager::getSingleton()->experienceGate(m_iUnitLevel))
+        m_experience = CMasterResourceManager::getSingleton()->experienceGate(m_iUnitLevel);
+}
+
+bool CCharacter::doWeaponSkill(CEquipment* equipment)
+{
+    Ogre::SceneNode* hand = m_pRightHandNode ? m_pRightHandNode : m_pLeftHandNode;
+    if (!equipment || !equipment->getSkillManager())
+        return false;
+    Ogre::Vector3 position = hand->_getDerivedPosition();
+    if (m_pInventory && m_pLeftHandNode && m_pInventory->getEquipmentEquippedAt(static_cast<EEQUIP_LOCATIONS>(1)) == equipment)
+        position = m_pLeftHandNode->_getDerivedPosition();
+    Ogre::Vector3 relative = position - getPosition(true);
+    relative.y = 0.0f;
+    float distance = std::max(0.6f * m_fBaseUnitValue194, relative.length());
+    position = getForward() * distance;
+    position = getPosition(true) + position;
+    position.y += 0.5f;
+    bool executed = false;
+    for (unsigned int i = 0; i < static_cast<unsigned int>(equipment->getSkillManager()->knownSkills(static_cast<ESKILL_ACTIVATION_TYPE>(0))); ++i)
+    {
+        CSkill* skill = equipment->getSkillManager()->getSkillByIndex(i);
+        if (!skill->m_bExecutedByProperty && skill->m_bEnabled)
+        {
+            CBaseUnit* target = m_targetCharacter.getObject();
+            if (!target)
+                target = m_targetItem.getObject();
+            Ogre::Vector3 aim = position + getForward() * 10.0f;
+            const Ogre::Quaternion& orientation = m_pSceneNode->getOrientation();
+            executed |= equipment->getSkillManager()->executeSkill(skill, this, static_cast<ESKILL_ACTIVATION_TYPE>(2), position, orientation, aim, target) != NULL;
+        }
+    }
+    return executed;
+}
+
+bool CCharacter::inStrikeRange(CCharacter* target, CItem* item, CEquipment* equipment)
+{
+    if (!m_attack)
+    {
+        selectAttack(ATTACK_RANGE_DEFAULT);
+        return false;
+    }
+    CItem* weapon = equipment ? equipment : m_attackItem;
+    float bonus = weapon && weapon->ISA(static_cast<UNITTYPES::EUNITTYPES>(0x23))
+        ? getEffectValue(static_cast<EEFFECT_TYPE>(0x4e), static_cast<EDAMAGE_TYPES>(7)) : 0.0f;
+    if (target)
+    {
+        Ogre::Vector3 from = getPosition(true);
+        Ogre::Vector3 to = target->getPosition(true);
+        if (fabsf(to.y - from.y) > 2.5f && (!weapon || !weapon->ISA(static_cast<UNITTYPES::EUNITTYPES>(0x23))))
+            return false;
+        Ogre::Vector3 delta = to - from;
+        delta.y = 0.0f;
+        float distance = delta.length() - std::max(target->m_fBaseUnitValue194, 0.0f) - std::max(m_fBaseUnitValue194, 0.0f);
+        float range = (m_attackRadius * m_vScale.z + 0.2f + m_attack->m_fStrikeRange) * m_attackRangeScale + bonus;
+        return !(distance > range);
+    }
+    if (item)
+    {
+        Ogre::Vector3 from = getPosition(true);
+        Ogre::Vector3 to = item->getPosition(true);
+        if (fabsf(to.y - from.y) > 2.5f)
+            return false;
+        Ogre::Vector3 delta = to - from;
+        delta.y = 0.0f;
+        float distance = delta.length() - std::max(item->m_fBaseUnitValue194, 0.0f) - std::max(m_fBaseUnitValue194, 0.0f);
+        float range = (m_attackRadius * m_vScale.z + 0.2f + m_attack->m_fStrikeRange) * m_attackRangeScale + bonus;
+        return !(distance > range);
+    }
+    return true;
+}
+
+bool CCharacter::validLineOfSight(CLevel& level, bool flag)
+{
+    if (m_pAIManager && m_pAIManager->hasAIFlag(static_cast<EAIFLAG_TYPES>(4)))
+        return true;
+    if (!m_targetCharacter.getObject() && !m_targetItem.getObject())
+        return true;
+    Ogre::Vector3 modelPosition = static_cast<CPositionableObject*>(getUnitModel())->getPosition(false);
+    Ogre::Vector3 start = getPosition(true) + modelPosition + Ogre::Vector3(0.0f, 1.5f, 0.0f);
+    Ogre::Vector3 end = start;
+    float height = start.y;
+    if (m_targetItem.getObject())
+    {
+        Ogre::Vector3 position = m_targetItem.getObject()->getPosition(true);
+        end.x = position.x;
+        end.z = position.z;
+    }
+    else if (m_targetCharacter.getObject())
+    {
+        end = m_targetCharacter.getObject()->getPosition(true);
+        float targetHeight = m_targetCharacter.getObject()->getPosition(true).y;
+        height = targetHeight - getPosition(true).y + start.y;
+    }
+    else
+    {
+        end = start + m_vForward * 1.5f * m_attackRangeScale;
+        height = end.y;
+    }
+    // The clamp measures the endpoint at the ray's starting height.
+    float limit = Ogre::Vector3(end.x, start.y, end.z).length() / 5.0f;
+    end.y = start.y + std::max(std::min(height - start.y, limit), -limit);
+    return level.sightUnobstructed(start, end, flag);
+}
+
+bool CCharacter::inAttackRange(EATTACK_RANGE_TYPE)
+{
+    if (!m_targetCharacter.getObject() && !m_targetItem.getObject())
+        return false;
+    if (!m_attack)
+    {
+        selectAttack(ATTACK_RANGE_DEFAULT);
+        if (!m_attack)
+            return false;
+    }
+    bool ranged = (getWeaponInLeftHand() && getWeaponInLeftHand()->ISA(static_cast<UNITTYPES::EUNITTYPES>(0x23))) ||
+                  (getWeaponInRightHand() && getWeaponInRightHand()->ISA(static_cast<UNITTYPES::EUNITTYPES>(0x23)));
+    float bonus = ranged ? getEffectValue(static_cast<EEFFECT_TYPE>(0x4e), static_cast<EDAMAGE_TYPES>(7)) : 0.0f;
+    float range = attackRange() * m_attackRangeScale;
+    if (m_targetCharacter.getObject())
+    {
+        Ogre::Vector3 from = getPosition(true);
+        Ogre::Vector3 to = m_targetCharacter.getObject()->getPosition(true);
+        if (fabsf(to.y - from.y) > 2.5f && !ranged)
+            return false;
+        Ogre::Vector3 delta = to - from;
+        delta.y = 0.0f;
+        float distance = delta.length() - std::max(m_targetCharacter.getObject()->m_fBaseUnitValue194, 0.0f) - std::max(m_fBaseUnitValue194, 0.0f);
+        return !(distance > range + bonus);
+    }
+    if (m_targetItem.getObject())
+    {
+        Ogre::Vector3 from = getPosition(true);
+        Ogre::Vector3 to = m_targetItem.getObject()->getPosition(true);
+        Ogre::Vector3 delta = to - from;
+        delta.y = 0.0f;
+        float distance = delta.length() - std::max(m_targetItem.getObject()->m_fBaseUnitValue194, 0.0f) - std::max(m_fBaseUnitValue194, 0.0f);
+        return !(distance > range + bonus);
+    }
+    return true;
+}
+
+int CCharacter::inSkillRange(long long guid, bool ignoreMinimum)
+{
+    if (!m_targetCharacter.getObject() && !m_targetItem.getObject())
+        return 2;
+    if (guid == -1 && m_activeSkill)
+        guid = m_activeSkill->m_Guid;
+    if (!m_pSkillManager || !m_pSkillManager->knownSkills(static_cast<ESKILL_ACTIVATION_TYPE>(0)))
+        return 2;
+    if (m_activeSkill != m_pSkillManager->getSkillByGuid(guid))
+        m_activeSkill = m_pSkillManager->getSkillByGuid(guid);
+    if (!m_activeSkill)
+        return 2;
+    float range = m_activeSkill->getRange();
+    if (m_activeSkill->getTargetType() == 3 || m_activeSkill->getTargetType() == 10 || m_activeSkill->getTargetType() == 9)
+        return 0;
+    if (m_targetCharacter.getObject())
+    {
+        Ogre::Vector3 from = getPosition(true);
+        Ogre::Vector3 to = m_targetCharacter.getObject()->getPosition(true);
+        Ogre::Vector3 delta = to - from;
+        delta.y = 0.0f;
+        float distance = delta.length() - std::max(m_targetCharacter.getObject()->m_fBaseUnitValue194, 0.0f) - std::max(m_fBaseUnitValue194, 0.0f);
+        if (distance > range)
+            return 2;
+        return ignoreMinimum ? 0 : m_activeSkill->getRangeMin() > distance;
+    }
+    if (m_targetItem.getObject())
+    {
+        Ogre::Vector3 from = getPosition(true);
+        Ogre::Vector3 to = m_targetItem.getObject()->getPosition(true);
+        Ogre::Vector3 delta = to - from;
+        delta.y = 0.0f;
+        float distance = delta.length() - std::max(m_targetItem.getObject()->m_fBaseUnitValue194, 0.0f) - std::max(m_fBaseUnitValue194, 0.0f);
+        if (distance > range)
+            return 2;
+    }
+    return 0;
+}
+
+CSkill* CCharacter::performSkill()
+{
+    if (!m_activeSkill)
+        return NULL;
+    if (m_activeSkill->m_allowsTurning)
+    {
+        CBaseUnit* target = m_targetCharacter.getObject();
+        if (!target)
+            target = m_targetItem.getObject();
+        const Ogre::Quaternion& orientation = m_pSceneNode->getOrientation();
+        Ogre::Vector3 position = getPosition(true) + Ogre::Vector3(0.0f, -m_fBaseUnitValue194, 0.0f);
+        return m_pSkillManager->executeSkill(m_activeSkill, this, static_cast<ESKILL_ACTIVATION_TYPE>(3), position, orientation, m_targetPosition, target);
+    }
+    Ogre::Vector3 direction = m_targetPosition - getPosition(true);
+    direction.y = 0.0f;
+    direction.normalise();
+    CBaseUnit* target = m_targetCharacter.getObject();
+    if (!target)
+        target = m_targetItem.getObject();
+    Ogre::Quaternion orientation;
+    orientation.FromAxes(Ogre::Vector3::UNIT_Y.crossProduct(direction), Ogre::Vector3::UNIT_Y, direction);
+    Ogre::Vector3 position = getPosition(true) + Ogre::Vector3(0.0f, -m_fBaseUnitValue194, 0.0f);
+    return m_pSkillManager->executeSkill(m_activeSkill, this, static_cast<ESKILL_ACTIVATION_TYPE>(3), position, orientation, m_targetPosition, target);
+}
+
+void CCharacter::startFishing()
+{
+    if (m_eAIState == 0x20 || m_eAIState == 0x21 || m_eAIState == 0x22)
+        return;
+    setAIState(static_cast<EAIState>(0x20));
+    if (!m_pUnitModel->animationPlayingSubstring("FISHING_CAST"))
+        blendAnimation("FISHING_CAST", false, 0.2f, 1.0f, -1.0f);
+    if (!m_pUnitModel->animationQueued("FISHING_IDLE"))
+        m_pUnitModel->queueBlendAnimation("FISHING_IDLE", true, 0.2f, 1.0f);
+}
+
+void CCharacter::addPet(CCharacter* pet)
+{
+    if (!pet || hasPet(pet))
+        return;
+    if (pet->getMaximumPetInstances() > 0)
+    {
+        int count = 0;
+        for (unsigned int i = 0; i < m_Followers.size(); ++i)
+            if (!m_Followers[i]->m_bInvulnerable && m_Followers[i]->getName() == pet->getName())
+                ++count;
+        if (count >= pet->getMaximumPetInstances())
+        {
+            int excess = count + 1 - pet->getMaximumPetInstances();
+            for (unsigned int i = 0; i < m_Followers.size(); ++i)
+            {
+                CCharacter* follower = m_Followers[i];
+                if (!follower->m_bInvulnerable && follower->getName() == pet->getName())
+                {
+                    follower->die(NULL, NULL, 0.0f, false);
+                    if (--excess == 0)
+                        break;
+                }
+            }
+        }
+    }
+    m_Followers.push_back(pet);
+    pet->setMaster(this);
+    m_followerFlags.push_back(pet->m_bBaseUnitFlag19B);
+}
+
+void CCharacter::generateMerchantInventory()
+{
+    if (!m_pInventory || !m_pResourceManager || !m_pResourceManager->getLevel())
+        return;
+    float scale = playerLevelForMerchantInventory();
+    int level = -1;
+    if (scale > 0.0f && getLevel()->getPlayer())
+        level = static_cast<int>(ceilf(static_cast<float>(getLevel()->getPlayer()->m_iUnitLevel) * scale));
+    m_pInventory->m_bUnknown14 = false;
+    TArrayList<CBaseUnit*> units(10);
+    bool uniques = m_pDataGroup->GetDataValue(L"ALLOWS_MERCH_UNIQUES", false);
+    bool magic = m_pDataGroup->GetDataValue(L"ALLOWS_MERCH_MAGIC", true);
+    int flags = uniques ? 0 : 2;
+    if (!magic)
+        flags |= 4;
+    if (!m_merchantSpawnClass)
+        return;
+    unsigned int count = UTILITIES::randomIntegerBetweenVolatile(m_merchantMinimum, m_merchantMaximum);
+    m_pResourceManager->createUnitsBySpawnClass(m_merchantSpawnClass, units, count, this, this, level, flags);
+    for (unsigned int i = 0; i < units.size(); ++i)
+    {
+        CEquipment* equipment = dynamic_cast<CEquipment*>(units[i]);
+        if (ISA(static_cast<UNITTYPES::EUNITTYPES>(0x7f)) && !equipment->isMagical())
+            equipment->enchant(true);
+        else if (!uniques && equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(0x36)))
+        {
+            delete equipment;
+            continue;
+        }
+        equipment->m_bUnknown348 = true;
+        equipment->destroyItemText();
+        CEquipment* added = m_pInventory->pickupEquipment(equipment, true);
+        if (!added)
+            delete equipment;
+        else if (ISA(static_cast<UNITTYPES::EUNITTYPES>(0x7f)))
+            added->recalculatePrice();
+    }
+}
+
+void CCharacter::fameUp()
+{
+    ++m_fameLevel;
+    CPlayer* player = dynamic_cast<CPlayer*>(this);
+    if (player)
+        m_iUnusedSkillPoints += player->getSkillPointsAwardedForFameLevel(m_iUnitLevel);
+    if (m_levelSound)
+        m_levelSound->queueGlobalSample(0x3d, 1.0f, 1.0f);
+    CGameGlobals* globals = CGameGlobals::getSingleton();
+    unsigned int rankIndex = std::min(static_cast<unsigned int>(m_fameLevel - 1), globals->m_configStrings.size() - 1);
+    std::wstring rank = globals->m_configStrings[rankIndex];
+    static std::wstring g_FameIncreased;
+    if (g_FameIncreased.empty())
+        g_FameIncreased = CStringTranslate::getSinglton()->getTranslateString(L"Fame Increased");
+    static std::wstring g_YouAttainedRank;
+    if (g_YouAttainedRank.empty())
+        g_YouAttainedRank = CStringTranslate::getSinglton()->getTranslateString(L"You attain the rank of");
+    m_pResourceManager->getGameUI()->setBigText(g_FameIncreased + L"!", 2.0f);
+    m_pResourceManager->getGameUI()->setSmallText(g_YouAttainedRank + L" " + rank, 2.0f);
+    if (m_fameLevel == CMasterResourceManager::getSingleton()->getMaxFameLevel())
+    {
+        CAchievement* achievement = CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(6));
+        if (achievement)
+            achievement->forceComplete();
+    }
+}
+
+static void loadAndEquipSpawnClass(CCharacter* character, CDataGroup* data, const wchar_t* key, EEQUIP_LOCATIONS location)
+{
+    if (!data || !character || !character->getResourceManager() || !character->getInventory())
+        return;
+    CResourceManager* resources = character->getResourceManager();
+    std::wstring name = data->GetDataValue(key, EMPTY_WSTRING);
+    if (name.empty())
+        return;
+    CSpawnClass* spawnClass = resources->getSpawnClassByName(name);
+    if (!spawnClass)
+        return;
+    TArrayList<CDataGroup*> groups;
+    TArrayList<bool> enchant(5);
+    spawnClass->rollSpawnClass(groups, &enchant, character, character, -1, static_cast<unsigned int>(-1), 0, -1, 0, 16);
+    if (groups.size() == 0)
+        return;
+    if (location == 12)
+    {
+        for (unsigned int i = 0; i < groups.size(); ++i)
+            createEquipmentAndEquip(character, data, groups[i]->GetDataValue(L"NAME", EMPTY_WSTRING).c_str(), static_cast<EEQUIP_LOCATIONS>(12), enchant[0]);
+    }
+    else
+        createEquipmentAndEquip(character, data, groups[0]->GetDataValue(L"NAME", EMPTY_WSTRING).c_str(), location, enchant[0]);
+}
+
+void CCharacter::fishingAICatch(float, CLevel&)
+{
+    if (m_pUnitModel->animationPlayingSubstring("FISHING_CATCH"))
+        return;
+    static std::wstring g_Fishing;
+    if (g_Fishing.empty())
+        g_Fishing = CStringTranslate::getSinglton()->getTranslateString(L"Fishing");
+    static std::wstring g_CaughtNothing;
+    if (g_CaughtNothing.empty())
+        g_CaughtNothing = CStringTranslate::getSinglton()->getTranslateString(L"You caught nothing");
+    getLevel()->m_pGameClient->getGameUI()->openModalDialog(g_Fishing, g_CaughtNothing + L"!", false);
+    setAIState(AISTATE_IDLE);
+}
+
+CCharacter* CCharacter::updateHP(CLevel& level, float elapsed)
+{
+    if (m_eAIState == AISTATE_DYING || m_eAIState == AISTATE_DEAD)
+        return NULL;
+    if (m_bInvulnerable && m_pMaster)
+    {
+        float maximum = static_cast<float>(maxHP());
+        modifyHP(maximum / 100.0f * CGameGlobals::getSingleton()->m_petHPRegeneration * elapsed);
+    }
+    else if (CGameGlobals::getSingleton()->m_hpRegeneration != 0.0f)
+    {
+        float maximum = static_cast<float>(maxHP());
+        modifyHP(maximum / 100.0f * CGameGlobals::getSingleton()->m_hpRegeneration * elapsed);
+    }
+    float change = getEffectValuesOfDamage() * elapsed;
+    if (change < 0.0f)
+        m_damageOverTimeTaken -= change;
+    modifyHP(change);
+    if (HP() > 0 || !m_pEffectManager)
+        return NULL;
+    CCharacter* killer = NULL;
+    for (int group = 0; group < 2; ++group)
+    {
+        CEffectManager* manager = m_pEffectManager;
+        TArrayList<CEffect*>& effects = manager->getActiveEffects(group);
+        for (unsigned int i = 0; i < effects.size(); ++i)
+        {
+            CEffect* effect = effects[i];
+            bool harmful = false;
+            if (effect->m_eType == 7 || effect->m_eType == 0x34 || effect->m_eType == 0x7c)
+                harmful = effect->value(static_cast<EEFFECT_VALUES>(0)) < 0.0f;
+            if ((harmful || effects[i]->m_eType == 0x34) && effects[i]->m_sourceCharacter)
+            {
+                effects[i]->m_sourceCharacter->awardExperience(level, this, m_experienceReward, false);
+                effects[i]->m_sourceCharacter->awardFame(level, this, m_fameReward, false);
+                m_experienceReward = 0;
+                m_fameReward = 0;
+                killer = effects[i]->m_sourceCharacter;
+                effects[i]->setOwner(NULL, true);
+                break;
+            }
+        }
+    }
+    broadcastUnitState(static_cast<EUNIT_STATES>(4));
+    return killer;
+}
+
+static void loadAndEquip(CCharacter* character, CDataGroup* data, const wchar_t* key, EEQUIP_LOCATIONS location)
+{
+    if (!data || !character)
+        return;
+    std::wstring name = data->GetDataValue(key, EMPTY_WSTRING);
+    if (!name.empty())
+        createEquipmentAndEquip(character, data, name.c_str(), location, false);
+}
+
+void CCharacter::createDefaultEquipment()
+{
+    if (!m_pDataGroup)
+        return;
+    CDataGroup* equipment = m_pDataGroup->GetDataGroupByName(L"EQUIPMENT", false);
+    if (!equipment)
+        return;
+    loadAndEquip(this, equipment, L"RIGHTHAND", static_cast<EEQUIP_LOCATIONS>(0));
+    loadAndEquip(this, equipment, L"LEFTHAND", static_cast<EEQUIP_LOCATIONS>(1));
+    loadAndEquip(this, equipment, L"CHEST", static_cast<EEQUIP_LOCATIONS>(4));
+    loadAndEquip(this, equipment, L"SHIELD", static_cast<EEQUIP_LOCATIONS>(11));
+    loadAndEquip(this, equipment, L"SHOULDERS", static_cast<EEQUIP_LOCATIONS>(5));
+    loadAndEquip(this, equipment, L"BOOTS", static_cast<EEQUIP_LOCATIONS>(6));
+    loadAndEquip(this, equipment, L"GLOVES", static_cast<EEQUIP_LOCATIONS>(2));
+    loadAndEquip(this, equipment, L"HELMET", static_cast<EEQUIP_LOCATIONS>(3));
+    loadAndEquip(this, equipment, L"WEAPON", static_cast<EEQUIP_LOCATIONS>(12));
+    loadAndEquipSpawnClass(this, equipment, L"SPAWNRIGHTHAND", static_cast<EEQUIP_LOCATIONS>(0));
+    loadAndEquipSpawnClass(this, equipment, L"SPAWNLEFTHAND", static_cast<EEQUIP_LOCATIONS>(1));
+    loadAndEquipSpawnClass(this, equipment, L"SPAWNCHEST", static_cast<EEQUIP_LOCATIONS>(4));
+    loadAndEquipSpawnClass(this, equipment, L"SPAWNSHIELD", static_cast<EEQUIP_LOCATIONS>(11));
+    loadAndEquipSpawnClass(this, equipment, L"SPAWNSHOULDERS", static_cast<EEQUIP_LOCATIONS>(5));
+    loadAndEquipSpawnClass(this, equipment, L"SPAWNBOOTS", static_cast<EEQUIP_LOCATIONS>(6));
+    loadAndEquipSpawnClass(this, equipment, L"SPAWNGLOVES", static_cast<EEQUIP_LOCATIONS>(2));
+    loadAndEquipSpawnClass(this, equipment, L"SPAWNHELMET", static_cast<EEQUIP_LOCATIONS>(3));
+    loadAndEquipSpawnClass(this, equipment, L"SPAWNCLASS", static_cast<EEQUIP_LOCATIONS>(12));
+}
+
+void CCharacter::transformCharacter(std::wstring name, float duration)
+{
+    CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(3))->forceComplete();
+    if (STRINGS::StringUpper(name) == L"PET MIMIC")
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(0x1e))->forceComplete();
+    if (duration == -999.0f)
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(4))->forceComplete();
+    if (m_eAIState != 0x2a)
+        setAIState(static_cast<EAIState>(0));
+    m_transformationTime = duration;
+    if (m_originalUnitGuid == -1)
+        m_originalUnitGuid = m_iUnitValue1A0;
+    std::wstring displayName = m_displayName;
+    EAlignment previousAlignment = alignment();
+    convertCharacter(name, true);
+    setAlignment(previousAlignment);
+    m_displayName = std::wstring(displayName);
+    setVisible(false, true);
+    setVisible(true, true);
 }
