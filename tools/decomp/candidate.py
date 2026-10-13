@@ -328,6 +328,11 @@ class Cycle:
         prepared = json.loads((packet / 'result.json').read_text())
         checkpoint = json.loads((packet / 'checkpoint.json').read_text())
         selected = {f['address'] for f in checkpoint['settings']['selected']}
+        repair = prepared.get('external_handoff', {}).get('repair')
+        if checkpoint['settings'].get('repair_addresses') or checkpoint.get('repair') is not None or repair is not None:
+            if not checkpoint['settings'].get('repair_addresses') or not isinstance(checkpoint.get('repair'), dict):
+                raise RuntimeError('missing repair admission snapshot')
+            llm_loop.validate_repair_snapshot(stage, checkpoint, self.spec['addresses'], elfdb.load_db())
         if not prepared.get('prepared') or prepared.get('blocked') or not set(self.spec['addresses']) <= selected:
             raise RuntimeError('matching unblocked --prepare-only packet required')
         packet_hashes = {n: toolchain.sha256(packet / n) for n in ('result.json', 'checkpoint.json')}

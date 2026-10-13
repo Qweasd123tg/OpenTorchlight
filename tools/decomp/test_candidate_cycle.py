@@ -558,5 +558,56 @@ class LoaderFrameParser(unittest.TestCase):
         self.assertEqual('72', rows[2][3])
 
 
+class RepairCycleAdmission(unittest.TestCase):
+    def setUp(self):
+        from test_llm_loop_pipeline import RepairWorkflow
+        self.preparation = RepairWorkflow('test_repair_prepares_without_removing_source_or_calling_model')
+        self.preparation.setUp()
+        self.addCleanup(self.preparation.doCleanups)
+        self.checkpoint = self.preparation.prepared_checkpoint()
+        self.stage = self.preparation.stage
+        self.source = self.preparation.loop.source
+        tests = self.stage.path / 'decomp/hybrid/tests'
+        tests.mkdir(parents=True, exist_ok=True)
+        (tests / 'Repair.cpp').write_text('TL_TEST(repair_probe) {}')
+        self.spec = {'schema': 1, 'tu': 'Probe.cpp', 'addresses': ['0x2'],
+                     'focused': ['Repair.cpp'], 'regression': ['Repair.cpp'],
+                     'controls': [{'name': 'repair-control', 'old': 'return 1', 'new': 'return 3',
+                                   'count': 1, 'test': 'repair_probe', 'address': '0x2'}]}
+        for target, attr, value in ((candidate.elfdb, 'load_db', self.preparation.loop.db),
+                                    (self.stage, '_input_digest', 'pinned')):
+            patched = patch.object(target, attr, return_value=value)
+            patched.start(); self.addCleanup(patched.stop)
+
+    def test_actual_identity_accepts_repaired_body_without_building(self):
+        self.source.write_text(self.source.read_text().replace('return 1', 'return 9'))
+        cycle = candidate.Cycle(self.stage, self.spec)
+        self.assertEqual('READY', cycle.state['status'])
+        self.assertIn('checkpoint.json', cycle.state['identity']['packet'])
+        self.preparation.model_class.assert_not_called()
+        self.preparation.loop.compile.assert_not_called()
+
+    def test_progress_or_protected_neighbor_change_blocks_before_cycle(self):
+        original = self.source.read_text()
+        self.source.write_text(original.replace('return 2', 'return 9'))
+        with self.assertRaisesRegex(RuntimeError, 'outside assigned bodies'):
+            candidate.Cycle(self.stage, self.spec)
+        self.source.write_text(original)
+        path = self.stage.root / 'build-decomp/progress.json'
+        path.write_text(path.read_text() + ' ')
+        with self.assertRaisesRegex(RuntimeError, 'protection inputs changed'):
+            candidate.Cycle(self.stage, self.spec)
+
+    def test_missing_or_corrupt_snapshot_does_not_downgrade_to_ordinary(self):
+        import copy
+        path = self.preparation.loop.work / 'checkpoint.json'
+        missing = copy.deepcopy(self.checkpoint)
+        missing.pop('repair');missing['settings'].pop('repair_addresses');missing['settings'].pop('repair_mode')
+        corrupt = copy.deepcopy(self.checkpoint);corrupt['repair']['source_sha256'] = '0' * 64
+        for value in (missing, corrupt):
+            path.write_text(json.dumps(value))
+            with self.assertRaises(RuntimeError): candidate.Cycle(self.stage, self.spec)
+
+
 if __name__ == '__main__':
     unittest.main()
