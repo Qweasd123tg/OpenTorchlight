@@ -164,12 +164,185 @@ def packet_inputs(root):
     return out
 
 
+def _repair_progress(root, db):
+    """Strict admission input, never a replacement acceptance registry."""
+    import acceptance
+    import evidence
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError("duplicate progress key")
+            result[key] = value
+        return result
+    raw = (Path(root) / "build-decomp/progress.json").read_bytes()
+    data = json.loads(raw, object_pairs_hook=unique)
+    known = db["functions"]
+    addresses = data.get("accepted") if isinstance(data, dict) else None
+    if (not re.fullmatch(r"[0-9a-f]{64}", str(db.get("original_elf_sha256", "")))
+            or not isinstance(data, dict) or data.get("schema") != 1
+            or data.get("original_elf_sha256") != db.get("original_elf_sha256")
+            or not isinstance(addresses, list) or not all(isinstance(a, str) and a in known for a in addresses)
+            or len(addresses) != len(set(addresses)) or type(data.get("accepted_functions")) is not int
+            or data["accepted_functions"] != len(addresses) or not isinstance(data.get("units"), list)
+            or not isinstance(data.get("comparison_evidence"), dict)):
+        raise ValueError("repair requires complete compatible canonical progress")
+    protected = set(addresses)
+    for address, receipt in data["comparison_evidence"].items():
+        ev = receipt.get("evidence") if isinstance(receipt, dict) else None
+        if (address not in known or not isinstance(ev, dict) or receipt.get("policy") != acceptance.POLICY_VERSION
+                or receipt.get("method") != "executed-call-pair" or ev.get("schema") != evidence.SCHEMA
+                or receipt.get("original_elf_sha256") != db["original_elf_sha256"]
+                or any(not isinstance(ev.get(k), str) or not re.fullmatch(r"[0-9a-f]{64}", ev[k])
+                       for k in ("object_digest", "inputs_digest"))):
+            raise ValueError("invalid repair protection receipt")
+        protected.add(address)  # Stale behavioral receipts remain protected.
+    for unit in data["units"]:
+        if not isinstance(unit, dict) or not isinstance(unit.get("functions"), list):
+            raise ValueError("invalid repair progress unit")
+        for row in unit["functions"]:
+            if not isinstance(row, dict) or row.get("status") not in ("MATCH", "DIFF", "MISSING", "EXTRA"):
+                raise ValueError("invalid repair progress function")
+            if row["status"] == "MATCH" and row.get("address"):
+                protected.add(row["address"])
+    return data, hashlib.sha256(raw).hexdigest(), protected
+
+
+def repair_snapshot(root, tu, functions, db, compare_rows):
+    """Bind explicit unaccepted-body repair to existing source/protection inputs."""
+    root = Path(root)
+    progress, digest, protected = _repair_progress(root, db)
+    if not functions or not isinstance(compare_rows, list):
+        raise ValueError("explicit repair targets and baseline comparison required")
+    for row in compare_rows:
+        if not isinstance(row, dict):
+            raise ValueError("invalid repair baseline comparison")
+        if row.get("status") == "MATCH" and row.get("address"):
+            protected.add(row["address"])
+    units = [u for u in progress["units"] if u.get("tu") == tu]
+    if (len(units) != 1 or units[0].get("unknown") != []
+            or not re.fullmatch(r"[0-9a-f]{64}", str(units[0].get("object_digest", "")))):
+        raise ValueError("repair requires one known canonical progress TU")
+    object_digest = units[0]["object_digest"]
+    if any(row.get("object_digest") != object_digest
+           for row in units[0]["functions"] + compare_rows):
+        raise ValueError("repair progress object differs from fresh baseline")
+    targets = []
+    for f in functions:
+        address = f["address"]
+        if (f != db["functions"].get(address) or f.get("kind") not in WRITTEN
+                or "thunk to " in f.get("demangled", "") or any(n.endswith("D0Ev") for n in f.get("names", []))
+                or f.get("tu") != next(
+                (t["id"] for t in db["tus"] if t.get("name") == tu and t.get("kind") == "game"), None)):
+            raise ValueError("repair target is not an owning-TU definition")
+        if definitions.closure(f, db) & protected:
+            raise ValueError("repair target/alias is accepted or protected: " + address)
+        for rows in (units[0]["functions"], compare_rows):
+            found = [r for r in rows if r.get("address") == address]
+            if (len(found) != 1 or found[0].get("status") != "DIFF" or found[0].get("weak") is not False
+                    or found[0].get("name") not in f["names"]
+                    or not re.fullmatch(r"[0-9a-f]{64}", str(found[0].get("object_digest", "")))):
+                raise ValueError("repair requires an existing strong unaccepted DIFF: " + address)
+        targets.append(address)
+    source = root / "decomp/src" / tu
+    if source.resolve() != root.resolve() / "decomp/src" / tu:
+        raise ValueError("redirected repair source")
+    return {"schema": 1, "tu": tu, "addresses": sorted(targets),
+            "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+            "progress_sha256": digest, "protected": sorted(protected), "compare_rows": compare_rows}
+
+
+def validate_repair_snapshot(stage, checkpoint, targets, db):
+    """Recheck admission and non-target bytes, without restoring validation authority."""
+    selected = checkpoint["settings"]["selected"]
+    addresses = checkpoint["settings"].get("repair_addresses", [])
+    saved = checkpoint.get("repair")
+    if not addresses and saved is None:
+        return
+    if (not addresses or not isinstance(saved, dict)
+            or checkpoint["settings"].get("repair_mode") != "external-prepare-only"
+            or checkpoint.get("accepted") or checkpoint.get("round") != 0
+            or sorted(addresses) != sorted(targets)
+            or sorted(addresses) != sorted(f["address"] for f in selected)):
+        raise RuntimeError("repair selection/snapshot mismatch")
+    current = repair_snapshot(stage.root, saved.get("tu"), selected, db, saved.get("compare_rows"))
+    copied = stage.path / "build-decomp/progress.json"
+    if (saved != current or toolchain.sha256(copied) != current["progress_sha256"]
+            or stage.baseline.get("decomp/src/" + current["tu"]) != current["source_sha256"]
+            or hashlib.sha256(checkpoint["existing"].encode()).hexdigest() != current["source_sha256"]):
+        raise RuntimeError("repair source/protection inputs changed; prepare a new attempt")
+    import mutate
+    def parameter_identity(parameter, named=False):
+        p = parameter.strip()
+        if any(c in p for c in "()[]=;"):
+            raise RuntimeError("repair source signature uses unsupported declarator")
+        if named:
+            name = re.search(r"([*&]\s*|\s+)([A-Za-z_]\w*)$", p)
+            keywords = {"int", "long", "short", "char", "wchar_t", "double", "float", "bool",
+                        "void", "const", "volatile", "unsigned", "signed"}
+            if name and name.group(2) not in keywords:
+                p = p[:name.start(2)].strip()
+        p = re.sub(r"(?<=\w)\s+(?=\w)", "|", p)
+        return re.sub(r"\s+", "", p)
+
+    def outside_bodies(text):
+        masked = mutate.mask(text)
+        spans = []
+        for f in selected:
+            # mutate.definition deliberately tolerates arity-only draft matches.
+            # Admission needs the exact qualified signature instead.
+            wanted = [parameter_identity(p) for p in ghidra_cpp.split_args(f.get("params") or "")
+                      if p != "void"]
+            found = []
+            qual = f["demangled"].split("(")[0]
+            for match in re.finditer(r"(?m)^[\w:<>,*&\s]*?(?<![\w:])(?P<qualified>" +
+                                     re.escape(qual) + r")\s*\(", masked):
+                prefix = masked[:match.start("qualified")]
+                if prefix.rstrip().endswith(":") or prefix.count("{") != prefix.count("}"):
+                    continue  # Nested namespace/class/linkage scope is not inferred.
+                close = mutate.matching(masked, match.end() - 1, "(", ")")
+                if close < 0:
+                    continue
+                brace, semi = masked.find("{", close), masked.find(";", close)
+                if brace < 0 or (0 <= semi < brace):
+                    continue
+                suffix = " ".join(masked[close + 1:brace].strip().split())
+                if f.get("kind") == "ctor" and suffix.startswith(":"):
+                    suffix = ""
+                actual = [parameter_identity(p, named=True)
+                          for p in ghidra_cpp.split_args(masked[match.end():close].strip())
+                          if p and p != "void"]
+                if actual == wanted and suffix == ghidra_cpp.cv_suffix(f).strip():
+                    found.append((brace, mutate.matching(masked, brace, "{", "}")))
+            if len(found) != 1:
+                raise RuntimeError("repair requires exact unique source signature")
+            spans.append(found[0])
+        if any(not span or span[0] < 0 or span[1] < span[0] for span in spans):
+            raise RuntimeError("repair requires unique existing source bodies")
+        ordered = sorted(spans)
+        if any(a[1] >= b[0] for a, b in zip(ordered, ordered[1:])):
+            raise RuntimeError("overlapping repair bodies")
+        for first, last in reversed(ordered):
+            text = text[:first] + "{REPAIR_BODY}" + text[last + 1:]
+        return text
+    candidate = stage.path / "decomp/src" / current["tu"]
+    if candidate.resolve() != stage.path.resolve() / "decomp/src" / current["tu"]:
+        raise RuntimeError("redirected repair candidate")
+    if outside_bodies(checkpoint["existing"]) != outside_bodies(candidate.read_bytes().decode("utf-8")):
+        raise RuntimeError("repair changed text outside assigned bodies")
+
+
 class Loop:
     def __init__(self, tu_name, models, rounds, switch_after=2, jobs=4, resume=False, *,
                  addresses=(), limit=16, max_size=4096, prepare_only=False, no_autotest=False,
-                 model_timeout=180, model_retries=2, attempt_resume=False, max_prompt_chars=DEFAULT_MAX_CHARS):
+                 model_timeout=180, model_retries=2, attempt_resume=False, max_prompt_chars=DEFAULT_MAX_CHARS,
+                 repair_addresses=()):
         if ROOT == elfdb.ROOT:
             raise RuntimeError("Loop requires publication.Stage.activate(); live-tree experiments are forbidden")
+        if repair_addresses and (not prepare_only or addresses):
+            raise ValueError("repair addresses require prepare-only and cannot mix ordinary selection")
+        addresses = repair_addresses or addresses
+        self.repair = None
         # Work in progress compiles against the generated headers; finish() promotes what it uses.
         os.environ["OTL_EXTRA_INCLUDE"] = str(headers.OUT)
         self.db = elfdb.load_db()
@@ -207,6 +380,11 @@ class Loop:
                          "switch_after": switch_after, "jobs": jobs, "limit": limit, "max_size": max_size,
                          "no_autotest": no_autotest, "model_timeout": model_timeout, "model_retries": model_retries,
                          "selected": self.funcs, "selection_request": request, "max_prompt_chars": max_prompt_chars}
+        if repair_addresses:
+            self.settings["repair_addresses"] = [f["address"] for f in self.funcs]
+            self.settings["repair_mode"] = "external-prepare-only"
+            if not attempt_resume:
+                self.repair = repair_snapshot(ROOT, tu_name, self.funcs, self.db, self.baseline_rows)
         self.examples = examples.load()
         self.by_model = {}
         self.classes = sorted({(f.get("scope") or "").split("::")[0] for f in self.funcs} - {""})
@@ -230,6 +408,7 @@ class Loop:
         import publication
         atomic_json(self.work / "checkpoint.json", {
             "schema": 1, "settings": self.settings, "inputs": packet_inputs(ROOT),
+            "repair": getattr(self, "repair", None),
             "tree": publication.tree_state(ROOT), "immutable": self.immutable,
             "accepted": self.accepted, "status": self.status, "existing": self.existing,
             "headers": self.headers, "pending": self.pending, "round": self.round_no,
@@ -242,6 +421,14 @@ class Loop:
                 or data.get("inputs") != packet_inputs(ROOT)
                 or data.get("tree") != publication.tree_state(ROOT)):
             raise RuntimeError("checkpoint inputs/settings changed; refusing resume")
+        if self.settings.get("repair_addresses"):
+            metadata = json.loads((ROOT / "stage.json").read_text())
+            from types import SimpleNamespace
+            stage = SimpleNamespace(root=Path(metadata["root"]), path=ROOT, baseline=metadata["baseline"])
+            validate_repair_snapshot(stage, data, self.settings["repair_addresses"], self.db)
+            self.repair = data["repair"]
+        elif data.get("repair") is not None:
+            raise RuntimeError("unexpected repair checkpoint")
         self.immutable = data["immutable"]
         if (ROOT / "stage.json").exists():
             metadata = json.loads((ROOT / "stage.json").read_text())
@@ -287,7 +474,13 @@ class Loop:
             probe = self.work / "baseline" / self.tu["name"]
             probe.parent.mkdir(exist_ok=True)
             probe.write_bytes(self.existing.encode())
-            rows = objdiff.compare_source(probe, self.original, quiet=True, scores=False)["functions"]
+            restored_unit = objdiff.compare_source(probe, self.original, quiet=True, scores=False)
+            rows = restored_unit["functions"]
+            if getattr(self, "repair", None) and restored_unit.get("unknown") != []:
+                raise RuntimeError("fresh repair baseline has unknown definitions")
+            if getattr(self, "repair", None) and repair_snapshot(
+                    ROOT, self.tu["name"], self.funcs, self.db, rows) != self.repair:
+                raise RuntimeError("fresh repair baseline changed during resume")
             present = {r["address"] for r in rows if r.get("address") and r["status"] not in ("MISSING", "EXTRA")}
             self.status.update({a: "existing" for a in selected if a in present})
         for address, code in self.accepted.items():
@@ -596,6 +789,13 @@ class Loop:
                             idioms=(ROOT / "tools/decomp/prompts/idioms.md").read_text(),
                             examples=examples.render(chosen) if chosen else "", stale_note=self.stale_note,
                             max_chars=self.max_prompt_chars, context_index=self._context_index)
+        if getattr(self, "repair", None):
+            note = ("\n\nExplicit existing-unaccepted repair: replace only this selected body in the full TU; "
+                    "do not append a duplicate definition. Read the unchanged full TU from checkpoint.existing "
+                    "or external_handoff.submission.source before editing. Other TU text must remain unchanged.\n")
+            if len(prompt) + len(note) > self.max_prompt_chars:
+                raise ValueError("repair prompt exceeds complete-input budget")
+            prompt += note
         self._packet_prompts[f["address"]] = prompt
         return prompt
 
@@ -652,6 +852,28 @@ class Loop:
                     self.items[f["address"]] = {"f": f, "model": 0, "tries": 0,
                         "session": None, "code": "", "feedback": self.declaration_error(f)}
             self.checkpoint()
+        if getattr(self, "repair", None):
+            metadata = json.loads((ROOT / "stage.json").read_text())
+            from types import SimpleNamespace
+            stage = SimpleNamespace(root=Path(metadata["root"]), path=ROOT, baseline=metadata["baseline"])
+            prepared = {"settings": self.settings, "repair": self.repair, "existing": self.existing,
+                        "accepted": self.accepted, "round": self.round_no}
+            validate_repair_snapshot(stage, prepared, self.settings["repair_addresses"], self.db)
+            # Repair is external-only; keep the full TU intact and merely prepare packets.
+            for f in self.funcs:
+                address = f["address"]
+                if self.status.get(address) == "existing":
+                    self.status.pop(address)
+                error = self.declaration_error(f)
+                if error:
+                    self.status[address] = "blocked"
+                    self.items[address] = {"f": f, "model": 0, "tries": 0, "session": None,
+                                           "code": "", "feedback": error}
+                    self.pending.pop(address, None)
+                if address not in self.status:
+                    item = self.items.setdefault(address, {"f": f, "session": None, "feedback": None,
+                                                           "model": 0, "tries": 0, "code": ""})
+                    self.pending[address] = item
         prompts = self.work / "prompts"
         prompts.mkdir(exist_ok=True)
         for f in self.funcs:
@@ -824,6 +1046,13 @@ class Loop:
                                   "fixtures_directory": str(stage / "decomp/hybrid/tests"),
                                   "cycle_spec": "worker_supplied",
                                   "headers_or_tools_changes": "prepare_new_attempt"})
+        if getattr(self, "repair", None):
+            result["repair"] = {key: self.repair[key] for key in
+                                ("schema", "tu", "addresses", "source_sha256", "progress_sha256")}
+            result["repair"]["admission_snapshot"] = str(checkpoint.resolve())
+            for target in targets:
+                target["kind"] = "repair_existing_unaccepted"
+            result["submission"]["allowed_edits"] = "assigned bodies only; preserve all other TU text"
         if not blockers:
             result.update(cwd=str(root),
                           cycle_argv_template=[sys.executable, str(root / "tools/decomp/candidate.py"),
@@ -853,6 +1082,9 @@ class Loop:
             rows = self.baseline_compare()["functions"]
         except SystemExit as error:
             raise RuntimeError("existing TU does not compile; preserved unchanged, refusing to start fresh") from error
+        if getattr(self, "repair", None) and repair_snapshot(
+                ROOT, self.tu["name"], self.funcs, self.db, rows) != self.repair:
+            raise RuntimeError("fresh repair baseline changed during preparation")
         present = {r["address"] for r in rows if r.get("address") and r["status"] != "MISSING"}
         self.existing = self.source.read_bytes().decode("utf-8")
         for f in self.funcs:
@@ -1003,6 +1235,8 @@ def main():
     parser.add_argument("--jobs", type=int, default=4, help="model calls in parallel")
     parser.add_argument("--resume", action="store_true", help="compatibility alias; existing definitions are always kept")
     parser.add_argument("--address", action="append", default=[], help="repeatable ELF address or symbol alias in this TU")
+    parser.add_argument("--repair-address", action="append", default=[],
+                        help="explicit existing unaccepted body; external prepare-only, never a model run")
     parser.add_argument("--limit", type=int, default=16, help="maximum selected definitions")
     parser.add_argument("--max-size", type=int, default=4096, help="maximum original function bytes")
     parser.add_argument("--publish", action="store_true", help="validate the final Stage and explicitly publish")
@@ -1015,6 +1249,8 @@ def main():
     parser.add_argument("--ignore-owner", action="store_true", help="work on a TU decomp/owners.json gives to "
                         "someone else than $OTL_OWNER")
     args = parser.parse_args()
+    if args.repair_address and (not args.prepare_only or args.publish or args.address):
+        parser.error("--repair-address requires --prepare-only without --publish or --address")
     if any(getattr(args, n) <= 0 for n in ("rounds", "switch_after", "jobs", "limit", "max_size", "model_timeout", "max_prompt_chars")) or args.model_retries < 0:
         parser.error("bounds/timeouts must be positive; retries must be nonnegative")
     if args.prepare_only and args.publish:
@@ -1022,7 +1258,7 @@ def main():
     models = [m.strip() for m in args.models.split(",") if m.strip()]
     if not models:
         parser.error("at least one explicit model is required")
-    select_functions(elfdb.load_db(), args.tu, args.address, args.limit, args.max_size)
+    select_functions(elfdb.load_db(), args.tu, args.repair_address or args.address, args.limit, args.max_size)
     import parallel
     owner = parallel.owned_by_others(args.tu)
     if owner and not args.ignore_owner:
@@ -1060,7 +1296,8 @@ def main():
                                addresses=args.address, limit=args.limit, max_size=args.max_size,
                                prepare_only=args.prepare_only, no_autotest=args.no_autotest,
                                 model_timeout=args.model_timeout, model_retries=args.model_retries,
-                               attempt_resume=bool(args.attempt), max_prompt_chars=args.max_prompt_chars)
+                               attempt_resume=bool(args.attempt), max_prompt_chars=args.max_prompt_chars,
+                               repair_addresses=args.repair_address)
             status = loop.run()
         if args.publish:
             if not loop.accepted:

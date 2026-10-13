@@ -496,10 +496,6 @@ class Pipeline(unittest.TestCase):
         self.assertFalse(self.loop.source.exists())
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class ExternalHandoff(unittest.TestCase):
     """Real saved Stage metadata and CLI parsing, with no compiler/model/game."""
     def setUp(self):
@@ -629,3 +625,268 @@ class ExternalHandoff(unittest.TestCase):
         self.assertEqual([], h['targets'])
         self.assertEqual(['0x2'], h['staged_implemented_addresses'])
         self.assertIsNone(h['cycle_argv_template'])
+
+
+class RepairWorkflow(unittest.TestCase):
+    """Reuse the finite fake Loop; all comparison/provider boundaries remain mocked."""
+    def setUp(self):
+        Pipeline.setUp(self)
+        self.original_source = 'int CProbe::work() { return 1; }\nint CProbe::keep() { return 2; }\n'
+        self.loop.source.write_text(self.original_source)
+        self.loop.db.update(tus=[{'id': 1, 'name': 'Probe.cpp', 'kind': 'game'}],
+                            original_elf_sha256='f' * 64)
+        self.row = {'address': '0x2', 'name': 'symbol_0x2', 'status': 'DIFF', 'weak': False,
+                    'object_digest': 'a' * 64}
+        self.progress = {'schema': 1, 'original_elf_sha256': 'f' * 64, 'accepted': [],
+                         'accepted_functions': 0, 'comparison_evidence': {},
+                         'units': [{'tu': 'Probe.cpp', 'unknown': [], 'object_digest': 'a' * 64,
+                                    'functions': [self.row]}]}
+        self.write_progress()
+        self.stage = publication.Stage(self.root)
+        self.loop.work = self.stage.path / 'build-decomp/llm-loop/Probe.cpp'
+        self.loop.work.mkdir(parents=True)
+        self.loop.source = self.stage.path / 'decomp/src/Probe.cpp'
+        newroot = patch.object(llm_loop, 'ROOT', self.stage.path)
+        newroot.start(); self.addCleanup(newroot.stop)
+        self.loop.settings.update(repair_addresses=['0x2'], repair_mode='external-prepare-only')
+        self.loop.prepare_only = True
+        self.loop.baseline_compare = Mock(return_value={'functions': [self.row], 'unknown': []})
+        self.loop.repair = self.snapshot()
+        self.loop.compile = Mock(side_effect=AssertionError('compiler forbidden'))
+
+    def write_progress(self):
+        (self.root / 'build-decomp').mkdir(exist_ok=True)
+        (self.root / 'build-decomp/progress.json').write_text(json.dumps(self.progress))
+
+    def snapshot(self, rows=None):
+        return llm_loop.repair_snapshot(self.root, 'Probe.cpp', self.loop.funcs, self.loop.db,
+                                       [self.row] if rows is None else rows)
+
+    def repair_result(self):
+        return json.loads((self.loop.work / 'result.json').read_text())
+
+    def prepared_checkpoint(self):
+        self.loop.run()
+        return json.loads((self.loop.work / 'checkpoint.json').read_text())
+
+    def test_repair_prepares_without_removing_source_or_calling_model(self):
+        self.prepared_checkpoint()
+        result = self.repair_result()
+        self.assertEqual('ready', result['external_handoff']['status'])
+        self.assertEqual('repair_existing_unaccepted', result['external_handoff']['targets'][0]['kind'])
+        self.assertEqual(self.original_source, self.loop.source.read_text())
+        self.assertEqual(self.original_source, self.loop.existing)
+        self.assertEqual({}, self.loop.accepted)
+        self.assertEqual('known inputs', (self.loop.work / 'prompts/0x2.md').read_text())
+        self.model_class.assert_not_called(); self.loop.compile.assert_not_called()
+
+    def test_repair_existing_status_does_not_skip_mandatory_declaration(self):
+        self.loop.declaration_error = Mock(return_value='Missing mandatory owning declaration')
+        self.prepared_checkpoint()
+        result = self.repair_result()
+        self.assertEqual('blocked', result['external_handoff']['status'])
+        self.assertIn('0x2', result['blocked'])
+        self.assertFalse((self.loop.work / 'prompts/0x2.md').exists())
+        self.assertEqual(self.original_source, self.loop.source.read_text())
+
+    def test_repair_resume_preserves_external_only_packet(self):
+        self.prepared_checkpoint()
+        self.loop.attempt_resume = True
+        with patch.object(llm_loop.objdiff, 'compare_source', return_value={'functions': [self.row], 'unknown': []}):
+            self.loop.run()
+        self.assertEqual('ready', self.repair_result()['external_handoff']['status'])
+        self.assertEqual(self.original_source, self.loop.source.read_text())
+        self.model_class.assert_not_called()
+
+    def test_fresh_prepare_and_resume_comparison_cannot_override_admission(self):
+        cp = self.prepared_checkpoint()
+        original = dict(self.row)
+        alias = dict(self.loop.funcs[0], address='0x3')
+        self.loop.db['functions']['0x3'] = alias
+        for rows in ([dict(original, status='MATCH')], [dict(original, object_digest='b' * 64)],
+                     [original, dict(original, address='0x3', status='MATCH')]):
+            with self.subTest(rows=rows):
+                self.loop.baseline_compare.return_value = {'functions': rows}
+                with self.assertRaises((ValueError, RuntimeError)):
+                    self.loop.keep_existing()
+                self.loop.attempt_resume = True
+                with patch.object(llm_loop.objdiff, 'compare_source', return_value={'functions': rows, 'unknown': []}):
+                    with self.assertRaises((ValueError, RuntimeError)):
+                        self.loop.restore()
+        self.assertEqual(self.original_source, self.loop.source.read_text())
+        self.model_class.assert_not_called()
+
+    def test_fresh_resume_unknown_definitions_fail_closed(self):
+        self.prepared_checkpoint()
+        self.loop.attempt_resume = True
+        for unknown in (None, ['unexpected symbol']):
+            unit = {'functions': [self.row]}
+            if unknown is not None: unit['unknown'] = unknown
+            with patch.object(llm_loop.objdiff, 'compare_source', return_value=unit):
+                with self.assertRaisesRegex(RuntimeError, 'unknown definitions'): self.loop.restore()
+
+    def test_changed_progress_root_or_copy_blocks_resume(self):
+        cp = self.prepared_checkpoint()
+        for target in (self.root, self.stage.path):
+            path = target / 'build-decomp/progress.json'; before = path.read_bytes()
+            path.write_bytes(before + b' ')
+            with self.assertRaises((RuntimeError, ValueError)):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+            path.write_bytes(before)
+
+    def test_only_assigned_body_changes_allowed(self):
+        cp = self.prepared_checkpoint()
+        self.loop.source.write_text(self.original_source.replace('return 1', 'return 3'))
+        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        for text in (self.original_source.replace('return 2', 'return 3'),
+                     self.original_source.replace('int CProbe::work', 'long CProbe::work'),
+                     '#include "Other.h"\n' + self.original_source, 'int CProbe::keep() { return 2; }\n'):
+            self.loop.source.write_text(text)
+            with self.assertRaises(RuntimeError):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_protected_target_or_alias_in_accepted_or_stale_receipt(self):
+        import copy
+        original = copy.deepcopy(self.progress)
+        alias = dict(self.loop.funcs[0], address='0x3')
+        self.loop.db['functions']['0x3'] = alias
+        for address in ('0x2', '0x3'):
+            for kind in ('accepted', 'stale'):
+                self.progress = copy.deepcopy(original)
+                if kind == 'accepted':
+                    self.progress.update(accepted=[address], accepted_functions=1)
+                else:
+                    self.progress['comparison_evidence'][address] = {
+                        'policy': 1, 'method': 'executed-call-pair', 'original_elf_sha256': 'f' * 64,
+                        'evidence': {'schema': 1, 'object_digest': 'b' * 64, 'inputs_digest': 'c' * 64}}
+                self.write_progress()
+                with self.subTest(address=address, kind=kind), self.assertRaises(ValueError):
+                    self.snapshot()
+
+    def test_fresh_match_alias_and_nonstrong_target_rejected(self):
+        alias = dict(self.loop.funcs[0], address='0x3')
+        self.loop.db['functions']['0x3'] = alias
+        for rows in ([dict(self.row, status='MATCH')], [dict(self.row, weak=True)],
+                     [dict(self.row, status='MISSING')], [dict(self.row, status='EXTRA')],
+                     [self.row, dict(self.row, address='0x3', status='MATCH')],
+                     [self.row, self.row]):
+            with self.subTest(rows=rows), self.assertRaises(ValueError):
+                self.snapshot(rows)
+
+    def test_progress_and_fresh_object_must_match(self):
+        with self.assertRaisesRegex(ValueError, 'object differs'):
+            self.snapshot([dict(self.row, object_digest='b' * 64)])
+
+    def test_exact_source_signature_not_just_arity(self):
+        cp = self.prepared_checkpoint()
+        # Hash-pinned source work() does not implement selected work(int).
+        f = self.loop.funcs[0]
+        f.update(params='int', demangled='CProbe::work(int)')
+        cp['settings']['selected'] = [f]
+        with self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+            llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        # Same arity but a different type must also fail closed.
+        f.update(params='void*', demangled='CProbe::work(void*)')
+        for path in (self.root / 'decomp/src/Probe.cpp', self.loop.source):
+            path.write_text(self.original_source.replace('work()', 'work(float value)'))
+        cp['existing'] = self.loop.source.read_text()
+        cp['repair'] = self.snapshot()
+        self.stage.baseline['decomp/src/Probe.cpp'] = cp['repair']['source_sha256']
+        with self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+            llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_signature_token_and_qualified_name_boundaries(self):
+        cp = self.prepared_checkpoint()
+        f = self.loop.funcs[0]
+        for demangled, params, text in (
+                ('CProbe::work(unsigned int)', 'unsigned int',
+                 self.original_source.replace('work()', 'work(unsignedint value)')),
+                ('CProbe::work()', '', self.original_source.replace('CProbe::work', 'OtherCProbe::work')),
+                ('CProbe::work()', '', self.original_source.replace('CProbe::work', 'Other::CProbe::work')),
+                ('CProbe::work()', '', self.original_source.replace('CProbe::work', 'Other:: CProbe::work')),
+                ('CProbe::work()', '', 'namespace Other {\n' + self.original_source + '}\n'),
+                ('CProbe::work(vendor::std::vector<int>)', 'vendor::std::vector<int>',
+                 self.original_source.replace('work()', 'work(vendor::std::vector<int, std::allocator<int> > value)')),
+                ('CProbe::work(const std::vector<Foo*>*)', 'const std::vector<Foo*>*',
+                 self.original_source.replace('work()', 'work(std::vector<Foo const*>* value)'))):
+            f.update(params=params, demangled=demangled)
+            for path in (self.root / 'decomp/src/Probe.cpp', self.loop.source): path.write_text(text)
+            cp['settings']['selected'] = [f]
+            cp['existing'] = text
+            cp['repair'] = self.snapshot()
+            self.stage.baseline['decomp/src/Probe.cpp'] = cp['repair']['source_sha256']
+            with self.subTest(demangled=demangled, source=text):
+                with self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+                    llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_full_unit_object_and_explicit_unknown_required(self):
+        import copy
+        original = copy.deepcopy(self.progress)
+        for field, value in (('object_digest', None), ('object_digest', 'b' * 64), ('unknown', None)):
+            self.progress = copy.deepcopy(original)
+            if value is None: self.progress['units'][0].pop(field)
+            else: self.progress['units'][0][field] = value
+            self.write_progress()
+            with self.subTest(field=field, value=value), self.assertRaises(ValueError): self.snapshot()
+        self.progress = original; self.write_progress()
+        with self.assertRaisesRegex(ValueError, 'object differs'):
+            self.snapshot([self.row, dict(self.row, address='0x4', object_digest='b' * 64)])
+
+    def test_missing_corrupt_incompatible_progress_fail_closed(self):
+        path = self.root / 'build-decomp/progress.json'
+        for raw in ('{}', '{"schema":1,"schema":1}', 'not-json',
+                    json.dumps(dict(self.progress, original_elf_sha256='e' * 64)),
+                    json.dumps(dict(self.progress, accepted_functions=1)),
+                    json.dumps(dict(self.progress, comparison_evidence={'0x2': {}}))):
+            path.write_text(raw)
+            with self.subTest(raw=raw), self.assertRaises((ValueError, KeyError)):
+                self.snapshot()
+        path.unlink()
+        with self.assertRaises(OSError): self.snapshot()
+        self.assertEqual(self.original_source, self.loop.source.read_text())
+
+    def test_foreign_implicit_or_moved_source_rejected(self):
+        for funcs in ([], [dict(self.loop.funcs[0], tu=2)]):
+            with self.assertRaises(ValueError):
+                llm_loop.repair_snapshot(self.root, 'Probe.cpp', funcs, self.loop.db, [self.row])
+        cp = self.prepared_checkpoint()
+        (self.root / 'decomp/src/Probe.cpp').write_text(self.original_source + '//changed')
+        with self.assertRaises(RuntimeError):
+            llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_snapshot_selection_or_mode_cannot_be_widened(self):
+        import copy
+        cp = self.prepared_checkpoint()
+        for changed in (dict(cp, accepted={'0x2': 'fake'}), dict(cp, round=1),
+                        dict(cp, repair=None)):
+            with self.assertRaises(RuntimeError):
+                llm_loop.validate_repair_snapshot(self.stage, changed, ['0x2'], self.loop.db)
+        changed = copy.deepcopy(cp);changed['settings'].pop('repair_mode')
+        with self.assertRaises(RuntimeError):
+            llm_loop.validate_repair_snapshot(self.stage, changed, ['0x2'], self.loop.db)
+        with self.assertRaises(RuntimeError):
+            llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2','0x3'], self.loop.db)
+        self.loop.settings.pop('repair_addresses'); self.loop.settings.pop('repair_mode')
+        with self.assertRaisesRegex(RuntimeError, 'inputs/settings changed'): self.loop.restore()
+
+    def test_constructor_rejects_model_mode_before_provider_or_elf(self):
+        with patch.object(llm_loop.elfdb, 'load_db', side_effect=AssertionError('ELF forbidden')):
+            with self.assertRaises(ValueError):
+                llm_loop.Loop('Probe.cpp', ['provider/model'], 1, repair_addresses=['0x2'])
+            with self.assertRaises(ValueError):
+                llm_loop.Loop('Probe.cpp', [], 1, prepare_only=True,
+                              addresses=['0x2'], repair_addresses=['0x2'])
+
+    def test_cli_repair_rejects_publish_models_or_mixed_selection_before_load(self):
+        import sys
+        for args in (['--repair-address','0x2'],
+                     ['--repair-address','0x2','--prepare-only','--publish'],
+                     ['--repair-address','0x2','--prepare-only','--address','0x2']):
+            with patch.object(sys, 'argv', ['llm_loop.py','Probe.cpp',*args]), \
+                 patch.object(llm_loop.elfdb, 'load_db', side_effect=AssertionError('ELF forbidden')), \
+                 self.assertRaises(SystemExit):
+                llm_loop.main()
+
+
+if __name__ == "__main__":
+    unittest.main()
