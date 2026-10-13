@@ -26,6 +26,7 @@ static unsigned char gPARTICLE_COLLISION_TYPE[24];
 static unsigned char gPARTICLE_INTERSECTION_TYPE[24];
 static unsigned char gPROPERTY_NODE_TYPE_NAMES[128];
 static unsigned char gQUEST_REQUIREMENTS[24];
+static unsigned char g_QUEST_TAG_DIALOG_ITEM_NAMES[16];
 static unsigned char gRANDOMGROUP_NAMES[24];
 static unsigned char gRESOURCE_GROUP_NAMES[32];
 static unsigned char g_DescriptorController[96];

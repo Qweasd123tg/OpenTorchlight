@@ -42,8 +42,8 @@ public:
     CDataGroup* m_pNPCDataGroup;
     int m_iDialogType;
 
-    bool m_bIconAboveHead;
-    bool m_bFloatyText;
+    bool m_bFloatyText; // +0x74: FLOATYTEXT
+    bool m_bIconAboveHead; // +0x75: ICONABOVEHEAD
     bool m_bDialogInitialized;
     bool m_bItemsGiven;
     bool m_bMakePetOnAccept;

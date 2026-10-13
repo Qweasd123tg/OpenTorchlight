@@ -169,7 +169,7 @@
   "Quest.cpp": "dot",
   "QuestController.cpp": "dot",
   "QuestControllerDescriptor.cpp": "opencode",
-  "QuestDialog.cpp": "opencode",
+  "QuestDialog.cpp": "dot",
   "QuestDialogItem.cpp": "opencode",
   "QuestManager.cpp": "dot",
   "QuestRequirements.cpp": "opencode",
