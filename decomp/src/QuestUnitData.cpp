@@ -326,3 +326,95 @@ bool CQuestUnitData::unitDefeated(CBaseUnit* unit)
 
     return false;
 }
+
+#include "Equipment.h"
+#include "StringTranslate.h"
+
+bool CQuestUnitData::unitPickedUp(CBaseUnit* unit)
+{
+    if (!m_trackUnitEvents)
+        return false;
+
+    if (m_unitSearchMode == 0)
+    {
+        if (m_completed && unit->getQuestGuid() == m_pQuest->m_iUnknown1C8)
+            for (unsigned int i = 0; i < m_children.size(); ++i)
+                if (m_children[i]->unitPickedUp(unit))
+                    return true;
+        return false;
+    }
+
+    if (m_pBaseUnitDataGroup == NULL)
+        m_pBaseUnitDataGroup = getBaseUnitDataGroup();
+    if (unit->getQuestGuid() != -1 &&
+        unit->getQuestGuid() != m_pQuest->m_iUnknown1C8)
+        return false;
+
+    const bool matches = m_pBaseUnitDataGroup == unit->getDataGroup();
+    bool belongsToQuest;
+    if (m_unitType != 22 &&
+        unit->ISA(static_cast<UNITTYPES::EUNITTYPES>(m_unitType)))
+        belongsToQuest = true;
+    else
+        belongsToQuest = unit->getQuestGuid() == m_pQuest->m_iUnknown1C8 &&
+            unit->m_iQuestState == m_questUnitDataId;
+
+    const bool wasCompleted = m_completed;
+    bool pickedUp = false;
+    if ((!m_createUnit || (!wasCompleted && belongsToQuest)) && matches)
+    {
+        unit->m_iQuestGuid = m_pQuest->m_iUnknown1C8;
+        m_currentUnitCount = static_cast<int>(
+            static_cast<unsigned int>(m_currentUnitCount) + 1u);
+        pickedUp = true;
+    }
+
+    if (!wasCompleted && static_cast<unsigned int>(m_currentUnitCount) >=
+        static_cast<unsigned int>(m_requiredUnitCount))
+        m_completed = true;
+    if (static_cast<unsigned int>(m_currentUnitCount) >
+        static_cast<unsigned int>(m_requiredUnitCount))
+        m_currentUnitCount = m_requiredUnitCount;
+
+    if (!wasCompleted && pickedUp)
+    {
+        CResourceManager* resources = unit->getResourceManager();
+        CLevel* level = resources != NULL ? resources->getLevel() : NULL;
+        if (level != NULL && m_pQuest != NULL &&
+            unit->ISA(static_cast<UNITTYPES::EUNITTYPES>(2)))
+        {
+            CEquipment* item = dynamic_cast<CEquipment*>(unit);
+            if (item != NULL && !m_pQuest->m_bUnknown209)
+            {
+                static std::wstring g_Found;
+                if (g_Found.empty())
+                    g_Found = CStringTranslate::getSinglton()->getTranslateString(L"Found");
+                level->m_pGameClient->getGameUI()->setBigText(
+                    m_pQuest->replaceStringTags(m_pQuest->m_sUnknown58), 1.0f);
+                level->m_pGameClient->getGameUI()->setSmallText(
+                    item->getItemName() + L" - " +
+                    STRINGS::GetValueAsWString(static_cast<unsigned int>(m_currentUnitCount)) +
+                    L"/" +
+                    STRINGS::GetValueAsWString(static_cast<unsigned int>(m_requiredUnitCount)) +
+                    L" " + g_Found, 1.0f);
+            }
+        }
+    }
+
+    if (m_completed)
+    {
+        if (!pickedUp && unit->getQuestGuid() == m_pQuest->m_iUnknown1C8 &&
+            m_children.size() != 0)
+        {
+            for (unsigned int i = 0; i < m_children.size(); ++i)
+                if (m_children[i]->unitPickedUp(unit))
+                    return true;
+            // Child callbacks may empty the list or clear completion.
+            if (m_children.size() != 0 || !m_completed)
+                return pickedUp;
+        }
+        if (!wasCompleted)
+            spawnChildrenUnits(unit->getResourceManager(), unit->getPosition(true));
+    }
+    return pickedUp;
+}
