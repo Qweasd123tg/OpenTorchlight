@@ -597,3 +597,63 @@ void CQuestUnitData::populate(CLevel* level)
         break;
     }
 }
+
+#include "MasterResourceManager.h"
+#include "Hierarchy.h"
+
+void CQuestUnitData::reinitialize(bool resolveUnitData)
+{
+    m_baseUnitGuid = -1;
+    m_trackUnitEvents = false;
+    m_completed = false;
+    for (unsigned int i = 0; i < m_children.size(); ++i)
+        m_children[i]->reinitialize(resolveUnitData);
+
+    if (!resolveUnitData)
+        return;
+
+    UTILITIES::setSeed(m_pQuest->m_iUnknown1C);
+    m_pBaseUnitDataGroup = getBaseUnitDataGroup();
+    if (m_spawnFromUnitTypeName == EMPTY_WSTRING)
+        m_spawnFromUnitType = 22;
+    else
+        m_spawnFromUnitType = CMasterResourceManager::getSingleton()->m_pHierarchy->
+            getTypeIDByName(m_spawnFromUnitTypeName);
+    const int required = UTILITIES::randomIntegerBetween(m_minCount, m_maxCount);
+    m_currentUnitCount = 0;
+    m_requiredUnitCount = required;
+}
+
+void CQuestUnitData::load(_IO_FILE* file, int version)
+{
+    reinitialize(true);
+
+    unsigned char flag;
+    fread(&flag, 1, 1, file);
+    const unsigned char completed = flag;
+    fread(&flag, 1, 1, file);
+    m_trackUnitEvents = flag != 0;
+
+    int required;
+    fread(&required, 4, 1, file);
+    fread(&m_currentUnitCount, 4, 1, file);
+    if (version <= 9)
+    {
+        int legacy = 0;
+        fread(&legacy, 4, 1, file);
+    }
+    int id;
+    fread(&id, 4, 1, file);
+    if (version > 19)
+        fread(&m_baseUnitGuid, 8, 1, file);
+
+    m_completed = completed != 0;
+    m_requiredUnitCount = required;
+    m_questUnitDataId = id;
+
+    unsigned int count;
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i)
+        if (m_children.size() >= count)
+            m_children[i]->load(file, version);
+}
