@@ -38,6 +38,7 @@ enum EBASEUNIT_TYPE
 class CBaseUnit : public CPositionableObject
 {
     friend class CSkill;
+    friend class CQuestUnitData;
 
     friend class CLevel;
     friend struct SmallmatchPass7Probe;
