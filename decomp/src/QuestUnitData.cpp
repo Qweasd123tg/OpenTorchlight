@@ -481,3 +481,119 @@ CPositionableObject* CQuestUnitData::createUnit(CLevel* level)
     }
     return unit;
 }
+
+#include <OgreLogManager.h>
+
+void CQuestUnitData::populate(CLevel* level)
+{
+    if (level == NULL)
+        return;
+
+    CQuest* quest = m_pQuest;
+    if (quest->m_pUnknown30 == EMPTY_WSTRING)
+        m_createUnit = false;
+
+    int floor = m_specificFloor;
+    if (m_relativeFloor != 0)
+    {
+        // The original adds in 32 bits and falls back on a negative result.
+        floor = static_cast<int>(static_cast<unsigned int>(quest->m_iUnknown20) +
+                                 static_cast<unsigned int>(m_relativeFloor));
+        if (floor < 0)
+            floor = quest->m_iUnknown20;
+    }
+    else if (floor == -1)
+        floor = quest->m_iUnknown20;
+
+    if (!(level->m_iLevelDepth == floor &&
+          level->m_sDungeonName == quest->m_pUnknown30))
+    {
+        if (m_createUnit || m_relativeFloor != 0 || m_specificFloor > 0 ||
+            !(quest->m_pUnknown30 == EMPTY_WSTRING ||
+              level->m_sDungeonName == m_pQuest->m_pUnknown30))
+            return;
+    }
+
+    if (m_pBaseUnitDataGroup == NULL)
+    {
+        for (unsigned int attempt = 0; attempt < 5; ++attempt)
+        {
+            m_pBaseUnitDataGroup = getBaseUnitDataGroup();
+            if (m_pBaseUnitDataGroup != NULL)
+                break;
+        }
+        if (m_pBaseUnitDataGroup == NULL)
+        {
+            std::string message = "Unable to spawn unit for quest " +
+                STRINGS::StringConvertToNarrow(m_pQuest->m_sUnknown50.c_str());
+            Ogre::LogManager::getSingleton().logMessage(
+                std::string(message.c_str()), Ogre::LML_CRITICAL, false);
+            m_completed = true;
+            m_trackUnitEvents = true;
+            return;
+        }
+    }
+
+    if (!m_pQuest->m_questAccepted &&
+        m_pQuest->m_pQuestManager->getQuestComplete(m_pQuest->m_sUnknown50) &&
+        !m_neverDestroy)
+    {
+        CBaseUnit* unit = level->getBaseUnitByDataGroup(m_pBaseUnitDataGroup);
+        if (unit != NULL)
+        {
+            level->removeUnit(unit, true);
+            delete unit;
+        }
+    }
+
+    if (m_completed || !m_pQuest->m_questAccepted || m_trackUnitEvents)
+        return;
+    m_trackUnitEvents = true;
+    if (m_unitType != 22)
+        return;
+
+    if (m_spawnFromUnitType == 22)
+    {
+        unsigned int count = 0;
+        while (count < static_cast<unsigned int>(m_requiredUnitCount))
+        {
+            ++count;
+            createUnit(level);
+        }
+        return;
+    }
+
+    TArrayList<CBaseUnit*> units(10);
+    level->getUnitsByUnitType(static_cast<UNITTYPES::EUNITTYPES>(m_spawnFromUnitType), units);
+    if (units.size() == 0)
+    {
+        std::string message = "No units found for quest : \n" +
+            STRINGS::StringConvertToNarrow(m_pQuest->m_sUnknown50.c_str());
+        Ogre::LogManager::getSingleton().logMessage(
+            std::string(message.c_str()), Ogre::LML_CRITICAL, false);
+        return;
+    }
+
+    while (units.size() != 0)
+    {
+        const unsigned int index = UTILITIES::randomIntegerBetween(0, units.size() - 1);
+        CBaseUnit* unit = units[index];
+        units.removeAt(index);
+        if (unit->m_iQuestGuid == -1)
+            continue;
+
+        unit->m_iQuestGuid = m_pQuest->m_iUnknown1C8;
+        unit->m_iQuestState = m_questUnitDataId;
+        CCharacter* character = dynamic_cast<CCharacter*>(unit);
+        if (character != NULL)
+            m_pQuest->m_pQuestManager->calculateNPCIcon(character);
+        CEquipment* equipment = dynamic_cast<CEquipment*>(unit);
+        if (equipment != NULL)
+        {
+            equipment->m_bUnknown348 = true;
+            equipment->destroyItemText();
+            equipment->destroyItemText();
+        }
+        break;
+    }
+}
