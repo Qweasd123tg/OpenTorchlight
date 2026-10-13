@@ -173,7 +173,7 @@
   "QuestDialogItem.cpp": "opencode",
   "QuestManager.cpp": "dot",
   "QuestRequirements.cpp": "opencode",
-  "QuestRewards.cpp": "opencode",
+  "QuestRewards.cpp": "dot",
   "QuestUnitData.cpp": "opencode",
   "RandomChoiceDescriptor.cpp": "opencode",
   "RandomGroup.cpp": "opencode",
