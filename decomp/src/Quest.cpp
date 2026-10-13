@@ -582,3 +582,31 @@ std::wstring CQuest::replaceStringTags(const std::wstring& input)
     }
     return text;
 }
+
+void CQuest::getAllNPCUnitDataInvolvedInQuest(TArrayList<CDataGroup*>& groups)
+{
+    for (unsigned int i = 0; i < m_acceptDialogs.size(); ++i)
+    {
+        if (m_acceptDialogs[i]->m_pNPCDataGroup &&
+            groups.find(m_acceptDialogs[i]->m_pNPCDataGroup) == -1)
+            groups.add(m_acceptDialogs[i]->m_pNPCDataGroup);
+    }
+    for (unsigned int i = 0; i < m_Unknown78.size(); ++i)
+    {
+        if (m_Unknown78[i]->m_pNPCDataGroup &&
+            groups.find(m_Unknown78[i]->m_pNPCDataGroup) == -1)
+            groups.add(m_Unknown78[i]->m_pNPCDataGroup);
+    }
+    for (unsigned int i = 0; i < m_Unknown90.size(); ++i)
+    {
+        if (m_Unknown90[i]->m_pNPCDataGroup &&
+            groups.find(m_Unknown90[i]->m_pNPCDataGroup) == -1)
+            groups.add(m_Unknown90[i]->m_pNPCDataGroup);
+    }
+    for (unsigned int i = 0; i < m_UnknownA8.size(); ++i)
+    {
+        if (m_UnknownA8[i]->m_pNPCDataGroup &&
+            groups.find(m_UnknownA8[i]->m_pNPCDataGroup) == -1)
+            groups.add(m_UnknownA8[i]->m_pNPCDataGroup);
+    }
+}
