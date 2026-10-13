@@ -174,6 +174,97 @@ class PacketContextTests(TestCase):
         self.assertFalse(self.overload_case("void createUnit(const std::string&);", full + " const&").gaps)
         self.assertFalse(self.overload_case("void createUnit(const " + full + "&);", "std::string const&").gaps)
 
+    def test_standard_vector_default_allocator_both_directions(self):
+        full = "std::vector<CDataGroup*, std::allocator<CDataGroup*> >*"
+        self.assertFalse(self.overload_case("void createUnit(std::vector<CDataGroup*>* groups);", full).gaps)
+        self.assertFalse(self.overload_case("void createUnit(" + full + " groups);",
+                                           "std::vector<CDataGroup*>*").gaps)
+
+    def test_standard_vector_real_datagroup_declaration_context(self):
+        declaration = "unsigned int GetDataGroupsMatchingName(const std::wstring& name, std::vector<CDataGroup*>* groups);"
+        self.write_header("DataGroup.h", "#include <string>\n#include <vector>\nclass CDataGroup { public: " + declaration + " };\n")
+        self.mapping['CDataGroup'] = 'DataGroup.h'
+        params = ("std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, "
+                  "std::vector<CDataGroup*, std::allocator<CDataGroup*> >*")
+        self.add_function(function(0xc5f910, 'CDataGroup', 'GetDataGroupsMatchingName', tu=1, params=params))
+        result = self.index().build(self.target, "1000: call c5f910").require_complete()
+        self.assertIn('DataGroup.h', result.headers)
+        self.assertIn(declaration, result.text)  # supplied declaration is not rewritten
+        self.add_function(function(0x2000, 'CMissing', 'missing', tu=1, params='int'))
+        with self.assertRaises(ContextError):
+            self.index().build(self.target, "1000: call c5f910\n1005: call 2000").require_complete()
+
+    def test_standard_vector_nested_default_and_string_alias(self):
+        full = 'std::vector<std::vector<int, std::allocator<int> >, std::allocator<std::vector<int, std::allocator<int> > > > const&'
+        self.assertFalse(self.overload_case('void createUnit(const std::vector<std::vector<int> >&);', full).gaps)
+        string = 'std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'
+        full = 'std::vector<' + string + ', std::allocator<' + string + '> > const&'
+        self.assertFalse(self.overload_case('void createUnit(const std::vector<std::wstring>&);', full).gaps)
+
+    def test_standard_vector_custom_namespace_allocator_and_element_do_not_match(self):
+        for full in ('std::vector<CDataGroup*, CustomAllocator<CDataGroup*> >*',
+                     'std::vector<CDataGroup*, std::allocator<const CDataGroup*> >*',
+                     'std::vector<CDataGroup*, std::allocator<CDataGroup> >*',
+                     'std::vector<CDataGroup*, otherstd::allocator<CDataGroup*> >*',
+                     'std::vector<CDataGroup*, std::__new::allocator<CDataGroup*> >*',
+                     'otherstd::vector<CDataGroup*, std::allocator<CDataGroup*> >*',
+                     'custom::std::vector<CDataGroup*, std::allocator<CDataGroup*> >*',
+                     'std::__debug::vector<CDataGroup*, std::allocator<CDataGroup*> >*',
+                     'std::vector<const CDataGroup*, std::allocator<const CDataGroup*> >*',
+                     'std::vector<CDataGroup* const, std::allocator<CDataGroup* const> >*'):
+            with self.subTest(full=full):
+                self.assertTrue(self.overload_case('void createUnit(std::vector<CDataGroup*>*);', full).gaps)
+
+    def test_standard_vector_preserves_outer_qualifiers_arity_member_cv(self):
+        full = 'std::vector<CDataGroup*, std::allocator<CDataGroup*> >'
+        for params, cv in ((full, ''), (full + '&', ''), (full + ' const*', ''),
+                           (full + '**', ''), (full + '*, int', ''), (full + '*', 'const')):
+            with self.subTest(params=params, cv=cv):
+                self.assertTrue(self.overload_case('void createUnit(std::vector<CDataGroup*>*);', params, cv).gaps)
+
+    def test_standard_vector_malformed_arguments_fail_closed(self):
+        for full in ('std::vector<CDataGroup*, std::allocator<CDataGroup*>*',
+                     'std::vector<>*', 'std::vector<CDataGroup*,>*',
+                     'std::vector<CDataGroup*,,std::allocator<CDataGroup*> >*',
+                     'std::vector<CDataGroup*, std::allocator<CDataGroup*>, int>*',
+                     'std::vector<CDataGroup*, ALLOC(CDataGroup*)>*'):
+            with self.subTest(full=full):
+                self.assertTrue(self.overload_case('void createUnit(std::vector<CDataGroup*>*);', full).gaps)
+
+    def test_standard_vector_element_word_boundaries_survive_signature_keys(self):
+        for spaced, joined in (('unsigned int', 'unsignedint'), ('Foo const*', 'Fooconst*'),
+                               ('const Foo*', 'constFoo*'), ('unsigned long long', 'unsignedlonglong')):
+            for header_type, callee_type in ((spaced, joined), (joined, spaced)):
+                with self.subTest(header=header_type, callee=callee_type):
+                    full = 'std::vector<' + callee_type + ', std::allocator<' + callee_type + '> >*'
+                    self.assertTrue(self.overload_case('void createUnit(std::vector<' + header_type + '>*);', full).gaps)
+        self.assertFalse(self.overload_case('void createUnit(std::vector<unsigned int>*);',
+                                           'std::vector<unsigned int, std::allocator<unsigned int> >*').gaps)
+
+    def test_standard_vector_namespace_spacing_keeps_token_boundaries(self):
+        for prefix in ('std :: vector', 'std:: vector', 'std ::vector', 'std\n::\nvector'):
+            with self.subTest(prefix=prefix):
+                self.assertTrue(self.overload_case('void createUnit(' + prefix + '<unsigned int>*);',
+                                                   'std::vector<unsignedint, std::allocator<unsignedint> >*').gaps)
+                self.assertTrue(self.overload_case('void createUnit(std::vector<unsignedint>*);',
+                                                   prefix + '<unsigned int, std::allocator<unsigned int> >*').gaps)
+                self.assertFalse(self.overload_case('void createUnit(' + prefix + '<unsigned int>*);',
+                                                    'std::vector<unsigned int, std::allocator<unsigned int> >*').gaps)
+                self.assertTrue(self.overload_case('void createUnit(std::vector<unsigned int>*);',
+                                                   'custom :: ' + prefix + '<unsigned int, std::allocator<unsigned int> >*').gaps)
+
+    def test_standard_vector_token_boundaries_not_allocator_heuristics(self):
+        from llm_context import _standard_vector_defaults
+        for text in ('std::vector<unsigned int, std::allocator<unsignedint> >',
+                     'std::vector<unsignedint, std::allocator<unsigned int> >',
+                     'std::vector<T*, AliasAllocator>',
+                     'custom:: std::vector<T, std::allocator<T> >'):
+            with self.subTest(text=text):
+                normalized = _standard_vector_defaults(text)
+                self.assertIn('allocator' if 'allocator' in text else 'AliasAllocator', normalized)
+        with self.assertRaises(ValueError):
+            _standard_vector_defaults('std::vector<' * 40 + 'int' + '>' * 40)
+
     def test_standard_string_alias_inside_template(self):
         full = "std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > const&"
         self.assertFalse(self.overload_case("void createUnit(const std::vector<std::wstring>& words);", full).gaps)
