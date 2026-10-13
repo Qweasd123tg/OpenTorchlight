@@ -107,6 +107,7 @@ public:
 
 private:
     friend struct SmallmatchPass7Probe;
+    friend class CQuestUnitData;
     TArrayList<CEditorScene*> m_RoomScenes;
     TArrayList<Ogre::AxisAlignedBox> m_roomBounds;
     short** m_mapPassability;

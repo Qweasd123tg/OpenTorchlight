@@ -258,3 +258,71 @@ std::wstring CQuestUnitData::getUnitName()
 
     return name;
 }
+
+#include "GameClient.h"
+#include "GameUI.h"
+
+bool CQuestUnitData::unitDefeated(CBaseUnit* unit)
+{
+    if (!m_trackUnitEvents)
+        return false;
+
+    if (m_pBaseUnitDataGroup == NULL)
+        m_pBaseUnitDataGroup = getBaseUnitDataGroup();
+
+    const UNITTYPES::EUNITTYPES type =
+        static_cast<UNITTYPES::EUNITTYPES>(m_unitType);
+    bool matches = m_pBaseUnitDataGroup == unit->getDataGroup() || unit->ISA(type);
+    bool belongsToQuest;
+    if (m_unitType != 22 &&
+        unit->ISA(static_cast<UNITTYPES::EUNITTYPES>(m_unitType)))
+        belongsToQuest = true;
+    else
+        belongsToQuest = unit->getQuestGuid() == m_pQuest->m_iUnknown1C8 &&
+            unit->m_iQuestState == m_questUnitDataId;
+
+    if (m_spawnFromUnitType == 22 && m_createUnit)
+        matches = belongsToQuest;
+
+    if (!m_completed && matches)
+    {
+        // The original uses a wrapping 32-bit count and unsigned completion test.
+        m_currentUnitCount = static_cast<int>(
+            static_cast<unsigned int>(m_currentUnitCount) + 1u);
+
+        CResourceManager* resources = unit->getResourceManager();
+        CLevel* level = resources != NULL ? resources->getLevel() : NULL;
+        if (level != NULL && m_pQuest != NULL &&
+            unit->ISA(static_cast<UNITTYPES::EUNITTYPES>(25)))
+        {
+            CCharacter* character = dynamic_cast<CCharacter*>(unit);
+            if (character != NULL)
+            {
+                level->m_pGameClient->getGameUI()->setBigText(
+                    m_pQuest->replaceStringTags(m_pQuest->m_sUnknown58), 1.0f);
+                level->m_pGameClient->getGameUI()->setSmallText(
+                    character->m_characterDisplayName + L" - " +
+                    STRINGS::GetValueAsWString(static_cast<unsigned int>(m_currentUnitCount)) +
+                    L"/" +
+                    STRINGS::GetValueAsWString(static_cast<unsigned int>(m_requiredUnitCount)) +
+                    L" Defeated", 1.0f);
+            }
+        }
+
+        if (static_cast<unsigned int>(m_currentUnitCount) >=
+            static_cast<unsigned int>(m_requiredUnitCount))
+        {
+            spawnChildrenUnits(unit->getResourceManager(), unit->getPosition(true));
+            m_completed = true;
+            return true;
+        }
+    }
+    else if (m_completed && !matches && m_children.size() != 0)
+    {
+        for (unsigned int i = 0; i < m_children.size(); ++i)
+            if (m_children[i]->unitDefeated(unit))
+                return true;
+    }
+
+    return false;
+}
