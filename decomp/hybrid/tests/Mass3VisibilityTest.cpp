@@ -27,13 +27,15 @@ TL_FUNCTION(dep_updateOpacity, "_ZN10CCharacter13updateOpacityEfb")
 namespace {
 using namespace smallmass;
 void *self,*model,*equipment,*secondary;unsigned animationCalls;
+unsigned particleStarts,particleStops[2],particleLoops[2],particleRepositions,nonLoopStops;
+void* nonLoopParticle;
 bool theme(void* p,void* value) {event(1,p);pointer(value);return input->index%3!=0;}
-void start(void* p) {event(2,p);field<bool>(p,0x81)=true;}
-void stop(void* p,bool immediate) {event(3,p);number(immediate);field<bool>(p,0x81)=false;}
-int loop(void* p) {event(4,p);return field<int>(p,0x90);}
+void start(void* p) {event(2,p);++particleStarts;field<bool>(p,0x81)=true;}
+void stop(void* p,bool immediate) {event(3,p);number(immediate);++particleStops[immediate?1:0];if(p==nonLoopParticle)++nonLoopStops;field<bool>(p,0x81)=false;}
+int loop(void* p) {event(4,p);int value=field<int>(p,0x90);++particleLoops[value?1:0];nonLoopParticle=value?0:p;return value;}
 void trailActive(void* p,bool v) {event(5,p);number(v);field<bool>(p,0x10)=v;}
 void trailVisible(void* p,bool v) {event(6,p);number(v);field<bool>(p,0x11)=v;}
-void setPosition(void* p,const Ogre::Vector3& v) {event(7,p);vector(v);field<Ogre::Vector3>(p,0x84)=v;}
+void setPosition(void* p,const Ogre::Vector3& v) {event(7,p);++particleRepositions;vector(v);field<Ogre::Vector3>(p,0x84)=v;}
 void baseVisible(void* p,bool v) {event(8,p);number(v);field<bool>(p,0x81)=v;}
 void simpleVisible(void* p,bool v) {event(9,p);number(v);field<bool>(p,0x52c)=v;}
 void visible(void* p,bool v,bool immediate) {event(10,p);number(v);number(immediate);field<bool>(p,0x81)=v;field<bool>(p,0x52c)=v;}
@@ -51,6 +53,7 @@ void stopSkills(void* p,bool a,bool b,bool c) {event(21,p);number(a);number(b);n
 void state(void* p,int v) {event(22,p);number(v);field<int>(p,0x330)=v;}
 void execute(Case& c,bool ours,autotest::Capture& out) {
  input=&c;output=&out;autotest::g_arenaUsed=0;animationCalls=0;
+ particleStarts=particleStops[0]=particleStops[1]=particleLoops[0]=particleLoops[1]=particleRepositions=nonLoopStops=0;nonLoopParticle=0;
  self=object(0x778);model=object(0x258);secondary=object(0x258);equipment=object(0x480);
  void* manager=object(0x100);void* skill=object(0x160);void* path=object(0x80);
  void** table=static_cast<void**>(object(0x430));table[0x50/8]=reinterpret_cast<void*>(&simpleVisible);table[0x348/8]=reinterpret_cast<void*>(&state);field<void*>(self,0)=table;
@@ -73,7 +76,7 @@ void execute(Case& c,bool ours,autotest::Capture& out) {
  void** triggers=static_cast<void**>(object(8*8));void* particles[8];unsigned n=c.index%9;
  for(unsigned i=0;i<8;++i) {
   triggers[i]=object(0x68);particles[i]=object(0x300);
-  field<void*>(triggers[i],0x38)=(i+c.index)%5?particles[i]:0;
+  field<void*>(triggers[i],0x18)=(i+c.index)%5?particles[i]:0;
   field<bool>(triggers[i],0x59)=i&1;field<bool>(triggers[i],0x5a)=i&2;
   field<bool>(triggers[i],0x20)=(i+c.index)&1;field<bool>(triggers[i],0x58)=(i+c.index)&2;
   field<void*>(triggers[i],0x50)=i&4?manager:0;field<int>(particles[i],0x90)=(i+c.index)%3;
@@ -107,6 +110,14 @@ void execute(Case& c,bool ours,autotest::Capture& out) {
  case 1:autotest::invoke(out,ours?candidate1:original1,self,elapsed,bool(c.index&32));break;
  case 2:autotest::invoke(out,ours?candidate2:original2,self,bool(c.index&32));break;
  }
+ // These seeds must reach real detoured calls on both sides, even if their
+ // captures would otherwise agree after a broken fixture skipped particles.
+ if(c.op==0 &&
+    ((c.index==22 && !particleStarts) ||
+     (c.index==5 && (!particleStops[0] || !particleRepositions)) ||
+     (c.index==37 && !particleLoops[1]) ||
+     (c.index==39 && (!particleLoops[0] || !nonLoopStops))))
+  out.issue=autotest::Capture::InvalidReport;
  number(field<bool>(self,0x81));number(field<bool>(self,0x52c));floating(field<float>(self,0x528));number(field<int>(self,0x330));floating(field<float>(self,0x378));floating(field<float>(self,0x380));number(field<bool>(self,0x267));number(field<bool>(self,0x264));floating(field<float>(self,0x278));vector(field<Ogre::Vector3>(self,0x21c));
  for(unsigned i=0;i<n;++i){number(field<bool>(particles[i],0x81));vector(field<Ogre::Vector3>(particles[i],0x84));}
 }

@@ -10,11 +10,18 @@
 class CBaseUnit;
 class CQuest;
 class CSpawnClass;
-class CUnitCreateRef;
 
 class CQuestRewards : public CRunicCore
 {
 public:
+    class CUnitCreateRef : public CRunicCore
+    {
+    public:
+        virtual ~CUnitCreateRef();
+        CDataGroup *m_pDataGroup;
+        bool m_bIdentify;
+    };
+
     virtual ~CQuestRewards();
 
     void destroyIcons();
@@ -32,7 +39,7 @@ public:
     float m_fFame;
     unsigned char m_Reserved24[4] __attribute__((aligned(4)));
     CSpawnClass *m_pSpawnClass;
-    TArrayList<CUnitCreateRef> m_unitRewardReferences;
+    TArrayList<CUnitCreateRef*> m_unitRewardReferences;
     float m_fExperienceMinPercent;
     float m_fExperienceMaxPercent;
     float m_fGoldMinPercent;

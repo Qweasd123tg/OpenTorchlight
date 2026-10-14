@@ -174,6 +174,97 @@ class PacketContextTests(TestCase):
         self.assertFalse(self.overload_case("void createUnit(const std::string&);", full + " const&").gaps)
         self.assertFalse(self.overload_case("void createUnit(const " + full + "&);", "std::string const&").gaps)
 
+    def test_standard_vector_default_allocator_both_directions(self):
+        full = "std::vector<CDataGroup*, std::allocator<CDataGroup*> >*"
+        self.assertFalse(self.overload_case("void createUnit(std::vector<CDataGroup*>* groups);", full).gaps)
+        self.assertFalse(self.overload_case("void createUnit(" + full + " groups);",
+                                           "std::vector<CDataGroup*>*").gaps)
+
+    def test_standard_vector_real_datagroup_declaration_context(self):
+        declaration = "unsigned int GetDataGroupsMatchingName(const std::wstring& name, std::vector<CDataGroup*>* groups);"
+        self.write_header("DataGroup.h", "#include <string>\n#include <vector>\nclass CDataGroup { public: " + declaration + " };\n")
+        self.mapping['CDataGroup'] = 'DataGroup.h'
+        params = ("std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, "
+                  "std::vector<CDataGroup*, std::allocator<CDataGroup*> >*")
+        self.add_function(function(0xc5f910, 'CDataGroup', 'GetDataGroupsMatchingName', tu=1, params=params))
+        result = self.index().build(self.target, "1000: call c5f910").require_complete()
+        self.assertIn('DataGroup.h', result.headers)
+        self.assertIn(declaration, result.text)  # supplied declaration is not rewritten
+        self.add_function(function(0x2000, 'CMissing', 'missing', tu=1, params='int'))
+        with self.assertRaises(ContextError):
+            self.index().build(self.target, "1000: call c5f910\n1005: call 2000").require_complete()
+
+    def test_standard_vector_nested_default_and_string_alias(self):
+        full = 'std::vector<std::vector<int, std::allocator<int> >, std::allocator<std::vector<int, std::allocator<int> > > > const&'
+        self.assertFalse(self.overload_case('void createUnit(const std::vector<std::vector<int> >&);', full).gaps)
+        string = 'std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'
+        full = 'std::vector<' + string + ', std::allocator<' + string + '> > const&'
+        self.assertFalse(self.overload_case('void createUnit(const std::vector<std::wstring>&);', full).gaps)
+
+    def test_standard_vector_custom_namespace_allocator_and_element_do_not_match(self):
+        for full in ('std::vector<CDataGroup*, CustomAllocator<CDataGroup*> >*',
+                     'std::vector<CDataGroup*, std::allocator<const CDataGroup*> >*',
+                     'std::vector<CDataGroup*, std::allocator<CDataGroup> >*',
+                     'std::vector<CDataGroup*, otherstd::allocator<CDataGroup*> >*',
+                     'std::vector<CDataGroup*, std::__new::allocator<CDataGroup*> >*',
+                     'otherstd::vector<CDataGroup*, std::allocator<CDataGroup*> >*',
+                     'custom::std::vector<CDataGroup*, std::allocator<CDataGroup*> >*',
+                     'std::__debug::vector<CDataGroup*, std::allocator<CDataGroup*> >*',
+                     'std::vector<const CDataGroup*, std::allocator<const CDataGroup*> >*',
+                     'std::vector<CDataGroup* const, std::allocator<CDataGroup* const> >*'):
+            with self.subTest(full=full):
+                self.assertTrue(self.overload_case('void createUnit(std::vector<CDataGroup*>*);', full).gaps)
+
+    def test_standard_vector_preserves_outer_qualifiers_arity_member_cv(self):
+        full = 'std::vector<CDataGroup*, std::allocator<CDataGroup*> >'
+        for params, cv in ((full, ''), (full + '&', ''), (full + ' const*', ''),
+                           (full + '**', ''), (full + '*, int', ''), (full + '*', 'const')):
+            with self.subTest(params=params, cv=cv):
+                self.assertTrue(self.overload_case('void createUnit(std::vector<CDataGroup*>*);', params, cv).gaps)
+
+    def test_standard_vector_malformed_arguments_fail_closed(self):
+        for full in ('std::vector<CDataGroup*, std::allocator<CDataGroup*>*',
+                     'std::vector<>*', 'std::vector<CDataGroup*,>*',
+                     'std::vector<CDataGroup*,,std::allocator<CDataGroup*> >*',
+                     'std::vector<CDataGroup*, std::allocator<CDataGroup*>, int>*',
+                     'std::vector<CDataGroup*, ALLOC(CDataGroup*)>*'):
+            with self.subTest(full=full):
+                self.assertTrue(self.overload_case('void createUnit(std::vector<CDataGroup*>*);', full).gaps)
+
+    def test_standard_vector_element_word_boundaries_survive_signature_keys(self):
+        for spaced, joined in (('unsigned int', 'unsignedint'), ('Foo const*', 'Fooconst*'),
+                               ('const Foo*', 'constFoo*'), ('unsigned long long', 'unsignedlonglong')):
+            for header_type, callee_type in ((spaced, joined), (joined, spaced)):
+                with self.subTest(header=header_type, callee=callee_type):
+                    full = 'std::vector<' + callee_type + ', std::allocator<' + callee_type + '> >*'
+                    self.assertTrue(self.overload_case('void createUnit(std::vector<' + header_type + '>*);', full).gaps)
+        self.assertFalse(self.overload_case('void createUnit(std::vector<unsigned int>*);',
+                                           'std::vector<unsigned int, std::allocator<unsigned int> >*').gaps)
+
+    def test_standard_vector_namespace_spacing_keeps_token_boundaries(self):
+        for prefix in ('std :: vector', 'std:: vector', 'std ::vector', 'std\n::\nvector'):
+            with self.subTest(prefix=prefix):
+                self.assertTrue(self.overload_case('void createUnit(' + prefix + '<unsigned int>*);',
+                                                   'std::vector<unsignedint, std::allocator<unsignedint> >*').gaps)
+                self.assertTrue(self.overload_case('void createUnit(std::vector<unsignedint>*);',
+                                                   prefix + '<unsigned int, std::allocator<unsigned int> >*').gaps)
+                self.assertFalse(self.overload_case('void createUnit(' + prefix + '<unsigned int>*);',
+                                                    'std::vector<unsigned int, std::allocator<unsigned int> >*').gaps)
+                self.assertTrue(self.overload_case('void createUnit(std::vector<unsigned int>*);',
+                                                   'custom :: ' + prefix + '<unsigned int, std::allocator<unsigned int> >*').gaps)
+
+    def test_standard_vector_token_boundaries_not_allocator_heuristics(self):
+        from llm_context import _standard_vector_defaults
+        for text in ('std::vector<unsigned int, std::allocator<unsignedint> >',
+                     'std::vector<unsignedint, std::allocator<unsigned int> >',
+                     'std::vector<T*, AliasAllocator>',
+                     'custom:: std::vector<T, std::allocator<T> >'):
+            with self.subTest(text=text):
+                normalized = _standard_vector_defaults(text)
+                self.assertIn('allocator' if 'allocator' in text else 'AliasAllocator', normalized)
+        with self.assertRaises(ValueError):
+            _standard_vector_defaults('std::vector<' * 40 + 'int' + '>' * 40)
+
     def test_standard_string_alias_inside_template(self):
         full = "std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > const&"
         self.assertFalse(self.overload_case("void createUnit(const std::vector<std::wstring>& words);", full).gaps)
@@ -1087,9 +1178,10 @@ class PacketContextTests(TestCase):
             scope = "TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >"
             address, size = 0x5f8e90, 155
             prefix, method = "_ZN10TArrayListISbIwSt11char_traitsIwESaIwEEE", "~TArrayList"
-        elif variant in ("quest_dialog", "quest_unit_arrays"):
+        elif variant in ("quest_dialog", "quest_unit_arrays", "base_unit"):
             f = self.window_array()
             scope, address, prefix = {
+                "base_unit": ("TArrayList<CBaseUnit*>", 0xd49940, "_ZN10TArrayListIP9CBaseUnitE"),
                 "quest_dialog": ("TArrayList<CQuestDialog*>", 0xd1d3f0, "_ZN10TArrayListIP12CQuestDialogE"),
                 "quest_unit_arrays": ("TArrayList<TArrayList<CQuestUnitData*>*>", 0xd1d3d0, "_ZN10TArrayListIPS_IP14CQuestUnitDataEE"),
             }[variant]
@@ -1108,19 +1200,45 @@ class PacketContextTests(TestCase):
         return f
 
     def test_pinned_destructors_supply_existing_headers(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 result = self.index().build(self.target, "1000: call " + f["address"]).require_complete()
-                expected = ("TArrayList.h",) if variant in ("wstring", "quest_dialog", "quest_unit_arrays") else ("Node.h", "SafePointer.h")
+                expected = ("TArrayList.h",) if variant in ("wstring", "quest_dialog", "quest_unit_arrays", "base_unit") else ("Node.h", "SafePointer.h")
                 self.assertEqual(result.headers, expected)
                 self.assertIn("No specialization or prototype synthesized", result.text)
+
+    def test_base_unit_destructor_uses_real_pinned_header(self):
+        f = self.pinned_destructor("base_unit")
+        body = (Path(__file__).resolve().parents[2] / "decomp/include/TArrayList.h").read_bytes()
+        digest = "e45608b683e95c9fb0a5eb0129bb99c3d09826270d14b06cf1f407a35208b4be"
+        self.assertEqual(hashlib.sha256(body).hexdigest(), digest)
+        (self.include / "TArrayList.h").write_bytes(body)
+        with mock.patch.object(ContextIndex, "WINDOW_ARRAY_HEADER_SHA256", digest):
+            result = self.index().build(self.target, "1000: call " + f["address"]).require_complete()
+        self.assertEqual(result.headers, ("TArrayList.h",))
+        self.assertIn(body.decode(), result.text)
+        self.assertIn("No specialization or prototype synthesized", result.text)
+
+    def test_base_unit_pointer_shape_is_not_generic_template_permission(self):
+        for scope, prefix in (("TArrayList<CBaseUnit const*>", "_ZN10TArrayListIPK9CBaseUnitE"),
+                              ("TArrayList<CBaseUnit**>", "_ZN10TArrayListIPP9CBaseUnitE"),
+                              ("TArrayList<CCharacter*>", "_ZN10TArrayListIP10CCharacterE")):
+            with self.subTest(scope=scope):
+                f = self.pinned_destructor("base_unit")
+                names = [prefix + "D1Ev", prefix + "D2Ev"]
+                f.update(scope=scope, qualified=scope + "::~TArrayList", names=names, mangled=names[0])
+                for symbol, name in zip(self.image.symbols, names): symbol.name = name
+                self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
+        f = self.pinned_destructor("base_unit")
+        f['names'].append("_extra_alias")
+        self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_reject_db_mutations(self):
         mutations = {"kind": "function", "bind": ["global"], "method": "clear", "params": "int",
                      "cv": "const", "mangled": "_fake", "names": ["_fake"], "qualified": "Other::~Other",
                      "scope": "TArrayList<CNode*>", "size": 99, "address": "0x2222"}
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit"):
             for field, value in mutations.items():
                 with self.subTest(variant=variant, field=field):
                     f = self.pinned_destructor(variant); address = f["address"]
@@ -1128,7 +1246,7 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + address).gaps)
 
     def test_pinned_destructors_require_both_weak_elf_aliases(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit"):
             for change in ("absent", "name", "size", "address", "binding", "type", "undefined", "D0"):
                 with self.subTest(variant=variant, change=change):
                     f = self.pinned_destructor(variant); symbol = self.image.symbols[1]
@@ -1145,12 +1263,12 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_reject_coherent_unreviewed_instantiations(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 if variant == "wstring":
                     scope, prefix = "TArrayList<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >", "_ZN10TArrayListISsE"
-                elif variant in ("quest_dialog", "quest_unit_arrays"):
+                elif variant in ("quest_dialog", "quest_unit_arrays", "base_unit"):
                     scope, prefix = "TArrayList<CQuestUnitData*>", "_ZN10TArrayListIP14CQuestUnitDataE"
                 else:
                     scope, prefix = "TSafePointer<CNode>", "_ZN12TSafePointerI5CNodeE"
@@ -1162,10 +1280,10 @@ class PacketContextTests(TestCase):
                 self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_reject_changed_template(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
-                header = "TArrayList.h" if variant in ("wstring", "quest_dialog", "quest_unit_arrays") else "SafePointer.h"
+                header = "TArrayList.h" if variant in ("wstring", "quest_dialog", "quest_unit_arrays", "base_unit") else "SafePointer.h"
                 with (self.include/header).open("a") as out: out.write("// changed\n")
                 self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
@@ -1182,7 +1300,7 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_do_not_hide_unknown_callee(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 self.add_function(function(0x3000, "CUnrelated", "missing", tu=2))
@@ -1191,7 +1309,7 @@ class PacketContextTests(TestCase):
                 self.assertIn("CUnrelated::missing", result.gaps[0])
 
     def test_quest_array_destructors_require_exact_header_and_snapshot(self):
-        for variant in ("quest_dialog", "quest_unit_arrays"):
+        for variant in ("quest_dialog", "quest_unit_arrays", "base_unit"):
             for change in ("missing", "renamed", "body", "hash", "snapshot"):
                 with self.subTest(variant=variant, change=change):
                     f = self.pinned_destructor(variant)

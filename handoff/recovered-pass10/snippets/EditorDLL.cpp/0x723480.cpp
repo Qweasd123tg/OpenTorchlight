@@ -1,4 +1,0 @@
-void EditorDeleteAllUndos()
-{
-    gEditor->deleteAllUndos();
-}

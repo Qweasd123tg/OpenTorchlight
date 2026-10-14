@@ -159,6 +159,65 @@ def _standard_string_aliases(text):
     return re.sub(pattern, lambda m: "std::wstring" if m[1] == "wchar_t" else "std::string", text)
 
 
+def _standard_vector_defaults(text, depth=0):
+    """Erase only the pinned std::vector<T, std::allocator<T> > default.
+
+    Balanced arguments and token identities preserve nested types and word
+    boundaries. Custom allocators/namespaces and element qualifiers stay distinct.
+    This is lookup text only; no declaration or general signature parser changes.
+    """
+    if depth > 32:
+        raise ValueError("vector template nesting exceeds lookup limit")
+    pattern = re.compile(r"(?<![\w:])std\s*::\s*vector\s*<")
+    out, cursor = [], 0
+    for_match = pattern.search(text, cursor)
+    while for_match:
+        start, opening = for_match.start(), for_match.end() - 1
+        if re.search(r"::\s*$", text[:start]):
+            cursor = for_match.end()
+            for_match = pattern.search(text, cursor)
+            continue
+        level, part, args, end = 1, opening + 1, [], None
+        for i in range(opening + 1, len(text)):
+            ch = text[i]
+            if ch == '<':
+                level += 1
+            elif ch == '>':
+                level -= 1
+                if level == 0:
+                    args.append(text[part:i].strip())
+                    end = i
+                    break
+            elif ch == ',' and level == 1:
+                args.append(text[part:i].strip())
+                part = i + 1
+        if end is None or len(args) not in (1, 2) or any(not a for a in args):
+            raise ValueError("malformed vector template arguments")
+        args = [_standard_vector_defaults(a, depth + 1) for a in args]
+        def tokens(value):
+            # Do not equate 'unsigned int' with 'unsignedint' or accept expressions.
+            token = r"[A-Za-z_]\w*|::|[<>,*&]|[0-9]+"
+            if re.sub(token + r"|\s+", "", value):
+                raise ValueError("unsupported vector template argument")
+            return re.findall(token, value)
+        element = tokens(args[0])
+        if len(args) == 2 and tokens(args[1]) == ['std', '::', 'allocator', '<', *element, '>']:
+            args.pop()
+        # Preserve everything before this occurrence, including skipped namespaces.
+        out.append(text[:start])
+        spelling = 'std::vector<' + ', '.join(args) + '>'
+        if depth == 0:
+            # parameter_key later removes whitespace. Keep element word boundaries
+            # in this lookup-only spelling: unsigned int must not become unsignedint.
+            spelling = re.sub(r"(?<=\w)\s+(?=\w)", "|", spelling)
+        out.append(spelling)
+        text = text[end + 1:]
+        cursor = 0
+        for_match = pattern.search(text)
+    out.append(text)
+    return ''.join(out)
+
+
 def _declares_callee(declaration, callee):
     """Match parameter and member-cv identity, never a name-only overload.
 
@@ -171,12 +230,16 @@ def _declares_callee(declaration, callee):
     method = callee.get("method", "")
     if not re.fullmatch(r"~?[A-Za-z_]\w*", method):
         return False
-    text = _standard_string_aliases(declaration.text)
+    try:
+        text = _standard_vector_defaults(_standard_string_aliases(declaration.text))
+        params = _standard_vector_defaults(_standard_string_aliases(callee["params"]))
+    except ValueError:
+        return False
     # The shared parser's word boundary is before an identifier, not '~'.
     if method.startswith("~"):
         text = re.sub(r"~\s*" + re.escape(method[1:]) + r"(?=\s*\()", method[1:], text)
         method = method[1:]
-    canonical = dict(callee, params=_standard_string_aliases(callee["params"]))
+    canonical = dict(callee, params=params)
     expected = ghidra_cpp.signature_key(canonical)[1:3]
     declared = declaration_headers.declared_signatures(text, method)
     return any((params, cv) == expected for params, cv, _static in declared)
@@ -771,15 +834,18 @@ class ContextIndex:
         return {header}
 
     def _pinned_destructor_headers(self, callee, scope):
-        """Five reviewed existing template bodies, never a generic exemption.
+        """Six reviewed existing template bodies, never a generic exemption.
 
         Original ASM: wstring delete[] destroys elements using the array cookie,
         then frees and clears data; safe pointers unregister and reset both fields.
-        Quest pointer arrays free only the array storage and clear its pointer.
+        Quest/BaseUnit pointer arrays free only the array storage and clear its pointer.
         Only the reviewed address, size, D1/D2 aliases and unmodified source count.
         """
         wide = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
         reviewed = {
+            "TArrayList<CBaseUnit*>":
+                (0xd49940, 26, "_ZN10TArrayListIP9CBaseUnitE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<CQuestDialog*>":
                 (0xd1d3f0, 26, "_ZN10TArrayListIP12CQuestDialogE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),

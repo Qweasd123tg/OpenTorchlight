@@ -1,3 +1,4 @@
+#include "StringUtilities.h"
 #include "Dungeon.h"
 #include "DungeonManager.h"
 #include "GameClient.h"
@@ -381,4 +382,231 @@ void CQuest::load(_IO_FILE* file, CResourceManager*, unsigned int version)
                 (*m_Unknown160[i])[j]->load(file, version);
     }
     m_questAccepted = true;
+}
+
+long long CQuest::isComplete(bool requireObjectives)
+{
+    if (!requireObjectives && m_complete)
+        return true;
+    if (m_bUnknown2A)
+        return false;
+
+    bool hasObjectives = false;
+    for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+    {
+        for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+        {
+            if (!(*m_Unknown130[i])[j]->isComplete(false))
+                return false;
+            hasObjectives = true;
+        }
+    }
+    for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+    {
+        for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+        {
+            if (!(*m_Unknown148[i])[j]->isComplete(false))
+                return false;
+            hasObjectives = true;
+        }
+    }
+    for (unsigned int i = 0; i < 2; ++i)
+    {
+        for (unsigned int j = 0; j < m_UnknownF8[i].size(); ++j)
+        {
+            if (!m_UnknownF8[i][j])
+                return false;
+            hasObjectives = true;
+        }
+    }
+    if (!hasObjectives)
+    {
+        if (requireObjectives)
+            return false;
+        bool interacted = m_acceptDialogs.size() == 0;
+        for (unsigned int i = 0; i < m_acceptDialogs.size(); ++i)
+        {
+            if (m_acceptDialogs[i]->m_bDialogInitialized)
+            {
+                interacted = true;
+                break;
+            }
+        }
+        if (!interacted)
+            return false;
+    }
+    setIsComplete(true);
+    return true;
+}
+
+void CQuest::questEventUpdate(EQUEST_EVENTS event, CBaseUnit* actor,
+                              CBaseUnit* target)
+{
+    switch (static_cast<unsigned int>(event))
+    {
+    case 0:
+        for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+                if (static_cast<unsigned char>((*m_Unknown130[i])[j]->unitPickedUp(target)))
+                {
+                    isComplete(false);
+                    break;
+                }
+        for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+                if (static_cast<unsigned char>((*m_Unknown148[i])[j]->unitPickedUp(target)))
+                {
+                    isComplete(false);
+                    break;
+                }
+        break;
+    case 1:
+        for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+                if ((*m_Unknown130[i])[j]->unitDefeated(target))
+                {
+                    isComplete(false);
+                    break;
+                }
+        for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+                if ((*m_Unknown148[i])[j]->unitDefeated(target))
+                {
+                    isComplete(false);
+                    break;
+                }
+        break;
+    case 2:
+        if (actor != m_pQuestManager->m_pPlayer)
+            break;
+        for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+                if ((*m_Unknown130[i])[j]->unitInteracted(target))
+                {
+                    isComplete(false);
+                    break;
+                }
+        for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+                if ((*m_Unknown148[i])[j]->unitInteracted(target))
+                {
+                    isComplete(false);
+                    break;
+                }
+        break;
+    case 3:
+        for (unsigned int i = 0; i < m_UnknownC8.size(); ++i)
+            if (!m_UnknownF8[0][i] && m_pQuestManager->getQuestIsActive(m_UnknownC8[i]))
+                m_UnknownF8[0][i] = true;
+        isComplete(false);
+        break;
+    case 4:
+        for (unsigned int i = 0; i < m_UnknownE0.size(); ++i)
+            if (!m_UnknownF8[1][i] && m_pQuestManager->getQuestComplete(m_UnknownE0[i]))
+                m_UnknownF8[1][i] = true;
+        isComplete(false);
+        break;
+    case 5:
+        for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+                if ((*m_Unknown130[i])[j]->unitDropped(target))
+                {
+                    m_complete = false;
+                    break;
+                }
+        for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+            for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+                if ((*m_Unknown148[i])[j]->unitDropped(target))
+                {
+                    m_complete = false;
+                    break;
+                }
+        break;
+    }
+}
+
+inline std::wstring getAcquireTags(CQuestUnitData* unit, std::wstring prefix,
+                                  unsigned int index, std::wstring& text)
+{
+    if (!unit)
+        return text;
+    std::wstring tag = prefix + STRINGS::GetValueAsWString(index + 1);
+    text = STRINGS::replaceWString(text, tag + L"COUNT]",
+                                  STRINGS::GetValueAsWString(static_cast<unsigned int>(unit->m_requiredUnitCount)));
+    text = STRINGS::replaceWString(text, tag + L"DEPTH]",
+                                  STRINGS::GetValueAsWString(unit->getDungeonFloorActiveOn() + 1));
+    text = STRINGS::replaceWString(text, tag + L"COMPLETE]",
+                                  unit->isComplete(false) ? L"Complete" : L"Incomplete");
+    text = STRINGS::replaceWString(text, tag + L"]", unit->getUnitName());
+    return text;
+}
+
+std::wstring CQuest::replaceStringTags(const std::wstring& input)
+{
+    std::wstring text = input;
+    unsigned int acquireCompleteCount = 0;
+    for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+            acquireCompleteCount += (*m_Unknown130[i])[j]->m_currentUnitCount;
+    unsigned int defeatCompleteCount = 0;
+    for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+            defeatCompleteCount += (*m_Unknown148[i])[j]->m_currentUnitCount;
+
+    text = STRINGS::replaceWString(text, L"[DEPTH]", STRINGS::GetValueAsWString(m_iUnknown20 + 1));
+    text = STRINGS::replaceWString(text, L"[DEFEATCOMPLETECOUNT]", STRINGS::GetValueAsWString(defeatCompleteCount));
+    text = STRINGS::replaceWString(text, L"[ACQUIRECOMPLETECOUNT]", STRINGS::GetValueAsWString(acquireCompleteCount));
+
+    for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+        text = getAcquireTags((*m_Unknown130[i])[0], L"[ACQUIRE", i, text);
+
+    CDungeon* dungeon = m_pResourceManager->getDungeonByName(m_pUnknown30);
+    if (dungeon)
+        text = STRINGS::replaceWString(text, L"[DUNEGONNAME]", dungeon->m_sDisplayName);
+
+    for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+    {
+        CQuestUnitData* unit = (*m_Unknown148[i])[0];
+        if (!unit)
+            continue;
+        std::wstring tag = L"[DEFEAT" + STRINGS::GetValueAsWString(i + 1);
+        text = STRINGS::replaceWString(text, tag + L"COUNT]",
+                                      STRINGS::GetValueAsWString(static_cast<unsigned int>(unit->m_requiredUnitCount)));
+        text = STRINGS::replaceWString(text, tag + L"DEPTH]",
+                                      STRINGS::GetValueAsWString(unit->getDungeonFloorActiveOn() + 1));
+        text = STRINGS::replaceWString(text, tag + L"COMPLETE]",
+                                      unit->isComplete(true) ? L"Complete" : L"Incomplete");
+        text = STRINGS::replaceWString(text, tag + L"]", unit->getUnitName());
+        for (unsigned int j = 0; j < unit->m_children.size(); ++j)
+            text = getAcquireTags(unit->m_children[j], tag + L"ACQUIRE", j, text);
+    }
+    return text;
+}
+
+void CQuest::getAllNPCUnitDataInvolvedInQuest(TArrayList<CDataGroup*>& groups)
+{
+    for (unsigned int i = 0; i < m_acceptDialogs.size(); ++i)
+    {
+        if (m_acceptDialogs[i]->m_pNPCDataGroup &&
+            groups.find(m_acceptDialogs[i]->m_pNPCDataGroup) == -1)
+            groups.add(m_acceptDialogs[i]->m_pNPCDataGroup);
+    }
+    for (unsigned int i = 0; i < m_Unknown78.size(); ++i)
+    {
+        if (m_Unknown78[i]->m_pNPCDataGroup &&
+            groups.find(m_Unknown78[i]->m_pNPCDataGroup) == -1)
+            groups.add(m_Unknown78[i]->m_pNPCDataGroup);
+    }
+    for (unsigned int i = 0; i < m_Unknown90.size(); ++i)
+    {
+        if (m_Unknown90[i]->m_pNPCDataGroup &&
+            groups.find(m_Unknown90[i]->m_pNPCDataGroup) == -1)
+            groups.add(m_Unknown90[i]->m_pNPCDataGroup);
+    }
+    for (unsigned int i = 0; i < m_UnknownA8.size(); ++i)
+    {
+        if (m_UnknownA8[i]->m_pNPCDataGroup &&
+            groups.find(m_UnknownA8[i]->m_pNPCDataGroup) == -1)
+            groups.add(m_UnknownA8[i]->m_pNPCDataGroup);
+    }
 }

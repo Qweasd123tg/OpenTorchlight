@@ -3046,11 +3046,11 @@ void CCharacter::transformCharacter(std::wstring name, float duration)
     m_transformationTime = duration;
     if (m_originalUnitGuid == -1)
         m_originalUnitGuid = m_iUnitValue1A0;
-    std::wstring displayName = m_displayName;
+    std::wstring displayName = m_characterDisplayName;
     EAlignment previousAlignment = alignment();
     convertCharacter(name, true);
     setAlignment(previousAlignment);
-    m_displayName = std::wstring(displayName);
+    m_characterDisplayName = std::wstring(displayName);
     setVisible(false, true);
     setVisible(true, true);
 }

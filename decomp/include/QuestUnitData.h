@@ -39,7 +39,7 @@ public:
     CDataGroup* getSpawnClassUnitDataLookingFor();
     CDataGroup* getBaseUnitDataGroup();
 
-    unsigned long unitPickedUp(CBaseUnit* unit);
+    bool unitPickedUp(CBaseUnit* unit);
     bool unitDropped(CBaseUnit* unit);
     bool unitDefeated(CBaseUnit* unit);
     bool unitInteracted(CBaseUnit* unit);

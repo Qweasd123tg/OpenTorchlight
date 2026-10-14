@@ -25,6 +25,7 @@ public:
     double GetValueFloat64();
     void SetValueFloat64(double value);
     void SetValueIsTranslate();
+    const std::wstring& GetDataValueName();
     std::wstring GetValueTypeAsString();
     std::wstring GetValueAsString();
     const std::wstring& GetValueString(bool translate);

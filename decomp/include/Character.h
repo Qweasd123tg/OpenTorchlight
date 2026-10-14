@@ -57,6 +57,7 @@ class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
     friend class CDieMenu;
+    friend class CQuestUnitData;
 friend class CPlayer;
 friend class CGameClient;
 public:
@@ -538,7 +539,7 @@ private:
     bool m_bCharacterFlag4A0;
     unsigned char m_Padding4A1[7];
     TArrayList<CParticle*> m_equipmentParticles; // +0x4a8
-    std::wstring m_displayName; // +0x4c0
+    std::wstring m_characterDisplayName; // +0x4c0; original-owned display text
     unsigned char m_Padding4C8[0x14];
     float m_attackRangeScale; // +0x4dc
     float m_attackRadius; // +0x4e0
