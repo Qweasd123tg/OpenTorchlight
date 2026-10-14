@@ -60,6 +60,7 @@ class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 friend class CPlayer;
 friend class CGameClient;
 public:
+    void makeChampion(const std::wstring& name, int level, std::wstring type);
     void completeDeath(CLevel& level);
     void doWeaponProcs(CEquipment* weapon, CBaseUnit* target);
     void playStrikeParticle(const Ogre::Vector3& source, const Ogre::Vector3& target, float radius, bool blocked, bool critical);

@@ -14,6 +14,7 @@ public:
     // Typed parameters from the original symbol; Boolean tail contract from CResourceManager::ISA.
     bool ISA(unsigned int type, unsigned int parent);
     UNITTYPES::EUNITTYPES getTypeIDByName(const std::wstring& name);
+    std::wstring getTypeName(unsigned int type);
     void getTypeNames(TArrayList<std::wstring>* names);
 };
 
