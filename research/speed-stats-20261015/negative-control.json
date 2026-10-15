@@ -1,0 +1,28 @@
+{
+ "base_commit": "266f9b29e4e62d0c79493fbe401d13e0e47538b1",
+ "source": "decomp/src/SteamStats.cpp",
+ "source_sha256": "792f652984e2b44b87c3992a0e2a75657e2c8190d970ef8b92385aad3b06ed2d",
+ "header": "decomp/include/SteamStats.h",
+ "header_sha256": "1fb75b5a90487da412707ef85d7e2ee6aad8b42ae3993c6c113c35b46c769a09",
+ "fixture_sha256": "718887644b0c83f7a6d6bd319b2c350a9bac477dc56cdabb7fb62b0a062b4bcd",
+ "fixture_derivation": {
+  "canonical": "decomp/hybrid/tests/SteamStatsPendingTest.cpp",
+  "canonical_sha256": "62983c9bfb422d76dbe729f256578904ea67b032215bbd58e24e4ef78dd763f7",
+  "replace_once_from": "const unsigned values[] = {0, 0xffffffffu, 0x80000000u, 0xdeadbeef};\n    value.m_uValue = values[(c.shape + c.key) % 4];",
+  "replace_once_to": "value.m_uValue = 0xdeadbeef;",
+  "output_sha256": "718887644b0c83f7a6d6bd319b2c350a9bac477dc56cdabb7fb62b0a062b4bcd"
+ },
+ "result": {
+  "code": 1,
+  "build_seconds": 39.68926365800144,
+  "report": [
+   "tlhybrid: begin steam_stats_pending_changes",
+   "    stat pending shape 0 key 0 exits 0/0 issues 0/0",
+   "    coverage steam_stats_pending_changes 0xece450 completed 1 different 1 incomplete 0",
+   "tlhybrid: timing steam_stats_pending_changes 0.002 seconds",
+   "tlhybrid: steam_stats_pending_changes                      FAIL (1)",
+   "tlhybrid: 1 tests, 1 failed"
+  ]
+ },
+ "interpretation": "Both real calls returned normally. Allocated spare slots differ: the original zeros both fields, the old typed header initializes only the union. The fixture used synthetic memory and intercepted new[]/delete[]; no Steam services."
+}

@@ -25,26 +25,19 @@ CMusicObjectDescriptor::~CMusicObjectDescriptor()
 
 void CMusicObjectDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
 {
-    if (object != NULL)
-    {
-        CMusicObject* musicObject = dynamic_cast<CMusicObject*>(object);
-        if (musicObject != NULL)
-        {
-            if (event == 10)
-            {
-                musicObject->stop();
-                return;
-            }
-
-            if (event == 13)
-            {
-                musicObject->playNormalLevelMusic();
-                return;
-            }
-
-            if (event == 9)
-                musicObject->play();
-        }
+    CMusicObject* musicObject = dynamic_cast<CMusicObject*>(object);
+    if (musicObject == NULL)
+        return;
+    switch (event) {
+    case 9:
+        musicObject->play();
+        break;
+    case 10:
+        musicObject->stop();
+        break;
+    case 13:
+        musicObject->playNormalLevelMusic();
+        break;
     }
 }
 

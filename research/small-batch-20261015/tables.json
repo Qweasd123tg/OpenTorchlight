@@ -1,0 +1,170 @@
+[
+ {
+  "table": "gCAMERASHAKE_ORIENTATION",
+  "owner_tu": "CameraShakeDescriptor.cpp",
+  "address": "0x142c330",
+  "original_bytes": 16,
+  "strings": 2,
+  "definition_sha256": "5c6c875e4667269e1647e543cef19e7a28ec355486e4c02657970daacdc50d0f"
+ },
+ {
+  "table": "gLIGHT_RENDER_NAMES",
+  "owner_tu": "LightDescriptor.cpp",
+  "address": "0x1436060",
+  "original_bytes": 24,
+  "strings": 3,
+  "definition_sha256": "2b800d24b15b87b7f71eb9710c14fd1555ef79b1a814d3ce641ab6268c2f12b3"
+ },
+ {
+  "table": "gPROPERTY_NODE_TYPE_NAMES",
+  "owner_tu": "PropertyNodeDescriptor.cpp",
+  "address": "0x143d000",
+  "original_bytes": 128,
+  "strings": 16,
+  "definition_sha256": "f144c43c065178440a3adf7c5e945c194abefc946526d9a20ebc6f8cd1a29ca8"
+ },
+ {
+  "table": "gRANDOMGROUP_NAMES",
+  "owner_tu": "RandomGroupDescriptor.cpp",
+  "address": "0x143d9c0",
+  "original_bytes": 24,
+  "strings": 3,
+  "definition_sha256": "2d463bfbde00f4c85b314917a14b69c1cb277a40b6ce00c414f0cdeef931044c"
+ },
+ {
+  "table": "gSHAPE_DIRECTION_NAMES",
+  "owner_tu": "ShapeDescriptor.cpp",
+  "address": "0x1441780",
+  "original_bytes": 40,
+  "strings": 5,
+  "definition_sha256": "9b54df16b48e7f6abd5d4e78752d20c6d2d8800385635a4ba1bfdbfceb2f4f97"
+ },
+ {
+  "table": "gSHAPE_NAMES",
+  "owner_tu": "ShapeDescriptor.cpp",
+  "address": "0x1441740",
+  "original_bytes": 40,
+  "strings": 5,
+  "definition_sha256": "c1c4e50231fb261fee8eab2efef1ffb4845c9b71bb29a25e6f901e3525d918a5"
+ },
+ {
+  "table": "gPOINT_ORDER_NAMES",
+  "owner_tu": "ShapeDescriptor.cpp",
+  "address": "0x1441710",
+  "original_bytes": 24,
+  "strings": 3,
+  "definition_sha256": "842433cbe0a566e51cae4af5445a5fc100bc4dd97f8977a00a2f00ecddadc5d8"
+ },
+ {
+  "table": "gSPAWN_TYPE_NAMES",
+  "owner_tu": "UnitSpawnerDescriptor.cpp",
+  "address": "0x1442d00",
+  "original_bytes": 56,
+  "strings": 7,
+  "definition_sha256": "87baa38fa51b4cfe711c036bb61641d89b8ddebb8a712d4b12e63b9c90581dc6"
+ },
+ {
+  "table": "gINTERACTABLE_TYPE_NAMES",
+  "owner_tu": "InteractiveDescriptor.cpp",
+  "address": "0x1444ec0",
+  "original_bytes": 32,
+  "strings": 4,
+  "definition_sha256": "9e40e7328f8ff32bda55f498e81e533800818062178bca195c64fd4d4aa157c9"
+ },
+ {
+  "table": "gTRIGGER_LOOP_TYPE_NAMES",
+  "owner_tu": "UnitTriggerDescriptor.cpp",
+  "address": "0x144b160",
+  "original_bytes": 24,
+  "strings": 3,
+  "definition_sha256": "48c9e0e058e41ee438a6f5b85cc14ed52ed0e6ad4c3cf2d850e29cf9d31ce859"
+ },
+ {
+  "table": "gPARTICLE_COLLISION_TYPE",
+  "owner_tu": "ColliderDescriptor.cpp",
+  "address": "0x144e5b0",
+  "original_bytes": 24,
+  "strings": 3,
+  "definition_sha256": "b2cfab526241ea370b130c3289cca04465e633cbfde4514640adea9248c41d88"
+ },
+ {
+  "table": "gEMITTER_TYPES",
+  "owner_tu": "ParticleEmitterWrapperDescriptor.cpp",
+  "address": "0x1459480",
+  "original_bytes": 40,
+  "strings": 5,
+  "definition_sha256": "5f1565d83902d31cd76e3b8bbbd06027699bbfd4638a0f800f947998ec8a9a05"
+ },
+ {
+  "table": "gPARTICLE_MATERIAL_TYPES",
+  "owner_tu": "ParticleTechWrapperDescriptor.cpp",
+  "address": "0x1459f40",
+  "original_bytes": 32,
+  "strings": 4,
+  "definition_sha256": "460a8498d898627699cd67bed1b1d9906c91486a3c7e40f6e8289a256008f5fc"
+ },
+ {
+  "table": "gPARTICLE_BILLBOARD_ORIGIN_POSITIONS",
+  "owner_tu": "ParticleTechWrapperDescriptor.cpp",
+  "address": "0x1459ee0",
+  "original_bytes": 72,
+  "strings": 9,
+  "definition_sha256": "296e3f3921d22428e295b9f1530144d0011e27c7e68777e62c007a837b0e6cc8"
+ },
+ {
+  "table": "gPARTICLE_BILLBOARD_ROTATION_TYPES",
+  "owner_tu": "ParticleTechWrapperDescriptor.cpp",
+  "address": "0x1459e80",
+  "original_bytes": 16,
+  "strings": 2,
+  "definition_sha256": "86b04891bb53a319615c567fba1bc0354c6597d7a862eb06ecfc82b78951c7d2"
+ },
+ {
+  "table": "gPARTICLE_RENDER_TYPE_NAMES",
+  "owner_tu": "ParticleTechWrapperDescriptor.cpp",
+  "address": "0x1459e00",
+  "original_bytes": 104,
+  "strings": 13,
+  "definition_sha256": "8281f4e6b69885f378db030abe745d549ac7477bf3110b74a8c49b08bea6240d"
+ },
+ {
+  "table": "gTIMELINE_INTERP_TYPES",
+  "owner_tu": "TimelineDescriptor.cpp",
+  "address": "0x14732a0",
+  "original_bytes": 64,
+  "strings": 8,
+  "definition_sha256": "0b3562e2ab5354d22c094336976b6fdd37d93fd8b884d164faa0f1af6b4ca0ab"
+ },
+ {
+  "table": "gTIMELINE_MODIFICATION_TYPE_NAMES",
+  "owner_tu": "TimelineDescriptor.cpp",
+  "address": "0x14732e0",
+  "original_bytes": 24,
+  "strings": 3,
+  "definition_sha256": "6154b41c32d4635ffe3103106d9c6e6bd960dc90506c01aad4d9ab241d68922f"
+ },
+ {
+  "table": "gCAMERA_TYPE_NAMES",
+  "owner_tu": "CameraControllerDescriptor.cpp",
+  "address": "0x1511a00",
+  "original_bytes": 16,
+  "strings": 2,
+  "definition_sha256": "e99db32a95871ae96284cdc197ddc91794d43603ec66b901de3a409c824573a3"
+ },
+ {
+  "table": "KContextTipNames",
+  "owner_tu": "GameStateControllerDescriptor.cpp",
+  "address": "0x1513ac0",
+  "original_bytes": 272,
+  "strings": 34,
+  "definition_sha256": "e122bd2e340e3aad28d8161a42dc706bddcd53641505b2949fe378468e4cc4e8"
+ },
+ {
+  "table": "gGAMESTATE_NAMES",
+  "owner_tu": "GameStateControllerDescriptor.cpp",
+  "address": "0x1512ce0",
+  "original_bytes": 56,
+  "strings": 7,
+  "definition_sha256": "25eaa3263149f74a4649385cb4c9a8edc4dd17f8bceb5124c16583f074cde1e9"
+ }
+]

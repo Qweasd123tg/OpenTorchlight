@@ -17,11 +17,6 @@ public:
     virtual void InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*);
     CRandomGroupDescriptor();
 
-    long long m_Unknown170;
-    long long m_Unknown178;
-    void* m_pUnknown180;
-    void* m_pUnknown188;
-    int m_iUnknown190;
 
     static void Set_setVisible(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count)
     {

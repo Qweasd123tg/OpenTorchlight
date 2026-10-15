@@ -1,0 +1,278 @@
+Relevant new/affected fixtures and canonical aggregate; the full 999-test inventory passed validation.
+
+tlhybrid: begin followup_files_application
+    coverage followup_files_application 0xc739d0 completed 12 different 0 incomplete 0
+tlhybrid: timing followup_files_application 0.063 seconds
+tlhybrid: followup_files_application                       PASS (0)
+tlhybrid: begin followup_files_absolute
+    coverage followup_files_absolute 0xc73aa0 completed 45 different 0 incomplete 0
+tlhybrid: timing followup_files_absolute 0.232 seconds
+tlhybrid: followup_files_absolute                          PASS (0)
+tlhybrid: begin followup_files_exists
+    coverage followup_files_exists 0xc741e0 completed 28 different 0 incomplete 0
+tlhybrid: timing followup_files_exists 0.135 seconds
+tlhybrid: followup_files_exists                            PASS (0)
+tlhybrid: begin followup_files_time
+    coverage followup_files_time 0xc77530 completed 28 different 0 incomplete 0
+tlhybrid: timing followup_files_time 0.139 seconds
+tlhybrid: followup_files_time                              PASS (0)
+tlhybrid: begin followup_skill_any_cooling
+    coverage followup_skill_any_cooling 0xcca7b0 completed 294 different 0 incomplete 0
+tlhybrid: timing followup_skill_any_cooling 1.476 seconds
+tlhybrid: followup_skill_any_cooling                       PASS (0)
+tlhybrid: begin followup_skill_find_level
+    coverage followup_skill_find_level 0xcd2ce0 completed 120 different 0 incomplete 0
+tlhybrid: timing followup_skill_find_level 0.631 seconds
+tlhybrid: followup_skill_find_level                        PASS (0)
+tlhybrid: begin ogre_resource_int64_read
+    coverage ogre_resource_int64_read 0xc687c0 completed 20 different 0 incomplete 0
+tlhybrid: timing ogre_resource_int64_read 0.104 seconds
+tlhybrid: ogre_resource_int64_read                         PASS (0)
+tlhybrid: begin followup_skill_find_name
+    coverage followup_skill_find_name 0xcd3290 completed 40 different 0 incomplete 0
+tlhybrid: timing followup_skill_find_name 0.243 seconds
+tlhybrid: followup_skill_find_name                         PASS (0)
+tlhybrid: begin layout_sound_events
+    coverage layout_sound_events 0x75ec10 completed 540 different 0 incomplete 0
+tlhybrid: timing layout_sound_events 3.051 seconds
+tlhybrid: layout_sound_events                              PASS (0)
+tlhybrid: begin achievement_set_float
+    coverage achievement_set_float 0xebe260 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_set_float 1.025 seconds
+tlhybrid: achievement_set_float                            PASS (0)
+tlhybrid: begin followup_skill_reset_levels
+    coverage followup_skill_reset_levels 0xcd5090 completed 144 different 0 incomplete 0
+tlhybrid: timing followup_skill_reset_levels 0.748 seconds
+tlhybrid: followup_skill_reset_levels                      PASS (0)
+tlhybrid: begin achievement_set_int
+    coverage achievement_set_int 0xebe2c0 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_set_int 1.050 seconds
+tlhybrid: achievement_set_int                              PASS (0)
+tlhybrid: begin followup_skill_property_cooldown
+    coverage followup_skill_property_cooldown 0xcdd1f0 completed 196 different 0 incomplete 0
+tlhybrid: timing followup_skill_property_cooldown 1.044 seconds
+tlhybrid: followup_skill_property_cooldown                 PASS (0)
+tlhybrid: begin achievement_cheat
+    coverage achievement_cheat 0xebe330 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_cheat 1.035 seconds
+tlhybrid: achievement_cheat                                PASS (0)
+tlhybrid: begin followup_skill_controller_start
+    coverage followup_skill_controller_start 0xe20650 completed 32 different 0 incomplete 0
+tlhybrid: timing followup_skill_controller_start 0.163 seconds
+tlhybrid: followup_skill_controller_start                  PASS (0)
+tlhybrid: begin achievement_force
+    coverage achievement_force 0xebe400 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_force 1.051 seconds
+tlhybrid: achievement_force                                PASS (0)
+tlhybrid: begin followup_skill_controller_stop
+    coverage followup_skill_controller_stop 0xe20620 completed 32 different 0 incomplete 0
+tlhybrid: timing followup_skill_controller_stop 0.170 seconds
+tlhybrid: followup_skill_controller_stop                   PASS (0)
+tlhybrid: begin achievement_add_float
+    coverage achievement_add_float 0xebe4c0 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_add_float 1.027 seconds
+tlhybrid: achievement_add_float                            PASS (0)
+tlhybrid: begin followup_logic_group_remove
+    coverage followup_logic_group_remove 0x795db0 completed 240 different 0 incomplete 0
+tlhybrid: timing followup_logic_group_remove 1.182 seconds
+tlhybrid: followup_logic_group_remove                      PASS (0)
+tlhybrid: begin achievement_add_int
+    coverage achievement_add_int 0xebe550 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_add_int 1.068 seconds
+tlhybrid: achievement_add_int                              PASS (0)
+tlhybrid: begin followup_player_class_id
+    coverage followup_player_class_id 0x638bb0 completed 48 different 0 incomplete 0
+tlhybrid: timing followup_player_class_id 0.272 seconds
+tlhybrid: followup_player_class_id                         PASS (0)
+tlhybrid: begin followup_strings_c8daf0
+    coverage followup_strings_c8daf0 0xc8daf0 completed 84 different 0 incomplete 0
+tlhybrid: timing followup_strings_c8daf0 0.467 seconds
+tlhybrid: followup_strings_c8daf0                          PASS (0)
+tlhybrid: begin achievement_increment
+    coverage achievement_increment 0xebe5f0 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_increment 1.027 seconds
+tlhybrid: achievement_increment                            PASS (0)
+tlhybrid: begin followup_strings_c8e0e0
+    coverage followup_strings_c8e0e0 0xc8e0e0 completed 84 different 0 incomplete 0
+tlhybrid: timing followup_strings_c8e0e0 0.484 seconds
+tlhybrid: followup_strings_c8e0e0                          PASS (0)
+tlhybrid: begin followup_strings_c8e190
+    coverage followup_strings_c8e190 0xc8e190 completed 84 different 0 incomplete 0
+tlhybrid: timing followup_strings_c8e190 0.452 seconds
+tlhybrid: followup_strings_c8e190                          PASS (0)
+tlhybrid: begin room_piece_closest_guid
+    coverage room_piece_closest_guid 0xa60f40 completed 324 different 0 incomplete 0
+tlhybrid: timing room_piece_closest_guid 2.016 seconds
+tlhybrid: room_piece_closest_guid                          PASS (0)
+tlhybrid: begin followup_strings_c8e350
+    coverage followup_strings_c8e350 0xc8e350 completed 84 different 0 incomplete 0
+tlhybrid: timing followup_strings_c8e350 0.462 seconds
+tlhybrid: followup_strings_c8e350                          PASS (0)
+tlhybrid: begin data_group_new_add_string
+    coverage data_group_new_add_string 0xc5fb30 completed 36 different 0 incomplete 0
+tlhybrid: timing data_group_new_add_string 0.219 seconds
+tlhybrid: data_group_new_add_string                        PASS (0)
+tlhybrid: begin followup_strings_c8e810
+    coverage followup_strings_c8e810 0xc8e810 completed 28 different 0 incomplete 0
+tlhybrid: timing followup_strings_c8e810 0.147 seconds
+tlhybrid: followup_strings_c8e810                          PASS (0)
+tlhybrid: begin data_group_new_add_bool
+    coverage data_group_new_add_bool 0xc5fe70 completed 36 different 0 incomplete 0
+tlhybrid: timing data_group_new_add_bool 0.242 seconds
+tlhybrid: data_group_new_add_bool                          PASS (0)
+tlhybrid: begin followup_strings_c8ea50
+    coverage followup_strings_c8ea50 0xc8ea50 completed 84 different 0 incomplete 0
+tlhybrid: timing followup_strings_c8ea50 0.529 seconds
+tlhybrid: followup_strings_c8ea50                          PASS (0)
+tlhybrid: begin data_group_new_add_double
+    coverage data_group_new_add_double 0xc603e0 completed 36 different 0 incomplete 0
+tlhybrid: timing data_group_new_add_double 0.204 seconds
+tlhybrid: data_group_new_add_double                        PASS (0)
+tlhybrid: begin descriptor_remap_lookup
+    coverage descriptor_remap_lookup 0x701d50 completed 180 different 0 incomplete 0
+tlhybrid: timing descriptor_remap_lookup 0.914 seconds
+tlhybrid: descriptor_remap_lookup                          PASS (0)
+tlhybrid: begin followup_strings_c90a30
+    coverage followup_strings_c90a30 0xc90a30 completed 28 different 0 incomplete 0
+tlhybrid: timing followup_strings_c90a30 0.155 seconds
+tlhybrid: followup_strings_c90a30                          PASS (0)
+tlhybrid: begin data_group_new_add_float
+    coverage data_group_new_add_float 0xc60560 completed 36 different 0 incomplete 0
+tlhybrid: timing data_group_new_add_float 0.187 seconds
+tlhybrid: data_group_new_add_float                         PASS (0)
+tlhybrid: begin data_group_new_add_uint
+    coverage data_group_new_add_uint 0xc606e0 completed 36 different 0 incomplete 0
+tlhybrid: timing data_group_new_add_uint 0.202 seconds
+tlhybrid: data_group_new_add_uint                          PASS (0)
+tlhybrid: begin data_group_new_add_group
+    coverage data_group_new_add_group 0xc61c00 completed 42 different 0 incomplete 0
+tlhybrid: timing data_group_new_add_group 0.225 seconds
+tlhybrid: data_group_new_add_group                         PASS (0)
+tlhybrid: begin data_group_find_value
+    coverage data_group_find_value 0xc5f1c0 completed 40 different 0 incomplete 0
+tlhybrid: timing data_group_find_value 0.210 seconds
+tlhybrid: data_group_find_value                            PASS (0)
+tlhybrid: begin data_group_matching_groups
+    coverage data_group_matching_groups 0xc5f910 completed 40 different 0 incomplete 0
+tlhybrid: timing data_group_matching_groups 0.202 seconds
+tlhybrid: data_group_matching_groups                       PASS (0)
+tlhybrid: begin data_group_set_wide
+    coverage data_group_set_wide 0xc5fd50 completed 40 different 0 incomplete 0
+tlhybrid: timing data_group_set_wide 0.226 seconds
+tlhybrid: data_group_set_wide                              PASS (0)
+tlhybrid: begin data_group_set_string
+    coverage data_group_set_string 0xc5fde0 completed 40 different 0 incomplete 0
+tlhybrid: timing data_group_set_string 0.207 seconds
+tlhybrid: data_group_set_string                            PASS (0)
+tlhybrid: begin data_group_add_int64
+    coverage data_group_add_int64 0xc5fff0 completed 24 different 0 incomplete 0
+tlhybrid: timing data_group_add_int64 0.128 seconds
+tlhybrid: data_group_add_int64                             PASS (0)
+tlhybrid: begin data_group_add_int32
+    coverage data_group_add_int32 0xc60160 completed 24 different 0 incomplete 0
+tlhybrid: timing data_group_add_int32 0.127 seconds
+tlhybrid: data_group_add_int32                             PASS (0)
+tlhybrid: begin data_value_type_labels
+    coverage data_value_type_labels 0xc62f90 completed 15 different 0 incomplete 0
+tlhybrid: timing data_value_type_labels 0.074 seconds
+tlhybrid: data_value_type_labels                           PASS (0)
+tlhybrid: begin followup_sound_data_name
+    coverage followup_sound_data_name 0x64dff0 completed 48 different 0 incomplete 0
+tlhybrid: timing followup_sound_data_name 0.261 seconds
+tlhybrid: followup_sound_data_name                         PASS (0)
+tlhybrid: begin followup_sound_data_index
+    coverage followup_sound_data_index 0x64e070 completed 48 different 0 incomplete 0
+tlhybrid: timing followup_sound_data_index 0.246 seconds
+tlhybrid: followup_sound_data_index                        PASS (0)
+tlhybrid: begin followup_sound_category_name
+    coverage followup_sound_category_name 0x6515e0 completed 48 different 0 incomplete 0
+tlhybrid: timing followup_sound_category_name 0.258 seconds
+tlhybrid: followup_sound_category_name                     PASS (0)
+tlhybrid: begin unit_resources_guid
+    coverage unit_resources_guid 0xe7a4b0 completed 64 different 0 incomplete 0
+tlhybrid: timing unit_resources_guid 0.321 seconds
+tlhybrid: unit_resources_guid                              PASS (0)
+tlhybrid: begin followup_random_choice_id
+    coverage followup_random_choice_id 0x672450 completed 24 different 0 incomplete 0
+tlhybrid: timing followup_random_choice_id 0.113 seconds
+tlhybrid: followup_random_choice_id                        PASS (0)
+tlhybrid: begin unit_resources_names
+    coverage unit_resources_names 0xe7ad00 completed 64 different 0 incomplete 0
+tlhybrid: timing unit_resources_names 0.318 seconds
+tlhybrid: unit_resources_names                             PASS (0)
+tlhybrid: begin followup_billboard_rotation_id
+    coverage followup_billboard_rotation_id 0x6ec760 completed 24 different 0 incomplete 0
+tlhybrid: timing followup_billboard_rotation_id 0.122 seconds
+tlhybrid: followup_billboard_rotation_id                   PASS (0)
+tlhybrid: begin unit_resources_clear
+    coverage unit_resources_clear 0xe7b1d0 completed 64 different 0 incomplete 0
+tlhybrid: timing unit_resources_clear 0.328 seconds
+tlhybrid: unit_resources_clear                             PASS (0)
+tlhybrid: begin followup_random_difficulty_id
+    coverage followup_random_difficulty_id 0x62e8a0 completed 24 different 0 incomplete 0
+tlhybrid: timing followup_random_difficulty_id 0.123 seconds
+tlhybrid: followup_random_difficulty_id                    PASS (0)
+tlhybrid: begin descriptor_update_traversal
+    coverage descriptor_update_traversal 0x702490 completed 240 different 0 incomplete 0
+tlhybrid: timing descriptor_update_traversal 1.150 seconds
+tlhybrid: descriptor_update_traversal                      PASS (0)
+tlhybrid: begin unit_resources_object_name
+    coverage unit_resources_object_name 0xe7b590 completed 64 different 0 incomplete 0
+tlhybrid: timing unit_resources_object_name 0.361 seconds
+tlhybrid: unit_resources_object_name                       PASS (0)
+tlhybrid: begin followup_interactive_group_id
+    coverage followup_interactive_group_id 0x662f50 completed 24 different 0 incomplete 0
+tlhybrid: timing followup_interactive_group_id 0.127 seconds
+tlhybrid: followup_interactive_group_id                    PASS (0)
+tlhybrid: begin descriptor_post_process_traversal
+    coverage descriptor_post_process_traversal 0x7026d0 completed 240 different 0 incomplete 0
+tlhybrid: timing descriptor_post_process_traversal 1.232 seconds
+tlhybrid: descriptor_post_process_traversal                PASS (0)
+tlhybrid: begin damage_descriptor_update
+    coverage damage_descriptor_update 0x5bb740 completed 32 different 0 incomplete 0
+tlhybrid: timing damage_descriptor_update 0.170 seconds
+tlhybrid: damage_descriptor_update                         PASS (0)
+tlhybrid: begin damage_descriptor_activate
+    coverage damage_descriptor_activate 0x5bb840 completed 32 different 0 incomplete 0
+tlhybrid: timing damage_descriptor_activate 0.131 seconds
+tlhybrid: damage_descriptor_activate                       PASS (0)
+tlhybrid: begin timeline_descriptor_activate
+    coverage timeline_descriptor_activate 0x7bd570 completed 32 different 0 incomplete 0
+tlhybrid: timing timeline_descriptor_activate 0.170 seconds
+tlhybrid: timeline_descriptor_activate                     PASS (0)
+tlhybrid: begin random_group_descriptor_activate
+    coverage random_group_descriptor_activate 0x62eab0 completed 32 different 0 incomplete 0
+tlhybrid: timing random_group_descriptor_activate 0.157 seconds
+tlhybrid: random_group_descriptor_activate                 PASS (0)
+tlhybrid: begin image_descriptor_update
+    coverage image_descriptor_update 0xd9d560 completed 32 different 0 incomplete 0
+tlhybrid: timing image_descriptor_update 0.168 seconds
+tlhybrid: image_descriptor_update                          PASS (0)
+tlhybrid: begin execute_skill_stats_query
+    coverage execute_skill_stats_query 0xc93b10 completed 150 different 0 incomplete 0
+tlhybrid: timing execute_skill_stats_query 0.809 seconds
+tlhybrid: execute_skill_stats_query                        PASS (0)
+tlhybrid: begin button_descriptor_update
+    coverage button_descriptor_update 0xd97a90 completed 32 different 0 incomplete 0
+tlhybrid: timing button_descriptor_update 0.163 seconds
+tlhybrid: button_descriptor_update                         PASS (0)
+tlhybrid: begin execute_skill_description_query
+    coverage execute_skill_description_query 0xc93bd0 completed 150 different 0 incomplete 0
+tlhybrid: timing execute_skill_description_query 0.767 seconds
+tlhybrid: execute_skill_description_query                  PASS (0)
+tlhybrid: begin animation_descriptor_start_on_load
+    coverage animation_descriptor_start_on_load 0xda2580 completed 32 different 0 incomplete 0
+tlhybrid: timing animation_descriptor_start_on_load 0.165 seconds
+tlhybrid: animation_descriptor_start_on_load               PASS (0)
+tlhybrid: begin camera_cinematic_state
+    coverage camera_cinematic_state 0xce9fd0 completed 676 different 0 incomplete 0
+tlhybrid: timing camera_cinematic_state 3.426 seconds
+tlhybrid: camera_cinematic_state                           PASS (0)
+tlhybrid: begin mod_filter_active_count
+    coverage mod_filter_active_count 0xc839d0 completed 140 different 0 incomplete 0
+tlhybrid: timing mod_filter_active_count 0.642 seconds
+tlhybrid: mod_filter_active_count                          PASS (0)
+tlhybrid: 999 tests, 0 failed
+hybrid self-test: PASS
+handwritten fixtures: 985 declared originals; 934 with executed per-function comparison evidence (declarations alone do not accept DIFF)
+accepted: 3238 of 5247 game functions (1459193 bytes); 813 by self-test, 0 by generated tests

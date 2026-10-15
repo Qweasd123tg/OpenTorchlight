@@ -505,7 +505,8 @@ def _build_impl(out, verbose, src, tests, timing):
     def compile_unit(unit):
         source, is_test = unit
         asm = out / f"{'test_' if is_test else ''}{source.stem}.s"
-        toolchain.compile_source(source, asm, ["-I", str(HYBRID)], assembly=True)
+        extra = ["-I", str(HYBRID)] if is_test else []
+        toolchain.compile_source(source, asm, extra, assembly=True)
     timing.phase("compile")
     toolchain.parallel_map(compile_unit, units, phase="build")
     timing.phase("rewrite_assemble_metadata")
@@ -657,7 +658,7 @@ def _build_impl(out, verbose, src, tests, timing):
         "standalone_link_closed": False,
         "reason": "hybrid resolves original ELF addresses and omits original entrypoint/initialization; this is not a standalone game"}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1))
-    selftest_schedule.write_inputs(blob, [obj for (_, is_test), obj in zip(units, objects) if is_test])
+    selftest_schedule.write_inputs(blob, [obj for (_, is_test), obj in zip(units, objects) if is_test], ROOT)
     if verbose:
         print(f"blob {blob.relative_to(ROOT)}: {len(hooks)} hooks, {len(missing) - len(copies)} runtime imports, "
               f"{len(copies)} copied library objects")

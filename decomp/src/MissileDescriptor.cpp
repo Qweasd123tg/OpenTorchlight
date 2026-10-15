@@ -57,3 +57,24 @@ CEditorBaseObject* CMissileDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CMissile(scene->getResourceManager());
 }
+
+std::wstring CMissileDescriptor::GetDamageTypeStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 6)
+        return gDAMAGE_TYPES[0];
+    return gDAMAGE_TYPES[index];
+}
+
+unsigned int CMissileDescriptor::GetDamageTypeIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 7; ++index)
+    {
+        if (gDAMAGE_TYPES[index] == value)
+            return index;
+    }
+    return 0;
+}

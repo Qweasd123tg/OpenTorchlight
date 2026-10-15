@@ -1,0 +1,64 @@
+    coverage logic_object_removal_differential 0x7a7d40 completed 128 different 0 incomplete 0
+    coverage logic_object_removal_differential 0x7a7e00 completed 128 different 0 incomplete 0
+tlhybrid: logic_object_removal_differential                PASS (0)
+    coverage logic_group_remove_link 0x795d60 completed 216 different 0 incomplete 0
+tlhybrid: logic_group_remove_link                          PASS (0)
+    coverage particle_emitter_parent_differential 0xa32ae0 completed 64 different 0 incomplete 0
+tlhybrid: particle_emitter_parent_differential             PASS (0)
+    coverage pov_accelerate_up_down 0x7887d0 completed 48 different 0 incomplete 0
+tlhybrid: pov_accelerate_up_down                           PASS (0)
+    coverage puzzle_randomizer_update_differential 0x993870 completed 64 different 0 incomplete 0
+tlhybrid: puzzle_randomizer_update_differential            PASS (0)
+    coverage pov_accelerate_forward 0x788830 completed 48 different 0 incomplete 0
+tlhybrid: pov_accelerate_forward                           PASS (0)
+    coverage animation_descriptor_update 0xda2630 completed 48 different 0 incomplete 0
+tlhybrid: animation_descriptor_update                      PASS (0)
+    coverage pov_accelerate_lateral 0x788890 completed 48 different 0 incomplete 0
+tlhybrid: pov_accelerate_lateral                           PASS (0)
+    coverage game_state_descriptor_update 0xdaffb0 completed 48 different 0 incomplete 0
+tlhybrid: game_state_descriptor_update                     PASS (0)
+    coverage pov_damp_contact 0x788690 completed 48 different 0 incomplete 0
+tlhybrid: pov_damp_contact                                 PASS (0)
+    coverage game_state_descriptor_activation 0xdaff00 completed 48 different 0 incomplete 0
+tlhybrid: game_state_descriptor_activation                 PASS (0)
+    coverage pov_extract_orientation 0x7885d0 completed 48 different 0 incomplete 0
+tlhybrid: pov_extract_orientation                          PASS (0)
+    coverage skill_descriptor_update 0xdbf040 completed 48 different 0 incomplete 0
+tlhybrid: skill_descriptor_update                          PASS (0)
+    coverage pov_update_flying_to 0x7889e0 completed 96 different 0 incomplete 0
+tlhybrid: pov_update_flying_to                             PASS (0)
+    coverage skill_descriptor_activation 0xdbef90 completed 48 different 0 incomplete 0
+tlhybrid: skill_descriptor_activation                      PASS (0)
+    coverage data_group_find_value 0xc5f1c0 completed 40 different 0 incomplete 0
+tlhybrid: data_group_find_value                            PASS (0)
+    coverage sound_descriptor_update 0x64e100 completed 48 different 0 incomplete 0
+tlhybrid: sound_descriptor_update                          PASS (0)
+    coverage data_group_matching_groups 0xc5f910 completed 40 different 0 incomplete 0
+tlhybrid: data_group_matching_groups                       PASS (0)
+    coverage sound_descriptor_activation 0x64e1e0 completed 48 different 0 incomplete 0
+tlhybrid: sound_descriptor_activation                      PASS (0)
+    coverage data_group_set_wide 0xc5fd50 completed 40 different 0 incomplete 0
+tlhybrid: data_group_set_wide                              PASS (0)
+    coverage random_group_descriptor_loaded 0x62eb50 completed 48 different 0 incomplete 0
+tlhybrid: random_group_descriptor_loaded                   PASS (0)
+    coverage data_group_set_string 0xc5fde0 completed 40 different 0 incomplete 0
+tlhybrid: data_group_set_string                            PASS (0)
+    coverage descriptor_manager_scene_loaded 0x702510 completed 48 different 0 incomplete 0
+tlhybrid: descriptor_manager_scene_loaded                  PASS (0)
+    coverage data_group_add_int64 0xc5fff0 completed 40 different 0 incomplete 0
+tlhybrid: data_group_add_int64                             PASS (0)
+    coverage descriptor_manager_deactivated 0x702570 completed 48 different 0 incomplete 0
+tlhybrid: descriptor_manager_deactivated                   PASS (0)
+    coverage data_group_add_int32 0xc60160 completed 40 different 0 incomplete 0
+tlhybrid: data_group_add_int32                             PASS (0)
+    coverage descriptor_manager_load_objects 0x702740 completed 48 different 0 incomplete 0
+tlhybrid: descriptor_manager_load_objects                  PASS (0)
+    coverage resource_manager_editor_running 0xd6f4e0 completed 64 different 0 incomplete 0
+tlhybrid: resource_manager_editor_running                  PASS (0)
+    coverage room_piece_descriptor_index_string 0x63d270 completed 60 different 0 incomplete 0
+tlhybrid: room_piece_descriptor_index_string               PASS (0)
+    coverage resource_manager_create_from_group 0xd78c50 completed 80 different 0 incomplete 0
+tlhybrid: resource_manager_create_from_group               PASS (0)
+    coverage room_piece_descriptor_string_index 0x63d310 completed 108 different 0 incomplete 0
+tlhybrid: room_piece_descriptor_string_index               PASS (0)
+tlhybrid: 31 tests, 0 failed

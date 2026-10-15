@@ -1,0 +1,166 @@
+{
+ "status": "PROPOSAL_ONLY_NOT_IMPLEMENTED_OR_ACCEPTED",
+ "scope": [
+  "combinemenu_return_items mode 0",
+  "combinemenu_equipment_used mode 1"
+ ],
+ "frozen_current_inputs_untouched": true,
+ "original": {
+  "return": "0xad48f0 size 645",
+  "used": "0xad4b90 size 31",
+  "elf": "build-decomp/bulk-scale-20261015/smallmatch-current/original/Torchlight.bin.x86_64",
+  "inspection": "objdump -d -M intel --start-address=0xad48f0 --stop-address=0xad4bd0"
+ },
+ "source_evidence": [
+  "decomp/src/combinemenu.cpp:819-840",
+  "decomp/hybrid/tests/CombineMenuReturnTest.cpp:25-87"
+ ],
+ "counts": {
+  "old_per_mode": 44544,
+  "proposed_per_mode": 1364,
+  "proposed_both_modes": 2728,
+  "removed_per_mode": 43180,
+  "reduction_percent": 96.9378591954023,
+  "location_counts": {
+   "-1": 184,
+   "0": 314,
+   "18": 314,
+   "19": 184,
+   "2147483647": 184,
+   "-2147483648": 184
+  },
+  "path_counts": {
+   "null-target": 288,
+   "unmapped": 288,
+   "mapped-null-destination": 192,
+   "mapped-outside-equipment": 224,
+   "mapped-equipment-fallback": 224,
+   "mapped-equipment-success": 148
+  },
+  "mutation_counts": {
+   "0": 170,
+   "1": 172,
+   "2": 172,
+   "3": 170,
+   "4": 170,
+   "5": 170,
+   "6": 170,
+   "7": 170
+  },
+  "symbolic_old_to_representative_checks": 44544,
+  "bad_representatives": 0
+ },
+ "selection_rule": "Keep the existing valid-domain prefilter, all six locations and all eight mutation values. Compute used_bits by the attached symbolic read/control proof. Keep case iff (mask & ~used_bits) == 0. Every removed case maps to (mask & used_bits, same location, same mutation), which remains in the unchanged valid domain and has exactly the same reached control/read sites. This is NOT deduplication by observed candidate or expected return.",
+ "mask_bits": {
+  "1": "target item present",
+  "2": "initial menu character present",
+  "4": "initial actor inventory present",
+  "8": "target map entry present",
+  "16": "slot callback returns occupied",
+  "32": "equip callback succeeds",
+  "64": "has callback says contained",
+  "128": "pickup callback succeeds",
+  "256": "actor resource manager present",
+  "512": "map destination inventory is inventories[1], else NULL"
+ },
+ "read_proof": [
+  {
+   "bits": [
+    1,
+    2,
+    8
+   ],
+   "condition": "always retained",
+   "reason": "target guard and final fixture state/menu/map-presence observation; no pruning of initial null character or map-entry alternatives"
+  },
+  {
+   "bits": [
+    512
+   ],
+   "condition": "map entry present (bit 8)",
+   "reason": "destination consumed by mapped path or retained in final map when target NULL"
+  },
+  {
+   "bits": [
+    4
+   ],
+   "condition": "target present AND initial character present",
+   "asm": "0xad4917-0xad491f",
+   "reason": "preserve even the initial inventory load that a mapped entry later overwrites"
+  },
+  {
+   "bits": [
+    128
+   ],
+   "condition": "initial character absent AND target present AND map entry present",
+   "reason": "retain validity-prefilter dependency even when successful equip makes pickup response unread"
+  },
+  {
+   "bits": [
+    16
+   ],
+   "condition": "target present AND map entry present AND destination non-NULL AND 0 <= location <= 18",
+   "asm": "0xad4974-0xad4986,0xad4a88-0xad4a96"
+  },
+  {
+   "bits": [
+    32
+   ],
+   "condition": "slot queried and returns NULL",
+   "asm": "0xad4a96-0xad4aaa"
+  },
+  {
+   "bits": [
+    64
+   ],
+   "condition": "post-map fallthrough reaches non-NULL player and inventory; successful equip reloads player from menu after mutation 1/2",
+   "asm": "0xad4ab2,0xad49d3-0xad49ea"
+  },
+  {
+   "bits": [
+    128
+   ],
+   "condition": "mapped equipment fallback OR has callback says absent",
+   "asm": "0xad4997,0xad4a0b"
+  },
+  {
+   "bits": [
+    256
+   ],
+   "condition": "drop path reached (mapped NULL destination OR failed pickup)",
+   "asm": "0xad4a4b-0xad4a5f,0xad4aed-0xad4b01,0xad4b5a-0xad4b6e",
+   "reason": "position callback can replace menu character; subsequent resource manager/level is reloaded from that current character"
+  }
+ ],
+ "mutation_proof": {
+  "keep": "all 0..7 for every selected mask/location, including unreachable points as negative sentinels",
+  "points": {
+   "1": "slot",
+   "2": "equip",
+   "3": "has",
+   "4": "pickup",
+   "5": "position",
+   "6": "addItem",
+   "7": "virtual drop"
+  },
+  "effect": "Matching point changes menu character to actor[1] and actor[0].inventory to inventories[1]. Inventory local must stay cached. Successful equip must reload current player; drop must load current player before position and again after its callback for getLevel. Keep callback order, receiver ids, arguments, full position bits, map contents, menu character and clicked-slot capture."
+ },
+ "mode1_extra_proof": "0xad4b90 checks tracking global, calls return function when false, then unconditionally tail-calls vtable +0x48 updateLayout. Mode 1 must retain exactly one update on all 1364 cases, correct receiver, map state at update and clicked slot mutation 91.",
+ "risks_and_limits": [
+  "This is a symbolic proposal; no fresh original/replacement run or wall timing has been performed. Do not change frozen inputs of running full acceptance.",
+  "Canonicalizing unread fixture reply bits reduces protection against a future candidate spuriously taking a path whose original has no such call; require callback-sequence negative controls, not return-only checks.",
+  "The old null-character invalid-domain prefilter remains unchanged, including its conservative exclusions. This proposal does not turn crash pairs into acceptance.",
+  "Existing fixture only tests mapped destination NULL or inventories[1], not mapped inventories[0] alias; do not describe proposal as exhaustive all possible alias graphs.",
+  "The source-level proof must be checked against original ASM if either target or callback fixture changes. Recompute counts/receipts and regenerate type/fingerprint inputs after edits."
+ ],
+ "required_future_validation": [
+  "Implement the selector only in next batch and keep current capture fields and incomplete/nonzero-child rejection.",
+  "Run both selected matrices original vs replacement; require 1364 normal completed pairs each, zero differences; retain all six location values and all seven reached mutation points.",
+  "Negative control: stale cached player after equip must be rejected by mutation 1/2 cases with initial player NULL and successful equip.",
+  "Negative control: reload inventory after has/pickup callback must be rejected by unmapped initial inventory[0] cases with mutation 3/4.",
+  "Negative control: cache character or level across position callback must be rejected by drop mutation 5 and resource bit 256 cases.",
+  "Negative controls: off-by-one location boundary; wrong occupied-slot/equip-fail fallback; skipped erase; omitted/extra drop; suppressed has/pickup; mode 1 omitted/early layout. Each must fail on selected cases.",
+  "Measure focused elapsed and full-gate wall time with the same pool settings; no speedup claim from pair-count reduction alone."
+ ],
+ "source_report_sha256": "ecd77868bc98e1078b06e1a69c6ad60f685800f85455700f9cfb5ba18a584169"
+}

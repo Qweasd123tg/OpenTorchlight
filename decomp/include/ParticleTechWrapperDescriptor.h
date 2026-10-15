@@ -18,19 +18,6 @@ public:
     virtual void InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*);
     CParticleTechWrapperDescriptor();
 
-    int m_iUnknown170;
-    int m_iUnknown174;
-    bool m_bUnknown178;
-    unsigned char m_gap179[0x37];
-    void* m_pUnknown1B0;
-    void* m_pUnknown1B8;
-    unsigned char m_gap1C0[0x8] __attribute__((aligned(8)));
-    int m_iUnknown1C8;
-    bool m_bUnknown1CC;
-    bool m_bUnknown1CD;
-    unsigned char m_gap1CE[0x2];
-    int m_iUnknown1D0;
-    int m_iUnknown1D4;
 
     static void Set_setRenderType(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
     static UNIONDATA8BIT* Get_getRenderType(CEditorBaseObject* object, unsigned int& count);

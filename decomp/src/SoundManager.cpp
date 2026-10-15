@@ -155,3 +155,89 @@ void CSoundInstance::clear()
 {
     if (m_pSound) { m_pSound->release(); m_pSound = NULL; }
 }
+
+void CSoundManager::releaseSound(CSoundInstance* sound)
+{
+    if (sound && --sound->m_referenceCount == 0 && !sound->m_stream.isNull())
+    {
+        m_pendingSounds.remove(sound);
+        delete sound;
+    }
+}
+
+void CSoundManager::stopSound(int index)
+{
+    m_iUnknown14 = static_cast<int>(static_cast<unsigned int>(m_iUnknown14) - 1u);
+    if (m_iUnknown14 == -1) m_iUnknown14 = 0;
+    if (index == -1) return;
+    if (index > 63) return;
+    {
+        FMOD::Channel* channel;
+        m_iUnknown18->getChannel(index, &channel);
+        channel->stop();
+        m_channels[index].m_iUnknown10 = 0;
+    }
+}
+
+void CSoundManager::stopAllSounds()
+{
+    m_iUnknown14 = 0;
+    stopSound(m_iUnknown6F0);
+    for (int i = 0; i < 64; ++i)
+    {
+        FMOD::Channel* channel;
+        if (m_iUnknown18->getChannel(i, &channel) == FMOD_OK && channel)
+            channel->stop();
+        m_channels[i].m_iUnknown10 = 0;
+    }
+}
+
+void CSoundManager::set3DMinMaxDistance(int index, float minimum, float maximum)
+{
+    if (index == -1) return;
+    if (index > 63) return;
+    {
+        FMOD::Channel* channel;
+        if (m_iUnknown18->getChannel(index, &channel) == FMOD_OK)
+            channel->set3DMinMaxDistance(minimum, maximum);
+    }
+}
+
+long long CSoundManager::isChannelPlaying(int index)
+{
+    if (index == -1) return 0;
+    if (index > 63) return 0;
+    {
+        FMOD::Channel* channel;
+        FMOD_RESULT result = m_iUnknown18->getChannel(index, &channel);
+        bool playing = false;
+        if (result == FMOD_OK)
+        {
+            channel->isPlaying(&playing);
+            return playing;
+        }
+    }
+    return 0;
+}
+
+void CSoundManager::setSoundVolume(int index, float volume)
+{
+    if (index == -1) return;
+    if (index > 63) return;
+    {
+        FMOD::Channel* channel;
+        if (m_iUnknown18->getChannel(index, &channel) == FMOD_OK)
+            channel->setVolume(volume);
+    }
+}
+
+void CSoundManager::setPauseSound(int index, bool paused)
+{
+    if (index == -1) return;
+    if (index > 63) return;
+    {
+        FMOD::Channel* channel;
+        if (m_iUnknown18->getChannel(index, &channel) == FMOD_OK)
+            channel->setPaused(paused);
+    }
+}

@@ -141,3 +141,9 @@ void CSoundObject::editorSelectionChanged(bool selected)
 CSoundObject::~CSoundObject()
 {
 }
+
+void CSoundObject::reset()
+{
+    m_pSoundBank->stop();
+    play();
+}

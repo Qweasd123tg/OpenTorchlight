@@ -1,0 +1,59 @@
+[
+ {
+  "address": "0xc62f90",
+  "tu": "DataValue.cpp",
+  "name": "CDataValue::GetValueTypeAsString()",
+  "original_bytes": 356,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "7a9586584144621b0d0ec7926be1f3e7a50107e84398e81232e0d9a6f976e7af",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "7a9586584144621b0d0ec7926be1f3e7a50107e84398e81232e0d9a6f976e7af",
+    "inputs_digest": "7ea21b900de4c5ef32c64e8d66b20ff9a9f9196dcd2a1c713a27cb2bc5d6f6d5",
+    "parameters": {
+     "fixtures": [
+      "data_value_type_labels"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc739d0",
+  "tu": "FileUtilities.cpp",
+  "name": "FILESYSTEM::GetApplicationPath()",
+  "original_bytes": 198,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "6dacd8f5591b2c309a63fae2a272a0937c2643961e13c103373f31d25cb9b5d3",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "6dacd8f5591b2c309a63fae2a272a0937c2643961e13c103373f31d25cb9b5d3",
+    "inputs_digest": "7ea21b900de4c5ef32c64e8d66b20ff9a9f9196dcd2a1c713a27cb2bc5d6f6d5",
+    "parameters": {
+     "fixtures": [
+      "followup_files_application"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xece450",
+  "tu": "SteamStats.cpp",
+  "name": "CSteamStats::statModified(ESTATS, UNIONDATA32BIT)",
+  "original_bytes": 384,
+  "acceptance": "MATCH",
+  "object_digest": "52457923fc30ec71a591b162c12141d18b56eb6bda6aac17fb81e7b0db49012f",
+  "comparison": null
+ }
+]

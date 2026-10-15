@@ -5,6 +5,8 @@
 #include "GameNamespaces.h"
 #include "FileUtilities.h"
 #include "LinuxUtils.h"
+#include <sys/stat.h>
+#include "StringUtilities.h"
 
 short FILESYSTEM::ReadShort(FILE* file)
 {
@@ -98,4 +100,47 @@ std::wstring FILESYSTEM::GetLocalPath()
 bool FILESYSTEM::FileExists(const std::wstring& path)
 {
     return FileExists(path.c_str());
+}
+
+std::wstring FILESYSTEM::GetApplicationPath()
+{
+    static std::wstring absolutePath(L"");
+    if (absolutePath.empty())
+        return LinuxUtils::GetAppDir();
+    return absolutePath;
+}
+
+std::wstring FILESYSTEM::AssembleAbsolutePath(const std::wstring& base,
+                                               const std::wstring& path)
+{
+    std::wstring result(path);
+    if (!path.empty() && path.find(L"/") != 0)
+        result = base + path;
+    return result;
+}
+
+bool FILESYSTEM::FileExists(const wchar_t* path)
+{
+    std::string narrow = STRINGS::StringConvertToUTF8(std::wstring(path));
+    struct stat info;
+    return stat(narrow.c_str(), &info) == 0;
+}
+
+long long FILESYSTEM::GetFileTime(const wchar_t* path)
+{
+    std::wstring wide(path);
+    std::string narrow = STRINGS::StringConvertToUTF8(wide);
+    struct stat info;
+    return stat(narrow.c_str(), &info) == 0 ? info.st_mtime : -1;
+}
+
+std::wstring FILESYSTEM::ReadWString(FILE* file, unsigned int length)
+{
+    std::wstring result;
+    for (unsigned int i = 0; i < length; ++i) {
+        unsigned short value;
+        fread(&value, 2, 1, file);
+        result = result + static_cast<wchar_t>(value);
+    }
+    return result;
 }

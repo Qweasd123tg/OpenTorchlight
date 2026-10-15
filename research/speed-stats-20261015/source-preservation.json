@@ -1,0 +1,24 @@
+{
+ "changed_production_sources": [
+  "decomp/src/SteamStats.cpp"
+ ],
+ "other_production_sources_byte_identical": true,
+ "steamstats_changes": "Only aggregate local initialization replaced by default construction and two field assignments.",
+ "prior_strong_matches_preserved": 3276,
+ "layout": [
+  {
+   "class": "CSteamStats",
+   "size_before": 160,
+   "size_after": 160,
+   "bases_unchanged": true,
+   "fields_unchanged_after_normalizing_dwarf_anonymous_union_ids": true
+  },
+  {
+   "class": "CSteamStats::SStatChange",
+   "size_before": 8,
+   "size_after": 8,
+   "bases_unchanged": true,
+   "fields_unchanged_after_normalizing_dwarf_anonymous_union_ids": true
+  }
+ ]
+}

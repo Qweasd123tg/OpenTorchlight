@@ -11,10 +11,10 @@ public:
 
     void setDynamicPropRotation(const float* dynamicPropertyValues,
                                 unsigned int dynamicPropertyIndex);
-    void getDynamicPropRotation(unsigned int& dynamicPropertyValues);
+    float* getDynamicPropRotation(unsigned int& dynamicPropertyValues);
     void setDynamicPropRotationSpeed(const float* dynamicPropertyValues,
                                      unsigned int dynamicPropertyIndex);
-    void getDynamicPropRotationSpeed(unsigned int& dynamicPropertyValues);
+    float* getDynamicPropRotationSpeed(unsigned int& dynamicPropertyValues);
 
     CTextureRotateWrapper(CResourceManager* resourceManager);
 

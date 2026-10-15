@@ -1,0 +1,6 @@
+tlhybrid: begin descriptor_factory_5c93e0
+    factory 0 pattern 0 text 0 status 0/0 issue 0/3
+    coverage descriptor_factory_5c93e0 0x5c93e0 completed 0 different 0 incomplete 1
+tlhybrid: timing descriptor_factory_5c93e0 0.003 seconds
+tlhybrid: descriptor_factory_5c93e0                        FAIL (1)
+tlhybrid: 1 tests, 1 failed

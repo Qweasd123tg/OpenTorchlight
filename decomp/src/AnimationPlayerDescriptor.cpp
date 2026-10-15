@@ -24,6 +24,18 @@ CAnimationPlayerDescriptor::CAnimationPlayerDescriptor(const wchar_t* name, cons
     AddOutputLogic(OUTPUT_EVENT_ANIMATION_STOPPED);
     AddOutputLogic(OUTPUT_EVENT_ANIMATION_PLAYING);
 }
+void CAnimationPlayerDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    if (scene->getResourceManager()->getEditorIsRunning())
+        return;
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CAnimationPlayer* player = dynamic_cast<CAnimationPlayer*>(m_Objects[i]);
+        if (player && player->m_bStartOnLoad)
+            player->playAnimation(true);
+    }
+}
+
+
 
 CAnimationPlayerDescriptor::~CAnimationPlayerDescriptor()
 {
@@ -44,31 +56,26 @@ std::wstring CAnimationPlayerDescriptor::GetGroupStringByID(CEditorScene*, CEdit
 
 void CAnimationPlayerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int eventType, CEditorBaseObject* sender)
 {
-    CAnimationPlayer* player;
-
-    if (object == NULL ||
-        (player = dynamic_cast<CAnimationPlayer*>(object)) == NULL) {
+    CAnimationPlayer* player = dynamic_cast<CAnimationPlayer*>(object);
+    if (!player)
         return;
-    }
 
-    if (eventType == 0x43) {
-        player->playAnimation(true);
-    } else if (eventType > 0x43) {
-        if (eventType == 0x44) {
-            player->stopAnimation(false);
-        } else if (eventType == 0x45) {
-            player->stopAnimation(true);
-        } else {
-            return;
-        }
-        return;
-    } else if (eventType == 0x42) {
+    switch (eventType) {
+    case 0x42:
         player->playAnimation(false);
-    } else {
-        return;
+        player->BroadcastEvent(OUTPUT_EVENT_ANIMATION_PLAYING);
+        break;
+    case 0x43:
+        player->playAnimation(true);
+        player->BroadcastEvent(OUTPUT_EVENT_ANIMATION_PLAYING);
+        break;
+    case 0x44:
+        player->stopAnimation(false);
+        break;
+    case 0x45:
+        player->stopAnimation(true);
+        break;
     }
-
-    player->BroadcastEvent(OUTPUT_EVENT_ANIMATION_PLAYING);
 }
 
 void CAnimationPlayerDescriptor::update(float timeSlice)

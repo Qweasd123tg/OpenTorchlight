@@ -19,12 +19,11 @@ CDungeonObjectDescriptor::~CDungeonObjectDescriptor()
 
 void CDungeonObjectDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
 {
-    if (object != NULL) {
-        CDungeonObject* dungeonObject = dynamic_cast<CDungeonObject*>(object);
-        if (dungeonObject != NULL && event == 0x51) {
-            dungeonObject->clearHistory();
-            return;
-        }
+    CDungeonObject* dungeonObject = dynamic_cast<CDungeonObject*>(object);
+    if (dungeonObject == NULL)
+        return;
+    if (event == 0x51) {
+        dungeonObject->clearHistory();
     }
 }
 

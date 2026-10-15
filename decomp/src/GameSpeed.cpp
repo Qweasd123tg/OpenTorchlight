@@ -36,3 +36,11 @@ CGameSpeed::CGameSpeed(std::wstring graphName1, std::wstring graphName2)
         m_pGraph2 = new CGraph(graphName2);
     }
 }
+
+float CGameSpeed::getGameSpeed()
+{
+    CGameSpeed* speed = static_cast<CGameSpeed*>(g_pGameSpeed);
+    if (speed)
+        return speed->m_fGameSpeed;
+    return 1.0f;
+}

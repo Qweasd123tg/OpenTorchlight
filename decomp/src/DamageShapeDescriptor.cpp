@@ -63,22 +63,16 @@ unsigned int CDamageShapeDescriptor::GetDamageTypeIDByString(
 
 void CDamageShapeDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
 {
-    if (object != NULL) {
-        CDamageShape* damageShape = dynamic_cast<CDamageShape*>(object);
-        if (damageShape != NULL) {
-            typedef void (*InputLogicMethod)(CDamageShape*, bool);
-            InputLogicMethod method = reinterpret_cast<InputLogicMethod>(
-                *reinterpret_cast<void**>(damageShape) + 0x40 / sizeof(void*));
-
-            if (event == 2) {
-                method(damageShape, true);
-                return;
-            }
-            if (event == 3) {
-                method(damageShape, false);
-                return;
-            }
-        }
+    CDamageShape* damageShape = dynamic_cast<CDamageShape*>(object);
+    if (damageShape == NULL)
+        return;
+    if (event == 2) {
+        damageShape->setEnabled(true);
+        return;
+    }
+    if (event == 3) {
+        damageShape->setEnabled(false);
+        return;
     }
 }
 
@@ -90,4 +84,37 @@ CEditorBaseObject* CDamageShapeDescriptor::CreateObject(CEditorScene* scene)
 CDamageShapeDescriptor* getSingleton()
 {
     return reinterpret_cast<CDamageShapeDescriptor*>(g_DescriptorController);
+}
+
+std::wstring CDamageShapeDescriptor::getAlignmentStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 6)
+        return KALIGNMENT_STRINGS[0];
+    return KALIGNMENT_STRINGS[index];
+}
+
+void CDamageShapeDescriptor::update(float elapsed)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CDamageShape* shape = dynamic_cast<CDamageShape*>(m_Objects[i]);
+        if (shape)
+            shape->updateLevelObject(elapsed, NULL, Ogre::Vector3::ZERO);
+    }
+}
+
+void CDamageShapeDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    if (scene->getResourceManager()->getEditorIsRunning())
+        return;
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CDamageShape* shape = dynamic_cast<CDamageShape*>(m_Objects[i]);
+        if (shape && shape->getEnabled()) {
+            shape->setEnabled(false);
+            shape->setEnabled(true);
+        }
+    }
 }

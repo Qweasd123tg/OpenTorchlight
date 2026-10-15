@@ -1,0 +1,53 @@
+{
+ "base_commit": "8d9f0ee6a2bf442295962f0d195795bec696b7af",
+ "main_base_commit": "3ad959f437ef58a66e1ae521a91befb0a5729f65",
+ "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+ "game_functions": 5247,
+ "accepted_before": 3154,
+ "accepted_after": 3238,
+ "matched_after": 2425,
+ "behavioral_after": 813,
+ "screened_candidates": 149,
+ "explicit_targets_accepted": 83,
+ "implemented_explicit_candidates": 85,
+ "below_minimum_comparison_count": [
+  "0xc62f90",
+  "0xc739d0"
+ ],
+ "generated_consequences_accepted": 1,
+ "screened_candidates_not_accepted": 66,
+ "new_game_addresses": 84,
+ "new_match": 26,
+ "new_behavioral": 58,
+ "new_original_bytes": 15484,
+ "accepted_original_bytes": 1459193,
+ "prior_accepted_preserved": 3154,
+ "prior_strong_matches_preserved": 3250,
+ "source_changes": {
+  "new-definition": 68,
+  "modified-body": 9,
+  "unchanged-body": 6,
+  "generated-consequence": 1
+ },
+ "integrated_tus": 37,
+ "production_tus": 290,
+ "targeted_tests": 68,
+ "targeted_fixture_files": 19,
+ "targeted_completed_pairs": 6904,
+ "targeted_build_seconds": 39.04226590500184,
+ "headless_tests": 999,
+ "hybrid_selftest_exit": 0,
+ "full_selftest_seconds": 1173.4601430839975,
+ "full_selftest_shards": 60,
+ "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+ "types_source_inputs_current": true,
+ "revalidated_existing_addresses": [
+  "0xc60160",
+  "0xc5fff0",
+  "0xc5f1c0",
+  "0xc5f910"
+ ],
+ "minimum_completed_pairs": 20,
+ "guards_unchanged": true,
+ "windowed_gameplay_claimed": false
+}

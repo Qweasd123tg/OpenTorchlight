@@ -84,7 +84,7 @@ def _scan(text):
         head = masked[start:i].strip()
         if token == "{":
             ns = re.fullmatch(r"namespace\s+(\w+)", head)
-            cls = re.fullmatch(r"(?:class|struct)\s+(\w+)\s*(?::[^{};]*)?", head)
+            cls = re.fullmatch(r"(?:class|struct)\s+(?:__attribute__\(\(\w+\)\)\s+)?(\w+)\s*(?::[^{};]*)?", head)
             array = re.fullmatch(r"(?:static\s+)?const\s+std::(?:w?string)\s+(\w+)\s*\[\s*(?:[0-9]+)?\s*\]\s*=", head)
             kind, name = (("namespace", ns[1]) if ns else
                           ("class", cls[1]) if cls else
@@ -218,7 +218,50 @@ def _standard_vector_defaults(text, depth=0):
     return ''.join(out)
 
 
-def _declares_callee(declaration, callee):
+def _callback_aliases(sources):
+    """Unique global function-pointer typedefs, validated by the existing parser."""
+    found = {}
+    scoped_typedefs = []
+    for filename, source in sources.items():
+        masked = _mask(source)
+        for declaration in re.finditer(r"\btypedef\b[^;{}]*;", masked):
+            before = masked[:declaration.start()]
+            if before.count("{") != before.count("}"):
+                scoped_typedefs.append(declaration[0])
+        for match in re.finditer(r"typedef\s+([^;{}]+?)\s*\(\s*\*\s*(\w+)\s*\)\s*\(([^;{}]*)\)\s*;", masked):
+            before = masked[:match.start()]
+            if before.count("{") != before.count("}"):
+                continue
+            callback = match[1].strip() + " (*) (" + match[3].strip() + ")"
+            if declaration_headers._unnamed_callback(callback):
+                found.setdefault(match[2], set()).add((callback, filename))
+    # This lookup has no C++ scope resolver. Defer any global alias mentioned
+    # by a scoped typedef rather than substitute a possibly shadowed type.
+    return {name: next(iter(values)) for name, values in found.items()
+            if len(values) == 1 and not any(re.search(r"\b" + re.escape(name) + r"\b", text)
+                                           for text in scoped_typedefs)}
+
+
+def _expand_callback_aliases(text, aliases):
+    for name, (callback, filename) in (aliases or {}).items():
+        # Drop only the parameter name after a proven typedef. Pointer-to-alias,
+        # qualifiers and compound declarators remain unsupported.
+        text = re.sub(r"(?<![\w:])" + re.escape(name) + r"(?:\s+[A-Za-z_]\w*)?(?=\s*[,)]|\s*$)",
+                      lambda match: callback, text)
+    return text
+
+
+def _callback_cv_spelling(text):
+    def replace(match):
+        candidate = match[0]
+        if not declaration_headers._unnamed_callback(candidate):
+            return candidate
+        args = ", ".join(ghidra_cpp.cxx_type(part.strip()) for part in match[2].split(","))
+        return match[1].strip() + " (*) (" + args + ")"
+    return re.sub(r"([^(),]+?)\(\s*\*\s*\)\s*\(([^()]*)\)", replace, text)
+
+
+def _declares_callee(declaration, callee, aliases=None):
     """Match parameter and member-cv identity, never a name-only overload.
 
     Reuse the existing conservative declaration parser. Return type and static
@@ -231,7 +274,7 @@ def _declares_callee(declaration, callee):
     if not re.fullmatch(r"~?[A-Za-z_]\w*", method):
         return False
     try:
-        text = _standard_vector_defaults(_standard_string_aliases(declaration.text))
+        text = _standard_vector_defaults(_standard_string_aliases(_expand_callback_aliases(declaration.text, aliases)))
         params = _standard_vector_defaults(_standard_string_aliases(callee["params"]))
     except ValueError:
         return False
@@ -239,6 +282,8 @@ def _declares_callee(declaration, callee):
     if method.startswith("~"):
         text = re.sub(r"~\s*" + re.escape(method[1:]) + r"(?=\s*\()", method[1:], text)
         method = method[1:]
+    text = _callback_cv_spelling(text)
+    params = _callback_cv_spelling(params)
     canonical = dict(callee, params=params)
     expected = ghidra_cpp.signature_key(canonical)[1:3]
     declared = declaration_headers.declared_signatures(text, method)
@@ -355,6 +400,7 @@ class ContextIndex:
             self.header_classes[path.name] = {c.name for c in classes if c.reason != "non-top-level/anonymous scope"}
             self.sources[path.name] = text
             self.declarations[path.name] = decls
+        self.callback_aliases = _callback_aliases(self.sources)
 
     def _path(self, directory, name):
         name = _basename(name)
@@ -834,15 +880,18 @@ class ContextIndex:
         return {header}
 
     def _pinned_destructor_headers(self, callee, scope):
-        """Six reviewed existing template bodies, never a generic exemption.
+        """Seven reviewed existing template bodies, never a generic exemption.
 
         Original ASM: wstring delete[] destroys elements using the array cookie,
         then frees and clears data; safe pointers unregister and reset both fields.
-        Quest/BaseUnit pointer arrays free only the array storage and clear its pointer.
+        Quest/BaseUnit/editor pointer arrays free only the array storage and clear its pointer.
         Only the reviewed address, size, D1/D2 aliases and unmodified source count.
         """
         wide = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
         reviewed = {
+            "TArrayList<CEditorBaseObject*>":
+                (0x740b90, 26, "_ZN10TArrayListIP17CEditorBaseObjectE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<CBaseUnit*>":
                 (0xd49940, 26, "_ZN10TArrayListIP9CBaseUnitE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
@@ -1011,13 +1060,17 @@ class ContextIndex:
             candidates = self._mapped(scope) if scope else []
             matches = self._matching(qualified, "function")
             matched_headers = {name for name, decl in matches
-                               if (not candidates or name in candidates) and _declares_callee(decl, callee)}
+                               if (not candidates or name in candidates) and _declares_callee(decl, callee, self.callback_aliases)}
             implicit_headers = self._implicit_destructor_headers(callee, scope, candidates)
             template_headers = self._safe_pointer_headers(callee, scope)
             window_array_headers = self._window_array_headers(callee, scope)
             pinned_destructor_headers = self._pinned_destructor_headers(callee, scope)
             if matched_headers:
                 wanted.update(matched_headers)
+                for name, decl in matches:
+                    if name in matched_headers:
+                        wanted.update(filename for alias, (_, filename) in self.callback_aliases.items()
+                                      if re.search(r"(?<![\w:])" + re.escape(alias) + r"\b", decl.text))
             elif implicit_headers:
                 wanted.update(implicit_headers)
                 notes.append(f"{address:#x}: weak D1/D2 destructor implicitly declared by the existing complete class header; no guessed return type.")

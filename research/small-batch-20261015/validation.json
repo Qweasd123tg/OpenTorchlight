@@ -1,0 +1,58 @@
+{
+ "base_commit": "3ad959f437ef58a66e1ae521a91befb0a5729f65",
+ "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+ "accepted_before": 2932,
+ "accepted_after": 2979,
+ "new_game_addresses": 47,
+ "new_match_original_bytes": 2248,
+ "matched_after": 2261,
+ "behavioral_after": 718,
+ "accepted_original_bytes": 1428552,
+ "game_functions": 5247,
+ "game_bytes": 3702188,
+ "prior_accepted_preserved": 2932,
+ "prior_game_matches_preserved_as_match": 2214,
+ "prior_all_strong_matches_preserved_as_match": 3038,
+ "old_source_definitions_unchanged": 98,
+ "production_tus": 281,
+ "changed_object_tus": [
+  "CameraControllerDescriptor.cpp",
+  "CameraShakeDescriptor.cpp",
+  "ColliderDescriptor.cpp",
+  "CounterDescriptor.cpp",
+  "DamageShapeDescriptor.cpp",
+  "EditorObjectManager.cpp",
+  "GameStateControllerDescriptor.cpp",
+  "InteractiveDescriptor.cpp",
+  "LightDescriptor.cpp",
+  "MissileDescriptor.cpp",
+  "ParticleEmitterWrapper.cpp",
+  "ParticleEmitterWrapperDescriptor.cpp",
+  "ParticleTechWrapperDescriptor.cpp",
+  "PropertyNodeDescriptor.cpp",
+  "RandomChoiceDescriptor.cpp",
+  "RandomGroupDescriptor.cpp",
+  "ShapeDescriptor.cpp",
+  "TimelineDescriptor.cpp",
+  "UnitSpawnerDescriptor.cpp",
+  "UnitTriggerDescriptor.cpp",
+  "dynamicline.cpp"
+ ],
+ "hybrid_selftest_exit": 0,
+ "headless_tests": 903,
+ "selftest_summaries": [
+  "tlhybrid: 903 tests, 0 failed"
+ ],
+ "inputs_digests": [
+  "0210127af1a261c4afdc3a5381d6bda2c47424b6005d34197219306a51da7662"
+ ],
+ "note": "Acceptance is MATCH or fresh completed paired selftest; no windowed gameplay or standalone build claim.",
+ "remaining_opencode_game_addresses": 1518,
+ "opencode_remaining_size_counts": {
+  "96": 358,
+  "128": 468,
+  "256": 758,
+  "512": 1103,
+  "1000": 1307
+ }
+}

@@ -1,0 +1,231 @@
+{
+ "targeted_build_before_seconds": 58.56053023700224,
+ "targeted_build_after_seconds": 34.806504538999434,
+ "targeted_build_reduction_percent": 40.56320119006285,
+ "before_tus": 679,
+ "focused_tus": 288,
+ "avoided_tu_passes": 391,
+ "production_assembly_preserved": 285,
+ "production_hybrid_header_dependencies": 0,
+ "benchmark": {
+  "inventory": [
+   "editor_more_roll",
+   "editor_more_event",
+   "editor_next_property_undo",
+   "equipment_description_differential",
+   "gameui_click_dispatch_regression",
+   "inventory_update_differential",
+   "journal_layout_differential",
+   "menu_more_cinematic_update",
+   "petmenu_set_open",
+   "shape_next_sphere",
+   "skillmenu_create_menus_differential",
+   "stats_fill_remove_differential"
+  ],
+  "historical_seconds": {
+   "petmenu_set_open": 6.013,
+   "menu_more_cinematic_update": 5.965,
+   "gameui_click_dispatch_regression": 6.078,
+   "skillmenu_create_menus_differential": 6.085,
+   "stats_fill_remove_differential": 5.914,
+   "journal_layout_differential": 6.12,
+   "equipment_description_differential": 6.129,
+   "editor_more_event": 5.849,
+   "shape_next_sphere": 6.183,
+   "inventory_update_differential": 5.808,
+   "editor_next_property_undo": 5.801,
+   "editor_more_roll": 6.206
+  },
+  "historical_total_seconds": 72.151,
+  "blob_sha256": "14889e440fdd61edc293aeffb6605f88271945d23271b01a5d73f07eb549cda7",
+  "loader_sha256": "ce2686eaf8a40b71f08d21e721abeb40e8f78c243ec840a36aede29e24f48752",
+  "runs": [
+   {
+    "turn": 0,
+    "slots_jobs": 4,
+    "code": 0,
+    "wall_seconds": 17.67741406499772,
+    "children_user_seconds": 5.465171,
+    "children_system_seconds": 57.712455,
+    "summary": "tlhybrid: 12 tests, 0 failed",
+    "timing_phases": {
+     "environment": 0.06364024700087612,
+     "schedule": 0.2924341709986038,
+     "execute": 17.31995809,
+     "parse": 0.00043197199920541607
+    }
+   },
+   {
+    "turn": 1,
+    "slots_jobs": 6,
+    "code": 0,
+    "wall_seconds": 14.903159702000266,
+    "children_user_seconds": 5.3985520000000005,
+    "children_system_seconds": 67.648754,
+    "summary": "tlhybrid: 12 tests, 0 failed",
+    "timing_phases": {
+     "environment": 0.06457550500272191,
+     "schedule": 0.29585611400034395,
+     "execute": 14.541619345000072,
+     "parse": 0.00020226199922035448
+    }
+   },
+   {
+    "turn": 2,
+    "slots_jobs": 6,
+    "code": 0,
+    "wall_seconds": 15.579643069999292,
+    "children_user_seconds": 5.777289,
+    "children_system_seconds": 72.02871499999999,
+    "summary": "tlhybrid: 12 tests, 0 failed",
+    "timing_phases": {
+     "environment": 0.06570539099993766,
+     "schedule": 0.2903418230016541,
+     "execute": 15.222502299002372,
+     "parse": 0.0001766419991326984
+    }
+   },
+   {
+    "turn": 3,
+    "slots_jobs": 4,
+    "code": 0,
+    "wall_seconds": 20.26319513499766,
+    "children_user_seconds": 5.601714999999999,
+    "children_system_seconds": 65.88761300000002,
+    "summary": "tlhybrid: 12 tests, 0 failed",
+    "timing_phases": {
+     "environment": 0.06463415799953509,
+     "schedule": 0.29604250299962587,
+     "execute": 19.90145599400057,
+     "parse": 0.00017508100063423626
+    }
+   }
+  ],
+  "shards": 12,
+  "original_pool": 4,
+  "order": "index",
+  "restored_pool": 4
+ },
+ "benchmark_mean_seconds": {
+  "4": 18.97030459999769,
+  "6": 15.24140138599978
+ },
+ "benchmark_mean_reduction_percent": 19.656527887266318,
+ "configured_selftest_slots": 6,
+ "compiler_slots_unchanged": 2,
+ "full_build": {
+  "schema": 1,
+  "status": "completed",
+  "phases": [
+   {
+    "name": "context",
+    "wall_seconds": 0.23525936200167052,
+    "process_cpu_seconds": 0.23451006200000535,
+    "children_cpu_seconds": 0.0
+   },
+   {
+    "name": "compile",
+    "wall_seconds": 23.498567732000083,
+    "process_cpu_seconds": 32.882673048,
+    "children_cpu_seconds": 32.281403
+   },
+   {
+    "name": "rewrite_assemble_metadata",
+    "wall_seconds": 10.092508398000064,
+    "process_cpu_seconds": 7.663546214999997,
+    "children_cpu_seconds": 7.309313000000003
+   },
+   {
+    "name": "hook_reduction",
+    "wall_seconds": 19.901006666998,
+    "process_cpu_seconds": 6.253570569999994,
+    "children_cpu_seconds": 13.703209999999991
+   },
+   {
+    "name": "hooks_imports",
+    "wall_seconds": 0.5961480270016182,
+    "process_cpu_seconds": 0.1347996300000034,
+    "children_cpu_seconds": 0.4720300000000037
+   },
+   {
+    "name": "link",
+    "wall_seconds": 0.45946922099756193,
+    "process_cpu_seconds": 0.0005119200000081037,
+    "children_cpu_seconds": 0.45664500000000885
+   },
+   {
+    "name": "loader",
+    "wall_seconds": 0.17297784400216187,
+    "process_cpu_seconds": 0.0005049369999881037,
+    "children_cpu_seconds": 0.1635699999999929
+   },
+   {
+    "name": "manifest",
+    "wall_seconds": 0.17295491299955756,
+    "process_cpu_seconds": 0.1708372570000023,
+    "children_cpu_seconds": 0.0
+   }
+  ],
+  "total": {
+   "wall_seconds": 55.128900152001734,
+   "process_cpu_seconds": 47.340960292999995,
+   "children_cpu_seconds": 54.386171
+  },
+  "compiler_slot_wait_seconds": null,
+  "note": "CPU is process-wide; phase wall time includes unseparated compiler slot waits."
+ },
+ "full_selftest_elapsed_seconds": 1136.181080532002,
+ "full_selftest_shards": 60,
+ "full_selftest_processes": 6,
+ "slowest_fixtures": [
+  {
+   "test": "combinemenu_equipment_used_suppressed",
+   "seconds": 235.624
+  },
+  {
+   "test": "combinemenu_return_items",
+   "seconds": 232.91
+  },
+  {
+   "test": "combinemenu_equipment_used",
+   "seconds": 224.281
+  },
+  {
+   "test": "merchant_main_slot_differential",
+   "seconds": 151.237
+  },
+  {
+   "test": "merchantmenu_layout",
+   "seconds": 110.201
+  },
+  {
+   "test": "equipment_use_differential",
+   "seconds": 97.944
+  },
+  {
+   "test": "inventory_slot_transfer",
+   "seconds": 86.649
+  },
+  {
+   "test": "inventorymenu_set_spell",
+   "seconds": 83.932
+  },
+  {
+   "test": "enchant_slot_transfer",
+   "seconds": 79.425
+  },
+  {
+   "test": "stash_pet_slot_transfer",
+   "seconds": 78.512
+  },
+  {
+   "test": "equipment_enchant_differential",
+   "seconds": 77.781
+  },
+  {
+   "test": "combine_layout_equipped",
+   "seconds": 76.551
+  }
+ ],
+ "scope": "Focused+cache-alignment measurement is combined and sequential; no isolated speed claim for the flag change. ABBA is warm identical 12-fixture throughput, not full-suite A/B. Final full check still runs every fixture."
+}

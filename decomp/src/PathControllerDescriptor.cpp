@@ -49,34 +49,28 @@ std::wstring CPathControllerDescriptor::GetGroupStringByID(CEditorScene*, CEdito
 
 void CPathControllerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
 {
-    if (object != 0)
-    {
-        CPathController* controller = dynamic_cast<CPathController*>(object);
-        if (controller != 0)
-        {
-            if (event == 2)
-            {
-                controller->setVisible(true);
-                return;
-            }
-            if (event == 3)
-            {
-                controller->setVisible(false);
-                return;
-            }
-        }
+    CPathController* controller = dynamic_cast<CPathController*>(object);
+    if (controller == NULL)
+        return;
+    if (event == 2) {
+        controller->setEnabled(true);
+        return;
+    }
+    if (event == 3) {
+        controller->setEnabled(false);
+        return;
     }
 }
 
 void CPathControllerDescriptor::descriptorSceneActivated(CEditorScene* scene)
 {
     for (unsigned int i = 0; i < m_Objects.size(); ++i) {
-        CPathController* controller =
-            dynamic_cast<CPathController*>(m_Objects[i]);
-
-        if (controller && !scene->getResourceManager()->getEditorIsRunning()) {
-            controller->initPathController();
-        }
+        CPathController* controller = dynamic_cast<CPathController*>(m_Objects[i]);
+        if (controller == NULL)
+            continue;
+        if (scene->getResourceManager()->getEditorIsRunning())
+            continue;
+        controller->initPathController();
     }
 }
 

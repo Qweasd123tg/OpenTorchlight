@@ -33,6 +33,8 @@ namespace ParticleUniverse
     {
     public:
         void setDynScaleY(DynamicAttribute *attribute);
+        void setDynScaleX(DynamicAttribute*);
+        void setDynScaleZ(DynamicAttribute*);
     };
 }
 
@@ -59,4 +61,14 @@ CScaleWrapper::CScaleWrapper(CResourceManager* resourceManager)
     setDynamicPropXScale(scale, 2);
     setDynamicPropYScale(scale, 2);
     setDynamicPropZScale(scale, 2);
+}
+
+void CScaleWrapper::setDynamicPropZScale(const float* values, unsigned int count)
+{
+    reinterpret_cast<ParticleUniverse::ScaleAffector*>(m_pAffector)->setDynScaleZ(getDynPropFromArray(values, count));
+}
+
+void CScaleWrapper::setDynamicPropXScale(const float* values, unsigned int count)
+{
+    reinterpret_cast<ParticleUniverse::ScaleAffector*>(m_pAffector)->setDynScaleX(getDynPropFromArray(values, count));
 }

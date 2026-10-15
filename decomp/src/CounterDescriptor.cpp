@@ -43,3 +43,28 @@ CEditorBaseObject* CCounterDescriptor::CreateObject(CEditorScene*)
 {
     return new CCounter();
 }
+
+std::wstring CCounterDescriptor::GetCounterTypeTypeStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 5)
+        return gCOUNTER_TYPE_NAMES[0];
+    return gCOUNTER_TYPE_NAMES[index];
+}
+
+void CCounterDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    CCounter* counter = dynamic_cast<CCounter*>(object);
+    if (counter == NULL)
+        return;
+    switch (event) {
+    case INPUT_EVENT_ENABLE: counter->setEnabled(true); break;
+    case INPUT_EVENT_DISABLE: counter->setEnabled(false); break;
+    case INPUT_EVENT_RESET: counter->reset(); break;
+    case INPUT_EVENT_ADD: counter->add(1); break;
+    case INPUT_EVENT_SUBTRACT: counter->subtract(1); break;
+    }
+}

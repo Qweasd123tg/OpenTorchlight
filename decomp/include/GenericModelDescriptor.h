@@ -16,15 +16,6 @@ public:
     virtual void DescriptorObjectHasBeenInited(CEditorBaseObject*);
     CGenericModelDescriptor();
 
-    unsigned char m_gap170[0x70] __attribute__((aligned(8)));
-    void* m_pUnknown1E0;
-    unsigned char m_gap1E8[0x51];
-    bool m_bUnknown239;
-    unsigned char m_gap23A[0x2];
-    bool m_bUnknown23C;
-    unsigned char m_gap23D[0x3];
-    float m_fUnknown240;
-    int m_iUnknown244;
 
     static void Set_loadModel(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
     static UNIONDATA8BIT* Get_getModelPath(CEditorBaseObject* object, unsigned int& count);

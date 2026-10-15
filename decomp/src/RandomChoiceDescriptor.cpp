@@ -33,17 +33,33 @@ void CRandomChoiceDescriptor::InputLogicEvent(CEditorBaseObject* object,
                                                unsigned int eventType,
                                                CEditorBaseObject* param_3)
 {
-    if (object != NULL) {
-        CRandomChoice* choice = dynamic_cast<CRandomChoice*>(object);
-
-        if (choice != NULL && eventType == 0x27) {
-            choice->roll();
-            return;
-        }
+    CRandomChoice* choice = dynamic_cast<CRandomChoice*>(object);
+    if (choice == NULL)
+        return;
+    if (eventType == 0x27) {
+        choice->roll();
     }
 }
 
 CEditorBaseObject* CRandomChoiceDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CRandomChoice;
+}
+
+std::wstring CRandomChoiceDescriptor::GetChoiceTypeStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 1)
+        return gRANDOMCHOICE_TYPE_NAMES[0];
+    return gRANDOMCHOICE_TYPE_NAMES[index];
+}
+
+unsigned int CRandomChoiceDescriptor::GetChoiceTypeIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    if (value == gRANDOMCHOICE_TYPE_NAMES[0]) return 0;
+    if (value == gRANDOMCHOICE_TYPE_NAMES[1]) return 1;
+    return 0;
 }

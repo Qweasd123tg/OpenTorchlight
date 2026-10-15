@@ -26,6 +26,10 @@ public:
     void EditorUpdateBeginning();
     void EditorUpdateEnd();
 
+    void highlightObject(CEditorBaseObject* object);
+    void dehighlightObject(CEditorBaseObject* object);
+    Ogre::Vector3 EditorGetWorkingPlanePosition();
+    void EditorUpdate(float elapsed);
     void flushKeyManager();
     Ogre::Vector3 getSelectedPivot();
 

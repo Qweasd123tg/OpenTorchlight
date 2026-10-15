@@ -8,12 +8,8 @@
 
 void CDescriptorManager::update(float fTimeDelta)
 {
-    for (unsigned int uiIndex = 0;
-         uiIndex < static_cast<unsigned int>(
-             reinterpret_cast<CDescriptor ***>(&m_descriptors)[1] -
-             reinterpret_cast<CDescriptor ***>(&m_descriptors)[0]);
-         ++uiIndex)
-        reinterpret_cast<CDescriptor ***>(&m_descriptors)[0][uiIndex]->update(fTimeDelta);
+    for (unsigned int i = 0; i < getDescriptorVector().size(); ++i)
+        getDescriptorVector()[i]->update(fTimeDelta);
 }
 
 void CDescriptorManager::postProcessDescriptorObjects(
@@ -22,25 +18,8 @@ void CDescriptorManager::postProcessDescriptorObjects(
 {
     if (group == NULL)
         return;
-
-    struct DescriptorListStorage
-    {
-        CDescriptor** first;
-        long last;
-    };
-
-    const volatile DescriptorListStorage* storage =
-        reinterpret_cast<const volatile DescriptorListStorage*>(&m_descriptors);
-
-    for (unsigned int i = 0;
-         i < static_cast<unsigned long>(
-                 (static_cast<long>(
-                      static_cast<unsigned long>(storage->last) -
-                      reinterpret_cast<unsigned long>(storage->first)) >> 3));
-         ++i)
-    {
-        storage->first[i]->postProcessObjects(group, configuration);
-    }
+    for (unsigned int i = 0; i < getDescriptorVector().size(); ++i)
+        getDescriptorVector()[i]->postProcessObjects(group, configuration);
 }
 
 CDescriptorManager::CDescriptorManager(CEditorScene* pEditorScene)
@@ -60,4 +39,37 @@ unsigned int CDescriptorManager::AddDescriptor(CDescriptor* pDescriptor)
     m_descriptors.add(pDescriptor);
 
     return uiIndex;
+}
+
+CDescriptor* CDescriptorManager::GetDescriptor(unsigned int index)
+{
+    if (index < getDescriptorVector().size())
+        return getDescriptorVector()[index];
+    return NULL;
+}
+
+void CDescriptorManager::notifyDescriptorsSceneLoaded(CEditorScene* scene)
+{
+    if (scene == NULL)
+        return;
+    for (unsigned int i = 0; i < getDescriptorVector().size(); ++i)
+        getDescriptorVector()[i]->descriptorSceneLoaded(scene);
+}
+
+void CDescriptorManager::deactivateDescriptors(CEditorScene* scene)
+{
+    if (scene == NULL)
+        return;
+    for (unsigned int i = 0; i < getDescriptorVector().size(); ++i)
+        getDescriptorVector()[i]->descriptorSceneDeactivated(scene);
+}
+
+int CDescriptorManager::loadDescriptorObjects(CDataGroup* group, CDescriptorLoadConfiguration* configuration)
+{
+    int count = 0;
+    if (group == NULL)
+        return count;
+    for (unsigned int i = 0; i < getDescriptorVector().size(); ++i)
+        count += getDescriptorVector()[i]->loadObjects(group, configuration);
+    return count;
 }

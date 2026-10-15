@@ -1,0 +1,277 @@
+[
+ {
+  "address": "0x5bb7d0",
+  "tu": "DamageShapeDescriptor.cpp",
+  "name": "CDamageShapeDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+  "original_bytes": 98,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "70dcec62668ed287b597e7e9b2b024164f2dbe41fe9d125d35fbc66a36bdb342",
+  "comparison": null
+ },
+ {
+  "address": "0x6192c0",
+  "tu": "PathControllerDescriptor.cpp",
+  "name": "CPathControllerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+  "original_bytes": 98,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "89c4690d361261d26082cd97e5400620d8f00dfd2c5da36463df84e87f9682df",
+  "comparison": null
+ },
+ {
+  "address": "0x62ea50",
+  "tu": "RandomGroupDescriptor.cpp",
+  "name": "CRandomGroupDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+  "original_bytes": 95,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "c209797f488536c1821c288badde8ff5d533cc45fff8e6ffbe5f980e12161b44",
+  "comparison": null
+ },
+ {
+  "address": "0x662eb0",
+  "tu": "InteractiveDescriptor.cpp",
+  "name": "CInteractiveDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 74,
+  "acceptance": "BEHAVIORAL",
+  "source_changed": false,
+  "object_digest": "0dc06bf689d2889b4248d6b60e4cdd0617c70a151fbbcbe4ff24edc79350659c",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "0dc06bf689d2889b4248d6b60e4cdd0617c70a151fbbcbe4ff24edc79350659c",
+    "inputs_digest": "e3cbb02a0b9416bb8b05f94f8e3a17e0d7bf55bcfac03c1689f9b01a7fdd42c2",
+    "parameters": {
+     "fixtures": [
+      "interactive_descriptor_group_names"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6724e0",
+  "tu": "RandomChoiceDescriptor.cpp",
+  "name": "CRandomChoiceDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+  "original_bytes": 57,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "28474ab5eb858eb42c08a90a9a73349b1c5701dd52e305e74aeebefcd161e90d",
+  "comparison": null
+ },
+ {
+  "address": "0x68ef20",
+  "tu": "WarperDescriptor.cpp",
+  "name": "CWarperDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+  "original_bytes": 111,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "aaa95ac4da761daedeab7f3dbb18687056000f2ae93d561c492b025f82b4e98a",
+  "comparison": null
+ },
+ {
+  "address": "0x7b6580",
+  "tu": "Timeline.cpp",
+  "name": "CTimeline::Pause()",
+  "original_bytes": 37,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "b9f7c6a2367fda76e276ef089ac20c0923ed3d98f5f08da7796e622f69a0f75a",
+  "comparison": null
+ },
+ {
+  "address": "0x7b6c70",
+  "tu": "Timeline.cpp",
+  "name": "CTimeline::GetObjectIDInTimelineByIndex(int)",
+  "original_bytes": 96,
+  "acceptance": "BEHAVIORAL",
+  "source_changed": true,
+  "object_digest": "b9f7c6a2367fda76e276ef089ac20c0923ed3d98f5f08da7796e622f69a0f75a",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "b9f7c6a2367fda76e276ef089ac20c0923ed3d98f5f08da7796e622f69a0f75a",
+    "inputs_digest": "e3cbb02a0b9416bb8b05f94f8e3a17e0d7bf55bcfac03c1689f9b01a7fdd42c2",
+    "parameters": {
+     "fixtures": [
+      "timeline_controls_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7bb000",
+  "tu": "Timeline.cpp",
+  "name": "CTimeline::Play_Backwards()",
+  "original_bytes": 107,
+  "acceptance": "BEHAVIORAL",
+  "source_changed": false,
+  "object_digest": "b9f7c6a2367fda76e276ef089ac20c0923ed3d98f5f08da7796e622f69a0f75a",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "b9f7c6a2367fda76e276ef089ac20c0923ed3d98f5f08da7796e622f69a0f75a",
+    "inputs_digest": "e3cbb02a0b9416bb8b05f94f8e3a17e0d7bf55bcfac03c1689f9b01a7fdd42c2",
+    "parameters": {
+     "fixtures": [
+      "timeline_controls_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7bb070",
+  "tu": "Timeline.cpp",
+  "name": "CTimeline::Play(bool)",
+  "original_bytes": 118,
+  "acceptance": "BEHAVIORAL",
+  "source_changed": false,
+  "object_digest": "b9f7c6a2367fda76e276ef089ac20c0923ed3d98f5f08da7796e622f69a0f75a",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "b9f7c6a2367fda76e276ef089ac20c0923ed3d98f5f08da7796e622f69a0f75a",
+    "inputs_digest": "e3cbb02a0b9416bb8b05f94f8e3a17e0d7bf55bcfac03c1689f9b01a7fdd42c2",
+    "parameters": {
+     "fixtures": [
+      "timeline_controls_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7bb0f0",
+  "tu": "Timeline.cpp",
+  "name": "CTimeline::StopToBeginning()",
+  "original_bytes": 93,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "b9f7c6a2367fda76e276ef089ac20c0923ed3d98f5f08da7796e622f69a0f75a",
+  "comparison": null
+ },
+ {
+  "address": "0x7bb150",
+  "tu": "Timeline.cpp",
+  "name": "CTimeline::StopToEnd()",
+  "original_bytes": 93,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "b9f7c6a2367fda76e276ef089ac20c0923ed3d98f5f08da7796e622f69a0f75a",
+  "comparison": null
+ },
+ {
+  "address": "0x7bb1b0",
+  "tu": "Timeline.cpp",
+  "name": "CTimeline::Stop()",
+  "original_bytes": 69,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "b9f7c6a2367fda76e276ef089ac20c0923ed3d98f5f08da7796e622f69a0f75a",
+  "comparison": null
+ },
+ {
+  "address": "0xcdc840",
+  "tu": "SkillParser.cpp",
+  "name": "CSkillParser::reloadSkills()",
+  "original_bytes": 26,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "698792dc6d39de2e10aef425d09004280e98961525cbb2e26aa66318350cad82",
+  "comparison": null
+ },
+ {
+  "address": "0xda7620",
+  "tu": "CameraControllerDescriptor.cpp",
+  "name": "CCameraControllerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 74,
+  "acceptance": "BEHAVIORAL",
+  "source_changed": false,
+  "object_digest": "df65e6667056825e435ca935be7e68f7e925c9db5578f8720a7d66260b9ec595",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "df65e6667056825e435ca935be7e68f7e925c9db5578f8720a7d66260b9ec595",
+    "inputs_digest": "e3cbb02a0b9416bb8b05f94f8e3a17e0d7bf55bcfac03c1689f9b01a7fdd42c2",
+    "parameters": {
+     "fixtures": [
+      "camera_descriptor_group_names"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xe5d3a0",
+  "tu": "MusicObjectDescriptor.cpp",
+  "name": "CMusicObjectDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+  "original_bytes": 97,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "541e3957af14a6a23bf5d2cefba8e4ef1cb2ccb2469ae593cfeed470f32f5468",
+  "comparison": null
+ },
+ {
+  "address": "0xe66b90",
+  "tu": "CinematicDescriptor.cpp",
+  "name": "CCinematicDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+  "original_bytes": 57,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "97fcce3f13b9d233523dc7336be1ab093898df01beb5b1c8a9ca7ecf76c2d2ee",
+  "comparison": null
+ },
+ {
+  "address": "0xe70610",
+  "tu": "MoneyTakerDescriptor.cpp",
+  "name": "CMoneyTakerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+  "original_bytes": 57,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "b47d353fdbeaae43a138422816333318d7f0b6661e5cb0ea90bda7ac92ece146",
+  "comparison": null
+ },
+ {
+  "address": "0xea6660",
+  "tu": "WaypointActivatorDescriptor.cpp",
+  "name": "CWaypointActivatorDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+  "original_bytes": 57,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "7e1be9f1b31665ac22464ca587834b624549b199c0a6fc8ca03ca0a356a716e6",
+  "comparison": null
+ },
+ {
+  "address": "0xeba640",
+  "tu": "DungeonObjectDescriptor.cpp",
+  "name": "CDungeonObjectDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+  "original_bytes": 57,
+  "acceptance": "MATCH",
+  "source_changed": true,
+  "object_digest": "c867cd79f542f10cf47ef9b732eadf5bd012375eb2583c68515d2c9b7eef9d8d",
+  "comparison": null
+ }
+]

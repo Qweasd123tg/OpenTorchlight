@@ -6,6 +6,7 @@
 #include "EditorScene.h"
 #include "Interact.h"
 #include "StringUtilities.h"
+#include "InteractiveDescriptorNames.h"
 
 CInteractiveDescriptor::CInteractiveDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CBaseObjectDescriptor(name, group, description)
@@ -68,4 +69,20 @@ void CInteractiveDescriptor::update(float deltaTime)
 CEditorBaseObject* CInteractiveDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CInteract(scene->getResourceManager());
+}
+
+std::wstring CInteractiveDescriptor::getTypeStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 3)
+        return gINTERACTABLE_TYPE_NAMES[0];
+    return gINTERACTABLE_TYPE_NAMES[index];
+}
+
+unsigned int CInteractiveDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    return value == L"ITEMS";
 }

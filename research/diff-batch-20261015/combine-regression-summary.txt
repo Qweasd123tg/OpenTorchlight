@@ -1,0 +1,7 @@
+    coverage combinemenu_destructor 0xad47b0 completed 384 different 0 incomplete 0
+tlhybrid: combinemenu_destructor                           PASS (0)
+    coverage combinemenu_deleting_destructor 0xad48d0 completed 384 different 0 incomplete 0
+tlhybrid: combinemenu_deleting_destructor                  PASS (0)
+    EXPECTED DESTRUCTOR EXCEPTIONS: 18 matching unwinds, not normal completion coverage
+tlhybrid: combinemenu_destructor_expected_exceptions       PASS (0)
+tlhybrid: 3 tests, 0 failed

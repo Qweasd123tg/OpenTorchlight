@@ -102,7 +102,7 @@ public:
     std::wstring getListValueByIndex(CEditorScene* scene, CEditorBaseObject* object, unsigned int index);
     void setPropertyInterpreterFunctions(PropertyStringToIndexFunction stringToIndex,
                                          PropertyIndexToStringFunction indexToString, void* userData);
-    void cloneValue(CEditorBaseObject* object, CEditorBaseObject* source);
+    bool cloneValue(CEditorBaseObject* object, CEditorBaseObject* source);
     void serializeProperty(CDataGroup* group, unsigned int index);
 
     std::wstring m_sName;

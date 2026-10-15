@@ -1,0 +1,6 @@
+tlhybrid: begin pov_update_flying_to
+    POV operation 5 seed 22 exits 0/0
+    coverage pov_update_flying_to 0x7889e0 completed 23 different 1 incomplete 0
+tlhybrid: timing pov_update_flying_to 0.041 seconds
+tlhybrid: pov_update_flying_to                             FAIL (1)
+tlhybrid: 1 tests, 1 failed

@@ -1,0 +1,1068 @@
+[
+ {
+  "source": "decomp/src/CameraControl.cpp",
+  "sha256": "f5beef14d6b529759b0453e45319617f7fe94d4d998eee1306aecb337c7a717d",
+  "targets": [
+   "0xce9fd0"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xce9ea0",
+   "0xce9ec0",
+   "0xce9ee0",
+   "0xce9fd0",
+   "0xceb230",
+   "0xceb4d0"
+  ],
+  "unassigned_comparison_rows_preserved": 21,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/ExecuteSkillProps.cpp",
+  "sha256": "c62ea440d5ba7131a0b08cefacf71edc31eb10aaee79a460f794b6d52507dd2b",
+  "targets": [
+   "0xc93b10",
+   "0xc93bd0"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xc938e0",
+   "0xc93b10",
+   "0xc93bd0",
+   "0xc9caa0",
+   "0xc9cb30"
+  ],
+  "unassigned_comparison_rows_preserved": 34,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/ModFileFilter.cpp",
+  "sha256": "a7f616b4cec9879d67c758c0aba1519d00d5acd83efb6bc02ed79fdb1585dadd",
+  "targets": [
+   "0xc839d0"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xc839d0"
+  ],
+  "unassigned_comparison_rows_preserved": 0,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/DescriptorManager.cpp",
+  "sha256": "b2c4a203dec9185c6ce5ff8754771df4fa3f1431acb4f3cf027648b9c477747a",
+  "targets": [
+   "0x702490",
+   "0x7026d0"
+  ],
+  "modified_existing_bodies": [
+   "0x702490",
+   "0x7026d0"
+  ],
+  "unchanged_definitions": [
+   "0x7024f0",
+   "0x702510",
+   "0x702570",
+   "0x702740",
+   "0x7027c0",
+   "0x705b60"
+  ],
+  "unassigned_comparison_rows_preserved": 17,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/LayoutScene.cpp",
+  "sha256": "345762093f49d9c464089575cca2357846ded6044ce0af243ed4d0e4ec7153b6",
+  "targets": [
+   "0x75ec10"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x75ec10",
+   "0x75ecc0",
+   "0x75ef00",
+   "0x75ef30"
+  ],
+  "unassigned_comparison_rows_preserved": 64,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/Achievement.cpp",
+  "sha256": "e5ccc5984323f07ffb068fe60060df21ad086e00a900aba4f51e9a11cf336b3b",
+  "targets": [
+   "0xebe260",
+   "0xebe2c0",
+   "0xebe330",
+   "0xebe400",
+   "0xebe4c0",
+   "0xebe550",
+   "0xebe5f0"
+  ],
+  "modified_existing_bodies": [
+   "0xebe260",
+   "0xebe2c0",
+   "0xebe330",
+   "0xebe400",
+   "0xebe4c0",
+   "0xebe550",
+   "0xebe5f0"
+  ],
+  "unchanged_definitions": [
+   "0xebf6a0"
+  ],
+  "unassigned_comparison_rows_preserved": 7,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/DescriptorLoadConfiguration.cpp",
+  "sha256": "78de380f2317a660927a39943552becf33dabff78312c818309bcd2a620dc2ea",
+  "targets": [
+   "0x701d50"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x701d50",
+   "0x701e20",
+   "0x701e90"
+  ],
+  "unassigned_comparison_rows_preserved": 6,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/LogicGroup.cpp",
+  "sha256": "df9609257c84c23423ed071de3ef882ebd9086255cab8a41bade70daa6aca23c",
+  "targets": [
+   "0x795db0"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x795bb0",
+   "0x795be0",
+   "0x795cb0",
+   "0x795d60",
+   "0x7960d0"
+  ],
+  "unassigned_comparison_rows_preserved": 9,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/SkillProperty.cpp",
+  "sha256": "2f3c4a92d37c6927a305cf8708bc9308b8d5246d95e3ff7b142aa2236e12fe03",
+  "targets": [
+   "0xcdd140",
+   "0xcdd1f0"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xcdce20",
+   "0xcdce40"
+  ],
+  "unassigned_comparison_rows_preserved": 27,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/StringUtilities.cpp",
+  "sha256": "6f5a6be4e0b2a78aaf42f9bfc7e65a7c86f118c2d2d2b42274f9ef98cbddf790",
+  "targets": [
+   "0xc8daf0",
+   "0xc8e0e0",
+   "0xc8e190",
+   "0xc8e350",
+   "0xc8e810",
+   "0xc8ea50",
+   "0xc90a30"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xc8d650",
+   "0xc8d6a0",
+   "0xc8d800",
+   "0xc8d860",
+   "0xc8d920",
+   "0xc8da10",
+   "0xc8dc80",
+   "0xc8dc90",
+   "0xc8dca0",
+   "0xc8dcf0",
+   "0xc8dd30",
+   "0xc8dd70",
+   "0xc8dd90",
+   "0xc8ddb0",
+   "0xc8ddc0",
+   "0xc8de40",
+   "0xc8de70",
+   "0xc8def0",
+   "0xc8df60",
+   "0xc8e660",
+   "0xc8e700",
+   "0xc8f040",
+   "0xc8f400"
+  ],
+  "unassigned_comparison_rows_preserved": 30,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/FileUtilities.cpp",
+  "sha256": "19f31b2e3d6c4238fd623d9b6d47feab126886a22589eeab1ad4e3be1b7de512",
+  "targets": [
+   "0xc739d0",
+   "0xc73aa0",
+   "0xc741e0",
+   "0xc751f0",
+   "0xc77530"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xc73970",
+   "0xc739b0",
+   "0xc739c0",
+   "0xc73b60",
+   "0xc74320",
+   "0xc74eb0",
+   "0xc764a0"
+  ],
+  "unassigned_comparison_rows_preserved": 11,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/SkillManager.cpp",
+  "sha256": "ba11345535f8fa980398c95e5d17119f77d37968b483793f1a9843bb7e8c1c25",
+  "targets": [
+   "0xcca7b0",
+   "0xcd2ce0",
+   "0xcd3290",
+   "0xcd5090"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xcca560",
+   "0xcca570",
+   "0xcca580",
+   "0xcca620",
+   "0xcca6a0",
+   "0xcca710",
+   "0xcca720",
+   "0xccab50",
+   "0xccac00",
+   "0xcd3420",
+   "0xcd3fa0",
+   "0xcd5220"
+  ],
+  "unassigned_comparison_rows_preserved": 18,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/SoundObject.cpp",
+  "sha256": "859172c1c1d1560d2958e59e75fa0d8f7e1346bef9a32999801b87a585b17d13",
+  "targets": [
+   "0xa08070"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xa07e20",
+   "0xa07e40",
+   "0xa07e60",
+   "0xa07e90",
+   "0xa07ec0",
+   "0xa07ee0",
+   "0xa08030",
+   "0xa08090",
+   "0xa081d0",
+   "0xa08240"
+  ],
+  "unassigned_comparison_rows_preserved": 72,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/SkillController.cpp",
+  "sha256": "e6bd7a5d63e09986481d6cc830119d7272a83c2f61b46cf8cf9c08fa6e344160",
+  "targets": [
+   "0xe20620",
+   "0xe20650",
+   "0xe20690"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xe17910",
+   "0xe17970",
+   "0xe1f7e0",
+   "0xe20680"
+  ],
+  "unassigned_comparison_rows_preserved": 24,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [
+   {
+    "address": "0xe17ac0",
+    "name": "_Z41__static_initialization_and_destruction_0ii.clone.0",
+    "before": {
+     "name": "_Z41__static_initialization_and_destruction_0ii.clone.0",
+     "demangled": "__static_initialization_and_destruction_0(int, int) [clone .clone.0]",
+     "address": "0xe17ac0",
+     "status": "DIFF",
+     "size": 22037,
+     "original_size": 31413,
+     "weak": false,
+     "code": "c6c1be6f40120c18",
+     "object_digest": "5e36c95b520717fdeee17894b3004acd9ee3ad01a05961f69e7f70371d7045ff",
+     "metadata_reasons": [
+      "EH LSDA equivalence unverified",
+      "ambiguous narrow/wide literal in linked rodata"
+     ]
+    },
+    "after": {
+     "name": "_Z41__static_initialization_and_destruction_0ii.clone.0",
+     "demangled": "__static_initialization_and_destruction_0(int, int) [clone .clone.0]",
+     "address": "0xe17ac0",
+     "status": "DIFF",
+     "size": 23957,
+     "original_size": 31413,
+     "weak": false,
+     "code": "806a9229795936c2",
+     "object_digest": "4d02315db2b0f4f80f9f3440c2786c6de9b29955f8192f92091a19008c1488ac",
+     "metadata_reasons": [
+      "EH LSDA equivalence unverified",
+      "ambiguous narrow/wide literal in linked rodata"
+     ]
+    }
+   }
+  ],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/DataGroup.cpp",
+  "sha256": "189df4d7f8b8ea754a060e6405a776d6620ca541e7deed3731542861cac93d91",
+  "targets": [
+   "0xc5fb30",
+   "0xc5fe70",
+   "0xc603e0",
+   "0xc60560",
+   "0xc606e0",
+   "0xc61c00"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xc5eda0",
+   "0xc5ee90",
+   "0xc5ef30",
+   "0xc5f1c0",
+   "0xc5f250",
+   "0xc5f280",
+   "0xc5f2b0",
+   "0xc5f2e0",
+   "0xc5f310",
+   "0xc5f340",
+   "0xc5f370",
+   "0xc5f3a0",
+   "0xc5f3e0",
+   "0xc5f910",
+   "0xc5fc80",
+   "0xc5fd50",
+   "0xc5fde0",
+   "0xc5ff80",
+   "0xc5fff0",
+   "0xc600f0",
+   "0xc60160",
+   "0xc60260",
+   "0xc604f0",
+   "0xc60670",
+   "0xc607f0",
+   "0xc614e0",
+   "0xc61d30"
+  ],
+  "unassigned_comparison_rows_preserved": 28,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": [
+   {
+    "address": "0xc60160",
+    "before": {
+     "name": "_ZN10CDataGroup12AddDataValueERKSbIwSt11char_traitsIwESaIwEEi",
+     "demangled": "CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, int)",
+     "address": "0xc60160",
+     "status": "DIFF",
+     "size": 256,
+     "original_size": 256,
+     "weak": false,
+     "code": "770b4ae53f141366",
+     "object_digest": "68374da8711c98292c0085139f90754ddc0d5a77527b00dd7f79727cfd85f594",
+     "eh_verified": "gcc447-cleanup-v1"
+    },
+    "after": {
+     "name": "_ZN10CDataGroup12AddDataValueERKSbIwSt11char_traitsIwESaIwEEi",
+     "demangled": "CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, int)",
+     "address": "0xc60160",
+     "status": "DIFF",
+     "size": 256,
+     "original_size": 256,
+     "weak": false,
+     "code": "19675a478cac1410",
+     "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+     "eh_verified": "gcc447-cleanup-v1"
+    },
+    "witness": {
+     "test": "data_group_add_int32",
+     "report": "build-decomp/followup-batch-20261015/data-candidate/final-focused-report.json",
+     "report_sha256": "f0e0c074ac453bef5683791db65d95b7ec832e9ba373abc156f24a37c22da121",
+     "fixture": "build-decomp/followup-batch-20261015/data-candidate/tests/DataGroupContainersTest.cpp",
+     "fixture_sha256": "d50f8bef6d75ec3b2cd549426aec781e836e0816dbec8b92b63340ef0b754f97"
+    },
+    "normalized_register_differences": [
+     {
+      "before": "mov 0x2c(%rbx),%esi",
+      "after": "mov 0x2c(%rbx),%edx"
+     },
+     {
+      "before": "test %esi,%esi",
+      "after": "test %edx,%edx"
+     }
+    ]
+   },
+   {
+    "address": "0xc5fff0",
+    "before": {
+     "name": "_ZN10CDataGroup12AddDataValueERKSbIwSt11char_traitsIwESaIwEEx",
+     "demangled": "CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, long long)",
+     "address": "0xc5fff0",
+     "status": "DIFF",
+     "size": 256,
+     "original_size": 256,
+     "weak": false,
+     "code": "6cf7611d7b5297fd",
+     "object_digest": "68374da8711c98292c0085139f90754ddc0d5a77527b00dd7f79727cfd85f594",
+     "eh_verified": "gcc447-cleanup-v1"
+    },
+    "after": {
+     "name": "_ZN10CDataGroup12AddDataValueERKSbIwSt11char_traitsIwESaIwEEx",
+     "demangled": "CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, long long)",
+     "address": "0xc5fff0",
+     "status": "DIFF",
+     "size": 256,
+     "original_size": 256,
+     "weak": false,
+     "code": "929ca858e3590ef3",
+     "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+     "eh_verified": "gcc447-cleanup-v1"
+    },
+    "witness": {
+     "test": "data_group_add_int64",
+     "report": "build-decomp/followup-batch-20261015/data-candidate/final-focused-report.json",
+     "report_sha256": "f0e0c074ac453bef5683791db65d95b7ec832e9ba373abc156f24a37c22da121",
+     "fixture": "build-decomp/followup-batch-20261015/data-candidate/tests/DataGroupContainersTest.cpp",
+     "fixture_sha256": "d50f8bef6d75ec3b2cd549426aec781e836e0816dbec8b92b63340ef0b754f97"
+    },
+    "normalized_register_differences": [
+     {
+      "before": "mov 0x2c(%rbx),%ecx",
+      "after": "mov 0x2c(%rbx),%edi"
+     },
+     {
+      "before": "test %ecx,%ecx",
+      "after": "test %edi,%edi"
+     }
+    ]
+   },
+   {
+    "address": "0xc5f1c0",
+    "before": {
+     "name": "_ZN10CDataGroup18GetDataValueByNameERKSbIwSt11char_traitsIwESaIwEE",
+     "demangled": "CDataGroup::GetDataValueByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+     "address": "0xc5f1c0",
+     "status": "DIFF",
+     "size": 140,
+     "original_size": 140,
+     "weak": false,
+     "code": "31419d64f80cb003",
+     "object_digest": "68374da8711c98292c0085139f90754ddc0d5a77527b00dd7f79727cfd85f594"
+    },
+    "after": {
+     "name": "_ZN10CDataGroup18GetDataValueByNameERKSbIwSt11char_traitsIwESaIwEE",
+     "demangled": "CDataGroup::GetDataValueByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+     "address": "0xc5f1c0",
+     "status": "DIFF",
+     "size": 140,
+     "original_size": 140,
+     "weak": false,
+     "code": "6891280e4c902205",
+     "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c"
+    },
+    "witness": {
+     "test": "data_group_find_value",
+     "report": "build-decomp/followup-batch-20261015/data-candidate/final-focused-report.json",
+     "report_sha256": "f0e0c074ac453bef5683791db65d95b7ec832e9ba373abc156f24a37c22da121",
+     "fixture": "build-decomp/followup-batch-20261015/data-candidate/tests/DataGroupContainersTest.cpp",
+     "fixture_sha256": "d50f8bef6d75ec3b2cd549426aec781e836e0816dbec8b92b63340ef0b754f97"
+    },
+    "normalized_register_differences": [
+     {
+      "before": "mov 0x28(%rdi),%ebx",
+      "after": "mov 0x28(%rdi),%ecx"
+     },
+     {
+      "before": "test %ebx,%ebx",
+      "after": "test %ecx,%ecx"
+     }
+    ]
+   },
+   {
+    "address": "0xc5f910",
+    "before": {
+     "name": "_ZN10CDataGroup25GetDataGroupsMatchingNameERKSbIwSt11char_traitsIwESaIwEEPSt6vectorIPS_SaIS7_EE",
+     "demangled": "CDataGroup::GetDataGroupsMatchingName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::vector<CDataGroup*, std::allocator<CDataGroup*> >*)",
+     "address": "0xc5f910",
+     "status": "DIFF",
+     "size": 237,
+     "original_size": 237,
+     "weak": false,
+     "code": "22ffe4a1d7551338",
+     "object_digest": "68374da8711c98292c0085139f90754ddc0d5a77527b00dd7f79727cfd85f594"
+    },
+    "after": {
+     "name": "_ZN10CDataGroup25GetDataGroupsMatchingNameERKSbIwSt11char_traitsIwESaIwEEPSt6vectorIPS_SaIS7_EE",
+     "demangled": "CDataGroup::GetDataGroupsMatchingName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::vector<CDataGroup*, std::allocator<CDataGroup*> >*)",
+     "address": "0xc5f910",
+     "status": "DIFF",
+     "size": 237,
+     "original_size": 237,
+     "weak": false,
+     "code": "da1cc4cfd8adbf0f",
+     "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c"
+    },
+    "witness": {
+     "test": "data_group_matching_groups",
+     "report": "build-decomp/followup-batch-20261015/data-candidate/final-focused-report.json",
+     "report_sha256": "f0e0c074ac453bef5683791db65d95b7ec832e9ba373abc156f24a37c22da121",
+     "fixture": "build-decomp/followup-batch-20261015/data-candidate/tests/DataGroupContainersTest.cpp",
+     "fixture_sha256": "d50f8bef6d75ec3b2cd549426aec781e836e0816dbec8b92b63340ef0b754f97"
+    },
+    "normalized_register_differences": [
+     {
+      "before": "mov 0x40(%rdi),%edi",
+      "after": "mov 0x40(%rdi),%ecx"
+     },
+     {
+      "before": "test %edi,%edi",
+      "after": "test %ecx,%ecx"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "source": "decomp/src/UnitResourceList.cpp",
+  "sha256": "3e4cd2d61355a6ada0c1a45aee1a6ae7c8c73f3fc8a260361c0f4fd6732ada49",
+  "targets": [
+   "0xe7a4b0",
+   "0xe7aae0",
+   "0xe7ad00",
+   "0xe7b1d0",
+   "0xe7b590"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xe7a510"
+  ],
+  "unassigned_comparison_rows_preserved": 1,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/DataValue.cpp",
+  "sha256": "4aced4e60e8c3146d678ece4bf0b3d6dc058286a2439d11a3f27210c60e4c072",
+  "targets": [
+   "0xc62f90"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xc62e40",
+   "0xc62e50",
+   "0xc62e60",
+   "0xc62e70",
+   "0xc62e80",
+   "0xc62e90",
+   "0xc62ea0",
+   "0xc62eb0",
+   "0xc62ec0",
+   "0xc62ed0",
+   "0xc62ee0",
+   "0xc62ef0",
+   "0xc62f00",
+   "0xc64ad0"
+  ],
+  "unassigned_comparison_rows_preserved": 14,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/OgreResourceFile.cpp",
+  "sha256": "94cc622a0ef2c0e54dffb3483686b82c74a22a35e395703e1a1fa2ac2c9c204c",
+  "targets": [
+   "0xc687c0"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xc68700",
+   "0xc68790"
+  ],
+  "unassigned_comparison_rows_preserved": 4,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/RoomPieceDataInformation.cpp",
+  "sha256": "bb48f80a5c77a707375cf5b8cf589c6a462954a8c4b27c5fe717e9301fd66d07",
+  "targets": [
+   "0xa60f40"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xa60e90",
+   "0xa60ea0",
+   "0xa60f00",
+   "0xa61000",
+   "0xa61070",
+   "0xa61570",
+   "0xa62560"
+  ],
+  "unassigned_comparison_rows_preserved": 15,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/Cinematics.cpp",
+  "sha256": "555f934ca888cf4289c5dd12daff0b8801787505ed56a32c17d4f6e8c09a915d",
+  "targets": [
+   "0xe73a10",
+   "0xe79560"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xe73a40",
+   "0xe79710",
+   "0xe7a3a0"
+  ],
+  "unassigned_comparison_rows_preserved": 5,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/editorimage.cpp",
+  "sha256": "e8830e7a56ffd5cf998fb400cc5884e6f53d59b917ac92147351f855130cbecb",
+  "targets": [
+   "0xe29410",
+   "0xe294e0",
+   "0xe29670"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xe29320",
+   "0xe29380",
+   "0xe294a0",
+   "0xe29560",
+   "0xe295c0",
+   "0xe33220"
+  ],
+  "unassigned_comparison_rows_preserved": 20,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [
+   {
+    "address": "0xe296e0",
+    "name": "_Z41__static_initialization_and_destruction_0ii.clone.0",
+    "before": {
+     "name": "_Z41__static_initialization_and_destruction_0ii.clone.0",
+     "demangled": "__static_initialization_and_destruction_0(int, int) [clone .clone.0]",
+     "address": "0xe296e0",
+     "status": "DIFF",
+     "size": 20101,
+     "original_size": 30421,
+     "weak": false,
+     "code": "8052da7444528a08",
+     "object_digest": "5322614cc1112e9d6ae20bdd41740e1d96a47b004a0580bfe122f6a0e5d620fc",
+     "metadata_reasons": [
+      "EH LSDA equivalence unverified",
+      "ambiguous narrow/wide literal in linked rodata"
+     ]
+    },
+    "after": {
+     "name": "_Z41__static_initialization_and_destruction_0ii.clone.0",
+     "demangled": "__static_initialization_and_destruction_0(int, int) [clone .clone.0]",
+     "address": "0xe296e0",
+     "status": "DIFF",
+     "size": 21509,
+     "original_size": 30421,
+     "weak": false,
+     "code": "5231c2a7ce2c84c5",
+     "object_digest": "a236d1c740c34ba8f8138e51a3431c07d5f93e6d3d2e8fc4225c92fb5a484903",
+     "metadata_reasons": [
+      "EH LSDA equivalence unverified",
+      "ambiguous narrow/wide literal in linked rodata"
+     ]
+    }
+   }
+  ],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/dynamicrenderable.cpp",
+  "sha256": "2ae8aa5ed870b6ab35ba65ee1d2172c3051ddd14eb167d8059406893a8f62374",
+  "targets": [
+   "0x86cca0"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [],
+  "unassigned_comparison_rows_preserved": 0,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/DamageShapeDescriptor.cpp",
+  "sha256": "a22d040d7ea756ac7304320388edff8a99324052ec2993dd2ebc6ffe0538b98b",
+  "targets": [
+   "0x5bb740",
+   "0x5bb840"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x5bb4d0",
+   "0x5bb500",
+   "0x5bb530",
+   "0x5bb5b0",
+   "0x5bb7d0",
+   "0x5bb910",
+   "0x5bb970",
+   "0x5c4c60",
+   "0x5c6840"
+  ],
+  "unassigned_comparison_rows_preserved": 73,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/AnimationPlayerDescriptor.cpp",
+  "sha256": "0bd386ec3cf8d2e418172d8d1d723c81299d4017ee04bc85c27e6a0b703a9d00",
+  "targets": [
+   "0xda2580"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xda2470",
+   "0xda2480",
+   "0xda24c0",
+   "0xda2630",
+   "0xda26b0",
+   "0xda2710",
+   "0xda5ff0"
+  ],
+  "unassigned_comparison_rows_preserved": 44,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/TimelineDescriptor.cpp",
+  "sha256": "c63baba6e0d9f401e3f2a58bfe748cf8448097a3a5c52d547dd1dd33bfba62e7",
+  "targets": [
+   "0x7bd570",
+   "0x7bd610",
+   "0x7bd690",
+   "0x7bd780",
+   "0x7bd300"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x7bd2a0",
+   "0x7bd2d0",
+   "0x7bd380",
+   "0x7bd400",
+   "0x7bd4f0",
+   "0x7bd820",
+   "0x7bd870"
+  ],
+  "unassigned_comparison_rows_preserved": 28,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [
+   {
+    "address": "0x7bd8a0",
+    "name": "_Z41__static_initialization_and_destruction_0ii.clone.0",
+    "before": {
+     "name": "_Z41__static_initialization_and_destruction_0ii.clone.0",
+     "demangled": "__static_initialization_and_destruction_0(int, int) [clone .clone.0]",
+     "address": "0x7bd8a0",
+     "status": "DIFF",
+     "size": 11685,
+     "original_size": 35413,
+     "weak": false,
+     "code": "eb03b8fd1a13bc7a",
+     "object_digest": "e2dfd6460d4f21bde8b2ec6d137a95f44028fe2bd24770d4d2826b1007a01dc2",
+     "metadata_reasons": [
+      "EH LSDA equivalence unverified",
+      "ambiguous narrow/wide literal in linked rodata"
+     ]
+    },
+    "after": {
+     "name": "_Z41__static_initialization_and_destruction_0ii.clone.0",
+     "demangled": "__static_initialization_and_destruction_0(int, int) [clone .clone.0]",
+     "address": "0x7bd8a0",
+     "status": "DIFF",
+     "size": 12261,
+     "original_size": 35413,
+     "weak": false,
+     "code": "b16f1bb691935b32",
+     "object_digest": "59eb5b1825ba7357ef33f1bd70e781267a1b89927ae0b00a9fa8d7b936fd5b46",
+     "metadata_reasons": [
+      "EH LSDA equivalence unverified",
+      "ambiguous narrow/wide literal in linked rodata"
+     ]
+    }
+   }
+  ],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/RandomChoiceDescriptor.cpp",
+  "sha256": "7581f02fa2bedc6ee26cd8b77aeb4b4c78fd3fe04ac71eabbf3ee42fba903c52",
+  "targets": [
+   "0x672450"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x672410",
+   "0x6724e0",
+   "0x672520",
+   "0x672570",
+   "0x6757b0"
+  ],
+  "unassigned_comparison_rows_preserved": 35,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/ParticleTechWrapperDescriptor.cpp",
+  "sha256": "be294de9d76d8e6899ea9f3e35f1ddfc69c68eba3a5ae70c2cbbb4d36e00a995",
+  "targets": [
+   "0x6ec760",
+   "0x6ec7e0",
+   "0x6ec800"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x6ec660",
+   "0x6ec670",
+   "0x6ec680",
+   "0x6ec690",
+   "0x6ec6c0",
+   "0x6ec6f0",
+   "0x6ec730",
+   "0x6ec820",
+   "0x6ec950",
+   "0x6ec9b0",
+   "0x6f00b0",
+   "0x6f0130",
+   "0x6f01a0"
+  ],
+  "unassigned_comparison_rows_preserved": 36,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/RandomGroupDescriptor.cpp",
+  "sha256": "ee1d894049b1ad8568d0e42fa46af2efbde78f3715d555e541a2c07cfaf57580",
+  "targets": [
+   "0x62e8a0",
+   "0x62eab0",
+   "0x638bb0"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x62e720",
+   "0x62e7b0",
+   "0x62e870",
+   "0x62e920",
+   "0x62ea50",
+   "0x62eb50",
+   "0x62ec00",
+   "0x62ec60",
+   "0x636880",
+   "0x6373b0"
+  ],
+  "unassigned_comparison_rows_preserved": 55,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/GenericModelDescriptor.cpp",
+  "sha256": "917f83c81be5a504a79590006910504c1d0213186cf25039d1fdec3c20945178",
+  "targets": [
+   "0x5da680"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x5da5f0",
+   "0x5da6c0",
+   "0x5ddc00",
+   "0x5de290"
+  ],
+  "unassigned_comparison_rows_preserved": 34,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/PropertyNodeDescriptor.cpp",
+  "sha256": "e9e3792f98fb015f59c71d261a880d4f46abd5df294c7fe5678e05fdec65d7d8",
+  "targets": [
+   "0x6258a0"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x6257a0",
+   "0x6257d0",
+   "0x625840",
+   "0x625910",
+   "0x625990",
+   "0x62dce0"
+  ],
+  "unassigned_comparison_rows_preserved": 51,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/EditorImageDescriptor.cpp",
+  "sha256": "6065c7ecebc8e2a8a2d88f7b8d3f94bbc1b8ade5cbbe54060825eda9821a79ee",
+  "targets": [
+   "0xd9d560"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xd9d4b0",
+   "0xd9d500",
+   "0xd9d6f0",
+   "0xda0860"
+  ],
+  "unassigned_comparison_rows_preserved": 47,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/EditorButtonDescriptor.cpp",
+  "sha256": "ef108016e8325c18ef32f80cca97833ae0e8cc11d0f57b6f966689428e534809",
+  "targets": [
+   "0xd97a90"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0xd979b0",
+   "0xd97a30",
+   "0xd97b00",
+   "0xd97b60",
+   "0xd9acd0"
+  ],
+  "unassigned_comparison_rows_preserved": 53,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/InteractiveDescriptor.cpp",
+  "sha256": "337eb09c877b933de22bd2f4f7b9d3b530f48af4393006855fe201c8a883ce11",
+  "targets": [
+   "0x662f50"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x662e90",
+   "0x662ea0",
+   "0x662eb0",
+   "0x662f00",
+   "0x662f30",
+   "0x662f70",
+   "0x662ff0",
+   "0x663050",
+   "0x666610"
+  ],
+  "unassigned_comparison_rows_preserved": 35,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/UnitSpawnerDescriptor.cpp",
+  "sha256": "f0a895e63cc8092ed5f9b71bf93c6e901ea953ca396aaae861b9fc0a9872e892",
+  "targets": [
+   "0x652740"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x652700",
+   "0x652710",
+   "0x652790",
+   "0x652850",
+   "0x652950",
+   "0x65b0c0",
+   "0x65c410"
+  ],
+  "unassigned_comparison_rows_preserved": 29,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/SoundObjectDescriptor.cpp",
+  "sha256": "404819ceb782df98505e668e0b0fc791373d5742b622d5a7af5782a5efc0565c",
+  "targets": [
+   "0x64dff0",
+   "0x64e070",
+   "0x64e0d0",
+   "0x6515e0"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x64df70",
+   "0x64e100",
+   "0x64e180",
+   "0x64e1e0",
+   "0x64e290",
+   "0x64e3a0",
+   "0x6516b0"
+  ],
+  "unassigned_comparison_rows_preserved": 35,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/ItemDescriptor.cpp",
+  "sha256": "05940b1985c0dd3108298422e295ba46055b9881ddf2d4a0d48165ca84840746",
+  "targets": [
+   "0x5dfc10"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x5dfae0",
+   "0x5dfaf0",
+   "0x5dfcb0",
+   "0x5e9920"
+  ],
+  "unassigned_comparison_rows_preserved": 41,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ },
+ {
+  "source": "decomp/src/PositionableObjectDescriptor.cpp",
+  "sha256": "45f4be09b73b8661b3da80902fef66c18bda61e3d7f86de5c29a84dd57d188dd",
+  "targets": [
+   "0x621900"
+  ],
+  "modified_existing_bodies": [],
+  "unchanged_definitions": [
+   "0x621890",
+   "0x6218a0",
+   "0x621990"
+  ],
+  "unassigned_comparison_rows_preserved": 26,
+  "unaccepted_compiler_helpers_changed_by_prepared_includes": [],
+  "revalidated_unchanged_existing": []
+ }
+]

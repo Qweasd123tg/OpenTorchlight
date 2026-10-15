@@ -15,36 +15,6 @@ public:
     virtual CEditorBaseObject* CreateObject(CEditorScene* scene);
     CMissileDescriptor();
 
-    unsigned char m_gap170[0x8] __attribute__((aligned(8)));
-    int m_iUnknown178;
-    unsigned char m_gap17C[0x4] __attribute__((aligned(4)));
-    int m_iUnknown180;
-    unsigned char m_gap184[0x2];
-    bool m_bUnknown186;
-    bool m_bUnknown187;
-    bool m_bUnknown188;
-    unsigned char m_gap189[0x13];
-    int m_iUnknown19C;
-    unsigned char m_gap1A0[0x18] __attribute__((aligned(8)));
-    int m_iUnknown1B8;
-    unsigned char m_gap1BC[0x94] __attribute__((aligned(4)));
-    float m_fUnknown250;
-    int m_iUnknown254;
-    unsigned char m_gap258[0x8] __attribute__((aligned(8)));
-    int m_iUnknown260;
-    int m_iUnknown264;
-    int m_iUnknown268;
-    int m_iUnknown26C;
-    int m_iUnknown270;
-    unsigned char m_gap274[0x8] __attribute__((aligned(4)));
-    int m_iUnknown27C;
-    int m_iUnknown280;
-    int m_iUnknown284;
-    int m_iUnknown288;
-    int m_iUnknown28C;
-    unsigned char m_gap290[0x38] __attribute__((aligned(8)));
-    long long m_Unknown2C8;
-    int m_iUnknown2D0;
 
     static void Set_setParticleFileKMISSILE_PARTICLE_RELEASE(CEditorBaseObject* object, UNIONDATA16BIT* data, unsigned int count);
     static UNIONDATA8BIT* Get_getParticleFileKMISSILE_PARTICLE_RELEASE(CEditorBaseObject* object, unsigned int& count);

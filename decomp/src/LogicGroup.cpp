@@ -22,14 +22,14 @@ unsigned int CLogicGroup::GetLogicObjectIndex(CLogicObject* pLogicObject)
 
 int CLogicGroup::AddLogicObject(long long objectID)
 {
-    CEditorScene* scene = getSceneOwner();
-    if (objectID == -1 || scene == NULL)
-        return -1;
-
-    CLogicObject* logicObject = new CLogicObject(
-        scene, objectID, m_logicObjects.size());
-    AddLogicObject(logicObject);
-    return m_logicObjects.size() - 1;
+    int index = -1;
+    if (objectID != -1 && getSceneOwner() != NULL) {
+        CLogicObject* logicObject = new CLogicObject(
+            getSceneOwner(), objectID, m_logicObjects.size());
+        AddLogicObject(logicObject);
+        index = m_logicObjects.size() - 1;
+    }
+    return index;
 }
 
 bool CLogicGroup::RemoveLogicObjectsLink(unsigned int logicObjectIndex,
@@ -52,4 +52,20 @@ CLogicGroup::CLogicGroup(CResourceManager* resourceManager)
       m_logicObjects(10),
       m_fEnabled(1.0f)
 {
+}
+
+bool CLogicGroup::RemoveLogicObjectByIndex(unsigned int index)
+{
+    if (index < m_logicObjects.size() && m_logicObjects[index] != NULL) {
+        for (unsigned int i = 0; i < m_logicObjects.size(); ++i)
+            if (i != index && m_logicObjects[i] != NULL)
+                m_logicObjects[i]->RemoveLinksToLogicObject(m_logicObjects[index]);
+        if (m_logicObjects[index] != NULL) {
+            delete m_logicObjects[index];
+            m_logicObjects[index] = NULL;
+        }
+        m_logicObjects[index] = NULL;
+        return true;
+    }
+    return false;
 }

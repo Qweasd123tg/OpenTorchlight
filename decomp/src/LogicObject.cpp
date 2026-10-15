@@ -54,3 +54,36 @@ CLogicObject::CLogicObject(CEditorScene* scene, long long objectID, unsigned int
     if (objectID != -1)
         setObjectID(objectID);
 }
+
+bool CLogicObject::RemoveLinksToLogicObject(CLogicObject* object)
+{
+    if (!object)
+        return false;
+    for (unsigned int i = 0; i < m_Links.size(); ++i)
+        if (m_Links[i] && object == m_Links[i]->m_pLinkingToLogicObject)
+            RemoveLinkByIndex(i);
+    return true;
+}
+bool CLogicObject::RemoveLogicLinksRefingObjectID(long long objectID)
+{
+    if (objectID == -1)
+        return false;
+    for (unsigned int i = 0; i < m_Links.size(); ++i)
+        if (m_Links[i])
+        {
+            CLogicObject* object = m_Links[i]->m_pLinkingToLogicObject;
+            if (object && objectID == object->m_iObjectID)
+                RemoveLinkByIndex(i);
+        }
+    return true;
+}
+void CLogicObject::SetXPosition(int position)
+{
+    m_fRight = m_fRight - m_fLeft + position;
+    m_fLeft = position;
+}
+void CLogicObject::SetYPosition(int position)
+{
+    m_fBottom = m_fBottom - m_fTop + position;
+    m_fTop = position;
+}

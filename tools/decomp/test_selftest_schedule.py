@@ -401,5 +401,207 @@ class Dispatch(Fixture):
         self.assertGreater(max(row["slot_wait_elapsed"] for row in evidence["shards"]), 0.005)
 
 
+def registration_object(names):
+    """ELF-reader model with nonzero symbol/addend offsets, not source parsing."""
+    import elfimage
+    data = b"prefix\0"
+    positions = []
+    for name in names:
+        positions.append(len(data))
+        data += name.encode() + b"\0"
+    sections = [SimpleNamespace(index=0, name="", flags=0, size=0),
+                SimpleNamespace(index=1, name=".rodata", flags=2, size=len(data)),
+                SimpleNamespace(index=2, name=".text", flags=6, size=20)]
+    relocs = []
+    if names:
+        sections.append(SimpleNamespace(index=3, name=".tlhybrid.tests", flags=2, size=16 * len(names)))
+        for index, position in enumerate(positions):
+            relocs += [elfimage.ObjReloc(index * 16, 1, SimpleNamespace(shndx=1, value=2), position - 2),
+                       elfimage.ObjReloc(index * 16 + 8, 1, SimpleNamespace(shndx=2, value=3), 2)]
+    return SimpleNamespace(sections=sections, relocs={3: relocs}, section_bytes=lambda index: data)
+
+
+class ObjectPrediction(Fixture):
+    def setUp(self):
+        super().setUp()
+        self.runtime = self.root / "decomp/hybrid/runtime.h"
+        self.runtime.write_text("shared runtime v1")
+        self.groups = {"test_A.o": self.names[:2], "test_B.o": self.names[2:4],
+                       "test_C.o": self.names[4:], "test_Helper.o": []}
+        self.objects = {}
+        for stem, names in self.groups.items():
+            (self.root / stem).write_bytes(stem.encode())
+            self.objects[stem] = registration_object(names)
+        reader = patch.object(schedule.elfimage, "load_object", side_effect=lambda path: self.objects[Path(path).name])
+        reader.start()
+        self.addCleanup(reader.stop)
+        self.refresh_inputs()
+        self.costs = dict(zip(self.names, [1, 20, 30, 4, 8, 6, 7]))
+        self.inputs = schedule.object_inputs(self.blob, self.root, self.names)
+        schedule._save_object_costs(self.inputs, self.costs)
+
+    def refresh_inputs(self):
+        schedule.write_inputs(self.blob, [self.root / stem for stem in self.groups], self.root)
+
+    def test_new_fixture_reuses_known_costs_and_estimates_every_unknown(self):
+        original_names = list(self.names)
+        self.names += ["new"]
+        self.groups["test_New.o"] = ["new"]
+        self.objects["test_New.o"] = registration_object(["new"])
+        (self.root / "test_New.o").write_bytes(b"new compiled fixture")
+        (self.root / "decomp/hybrid/tests/New.cpp").write_text("new fixture")
+        self.blob.write_bytes(b"new linked fixture inventory")
+        self.refresh_inputs()
+        result = self.plan()
+        self.assertEqual("object-predicted-first", result["method"])
+        self.assertEqual((7, 1, 7), (result["known_costs"], result["estimated_costs"], result["estimated_test_seconds"]))
+        self.assertEqual([12, 35, 36], result["predicted_seconds"])
+        self.assertEqual([2, 1, 0], result["order"])
+        self.assertEqual(original_names + ["new"], result["selected"])
+        self.assertEqual([0, 1, 2], sorted(result["order"]))
+
+    def test_changed_one_fixture_uses_only_other_object_hints(self):
+        (self.root / "test_B.o").write_bytes(b"changed compiled fixture")
+        self.fixture.write_text("changed source")
+        self.refresh_inputs()
+        result = self.plan()
+        self.assertEqual("object-predicted-first", result["method"])
+        self.assertEqual((5, 2), (result["known_costs"], result["estimated_costs"]))
+        self.assertEqual(7, result["estimated_test_seconds"])
+        self.assertEqual([15, 28, 13], result["predicted_seconds"])
+        self.assertEqual([1, 0, 2], result["order"])
+
+    def test_reordered_removed_or_filtered_inventory_keeps_current_modulo(self):
+        self.names.reverse()
+        result = self.plan(only="t1,t4")
+        self.assertEqual(["t4", "t1"], result["selected"])
+        self.assertEqual([8, 20, 0], result["predicted_seconds"])
+        self.assertEqual([1, 0, 2], result["order"])
+        self.groups.pop("test_C.o")
+        self.names[:] = [name for name in self.names if name not in ("t4", "t5", "t6")]
+        self.refresh_inputs()
+        self.assertEqual(4, self.plan()["known_costs"])
+
+    def test_shared_runtime_or_registration_free_helper_change_invalidates_all(self):
+        for path in [self.runtime, self.root / "test_Helper.o"]:
+            old = path.read_bytes()
+            path.write_bytes(old + b" changed")
+            self.refresh_inputs()
+            self.assertEqual("index", self.plan()["method"])
+            path.write_bytes(old)
+            self.refresh_inputs()
+            self.assertEqual(7, self.plan()["known_costs"])
+        # A changed shared header without rebuilding the sidecar is rejected too.
+        self.runtime.write_text("unbuilt shared runtime change")
+        self.assertNotIn("object_inputs", self.plan())
+
+    def test_engine_header_change_requires_changed_object_not_global_runtime_reset(self):
+        shared = schedule.shared_runtime_digest(self.root)
+        self.header.write_text("changed unrelated engine header")
+        self.assertEqual(shared, schedule.shared_runtime_digest(self.root))
+        (self.root / "test_B.o").write_bytes(b"recompiled fixture affected by header")
+        self.refresh_inputs()
+        self.assertEqual(5, self.plan()["known_costs"])
+
+    def test_exact_profile_still_wins_and_explicit_index_and_path_are_respected(self):
+        self.write_profile([1] * 7)
+        self.assertEqual("longest-predicted-first", self.plan()["method"])
+        with patch.dict(os.environ, {"OTL_SELFTEST_ORDER": "index"}):
+            self.assertEqual("index", self.plan()["method"])
+        self.assertEqual("index", self.plan(timing_path=self.root / "missing.json")["method"])
+
+    def test_legacy_schema_or_stale_object_does_not_enable_partial_hints(self):
+        schedule.write_inputs(self.blob, [self.root / stem for stem in self.groups])
+        self.assertNotIn("object_inputs", self.plan())
+        self.refresh_inputs()
+        (self.root / "test_A.o").write_bytes(b"object changed since sidecar")
+        self.assertNotIn("object_inputs", self.plan())
+        self.assertEqual("index", self.plan()["method"])
+
+    def test_corrupt_object_cost_is_ignored_and_no_directory_scan_is_used(self):
+        target = schedule.object_profile_path(self.inputs["shared_sha256"], self.inputs["objects"][0][0])
+        original = target.read_text()
+        profile = json.loads(original)
+        for text in ["{", original.replace('"schema": 1', '"schema": true'),
+                     json.dumps({**profile, "seconds": [True, 2]}),
+                     json.dumps({**profile, "seconds": [1, float("inf")]}),
+                     json.dumps({**profile, "inventory": ["wrong", "names"]}),
+                     json.dumps({**profile, "seconds": [1, 2], "sha256": "wrong"})]:
+            target.write_text(text)
+            result = self.plan()
+            self.assertEqual((5, 2), (result["known_costs"], result["estimated_costs"]))
+        target.write_text(original)
+        with patch.object(Path, "iterdir", side_effect=AssertionError("no profile scan")):
+            self.assertEqual(7, self.plan()["known_costs"])
+        for sha, _ in self.inputs["objects"]:
+            schedule.object_profile_path(self.inputs["shared_sha256"], sha).unlink()
+        self.assertEqual("index", self.plan()["method"])
+
+    def test_registration_mapping_failures_disable_narrow_hints(self):
+        obj = self.objects["test_A.o"]
+        for alter in [lambda: obj.relocs[3].pop(),
+                      lambda: obj.relocs[3].append(obj.relocs[3][0]),
+                      lambda: setattr(obj.relocs[3][0], "type", 99),
+                      lambda: setattr(obj.relocs[3][0].symbol, "shndx", 0),
+                      lambda: setattr(obj.relocs[3][0], "addend", -100),
+                      lambda: setattr(obj.sections[2], "flags", 2),
+                      lambda: setattr(obj.sections[3], "size", 31)]:
+            obj = registration_object(self.groups["test_A.o"])
+            self.objects["test_A.o"] = obj
+            alter()
+            self.assertNotIn("object_inputs", self.plan())
+        self.objects["test_A.o"] = registration_object(["t0", "t2"])
+        self.assertNotIn("object_inputs", self.plan())
+        self.objects["test_A.o"] = registration_object(["t0", "unlinked"])
+        self.assertNotIn("object_inputs", self.plan())
+        with patch.object(schedule.elfimage, "load_object", side_effect=StopIteration("no symbol table")):
+            self.assertNotIn("object_inputs", self.plan())
+
+    def test_object_hints_dispatch_all_processes_with_unchanged_reports_and_limits(self):
+        dispatched = []
+        def run(*args, **kwargs):
+            index, count = map(int, kwargs["env"]["TLHYBRID_SHARD"].split("/"))
+            self.assertEqual(3, count)
+            self.assertEqual(120, kwargs["timeout"])
+            dispatched.append(index)
+            return output(self.names[index::count])
+        with patch.object(hybrid, "ROOT", self.root), \
+                patch.object(hybrid, "game_env", return_value=(self.root, {})), \
+                patch.object(hybrid.resource_slots, "slot", side_effect=lambda _: contextlib.nullcontext()), \
+                patch.object(hybrid.subprocess, "run", side_effect=run), \
+                patch.object(hybrid.toolchain, "parallel_map", side_effect=lambda fn, indices, **kw: [fn(i) for i in indices]):
+            code, report = hybrid.selftest(self.blob, None, shards=3)
+        self.assertEqual([2, 1, 0], dispatched)
+        self.assertEqual(0, code)
+        self.assertEqual("tlhybrid: 7 tests, 0 failed", report[-1])
+        self.assertEqual(["tlhybrid: begin " + name for i in range(3) for name in self.names[i::3]],
+                         [line for line in report if line.startswith("tlhybrid: begin ")])
+
+    def test_only_complete_full_reports_save_object_costs_without_verdicts(self):
+        paths = [schedule.object_profile_path(self.inputs["shared_sha256"], sha)
+                 for sha, _ in self.inputs["objects"]]
+        before = [path.read_bytes() for path in paths]
+        schedule.save_costs(self.plan(only="t2"), [output(["t2"]), output([]), output([])])
+        self.assertEqual(before, [path.read_bytes() for path in paths])
+        with self.assertRaises(ValueError):
+            schedule.save_costs(self.plan(), [output(["t0"]), output([]), output([])])
+        self.assertEqual(before, [path.read_bytes() for path in paths])
+        schedule.save_costs(self.plan(), [output(self.names[index::3]) for index in range(3)])
+        for path in paths:
+            profile = json.loads(path.read_text())
+            self.assertEqual({"schema", "shared_sha256", "object_sha256", "inventory", "seconds", "sha256"}, set(profile))
+            self.assertEqual([0.01] * len(profile["inventory"]), profile["seconds"])
+
+    def test_seed_requires_exact_full_report_and_writes_all_object_hints(self):
+        _, report = hybrid._selftest_report([output(self.names[index::3]) for index in range(3)])
+        source = self.root / "prior-full.json"
+        source.write_text(json.dumps({"report": report, "code": 0}))
+        schedule.seed(self.blob, self.root, source, 3)
+        self.assertEqual({name: 0.01 for name in self.names}, schedule._object_costs(self.inputs))
+        source.write_text(json.dumps({"report": report + report, "code": 0}))
+        with self.assertRaises(ValueError):
+            schedule.seed(self.blob, self.root, source, 3)
+
+
 if __name__ == "__main__":
     unittest.main()

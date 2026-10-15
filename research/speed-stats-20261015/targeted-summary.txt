@@ -1,0 +1,57 @@
+tlhybrid: begin data_value_type_labels
+    coverage data_value_type_labels 0xc62f90 completed 45 different 0 incomplete 0
+tlhybrid: timing data_value_type_labels 0.123 seconds
+tlhybrid: data_value_type_labels                           PASS (0)
+tlhybrid: begin steamstats_listener_differential
+    coverage steamstats_listener_differential 0xece980 completed 384 different 0 incomplete 0
+tlhybrid: timing steamstats_listener_differential 0.894 seconds
+tlhybrid: steamstats_listener_differential                 PASS (0)
+tlhybrid: begin achievement_add_int
+    coverage achievement_add_int 0xebe550 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_add_int 0.400 seconds
+tlhybrid: achievement_add_int                              PASS (0)
+tlhybrid: begin followup_files_application
+    coverage followup_files_application 0xc739d0 completed 32 different 0 incomplete 0
+tlhybrid: timing followup_files_application 0.096 seconds
+tlhybrid: followup_files_application                       PASS (0)
+tlhybrid: begin achievement_set_float
+    coverage achievement_set_float 0xebe260 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_set_float 0.606 seconds
+tlhybrid: achievement_set_float                            PASS (0)
+tlhybrid: begin achievement_increment
+    coverage achievement_increment 0xebe5f0 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_increment 0.410 seconds
+tlhybrid: achievement_increment                            PASS (0)
+tlhybrid: begin followup_files_absolute
+    coverage followup_files_absolute 0xc73aa0 completed 45 different 0 incomplete 0
+tlhybrid: timing followup_files_absolute 0.125 seconds
+tlhybrid: followup_files_absolute                          PASS (0)
+tlhybrid: begin achievement_set_int
+    coverage achievement_set_int 0xebe2c0 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_set_int 0.573 seconds
+tlhybrid: achievement_set_int                              PASS (0)
+tlhybrid: begin followup_files_exists
+    coverage followup_files_exists 0xc741e0 completed 28 different 0 incomplete 0
+tlhybrid: timing followup_files_exists 0.081 seconds
+tlhybrid: followup_files_exists                            PASS (0)
+tlhybrid: begin achievement_cheat
+    coverage achievement_cheat 0xebe330 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_cheat 0.601 seconds
+tlhybrid: achievement_cheat                                PASS (0)
+tlhybrid: begin followup_files_time
+    coverage followup_files_time 0xc77530 completed 28 different 0 incomplete 0
+tlhybrid: timing followup_files_time 0.076 seconds
+tlhybrid: followup_files_time                              PASS (0)
+tlhybrid: begin achievement_force
+    coverage achievement_force 0xebe400 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_force 0.599 seconds
+tlhybrid: achievement_force                                PASS (0)
+tlhybrid: begin steam_stats_pending_changes
+    coverage steam_stats_pending_changes 0xece450 completed 30 different 0 incomplete 0
+tlhybrid: timing steam_stats_pending_changes 0.088 seconds
+tlhybrid: steam_stats_pending_changes                      PASS (0)
+tlhybrid: begin achievement_add_float
+    coverage achievement_add_float 0xebe4c0 completed 192 different 0 incomplete 0
+tlhybrid: timing achievement_add_float 0.593 seconds
+tlhybrid: achievement_add_float                            PASS (0)
+tlhybrid: 14 tests, 0 failed

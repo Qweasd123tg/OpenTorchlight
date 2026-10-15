@@ -1,0 +1,378 @@
+[
+ {
+  "address": "0x5ade20",
+  "tu": "CameraShakeDescriptor.cpp",
+  "name": "CCameraShakeDescriptor::getCameraShakeOrientationStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 52,
+  "acceptance": "MATCH",
+  "object_digest": "d835ff5295e30bf3190ef5fd9529336cebf16f2ed9dad9cf0eb128678198e946"
+ },
+ {
+  "address": "0x5bb4d0",
+  "tu": "DamageShapeDescriptor.cpp",
+  "name": "CDamageShapeDescriptor::getAlignmentStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "e3906ceef6a1aa7c7802a439532b372055bc7ea52b102875c498a356699641cf"
+ },
+ {
+  "address": "0x5f4d30",
+  "tu": "LightDescriptor.cpp",
+  "name": "CLightDescriptor::GetLightStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "d295ceb9516364602c6f92b328e5848d50f7c69ffaee99111ba48b6469d404f1"
+ },
+ {
+  "address": "0x5f90b0",
+  "tu": "MissileDescriptor.cpp",
+  "name": "CMissileDescriptor::GetDamageTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "9496d50fc1e11e4fb3d74e31cfd16ab60f0ff08a75ab24c1579c53e1d92ed233"
+ },
+ {
+  "address": "0x6257a0",
+  "tu": "PropertyNodeDescriptor.cpp",
+  "name": "CPropertyNodeDescriptor::getPropertyNodeTypeString(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "8183403a6c86868ead516f8d02c8d4c98d564c2827cb99d4f598be4b22ebc8b7"
+ },
+ {
+  "address": "0x62e870",
+  "tu": "RandomGroupDescriptor.cpp",
+  "name": "CRandomGroupDescriptor::GetRandomGroupTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "42b84c7cbb1ddc926214a7eb8e60319ca9a46a885319f88ff4db559c257c8dab"
+ },
+ {
+  "address": "0x648300",
+  "tu": "ShapeDescriptor.cpp",
+  "name": "CShapeDescriptor::GetSpawnDirectionStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "4e16f62f125b47053192388dd2af9c4a3e038b57fe26efd0c3ec430ed1d86e66"
+ },
+ {
+  "address": "0x648330",
+  "tu": "ShapeDescriptor.cpp",
+  "name": "CShapeDescriptor::GetSpawnShapeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "4e16f62f125b47053192388dd2af9c4a3e038b57fe26efd0c3ec430ed1d86e66"
+ },
+ {
+  "address": "0x648360",
+  "tu": "ShapeDescriptor.cpp",
+  "name": "CShapeDescriptor::GetSpawnOrderStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "4e16f62f125b47053192388dd2af9c4a3e038b57fe26efd0c3ec430ed1d86e66"
+ },
+ {
+  "address": "0x652710",
+  "tu": "UnitSpawnerDescriptor.cpp",
+  "name": "CUnitSpawnerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "abba7d6f975a897d62d15b3eea2f05369e2e2dd2b4fa83135d1a1b01fd963fe7"
+ },
+ {
+  "address": "0x65f220",
+  "tu": "CounterDescriptor.cpp",
+  "name": "CCounterDescriptor::GetCounterTypeTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "e588be0daa331bcfb357bd83214d4819f364893bc09d20d95cb52c4047c282dd"
+ },
+ {
+  "address": "0x662f00",
+  "tu": "InteractiveDescriptor.cpp",
+  "name": "CInteractiveDescriptor::getTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "0dc06bf689d2889b4248d6b60e4cdd0617c70a151fbbcbe4ff24edc79350659c"
+ },
+ {
+  "address": "0x672410",
+  "tu": "RandomChoiceDescriptor.cpp",
+  "name": "CRandomChoiceDescriptor::GetChoiceTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 52,
+  "acceptance": "MATCH",
+  "object_digest": "256caa05a3c65f791dd30f93015433c7731fd00d35d353319b652778cb674f9b"
+ },
+ {
+  "address": "0x6841b0",
+  "tu": "UnitTriggerDescriptor.cpp",
+  "name": "CUnitTriggerDescriptor::GetLoopTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "caf355d38c55f054190002a483c949b654ad4232fa1cc201ffb07f1b8df6423c"
+ },
+ {
+  "address": "0x6a01d0",
+  "tu": "ColliderDescriptor.cpp",
+  "name": "CColliderDescriptor::GetParticleCollisionTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "0be944cd4ba5c711349950bc06304ea42f6e391fd584e3e112e9a9fb484956aa"
+ },
+ {
+  "address": "0x6e3f70",
+  "tu": "ParticleEmitterWrapperDescriptor.cpp",
+  "name": "CParticleEmitterWrapperDescriptor::GetEmitterTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "e7f84de9551514b56117c4b7c5ce827591bee1f902e29cdf9e0b29b9b1b51286"
+ },
+ {
+  "address": "0x6ec690",
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "name": "CParticleTechWrapperDescriptor::GetParticleRenderStyleStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "1d9efcb7c71fedce7117c4b447fa6cb62dae51d3546ac485f1abb6421eaa675e"
+ },
+ {
+  "address": "0x6ec6c0",
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "name": "CParticleTechWrapperDescriptor::GetBillboardOriginTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "1d9efcb7c71fedce7117c4b447fa6cb62dae51d3546ac485f1abb6421eaa675e"
+ },
+ {
+  "address": "0x6ec6f0",
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "name": "CParticleTechWrapperDescriptor::GetBillboardRotationTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 52,
+  "acceptance": "MATCH",
+  "object_digest": "1d9efcb7c71fedce7117c4b447fa6cb62dae51d3546ac485f1abb6421eaa675e"
+ },
+ {
+  "address": "0x6ec730",
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "name": "CParticleTechWrapperDescriptor::GetParticleRenderStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "1d9efcb7c71fedce7117c4b447fa6cb62dae51d3546ac485f1abb6421eaa675e"
+ },
+ {
+  "address": "0x73f460",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorUpdateEnd()",
+  "original_bytes": 2,
+  "acceptance": "MATCH",
+  "object_digest": "5326b0421f5a505724b7799d9d520d0713856637d0b49699e0f7401fa40e8c37"
+ },
+ {
+  "address": "0x73f470",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorUpdateBeginning()",
+  "original_bytes": 2,
+  "acceptance": "MATCH",
+  "object_digest": "5326b0421f5a505724b7799d9d520d0713856637d0b49699e0f7401fa40e8c37"
+ },
+ {
+  "address": "0x7bd2a0",
+  "tu": "TimelineDescriptor.cpp",
+  "name": "CTimelineDescriptor::GetTimelineInterpolationStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "da9fac6323a3e5a32773787699398694531db023b6c8a56b17615d6c5d82e74a"
+ },
+ {
+  "address": "0x7bd2d0",
+  "tu": "TimelineDescriptor.cpp",
+  "name": "CTimelineDescriptor::GetTimelineModStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "da9fac6323a3e5a32773787699398694531db023b6c8a56b17615d6c5d82e74a"
+ },
+ {
+  "address": "0x86b460",
+  "tu": "dynamicline.cpp",
+  "name": "CDynamicLine::~CDynamicLine()",
+  "original_bytes": 56,
+  "acceptance": "MATCH",
+  "object_digest": "8ab34aeb876acf9b205f9bb19d5d5640c566334837d0765034a1ac546b0bb1c4"
+ },
+ {
+  "address": "0x86b4a0",
+  "tu": "dynamicline.cpp",
+  "name": "non-virtual thunk to CDynamicLine::~CDynamicLine()",
+  "original_bytes": 9,
+  "acceptance": "MATCH",
+  "object_digest": "8ab34aeb876acf9b205f9bb19d5d5640c566334837d0765034a1ac546b0bb1c4"
+ },
+ {
+  "address": "0x86b4b0",
+  "tu": "dynamicline.cpp",
+  "name": "non-virtual thunk to CDynamicLine::~CDynamicLine()",
+  "original_bytes": 6,
+  "acceptance": "MATCH",
+  "object_digest": "8ab34aeb876acf9b205f9bb19d5d5640c566334837d0765034a1ac546b0bb1c4"
+ },
+ {
+  "address": "0x86b4c0",
+  "tu": "dynamicline.cpp",
+  "name": "non-virtual thunk to CDynamicLine::~CDynamicLine()",
+  "original_bytes": 9,
+  "acceptance": "MATCH",
+  "object_digest": "8ab34aeb876acf9b205f9bb19d5d5640c566334837d0765034a1ac546b0bb1c4"
+ },
+ {
+  "address": "0x86b4d0",
+  "tu": "dynamicline.cpp",
+  "name": "non-virtual thunk to CDynamicLine::~CDynamicLine()",
+  "original_bytes": 6,
+  "acceptance": "MATCH",
+  "object_digest": "8ab34aeb876acf9b205f9bb19d5d5640c566334837d0765034a1ac546b0bb1c4"
+ },
+ {
+  "address": "0x86b4e0",
+  "tu": "dynamicline.cpp",
+  "name": "CDynamicLine::~CDynamicLine()",
+  "original_bytes": 18,
+  "acceptance": "MATCH",
+  "object_digest": "8ab34aeb876acf9b205f9bb19d5d5640c566334837d0765034a1ac546b0bb1c4"
+ },
+ {
+  "address": "0xa328c0",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::positionUpdated(Ogre::Vector3 const&)",
+  "original_bytes": 31,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa32940",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::setBoxWidth(float)",
+  "original_bytes": 41,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa32970",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::setPositionEnd(Ogre::Vector3 const&)",
+  "original_bytes": 67,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa329c0",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::setMaxLineDeviation(float)",
+  "original_bytes": 41,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa329f0",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::setMaxLineIncrement(float)",
+  "original_bytes": 41,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa32ca0",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::setCircleFixedSize(bool)",
+  "original_bytes": 40,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa32cd0",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::setCircleStep(float const*, unsigned int)",
+  "original_bytes": 159,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa32d70",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::getCircleStep(unsigned int&)",
+  "original_bytes": 12,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa32d80",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::getCircleDegrees(unsigned int&)",
+  "original_bytes": 12,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa32d90",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::getMaxRadius(unsigned int&)",
+  "original_bytes": 12,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa32da0",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::getMinRadius(unsigned int&)",
+  "original_bytes": 12,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa32db0",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::setCircleDegrees(float const*, unsigned int)",
+  "original_bytes": 159,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa32e50",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::setMaxRadius(float const*, unsigned int)",
+  "original_bytes": 159,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xa32ef0",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::setMinRadius(float const*, unsigned int)",
+  "original_bytes": 159,
+  "acceptance": "MATCH",
+  "object_digest": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59"
+ },
+ {
+  "address": "0xda7670",
+  "tu": "CameraControllerDescriptor.cpp",
+  "name": "CCameraControllerDescriptor::getTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 52,
+  "acceptance": "MATCH",
+  "object_digest": "df65e6667056825e435ca935be7e68f7e925c9db5578f8720a7d66260b9ec595"
+ },
+ {
+  "address": "0xdafc80",
+  "tu": "GameStateControllerDescriptor.cpp",
+  "name": "CGameStateControllerDescriptor::getTipStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "62873564e552cff806776ebdd4e86ea8341bffc80fa5faa9b33a9ce091201fb7"
+ },
+ {
+  "address": "0xdafcb0",
+  "tu": "GameStateControllerDescriptor.cpp",
+  "name": "CGameStateControllerDescriptor::getGameStateStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "62873564e552cff806776ebdd4e86ea8341bffc80fa5faa9b33a9ce091201fb7"
+ }
+]

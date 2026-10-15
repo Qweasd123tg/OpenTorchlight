@@ -1,0 +1,12 @@
+[
+ {
+  "fixture": "descriptor_factory_5c93e0",
+  "returncode": 1,
+  "rejected": true
+ },
+ {
+  "fixture": "combinemenu_equipment_used_suppressed",
+  "returncode": 1,
+  "rejected": true
+ }
+]

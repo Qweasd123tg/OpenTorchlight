@@ -579,7 +579,7 @@ class Loop:
                    for declared, suffix, _ in headers.declared_signatures(body, f["method"])):
                 return None
             return "Selected namespace function signature is absent from known headers; declaration unavailable."
-        match = re.search(rf"\b(?:class|struct)\s+{re.escape(f['scope'])}\b[^;{{]*{{", text)
+        match = re.search(rf"\b(?:class|struct)\s+(?:__attribute__\(\(\w+\)\)\s+)?{re.escape(f['scope'])}\b[^;{{]*{{", text)
         if not match:
             return "Owning class declaration cannot be located safely."
         end = text.find("\n};", match.end())
@@ -1220,7 +1220,7 @@ def headers_by_class():
     out = {}
     for h in sorted((ROOT / "decomp" / "include").glob("*.h")):
         text = h.read_text(errors="replace")
-        for m in re.finditer(r"^(?:class|struct)\s+(\w+)\s*(?::[^{;]*)?\{|^namespace\s+(\w+)", text, re.M):
+        for m in re.finditer(r"^(?:class|struct)\s+(?:__attribute__\(\(\w+\)\)\s+)?(\w+)\s*(?::[^{;]*)?\{|^namespace\s+(\w+)", text, re.M):
             out.setdefault(m.group(1) or m.group(2), []).append(h.name)
     return out
 

@@ -39,6 +39,13 @@ CEditorButtonDescriptor::CEditorButtonDescriptor()
     AddOutputLogic(OUTPUT_EVENT_DISABLED);
     AddOutputLogic(OUTPUT_EVENT_CLICKED);
 }
+void CEditorButtonDescriptor::update(float elapsed)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+        static_cast<CEditorImage*>(m_Objects[i])->update(elapsed);
+}
+
+
 
 CEditorButtonDescriptor::~CEditorButtonDescriptor()
 {

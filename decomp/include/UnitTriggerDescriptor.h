@@ -16,7 +16,7 @@ public:
     virtual bool DescriptorObjectBeingDeleted(CEditorBaseObject*);
     virtual void descriptorSceneActivated(CEditorScene*);
     virtual void InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*);
-    void AddInputsAndOutputs(CDescriptor*);
+    static void AddInputsAndOutputs(CDescriptor* descriptor);
     CUnitTriggerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description);
 
 

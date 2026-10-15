@@ -53,6 +53,8 @@ TL_FUNCTION(callback50,"_ZN28COutputIncrementorDescriptor16Get_getLoopCountEP17C
 TL_FUNCTION(callback51,"_ZN28COutputIncrementorDescriptor18Get_getLoopForeverEP17CEditorBaseObjectRj")
 TL_FUNCTION(callback52,"_ZN28COutputIncrementorDescriptor18Set_setLoopForeverEP17CEditorBaseObjectPK13UNIONDATA8BITj")
 TL_FUNCTION(callback53,"_ZN28COutputIncrementorDescriptor19Get_getMaxIncrementEP17CEditorBaseObjectRj")
+TL_FUNCTION(callback54,"_ZN18CMissileDescriptor23GetDamageTypeStringByIDEP12CEditorSceneP17CEditorBaseObjectjPv")
+TL_FUNCTION(callback55,"_ZN18CMissileDescriptor23GetDamageTypeIDByStringEP12CEditorSceneP17CEditorBaseObjectRKSbIwSt11char_traitsIwESaIwEEPv")
 static uintptr_t callbackIdentity(void* p) {
  if(p==(void*)callback0_original || p==(void*)callback0_linked)return (uintptr_t)callback0_original;
  if(p==(void*)callback1_original || p==(void*)callback1_linked)return (uintptr_t)callback1_original;
@@ -108,5 +110,7 @@ static uintptr_t callbackIdentity(void* p) {
  if(p==(void*)callback51_original || p==(void*)callback51_linked)return (uintptr_t)callback51_original;
  if(p==(void*)callback52_original || p==(void*)callback52_linked)return (uintptr_t)callback52_original;
  if(p==(void*)callback53_original || p==(void*)callback53_linked)return (uintptr_t)callback53_original;
+ if(p==(void*)callback54_original || p==(void*)callback54_linked)return (uintptr_t)callback54_original;
+ if(p==(void*)callback55_original || p==(void*)callback55_linked)return (uintptr_t)callback55_original;
  return (uintptr_t)p;
 }

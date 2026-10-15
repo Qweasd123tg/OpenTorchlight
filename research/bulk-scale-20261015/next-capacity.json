@@ -1,0 +1,63 @@
+{
+ "analysis_only": true,
+ "target_count": 1091,
+ "targets_by_kind": {
+  "function": 902,
+  "dtor": 127,
+  "ctor": 62
+ },
+ "prior_defined_preserved_count": 25,
+ "hypothesis_count": 81,
+ "hypotheses_by_family": {
+  "implicit_member_destruction": 76,
+  "cleanup_then_member_destruction": 4,
+  "nullable_member": 1
+ },
+ "blocker_count": 985,
+ "primary_blocker_counts": {
+  "no unique existing declaration with the exact parameter types and cv": 335,
+  "namespace/free function requires a separate generator": 49,
+  "only missing ordinary method definitions; ABI thunks are compiler output": 108,
+  "no supported semantic idiom": 333,
+  "return/static ABI not trusted, variadic or hidden object return": 158,
+  "constructor parameters not declared uniquely": 1,
+  "factory allocation size not confirmed by existing class header": 1
+ },
+ "compiled_count": 0,
+ "game_runs": 0,
+ "elapsed_seconds": 9.18618233899906,
+ "hypothesis_definition_count": 51,
+ "hypothesis_closure_address_count": 123,
+ "hypothesis_definition_families": {
+  "implicit_member_destruction": 46,
+  "cleanup_then_member_destruction": 4,
+  "nullable_member": 1
+ },
+ "hypothesis_closure_not_in_targets": [
+  "0x86ce70",
+  "0x86ce80",
+  "0x86ce90",
+  "0x86cea0",
+  "0x8a6190",
+  "0x8a61a0",
+  "0x8a61b0",
+  "0x8a61c0",
+  "0x9939d0",
+  "0x9939e0",
+  "0x9c2bb0",
+  "0x9c2bc0",
+  "0x9c2bd0",
+  "0x9c2be0",
+  "0x9e85c0",
+  "0x9e85d0",
+  "0xa01140",
+  "0xa01150",
+  "0xa01160",
+  "0xa01170",
+  "0xa01180",
+  "0xa01190"
+ ],
+ "canonical_inputs_unchanged": true,
+ "accepted_count": 0,
+ "note": "Next tranche navigation only: 81 proposals collapse to 51 source definitions, whose ABI closure includes 101 screened MISSING addresses and22thunks. Some closure bodies are outside the generated patterns. No new source or acceptance produced."
+}

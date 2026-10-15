@@ -1,0 +1,3 @@
+tlhybrid: 937 tests, 0 failed
+hybrid self-test: PASS
+accepted: 3154 of 5247 game functions (1443709 bytes); 755 by self-test, 0 by generated tests

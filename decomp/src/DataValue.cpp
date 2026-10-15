@@ -82,3 +82,18 @@ void CDataValue::SetValueTranslate(const wchar_t* value)
     m_eType = DATAVALUE_TRANSLATE;
     SetValueString(value);
 }
+
+std::wstring CDataValue::GetValueTypeAsString()
+{
+    switch (static_cast<unsigned int>(m_eType)) {
+    case 1: return L"INTEGER";
+    case 2: return L"FLOAT";
+    case 3: return L"DOUBLE";
+    case 4: return L"UNSIGNED INT";
+    case 5: return L"STRING";
+    case 6: return L"BOOL";
+    case 7: return L"INTEGER64";
+    case 8: return L"TRANSLATE";
+    default: return L"Not Set";
+    }
+}

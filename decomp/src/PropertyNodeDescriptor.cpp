@@ -5,6 +5,7 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "PropertyNode.h"
+#include "PropertyNodeDescriptorNames.h"
 
 CPropertyNodeDescriptor::CPropertyNodeDescriptor()
     : CPositionableObjectDescriptor(L"Property Node", L"Property node for spawns and logic", L"gear", true, true, true, true, true)
@@ -49,15 +50,32 @@ CEditorBaseObject* CPropertyNodeDescriptor::CreateObject(CEditorScene* scene)
 
 void CPropertyNodeDescriptor::descriptorSceneActivated(CEditorScene*)
 {
-    for (unsigned int i = 0; i < m_Objects.size(); ++i)
-    {
-        if (m_Objects[i] != NULL)
-        {
-            CPropertyNode *propertyNode =
-                dynamic_cast<CPropertyNode *>(m_Objects[i]);
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CEditorBaseObject* object = m_Objects[i];
+        CPropertyNode* target = dynamic_cast<CPropertyNode*>(object);
+        if (target == NULL)
+            continue;
+        target->activate();
+    }
+}
 
-            if (propertyNode != NULL)
-                propertyNode->activate();
-        }
+std::wstring CPropertyNodeDescriptor::getPropertyNodeTypeString(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 15)
+        return gPROPERTY_NODE_TYPE_NAMES[0];
+    return gPROPERTY_NODE_TYPE_NAMES[index];
+}
+
+void CPropertyNodeDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject* source)
+{
+    CPropertyNode* node = dynamic_cast<CPropertyNode*>(object);
+    if (!node) return;
+    switch (event) {
+    case 2: node->setEnabled(true); break;
+    case 3: node->setEnabled(false); break;
     }
 }

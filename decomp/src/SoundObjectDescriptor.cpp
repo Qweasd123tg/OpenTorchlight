@@ -79,34 +79,59 @@ void CSoundObjectDescriptor::descriptorSceneActivated(CEditorScene* scene)
 
 void CSoundObjectDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int eventType, CEditorBaseObject* eventObject)
 {
-    if (object != NULL) {
-        CSoundObject* sound = dynamic_cast<CSoundObject*>(object);
-        if (sound != NULL) {
-            if (eventType == 9) {
-                sound->setVisible(true);
-                sound->setEnabled(true);
-                sound->play();
-                return;
-            }
-
-            if (eventType > 8) {
-                if (eventType == 10) {
-                    sound->stop();
-                    return;
-                }
-
-                if (eventType == 11) {
-                    sound->pause();
-                    return;
-                }
-
-                if (eventType == 12) {
-                    sound->setVisible(true);
-                    sound->setEnabled(true);
-                    sound->resume();
-                    return;
-                }
-            }
-        }
+    CSoundObject* sound = dynamic_cast<CSoundObject*>(object);
+    if (sound == NULL)
+        return;
+    switch (eventType) {
+    case 9:
+        sound->setVisible(true);
+        sound->setEnabled(true);
+        sound->play();
+        break;
+    case 10:
+        sound->stop();
+        break;
+    case 11:
+        sound->pause();
+        break;
+    case 12:
+        sound->setVisible(true);
+        sound->setEnabled(true);
+        sound->resume();
+        break;
     }
+}
+
+#include "MasterResourceManager.h"
+
+#include "SoundBankDataInformation.h"
+
+std::wstring CSoundObjectDescriptor::GetSoundDataStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    CSoundObject* sound = dynamic_cast<CSoundObject*>(object);
+    if (!sound)
+        return EMPTY_WSTRING;
+    return CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation->getSoundNameByCategoryIndex(sound->getSoundBankCategory(), index);
+}
+
+unsigned int CSoundObjectDescriptor::GetSoundDataIDByString(CEditorScene*, CEditorBaseObject* object, const std::wstring& value, void*)
+{
+    CSoundObject* sound = dynamic_cast<CSoundObject*>(object);
+    if (!sound) return 0;
+    unsigned int index = CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation->getSoundIndexInCategoryByName(sound->getSoundBankCategory(), value);
+    return index == 0xffffffff ? 0 : index;
+}
+
+unsigned int CSoundObjectDescriptor::GetSoundCategoryIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    unsigned int index = CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation->getCategoryID(value);
+    return index == 0xffffffff ? 0 : index;
+}
+
+std::wstring CSoundObjectDescriptor::GetSoundCategoryStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    std::wstring name = CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation->getCategoryNameByID(index);
+    if (name == L"")
+        return CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation->getCategoryNameByID(0);
+    return name;
 }

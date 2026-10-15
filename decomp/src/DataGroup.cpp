@@ -191,3 +191,133 @@ CDataValue* CDataGroup::AddDataValue(const std::wstring& name, const wchar_t* va
     std::wstring text(value);
     return AddDataValue(name, text, translate);
 }
+
+CDataValue* CDataGroup::GetDataValueByName(const std::wstring& name)
+{
+    for (unsigned int i = 0; i < m_DataValues.size(); ++i)
+        if (m_DataValues[i]->GetDataValueName() == name)
+            return m_DataValues[i];
+    return NULL;
+}
+
+unsigned int CDataGroup::GetDataGroupsMatchingName(const std::wstring& name, std::vector<CDataGroup*>* groups)
+{
+    if (!groups)
+        return 0;
+    unsigned int i = 0;
+    while (i < m_DataGroups.size()) {
+        if (m_DataGroups[i]->GetGroupName() == name)
+            groups->push_back(m_DataGroups[i]);
+        ++i;
+    }
+    return groups->size();
+}
+
+bool CDataGroup::SetDataValue(const std::wstring& name, const wchar_t* value, bool translate)
+{
+    CDataValue* data = GetDataValueByName(name);
+    if (data) {
+        data->SetValueString(value);
+        if (translate)
+            data->SetValueIsTranslate();
+        return false;
+    }
+    AddDataValue(name, value, translate);
+    return true;
+}
+
+bool CDataGroup::SetDataValue(const std::wstring& name, const std::wstring& value, bool translate)
+{
+    CDataValue* data = GetDataValueByName(name);
+    if (data) {
+        data->SetValueString(value.c_str());
+        if (translate)
+            data->SetValueIsTranslate();
+        return false;
+    }
+    AddDataValue(name, value, translate);
+    return true;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, long long value)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueInt64(value);
+    m_DataValues.add(data);
+    return data;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, int value)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueInt32(value);
+    m_DataValues.add(data);
+    return data;
+}
+
+CDataGroup* CDataGroup::GetDataGroupByName(const std::wstring& name, bool createIfMissing)
+{
+    for (unsigned int i = 0; i < m_DataGroups.size() && m_DataGroups.size() != (unsigned int)-1; ++i)
+        if (m_DataGroups[i]->GetGroupName() == name)
+            return m_DataGroups[i];
+    if (createIfMissing)
+        return AddDataGroup(name);
+    return NULL;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, const std::wstring& value, bool translate)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueString(value.c_str());
+    m_DataValues.add(data);
+    if (translate)
+        data->SetValueIsTranslate();
+    return data;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, bool value)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueBool(value);
+    m_DataValues.add(data);
+    return data;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, double value)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueFloat64(value);
+    m_DataValues.add(data);
+    return data;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, float value)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueFloat32(value);
+    m_DataValues.add(data);
+    return data;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, unsigned int value)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueUInt32(value);
+    m_DataValues.add(data);
+    return data;
+}
+
+CDataGroup* CDataGroup::AddDataGroup(const std::wstring& name)
+{
+    m_b58 = true;
+    CDataGroup* group = new CDataGroup(name, this, 20, 10, NULL);
+    m_DataGroups.add(group);
+    return group;
+}

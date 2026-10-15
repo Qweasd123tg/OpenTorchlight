@@ -1,0 +1,18 @@
+{
+ "scope": "Read-only algebraic input audit; canonical fixtures unchanged; no runtime equivalence acceptance.",
+ "source": "decomp/hybrid/tests/CombineMenuReturnTest.cpp",
+ "source_sha256": "de6564f19153f1f666ebf61c1bb369245e08cfb4bf7b59320b6461985e63554b",
+ "pairs_per_test": 44544,
+ "three_tests_pairs": 133632,
+ "three_tests_forks": 267264,
+ "projected_unique_cases_per_test": 22016,
+ "projected_reduction_percent": 50.57471264367817,
+ "projection": "When mask bit8 is clear, location and bit512 affect neither constructed state nor spy responses. All other flags, all eight mutations and all three modes are retained. Independent review and before/after branch/capture validation required before changing fixtures.",
+ "recorded_seconds": {
+  "combinemenu_equipment_used_suppressed": 235.624,
+  "combinemenu_return_items": 232.91,
+  "combinemenu_equipment_used": 224.281
+ },
+ "full_selftest_seconds": 1136.181080532002,
+ "recommendation": "Prioritize one full gate per coherent 100-200candidate tranche; this fixture-only projection cannot promise a comparable full-suite speedup."
+}

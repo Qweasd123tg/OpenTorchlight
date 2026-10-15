@@ -118,6 +118,10 @@ public:
     CEditorBaseObject* postProcessObject(CDataGroup* group, CDescriptorLoadConfiguration* configuration);
     void postProcessObjects(CDataGroup* group, CDescriptorLoadConfiguration* configuration);
 
+    // Inlined descriptor metadata assignments in DescriptorController.cpp.
+    void setDescriptorName(const std::wstring& name) { m_sName = name; }
+    void setMenuCategory(const std::wstring& category) { m_sMenuCategory = category; }
+
     unsigned int getObjectCount() const { return m_Objects.size(); }
     CEditorBaseObject* getObject(unsigned int index) { return m_Objects[index]; }
 

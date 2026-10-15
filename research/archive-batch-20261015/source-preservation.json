@@ -1,0 +1,215 @@
+[
+ {
+  "source": "decomp/src/DynamicPropertyFile.cpp",
+  "new_tu": true,
+  "old_definitions_unchanged": 0,
+  "addresses": []
+ },
+ {
+  "source": "decomp/src/EditorObjectManager.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 3,
+  "addresses": [
+   "0x73f460",
+   "0x73f470",
+   "0x740780"
+  ]
+ },
+ {
+  "source": "decomp/src/GameStateControllerDescriptor.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 8,
+  "addresses": [
+   "0xdafc80",
+   "0xdafcb0",
+   "0xdafd50",
+   "0xdaff00",
+   "0xdaffb0",
+   "0xdb0030",
+   "0xdb0090",
+   "0xdb9760"
+  ]
+ },
+ {
+  "source": "decomp/src/JetWrapper.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 3,
+  "addresses": [
+   "0xa21080",
+   "0xa210a0",
+   "0xa218b0"
+  ]
+ },
+ {
+  "source": "decomp/src/MissileDescriptor.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 5,
+  "addresses": [
+   "0x5f90a0",
+   "0x5f90b0",
+   "0x5f9160",
+   "0x5f91c0",
+   "0x602dc0"
+  ]
+ },
+ {
+  "source": "decomp/src/ParticleEmitterWrapper.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 20,
+  "addresses": [
+   "0xa328b0",
+   "0xa328c0",
+   "0xa328e0",
+   "0xa32910",
+   "0xa32940",
+   "0xa32970",
+   "0xa329c0",
+   "0xa329f0",
+   "0xa32a20",
+   "0xa32c70",
+   "0xa32ca0",
+   "0xa32cd0",
+   "0xa32d70",
+   "0xa32d80",
+   "0xa32d90",
+   "0xa32da0",
+   "0xa32db0",
+   "0xa32e50",
+   "0xa32ef0",
+   "0xa32f90"
+  ]
+ },
+ {
+  "source": "decomp/src/ParticleEmitterWrapperDescriptor.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 5,
+  "addresses": [
+   "0x6e3f00",
+   "0x6e3f70",
+   "0x6e4020",
+   "0x6e4040",
+   "0x6e4180"
+  ]
+ },
+ {
+  "source": "decomp/src/ParticleTechWrapper.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 12,
+  "addresses": [
+   "0xa3c600",
+   "0xa3c610",
+   "0xa3d070",
+   "0xa3d230",
+   "0xa3d370",
+   "0xa43e00",
+   "0xa45110",
+   "0xa451a0",
+   "0xa451d0",
+   "0xa454a0",
+   "0xa454f0",
+   "0xa465c0"
+  ]
+ },
+ {
+  "source": "decomp/src/ParticleTechWrapperDescriptor.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 10,
+  "addresses": [
+   "0x6ec660",
+   "0x6ec670",
+   "0x6ec680",
+   "0x6ec690",
+   "0x6ec6c0",
+   "0x6ec6f0",
+   "0x6ec730",
+   "0x6ec820",
+   "0x6ec950",
+   "0x6ec9b0"
+  ]
+ },
+ {
+  "source": "decomp/src/PropertyNode.cpp",
+  "new_tu": true,
+  "old_definitions_unchanged": 0,
+  "addresses": []
+ },
+ {
+  "source": "decomp/src/ScaleWrapper.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 4,
+  "addresses": [
+   "0xa24960",
+   "0xa249a0",
+   "0xa249e0",
+   "0xa251f0"
+  ]
+ },
+ {
+  "source": "decomp/src/ShapeDescriptor.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 4,
+  "addresses": [
+   "0x648300",
+   "0x648330",
+   "0x648360",
+   "0x648410"
+  ]
+ },
+ {
+  "source": "decomp/src/SkillManager.cpp",
+  "new_tu": true,
+  "old_definitions_unchanged": 0,
+  "addresses": []
+ },
+ {
+  "source": "decomp/src/SkillProperty.cpp",
+  "new_tu": true,
+  "old_definitions_unchanged": 0,
+  "addresses": []
+ },
+ {
+  "source": "decomp/src/TextureRotateWrapper.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 2,
+  "addresses": [
+   "0xa282e0",
+   "0xa28af0"
+  ]
+ },
+ {
+  "source": "decomp/src/TimelineDescriptor.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 6,
+  "addresses": [
+   "0x7bd2a0",
+   "0x7bd2d0",
+   "0x7bd400",
+   "0x7bd4f0",
+   "0x7bd820",
+   "0x7bd870"
+  ]
+ },
+ {
+  "source": "decomp/src/UnitSpawnerDescriptor.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 6,
+  "addresses": [
+   "0x652700",
+   "0x652710",
+   "0x652790",
+   "0x652850",
+   "0x652950",
+   "0x65c410"
+  ]
+ },
+ {
+  "source": "decomp/src/UnitTriggerDescriptor.cpp",
+  "new_tu": false,
+  "old_definitions_unchanged": 3,
+  "addresses": [
+   "0x6841a0",
+   "0x6841b0",
+   "0x684500"
+  ]
+ }
+]

@@ -1,0 +1,4 @@
+tlhybrid: 1018 tests, 0 failed
+hybrid self-test: PASS
+handwritten fixtures: 1012 declared originals; 963 with executed per-function comparison evidence (declarations alone do not accept DIFF)
+accepted: 3269 of 5247 game functions (1463949 bytes); 837 by self-test, 0 by generated tests

@@ -23,3 +23,13 @@ void CItemDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorB
 void CItemDescriptor::deleteNotification()
 {
 }
+
+#include "Level.h"
+
+bool CItemDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject* object)
+{
+    CLevel* level = getSceneOwner()->getResourceManager()->getLevel();
+    if (level)
+        level->removeItem(static_cast<CItem*>(object), true);
+    return true;
+}

@@ -1,0 +1,34 @@
+{
+ "base_commit": "bd6a5140b2b7464d11d52fb3b90c33873fed6231",
+ "main_base_commit": "3ad959f437ef58a66e1ae521a91befb0a5729f65",
+ "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+ "game_functions": 5247,
+ "game_bytes": 3702188,
+ "accepted_before": 2979,
+ "accepted_after": 3062,
+ "matched_after": 2344,
+ "behavioral_after": 718,
+ "new_game_addresses": 83,
+ "archive_targets_matched": 82,
+ "new_match_original_bytes": 5103,
+ "accepted_original_bytes": 1433655,
+ "prior_accepted_preserved": 2979,
+ "prior_strong_matches_preserved": 3090,
+ "old_source_definitions_unchanged": 91,
+ "production_tus": 285,
+ "new_source_tus": [
+  "decomp/src/DynamicPropertyFile.cpp",
+  "decomp/src/PropertyNode.cpp",
+  "decomp/src/SkillManager.cpp",
+  "decomp/src/SkillProperty.cpp"
+ ],
+ "headless_tests": 903,
+ "hybrid_selftest_exit": 0,
+ "targeted_registration_tests": 5,
+ "resolver_module_tests": 157,
+ "inputs_digests": [
+  "67e044a9cecc2de4333b14208a30747bccee25a09bb4d4ac51c549f25b9be21f"
+ ],
+ "types_source_inputs_current": true,
+ "note": "Current strict MATCH and fresh paired headless evidence; no windowed or standalone gameplay claim."
+}

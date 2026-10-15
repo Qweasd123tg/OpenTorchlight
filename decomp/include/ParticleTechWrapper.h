@@ -11,6 +11,7 @@
 #include "ParticleWrapper.h"
 #include "ResourceManager.h"
 #include "iLevelUpdate.h"
+namespace ParticleUniverse { class ParticleTechnique; class RibbonTrailRenderer; }
 class CAffectorWrapper;
 class CParticleEmitterWrapper;
 
@@ -55,10 +56,13 @@ public:
     void setDepthBias(float);
 
     // fields
-    unsigned char m_AlwaysUp[0x18] __attribute__((aligned(8)));
+    union {
+        unsigned char m_AlwaysUp[0x18] __attribute__((aligned(8)));
+        ParticleUniverse::ParticleTechnique* m_technique;
+    };
     float m_fRibbonLength;
     float m_fRibbonWidth;
-    int m_iRibbonMaxChains;
+    unsigned int m_iRibbonMaxChains;
     bool m_bRibbonEndFade;
     bool m_bRibbonLocalTrail;
     unsigned char m_gap166[0x2];
@@ -72,7 +76,10 @@ public:
     long long m_iUnknown188;
     long long m_iUnknown190;
     long long m_iUnknown198;
-    unsigned char m_pUnknown1A0[0x8] __attribute__((aligned(8)));
+    union {
+        unsigned char m_pUnknown1A0[0x8] __attribute__((aligned(8)));
+        ParticleUniverse::RibbonTrailRenderer* m_ribbonRenderer;
+    };
     void* m_pUnknown1A8;
     void* m_pTexturePath;
     void* m_pModelPath;

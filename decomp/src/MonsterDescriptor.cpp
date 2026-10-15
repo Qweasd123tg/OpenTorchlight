@@ -5,6 +5,8 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "UnitThemes.h"
+#include "Level.h"
+#include "Character.h"
 
 CMonsterDescriptor::CMonsterDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, true, true, true, true, false)
@@ -121,4 +123,12 @@ unsigned int CMonsterDescriptor::getThemeIDByString(
     }
 
     return 0;
+}
+
+bool CMonsterDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject* object)
+{
+    CLevel* level = getSceneOwner()->getResourceManager()->getLevel();
+    if (level != NULL)
+        level->removeCharacter(static_cast<CCharacter*>(object), true);
+    return true;
 }

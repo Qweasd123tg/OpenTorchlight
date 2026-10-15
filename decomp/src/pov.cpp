@@ -92,24 +92,22 @@ long long CPOV::UpdateFlyingTo(float)
     if (!m_bUnknown179)
         return 0;
 
-    float fDX = m_fUnknown180 - m_fUnknownDC;
-    float fDY = m_fUnknown17C - m_fUnknownD8;
-    float fDZ = m_fUnknown184 - m_fUnknownE0;
-    float fDistance = sqrtf(fDX * fDX + fDY * fDY + fDZ * fDZ);
-
-    if (fDistance >= 0.01f)
-    {
-        m_fUnknownDC = fDX * 0.8f + m_fUnknown180;
-        m_fUnknownD8 = fDY * 0.8f + m_fUnknown17C;
-        m_fUnknownE0 = fDZ * 0.8f + m_fUnknown184;
+    float x = m_fUnknown17C - m_fUnknownD8;
+    float y = m_fUnknown180 - m_fUnknownDC;
+    float z = m_fUnknown184 - m_fUnknownE0;
+    const float distance = sqrtf(x * x + y * y + z * z);
+    if (distance < 0.01f) {
+        x = m_fUnknown17C;
+        y = m_fUnknown180;
+        z = m_fUnknown184;
+    } else {
+        z = z * 0.8f + m_fUnknown184;
+        y = y * 0.8f + m_fUnknown180;
+        x = x * 0.8f + m_fUnknown17C;
     }
-    else
-    {
-        m_fUnknownDC = m_fUnknown180;
-        m_fUnknownD8 = m_fUnknown17C;
-        m_fUnknownE0 = m_fUnknown184;
-    }
-
+    m_fUnknownD8 = x;
+    m_fUnknownDC = y;
+    m_fUnknownE0 = z;
     return 1;
 }
 

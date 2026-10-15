@@ -7,6 +7,7 @@
 #include "ResourceManager.h"
 #include "UnitResourceList.h"
 #include "SafePointer.h"
+#include "SkillManager.h"
 
 CPlayer* CSkillController::getSkillTarget()
 {
@@ -57,4 +58,30 @@ void CSkillController::setUnitInteractWith(std::wstring unitInteractWith)
 bool CSkillController::initSkillController()
 {
     return configureUnit();
+}
+
+void CSkillController::stopSkill()
+{
+    if (configureUnit() && !m_sSkillName.empty()) {
+        m_bSkillStartRequested = false;
+        m_bSkillStopRequested = true;
+    }
+}
+
+void CSkillController::startSkill()
+{
+    if (configureUnit() && !m_sSkillName.empty()) {
+        m_bSkillStartRequested = true;
+        m_bSkillStopRequested = false;
+    }
+}
+
+void CSkillController::unlearnSkill()
+{
+    if (configureUnit() && !m_sSkillName.empty() && m_pRunicCore) {
+        CSkillManager* skills = static_cast<CBaseUnit*>(m_pRunicCore)->getSkillManager();
+        if (skills)
+            skills->deleteSkill(m_sSkillName);
+        BroadcastEvent(106);
+    }
 }

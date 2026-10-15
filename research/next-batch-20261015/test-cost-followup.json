@@ -1,0 +1,32 @@
+{
+ "source": "decomp/hybrid/tests/CombineMenuReturnTest.cpp",
+ "original_address": "0xad4b90",
+ "original_function": "CCombineMenu::equipmentUsed(CEquipment*)",
+ "suppression_semantics": "Skip item return, always tail-call virtual updateLayout at vtable+0x48; no early return.",
+ "current_cases_per_registration": 44544,
+ "historical_timing_seconds_range": [
+  251,
+  256
+ ],
+ "proposed_suppressed_mode_only": {
+  "masks": [
+   0,
+   3,
+   10,
+   527
+  ],
+  "locations": 6,
+  "mutations": [
+   0
+  ],
+  "normal_pairs": 24,
+  "required_observations": [
+   "one updateLayout callback",
+   "correct receiver",
+   "map state retained",
+   "clicked slot mutation",
+   "zero inventory/drop callbacks"
+  ]
+ },
+ "status": "read-only analysis; no fixture changes or runtime speedup claim; not part of current gate"
+}

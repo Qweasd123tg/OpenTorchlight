@@ -1,3 +1,4 @@
+#include "LogicTrigger.h"
 #include "EmptyStrings.h"
 #include "TriggerDescriptor.h"
 #include "GameEnums.h"
@@ -28,4 +29,25 @@ CTriggerDescriptor::~CTriggerDescriptor()
 CEditorBaseObject* CTriggerDescriptor::CreateObject(CEditorScene*)
 {
     return 0;
+}
+
+void CTriggerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    CLogicTrigger* trigger = dynamic_cast<CLogicTrigger*>(object);
+    if (trigger == NULL)
+        return;
+    switch (event) {
+    case INPUT_EVENT_ENABLE: trigger->setEnabled(true); break;
+    case INPUT_EVENT_DISABLE: trigger->setEnabled(false); break;
+    case INPUT_EVENT_RESET: trigger->TriggerReset(); break;
+    }
+}
+
+void CTriggerDescriptor::update(float elapsed)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CLogicTrigger* trigger = dynamic_cast<CLogicTrigger*>(m_Objects[i]);
+        if (trigger != NULL)
+            trigger->updateTrigger(elapsed, getSceneOwner());
+    }
 }

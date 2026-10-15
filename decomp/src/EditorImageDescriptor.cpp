@@ -28,6 +28,13 @@ CEditorImageDescriptor::CEditorImageDescriptor()
     AddOutputLogic(OUTPUT_EVENT_ON_VISIBLE);
     AddOutputLogic(OUTPUT_EVENT_ON_INVISIBLE);
 }
+void CEditorImageDescriptor::update(float elapsed)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+        static_cast<CEditorImage*>(m_Objects[i])->update(elapsed);
+}
+
+
 
 CEditorImageDescriptor::~CEditorImageDescriptor()
 {

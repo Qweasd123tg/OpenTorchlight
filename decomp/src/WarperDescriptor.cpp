@@ -26,22 +26,19 @@ CWarperDescriptor::~CWarperDescriptor()
 
 void CWarperDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int eventType, CEditorBaseObject* source)
 {
-    if (object != 0) {
-        CWarper* warper = dynamic_cast<CWarper*>(object);
-        if (warper != 0) {
-            if (eventType == 3) {
-                warper->setEnabled(false);
-                return;
-            }
-            if (eventType == 0x25) {
-                warper->activate();
-                return;
-            }
-            if (eventType == 2) {
-                warper->setEnabled(true);
-                return;
-            }
-        }
+    CWarper* warper = dynamic_cast<CWarper*>(object);
+    if (warper == NULL)
+        return;
+    switch (eventType) {
+    case 2:
+        warper->setEnabled(true);
+        break;
+    case 3:
+        warper->setEnabled(false);
+        break;
+    case 37:
+        warper->activate();
+        break;
     }
 }
 

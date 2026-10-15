@@ -1,0 +1,398 @@
+[
+ {
+  "scope": "stats",
+  "address": "0xa768c0",
+  "tu": "SpawnClassData.cpp",
+  "reason": "Packet blocked: no existing declaration of direct TArrayList<CDataGroup*>::add callee 0xa7e5e0."
+ },
+ {
+  "scope": "stats",
+  "address": "0xc78030",
+  "tu": "GameSpeed.cpp",
+  "reason": "CGameSpeedModifier incomplete in frozen TU includes; original calls virtual deleting destructor and nulls every slot, but delete/deleteAll on incomplete type omits destructor. Needs complete dependency header before a new attempt."
+ },
+ {
+  "scope": "timeline",
+  "address": "0x7b65b0",
+  "tu": "Timeline.cpp",
+  "reason": "Original outer map stores pointers to inner property maps; Timeline.h declares by-value mapped maps. Safe body-only recovery cannot express the original layout without forbidden type-punning."
+ },
+ {
+  "scope": "timeline",
+  "address": "0x7b6680",
+  "tu": "Timeline.cpp",
+  "reason": "Original outer map stores pointers to inner property maps; Timeline.h declares by-value mapped maps. Safe body-only recovery cannot express the original layout without forbidden type-punning."
+ },
+ {
+  "scope": "timeline",
+  "address": "0x7b6930",
+  "tu": "Timeline.cpp",
+  "reason": "packet context unresolved: No existing declaration of direct callee CTimelineProperty::RemovePoint(int) at 0x7c9610"
+ },
+ {
+  "scope": "timeline",
+  "address": "0x7b6960",
+  "tu": "Timeline.cpp",
+  "reason": "packet context unresolved: No existing declaration of direct callee CTimelineProperty::AddPoint() at 0x7c97c0"
+ },
+ {
+  "scope": "timeline",
+  "address": "0x7b6990",
+  "tu": "Timeline.cpp",
+  "reason": "Original outer map stores pointers to inner property maps; Timeline.h declares by-value mapped maps. Safe body-only recovery cannot express the original layout without forbidden type-punning."
+ },
+ {
+  "scope": "timeline",
+  "address": "0x7b6a90",
+  "tu": "Timeline.cpp",
+  "reason": "Original outer map stores pointers to inner property maps; Timeline.h declares by-value mapped maps. Safe body-only recovery cannot express the original layout without forbidden type-punning."
+ },
+ {
+  "scope": "timeline",
+  "address": "0x7b6d50",
+  "tu": "Timeline.cpp",
+  "reason": "packet context unresolved: No existing declaration of direct callee CTimelineProperty::GetTimelinePointIDByIndex(int) at 0x7c82e0"
+ },
+ {
+  "scope": "timeline",
+  "address": "0xc875c0",
+  "tu": "path.cpp",
+  "reason": "Original path fields are std::vector-style begin/end/capacity triples; Path.h declares TArrayList fields (pointer/count/capacity/growBy). Correct body-only recovery is blocked without owner-layout correction; no raw-offset casts added."
+ },
+ {
+  "scope": "timeline",
+  "address": "0xc87780",
+  "tu": "path.cpp",
+  "reason": "Original path fields are std::vector-style begin/end/capacity triples; Path.h declares TArrayList fields (pointer/count/capacity/growBy). Correct body-only recovery is blocked without owner-layout correction; no raw-offset casts added."
+ },
+ {
+  "scope": "timeline",
+  "address": "0xc877a0",
+  "tu": "path.cpp",
+  "reason": "Original path fields are std::vector-style begin/end/capacity triples; Path.h declares TArrayList fields (pointer/count/capacity/growBy). Correct body-only recovery is blocked without owner-layout correction; no raw-offset casts added."
+ },
+ {
+  "scope": "timeline",
+  "address": "0xc88250",
+  "tu": "path.cpp",
+  "reason": "packet context unresolved: No existing declaration of direct callee CPath::GetPoint(unsigned int) at 0xc87600"
+ },
+ {
+  "scope": "strings-logic",
+  "address": "0x795bf0",
+  "tu": "LogicGroup.cpp",
+  "reason": "Writes private CLogicObject::m_iID; CLogicGroup lacks friendship; no new field/raw-offset workaround permitted."
+ },
+ {
+  "scope": "strings-logic",
+  "address": "0x795f10",
+  "tu": "LogicGroup.cpp",
+  "reason": "Reads private CLogicObject::m_iObjectID; not equivalent to public object lookup or another guid."
+ },
+ {
+  "scope": "strings-logic",
+  "address": "0xc76730",
+  "tu": "FileUtilities.cpp",
+  "reason": "Original first copies separate TU-local global wstring at 0x14e5900, whose exact typed declaration is unavailable in immutable header packet; no invented global declaration."
+ },
+ {
+  "scope": "strings-logic",
+  "address": "0xcca8c0",
+  "tu": "SkillManager.cpp",
+  "reason": "Original compares Skill +0x28, currently opaque m_SkillData28; existing getGuid is unrelated +0x150."
+ },
+ {
+  "scope": "strings-logic",
+  "address": "0xcca9d0",
+  "tu": "SkillManager.cpp",
+  "reason": "Same opaque Skill +0x28 identity comparison; cannot substitute getGuid."
+ },
+ {
+  "scope": "strings-logic",
+  "address": "0xcd5530",
+  "tu": "SkillManager.cpp",
+  "reason": "Original CSkillParser::getSkill takes resource manager in rdi as static/free ABI; current header declares nonstatic member requiring parser this."
+ },
+ {
+  "scope": "strings-logic",
+  "address": "0xa0a420",
+  "tu": "SoundObject.cpp",
+  "reason": "Returned CSoundData guid field +0x20 needs complete SoundData.h, not present among this target packet complete direct headers; do not invent declaration/raw offset."
+ },
+ {
+  "scope": "strings-logic",
+  "address": "0xe20450",
+  "tu": "SkillController.cpp",
+  "reason": "Original TSafePointer<CBaseUnit> object at controller+0x110 is flattened CRunicCore pointer/id in current header. No typed alias or layout edits allowed."
+ },
+ {
+  "scope": "data",
+  "address": "0xc62dd0",
+  "tu": "DataValue.cpp",
+  "reason": "TRepository only forward-declared, no safe typed lookup API in frozen packet."
+ },
+ {
+  "scope": "data",
+  "address": "0xc63100",
+  "tu": "DataValue.cpp",
+  "reason": "TRepository only forward-declared, no safe typed lookup API in frozen packet."
+ },
+ {
+  "scope": "data",
+  "address": "0xc687f0",
+  "tu": "OgreResourceFile.cpp",
+  "reason": "ReadUTF16ToUTF32 has no existing callable declaration in packet; no prototype invented."
+ },
+ {
+  "scope": "data",
+  "address": "0xc68af0",
+  "tu": "OgreResourceFile.cpp",
+  "reason": "Original returns zero EAX; frozen virtual declaration void requires caller/return ABI recovery."
+ },
+ {
+  "scope": "data",
+  "address": "0xdff080",
+  "tu": "DungeonManager.cpp",
+  "reason": "CDungeon only forward declaration in packet; virtual destructor unavailable."
+ },
+ {
+  "scope": "data",
+  "address": "0xe03fe0",
+  "tu": "DungeonManager.cpp",
+  "reason": "CDungeon name field/type not provided in packet; no opaque offset access invented."
+ },
+ {
+  "scope": "data",
+  "address": "0xece3e0",
+  "tu": "SteamStats.cpp",
+  "reason": "stat28 reads private CPlayer journal-stat field +0x7f0; no existing getter in frozen header."
+ },
+ {
+  "scope": "data",
+  "address": "0xece360",
+  "tu": "SteamStats.cpp",
+  "reason": "Excluded whole SteamStats candidate: adding definitions changes old unaccepted statModified code fingerprint; strict original-paired control exposes preexisting missing zero initialization of SStatChange.stat in frozen header. Existing body untouched. Needs separate header recovery; no broad preservation exception."
+ },
+ {
+  "scope": "data",
+  "address": "0xece3a0",
+  "tu": "SteamStats.cpp",
+  "reason": "Excluded whole SteamStats candidate: adding definitions changes old unaccepted statModified code fingerprint; strict original-paired control exposes preexisting missing zero initialization of SStatChange.stat in frozen header. Existing body untouched. Needs separate header recovery; no broad preservation exception."
+ },
+ {
+  "scope": "data",
+  "address": "0xece5d0",
+  "tu": "SteamStats.cpp",
+  "reason": "Excluded whole SteamStats candidate: adding definitions changes old unaccepted statModified code fingerprint; strict original-paired control exposes preexisting missing zero initialization of SStatChange.stat in frozen header. Existing body untouched. Needs separate header recovery; no broad preservation exception."
+ },
+ {
+  "scope": "data",
+  "address": "0xece780",
+  "tu": "SteamStats.cpp",
+  "reason": "Excluded whole SteamStats candidate: adding definitions changes old unaccepted statModified code fingerprint; strict original-paired control exposes preexisting missing zero initialization of SStatChange.stat in frozen header. Existing body untouched. Needs separate header recovery; no broad preservation exception."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x86cbe0",
+  "tu": "dynamicrenderable.cpp",
+  "reason": "Squared-depth implementation needs the complete pinned Ogre::Camera declaration; the supplied packet contains only the owner with a Camera pointer/forward type. No new SDK include or declaration was invented."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0xcf8850",
+  "tu": "CameraShake.cpp",
+  "reason": "The original graph weak reference is a TSafePointer pair at +0x70/+0x78, but owner declares split CRunicCore* and index fields. Calling safe-pointer registration requires a forbidden reinterpretation of those fields; no safe typed owner accessor exists."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0xdc9c70",
+  "tu": "AnimationPlayer.cpp",
+  "reason": "Original target calls primary vtable+0x1e0 get-model on safe-reference pointees. Header exposes TSafePointer<CRunicCore>, whose complete declaration has only destructor virtuals and no model accessor."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x5bb630",
+  "tu": "DamageShapeDescriptor.cpp",
+  "reason": "Original hierarchy converters index count/capacity/unit-ID array at CHierarchy+0x70..+0x7c; supplied complete partial CHierarchy.h exposes no corresponding fields or accessor."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x5bb6d0",
+  "tu": "DamageShapeDescriptor.cpp",
+  "reason": "Original hierarchy converters index count/capacity/unit-ID array at CHierarchy+0x70..+0x7c; supplied complete partial CHierarchy.h exposes no corresponding fields or accessor."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x5f4d60",
+  "tu": "LightDescriptor.cpp",
+  "reason": "Original converter is static: input string in RDX. Header declares a non-static method, shifting input string to RCX; mangling alone does not expose staticness. Deferred for owner ABI correction."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0xdb9fe0",
+  "tu": "QuestControllerDescriptor.cpp",
+  "reason": "Resource-group callbacks require the incorrectly unsigned-char-typed local wstring table; quest callbacks require dereferencing CQuest+0x50, but the packet supplies only the QuestManager map with a forward CQuest and no complete owning declaration. No context/header expansion."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0xdba020",
+  "tu": "QuestControllerDescriptor.cpp",
+  "reason": "Resource-group callbacks require the incorrectly unsigned-char-typed local wstring table; quest callbacks require dereferencing CQuest+0x50, but the packet supplies only the QuestManager map with a forward CQuest and no complete owning declaration. No context/header expansion."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0xdbd550",
+  "tu": "QuestControllerDescriptor.cpp",
+  "reason": "Resource-group callbacks require the incorrectly unsigned-char-typed local wstring table; quest callbacks require dereferencing CQuest+0x50, but the packet supplies only the QuestManager map with a forward CQuest and no complete owning declaration. No context/header expansion."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0xdbdb60",
+  "tu": "QuestControllerDescriptor.cpp",
+  "reason": "Resource-group callbacks require the incorrectly unsigned-char-typed local wstring table; quest callbacks require dereferencing CQuest+0x50, but the packet supplies only the QuestManager map with a forward CQuest and no complete owning declaration. No context/header expansion."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0xdbeed0",
+  "tu": "SkillControllerDescriptor.cpp",
+  "reason": "Original TU-local resource group table stores std::wstring objects, but supplied GameVariables.h declares gRESOURCE_GROUP_NAMES as unsigned char[32]. No retyping, guessed literals, or raw casts added."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0xdc75e0",
+  "tu": "SkillControllerDescriptor.cpp",
+  "reason": "Original TU-local resource group table stores std::wstring objects, but supplied GameVariables.h declares gRESOURCE_GROUP_NAMES as unsigned char[32]. No retyping, guessed literals, or raw casts added."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x62e730",
+  "tu": "RandomGroupDescriptor.cpp",
+  "reason": "Dungeon/quest callbacks dereference CDungeon+0x60 or CQuest+0x50; supplied manager headers contain only forward declarations of those pointees. No new header outside supplied full packet."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x62e990",
+  "tu": "RandomGroupDescriptor.cpp",
+  "reason": "Dungeon/quest callbacks dereference CDungeon+0x60 or CQuest+0x50; supplied manager headers contain only forward declarations of those pointees. No new header outside supplied full packet."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x638ac0",
+  "tu": "RandomGroupDescriptor.cpp",
+  "reason": "Dungeon/quest callbacks dereference CDungeon+0x60 or CQuest+0x50; supplied manager headers contain only forward declarations of those pointees. No new header outside supplied full packet."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0xe66af0",
+  "tu": "CinematicDescriptor.cpp",
+  "reason": "getCinematic returns forward-declared CCinematic*, but the ELF callbacks read its leading wstring; no complete CCinematic declaration/name accessor is supplied. No pointer punning added."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0xe700f0",
+  "tu": "CinematicDescriptor.cpp",
+  "reason": "getCinematic returns forward-declared CCinematic*, but the ELF callbacks read its leading wstring; no complete CCinematic declaration/name accessor is supplied. No pointer punning added."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0xda59e0",
+  "tu": "AnimationPlayerDescriptor.cpp",
+  "reason": "Original TU-local resource-group table is wstring[4], but supplied GameVariables.h represents it as unsigned char[32]. No typed replacement table or guessed literals added."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x5dfb00",
+  "tu": "ItemDescriptor.cpp",
+  "reason": "Activation/CreateObject require protected/opaque BaseUnit/Equipment fields (+0x191/+0x1d0); item converters require the incorrectly unsigned-char-typed TU-local wstring resource-group table. No protected access or data retyping workaround."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x5dfc40",
+  "tu": "ItemDescriptor.cpp",
+  "reason": "Activation/CreateObject require protected/opaque BaseUnit/Equipment fields (+0x191/+0x1d0); item converters require the incorrectly unsigned-char-typed TU-local wstring resource-group table. No protected access or data retyping workaround."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x5e96a0",
+  "tu": "ItemDescriptor.cpp",
+  "reason": "Activation/CreateObject require protected/opaque BaseUnit/Equipment fields (+0x191/+0x1d0); item converters require the incorrectly unsigned-char-typed TU-local wstring resource-group table. No protected access or data retyping workaround."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x5e9ce0",
+  "tu": "ItemDescriptor.cpp",
+  "reason": "Activation/CreateObject require protected/opaque BaseUnit/Equipment fields (+0x191/+0x1d0); item converters require the incorrectly unsigned-char-typed TU-local wstring resource-group table. No protected access or data retyping workaround."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x61c5a0",
+  "tu": "PathControllerDescriptor.cpp",
+  "reason": "Original resource-group lookup reads the TU-local wstring table; supplied GameVariables.h declares it as unsigned char[32]. No table retyping or raw casts."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x6a0200",
+  "tu": "ColliderDescriptor.cpp",
+  "reason": "Original intersection names are wstring objects; packet GameVariables.h declares unsigned char gPARTICLE_INTERSECTION_TYPE[24]. No typed table exists in supplied packet."
+ },
+ {
+  "scope": "descriptors",
+  "address": "0x6ace90",
+  "tu": "ForceAffectorDescriptor.cpp",
+  "reason": "Original force-application names are wstring objects; packet GameVariables.h declares unsigned char gPARTICLE_AFFECTOR_FORCE_APPLICATION_TYPES[16]. No typed table exists in supplied packet."
+ },
+ {
+  "scope": "root",
+  "address": "0x97f6d0",
+  "tu": "Interact.cpp",
+  "reason": "RuntimeError: repair requires exact unique source signature"
+ },
+ {
+  "scope": "root",
+  "address": "0x97f7a0",
+  "tu": "Interact.cpp",
+  "reason": "RuntimeError: repair requires exact unique source signature"
+ },
+ {
+  "scope": "root",
+  "address": "0x97f850",
+  "tu": "Interact.cpp",
+  "reason": "repair target ABI closure intersects protected addresses"
+ },
+ {
+  "scope": "root",
+  "address": "0xe812a0",
+  "tu": "CinematicObject.cpp",
+  "reason": "repair target ABI closure intersects protected addresses"
+ },
+ {
+  "scope": "root",
+  "address": "0xa60ea0",
+  "tu": "RoomPieceDataInformation.cpp",
+  "reason": "TU assigned to new-definition worker; no mixed repair/new source edits"
+ },
+ {
+  "scope": "root-prescreen",
+  "address": "0xcf8940",
+  "tu": "CameraShake.cpp",
+  "reason": "Repair reserved during initial screening, then TU handed to new-definition worker; no mixed repair/new edits or acceptance claimed"
+ },
+ {
+  "scope": "root-prescreen",
+  "address": "0xe17910",
+  "tu": "SkillController.cpp",
+  "reason": "Repair reserved during initial screening, then TU handed to new-definition worker; no mixed repair/new edits or acceptance claimed"
+ },
+ {
+  "scope": "canonical-minimum",
+  "address": "0xc62f90",
+  "tu": "DataValue.cpp",
+  "reason": "Normal paired matrix passes 15 cases, below unchanged autotest.MIN_COMPLETED=20; source is implemented but not accepted in this tranche"
+ },
+ {
+  "scope": "canonical-minimum",
+  "address": "0xc739d0",
+  "tu": "FileUtilities.cpp",
+  "reason": "Normal paired matrix passes 12 cases, below unchanged autotest.MIN_COMPLETED=20; source is implemented but not accepted in this tranche"
+ }
+]
