@@ -8,12 +8,8 @@
 
 void CDescriptorManager::update(float fTimeDelta)
 {
-    for (unsigned int uiIndex = 0;
-         uiIndex < static_cast<unsigned int>(
-             reinterpret_cast<CDescriptor ***>(&m_descriptors)[1] -
-             reinterpret_cast<CDescriptor ***>(&m_descriptors)[0]);
-         ++uiIndex)
-        reinterpret_cast<CDescriptor ***>(&m_descriptors)[0][uiIndex]->update(fTimeDelta);
+    for (unsigned int i = 0; i < getDescriptorVector().size(); ++i)
+        getDescriptorVector()[i]->update(fTimeDelta);
 }
 
 void CDescriptorManager::postProcessDescriptorObjects(
@@ -22,25 +18,8 @@ void CDescriptorManager::postProcessDescriptorObjects(
 {
     if (group == NULL)
         return;
-
-    struct DescriptorListStorage
-    {
-        CDescriptor** first;
-        long last;
-    };
-
-    const volatile DescriptorListStorage* storage =
-        reinterpret_cast<const volatile DescriptorListStorage*>(&m_descriptors);
-
-    for (unsigned int i = 0;
-         i < static_cast<unsigned long>(
-                 (static_cast<long>(
-                      static_cast<unsigned long>(storage->last) -
-                      reinterpret_cast<unsigned long>(storage->first)) >> 3));
-         ++i)
-    {
-        storage->first[i]->postProcessObjects(group, configuration);
-    }
+    for (unsigned int i = 0; i < getDescriptorVector().size(); ++i)
+        getDescriptorVector()[i]->postProcessObjects(group, configuration);
 }
 
 CDescriptorManager::CDescriptorManager(CEditorScene* pEditorScene)

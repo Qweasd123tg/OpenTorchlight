@@ -266,3 +266,58 @@ CDataGroup* CDataGroup::GetDataGroupByName(const std::wstring& name, bool create
         return AddDataGroup(name);
     return NULL;
 }
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, const std::wstring& value, bool translate)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueString(value.c_str());
+    m_DataValues.add(data);
+    if (translate)
+        data->SetValueIsTranslate();
+    return data;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, bool value)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueBool(value);
+    m_DataValues.add(data);
+    return data;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, double value)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueFloat64(value);
+    m_DataValues.add(data);
+    return data;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, float value)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueFloat32(value);
+    m_DataValues.add(data);
+    return data;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, unsigned int value)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueUInt32(value);
+    m_DataValues.add(data);
+    return data;
+}
+
+CDataGroup* CDataGroup::AddDataGroup(const std::wstring& name)
+{
+    m_b58 = true;
+    CDataGroup* group = new CDataGroup(name, this, 20, 10, NULL);
+    m_DataGroups.add(group);
+    return group;
+}

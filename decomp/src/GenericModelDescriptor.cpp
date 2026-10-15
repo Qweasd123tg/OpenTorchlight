@@ -61,3 +61,10 @@ unsigned int CGenericModelDescriptor::GetAnimationIDByString(CEditorScene* scene
 
     return 0;
 }
+
+void CGenericModelDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject* object)
+{
+    CGenericModel* model = dynamic_cast<CGenericModel*>(object);
+    if (model)
+        model->setQueryMask(static_cast<OGRE_UTILITIES::EQUERYMASK>(2));
+}

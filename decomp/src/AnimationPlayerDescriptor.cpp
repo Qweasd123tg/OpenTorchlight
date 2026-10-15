@@ -24,6 +24,18 @@ CAnimationPlayerDescriptor::CAnimationPlayerDescriptor(const wchar_t* name, cons
     AddOutputLogic(OUTPUT_EVENT_ANIMATION_STOPPED);
     AddOutputLogic(OUTPUT_EVENT_ANIMATION_PLAYING);
 }
+void CAnimationPlayerDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    if (scene->getResourceManager()->getEditorIsRunning())
+        return;
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CAnimationPlayer* player = dynamic_cast<CAnimationPlayer*>(m_Objects[i]);
+        if (player && player->m_bStartOnLoad)
+            player->playAnimation(true);
+    }
+}
+
+
 
 CAnimationPlayerDescriptor::~CAnimationPlayerDescriptor()
 {

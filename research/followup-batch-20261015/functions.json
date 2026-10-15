@@ -1,0 +1,1712 @@
+[
+ {
+  "address": "0x5bb740",
+  "tu": "DamageShapeDescriptor.cpp",
+  "name": "CDamageShapeDescriptor::update(float)",
+  "original_bytes": 135,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "e56f4ba609bf4a2a710b8b05ea20450d6623477ab576d11ae76b6eee7e572f98",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "e56f4ba609bf4a2a710b8b05ea20450d6623477ab576d11ae76b6eee7e572f98",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "damage_descriptor_update"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5bb840",
+  "tu": "DamageShapeDescriptor.cpp",
+  "name": "CDamageShapeDescriptor::descriptorSceneActivated(CEditorScene*)",
+  "original_bytes": 197,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "e56f4ba609bf4a2a710b8b05ea20450d6623477ab576d11ae76b6eee7e572f98",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "e56f4ba609bf4a2a710b8b05ea20450d6623477ab576d11ae76b6eee7e572f98",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "damage_descriptor_activate"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5da680",
+  "tu": "GenericModelDescriptor.cpp",
+  "name": "CGenericModelDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject*)",
+  "original_bytes": 61,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "82e6a380dc4b4255fc1b843392575f486da01fb1aceafe1b23556cada94813d0",
+  "comparison": null
+ },
+ {
+  "address": "0x5dfc10",
+  "tu": "ItemDescriptor.cpp",
+  "name": "CItemDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject*)",
+  "original_bytes": 41,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "f6d86f8e4f3b3e1c7e80918b07fa0e2313b5f6e5ebf4197a65dbf6b38db2b855",
+  "comparison": null
+ },
+ {
+  "address": "0x621900",
+  "tu": "PositionableObjectDescriptor.cpp",
+  "name": "CPositionableObjectDescriptor::loadAdditionalInfo(CEditorBaseObject*, COgreReader*, CDataGroup*, CDescriptorLoadConfiguration*)",
+  "original_bytes": 138,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "70a38da9c046de695fbcecd2cb09af95cc4d09cdcb827eaba1b9adb1633eb941",
+  "comparison": null
+ },
+ {
+  "address": "0x6258a0",
+  "tu": "PropertyNodeDescriptor.cpp",
+  "name": "CPropertyNodeDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+  "original_bytes": 98,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "898d1701a9b11e13b837fe3e7b8715a94353b248795dca03e2ee522c4abd6ccd",
+  "comparison": null
+ },
+ {
+  "address": "0x62e8a0",
+  "tu": "RandomGroupDescriptor.cpp",
+  "name": "CRandomGroupDescriptor::getDifficultyIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 119,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "a46a0e8e48a8a5edd23ca46dc4ed261e56bfa5dec67bd0422a3f08548d5cfff4",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "a46a0e8e48a8a5edd23ca46dc4ed261e56bfa5dec67bd0422a3f08548d5cfff4",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_random_difficulty_id"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x62eab0",
+  "tu": "RandomGroupDescriptor.cpp",
+  "name": "CRandomGroupDescriptor::descriptorSceneActivated(CEditorScene*)",
+  "original_bytes": 145,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "a46a0e8e48a8a5edd23ca46dc4ed261e56bfa5dec67bd0422a3f08548d5cfff4",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "a46a0e8e48a8a5edd23ca46dc4ed261e56bfa5dec67bd0422a3f08548d5cfff4",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "random_group_descriptor_activate"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x638bb0",
+  "tu": "RandomGroupDescriptor.cpp",
+  "name": "CRandomGroupDescriptor::getPlayerClassIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 390,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "a46a0e8e48a8a5edd23ca46dc4ed261e56bfa5dec67bd0422a3f08548d5cfff4",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "a46a0e8e48a8a5edd23ca46dc4ed261e56bfa5dec67bd0422a3f08548d5cfff4",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_player_class_id"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x64dff0",
+  "tu": "SoundObjectDescriptor.cpp",
+  "name": "CSoundObjectDescriptor::GetSoundDataStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 127,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "533ab1c16c655fb38c187161021d8fd04e4289078ac2be182c0ce9d1f503633d",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "533ab1c16c655fb38c187161021d8fd04e4289078ac2be182c0ce9d1f503633d",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_sound_data_name"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x64e070",
+  "tu": "SoundObjectDescriptor.cpp",
+  "name": "CSoundObjectDescriptor::GetSoundDataIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 89,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "533ab1c16c655fb38c187161021d8fd04e4289078ac2be182c0ce9d1f503633d",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "533ab1c16c655fb38c187161021d8fd04e4289078ac2be182c0ce9d1f503633d",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_sound_data_index"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x64e0d0",
+  "tu": "SoundObjectDescriptor.cpp",
+  "name": "CSoundObjectDescriptor::GetSoundCategoryIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 37,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "533ab1c16c655fb38c187161021d8fd04e4289078ac2be182c0ce9d1f503633d",
+  "comparison": null
+ },
+ {
+  "address": "0x6515e0",
+  "tu": "SoundObjectDescriptor.cpp",
+  "name": "CSoundObjectDescriptor::GetSoundCategoryStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 205,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "533ab1c16c655fb38c187161021d8fd04e4289078ac2be182c0ce9d1f503633d",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "533ab1c16c655fb38c187161021d8fd04e4289078ac2be182c0ce9d1f503633d",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_sound_category_name"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x652740",
+  "tu": "UnitSpawnerDescriptor.cpp",
+  "name": "CUnitSpawnerDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 68,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "bdf2ef98b12d3ee726aacf823175b50afd06459338029ad41425ca720cef0474",
+  "comparison": null
+ },
+ {
+  "address": "0x662f50",
+  "tu": "InteractiveDescriptor.cpp",
+  "name": "CInteractiveDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 30,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "d220d35021b5c99f3df965a7d15ad3c9983bec5c1f711f66e90711d011e0b7bd",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "d220d35021b5c99f3df965a7d15ad3c9983bec5c1f711f66e90711d011e0b7bd",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_interactive_group_id"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x672450",
+  "tu": "RandomChoiceDescriptor.cpp",
+  "name": "CRandomChoiceDescriptor::GetChoiceTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 143,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "273c1b058db0303eed02d39ec46aabea07a59f13603f7020c44e897d76ed5ea2",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "273c1b058db0303eed02d39ec46aabea07a59f13603f7020c44e897d76ed5ea2",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_random_choice_id"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6ec760",
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "name": "CParticleTechWrapperDescriptor::GetBillboardRotationTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 127,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "f4a18f04da46b7edeff50cc5fdf9a7fe4f5079ba559263119817b33974b503ba",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "f4a18f04da46b7edeff50cc5fdf9a7fe4f5079ba559263119817b33974b503ba",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_billboard_rotation_id"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6ec7e0",
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "name": "CParticleTechWrapperDescriptor::GetSortIndexStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+  "original_bytes": 27,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "f4a18f04da46b7edeff50cc5fdf9a7fe4f5079ba559263119817b33974b503ba",
+  "comparison": null
+ },
+ {
+  "address": "0x6ec800",
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "name": "CParticleTechWrapperDescriptor::GetSortIndexIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 28,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "f4a18f04da46b7edeff50cc5fdf9a7fe4f5079ba559263119817b33974b503ba",
+  "comparison": null
+ },
+ {
+  "address": "0x701d50",
+  "tu": "DescriptorLoadConfiguration.cpp",
+  "name": "CDescriptorLoadConfiguration::getRemappedID(long long)",
+  "original_bytes": 88,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "unchanged-body",
+  "object_digest": "251bf9b4e751262d975558d7043c80ce3aed841adb27e488ea102104c826037e",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "251bf9b4e751262d975558d7043c80ce3aed841adb27e488ea102104c826037e",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "descriptor_remap_lookup"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x702490",
+  "tu": "DescriptorManager.cpp",
+  "name": "CDescriptorManager::update(float)",
+  "original_bytes": 96,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "modified-body",
+  "object_digest": "59f6ce4292dd8405cf7eb26d3bc7804769ec1395e2ad44a9fc010835ccbe0a8c",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "59f6ce4292dd8405cf7eb26d3bc7804769ec1395e2ad44a9fc010835ccbe0a8c",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "descriptor_update_traversal"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7026d0",
+  "tu": "DescriptorManager.cpp",
+  "name": "CDescriptorManager::postProcessDescriptorObjects(CDataGroup*, CDescriptorLoadConfiguration*)",
+  "original_bytes": 99,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "modified-body",
+  "object_digest": "59f6ce4292dd8405cf7eb26d3bc7804769ec1395e2ad44a9fc010835ccbe0a8c",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "59f6ce4292dd8405cf7eb26d3bc7804769ec1395e2ad44a9fc010835ccbe0a8c",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "descriptor_post_process_traversal"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x75ec10",
+  "tu": "LayoutScene.cpp",
+  "name": "CLayoutScene::fireEvent(EEDITOR_EVENTS, long long)",
+  "original_bytes": 170,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "unchanged-body",
+  "object_digest": "08a2c8e2a7d9cb7c023c6962ee2396f6b6a564781ff2ab302a5c1e3f9aa31960",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "08a2c8e2a7d9cb7c023c6962ee2396f6b6a564781ff2ab302a5c1e3f9aa31960",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "layout_sound_events"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x795db0",
+  "tu": "LogicGroup.cpp",
+  "name": "CLogicGroup::RemoveLogicObjectByIndex(unsigned int)",
+  "original_bytes": 342,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "00b98647f91bf4f85634ae250f7e4543614fef36360f39ee7d75c621d2352884",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "00b98647f91bf4f85634ae250f7e4543614fef36360f39ee7d75c621d2352884",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_logic_group_remove"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7bd300",
+  "tu": "TimelineDescriptor.cpp",
+  "name": "CTimelineDescriptor::GetTimelineInterpolationIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 113,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "59eb5b1825ba7357ef33f1bd70e781267a1b89927ae0b00a9fa8d7b936fd5b46",
+  "comparison": null
+ },
+ {
+  "address": "0x7bd570",
+  "tu": "TimelineDescriptor.cpp",
+  "name": "CTimelineDescriptor::descriptorSceneActivated(CEditorScene*)",
+  "original_bytes": 156,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "59eb5b1825ba7357ef33f1bd70e781267a1b89927ae0b00a9fa8d7b936fd5b46",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "59eb5b1825ba7357ef33f1bd70e781267a1b89927ae0b00a9fa8d7b936fd5b46",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "timeline_descriptor_activate"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7bd610",
+  "tu": "TimelineDescriptor.cpp",
+  "name": "CTimelineDescriptor::update(float)",
+  "original_bytes": 127,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "59eb5b1825ba7357ef33f1bd70e781267a1b89927ae0b00a9fa8d7b936fd5b46",
+  "comparison": null
+ },
+ {
+  "address": "0x7bd690",
+  "tu": "TimelineDescriptor.cpp",
+  "name": "CTimelineDescriptor::loadAdditionalInfo(CEditorBaseObject*, COgreReader*, CDataGroup*, CDescriptorLoadConfiguration*)",
+  "original_bytes": 236,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "59eb5b1825ba7357ef33f1bd70e781267a1b89927ae0b00a9fa8d7b936fd5b46",
+  "comparison": null
+ },
+ {
+  "address": "0x7bd780",
+  "tu": "TimelineDescriptor.cpp",
+  "name": "CTimelineDescriptor::saveAdditionalInfo(CEditorBaseObject*, std::basic_ofstream<char, std::char_traits<char> >*, CDataGroup*, CDescriptorSaveConfiguration*)",
+  "original_bytes": 148,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "59eb5b1825ba7357ef33f1bd70e781267a1b89927ae0b00a9fa8d7b936fd5b46",
+  "comparison": null
+ },
+ {
+  "address": "0x86cca0",
+  "tu": "dynamicrenderable.cpp",
+  "name": "CDynamicRenderable::getBoundingRadius() const",
+  "original_bytes": 123,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "6e1c5d3a8d5acd0a3b98455cd1acc18615599098cdc0e3f9528182555a88c960",
+  "comparison": null
+ },
+ {
+  "address": "0xa08070",
+  "tu": "SoundObject.cpp",
+  "name": "CSoundObject::reset()",
+  "original_bytes": 25,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "4e70409066cbc42df840fc76fd4f2cc5aa3a5cfb6d86acb6ebc87ab7dc967787",
+  "comparison": null
+ },
+ {
+  "address": "0xa60f40",
+  "tu": "RoomPieceDataInformation.cpp",
+  "name": "CRoomPieceDataInformation::_GetRoomPieceCoreDataByGuidByClosestGuid(long long)",
+  "original_bytes": 192,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "6dbf9a5f34abf5742b58dcf0d9afc7ab7ebb57236e38fb474f6443ba54bdcc28",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "6dbf9a5f34abf5742b58dcf0d9afc7ab7ebb57236e38fb474f6443ba54bdcc28",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "room_piece_closest_guid"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc5fb30",
+  "tu": "DataGroup.cpp",
+  "name": "CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",
+  "original_bytes": 336,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "data_group_new_add_string"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc5fe70",
+  "tu": "DataGroup.cpp",
+  "name": "CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",
+  "original_bytes": 272,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "data_group_new_add_bool"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc603e0",
+  "tu": "DataGroup.cpp",
+  "name": "CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, double)",
+  "original_bytes": 272,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "data_group_new_add_double"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc60560",
+  "tu": "DataGroup.cpp",
+  "name": "CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, float)",
+  "original_bytes": 272,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "data_group_new_add_float"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc606e0",
+  "tu": "DataGroup.cpp",
+  "name": "CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int)",
+  "original_bytes": 272,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "data_group_new_add_uint"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc61c00",
+  "tu": "DataGroup.cpp",
+  "name": "CDataGroup::AddDataGroup(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "original_bytes": 304,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "bd7202e714c4e24ad8fc916e902fcd540cc55c85d088f843f5520300d136e45c",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "data_group_new_add_group"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc687c0",
+  "tu": "OgreResourceFile.cpp",
+  "name": "COgreResourceFile::Get64BitData(COgreReader*)",
+  "original_bytes": 37,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "2e0318814b81cce902440a7ad2c59238208c8b1fe22ad5fe6276540599e37d3b",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "2e0318814b81cce902440a7ad2c59238208c8b1fe22ad5fe6276540599e37d3b",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "ogre_resource_int64_read"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc73aa0",
+  "tu": "FileUtilities.cpp",
+  "name": "FILESYSTEM::AssembleAbsolutePath(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "original_bytes": 180,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "6dacd8f5591b2c309a63fae2a272a0937c2643961e13c103373f31d25cb9b5d3",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "6dacd8f5591b2c309a63fae2a272a0937c2643961e13c103373f31d25cb9b5d3",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_files_absolute"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc741e0",
+  "tu": "FileUtilities.cpp",
+  "name": "FILESYSTEM::FileExists(wchar_t const*)",
+  "original_bytes": 226,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "6dacd8f5591b2c309a63fae2a272a0937c2643961e13c103373f31d25cb9b5d3",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "6dacd8f5591b2c309a63fae2a272a0937c2643961e13c103373f31d25cb9b5d3",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_files_exists"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc751f0",
+  "tu": "FileUtilities.cpp",
+  "name": "FILESYSTEM::ReadWString(_IO_FILE*, unsigned int)",
+  "original_bytes": 228,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "6dacd8f5591b2c309a63fae2a272a0937c2643961e13c103373f31d25cb9b5d3",
+  "comparison": null
+ },
+ {
+  "address": "0xc77530",
+  "tu": "FileUtilities.cpp",
+  "name": "FILESYSTEM::GetFileTime(wchar_t const*)",
+  "original_bytes": 274,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "6dacd8f5591b2c309a63fae2a272a0937c2643961e13c103373f31d25cb9b5d3",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "6dacd8f5591b2c309a63fae2a272a0937c2643961e13c103373f31d25cb9b5d3",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_files_time"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc839d0",
+  "tu": "ModFileFilter.cpp",
+  "name": "CModFileFilter::getNumberOfActiveMods()",
+  "original_bytes": 106,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "unchanged-body",
+  "object_digest": "52c074d9f91fcdab9e585675b7a5d78ad99be73925365a7917dddf58bdab4fb3",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "52c074d9f91fcdab9e585675b7a5d78ad99be73925365a7917dddf58bdab4fb3",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "mod_filter_active_count"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc8daf0",
+  "tu": "StringUtilities.cpp",
+  "name": "STRINGS::StringConvertToWide(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+  "original_bytes": 389,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_strings_c8daf0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc8de90",
+  "tu": "StringUtilities.cpp",
+  "name": "std::basic_iostream<char, std::char_traits<char> >::~basic_iostream() [clone .clone.0]",
+  "original_bytes": 86,
+  "acceptance": "MATCH",
+  "source_change": "generated-consequence",
+  "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+  "comparison": null
+ },
+ {
+  "address": "0xc8e0e0",
+  "tu": "StringUtilities.cpp",
+  "name": "STRINGS::StringUpper(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+  "original_bytes": 162,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_strings_c8e0e0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc8e190",
+  "tu": "StringUtilities.cpp",
+  "name": "STRINGS::StringUpper(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "original_bytes": 159,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_strings_c8e190"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc8e350",
+  "tu": "StringUtilities.cpp",
+  "name": "STRINGS::StringConvertToNarrow(wchar_t const*)",
+  "original_bytes": 350,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_strings_c8e350"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc8e810",
+  "tu": "StringUtilities.cpp",
+  "name": "STRINGS::GetValueAsString(int)",
+  "original_bytes": 576,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_strings_c8e810"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc8ea50",
+  "tu": "StringUtilities.cpp",
+  "name": "STRINGS::uniqueName(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)",
+  "original_bytes": 338,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_strings_c8ea50"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc90a30",
+  "tu": "StringUtilities.cpp",
+  "name": "STRINGS::GetValueAsString(float)",
+  "original_bytes": 534,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "26b7e3196e8862f096412195dfdd66879c6cd90f95870c05fc7a1990039ebf1e",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_strings_c90a30"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc93b10",
+  "tu": "ExecuteSkillProps.cpp",
+  "name": "CExecuteSkillProps::getSkillStats(CBaseUnit*, int)",
+  "original_bytes": 179,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "unchanged-body",
+  "object_digest": "84d0c2d8836aca6b8b5789d9c5d732761c0943682f82399af4cbc3c2b5dc1c6e",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "84d0c2d8836aca6b8b5789d9c5d732761c0943682f82399af4cbc3c2b5dc1c6e",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "execute_skill_stats_query"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc93bd0",
+  "tu": "ExecuteSkillProps.cpp",
+  "name": "CExecuteSkillProps::getSkillDescription(CBaseUnit*, int)",
+  "original_bytes": 179,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "unchanged-body",
+  "object_digest": "84d0c2d8836aca6b8b5789d9c5d732761c0943682f82399af4cbc3c2b5dc1c6e",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "84d0c2d8836aca6b8b5789d9c5d732761c0943682f82399af4cbc3c2b5dc1c6e",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "execute_skill_description_query"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xcca7b0",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::getAnySkillsCoolingByActivationType(ESKILL_ACTIVATION_TYPE)",
+  "original_bytes": 257,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "c392318a3b40e250b51e70a7faab66b461fbca524af41950f58cf243decf7a93",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "c392318a3b40e250b51e70a7faab66b461fbca524af41950f58cf243decf7a93",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_skill_any_cooling"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xcd2ce0",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::getSkill(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, int)",
+  "original_bytes": 445,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "c392318a3b40e250b51e70a7faab66b461fbca524af41950f58cf243decf7a93",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "c392318a3b40e250b51e70a7faab66b461fbca524af41950f58cf243decf7a93",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_skill_find_level"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xcd3290",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::getSkill(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "original_bytes": 394,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "c392318a3b40e250b51e70a7faab66b461fbca524af41950f58cf243decf7a93",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "c392318a3b40e250b51e70a7faab66b461fbca524af41950f58cf243decf7a93",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_skill_find_name"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xcd5090",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::resetSkillLevels()",
+  "original_bytes": 167,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "c392318a3b40e250b51e70a7faab66b461fbca524af41950f58cf243decf7a93",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "c392318a3b40e250b51e70a7faab66b461fbca524af41950f58cf243decf7a93",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_skill_reset_levels"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xcdd140",
+  "tu": "SkillProperty.cpp",
+  "name": "CSkillProperty::getSkillDescription()",
+  "original_bytes": 21,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "51c2d6867d82627c420543bf1c61422606a1a3790aeae98ab6a5be30b9e9ed1b",
+  "comparison": null
+ },
+ {
+  "address": "0xcdd1f0",
+  "tu": "SkillProperty.cpp",
+  "name": "CSkillProperty::getCoolDown()",
+  "original_bytes": 74,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "51c2d6867d82627c420543bf1c61422606a1a3790aeae98ab6a5be30b9e9ed1b",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "51c2d6867d82627c420543bf1c61422606a1a3790aeae98ab6a5be30b9e9ed1b",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_skill_property_cooldown"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xce9fd0",
+  "tu": "CameraControl.cpp",
+  "name": "CCameraControl::setCinematicMode(bool)",
+  "original_bytes": 119,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "unchanged-body",
+  "object_digest": "53229298a2a757067250bd58b233ec942ad6b1bd749a0b7409dc43c9cd56706a",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "53229298a2a757067250bd58b233ec942ad6b1bd749a0b7409dc43c9cd56706a",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "camera_cinematic_state"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xd97a90",
+  "tu": "EditorButtonDescriptor.cpp",
+  "name": "CEditorButtonDescriptor::update(float)",
+  "original_bytes": 103,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "6332a11edb2ddeec282cd6fa98f50019528605b24e4a0ec1e55d7ec6dd247a09",
+  "comparison": null
+ },
+ {
+  "address": "0xd9d560",
+  "tu": "EditorImageDescriptor.cpp",
+  "name": "CEditorImageDescriptor::update(float)",
+  "original_bytes": 103,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "3c1c3b7cef40b37c6c326faec58a802d3601db2dc4da2342b0c7de85052b418a",
+  "comparison": null
+ },
+ {
+  "address": "0xda2580",
+  "tu": "AnimationPlayerDescriptor.cpp",
+  "name": "CAnimationPlayerDescriptor::descriptorSceneActivated(CEditorScene*)",
+  "original_bytes": 167,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "231d44ce657e5e2c97319399b6c6f7b213190b15c76adcef6ea27847e2a6f7fe",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "231d44ce657e5e2c97319399b6c6f7b213190b15c76adcef6ea27847e2a6f7fe",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "animation_descriptor_start_on_load"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xe20620",
+  "tu": "SkillController.cpp",
+  "name": "CSkillController::stopSkill()",
+  "original_bytes": 48,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "4d02315db2b0f4f80f9f3440c2786c6de9b29955f8192f92091a19008c1488ac",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "4d02315db2b0f4f80f9f3440c2786c6de9b29955f8192f92091a19008c1488ac",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_skill_controller_stop"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xe20650",
+  "tu": "SkillController.cpp",
+  "name": "CSkillController::startSkill()",
+  "original_bytes": 48,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "4d02315db2b0f4f80f9f3440c2786c6de9b29955f8192f92091a19008c1488ac",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "4d02315db2b0f4f80f9f3440c2786c6de9b29955f8192f92091a19008c1488ac",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "followup_skill_controller_start"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xe20690",
+  "tu": "SkillController.cpp",
+  "name": "CSkillController::unlearnSkill()",
+  "original_bytes": 90,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "4d02315db2b0f4f80f9f3440c2786c6de9b29955f8192f92091a19008c1488ac",
+  "comparison": null
+ },
+ {
+  "address": "0xe29410",
+  "tu": "editorimage.cpp",
+  "name": "CEditorImage::calculatePosHie(CEGUI::UDim&, CEGUI::UDim&)",
+  "original_bytes": 142,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "a236d1c740c34ba8f8138e51a3431c07d5f93e6d3d2e8fc4225c92fb5a484903",
+  "comparison": null
+ },
+ {
+  "address": "0xe294e0",
+  "tu": "editorimage.cpp",
+  "name": "CEditorImage::activate()",
+  "original_bytes": 126,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "a236d1c740c34ba8f8138e51a3431c07d5f93e6d3d2e8fc4225c92fb5a484903",
+  "comparison": null
+ },
+ {
+  "address": "0xe29670",
+  "tu": "editorimage.cpp",
+  "name": "CEditorImage::update(float)",
+  "original_bytes": 107,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "a236d1c740c34ba8f8138e51a3431c07d5f93e6d3d2e8fc4225c92fb5a484903",
+  "comparison": null
+ },
+ {
+  "address": "0xe73a10",
+  "tu": "Cinematics.cpp",
+  "name": "CCinematics::getCinematic(unsigned int)",
+  "original_bytes": 38,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "e023d09530026ac3aee922a7b88991b2835152292b1a7bb2f376db0a392a77de",
+  "comparison": null
+ },
+ {
+  "address": "0xe79560",
+  "tu": "Cinematics.cpp",
+  "name": "CCinematics::getCinematic(wchar_t const*)",
+  "original_bytes": 430,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "e023d09530026ac3aee922a7b88991b2835152292b1a7bb2f376db0a392a77de",
+  "comparison": null
+ },
+ {
+  "address": "0xe7a4b0",
+  "tu": "UnitResourceList.cpp",
+  "name": "CUnitResourceList::getDataGroupByGuid(long long)",
+  "original_bytes": 94,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "5b58768a74c70519ce095875073e7db73d8ed16c60bdf62ce4814f71b1cd3ab8",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "5b58768a74c70519ce095875073e7db73d8ed16c60bdf62ce4814f71b1cd3ab8",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "unit_resources_guid"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xe7aae0",
+  "tu": "UnitResourceList.cpp",
+  "name": "CUnitResourceList::getGroupByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "original_bytes": 249,
+  "acceptance": "MATCH",
+  "source_change": "new-definition",
+  "object_digest": "5b58768a74c70519ce095875073e7db73d8ed16c60bdf62ce4814f71b1cd3ab8",
+  "comparison": null
+ },
+ {
+  "address": "0xe7ad00",
+  "tu": "UnitResourceList.cpp",
+  "name": "CUnitResourceList::getUnitNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&)",
+  "original_bytes": 560,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "5b58768a74c70519ce095875073e7db73d8ed16c60bdf62ce4814f71b1cd3ab8",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "5b58768a74c70519ce095875073e7db73d8ed16c60bdf62ce4814f71b1cd3ab8",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "unit_resources_names"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xe7b1d0",
+  "tu": "UnitResourceList.cpp",
+  "name": "CUnitResourceList::clearDataOut()",
+  "original_bytes": 502,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "5b58768a74c70519ce095875073e7db73d8ed16c60bdf62ce4814f71b1cd3ab8",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "5b58768a74c70519ce095875073e7db73d8ed16c60bdf62ce4814f71b1cd3ab8",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "unit_resources_clear"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xe7b590",
+  "tu": "UnitResourceList.cpp",
+  "name": "CUnitResourceList::getDataGroupByObjectName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "original_bytes": 408,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "new-definition",
+  "object_digest": "5b58768a74c70519ce095875073e7db73d8ed16c60bdf62ce4814f71b1cd3ab8",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "5b58768a74c70519ce095875073e7db73d8ed16c60bdf62ce4814f71b1cd3ab8",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "unit_resources_object_name"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xebe260",
+  "tu": "Achievement.cpp",
+  "name": "CAchievement::setValue(float)",
+  "original_bytes": 95,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "modified-body",
+  "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "achievement_set_float"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xebe2c0",
+  "tu": "Achievement.cpp",
+  "name": "CAchievement::setValue(int)",
+  "original_bytes": 99,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "modified-body",
+  "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "achievement_set_int"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xebe330",
+  "tu": "Achievement.cpp",
+  "name": "CAchievement::cheat()",
+  "original_bytes": 202,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "modified-body",
+  "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "achievement_cheat"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xebe400",
+  "tu": "Achievement.cpp",
+  "name": "CAchievement::forceComplete()",
+  "original_bytes": 178,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "modified-body",
+  "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "achievement_force"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xebe4c0",
+  "tu": "Achievement.cpp",
+  "name": "CAchievement::addValue(float)",
+  "original_bytes": 135,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "modified-body",
+  "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "achievement_add_float"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xebe550",
+  "tu": "Achievement.cpp",
+  "name": "CAchievement::addValue(int)",
+  "original_bytes": 145,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "modified-body",
+  "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "achievement_add_int"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xebe5f0",
+  "tu": "Achievement.cpp",
+  "name": "CAchievement::increment()",
+  "original_bytes": 87,
+  "acceptance": "BEHAVIORAL",
+  "source_change": "modified-body",
+  "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "052345cb4a3182fc373ba49a5825482d2299f01b718c46628e0a3372560067fc",
+    "inputs_digest": "c8be75f97e11b38209ff88b730cb46a503038dfec98a8fa6a53610efb8a0bd04",
+    "parameters": {
+     "fixtures": [
+      "achievement_increment"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ }
+]

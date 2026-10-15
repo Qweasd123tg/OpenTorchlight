@@ -81,3 +81,44 @@ void CEditorImage::setImageFileName(const std::wstring& imageFileName)
         }
     }
 }
+
+void CEditorImage::calculatePosHie(CEGUI::UDim& position, CEGUI::UDim& size)
+{
+    if (m_pParentImage)
+        m_pParentImage->calculatePosHie(position, size);
+    position.d_scale += m_fPosXPct;
+    position.d_offset += m_fPosX;
+    size.d_scale += m_fPosYPct;
+    size.d_offset += m_fPosY;
+}
+
+#include "EditorScene.h"
+
+void CEditorImage::activate()
+{
+    m_pParentImage = NULL;
+    if (getParentGuid() != -1) {
+        m_pParentImage = dynamic_cast<CEditorImage*>(getSceneOwner()->GetObjectInScene(getParentGuid()));
+        if (m_pParentImage && m_pParentImage->m_pWindow) {
+            m_pParentImage->m_pWindow->addChildWindow(m_pWindow);
+            return;
+        }
+    }
+    m_pParentWindow->addChildWindow(m_pWindow);
+}
+
+void CEditorImage::update(float elapsed)
+{
+    if (!m_pWindow || !m_pParentWindow)
+        return;
+    if (m_bVisible) {
+        if (!m_bWindowVisible) {
+            m_bWindowVisible = true;
+            m_pWindow->setVisible(true);
+        }
+        updatePositionAndSize();
+    } else if (m_bWindowVisible) {
+        m_bWindowVisible = false;
+        m_pWindow->setVisible(false);
+    }
+}

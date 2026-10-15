@@ -96,3 +96,25 @@ std::wstring CDamageShapeDescriptor::getAlignmentStringByID(
         return KALIGNMENT_STRINGS[0];
     return KALIGNMENT_STRINGS[index];
 }
+
+void CDamageShapeDescriptor::update(float elapsed)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CDamageShape* shape = dynamic_cast<CDamageShape*>(m_Objects[i]);
+        if (shape)
+            shape->updateLevelObject(elapsed, NULL, Ogre::Vector3::ZERO);
+    }
+}
+
+void CDamageShapeDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    if (scene->getResourceManager()->getEditorIsRunning())
+        return;
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CDamageShape* shape = dynamic_cast<CDamageShape*>(m_Objects[i]);
+        if (shape && shape->getEnabled()) {
+            shape->setEnabled(false);
+            shape->setEnabled(true);
+        }
+    }
+}

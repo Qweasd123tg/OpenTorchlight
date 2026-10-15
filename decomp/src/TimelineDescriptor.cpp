@@ -15,6 +15,62 @@ CTimelineDescriptor::~CTimelineDescriptor()
 #include <string>
 #include "TimelineDescriptorNames.h"
 
+void CTimelineDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CTimeline* timeline = dynamic_cast<CTimeline*>(m_Objects[i]);
+        if (timeline)
+            timeline->SetEnabled(timeline->m_bStartOnLoad);
+    }
+}
+
+void CTimelineDescriptor::update(float elapsed)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CTimeline* timeline = dynamic_cast<CTimeline*>(m_Objects[i]);
+        if (timeline)
+            timeline->UpdateTimeline(elapsed);
+    }
+}
+
+#include "ResourceManager.h"
+
+bool CTimelineDescriptor::loadAdditionalInfo(CEditorBaseObject* object, COgreReader* reader, CDataGroup* data, CDescriptorLoadConfiguration* configuration)
+{
+    CTimeline* timeline = dynamic_cast<CTimeline*>(object);
+    if (!timeline)
+        return false;
+    if (data)
+        timeline->loadTimelineFromDataGroup(getSceneOwner(), data, configuration);
+    else if (reader)
+        timeline->loadTimelineFromBinaryFile(getSceneOwner(), reader, configuration);
+    if (!getSceneOwner()->getResourceManager()->getEditorIsRunning() && timeline->m_bStartOnLoad)
+        timeline->SetEnabled(true);
+    return true;
+}
+
+bool CTimelineDescriptor::saveAdditionalInfo(CEditorBaseObject* object, std::basic_ofstream<char, std::char_traits<char> >* stream, CDataGroup* data, CDescriptorSaveConfiguration* configuration)
+{
+    CTimeline* timeline = dynamic_cast<CTimeline*>(object);
+    if (!timeline)
+        return false;
+    if (data)
+        timeline->saveTimelineToDataGroup(getSceneOwner(), data);
+    else if (stream)
+        timeline->saveTimelineToBinaryFile(getSceneOwner(), stream);
+    return true;
+}
+
+unsigned int CTimelineDescriptor::GetTimelineInterpolationIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    for (unsigned int i = 0; i < 7; ++i)
+        if (value == gTIMELINE_INTERP_TYPES[i])
+            return i;
+    return 0;
+}
+
+
+
 void CTimelineDescriptor::descriptorSceneDeactivated(CEditorScene* scene)
 {
     for (unsigned int i = 0; i < m_Objects.size(); ++i)

@@ -105,3 +105,24 @@ unsigned int CParticleTechWrapperDescriptor::GetParticleRenderIDByString(CEditor
     }
     return 0;
 }
+
+unsigned int CParticleTechWrapperDescriptor::GetBillboardRotationTypeIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    if (value == gPARTICLE_BILLBOARD_ROTATION_TYPES[0]) return 0;
+    if (value == gPARTICLE_BILLBOARD_ROTATION_TYPES[1]) return 1;
+    return 0;
+}
+
+#include "StringUtilities.h"
+
+std::wstring CParticleTechWrapperDescriptor::GetSortIndexStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    if (index >= 5) index = 0;
+    return STRINGS::GetValueAsWString(index);
+}
+
+unsigned int CParticleTechWrapperDescriptor::GetSortIndexIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    unsigned int index = STRINGS::GetInt(value);
+    return index >= 5 ? 0 : index;
+}

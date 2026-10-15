@@ -81,3 +81,8 @@ std::wstring CInteractiveDescriptor::getTypeStringByID(
         return gINTERACTABLE_TYPE_NAMES[0];
     return gINTERACTABLE_TYPE_NAMES[index];
 }
+
+unsigned int CInteractiveDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    return value == L"ITEMS";
+}

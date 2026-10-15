@@ -56,3 +56,10 @@ std::wstring CRandomChoiceDescriptor::GetChoiceTypeStringByID(
         return gRANDOMCHOICE_TYPE_NAMES[0];
     return gRANDOMCHOICE_TYPE_NAMES[index];
 }
+
+unsigned int CRandomChoiceDescriptor::GetChoiceTypeIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    if (value == gRANDOMCHOICE_TYPE_NAMES[0]) return 0;
+    if (value == gRANDOMCHOICE_TYPE_NAMES[1]) return 1;
+    return 0;
+}

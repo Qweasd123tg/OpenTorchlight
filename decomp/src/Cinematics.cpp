@@ -38,3 +38,18 @@ CCinematics::CCinematics(const wchar_t* path)
         reload();
     }
 }
+
+CCinematic* CCinematics::getCinematic(unsigned int index)
+{
+    if (index < m_lCinematics.size())
+        return m_lCinematics[index];
+    return NULL;
+}
+
+CCinematic* CCinematics::getCinematic(const wchar_t* name)
+{
+    std::map<std::wstring, unsigned int>::iterator found = m_mapCinematics.find(name);
+    if (found != m_mapCinematics.end())
+        return getCinematic(found->second);
+    return NULL;
+}

@@ -20,3 +20,17 @@ CCharacter* CSkillProperty::getOwnerCharacter()
     return NULL;
 }
 
+
+std::wstring CSkillProperty::getSkillDescription()
+{
+    return m_sDescription;
+}
+
+float CSkillProperty::getCoolDown()
+{
+    if (m_pSkill && m_pSkill->m_pOwner &&
+        m_pSkill->m_pOwner->m_eBaseUnitType == 0 &&
+        m_pSkill->m_pOwner->ISA(UNITTYPES::MONSTER))
+        return m_fMonsterCoolDown;
+    return m_fCoolDown;
+}

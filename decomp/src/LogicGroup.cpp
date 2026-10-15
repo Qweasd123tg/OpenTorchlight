@@ -53,3 +53,19 @@ CLogicGroup::CLogicGroup(CResourceManager* resourceManager)
       m_fEnabled(1.0f)
 {
 }
+
+bool CLogicGroup::RemoveLogicObjectByIndex(unsigned int index)
+{
+    if (index < m_logicObjects.size() && m_logicObjects[index] != NULL) {
+        for (unsigned int i = 0; i < m_logicObjects.size(); ++i)
+            if (i != index && m_logicObjects[i] != NULL)
+                m_logicObjects[i]->RemoveLinksToLogicObject(m_logicObjects[index]);
+        if (m_logicObjects[index] != NULL) {
+            delete m_logicObjects[index];
+            m_logicObjects[index] = NULL;
+        }
+        m_logicObjects[index] = NULL;
+        return true;
+    }
+    return false;
+}

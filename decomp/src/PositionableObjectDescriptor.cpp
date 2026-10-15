@@ -26,3 +26,13 @@ void CPositionableObjectDescriptor::InputLogicEvent(CEditorBaseObject* object, u
         }
     }
 }
+
+bool CPositionableObjectDescriptor::loadAdditionalInfo(CEditorBaseObject* object, COgreReader* reader, CDataGroup* data, CDescriptorLoadConfiguration* configuration)
+{
+    CPositionableObject* positionable = dynamic_cast<CPositionableObject*>(object);
+    if (positionable) {
+        positionable->setPosition(positionable->getPosition(false));
+        positionable->setOrientation(positionable->getOrientation(), false);
+    }
+    return true;
+}

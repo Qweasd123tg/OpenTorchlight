@@ -6,6 +6,9 @@
 #include "GameVariables.h"
 #include "GameNamespaces.h"
 #include "StringUtilities.h"
+#include <cwctype>
+#include <sstream>
+#include <OgreStringConverter.h>
 
 long long STRINGS::firstXCharactersMatch(const wchar_t *text, unsigned int length,
                                         const wchar_t *other, unsigned int otherLength)
@@ -289,4 +292,72 @@ std::wstring STRINGS::replaceWString(std::wstring text, const std::wstring& find
     std::wstring::size_type pos;
     while((pos=text.find(find))!=std::wstring::npos)text.replace(pos,length,replacement);
     return text;
+}
+
+std::wstring STRINGS::StringConvertToWide(const std::string& text)
+{
+    static wchar_t buff[5000];
+    const char* begin = text.data();
+    const char* end = begin + text.size();
+    const char* current = begin;
+    for (; current < end; ++current) {
+        unsigned char value = *current;
+        wchar_t converted;
+        switch (value) {
+        case 0xa4: converted = 0x20ac; break;
+        case 0xa6: converted = 0x160; break;
+        case 0xa8: converted = 0x161; break;
+        case 0xb4: converted = 0x17d; break;
+        case 0xb8: converted = 0x17e; break;
+        case 0xbc: converted = 0x152; break;
+        case 0xbd: converted = 0x153; break;
+        case 0xbe: converted = 0x178; break;
+        default: converted = value; break;
+        }
+        buff[static_cast<int>(current - begin)] = converted;
+    }
+    return std::wstring(buff, buff + static_cast<int>(current - begin));
+}
+
+std::string STRINGS::StringUpper(const std::string& text)
+{
+    std::string result(text);
+    for (unsigned int i = 0; i < result.size(); ++i)
+        result[i] = toupper(result[i]);
+    return result;
+}
+
+std::wstring STRINGS::StringUpper(const std::wstring& text)
+{
+    std::wstring result(text);
+    for (unsigned int i = 0; i < result.size(); ++i)
+        result[i] = towupper(result[i]);
+    return result;
+}
+
+std::string STRINGS::StringConvertToNarrow(const wchar_t* text)
+{
+    std::wstring wide(text);
+    return std::string(wide.begin(), wide.end());
+}
+
+std::string STRINGS::GetValueAsString(int value)
+{
+    std::stringstream stream;
+    stream << value;
+    return stream.str();
+}
+
+std::string STRINGS::GetValueAsString(float value)
+{
+    std::stringstream stream;
+    stream << value;
+    return stream.str();
+}
+
+std::string STRINGS::uniqueName(const std::string& prefix)
+{
+    static unsigned int gUniqueNameValue;
+    std::string value = Ogre::StringConverter::toString(++gUniqueNameValue);
+    return prefix + "_" + value;
 }

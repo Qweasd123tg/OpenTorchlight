@@ -1,0 +1,26 @@
+{
+ "address": "0xece450",
+ "tu": "SteamStats.cpp",
+ "classification": "existing source/header reconstruction mismatch, not a new candidate regression",
+ "canonical_head": "8d9f0ee6a2bf442295962f0d195795bec696b7af",
+ "canonical_source_sha256": "792f652984e2b44b87c3992a0e2a75657e2c8190d970ef8b92385aad3b06ed2d",
+ "frozen_header_sha256": "1fb75b5a90487da412707ef85d7e2ee6aad8b42ae3993c6c113c35b46c769a09",
+ "fresh_packet": "build-decomp/followup-batch-20261015/data-candidate/statModified-prepared.json",
+ "fixture_not_for_integration": "build-decomp/followup-batch-20261015/data-candidate/tests/SteamStatsPendingTest.cpp",
+ "canonical_negative_report": "build-decomp/followup-batch-20261015/data-candidate/canonical-statModified-negative.json",
+ "canonical_negative_log": "build-decomp/followup-batch-20261015/data-candidate/canonical-statModified-negative.log",
+ "case": "shape0/key-1; empty pending list grows to capacity4 in deterministic0x3c-filled allocation; original zeros stat and value of every slot, current implicit SStatChange constructor zeros only union.value",
+ "completed_pairs": 1,
+ "different": 1,
+ "incomplete": 0,
+ "child_exits": [
+  0,
+  0
+ ],
+ "guard_issues": [
+  0,
+  0
+ ],
+ "header_fix_deferred": true,
+ "diagnostic_source": "research/followup-batch-20261015/SteamStatsPendingProbe.cpp"
+}

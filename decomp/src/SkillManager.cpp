@@ -1,5 +1,6 @@
 #include "SkillManager.h"
 #include "Skill.h"
+#include "StringUtilities.h"
 
 bool m_gDisableSkillFromBeingCasted = false;
 
@@ -89,3 +90,43 @@ bool CSkillManager::getSkillCanBeExecuted(CSkill* skill, CBaseUnit* caster,
     return skill->requirementsMet(caster, activation, &targetPosition, target, flag);
 }
 
+
+bool CSkillManager::getAnySkillsCoolingByActivationType(ESKILL_ACTIVATION_TYPE activation)
+{
+    for (unsigned int i = 0; i < m_OtherSkills.size(); ++i)
+        if (m_OtherSkills[i]->m_eActivationType == activation &&
+            m_OtherSkills[i]->m_coolingTime > 0.0f)
+            return true;
+    for (unsigned int i = 0; i < m_UpdatingSkills.size(); ++i)
+        if (m_UpdatingSkills[i]->m_eActivationType == activation &&
+            m_UpdatingSkills[i]->m_coolingTime > 0.0f)
+            return true;
+    return false;
+}
+
+CSkill* CSkillManager::getSkill(const std::wstring& name, int level)
+{
+    std::wstring upperName = STRINGS::StringUpper(name);
+    for (unsigned int i = 0; i < m_OtherSkills.size(); ++i)
+        if (STRINGS::StringUpper(m_OtherSkills[i]->getName()) == upperName &&
+            m_OtherSkills[i]->m_skillLevel == level)
+            return m_OtherSkills[i];
+    return NULL;
+}
+
+CSkill* CSkillManager::getSkill(const std::wstring& name)
+{
+    std::map<std::wstring,TArrayList<CSkill*>*>::iterator found =
+        m_SkillsByName.find(STRINGS::StringUpper(name));
+    if (found != m_SkillsByName.end() && found->second->size())
+        return (*found->second)[0];
+    return NULL;
+}
+
+void CSkillManager::resetSkillLevels()
+{
+    for (unsigned int i = 0; i < m_OtherSkills.size(); ++i)
+        if (m_OtherSkills[i]->m_bEnabled & !m_OtherSkills[i]->m_bExecutedByProperty)
+            if (m_OtherSkills[i]->m_skillType == 0)
+                setSkillLevel(m_OtherSkills[i], 0);
+}

@@ -69,3 +69,13 @@ std::wstring CPropertyNodeDescriptor::getPropertyNodeTypeString(
         return gPROPERTY_NODE_TYPE_NAMES[0];
     return gPROPERTY_NODE_TYPE_NAMES[index];
 }
+
+void CPropertyNodeDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject* source)
+{
+    CPropertyNode* node = dynamic_cast<CPropertyNode*>(object);
+    if (!node) return;
+    switch (event) {
+    case 2: node->setEnabled(true); break;
+    case 3: node->setEnabled(false); break;
+    }
+}

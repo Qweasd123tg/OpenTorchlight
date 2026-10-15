@@ -103,3 +103,11 @@ unsigned int CUnitSpawnerDescriptor::GetGroupIDByString(CEditorScene* scene, CEd
     }
     return 0;
 }
+
+unsigned int CUnitSpawnerDescriptor::GetResourceIDByString(CEditorScene*, CEditorBaseObject* object, const std::wstring& value, void*)
+{
+    CUnitSpawner* spawner = dynamic_cast<CUnitSpawner*>(object);
+    if (spawner && spawner->getResourceManager() != NULL)
+        return 0;
+    return 0xffffffff;
+}

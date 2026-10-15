@@ -31,6 +31,26 @@ CRandomGroupDescriptor::CRandomGroupDescriptor()
     AddPropertyWithInterpreterFunctions(L"QUEST", L"ACTIVE", L"Group will only show if quest is active.", (void*)Set_setQuestHasToBeActive, (void*)Get_getQuestHasToBeActive, getQuestIDByString, getQuestStringByID, NULL, VARIABLE_TYPE_STRING, 4);
     AddPropertyWithInterpreterFunctions(L"QUEST", L"NOT ACTIVE OR COMPLETE", L"Group will only show if quest is NOT active or complete.", (void*)Set_setQuestCannotBeActiveOrComplete, (void*)Get_getQuestCannotBeActiveOrComplete, getQuestIDByString, getQuestStringByID, NULL, VARIABLE_TYPE_STRING, 4);
 }
+unsigned int CRandomGroupDescriptor::getDifficultyIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    if (value.empty()) return 14;
+    if (value == L"EASY") return 0;
+    if (value == L"NORMAL") return 1;
+    if (value == L"HARD") return 2;
+    if (value == L"VERY HARD") return 3;
+    return 14;
+}
+
+void CRandomGroupDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CRandomGroup* group = dynamic_cast<CRandomGroup*>(m_Objects[i]);
+        if (group && !group->getVisible())
+            getSceneOwner()->setChildrenVisible(group->getGuid(), false);
+    }
+}
+
+
 
 CRandomGroupDescriptor::~CRandomGroupDescriptor()
 {
@@ -144,4 +164,19 @@ std::wstring CRandomGroupDescriptor::GetRandomGroupTypeStringByID(
     if (index > 2)
         return gRANDOMGROUP_NAMES[0];
     return gRANDOMGROUP_NAMES[index];
+}
+
+#include "StringUtilities.h"
+
+unsigned int CRandomGroupDescriptor::getPlayerClassIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    if (value.empty())
+        return 0;
+    std::wstring upper = STRINGS::StringUpper(value);
+    TArrayList<std::wstring>* names = CUnitResourceList::getSingleton()->getPlayerClassNames();
+    const unsigned int count = names->size();
+    for (unsigned int i = 0; i < count; ++i)
+        if ((*names)[i] == upper)
+            return i + 1;
+    return 0;
 }

@@ -115,3 +115,30 @@ CRoomPieceDataInformation::CRoomPieceDataInformation(CResourceSettings* resource
 {
     LoadRoomData();
 }
+
+CRoomPieceDataInformation::CRoomPieceCoreData*
+CRoomPieceDataInformation::_GetRoomPieceCoreDataByGuidByClosestGuid(long long guid)
+{
+    std::map<long long, CRoomPieceCoreData*>::iterator found =
+        m_RoomPieceCoreDataByGuid.find(guid);
+    if (found != m_RoomPieceCoreDataByGuid.end())
+        return found->second;
+
+    CRoomPieceCoreData* closest = m_RoomPieceCoreDataByGuid.begin()->second;
+    unsigned int mostCommonBits = 0;
+    for (found = m_RoomPieceCoreDataByGuid.begin();
+         found != m_RoomPieceCoreDataByGuid.end(); ++found) {
+        unsigned long long different = static_cast<unsigned long long>(found->first ^ guid);
+        unsigned int commonBits = 0;
+        for (int bit = 63; bit >= 0; --bit) {
+            if (different & (1ULL << bit))
+                break;
+            ++commonBits;
+        }
+        if (commonBits > mostCommonBits) {
+            mostCommonBits = commonBits;
+            closest = found->second;
+        }
+    }
+    return closest;
+}

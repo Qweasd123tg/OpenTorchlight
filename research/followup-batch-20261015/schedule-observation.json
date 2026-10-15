@@ -1,0 +1,7 @@
+{
+ "method": "index",
+ "test_inventory_count": 999,
+ "exact_timing_profile_available": false,
+ "reason": "expanded inventory and fixture/artifact keys have no exact timing profile",
+ "next_candidate": "reuse advisory per-fixture costs with explicit object/input identity, while still scheduling every shard; not implemented or measured here"
+}
