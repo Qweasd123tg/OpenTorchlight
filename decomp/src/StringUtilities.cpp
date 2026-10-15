@@ -361,3 +361,15 @@ std::string STRINGS::uniqueName(const std::string& prefix)
     std::string value = Ogre::StringConverter::toString(++gUniqueNameValue);
     return prefix + "_" + value;
 }
+
+long long STRINGS::firstXCharactersMatch(const std::wstring& text,
+                                        const std::wstring& other,
+                                        unsigned int count)
+{
+    if (count > other.length() || count > static_cast<unsigned int>(text.length()))
+        return 0;
+    for (unsigned int i = 0; i < count; ++i)
+        if (text[i] != other[i])
+            return 0;
+    return 1;
+}

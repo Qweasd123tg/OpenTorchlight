@@ -84,7 +84,7 @@ def _scan(text):
         head = masked[start:i].strip()
         if token == "{":
             ns = re.fullmatch(r"namespace\s+(\w+)", head)
-            cls = re.fullmatch(r"(?:class|struct)\s+(\w+)\s*(?::[^{};]*)?", head)
+            cls = re.fullmatch(r"(?:class|struct)\s+(?:__attribute__\(\(\w+\)\)\s+)?(\w+)\s*(?::[^{};]*)?", head)
             array = re.fullmatch(r"(?:static\s+)?const\s+std::(?:w?string)\s+(\w+)\s*\[\s*(?:[0-9]+)?\s*\]\s*=", head)
             kind, name = (("namespace", ns[1]) if ns else
                           ("class", cls[1]) if cls else

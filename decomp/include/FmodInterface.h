@@ -6,7 +6,14 @@ namespace FMOD {
 class Sound { public: FMOD_RESULT getMode(unsigned int*); FMOD_RESULT release(); };
 class SoundGroup { public: FMOD_RESULT setVolume(float); };
 class ChannelGroup { public: FMOD_RESULT setVolume(float); FMOD_RESULT setMute(bool); };
-class Channel { public: FMOD_RESULT setMute(bool); };
+class Channel { public:
+    FMOD_RESULT setMute(bool);
+    FMOD_RESULT stop();
+    FMOD_RESULT set3DMinMaxDistance(float,float);
+    FMOD_RESULT isPlaying(bool*);
+    FMOD_RESULT setVolume(float);
+    FMOD_RESULT setPaused(bool);
+};
 class System { public:
     FMOD_RESULT createSoundGroup(const char*,SoundGroup**);
     FMOD_RESULT getMasterSoundGroup(SoundGroup**);

@@ -108,3 +108,58 @@ void CAchievement::increment()
 CAchievement::~CAchievement()
 {
 }
+
+ESTATS CAchievement::getStatType()
+{
+    if (static_cast<int>(m_eStatType) > 30)
+        return static_cast<ESTATS>(0);
+    return static_cast<ESTATS>(
+        *reinterpret_cast<const int*>(g_strStatDefines + static_cast<long>(static_cast<int>(m_eStatType)) * 24 + 4));
+}
+
+void CAchievement::checkForAchieved()
+{
+    if (m_bAchieved)
+        return;
+    ESTATS stat = m_eStatType;
+    if (static_cast<int>(stat) > 30)
+        return;
+    if (stat == 30)
+        m_bAchieved = true;
+    else {
+        int type = *reinterpret_cast<const int*>(g_strStatDefines + static_cast<long>(static_cast<int>(stat)) * 24 + 4);
+        if (type == 0) {
+            if (CSteamStats::getSingleton()->getStatInt(stat) >=
+                *reinterpret_cast<const int*>(&m_fRequiredValue))
+                m_bAchieved = true;
+        } else if (type == 1) {
+            if (CSteamStats::getSingleton()->getStatFloat(stat) >= m_fRequiredValue)
+                m_bAchieved = true;
+        } else
+            return;
+    }
+    if (m_bAchieved)
+        CAchievements::getSingleton()->setAchievementComplete(this);
+}
+
+CAchievement::CAchievement(std::string name, ESTATS statType,
+                           float currentValue, float requiredValue)
+    : CRunicCore(), iStatListener(), m_strName(name.c_str()),
+      m_bAchieved(false), m_eStatType(statType),
+      m_fCurrentValue(requiredValue < currentValue ? requiredValue : currentValue),
+      m_fRequiredValue(currentValue < requiredValue ? requiredValue : currentValue)
+{
+    CSteamStats::getSingleton()->addStatListener(statType, this);
+}
+
+CAchievement::CAchievement(std::string name, ESTATS statType,
+                           int currentValue, int requiredValue)
+    : CRunicCore(), iStatListener(), m_strName(name.c_str()),
+      m_bAchieved(false), m_eStatType(statType)
+{
+    *reinterpret_cast<int*>(&m_fCurrentValue) =
+        requiredValue < currentValue ? requiredValue : currentValue;
+    *reinterpret_cast<int*>(&m_fRequiredValue) =
+        currentValue < requiredValue ? requiredValue : currentValue;
+    CSteamStats::getSingleton()->addStatListener(statType, this);
+}

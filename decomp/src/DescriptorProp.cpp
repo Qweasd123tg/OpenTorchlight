@@ -45,3 +45,14 @@ CDescriptorProp::~CDescriptorProp()
         m_pValueBuffer = NULL;
     }
 }
+
+#include "DescriptorPropertyInterpreter.h"
+
+std::wstring CDescriptorProp::getListValueByIndex(CEditorScene* scene,
+                                                CEditorBaseObject* object,
+                                                unsigned int index)
+{
+    if (!(m_iFlags & FLAG_HAS_LIST_OF_VALUES))
+        return EMPTY_WSTRING;
+    return m_pInterpreter->GetValue(scene, object, index);
+}

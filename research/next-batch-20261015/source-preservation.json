@@ -1,0 +1,19 @@
+{
+ "changed_production_sources": [
+  "decomp/src/Achievement.cpp",
+  "decomp/src/DescriptorProp.cpp",
+  "decomp/src/DynamicPropertyFile.cpp",
+  "decomp/src/EditorObjectManager.cpp",
+  "decomp/src/GameSpeed.cpp",
+  "decomp/src/RoomPiece.cpp",
+  "decomp/src/SoundManager.cpp",
+  "decomp/src/SteamStats.cpp",
+  "decomp/src/StringUtilities.cpp",
+  "decomp/src/TimelineProperty.cpp"
+ ],
+ "all_previous_source_prefixes_preserved": true,
+ "other_production_sources_byte_identical": true,
+ "prior_accepted_preserved": 3241,
+ "prior_strong_matches_preserved": 3277,
+ "current_strong_matches": 3283
+}

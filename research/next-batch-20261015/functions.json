@@ -1,0 +1,584 @@
+[
+ {
+  "address": "0x706600",
+  "tu": "DescriptorProp.cpp",
+  "name": "CDescriptorProp::getListValueByIndex(CEditorScene*, CEditorBaseObject*, unsigned int)",
+  "original_bytes": 47,
+  "acceptance": "MATCH",
+  "object_digest": "ef0558e68b4f26d4e9a13f160742414eee54097ebfd89da4c642f96b5016a966",
+  "comparison": null
+ },
+ {
+  "address": "0x73f960",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorObjectSelected(CEditorBaseObject*)",
+  "original_bytes": 331,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "1f08dec7aad66e03b1425b21b84393a08109aaf73562181cda22e393bb74a266",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "1f08dec7aad66e03b1425b21b84393a08109aaf73562181cda22e393bb74a266",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "editor_object_selected"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x740a40",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorObjectCreated(CEditorBaseObject*)",
+  "original_bytes": 333,
+  "acceptance": "MATCH",
+  "object_digest": "1f08dec7aad66e03b1425b21b84393a08109aaf73562181cda22e393bb74a266",
+  "comparison": null
+ },
+ {
+  "address": "0x7c82a0",
+  "tu": "TimelineProperty.cpp",
+  "name": "CTimelineProperty::GetFreeIDForPoint()",
+  "original_bytes": 56,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "timeline_property_points_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7c82e0",
+  "tu": "TimelineProperty.cpp",
+  "name": "CTimelineProperty::GetTimelinePointIDByIndex(int)",
+  "original_bytes": 62,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "timeline_property_points_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7c8320",
+  "tu": "TimelineProperty.cpp",
+  "name": "CTimelineProperty::GetTimelinePoint(int)",
+  "original_bytes": 58,
+  "acceptance": "MATCH",
+  "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+  "comparison": null
+ },
+ {
+  "address": "0x7c8360",
+  "tu": "TimelineProperty.cpp",
+  "name": "CTimelineProperty::GetTimePercentAtPoint(int)",
+  "original_bytes": 52,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "timeline_property_points_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7c86e0",
+  "tu": "TimelineProperty.cpp",
+  "name": "CTimelineProperty::GetBaseTypeValueAsString(int)",
+  "original_bytes": 74,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "timeline_property_points_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7c8880",
+  "tu": "TimelineProperty.cpp",
+  "name": "CTimelineProperty::GetValueAtPoint(int, unsigned int&)",
+  "original_bytes": 67,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "timeline_property_points_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7c8ae0",
+  "tu": "TimelineProperty.cpp",
+  "name": "CTimelineProperty::SetValueAtPoint(int, void*, unsigned int)",
+  "original_bytes": 74,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "timeline_property_points_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x7c9610",
+  "tu": "TimelineProperty.cpp",
+  "name": "CTimelineProperty::RemovePoint(int)",
+  "original_bytes": 231,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "1f1f7cf8b9b1d43c93f72e2a376561d3661ea6936bc80ee53caf6fe6a2585cdd",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "timeline_property_points_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x9fa500",
+  "tu": "RoomPiece.cpp",
+  "name": "CRoomPiece::setParentGuid(long long)",
+  "original_bytes": 106,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "7b02203daef226b4879e4eb4a6effad23b6e9761273b7dd336af3d76443d453f",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "7b02203daef226b4879e4eb4a6effad23b6e9761273b7dd336af3d76443d453f",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "room_piece_parent_guid"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xa6aee0",
+  "tu": "SoundManager.cpp",
+  "name": "CSoundManager::releaseSound(CSoundInstance*)",
+  "original_bytes": 146,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "sound_manager_release_sound"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xa6b1c0",
+  "tu": "SoundManager.cpp",
+  "name": "CSoundManager::stopSound(int)",
+  "original_bytes": 128,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "sound_manager_stop_sound"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xa6b280",
+  "tu": "SoundManager.cpp",
+  "name": "CSoundManager::stopAllSounds()",
+  "original_bytes": 116,
+  "acceptance": "MATCH",
+  "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+  "comparison": null
+ },
+ {
+  "address": "0xa6b300",
+  "tu": "SoundManager.cpp",
+  "name": "CSoundManager::set3DMinMaxDistance(int, float, float)",
+  "original_bytes": 76,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "sound_manager_channel_distance"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xa6b350",
+  "tu": "SoundManager.cpp",
+  "name": "CSoundManager::isChannelPlaying(int)",
+  "original_bytes": 73,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "sound_manager_channel_playing"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xa6b3a0",
+  "tu": "SoundManager.cpp",
+  "name": "CSoundManager::setSoundVolume(int, float)",
+  "original_bytes": 64,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "sound_manager_channel_volume"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xa6b3e0",
+  "tu": "SoundManager.cpp",
+  "name": "CSoundManager::setPauseSound(int, bool)",
+  "original_bytes": 66,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "e50462bd6c29a2f00c8282e45398320a6ff4460dd508aeb49922d93bcbae3077",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "sound_manager_channel_pause"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc6e650",
+  "tu": "DynamicPropertyFile.cpp",
+  "name": "CDynamicPropertyFile::SetInt(unsigned int, int)",
+  "original_bytes": 208,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "cb2515667d1e702442f5144611fc3de7b45eff77a09c3918198952b299d85b10",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "cb2515667d1e702442f5144611fc3de7b45eff77a09c3918198952b299d85b10",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "dynamic_property_setters_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc6e720",
+  "tu": "DynamicPropertyFile.cpp",
+  "name": "CDynamicPropertyFile::SetFloat(unsigned int, float)",
+  "original_bytes": 207,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "cb2515667d1e702442f5144611fc3de7b45eff77a09c3918198952b299d85b10",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "cb2515667d1e702442f5144611fc3de7b45eff77a09c3918198952b299d85b10",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "dynamic_property_setters_differential"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xc77c30",
+  "tu": "GameSpeed.cpp",
+  "name": "CGameSpeed::getGameSpeed()",
+  "original_bytes": 33,
+  "acceptance": "MATCH",
+  "object_digest": "e4dc94559abe6b52eeb46c71707245d660ababf8ab351153bcff7334812b1395",
+  "comparison": null
+ },
+ {
+  "address": "0xc8d5f0",
+  "tu": "StringUtilities.cpp",
+  "name": "STRINGS::firstXCharactersMatch(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int)",
+  "original_bytes": 83,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "1383d9c5a82d5f7c4cd763dbeadd33ea8711bb5465a2bd193812a8560aa8407a",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "1383d9c5a82d5f7c4cd763dbeadd33ea8711bb5465a2bd193812a8560aa8407a",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "strings_wide_prefix"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xebe190",
+  "tu": "Achievement.cpp",
+  "name": "CAchievement::getStatType()",
+  "original_bytes": 26,
+  "acceptance": "MATCH",
+  "object_digest": "fbe106632341904675826463f9c3a5c46fd738947808126f600bc4a6320f31d5",
+  "comparison": null
+ },
+ {
+  "address": "0xebe1b0",
+  "tu": "Achievement.cpp",
+  "name": "CAchievement::checkForAchieved()",
+  "original_bytes": 167,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "fbe106632341904675826463f9c3a5c46fd738947808126f600bc4a6320f31d5",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "fbe106632341904675826463f9c3a5c46fd738947808126f600bc4a6320f31d5",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "achievement_check_achieved"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xebe650",
+  "tu": "Achievement.cpp",
+  "name": "CAchievement::CAchievement(std::basic_string<char, std::char_traits<char>, std::allocator<char> >, ESTATS, float, float)",
+  "original_bytes": 213,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "fbe106632341904675826463f9c3a5c46fd738947808126f600bc4a6320f31d5",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "fbe106632341904675826463f9c3a5c46fd738947808126f600bc4a6320f31d5",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "achievement_construct_float"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xebe730",
+  "tu": "Achievement.cpp",
+  "name": "CAchievement::CAchievement(std::basic_string<char, std::char_traits<char>, std::allocator<char> >, ESTATS, int, int)",
+  "original_bytes": 214,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "fbe106632341904675826463f9c3a5c46fd738947808126f600bc4a6320f31d5",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "fbe106632341904675826463f9c3a5c46fd738947808126f600bc4a6320f31d5",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "achievement_construct_int"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xece780",
+  "tu": "SteamStats.cpp",
+  "name": "CSteamStats::checkForLocalUpdates(float)",
+  "original_bytes": 507,
+  "acceptance": "BEHAVIORAL",
+  "object_digest": "5fa25d59d8e37f3ba833bf04f7f42c0eae3a63778b3ba4ca8fa2dbbd64c67775",
+  "comparison": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "5fa25d59d8e37f3ba833bf04f7f42c0eae3a63778b3ba4ca8fa2dbbd64c67775",
+    "inputs_digest": "120b1b3b3948a0666c63165337b5b6b3840ce6ea652dc5d87551816c6bb40186",
+    "parameters": {
+     "fixtures": [
+      "steam_stats_local_updates"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ }
+]

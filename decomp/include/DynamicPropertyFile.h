@@ -11,7 +11,7 @@
 class CDynamicPropertyFile : public CRunicCore
 {
 public:
-    void SetFloat(unsigned int,float);
+    bool SetFloat(unsigned int,float);
 
     CDynamicPropertyFile(std::wstring directory, std::wstring file, std::wstring section);
     unsigned int GetStringPropertyIndex(const std::wstring& name, std::wstring value, bool flag);
@@ -22,7 +22,7 @@ public:
     int GetInt(unsigned int property);
     float GetFloat(unsigned int property);
     const std::wstring& GetString(unsigned int property);
-    void SetInt(unsigned int property, int value);
+    bool SetInt(unsigned int property, int value);
     bool SetString(unsigned int property, const std::wstring& value);
     bool isNonLocalVariable(const std::wstring& name);
     void SetStatChangeCallback(unsigned int property, void (*)(unsigned int));

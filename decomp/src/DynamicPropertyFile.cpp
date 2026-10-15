@@ -67,3 +67,25 @@ bool CDynamicPropertyFile::LoadSettings(const std::wstring& file)
     return true;
 }
 
+
+bool CDynamicPropertyFile::SetInt(unsigned int property, int value)
+{
+    if (property >= m_intValues.size())
+        return false;
+    m_intValues[property] = value;
+    if (property < m_callbacks.size())
+        for (unsigned int i = 0; i < m_callbacks[property].size(); ++i)
+            m_callbacks[property][i](property);
+    return true;
+}
+
+bool CDynamicPropertyFile::SetFloat(unsigned int property, float value)
+{
+    if (property >= m_floatValues.size())
+        return false;
+    m_floatValues[property] = value;
+    if (property < m_callbacks.size())
+        for (unsigned int i = 0; i < m_callbacks[property].size(); ++i)
+            m_callbacks[property][i](property);
+    return true;
+}

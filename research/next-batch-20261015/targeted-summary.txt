@@ -1,0 +1,81 @@
+tlhybrid: begin editor_object_registered
+    coverage editor_object_registered 0x740a40 completed 160 different 0 incomplete 0
+tlhybrid: timing editor_object_registered 0.513 seconds
+tlhybrid: editor_object_registered                         PASS (0)
+tlhybrid: begin achievement_construct_int
+    coverage achievement_construct_int 0xebe730 completed 32 different 0 incomplete 0
+tlhybrid: timing achievement_construct_int 0.088 seconds
+tlhybrid: achievement_construct_int                        PASS (0)
+tlhybrid: begin sound_manager_channel_volume
+    coverage sound_manager_channel_volume 0xa6b3a0 completed 48 different 0 incomplete 0
+tlhybrid: timing sound_manager_channel_volume 0.135 seconds
+tlhybrid: sound_manager_channel_volume                     PASS (0)
+tlhybrid: begin editor_object_selected
+    coverage editor_object_selected 0x73f960 completed 160 different 0 incomplete 0
+tlhybrid: timing editor_object_selected 0.528 seconds
+tlhybrid: editor_object_selected                           PASS (0)
+tlhybrid: begin sound_manager_release_sound
+    coverage sound_manager_release_sound 0xa6aee0 completed 45 different 0 incomplete 0
+tlhybrid: timing sound_manager_release_sound 0.114 seconds
+tlhybrid: sound_manager_release_sound                      PASS (0)
+tlhybrid: begin sound_manager_channel_pause
+    coverage sound_manager_channel_pause 0xa6b3e0 completed 48 different 0 incomplete 0
+tlhybrid: timing sound_manager_channel_pause 0.129 seconds
+tlhybrid: sound_manager_channel_pause                      PASS (0)
+tlhybrid: begin strings_wide_prefix
+    coverage strings_wide_prefix 0xc8d5f0 completed 192 different 0 incomplete 0
+tlhybrid: timing strings_wide_prefix 0.606 seconds
+tlhybrid: strings_wide_prefix                              PASS (0)
+tlhybrid: begin room_piece_parent_guid
+    coverage room_piece_parent_guid 0x9fa500 completed 80 different 0 incomplete 0
+tlhybrid: timing room_piece_parent_guid 0.205 seconds
+tlhybrid: room_piece_parent_guid                           PASS (0)
+tlhybrid: begin property_list_value_differential
+    coverage property_list_value_differential 0x706600 completed 48 different 0 incomplete 0
+tlhybrid: timing property_list_value_differential 0.110 seconds
+tlhybrid: property_list_value_differential                 PASS (0)
+tlhybrid: begin achievement_stat_type
+    coverage achievement_stat_type 0xebe190 completed 21 different 0 incomplete 0
+tlhybrid: timing achievement_stat_type 0.073 seconds
+tlhybrid: achievement_stat_type                            PASS (0)
+tlhybrid: begin sound_manager_stop_sound
+    coverage sound_manager_stop_sound 0xa6b1c0 completed 60 different 0 incomplete 0
+tlhybrid: timing sound_manager_stop_sound 0.196 seconds
+tlhybrid: sound_manager_stop_sound                         PASS (0)
+tlhybrid: begin timeline_property_points_differential
+    coverage timeline_property_points_differential 0x7c82a0 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c82e0 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c8320 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c8360 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c86e0 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c8880 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c8ae0 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c9610 completed 48 different 0 incomplete 0
+tlhybrid: timing timeline_property_points_differential 1.109 seconds
+tlhybrid: timeline_property_points_differential            PASS (0)
+tlhybrid: begin achievement_check_achieved
+    coverage achievement_check_achieved 0xebe1b0 completed 168 different 0 incomplete 0
+tlhybrid: timing achievement_check_achieved 0.517 seconds
+tlhybrid: achievement_check_achieved                       PASS (0)
+tlhybrid: begin sound_manager_channel_distance
+    coverage sound_manager_channel_distance 0xa6b300 completed 48 different 0 incomplete 0
+tlhybrid: timing sound_manager_channel_distance 0.124 seconds
+tlhybrid: sound_manager_channel_distance                   PASS (0)
+tlhybrid: begin dynamic_property_setters_differential
+    coverage dynamic_property_setters_differential 0xc6e650 completed 96 different 0 incomplete 0
+    coverage dynamic_property_setters_differential 0xc6e720 completed 96 different 0 incomplete 0
+tlhybrid: timing dynamic_property_setters_differential 0.593 seconds
+tlhybrid: dynamic_property_setters_differential            PASS (0)
+tlhybrid: begin achievement_construct_float
+    coverage achievement_construct_float 0xebe650 completed 40 different 0 incomplete 0
+tlhybrid: timing achievement_construct_float 0.180 seconds
+tlhybrid: achievement_construct_float                      PASS (0)
+tlhybrid: begin sound_manager_channel_playing
+    coverage sound_manager_channel_playing 0xa6b350 completed 48 different 0 incomplete 0
+tlhybrid: timing sound_manager_channel_playing 0.148 seconds
+tlhybrid: sound_manager_channel_playing                    PASS (0)
+tlhybrid: begin steam_stats_local_updates
+    coverage steam_stats_local_updates 0xece780 completed 140 different 0 incomplete 0
+tlhybrid: timing steam_stats_local_updates 0.397 seconds
+tlhybrid: steam_stats_local_updates                        PASS (0)
+tlhybrid: 18 tests, 0 failed

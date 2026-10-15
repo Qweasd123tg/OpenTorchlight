@@ -327,6 +327,18 @@ class PacketContextTests(TestCase):
         self.assertNotIn("Direct game call/tail-call 0x3000", result.text)
         self.assertFalse(result.gaps)
 
+    def test_packed_callee_keeps_its_scope_and_exact_overload(self):
+        header = ("class __attribute__((packed)) CSteamStats { public: "
+                  "int getStatInt(int value); float getStatFloat(int value); };\n")
+        self.write_header("SteamStats.h", header)
+        callee = function(0x2000, "CSteamStats", "getStatInt", tu=1)
+        self.add_function(callee)
+        result = self.index().build(self.target, "1000: call 2000")
+        self.assertFalse(result.gaps)
+        self.assertIn(header, result.text)
+        self.db["functions"]["0x2000"] = dict(callee, params="float")
+        self.assertTrue(self.index().build(self.target, "1000: call 2000").gaps)
+
     def test_raw_bytes_asm_tail_call_and_library_exclusion(self):
         self.add_function(function(0x2000, "CSteamStats", "getStatInt", tu=1))
         self.add_function(function(0x3000, "CUnrelated", "update", tu=3))

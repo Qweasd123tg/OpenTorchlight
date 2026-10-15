@@ -92,6 +92,31 @@ class DeclarationReadiness(unittest.TestCase):
         self.assertIsNone(self.check(files, "CUnit", "~CUnit", ""))
         self.assertIsNotNone(self.check(files, "CUnit", "CUnit", ""))
 
+    def test_packed_owner_keeps_its_hand_written_layout(self):
+        from unittest.mock import patch
+        header = ("class CBase;\nclass __attribute__((packed)) CUnit : public CBase\n"
+                  "{\npublic:\n int work(int value);\n CPoint* m_head;\n};\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "decomp/include").mkdir(parents=True)
+            (root / "build-decomp/include-gen").mkdir(parents=True)
+            path = root / "decomp/include/Unit.h"
+            path.write_text(header)
+            generated = root / "build-decomp/include-gen/CUnit.h"
+            generated.write_text("class CUnit { void* m_unknown; };\n")
+            loop = llm_loop.Loop.__new__(llm_loop.Loop)
+            loop.classes, loop.funcs, loop.allowed_headers = ["CUnit"], [], set()
+            with patch.object(llm_loop, "ROOT", root):
+                self.assertEqual({"CUnit": ["Unit.h"]}, llm_loop.headers_by_class())
+                loop.header()
+                self.assertIsNone(loop.declaration_error(
+                    {"scope": "CUnit", "method": "work", "params": "int", "cv": ""}))
+                self.assertIsNotNone(loop.declaration_error(
+                    {"scope": "CUnit", "method": "work", "params": "float", "cv": ""}))
+            self.assertEqual(header, path.read_text())
+            self.assertTrue(generated.exists())
+            self.assertFalse(loop.allowed_headers)
+
     def test_constructor_and_destructor_signatures_stay_separate(self):
         files = {"Unit.h": "class CUnit\n{\npublic:\n CUnit(int);\n virtual ~CUnit();\n};\n"}
         self.assertIsNone(self.check(files, "CUnit", "CUnit", "int"))

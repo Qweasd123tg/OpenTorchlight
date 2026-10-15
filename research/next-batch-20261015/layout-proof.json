@@ -1,0 +1,54 @@
+[
+ {
+  "class": "CTimelineProperty",
+  "size_before": 104,
+  "size_after": 104,
+  "bases_and_field_offsets_and_sizes_unchanged": true,
+  "field_type_changes": [
+   {
+    "before": {
+     "offset": 64,
+     "name": "m_timelinePoints",
+     "type": "TArrayList<CTimelineProperty::CTimelinePoint*>*",
+     "ghidra_type": "TArrayList<CTimelineProperty::CTimelinePoint*>*",
+     "size": 8
+    },
+    "after": {
+     "offset": 64,
+     "name": "m_timelinePoints",
+     "type": "TLinkedListNode<CTimelineProperty::CTimelinePoint*>*",
+     "ghidra_type": "TLinkedListNode<CTimelineProperty::CTimelinePoint*>*",
+     "size": 8
+    }
+   }
+  ]
+ },
+ {
+  "class": "CTimelineProperty::CTimelinePoint",
+  "size_before": 160,
+  "size_after": 160,
+  "bases_and_field_offsets_and_sizes_unchanged": true,
+  "field_type_changes": []
+ },
+ {
+  "class": "CDynamicPropertyFile",
+  "size_before": 320,
+  "size_after": 320,
+  "bases_and_field_offsets_and_sizes_unchanged": true,
+  "field_type_changes": []
+ },
+ {
+  "class": "CDescriptorProp",
+  "size_before": 128,
+  "size_after": 128,
+  "bases_and_field_offsets_and_sizes_unchanged": true,
+  "field_type_changes": []
+ },
+ {
+  "class": "FMOD::Channel",
+  "size_before": 1,
+  "size_after": 1,
+  "bases_and_field_offsets_and_sizes_unchanged": true,
+  "field_type_changes": []
+ }
+]

@@ -229,3 +229,23 @@ void CEditorObjectManager::EditorDeleteAllObjectsInScene(CEditorScene* scene)
     }
     scene->DeleteAllObjectsFromScene();
 }
+
+void CEditorObjectManager::EditorObjectSelected(CEditorBaseObject* object)
+{
+    if (object == NULL || m_SelectedObjects.find(object) != -1)
+        return;
+    iSelected* selected = dynamic_cast<iSelected*>(object);
+    if (selected)
+        selected->editorSelectionChanged(true);
+    highlightObject(object);
+    m_SelectedObjects.add(object);
+    m_bUnknown78 = true;
+}
+
+void CEditorObjectManager::EditorObjectCreated(CEditorBaseObject* object)
+{
+    if (object) {
+        m_Objects[object->getGuid()] = object;
+        m_CreatedObjects.add(object);
+    }
+}
