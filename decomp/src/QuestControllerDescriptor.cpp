@@ -69,15 +69,12 @@ void CQuestControllerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsi
 void CQuestControllerDescriptor::descriptorSceneActivated(CEditorScene* scene)
 {
     for (unsigned int i = 0; i < m_Objects.size(); ++i) {
-        CQuestController* questController =
-            m_Objects[i] != NULL
-                ? dynamic_cast<CQuestController*>(m_Objects[i])
-                : NULL;
-
-        if (questController != NULL &&
-            !scene->getResourceManager()->getEditorIsRunning()) {
-            questController->initQuestController();
-        }
+        CQuestController* controller = dynamic_cast<CQuestController*>(m_Objects[i]);
+        if (controller == NULL)
+            continue;
+        if (scene->getResourceManager()->getEditorIsRunning())
+            continue;
+        controller->initQuestController();
     }
 }
 

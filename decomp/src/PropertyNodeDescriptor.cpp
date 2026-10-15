@@ -50,16 +50,12 @@ CEditorBaseObject* CPropertyNodeDescriptor::CreateObject(CEditorScene* scene)
 
 void CPropertyNodeDescriptor::descriptorSceneActivated(CEditorScene*)
 {
-    for (unsigned int i = 0; i < m_Objects.size(); ++i)
-    {
-        if (m_Objects[i] != NULL)
-        {
-            CPropertyNode *propertyNode =
-                dynamic_cast<CPropertyNode *>(m_Objects[i]);
-
-            if (propertyNode != NULL)
-                propertyNode->activate();
-        }
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CEditorBaseObject* object = m_Objects[i];
+        CPropertyNode* target = dynamic_cast<CPropertyNode*>(object);
+        if (target == NULL)
+            continue;
+        target->activate();
     }
 }
 

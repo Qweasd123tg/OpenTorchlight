@@ -22,14 +22,14 @@ unsigned int CLogicGroup::GetLogicObjectIndex(CLogicObject* pLogicObject)
 
 int CLogicGroup::AddLogicObject(long long objectID)
 {
-    CEditorScene* scene = getSceneOwner();
-    if (objectID == -1 || scene == NULL)
-        return -1;
-
-    CLogicObject* logicObject = new CLogicObject(
-        scene, objectID, m_logicObjects.size());
-    AddLogicObject(logicObject);
-    return m_logicObjects.size() - 1;
+    int index = -1;
+    if (objectID != -1 && getSceneOwner() != NULL) {
+        CLogicObject* logicObject = new CLogicObject(
+            getSceneOwner(), objectID, m_logicObjects.size());
+        AddLogicObject(logicObject);
+        index = m_logicObjects.size() - 1;
+    }
+    return index;
 }
 
 bool CLogicGroup::RemoveLogicObjectsLink(unsigned int logicObjectIndex,

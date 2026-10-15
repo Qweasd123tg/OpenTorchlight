@@ -29,12 +29,11 @@ CGenericModelDescriptor::~CGenericModelDescriptor()
 void CGenericModelDescriptor::update(float param_1)
 {
     for (unsigned int i = 0; i < m_Objects.size(); ++i) {
-        if (m_Objects[i] != NULL) {
-            CGenericModel *pModel = dynamic_cast<CGenericModel *>(m_Objects[i]);
-            if (pModel != NULL) {
-                pModel->updateAnimation(param_1, false);
-            }
-        }
+        CEditorBaseObject* object = m_Objects[i];
+        CGenericModel* target = dynamic_cast<CGenericModel*>(object);
+        if (target == NULL)
+            continue;
+        target->updateAnimation(param_1, false);
     }
 }
 

@@ -1,3 +1,5 @@
+#include "iSelected.h"
+#include "EditorScene.h"
 #include "EmptyStrings.h"
 #include "GameVariables.h"
 #include "EditorObjectManager.h"
@@ -197,3 +199,33 @@ CEditorObjectManager::CEditorObjectManager(CResourceManager* resources)
 }
 
 template TArrayList<CEditorBaseObject*>::~TArrayList();
+
+void CEditorObjectManager::EditorSetChunkTemplateExit(int index, float x, float y, float z)
+{
+    if (m_pObjectControl != NULL)
+        m_pObjectControl->m_chunkPositions[index] = Ogre::Vector3(x, y, z);
+}
+
+void CEditorObjectManager::ClearSelectedObjects()
+{
+    for (unsigned int i = 0; i < m_SelectedObjects.size(); ++i) {
+        dehighlightObject(m_SelectedObjects[i]);
+        iSelected* selected = dynamic_cast<iSelected*>(m_SelectedObjects[i]);
+        if (selected != NULL)
+            selected->editorSelectionChanged(false);
+    }
+    m_SelectedObjects.clear();
+    m_bUnknown78 = true;
+}
+
+void CEditorObjectManager::EditorDeleteAllObjectsInScene(CEditorScene* scene)
+{
+    ClearSelectedObjects();
+    for (ObjectMap::iterator it = m_Objects.begin(); it != m_Objects.end();) {
+        if (it->second->getSceneOwner() == scene)
+            m_Objects.erase(it++);
+        else
+            ++it;
+    }
+    scene->DeleteAllObjectsFromScene();
+}

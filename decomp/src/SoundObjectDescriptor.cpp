@@ -79,34 +79,25 @@ void CSoundObjectDescriptor::descriptorSceneActivated(CEditorScene* scene)
 
 void CSoundObjectDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int eventType, CEditorBaseObject* eventObject)
 {
-    if (object != NULL) {
-        CSoundObject* sound = dynamic_cast<CSoundObject*>(object);
-        if (sound != NULL) {
-            if (eventType == 9) {
-                sound->setVisible(true);
-                sound->setEnabled(true);
-                sound->play();
-                return;
-            }
-
-            if (eventType > 8) {
-                if (eventType == 10) {
-                    sound->stop();
-                    return;
-                }
-
-                if (eventType == 11) {
-                    sound->pause();
-                    return;
-                }
-
-                if (eventType == 12) {
-                    sound->setVisible(true);
-                    sound->setEnabled(true);
-                    sound->resume();
-                    return;
-                }
-            }
-        }
+    CSoundObject* sound = dynamic_cast<CSoundObject*>(object);
+    if (sound == NULL)
+        return;
+    switch (eventType) {
+    case 9:
+        sound->setVisible(true);
+        sound->setEnabled(true);
+        sound->play();
+        break;
+    case 10:
+        sound->stop();
+        break;
+    case 11:
+        sound->pause();
+        break;
+    case 12:
+        sound->setVisible(true);
+        sound->setEnabled(true);
+        sound->resume();
+        break;
     }
 }

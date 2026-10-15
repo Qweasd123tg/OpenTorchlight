@@ -1,3 +1,4 @@
+#include "StringUtilities.h"
 #include "EmptyStrings.h"
 #include "RoomPieceDescriptor.h"
 #include "GameEnums.h"
@@ -34,4 +35,38 @@ bool CRoomPieceDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject* objec
 CEditorBaseObject* CRoomPieceDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CRoomPiece(scene->getResourceManager());
+}
+
+void CRoomPieceDescriptor::update(float elapsed)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i)
+        static_cast<CRoomPiece*>(m_Objects[i])->updateAnimation(elapsed);
+}
+
+void CRoomPieceDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject* object)
+{
+    static_cast<CRoomPiece*>(object)->initRoomPiece();
+}
+
+std::wstring CRoomPieceDescriptor::GetRoomPieceVisualIndexStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    CRoomPiece* piece = dynamic_cast<CRoomPiece*>(object);
+    if (piece != NULL) {
+        if (index < static_cast<unsigned int>(piece->getVisualMeshCountInRoomPiece()) && index != static_cast<unsigned int>(-1))
+            return STRINGS::GetValueAsWString(index);
+        return L"RANDOM";
+    }
+    return EMPTY_WSTRING;
+}
+
+unsigned int CRoomPieceDescriptor::GetRoomPieceVisualIndexIDByString(CEditorScene*, CEditorBaseObject* object, const std::wstring& value, void*)
+{
+    CRoomPiece* piece = dynamic_cast<CRoomPiece*>(object);
+    if (piece == NULL || value == L"RANDOM")
+        return -1;
+    unsigned int count = piece->getVisualMeshCountInRoomPiece();
+    unsigned int index = STRINGS::GetInt(value);
+    if (index < count)
+        return index;
+    return -1;
 }

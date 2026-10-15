@@ -1,3 +1,4 @@
+#include "EditorScene.h"
 #include "EmptyStrings.h"
 #include "ParticleEmitterWrapper.h"
 #include "ParticleDynamicAttribute.h"
@@ -282,4 +283,28 @@ void CParticleEmitterWrapper::setKeepLocal(bool local)
     (*reinterpret_cast<ParticleUniverse::ParticleEmitter**>(m_ParticleDirection))->setKeepLocal(local);
     if (m_pParticleTechWrapper)
         m_pParticleTechWrapper->m_technique->setKeepLocal(local);
+}
+
+void CParticleEmitterWrapper::setParentGuid(long long guid)
+{
+    if (m_pParticleTechWrapper)
+        m_pParticleTechWrapper->removeEmitter(this);
+    setParentTechniqueWrapper(NULL);
+    CEditorBaseObject::setParentGuid(guid);
+    if (getSceneOwner())
+    {
+        while (guid != -1)
+        {
+            CEditorBaseObject* parent = getSceneOwner()->GetObjectInScene(guid);
+            if (!parent)
+                break;
+            CParticleTechWrapper* technique = dynamic_cast<CParticleTechWrapper*>(parent);
+            if (technique)
+            {
+                setParentTechniqueWrapper(technique);
+                break;
+            }
+            guid = parent->getParentGuid();
+        }
+    }
 }

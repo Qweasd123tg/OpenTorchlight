@@ -65,12 +65,12 @@ void CPathControllerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsig
 void CPathControllerDescriptor::descriptorSceneActivated(CEditorScene* scene)
 {
     for (unsigned int i = 0; i < m_Objects.size(); ++i) {
-        CPathController* controller =
-            dynamic_cast<CPathController*>(m_Objects[i]);
-
-        if (controller && !scene->getResourceManager()->getEditorIsRunning()) {
-            controller->initPathController();
-        }
+        CPathController* controller = dynamic_cast<CPathController*>(m_Objects[i]);
+        if (controller == NULL)
+            continue;
+        if (scene->getResourceManager()->getEditorIsRunning())
+            continue;
+        controller->initPathController();
     }
 }
 
