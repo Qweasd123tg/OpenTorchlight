@@ -17,6 +17,8 @@ class CSteamStats : public CRunicCore
 public:
 	struct SStatChange
 	{
+		SStatChange() : stat(static_cast<ESTATS>(0)), value() {}
+
 		ESTATS stat;
 		UNIONDATA32BIT value;
 	};

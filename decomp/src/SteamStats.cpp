@@ -44,7 +44,9 @@ void CSteamStats::statModified(ESTATS stat, UNIONDATA32BIT value)
         }
     }
 
-    SStatChange change = { stat, value };
+    SStatChange change;
+    change.stat = stat;
+    change.value = value;
     m_pendingStatChanges.add(change);
 }
 

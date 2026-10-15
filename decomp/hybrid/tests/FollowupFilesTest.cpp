@@ -18,19 +18,40 @@ extern unsigned long long applicationGuard __asm__("_ZGVZN10FILESYSTEM18GetAppli
 namespace {
 std::string directory;
 unsigned appCalls;
-std::wstring appDirectorySpy(){++appCalls;return L"/synthetic app/";}
+std::wstring appDirectoryValue;
+std::wstring appDirectorySpy(){++appCalls;return appDirectoryValue;}
+std::wstring applicationCaseValue(unsigned index, bool cached) {
+ switch(index) {
+ case 0: return cached?L"/cached app/":L"";
+ case 1: return L"/";
+ case 2: return L"relative/../app";
+ case 3: return L"/space path/with trailing /";
+ case 4: return L"/\u0438\u0433\u0440\u0430/\u00e9/";
+ case 5: {const wchar_t embedded[]={L'/',L'a',0,L'b',L'/'};return std::wstring(embedded,5);}
+ case 6: return std::wstring(4096,L'x');
+ default: return std::wstring(L"/astral/")+wchar_t(0x1f642)+L"/";
+ }
+}
 void execute(smallmass::Case& c,bool ours,autotest::Capture& out) {
  using namespace smallmass;output=&out;
  if(c.op==0) {
-  new(&applicationCache)std::wstring(c.index%3==1?L"/cached app/":L"");
-  applicationGuard=c.index%3==2?0:1;appCalls=0;
+  // Cold, initialized empty, shared cache, and unshared cache each see eight values.
+  const unsigned state=c.index/8, variation=c.index%8;
+  const std::wstring cached=state>=2?applicationCaseValue(variation,true):std::wstring();
+  new(&applicationCache)std::wstring(cached);
+  std::wstring alias=state>=2?applicationCache:std::wstring();
+  if(state==3)applicationCache[0]=applicationCache[0];
+  appDirectoryValue=applicationCaseValue(variation,false);
+  applicationGuard=state==0?0:1;appCalls=0;
   detour::Set patches;TL_REDIRECT(patches,appDirectory,&appDirectorySpy);
   if(patches.failed()){out.issue=autotest::Capture::InvalidReport;return;}
   typedef std::wstring(*Fn)();Fn fn=ours?nextApplication:oldApplication;
   if(!autotest::beginInvocation(out,fn))return;
   std::wstring value=fn();
-  out.callCompleted=1;text(value);text(applicationCache);number(unsigned(applicationGuard&1));number(appCalls);
-  if(appCalls!=unsigned(c.index%3!=1))out.issue=autotest::Capture::InvalidReport;
+  out.callCompleted=1;text(value);text(applicationCache);text(alias);number(unsigned(applicationGuard&1));number(appCalls);
+  const std::wstring expected=state>=2?cached:appDirectoryValue;
+  if(value!=expected||applicationCache!=cached||alias!=(state>=2?cached:std::wstring())||
+     !(applicationGuard&1)||appCalls!=unsigned(state<2))out.issue=autotest::Capture::InvalidReport;
  } else if(c.op==1) {
   const wchar_t* bases[]={L"",L"base/",L"base",L"/base space/",L"C:\\base\\"};
   const wchar_t* paths[]={L"",L"file",L"/absolute",L"//double",L"x/y",L"\\windows",L".",L"../up",L" spaced/thing"};
@@ -60,7 +81,7 @@ int files(const tlhybrid_host* host,unsigned op,const char* name,uint64_t addres
  unlink(alias.c_str());unlink(broken.c_str());unlink(file.c_str());unlink(unicode.c_str());rmdir(folder.c_str());rmdir(directory.c_str());return code;
 }
 }
-TL_TEST(followup_files_application){return smallmass::run(host,0,"followup_files_application",(uint64_t)(uintptr_t)oldApplication,execute,12);}
+TL_TEST(followup_files_application){return smallmass::run(host,0,"followup_files_application",(uint64_t)(uintptr_t)oldApplication,execute,32);}
 TL_TEST(followup_files_absolute){return smallmass::run(host,1,"followup_files_absolute",(uint64_t)(uintptr_t)oldAbsolute,execute,45);}
 TL_TEST(followup_files_exists){return files(host,2,"followup_files_exists",(uint64_t)(uintptr_t)oldExists);}
 TL_TEST(followup_files_time){return files(host,3,"followup_files_time",(uint64_t)(uintptr_t)oldTime);}
