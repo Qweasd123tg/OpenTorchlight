@@ -54,3 +54,18 @@ TL_TEST(button_descriptor_registration){return run(host,0,"button_descriptor_reg
 TL_TEST(image_descriptor_registration){return run(host,1,"image_descriptor_registration",(uint64_t)(uintptr_t)&oldImageCtor);}
 TL_TEST(missile_descriptor_registration){return run(host,2,"missile_descriptor_registration",(uint64_t)(uintptr_t)&oldMissileCtor);}
 TL_TEST(increment_descriptor_registration){return run(host,3,"increment_descriptor_registration",(uint64_t)(uintptr_t)&oldIncrementCtor);}
+
+TL_TEST(descriptor_callback_identity)
+{
+    const uintptr_t expected = (uintptr_t)callback54_original;
+    if (callbackIdentity((void*)callback54_original) != expected ||
+        callbackIdentity((void*)callback54_linked) != expected)
+        return 1;
+    if (callbackIdentity((void*)callback0_original) == expected)
+        return 2;
+    int unknown = 0;
+    if (callbackIdentity(&unknown) != (uintptr_t)&unknown ||
+        callbackIdentity(NULL) != 0)
+        return 3;
+    return 0;
+}

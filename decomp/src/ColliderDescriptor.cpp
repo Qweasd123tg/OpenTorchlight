@@ -4,6 +4,7 @@
 #include "GameVariables.h"
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
+#include "ColliderDescriptorNames.h"
 
 CColliderDescriptor::CColliderDescriptor(const wchar_t* name)
     : CAffectorDescriptor(name, L"Collision for particles", L"gear")
@@ -50,4 +51,15 @@ unsigned int CColliderDescriptor::GetParticleCollisionTypeIDByString(
     }
 
     return 0;
+}
+
+std::wstring CColliderDescriptor::GetParticleCollisionTypeStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 2)
+        return gPARTICLE_COLLISION_TYPE[0];
+    return gPARTICLE_COLLISION_TYPE[index];
 }

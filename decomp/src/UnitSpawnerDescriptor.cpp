@@ -5,6 +5,7 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "UnitSpawner.h"
+#include "UnitSpawnerDescriptorNames.h"
 
 CUnitSpawnerDescriptor::CUnitSpawnerDescriptor()
     : CShapeDescriptor(L"Unit Spawner", L"Spawns units in differnt formations", L"spawn", true, true, true)
@@ -80,4 +81,15 @@ void CUnitSpawnerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned
             break;
         }
     }
+}
+
+std::wstring CUnitSpawnerDescriptor::GetGroupStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index < 1 || index > 6)
+        return gSPAWN_TYPE_NAMES[0];
+    return gSPAWN_TYPE_NAMES[index];
 }

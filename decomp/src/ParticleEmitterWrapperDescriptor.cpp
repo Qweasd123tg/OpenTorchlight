@@ -13,6 +13,7 @@ CParticleEmitterWrapperDescriptor::~CParticleEmitterWrapperDescriptor()
 #include "ParticleEmitterWrapper.h"
 #include <map>
 #include <string>
+#include "ParticleEmitterWrapperDescriptorNames.h"
 
 bool CParticleEmitterWrapperDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject* object)
 {
@@ -35,4 +36,15 @@ void CParticleEmitterWrapperDescriptor::InputLogicEvent(CEditorBaseObject* objec
             CPositionableObjectDescriptor::InputLogicEvent(object, event, initiator);
         }
     }
+}
+
+std::wstring CParticleEmitterWrapperDescriptor::GetEmitterTypeStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 4)
+        return gEMITTER_TYPES[0];
+    return gEMITTER_TYPES[index];
 }

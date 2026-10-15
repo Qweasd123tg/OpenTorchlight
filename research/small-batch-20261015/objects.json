@@ -1,0 +1,1407 @@
+[
+ {
+  "tu": "AIFlag.cpp",
+  "sha256": "cd070dfd1feef9a7286d97749e50db91392c5f1085602016978f1ac3c9f0c07b",
+  "changed": false
+ },
+ {
+  "tu": "AIFlagManager.cpp",
+  "sha256": "cad5dcd8d9aee580ac28365ead3c97308849622ad0ff2dc4c7b8a0d2cd9ba62b",
+  "changed": false
+ },
+ {
+  "tu": "AIManager.cpp",
+  "sha256": "96c24cc4eecb5c6f56293044be1ca45a51fafffe06fceccc4307eacfa6627fb5",
+  "changed": false
+ },
+ {
+  "tu": "AISkill.cpp",
+  "sha256": "d14144a050345787a54b6fb8e8f2ca56a4d675367e1ea550c25c50cf0c14256f",
+  "changed": false
+ },
+ {
+  "tu": "AISkillManager.cpp",
+  "sha256": "f5e73bf7d3cb2b95d2676901f4083f84975e4de805fdfc65b53740a65607544f",
+  "changed": false
+ },
+ {
+  "tu": "AIStatWatcher.cpp",
+  "sha256": "cf0e697ba34de8f1d3af5c190c9188a064ac3ddd1b40884e92618dae11eb55e1",
+  "changed": false
+ },
+ {
+  "tu": "Achievement.cpp",
+  "sha256": "5e20f643b65a867d46c4dc3c69f33ab75dc2abfc04ace30318c7eb21d3138baf",
+  "changed": false
+ },
+ {
+  "tu": "Achievements.cpp",
+  "sha256": "4217c64f86b84568929b76e32622c7909cd16ae9ba9a87ffb006520ee83f56f2",
+  "changed": false
+ },
+ {
+  "tu": "AffectorDescriptor.cpp",
+  "sha256": "360fec883ce145ff6989338a62448d7847d2e8c7e9f91a5e05fa6d1089b4f10c",
+  "changed": false
+ },
+ {
+  "tu": "AffectorWrapper.cpp",
+  "sha256": "38b840ffd2afe1d6e97cd253a811af1e19acdf5e47c57bc2e75ccdfbe2ece187",
+  "changed": false
+ },
+ {
+  "tu": "AlignDescriptor.cpp",
+  "sha256": "e83261e389aea8191a7cf55c57340dff04bbfa04f592ef5631b4e7095e7b397f",
+  "changed": false
+ },
+ {
+  "tu": "AlignWrapper.cpp",
+  "sha256": "a36da1c6b493501a46c58ae6269ddfb98bc1eb2aa2b68bf4fd01d4232d97049e",
+  "changed": false
+ },
+ {
+  "tu": "AllDescriptorsScene.cpp",
+  "sha256": "1d53070066d3c55ef876550f00bde6f2ac43ff53b6c69773ca7b5319343a79ba",
+  "changed": false
+ },
+ {
+  "tu": "AnimationPlayer.cpp",
+  "sha256": "5a4b6f1100b496d6fec335aa9512b45712a15f761a1a183a795aa4a121a38f59",
+  "changed": false
+ },
+ {
+  "tu": "AnimationPlayerDescriptor.cpp",
+  "sha256": "bc8ddd2f87e75a7914c6092a666aac09ca305d0492012b91e3fa94b8472e7288",
+  "changed": false
+ },
+ {
+  "tu": "AnimationSet.cpp",
+  "sha256": "ab7d975bd8c7f405488cbe2eea3bed85efb240fcaf078b615f3f87c4060b8c43",
+  "changed": false
+ },
+ {
+  "tu": "BaseObjectDescriptor.cpp",
+  "sha256": "9f2bc3d39920df8d9f399a00f623edd51e09a9ac09da0acfe5c56a7e64062f3b",
+  "changed": false
+ },
+ {
+  "tu": "BaseUnit.cpp",
+  "sha256": "1ccd0ea5c22fbd76486871d68f74aa4ec1fc8b6df2350165fc6c7262c44fc9c0",
+  "changed": false
+ },
+ {
+  "tu": "BinaryStyle.cpp",
+  "sha256": "25fd45ea241553cc2f668fb8a1f44d75e321c141d83a9c0fd5409528f86bc5dd",
+  "changed": false
+ },
+ {
+  "tu": "BoxColliderDescriptor.cpp",
+  "sha256": "4d8a8c1197ec9a123c8071094c2d991b5c28275c41ea93a9790a196910e8de28",
+  "changed": false
+ },
+ {
+  "tu": "BoxColliderWrapper.cpp",
+  "sha256": "73f2563c904aaaad915bfe143150458fe34c19ca013a714dbcff886e0f471a99",
+  "changed": false
+ },
+ {
+  "tu": "CameraControl.cpp",
+  "sha256": "53229298a2a757067250bd58b233ec942ad6b1bd749a0b7409dc43c9cd56706a",
+  "changed": false
+ },
+ {
+  "tu": "CameraControllerDescriptor.cpp",
+  "sha256": "df65e6667056825e435ca935be7e68f7e925c9db5578f8720a7d66260b9ec595",
+  "changed": true
+ },
+ {
+  "tu": "CameraShake.cpp",
+  "sha256": "2a70889db9d7f58e5fa032b3776d3492761cdc57c39629b457268accb9e4c10b",
+  "changed": false
+ },
+ {
+  "tu": "CameraShakeDescriptor.cpp",
+  "sha256": "d835ff5295e30bf3190ef5fd9529336cebf16f2ed9dad9cf0eb128678198e946",
+  "changed": true
+ },
+ {
+  "tu": "CinematicDescriptor.cpp",
+  "sha256": "e1646755c2e4b63d11cb305dd1dd99ee673209a952dbd479156acad7b01b2a05",
+  "changed": false
+ },
+ {
+  "tu": "CinematicObject.cpp",
+  "sha256": "1711274367e4b2a715e57654b2f08b5c36359a3c6ea540686fcc53d71fb613c0",
+  "changed": false
+ },
+ {
+  "tu": "Cinematics.cpp",
+  "sha256": "7e56d37e8782f094a8b2b7ce39fae45355103a4a315079c34c57a618e0cceafc",
+  "changed": false
+ },
+ {
+  "tu": "CmdLineParser.cpp",
+  "sha256": "68d6d0b99bbc340e668c4bcc918b85b9a220a0a36bc30d23632e687efad50033",
+  "changed": false
+ },
+ {
+  "tu": "ColliderDescriptor.cpp",
+  "sha256": "0be944cd4ba5c711349950bc06304ea42f6e391fd584e3e112e9a9fb484956aa",
+  "changed": true
+ },
+ {
+  "tu": "ColliderWrapper.cpp",
+  "sha256": "b02a1e7ff6dfcccca6382ab2f709f2134d35d017d601f809e17faf39310564fa",
+  "changed": false
+ },
+ {
+  "tu": "CollisionAvoiderDescriptor.cpp",
+  "sha256": "ab4d88d733169c28b04960135be5c98a531cc5dbbd47f20fbba369022ea0325a",
+  "changed": false
+ },
+ {
+  "tu": "CollisionAvoiderWrapper.cpp",
+  "sha256": "e05adf7529b3a8c100bb8fe863968b0dd9c70768c06c07836c42cdd0aa24dec6",
+  "changed": false
+ },
+ {
+  "tu": "CollisionShapeDescriptor.cpp",
+  "sha256": "d68b8b016ffdcff3eb144dcf920dddcc04ee343aec1fcd347ed18b43f84ada85",
+  "changed": false
+ },
+ {
+  "tu": "ColorAffectorDescriptor.cpp",
+  "sha256": "4dac9519559b54cd477a5a81265cc2dec86204e110fd7720bcc7e8a72725234d",
+  "changed": false
+ },
+ {
+  "tu": "ColorWrapper.cpp",
+  "sha256": "962685357dd8e04becd3174698990ce8e044eff997e75876021fe93a75b87c99",
+  "changed": false
+ },
+ {
+  "tu": "Console.cpp",
+  "sha256": "e4b6bfc71658a5eb76207f0aa4ca707219981cd3ca5d118322860329d85c2bd4",
+  "changed": false
+ },
+ {
+  "tu": "Counter.cpp",
+  "sha256": "faeda4dd173a8abb5cec187d6aa6a7208cf811dc7673caa2538ad181314627ed",
+  "changed": false
+ },
+ {
+  "tu": "CounterDescriptor.cpp",
+  "sha256": "e588be0daa331bcfb357bd83214d4819f364893bc09d20d95cb52c4047c282dd",
+  "changed": true
+ },
+ {
+  "tu": "CutsceneDescriptor.cpp",
+  "sha256": "122c675fd36c76883217c72898105d46e47a221f2ff24dd5bb25258ea2566b85",
+  "changed": false
+ },
+ {
+  "tu": "DamageShapeDescriptor.cpp",
+  "sha256": "e3906ceef6a1aa7c7802a439532b372055bc7ea52b102875c498a356699641cf",
+  "changed": true
+ },
+ {
+  "tu": "DataGroup.cpp",
+  "sha256": "4c5162d05da695d67d3669350999e7f792bc016c62700c0d0c46d7dc13f6757e",
+  "changed": false
+ },
+ {
+  "tu": "DataValue.cpp",
+  "sha256": "b9281e12844f6c45ecaf91c88c74eeda4f82511b39b2d1cfb25eb3b20655546b",
+  "changed": false
+ },
+ {
+  "tu": "Descriptor.cpp",
+  "sha256": "19825619396a927ad349dfe17705057af85e02796e51625a151687ec19648c08",
+  "changed": false
+ },
+ {
+  "tu": "DescriptorLoadConfiguration.cpp",
+  "sha256": "251bf9b4e751262d975558d7043c80ce3aed841adb27e488ea102104c826037e",
+  "changed": false
+ },
+ {
+  "tu": "DescriptorManager.cpp",
+  "sha256": "90444eda4b26beb5e428fd282b28f709099a4f9a038324d5f11707313da9be4e",
+  "changed": false
+ },
+ {
+  "tu": "DescriptorProp.cpp",
+  "sha256": "4bcbc271dbb617e5a571ed618cf4a3e9848c774976e69a80b7aefc52faf1ecfc",
+  "changed": false
+ },
+ {
+  "tu": "DescriptorPropertyInterpreter.cpp",
+  "sha256": "2a567890e0a5c9e7bb967c0463ca3ecaf146b5defcd7ff240c636d2c4cd9492e",
+  "changed": false
+ },
+ {
+  "tu": "DescriptorSaveConfiguration.cpp",
+  "sha256": "5956733eb09e90e3262f6a4ce3307684a47b25e17ea36e19add4658cac650091",
+  "changed": false
+ },
+ {
+  "tu": "DungeonManager.cpp",
+  "sha256": "52aa6b0d77d81d5507afc2f0b0b85344ab8745d270a0e0edaf58f68f024de0f7",
+  "changed": false
+ },
+ {
+  "tu": "DungeonObject.cpp",
+  "sha256": "b187aa934db7a455bcb13bd87c60ee6e2f8e364827e527e24752274e9a40b5fd",
+  "changed": false
+ },
+ {
+  "tu": "DungeonObjectDescriptor.cpp",
+  "sha256": "7716895fe7505b441c4824e2f2b268878e565c7a7509a26adf0bd132045c4c3c",
+  "changed": false
+ },
+ {
+  "tu": "Editor.cpp",
+  "sha256": "31d7d8ddb0343e6f3822a25b874c19d714321c4ac3c971a7b36107fa87474aac",
+  "changed": false
+ },
+ {
+  "tu": "EditorBaseObject.cpp",
+  "sha256": "fe2c3984962c398ba32dbb84e4e436801e3cc2e705786fce31e17ed68295a858",
+  "changed": false
+ },
+ {
+  "tu": "EditorButtonDescriptor.cpp",
+  "sha256": "11888bf6e7bcf28dfa562d02cb247e483d4d7203e4b5d3290e6a3601e4e4a73e",
+  "changed": false
+ },
+ {
+  "tu": "EditorDLL.cpp",
+  "sha256": "60a17c2e29073dde17da2486a30bd9f35774e3005104e46fe25cf11eb9c2e293",
+  "changed": false
+ },
+ {
+  "tu": "EditorImageDescriptor.cpp",
+  "sha256": "00a1524c5b62c5213172063d53c6a7055d03589c2467ba7245430a84df1c232b",
+  "changed": false
+ },
+ {
+  "tu": "EditorObjectManager.cpp",
+  "sha256": "5326b0421f5a505724b7799d9d520d0713856637d0b49699e0f7401fa40e8c37",
+  "changed": true
+ },
+ {
+  "tu": "EditorScene.cpp",
+  "sha256": "981dfee726547fc66c74d1672ec551bc42a1db0213439d202d65d0dcec9244b6",
+  "changed": false
+ },
+ {
+  "tu": "EffectGroupManager.cpp",
+  "sha256": "e61bd36f3db8efe7ee41dd761fa762d34fa14dc9211c2680081eabd28a909042",
+  "changed": false
+ },
+ {
+  "tu": "EffectManager.cpp",
+  "sha256": "91b2d41da7baa67ff349b151f5304128c88dfb9724960d5276ffd8617b8f563d",
+  "changed": false
+ },
+ {
+  "tu": "EffectsHeader.cpp",
+  "sha256": "1cc63ff168e69b4720d311cc949e38dbd499b8044c28d7e8f0056e3bd7ac9f06",
+  "changed": false
+ },
+ {
+  "tu": "Equipment.cpp",
+  "sha256": "04232626c653c927e9c1608a4a0eb4c1c60618f230afda7fe88e7f10a1e661df",
+  "changed": false
+ },
+ {
+  "tu": "ExecuteSkillProps.cpp",
+  "sha256": "84d0c2d8836aca6b8b5789d9c5d732761c0943682f82399af4cbc3c2b5dc1c6e",
+  "changed": false
+ },
+ {
+  "tu": "FileReader.cpp",
+  "sha256": "8f96546714f7f8b3d3c677c7972d643d025d0fe6523b357532b6babdb4f060d3",
+  "changed": false
+ },
+ {
+  "tu": "FileSystem.cpp",
+  "sha256": "991045eae0fc5b9a691b009d823e423f58c1c3d12c8fe811684a007247e50f02",
+  "changed": false
+ },
+ {
+  "tu": "FileUtilities.cpp",
+  "sha256": "ad5012eb1af30780c82705358206ecc75c59bb61e17a6fd0e5414edb2f189488",
+  "changed": false
+ },
+ {
+  "tu": "ForceAffectorDescriptor.cpp",
+  "sha256": "d284699c39d15032d9defc005aabf6b14b01f81b7974415c8ac27fdd9b245475",
+  "changed": false
+ },
+ {
+  "tu": "ForceWrapper.cpp",
+  "sha256": "8aebf33d6b8d9ccd77ecdf8523ec1bf286205ec716178b5dd8835981e363ac76",
+  "changed": false
+ },
+ {
+  "tu": "FormationNode.cpp",
+  "sha256": "2ba95999d8007de0140ed9bb1a320cda56b644eb1169d52c8f3a541c7911e081",
+  "changed": false
+ },
+ {
+  "tu": "GameGlobals.cpp",
+  "sha256": "8795d3ed035b57400a8f0778c47450ffa407dc2790e96fe4250000a9c364901f",
+  "changed": false
+ },
+ {
+  "tu": "GameSpeed.cpp",
+  "sha256": "41f702ff28bd2eb8f21d09add0ac1748fb3e2362099611b6d45c33ca4130650b",
+  "changed": false
+ },
+ {
+  "tu": "GameStateController.cpp",
+  "sha256": "aacaf9efd9a4a8a432c75bf86e915d1296b99f64bac5697dba06e439e054aed2",
+  "changed": false
+ },
+ {
+  "tu": "GameStateControllerDescriptor.cpp",
+  "sha256": "62873564e552cff806776ebdd4e86ea8341bffc80fa5faa9b33a9ce091201fb7",
+  "changed": true
+ },
+ {
+  "tu": "GenericModelDescriptor.cpp",
+  "sha256": "bfb5de98ae25707e52f18304bbfaa6d1da9988df458d101856351b94cb973e18",
+  "changed": false
+ },
+ {
+  "tu": "GeometryRotateDescriptor.cpp",
+  "sha256": "2e689b36c34868dde82b365e382a0c87ffb447c29ebb074941826e396372990e",
+  "changed": false
+ },
+ {
+  "tu": "GeometryRotateWrapper.cpp",
+  "sha256": "e3c4dca022865d1cfed957fbbd6fa977dae0a5289b6bd55ac0185f3cc8e1d58c",
+  "changed": false
+ },
+ {
+  "tu": "Graph.cpp",
+  "sha256": "2ad68ac8f7bc0d9cec87e3297dfa71fff5307fdc9b24184309f700f0edfbe900",
+  "changed": false
+ },
+ {
+  "tu": "GraphManager.cpp",
+  "sha256": "0d65cf949f09e6d46a8525a6c0fd1308cf9a6ca0cec094e1ec417dc6ae700bb6",
+  "changed": false
+ },
+ {
+  "tu": "GravityAffectorDescriptor.cpp",
+  "sha256": "93a9c4513229834e293d9777ae2285be28c93d45509264f5dbb3f87142b67921",
+  "changed": false
+ },
+ {
+  "tu": "GravityWrapper.cpp",
+  "sha256": "3dd146e73006903eda68f1a233164d2d363c7ffab917614fd50022ff72c035cd",
+  "changed": false
+ },
+ {
+  "tu": "Interact.cpp",
+  "sha256": "cb0697e88011e8ef6176186bb7eb04a1b74fbfffa83c951ab421fde9bb2834a6",
+  "changed": false
+ },
+ {
+  "tu": "InteractiveDescriptor.cpp",
+  "sha256": "0dc06bf689d2889b4248d6b60e4cdd0617c70a151fbbcbe4ff24edc79350659c",
+  "changed": true
+ },
+ {
+  "tu": "Inventory.cpp",
+  "sha256": "7701d2cffd9d26d57914543d67d1e4e6db2ef7bbd38e86456aab350c376a965a",
+  "changed": false
+ },
+ {
+  "tu": "Item.cpp",
+  "sha256": "8fe85465b38910f49b354c848dfd57c8fcffaa4f224dfc54bbfe2e013bf56d39",
+  "changed": false
+ },
+ {
+  "tu": "ItemDescriptor.cpp",
+  "sha256": "11a20d42f3f5f2dde6dda388a1f4d0bf607f62d3854191ee0e69992cfefd68e3",
+  "changed": false
+ },
+ {
+  "tu": "Itemsavestate.cpp",
+  "sha256": "bcf39aa84279b7aac63333586b5b5dbac0add96784b0442d4217ac18a400ae90",
+  "changed": false
+ },
+ {
+  "tu": "JetAffectorDescriptor.cpp",
+  "sha256": "84dd844c73960e9d4eb2a3673348e91155450f39130e7c1e001992db98859319",
+  "changed": false
+ },
+ {
+  "tu": "JetWrapper.cpp",
+  "sha256": "cde94686b3a10b21c22acf80f053e1a35e565c6b2a9570455e2d39e452e6440e",
+  "changed": false
+ },
+ {
+  "tu": "Layout.cpp",
+  "sha256": "72fe3547e270970a93ee54056a0d7ca36e34d535d601a96667d4280924a2ccce",
+  "changed": false
+ },
+ {
+  "tu": "LayoutScene.cpp",
+  "sha256": "08a2c8e2a7d9cb7c023c6962ee2396f6b6a564781ff2ab302a5c1e3f9aa31960",
+  "changed": false
+ },
+ {
+  "tu": "LightDescriptor.cpp",
+  "sha256": "d295ceb9516364602c6f92b328e5848d50f7c69ffaee99111ba48b6469d404f1",
+  "changed": true
+ },
+ {
+  "tu": "LineAffectorDescriptor.cpp",
+  "sha256": "ff59ae1f6b239ffcd485f1bb1de9b64e84c8e82b91d879cb9e26153e706ac909",
+  "changed": false
+ },
+ {
+  "tu": "LineWrapper.cpp",
+  "sha256": "91900bcac57926504cbb7bc00dea9357de630bd03460200e7738896ff0b29e3e",
+  "changed": false
+ },
+ {
+  "tu": "LinearForceAffectorDescriptor.cpp",
+  "sha256": "33e5b7f03e3ce30c44c13a6e6e9f0c0f4b4693fa7e08412423fc3bc109569473",
+  "changed": false
+ },
+ {
+  "tu": "LinearForceWrapper.cpp",
+  "sha256": "25393e3ff8494c9fa8f1e731ee474b603d11380c3f7f716e081178fb386f6d66",
+  "changed": false
+ },
+ {
+  "tu": "LinuxUtils.cpp",
+  "sha256": "568826389c3c667ab94501cbdbbea7e388d3420941979f2c19471bf9334b7f62",
+  "changed": false
+ },
+ {
+  "tu": "LogicGroup.cpp",
+  "sha256": "fc7958fb9cf4d5ac604291d096252103279f7fbbffd939e0fe5b601a881b2d32",
+  "changed": false
+ },
+ {
+  "tu": "LogicGroupDescriptor.cpp",
+  "sha256": "11e9bc431350dbea9063a4d65a4f27926145c43491df236567b898ee0cc795a2",
+  "changed": false
+ },
+ {
+  "tu": "LogicLink.cpp",
+  "sha256": "7d2305389d9af926876ab3afeef1da319382fb5641cb7a684c009293af01805b",
+  "changed": false
+ },
+ {
+  "tu": "LogicObject.cpp",
+  "sha256": "536d82381c097a3fee3eef7600c994b214ca7c5bf93a5a5fc26274266d595977",
+  "changed": false
+ },
+ {
+  "tu": "LogicTimer.cpp",
+  "sha256": "08d51d11b752fc8bcad2f8fd3bd4a75ca977d30ae137c9552d133142c1a7d8d9",
+  "changed": false
+ },
+ {
+  "tu": "LogicTimerDescriptor.cpp",
+  "sha256": "7d670eb8fa4b89a28a5f1b5267565b856c025b731581e604729c0bcd2885a116",
+  "changed": false
+ },
+ {
+  "tu": "LogicTrigger.cpp",
+  "sha256": "75325d8bda34f563dc81fc81ff7a05a780fdff712ec2120a35450277bf66f867",
+  "changed": false
+ },
+ {
+  "tu": "LogicWrapper.cpp",
+  "sha256": "bc1c9faf054167dfacb94b750df1c74acdf55c452ea223c087126d164207b9ad",
+  "changed": false
+ },
+ {
+  "tu": "MasterResourceManager.cpp",
+  "sha256": "ba4ae3bc328134772a57e2a625f38a38403555e4a735007a763a30238a3d8a69",
+  "changed": false
+ },
+ {
+  "tu": "merchantmenu.cpp",
+  "sha256": "d428ecae6e9b83be72e7d972d4874135aa0cde6eff7e28a893e4067de1e12c5b",
+  "changed": false
+ },
+ {
+  "tu": "Missile.cpp",
+  "sha256": "4bec6f8bed17ee31daba3b08cfefdf58f1f0ca67b064799e8e02f77b784c938f",
+  "changed": false
+ },
+ {
+  "tu": "MissileDescriptor.cpp",
+  "sha256": "9496d50fc1e11e4fb3d74e31cfd16ab60f0ff08a75ab24c1579c53e1d92ed233",
+  "changed": true
+ },
+ {
+  "tu": "MissilePreloader.cpp",
+  "sha256": "f9662d6be0d04f2c8944ed22b369c854db60706b1899f0714c9d9578cf704886",
+  "changed": false
+ },
+ {
+  "tu": "Mod.cpp",
+  "sha256": "c1f8254f0887f5f793a944328c7293444dc8aec8213fd6414cd89c370e6884aa",
+  "changed": false
+ },
+ {
+  "tu": "ModFileFilter.cpp",
+  "sha256": "52c074d9f91fcdab9e585675b7a5d78ad99be73925365a7917dddf58bdab4fb3",
+  "changed": false
+ },
+ {
+  "tu": "ModelViewerScene.cpp",
+  "sha256": "02b0e630914a17b7564e757ec8c93675bcfc9f05b08a4595b658cc2497245c86",
+  "changed": false
+ },
+ {
+  "tu": "MoneyTaker.cpp",
+  "sha256": "a725340cdd5b79fec5bbfe9fec524fcdd6709a77c9b5dd4dbcbfc354a9d9855c",
+  "changed": false
+ },
+ {
+  "tu": "MoneyTakerDescriptor.cpp",
+  "sha256": "cc10283593e214b3cd3f53a5d84e5e453a05256c419e5632e238bd0689761a80",
+  "changed": false
+ },
+ {
+  "tu": "MonsterDescriptor.cpp",
+  "sha256": "b91acd29d623e37e1d8d463d3bd6b56896ffcfb80d8a547310febbad498340e5",
+  "changed": false
+ },
+ {
+  "tu": "MouseHandler.cpp",
+  "sha256": "714bfdc77cc93123ba0598e8da41239304f19e8dab01f865050e59f428ab3fcc",
+  "changed": false
+ },
+ {
+  "tu": "MusicObject.cpp",
+  "sha256": "e368939255603ba8ee53d880b3c98244e726cd5b6cf53a8e457f41a03e69c296",
+  "changed": false
+ },
+ {
+  "tu": "MusicObjectDescriptor.cpp",
+  "sha256": "e19cb4dd9f5fa27eb565234802c59011524bf1985ac242326b4852a07764a18a",
+  "changed": false
+ },
+ {
+  "tu": "ObjectControl3D.cpp",
+  "sha256": "f8dfa4fa62f9b5ba9795f6f1803e5e0010f17f8c50cb72d7d95d6e28e8b521e9",
+  "changed": false
+ },
+ {
+  "tu": "OgreGpuCommandBufferFlush.cpp",
+  "sha256": "746265292c03d4299cd0bb4a21481473543d7b7435202f8da090d60d67407295",
+  "changed": false
+ },
+ {
+  "tu": "OgreReader.cpp",
+  "sha256": "6752d4e6e82eefe1f4e5fe37e4e1eaddbbc982bc2e8283edba3187d76afb6d26",
+  "changed": false
+ },
+ {
+  "tu": "OgreResourceFile.cpp",
+  "sha256": "36efa37c81442d8c35353bdc02894bf5d2912528e8c8cabd6b0b02e09d4101d8",
+  "changed": false
+ },
+ {
+  "tu": "OgreUtilities.cpp",
+  "sha256": "98f852bf742b2ef8df6dc58de3c14587c9bcb0323de87362382abc2fc6f7cb6a",
+  "changed": false
+ },
+ {
+  "tu": "OutputIncrementor.cpp",
+  "sha256": "c5a9632dc0178e48e477998f63b301d3ef1395d84a6b8900037b07d4d3228bd0",
+  "changed": false
+ },
+ {
+  "tu": "OutputIncrementorDescriptor.cpp",
+  "sha256": "e6edcaca281ea7339593b6138c8b79a9dae614959de96f863eb3ae4ccd23599d",
+  "changed": false
+ },
+ {
+  "tu": "PairStyle.cpp",
+  "sha256": "96e27b24bc21d6f5d5aae005b4398c0836769e3e2724f1c6c2072c72415f5fec",
+  "changed": false
+ },
+ {
+  "tu": "Particle.cpp",
+  "sha256": "305dc42d16e86ab19e107c5f4c14b7135eba6de63f081e3d5c1e13215e403df7",
+  "changed": false
+ },
+ {
+  "tu": "ParticleCache.cpp",
+  "sha256": "ed3ed08ea69d559e03cfb581ee4a8c4e54d48e47ec4bf9839b189169d49d8a6c",
+  "changed": false
+ },
+ {
+  "tu": "ParticleEmitterWrapper.cpp",
+  "sha256": "a5c50c6f96fbe8675487a131849fff59a7b53079e1542f27cb7cf01dcaf4cd59",
+  "changed": true
+ },
+ {
+  "tu": "ParticleEmitterWrapperDescriptor.cpp",
+  "sha256": "e7f84de9551514b56117c4b7c5ce827591bee1f902e29cdf9e0b29b9b1b51286",
+  "changed": true
+ },
+ {
+  "tu": "ParticlePreloader.cpp",
+  "sha256": "f56ad2b0df5e70c2daa666d3932cbceeb01906873d37164b80415d13c1cfdcc1",
+  "changed": false
+ },
+ {
+  "tu": "ParticleScene.cpp",
+  "sha256": "f06db102f48c9fe9e236c765abe41615f671d497c01b69cf57958501178f0928",
+  "changed": false
+ },
+ {
+  "tu": "ParticleTechWrapper.cpp",
+  "sha256": "f544cf5c71940291cf330b562f3937dc87a8b11bccf7b44a473197ec645f3d78",
+  "changed": false
+ },
+ {
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "sha256": "1d9efcb7c71fedce7117c4b447fa6cb62dae51d3546ac485f1abb6421eaa675e",
+  "changed": true
+ },
+ {
+  "tu": "ParticleWrapper.cpp",
+  "sha256": "aeef0a2fa0a419668ba493f9ea8677e13e7dab781b372af3b4f94cdfa8bf4c97",
+  "changed": false
+ },
+ {
+  "tu": "ParticleWrapperDescriptor.cpp",
+  "sha256": "76faf72e63d8420aa21f8ff2a55d829b87aa45e4eeb608f4ccecdd9b4add2c48",
+  "changed": false
+ },
+ {
+  "tu": "PathController.cpp",
+  "sha256": "afafb2fe291807b41c55310dfb4ccd2d4871bc0ceba07d17ee160d6e24124201",
+  "changed": false
+ },
+ {
+  "tu": "PathControllerDescriptor.cpp",
+  "sha256": "1204612c5e132a1ec4115ea53b5af5998d3deda8200040182856fb90a2f7d744",
+  "changed": false
+ },
+ {
+  "tu": "PathNode.cpp",
+  "sha256": "87e658c247496032ef67da0f8b9d3dbd372845bcbdd85d2496973deb8e74338d",
+  "changed": false
+ },
+ {
+  "tu": "PathNodeDescriptor.cpp",
+  "sha256": "d90c51f095eee5538ea8ec50059640a1f8a6738cca5549700408305c61441301",
+  "changed": false
+ },
+ {
+  "tu": "PlaneColliderDescriptor.cpp",
+  "sha256": "f84c3ce0cf16a56eb7b753b2af352a37e5b5a9d85bc1009305ea10758cb630ce",
+  "changed": false
+ },
+ {
+  "tu": "PlaneColliderWrapper.cpp",
+  "sha256": "e02715eac32ef22ed1621ad0544033cc9ea8f068b5f5e8af6f1e0dfa3e4590e1",
+  "changed": false
+ },
+ {
+  "tu": "PositionableObject.cpp",
+  "sha256": "51bb58ba7d46293ba900049221fb135f08fe0a511ee9f6bb1a931c38e27e70cb",
+  "changed": false
+ },
+ {
+  "tu": "PositionableObjectDescriptor.cpp",
+  "sha256": "500ee5480beaa9662b26db97414b346acdfe0f6f4adcdced4b34178abee79014",
+  "changed": false
+ },
+ {
+  "tu": "PropertyNodeDescriptor.cpp",
+  "sha256": "8183403a6c86868ead516f8d02c8d4c98d564c2827cb99d4f598be4b22ebc8b7",
+  "changed": true
+ },
+ {
+  "tu": "PuzzleRandomizerDescriptor.cpp",
+  "sha256": "5585db962e1e63f014739dacea84a88cab37991f42b582a3ad35e63b97450b01",
+  "changed": false
+ },
+ {
+  "tu": "Quest.cpp",
+  "sha256": "137b38b00d86a6893327acb2c4a49a0650adb03ba5aaeff73da7199202d4fb33",
+  "changed": false
+ },
+ {
+  "tu": "QuestController.cpp",
+  "sha256": "8006a2008d3b5c98b00069550a237678b0ccd63569852fb38dd358aa7b0fd217",
+  "changed": false
+ },
+ {
+  "tu": "QuestControllerDescriptor.cpp",
+  "sha256": "b37def033457f3a1064eb4424ce1883da6c6e2d392d53117f4ab9f567ffca3d6",
+  "changed": false
+ },
+ {
+  "tu": "QuestDialog.cpp",
+  "sha256": "2b6d639fb1e7c1740c9c290b5a41aa2e15681cda14dde38cace449718f793262",
+  "changed": false
+ },
+ {
+  "tu": "QuestDialogItem.cpp",
+  "sha256": "6d87e2f454d6c8a5871bcf7829a059db496ddae221aeafd7854f1fb5c7fecb78",
+  "changed": false
+ },
+ {
+  "tu": "QuestManager.cpp",
+  "sha256": "8ca7714bef2f86c2535993d1e682407f70d2f46267a4fb7d5ab8b26dc45162dc",
+  "changed": false
+ },
+ {
+  "tu": "QuestRequirements.cpp",
+  "sha256": "a1af82c2bfd78a6a27aaf17ab265b13ef0bff1584202c33a0dae160d5f3cc637",
+  "changed": false
+ },
+ {
+  "tu": "QuestRewards.cpp",
+  "sha256": "c0bfeaab4611425c878d9309a3bd7fe7e507eab19262ce1c55164415c9e8dfc0",
+  "changed": false
+ },
+ {
+  "tu": "QuestUnitData.cpp",
+  "sha256": "d46c9b3de24315287c1fbc846fbee2102bd11bc69ac7b883bf280f7e28983b5b",
+  "changed": false
+ },
+ {
+  "tu": "RandomChoice.cpp",
+  "sha256": "4cf619dfef554b1e7036c88091c69536f410db7beab5044e04bb8e52efd0260f",
+  "changed": false
+ },
+ {
+  "tu": "RandomChoiceDescriptor.cpp",
+  "sha256": "256caa05a3c65f791dd30f93015433c7731fd00d35d353319b652778cb674f9b",
+  "changed": true
+ },
+ {
+  "tu": "RandomGroup.cpp",
+  "sha256": "87057b9636c5082170ea9a0ff5030be36bc28d9fa7c5cb3996beb5a0db27570b",
+  "changed": false
+ },
+ {
+  "tu": "RandomGroupDescriptor.cpp",
+  "sha256": "42b84c7cbb1ddc926214a7eb8e60319ca9a46a885319f88ff4db559c257c8dab",
+  "changed": true
+ },
+ {
+  "tu": "RandomNames.cpp",
+  "sha256": "27663b1bd5eaf4e39bd178804fdc41515e18bad7b80e6d50ba013e0467a5ca01",
+  "changed": false
+ },
+ {
+  "tu": "Recipes.cpp",
+  "sha256": "eae9e19bfcd7390ebb61e8c6667f4b119459f7a133dbba6a47c63471c61c79a4",
+  "changed": false
+ },
+ {
+  "tu": "RefManagerInterpreterFunc.cpp",
+  "sha256": "51df27bbf4f2d415084c313a9caded50b145d636e3d128b587fa4555ec82d801",
+  "changed": false
+ },
+ {
+  "tu": "ResourceManager.cpp",
+  "sha256": "fdd7d54eaead179ad1946d78a0e41fcc9c22ae0d3cb0fa155f2a432f58079fa7",
+  "changed": false
+ },
+ {
+  "tu": "ResourceSettings.cpp",
+  "sha256": "47e5d718a0786dd6c418203db0bf6f5b78661ef16f12c17191640aaf43eb1d98",
+  "changed": false
+ },
+ {
+  "tu": "Room.cpp",
+  "sha256": "bb9218aa1bb9744bce07639fb20b03978e2fde95113d2c3530b058d2c2009803",
+  "changed": false
+ },
+ {
+  "tu": "RoomDescriptor.cpp",
+  "sha256": "886196bdf3bb33e8c7d0d5cd658ff6cb10536a483fa78ebbeaefe9aa2cef80e6",
+  "changed": false
+ },
+ {
+  "tu": "RoomPieceDataInformation.cpp",
+  "sha256": "2462cfbdaabbe8359690f57a2d4bf9373a40da429915c35eee6c2542d2e99de1",
+  "changed": false
+ },
+ {
+  "tu": "RoomPieceDescriptor.cpp",
+  "sha256": "959873c1c0c3a2fc71c3d5a9d323e337e3e530c15e11aa4c15063ec5dbe59363",
+  "changed": false
+ },
+ {
+  "tu": "RunicCore.cpp",
+  "sha256": "fb19f0a671f346aac9a7dc39e48241f08d1b3e70267091b81315540f9fdbeaf2",
+  "changed": false
+ },
+ {
+  "tu": "SDLEventHandler.cpp",
+  "sha256": "e9ed5897b282f7d85dd55b99e5bfb1dd863775b80a8992240c8108f55e47fc03",
+  "changed": false
+ },
+ {
+  "tu": "SPLASH.cpp",
+  "sha256": "f70746e9431c6fbc3dc928b930eb57fbfa444f772e4dbfc609b1e72823bd1d55",
+  "changed": false
+ },
+ {
+  "tu": "ScaleAffectorDescriptor.cpp",
+  "sha256": "820b0465e4e810a9263722900d5c43a8a905487f10950bfc22c579adb688a46f",
+  "changed": false
+ },
+ {
+  "tu": "ScaleWrapper.cpp",
+  "sha256": "ba50d7d98b86fbd2128c4fa757183a9e5f26549edc912b04612b16b274285233",
+  "changed": false
+ },
+ {
+  "tu": "SceneNodeObject.cpp",
+  "sha256": "30c5860f6d1bf2496653a97b303c3edf486a0d1dfc8ac1146179db828b7f2997",
+  "changed": false
+ },
+ {
+  "tu": "Sets.cpp",
+  "sha256": "d64396e69120d41fc7d680276edea9bd70125d37460328f679dc1c27d22428a6",
+  "changed": false
+ },
+ {
+  "tu": "Settings.cpp",
+  "sha256": "984c7e61fc045236e6b753d824e1409f1f4c2b22a58303391e3ee3c409172780",
+  "changed": false
+ },
+ {
+  "tu": "Shape.cpp",
+  "sha256": "f35607979fdb65d580210a1f0b989d3e55bbcaed997a1b3df61039629c278c9c",
+  "changed": false
+ },
+ {
+  "tu": "ShapeDescriptor.cpp",
+  "sha256": "4e16f62f125b47053192388dd2af9c4a3e038b57fe26efd0c3ec430ed1d86e66",
+  "changed": true
+ },
+ {
+  "tu": "SharedStash.cpp",
+  "sha256": "6105b0a33e505b6057160c43128916e5d481a9ce166fa682f73fefbc99504f92",
+  "changed": false
+ },
+ {
+  "tu": "ShellUtils.cpp",
+  "sha256": "5a06304015b636136b851e70aced49c43c0cc4a857c88906d2bc80ba99544733",
+  "changed": false
+ },
+ {
+  "tu": "SineForceAffectorDescriptor.cpp",
+  "sha256": "0333d3b46d8e6281092366d47a061a7da26a635a81b85ff713adae62f2e55978",
+  "changed": false
+ },
+ {
+  "tu": "SineForceWrapper.cpp",
+  "sha256": "c4ea47c3453defd335321abf1da17c80b5537dbba647f56abbb9e2aee038f248",
+  "changed": false
+ },
+ {
+  "tu": "Skill.cpp",
+  "sha256": "c5137792e3e6344baedc194f1ed79dc21d7073225080359c0893608863bb4e8c",
+  "changed": false
+ },
+ {
+  "tu": "SkillController.cpp",
+  "sha256": "5e36c95b520717fdeee17894b3004acd9ee3ad01a05961f69e7f70371d7045ff",
+  "changed": false
+ },
+ {
+  "tu": "SkillControllerDescriptor.cpp",
+  "sha256": "7806cfcd7011ba97830d8c979c23d155a663e305b51231665365addf026fa5f8",
+  "changed": false
+ },
+ {
+  "tu": "SkillParser.cpp",
+  "sha256": "67b74fa71f5c349da93bbc8de2fad3fcfe9b4ae524e8148310ea802c7433962d",
+  "changed": false
+ },
+ {
+  "tu": "SkipCutscene.cpp",
+  "sha256": "ec42afc4f1508cd01144490f4755eaea266eae325d1d3b7a65d41fa30f48f069",
+  "changed": false
+ },
+ {
+  "tu": "SoundBankDataInformation.cpp",
+  "sha256": "0b3d4b0b8438694fea3983fbda6de1ffd7d8a5dbc147e3a4be9eb66bce513b0a",
+  "changed": false
+ },
+ {
+  "tu": "SoundManager.cpp",
+  "sha256": "37a9536bf02f97dac1c68120e9f2d299a24b59a48a9594441d30ea59b55dca25",
+  "changed": false
+ },
+ {
+  "tu": "SoundObject.cpp",
+  "sha256": "3171d629537c9c60be7578bd145a7f3d37280e035dab5e256625a66411d461ae",
+  "changed": false
+ },
+ {
+  "tu": "SoundObjectDescriptor.cpp",
+  "sha256": "d9aca100a1a08cad6a962eb5ae5a46b6b5633ef18ebd12f6fe23f6e1bd0f92cc",
+  "changed": false
+ },
+ {
+  "tu": "SpawnClassData.cpp",
+  "sha256": "e71c23341cecf3069e506f9a512ad5b94f411160ca6f40b4ed2247442a9cf830",
+  "changed": false
+ },
+ {
+  "tu": "SpawnClassParser.cpp",
+  "sha256": "3c40a3d96c15e37a8cc5d1838cc66819ad6498484e8eb7552b49ce2cc26508b1",
+  "changed": false
+ },
+ {
+  "tu": "SphereColliderDescriptor.cpp",
+  "sha256": "575360d87776bc26457acbebe5e202e0965afa3d4bb77c91cfce9dce22f4b8f7",
+  "changed": false
+ },
+ {
+  "tu": "SphereColliderWrapper.cpp",
+  "sha256": "dc0bf52c1f134311a9bf8a402884426300b89a294da44a5d7ce2499ab1798487",
+  "changed": false
+ },
+ {
+  "tu": "stashmenu.cpp",
+  "sha256": "128ddeb04a6de56900eb7e6ea716591bab8189436c52be2c5d80597413e7bf45",
+  "changed": false
+ },
+ {
+  "tu": "SteamStats.cpp",
+  "sha256": "4f4925f7c6f09e7c42537332ec6ccd629c4bafbd354ce04447e09fb3b2e8d51b",
+  "changed": false
+ },
+ {
+  "tu": "StringRepository.cpp",
+  "sha256": "d5d5a723ee8bc2d45c9a3c170fe408378a9a24a3609b6e987712debcb8dc330e",
+  "changed": false
+ },
+ {
+  "tu": "StringTranslate.cpp",
+  "sha256": "1283c7668b63fd524d2f6f2838934e81eabaa551443f7a7445bbdb32bb8a17e1",
+  "changed": false
+ },
+ {
+  "tu": "StringUtilities.cpp",
+  "sha256": "16e5708947e05c4aee908aa484847a17228ac637409a8a4a33d38d23285706ca",
+  "changed": false
+ },
+ {
+  "tu": "Teleport.cpp",
+  "sha256": "95eb639671298996c14760b37fc205ba5ebbb21d307cfa84bad0318370fbbf2b",
+  "changed": false
+ },
+ {
+  "tu": "TeleportDescriptor.cpp",
+  "sha256": "a6a3fa6e8828ef1f6ee5914e6dc42d6a4a8142d5de3b50af1dc229ed75239548",
+  "changed": false
+ },
+ {
+  "tu": "TextureAnimateDescriptor.cpp",
+  "sha256": "cbc7d15dbe6cc1d5ffdded09a892dcedd08d16ad2084ef554e111cacb511ce99",
+  "changed": false
+ },
+ {
+  "tu": "TextureAnimateWrapper.cpp",
+  "sha256": "6807cd577ec8ae9b96aceb4138293a393690a619ace50b69d2e227497af2a48b",
+  "changed": false
+ },
+ {
+  "tu": "TextureRotateDescriptor.cpp",
+  "sha256": "a624bcb383ba51c84ce4d12bbe1e073da2dedb652bd07fec4a678ee0a73f27c3",
+  "changed": false
+ },
+ {
+  "tu": "TextureRotateWrapper.cpp",
+  "sha256": "687d1349186b564e5f1f9d3d49f6ecd8f52c15fcf62cc118cb75895c36e921ea",
+  "changed": false
+ },
+ {
+  "tu": "Timeline.cpp",
+  "sha256": "1fbc5bc156675c3aef69796fef2f66f09d97261463c92a8b408bbc8476498209",
+  "changed": false
+ },
+ {
+  "tu": "TimelineDescriptor.cpp",
+  "sha256": "da9fac6323a3e5a32773787699398694531db023b6c8a56b17615d6c5d82e74a",
+  "changed": true
+ },
+ {
+  "tu": "TimelineProperty.cpp",
+  "sha256": "81c04747570a7e174ebae45eb2d5c9adb3ee871f41eadbb35189c7a66b67d400",
+  "changed": false
+ },
+ {
+  "tu": "TriggerBox.cpp",
+  "sha256": "61ee99f6ac9787a5eeb1bc2204ea202da48de43164c48ac74a0e753f6fb579a0",
+  "changed": false
+ },
+ {
+  "tu": "TriggerBoxDescriptor.cpp",
+  "sha256": "9fe000b3ad6a3359d275bf00aeca23e4db8a14e66c8fdd0c7fa246bf14bddbeb",
+  "changed": false
+ },
+ {
+  "tu": "TriggerDescriptor.cpp",
+  "sha256": "b29e11f7ebce6e2922642dbd74622fd19dd7af5b4e9a19765ed77e5ef26aeba2",
+  "changed": false
+ },
+ {
+  "tu": "TriggerSphere.cpp",
+  "sha256": "b143498fad64e35e103f5da644edc3a14f0bbf6ae8117e0f074f87bd442146b4",
+  "changed": false
+ },
+ {
+  "tu": "TriggerSphereDescriptor.cpp",
+  "sha256": "4e8bec884fcdd4f1b78cb341064ee1fb6c35ae9de01989e0056659fc28107b36",
+  "changed": false
+ },
+ {
+  "tu": "Undo.cpp",
+  "sha256": "0a6952fc88de03bf1391c971a1fb96978df7cd12c9387e701af6f746cba9bafd",
+  "changed": false
+ },
+ {
+  "tu": "UnitResourceList.cpp",
+  "sha256": "e474f0890008699c497a9735f4a35d703270a9cf0e205d5d051ea134a2da9e80",
+  "changed": false
+ },
+ {
+  "tu": "UnitSpawner.cpp",
+  "sha256": "b6b69e5532fb95551cfab90116b335989885a260e82f8c7e3689c440109cc6ff",
+  "changed": false
+ },
+ {
+  "tu": "UnitSpawnerDescriptor.cpp",
+  "sha256": "abba7d6f975a897d62d15b3eea2f05369e2e2dd2b4fa83135d1a1b01fd963fe7",
+  "changed": true
+ },
+ {
+  "tu": "UnitThemes.cpp",
+  "sha256": "feb8a5ad7bd93bcc96ebb0cdba88e839fb2e7ff6b26166193a5419d293b0ad0d",
+  "changed": false
+ },
+ {
+  "tu": "UnitTriggerDescriptor.cpp",
+  "sha256": "caf355d38c55f054190002a483c949b654ad4232fa1cc201ffb07f1b8df6423c",
+  "changed": true
+ },
+ {
+  "tu": "UtilitiesMath.cpp",
+  "sha256": "12a6f9b28d64e78b0a0e32f1f3d3ab21dfbd7edf496f027f81e841a98430fa9b",
+  "changed": false
+ },
+ {
+  "tu": "VortexAffectorDescriptor.cpp",
+  "sha256": "75e1ddd28d4cbb0c9316eb65d5cecda069ca895d73ccfa5324e7bc4f5c48e4fa",
+  "changed": false
+ },
+ {
+  "tu": "VortexWrapper.cpp",
+  "sha256": "75f9b55f57d93feb322cfc20f22e51950c6c4c1614b643738cdb9dc44a028a51",
+  "changed": false
+ },
+ {
+  "tu": "Warper.cpp",
+  "sha256": "a9e0e7b007b334ff46471f8ec744d0614513d0518b9642fb233d372a141ff7b1",
+  "changed": false
+ },
+ {
+  "tu": "WarperDescriptor.cpp",
+  "sha256": "a7e4ca0b0f85dc79d26625d8434574ae9bdbbadf23c272d2058f92d89ef7e422",
+  "changed": false
+ },
+ {
+  "tu": "WaypointActivator.cpp",
+  "sha256": "3c7cb9b01c2747776291dfba1e331d956bff49b05b14ea8984746a01fa70f72e",
+  "changed": false
+ },
+ {
+  "tu": "WaypointActivatorDescriptor.cpp",
+  "sha256": "d64725dff6680b199412ad4131d7bda7cc1424be358c1e5d5987e6532b905581",
+  "changed": false
+ },
+ {
+  "tu": "WeaponTrail.cpp",
+  "sha256": "76d606a3fa1c14caac4db4169daf679353a99a14b65b2922a9d0d64de42d2e2a",
+  "changed": false
+ },
+ {
+  "tu": "affix.cpp",
+  "sha256": "4e5172dc6e39fd83e699fb83b74366c665f940e5d80283b0acb985d230583d77",
+  "changed": false
+ },
+ {
+  "tu": "astarpathfinder.cpp",
+  "sha256": "843a167055c9d9dfd454e49e4e571494530e7a99b1e6b77a369734e3566c9102",
+  "changed": false
+ },
+ {
+  "tu": "automap.cpp",
+  "sha256": "ac9b19c6b0a889c9be12521169d3ef6c4b913ef92a60f2932bd3669ae76dd254",
+  "changed": false
+ },
+ {
+  "tu": "character.cpp",
+  "sha256": "105734b0e8497eb53b623189886260e948de3b4d7b10dfd6f6abe314f47f182b",
+  "changed": false
+ },
+ {
+  "tu": "charactersavestate.cpp",
+  "sha256": "6711e4c21cf401e0dc4cbf92ab250eb6d9f213c36400026a79c60cefbdd7f9f1",
+  "changed": false
+ },
+ {
+  "tu": "cinematicmenu.cpp",
+  "sha256": "25703b2424183e39fed5c669fd9458201f8d2ecd936679483c90e36fa528fd8e",
+  "changed": false
+ },
+ {
+  "tu": "collisionlist.cpp",
+  "sha256": "7a59bba08847375220a91f163a2502e21ce74d312cc50fa69351103b22321b89",
+  "changed": false
+ },
+ {
+  "tu": "combinemenu.cpp",
+  "sha256": "ac948edb30b8f083e6e9baa150883313367ef44342e130fbf1050f5141d74da0",
+  "changed": false
+ },
+ {
+  "tu": "continuegamemenu.cpp",
+  "sha256": "02811b38e869cdfd302a8fe8a1cd6d365e1dd635cb3647b9847ab1ed4dd78c42",
+  "changed": false
+ },
+ {
+  "tu": "dialogmenu.cpp",
+  "sha256": "4091f0df294b3008f3bc8bd2813de62064abaebaec1446c43857aebe26cdc719",
+  "changed": false
+ },
+ {
+  "tu": "diemenu.cpp",
+  "sha256": "b8595f36594b2b3374462604b98a4e382ac14a10bc373a53e803aa9b00fab1c4",
+  "changed": false
+ },
+ {
+  "tu": "difficultymenu.cpp",
+  "sha256": "d3f7b4e270a3564685199eaba68bec35072bb2decefc13da8f7a5a2d559cfc0f",
+  "changed": false
+ },
+ {
+  "tu": "dropdownmenu.cpp",
+  "sha256": "723635eceffcf7db8ee53c1536da1da44f0f7b3c0d695a754ce1ee79dd32613c",
+  "changed": false
+ },
+ {
+  "tu": "dungeon.cpp",
+  "sha256": "63ed031492178a19623df7bb25844754b037047d1a3d66ccaf253a7f890c8e90",
+  "changed": false
+ },
+ {
+  "tu": "dynamicline.cpp",
+  "sha256": "8ab34aeb876acf9b205f9bb19d5d5640c566334837d0765034a1ac546b0bb1c4",
+  "changed": true
+ },
+ {
+  "tu": "editorbutton.cpp",
+  "sha256": "66a4ce83220f8a309137c66a7879a883a64433fa8f680a788017b27e7fda2496",
+  "changed": false
+ },
+ {
+  "tu": "editorimage.cpp",
+  "sha256": "5322614cc1112e9d6ae20bdd41740e1d96a47b004a0580bfe122f6a0e5d620fc",
+  "changed": false
+ },
+ {
+  "tu": "effect.cpp",
+  "sha256": "211bcf4512f690ef36c198270a083113f54ca1353b5c10305e42153970081367",
+  "changed": false
+ },
+ {
+  "tu": "enchantmenu.cpp",
+  "sha256": "7a8c936642e49881b79a512c704bbf4e6ac2f19b277514f6d2f8773bdad7c105",
+  "changed": false
+ },
+ {
+  "tu": "fishingmenu.cpp",
+  "sha256": "209890d61cdffb38955ab6ca9a0b14497761b9a7ee8a00b5de35ac662dae74f4",
+  "changed": false
+ },
+ {
+  "tu": "gameclient.cpp",
+  "sha256": "19baccd7f3ef870d610e8cc0ec0108f9bf9e06d9fb72d813bc475c3b0c4d033c",
+  "changed": false
+ },
+ {
+  "tu": "gameui.cpp",
+  "sha256": "e31d47a5dc178ab956347b2c0ba3bf38566fc0b5ec66874cb8bc28777784d0bd",
+  "changed": false
+ },
+ {
+  "tu": "genericmodel.cpp",
+  "sha256": "ea67e8eac7565f91bc2fec90a6a29530ad66142ace973252c94fce9f26795a10",
+  "changed": false
+ },
+ {
+  "tu": "interactiveMenu.cpp",
+  "sha256": "a8db6629f2cb6ba998990b9b6b862e46001233103b088179885fd70b2d1fb340",
+  "changed": false
+ },
+ {
+  "tu": "inventorymenu.cpp",
+  "sha256": "4e386d695a1c236353f4167d90e15d1f665fb96b3b0d624470372b96b3281a9d",
+  "changed": false
+ },
+ {
+  "tu": "itemgold.cpp",
+  "sha256": "61bd185d701cc227b6f44d30675b233de98b41f7d30e2d5987403d8482a7ce60",
+  "changed": false
+ },
+ {
+  "tu": "journalmenu.cpp",
+  "sha256": "b9c294e8dbe9fc5494ca081d31838a425e17fa3ed66e1fbc6f0471ab504c7955",
+  "changed": false
+ },
+ {
+  "tu": "keymanager.cpp",
+  "sha256": "b20ae30983ab2f89754d9cd1a6f47c66a72875715b05e83736127a3817aef410",
+  "changed": false
+ },
+ {
+  "tu": "level.cpp",
+  "sha256": "751d33dacc1b82f4b0ef069966504d9360078e7a4713e3cdc06df64177784ecb",
+  "changed": false
+ },
+ {
+  "tu": "levelstate.cpp",
+  "sha256": "d987d774334584c93857850908d6d6bc75cde0f716c3b30ce8938b207d155fc5",
+  "changed": false
+ },
+ {
+  "tu": "leveltemplatedata.cpp",
+  "sha256": "6228f76ddae5d79282f8ec5e610168b5c2323790d29a3c57ca67b8ddb41c18a9",
+  "changed": false
+ },
+ {
+  "tu": "mainmenu.cpp",
+  "sha256": "800b6d57ce7c69bf899a37d77180bad1bd7f52515d29b7403fe2da50c6750123",
+  "changed": false
+ },
+ {
+  "tu": "menumanager.cpp",
+  "sha256": "a0861c331ec7c810843be965011008868c224c3a2a1f2a2cf11deb9a9d821e6b",
+  "changed": false
+ },
+ {
+  "tu": "modalmenu.cpp",
+  "sha256": "b53904324540121d1c26f001f6a75bfd9954fdad6fc82169e381692344de43f1",
+  "changed": false
+ },
+ {
+  "tu": "monster.cpp",
+  "sha256": "f05aa2acd6664d035e59211fa9be8bb619b67f53b3b1fa7a612c51ce45934001",
+  "changed": false
+ },
+ {
+  "tu": "mousemanager.cpp",
+  "sha256": "a20da35c0bf836523144884d65b548df78109459cde92358761ad510d0f7013e",
+  "changed": false
+ },
+ {
+  "tu": "newgamemenu.cpp",
+  "sha256": "1699cff7c3c1e8fbb19187a5bba9037fc1bd4d1e5c51ce81ac665bb5a8d3c495",
+  "changed": false
+ },
+ {
+  "tu": "optionsmenu.cpp",
+  "sha256": "464d870b549d720e6a6b9fcb854f23348c1eb38f5a95e5adf05ddc69e6558988",
+  "changed": false
+ },
+ {
+  "tu": "path.cpp",
+  "sha256": "7ab9994d84df3800518eb90eeac0c7329b2db7f23062f3af9aefc8ac41a4cf70",
+  "changed": false
+ },
+ {
+  "tu": "petmenu.cpp",
+  "sha256": "a7f0f9d0f039093d4db9a34b775d31413fc492c98c73567c0c6e9f55e22bab0a",
+  "changed": false
+ },
+ {
+  "tu": "player.cpp",
+  "sha256": "ffa88a86c203d28a85e3ee9430d7d71d0cbe86b38254ebf05103ec356429eb8f",
+  "changed": false
+ },
+ {
+  "tu": "pov.cpp",
+  "sha256": "27666f16e3a2f8e5843557837360aba0aba9eb4a5ecfa788750492d058286eed",
+  "changed": false
+ },
+ {
+  "tu": "questdialogmenu.cpp",
+  "sha256": "1b885cd979a9b6916ece405222dedf6cbf4151cc99b2e50dd26339e2aa22ebd9",
+  "changed": false
+ },
+ {
+  "tu": "questmenu.cpp",
+  "sha256": "e7af363744af08b85e459b593ac9a0d6b368e63237dd3090220542dde967fdb5",
+  "changed": false
+ },
+ {
+  "tu": "randomizer.cpp",
+  "sha256": "1d9435c984b2c40ae946bec6b127fc0bf13b20a44e377efd5d0afe69522dc713",
+  "changed": false
+ },
+ {
+  "tu": "settingsmenu.cpp",
+  "sha256": "72e0791c5679d337f3ec104907ed8689a3f9ce91667a772f7719b57cac5bfa7c",
+  "changed": false
+ },
+ {
+  "tu": "skillmenu.cpp",
+  "sha256": "3aa9431681b5000b93d1b4945f75d40b4217329c62382be9bd1fce09b44f2a17",
+  "changed": false
+ },
+ {
+  "tu": "statsmenu.cpp",
+  "sha256": "7d8e8caab72d6031871ed5ce759b134596c7f76aeab2420f9065ba7730ab497b",
+  "changed": false
+ },
+ {
+  "tu": "statsmenu_fill.cpp",
+  "sha256": "b1673f5001d9abc6c56efe76a2532e9f1ef0dee4d89335f59306bf9db2495250",
+  "changed": false
+ },
+ {
+  "tu": "tipmenu.cpp",
+  "sha256": "3bfa808fb2ac34daca07e42b9bc47406454dca0730907cbabbee66cf5909f401",
+  "changed": false
+ },
+ {
+  "tu": "utilities.cpp",
+  "sha256": "6f2bc42dc6bb65d4da658b9c22e2659876ea6050de44aed85be9a324c57acc81",
+  "changed": false
+ },
+ {
+  "tu": "waypointmenu.cpp",
+  "sha256": "df2052023870f1f1181c231778cd5b7b17b205adf9274bab34f42bd06212bb36",
+  "changed": false
+ }
+]

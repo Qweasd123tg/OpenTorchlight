@@ -12,3 +12,11 @@ CEditorObjectManager::~CEditorObjectManager()
         m_pObjectControl = NULL;
     }
 }
+
+void CEditorObjectManager::EditorUpdateEnd()
+{
+}
+
+void CEditorObjectManager::EditorUpdateBeginning()
+{
+}

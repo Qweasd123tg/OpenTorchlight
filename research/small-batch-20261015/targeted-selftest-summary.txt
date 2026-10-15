@@ -1,0 +1,10 @@
+    coverage button_descriptor_registration 0xd9acd0 completed 48 different 0 incomplete 0
+tlhybrid: button_descriptor_registration                   PASS (0)
+    coverage image_descriptor_registration 0xda0860 completed 48 different 0 incomplete 0
+tlhybrid: image_descriptor_registration                    PASS (0)
+    coverage missile_descriptor_registration 0x602dc0 completed 48 different 0 incomplete 0
+tlhybrid: missile_descriptor_registration                  PASS (0)
+    coverage increment_descriptor_registration 0x66e4f0 completed 192 different 0 incomplete 0
+tlhybrid: increment_descriptor_registration                PASS (0)
+tlhybrid: descriptor_callback_identity                     PASS (0)
+tlhybrid: 5 tests, 0 failed

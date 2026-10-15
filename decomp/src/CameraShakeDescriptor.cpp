@@ -4,6 +4,7 @@
 #include "CameraShake.h"
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
+#include "CameraShakeDescriptorNames.h"
 
 CCameraShakeDescriptor::CCameraShakeDescriptor()
     : CBaseObjectDescriptor(L"Camera Shake", L"Does a camera shake", L"shake")
@@ -42,4 +43,15 @@ unsigned int CCameraShakeDescriptor::getCameraShakeNameByString(
 CEditorBaseObject* CCameraShakeDescriptor::CreateObject(CEditorScene*)
 {
     return new CCameraShake();
+}
+
+std::wstring CCameraShakeDescriptor::getCameraShakeOrientationStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 1)
+        return gCAMERASHAKE_ORIENTATION[0];
+    return gCAMERASHAKE_ORIENTATION[index];
 }

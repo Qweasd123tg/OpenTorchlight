@@ -7,6 +7,7 @@
 #include "RandomGroup.h"
 #include "UnitResourceList.h"
 #include "TArrayList.h"
+#include "RandomGroupDescriptorNames.h"
 
 CRandomGroupDescriptor::CRandomGroupDescriptor()
     : CPositionableObjectDescriptor(L"Group", L"Group for organizing random selections for levels", L"folder", true, false, false, false, false)
@@ -129,4 +130,15 @@ unsigned int CRandomGroupDescriptor::GetRandomGroupTypeIDByString(
     }
 
     return 0;
+}
+
+std::wstring CRandomGroupDescriptor::GetRandomGroupTypeStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 2)
+        return gRANDOMGROUP_NAMES[0];
+    return gRANDOMGROUP_NAMES[index];
 }

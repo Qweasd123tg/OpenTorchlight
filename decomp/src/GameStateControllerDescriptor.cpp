@@ -5,6 +5,7 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "GameStateController.h"
+#include "GameStateControllerDescriptorNames.h"
 
 CGameStateControllerDescriptor::CGameStateControllerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CBaseObjectDescriptor(name, group, description)
@@ -82,4 +83,26 @@ void CGameStateControllerDescriptor::update(float timeDelta)
 CEditorBaseObject* CGameStateControllerDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CGameStateController(scene->getResourceManager());
+}
+
+std::wstring CGameStateControllerDescriptor::getTipStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 33)
+        return KContextTipNames[0];
+    return KContextTipNames[index];
+}
+
+std::wstring CGameStateControllerDescriptor::getGameStateStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 6)
+        return gGAMESTATE_NAMES[1];
+    return gGAMESTATE_NAMES[index];
 }

@@ -5,6 +5,7 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "PropertyNode.h"
+#include "PropertyNodeDescriptorNames.h"
 
 CPropertyNodeDescriptor::CPropertyNodeDescriptor()
     : CPositionableObjectDescriptor(L"Property Node", L"Property node for spawns and logic", L"gear", true, true, true, true, true)
@@ -60,4 +61,15 @@ void CPropertyNodeDescriptor::descriptorSceneActivated(CEditorScene*)
                 propertyNode->activate();
         }
     }
+}
+
+std::wstring CPropertyNodeDescriptor::getPropertyNodeTypeString(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 15)
+        return gPROPERTY_NODE_TYPE_NAMES[0];
+    return gPROPERTY_NODE_TYPE_NAMES[index];
 }

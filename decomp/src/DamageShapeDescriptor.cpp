@@ -91,3 +91,14 @@ CDamageShapeDescriptor* getSingleton()
 {
     return reinterpret_cast<CDamageShapeDescriptor*>(g_DescriptorController);
 }
+
+std::wstring CDamageShapeDescriptor::getAlignmentStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 6)
+        return KALIGNMENT_STRINGS[0];
+    return KALIGNMENT_STRINGS[index];
+}

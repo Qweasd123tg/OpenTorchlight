@@ -43,3 +43,14 @@ CEditorBaseObject* CCounterDescriptor::CreateObject(CEditorScene*)
 {
     return new CCounter();
 }
+
+std::wstring CCounterDescriptor::GetCounterTypeTypeStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 5)
+        return gCOUNTER_TYPE_NAMES[0];
+    return gCOUNTER_TYPE_NAMES[index];
+}

@@ -5,6 +5,7 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "StringUtilities.h"
+#include "CameraControllerDescriptorNames.h"
 
 CCameraControllerDescriptor::CCameraControllerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, true, false, false, false, false)
@@ -89,4 +90,15 @@ void CCameraControllerDescriptor::InputLogicEvent(CEditorBaseObject* object, uns
 CEditorBaseObject* CCameraControllerDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CCameraController(scene->getResourceManager());
+}
+
+std::wstring CCameraControllerDescriptor::getTypeStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 1)
+        return gCAMERA_TYPE_NAMES[0];
+    return gCAMERA_TYPE_NAMES[index];
 }

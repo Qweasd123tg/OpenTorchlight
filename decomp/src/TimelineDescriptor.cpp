@@ -13,6 +13,7 @@ CTimelineDescriptor::~CTimelineDescriptor()
 
 #include <map>
 #include <string>
+#include "TimelineDescriptorNames.h"
 
 void CTimelineDescriptor::descriptorSceneDeactivated(CEditorScene* scene)
 {
@@ -49,4 +50,26 @@ void CTimelineDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned in
             }
         }
     }
+}
+
+std::wstring CTimelineDescriptor::GetTimelineInterpolationStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index < 1 || index > 6)
+        return gTIMELINE_INTERP_TYPES[0];
+    return gTIMELINE_INTERP_TYPES[index];
+}
+
+std::wstring CTimelineDescriptor::GetTimelineModStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 2)
+        return gTIMELINE_MODIFICATION_TYPE_NAMES[0];
+    return gTIMELINE_MODIFICATION_TYPE_NAMES[index];
 }

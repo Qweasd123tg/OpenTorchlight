@@ -47,3 +47,14 @@ CEditorBaseObject* CRandomChoiceDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CRandomChoice;
 }
+
+std::wstring CRandomChoiceDescriptor::GetChoiceTypeStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 1)
+        return gRANDOMCHOICE_TYPE_NAMES[0];
+    return gRANDOMCHOICE_TYPE_NAMES[index];
+}

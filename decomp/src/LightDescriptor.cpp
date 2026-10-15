@@ -5,6 +5,7 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "Light.h"
+#include "LightDescriptorNames.h"
 
 CLightDescriptor::CLightDescriptor()
     : CPositionableObjectDescriptor(L"Light", L"A light for the level", L"LIGHT", true, false, false, false, true)
@@ -38,4 +39,15 @@ void CLightDescriptor::descriptorSceneActivated(CEditorScene* scene)
 CEditorBaseObject* CLightDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CLight(scene->getResourceManager());
+}
+
+std::wstring CLightDescriptor::GetLightStringByID(
+    CEditorScene*,
+    CEditorBaseObject*,
+    unsigned int index,
+    void*)
+{
+    if (index > 2)
+        return gLIGHT_RENDER_NAMES[0];
+    return gLIGHT_RENDER_NAMES[index];
 }
