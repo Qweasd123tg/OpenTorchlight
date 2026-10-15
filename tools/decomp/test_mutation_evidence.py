@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import contextlib
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -13,6 +14,48 @@ import mutate
 
 
 class EvidenceTests(unittest.TestCase):
+    def test_manifest_preserves_legacy_digest_and_snapshots_context(self):
+        with tempfile.TemporaryDirectory() as folder:
+            first, second = Path(folder) / "a", Path(folder) / "b"
+            first.write_bytes(b"first")
+            second.write_bytes(b"second")
+            context = {"config": {"flags": ["-O2"]}}
+            paths = [("z", second), ("a", first)]
+            legacy = {"schema": 1,
+                      "files": [["a", hashlib.sha256(b"first").hexdigest()],
+                                ["z", hashlib.sha256(b"second").hexdigest()]],
+                      "context": context}
+            expected = hashlib.sha256(json.dumps(legacy, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+            with patch.object(evidence, "file_digest", wraps=evidence.file_digest) as hashed:
+                manifest = evidence.manifest_paths(paths, context)
+                self.assertEqual(expected, evidence.manifest_digest(manifest))
+                self.assertEqual(2, hashed.call_count)
+            self.assertEqual(expected, evidence.digest_paths(paths, context))
+            context["config"]["flags"].append("-g")
+            self.assertEqual(["-O2"], manifest["context"]["config"]["flags"])
+            self.assertEqual(expected, evidence.manifest_digest(manifest))
+
+    def test_manifest_names_file_and_nested_context_changes(self):
+        before = {"schema": 1, "files": [["same", "1"], ["changed", "1"], ["removed", "1"]],
+                  "context": {"config": {"flags": ["-O2"]}, "database_digest": "old"}}
+        after = {"schema": 1, "files": [["same", "1"], ["changed", "2"], ["added", "1"]],
+                 "context": {"config": {"flags": ["-O0"]}, "database_digest": "new"}}
+        self.assertEqual({"added": ["added"], "removed": ["removed"], "changed": ["changed"],
+                          "context": ["context.config.flags", "context.database_digest"], "schema": False},
+                         evidence.manifest_changes(before, after))
+        self.assertEqual({"added": [], "removed": [], "changed": [], "context": [], "schema": False},
+                         evidence.manifest_changes(before, before))
+
+    def test_manifest_preserves_legacy_numeric_context_key_order(self):
+        context = {"numeric": {10: "ten", 2: "two"}}
+        legacy = {"schema": 1, "files": [], "context": context}
+        expected = hashlib.sha256(json.dumps(legacy, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        manifest = evidence.manifest_paths([], context)
+        self.assertEqual({10, 2}, set(manifest["context"]["numeric"]))
+        self.assertEqual(expected, evidence.digest_paths([], context))
+        context["numeric"][2] = "changed"
+        self.assertEqual(expected, evidence.manifest_digest(manifest))
+
     def test_file_addition_content_and_context_invalidate(self):
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)

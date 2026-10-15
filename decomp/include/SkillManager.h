@@ -44,6 +44,7 @@ public:
     CSkill* getSkillByGuid(long long);
     CSkill* getSkill(const std::wstring& name,int level);
     void update(float elapsed);
+    void triggerSkillEvent(ESKILL_EVENT_TYPE event, const Ogre::Vector3& position, const Ogre::Quaternion& orientation, CBaseUnit* target);
     void setSkillLevel(CSkill* skill,unsigned int level);
     void setSkillLevel(const std::wstring& name, unsigned int level);
     int getSkillPoints();

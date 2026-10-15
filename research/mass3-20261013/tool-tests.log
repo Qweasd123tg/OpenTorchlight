@@ -1,0 +1,15 @@
+.....A
+warning A
+B
+warning B
+C
+warning C
+test_D
+warning test_D
+test_E
+warning test_E
+............
+----------------------------------------------------------------------
+Ran 17 tests in 0.117s
+
+OK

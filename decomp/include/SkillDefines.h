@@ -7,6 +7,8 @@
 // including TU constructs its own copy. Enumerator names are ours; values
 // follow the table order.
 
+enum ESKILL_EVENT_TYPE { SKILL_EVENT_TRIGGER = 2, SKILL_EVENT_TRIGGER_TWO = 3 };
+
 enum ESKILL_ACTIVATION_TYPE
 {
     SKILL_ACTIVATION_ANY,

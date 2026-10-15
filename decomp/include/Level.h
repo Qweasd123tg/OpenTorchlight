@@ -35,6 +35,7 @@ class CPropertyNode;
 class CLevel : public CRunicCore
 {
 public:
+    CBaseUnit* addUnit(CBaseUnit* unit, const Ogre::Vector3& position);
     void addUpdateObject(iLevelUpdate* object);
     CBaseUnit* getBaseUnitByDataGroup(CDataGroup* dataGroup);
     void getUnitsByUnitType(UNITTYPES::EUNITTYPES type, TArrayList<CBaseUnit*>& units);
@@ -70,6 +71,7 @@ public:
     int getDungeonDepth() const { return m_dungeonDepth; }
     void notifyOfDeletion(CItem* item);
     void addItem(CItem*,const Ogre::Vector3&,bool);
+    void deleteItem(CItem*);
     // Original removal symbols; used by typed descriptor notifications.
     bool removeItem(CItem* item, bool deactivate);
     void removeCharacter(CCharacter* character, bool clearReferences);
@@ -111,6 +113,9 @@ public:
 private:
     friend struct SmallmatchPass7Probe;
     friend class CQuestUnitData;
+    friend class CCharacter;
+    friend class CPlayer;
+    friend class CMonster;
     TArrayList<CEditorScene*> m_RoomScenes;
     TArrayList<Ogre::AxisAlignedBox> m_roomBounds;
     short** m_mapPassability;
@@ -125,7 +130,12 @@ private:
     char m_LevelDataA8[0xf0-0xa8];
     TArrayList<CPropertyNode*> m_propertyNodesF0; // +0xf0, createUnit mode 0
     TArrayList<CPropertyNode*> m_propertyNodes108; // +0x108, createUnit mode 1
-    char m_LevelData120[0x1a4-0x120];
+    char m_LevelData120[0x140-0x120];
+    Ogre::Vector3 m_playerStart; // +0x140
+    Ogre::Vector3 m_returnPortalPosition; // +0x14c
+    Ogre::Vector3 m_waypointPosition; // +0x158
+    Ogre::Vector3 m_startDirection; // +0x164
+    char m_LevelData170[0x1a4-0x170];
     int m_iLevelDepth;
     int m_dungeonDepth; // +0x1a8
     char m_LevelData1AC[0x1d8 - 0x1ac];

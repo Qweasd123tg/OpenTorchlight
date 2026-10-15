@@ -6,6 +6,7 @@ Old unversioned results must be rerun rather than stamped with current inputs.
 """
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 import os
@@ -29,13 +30,51 @@ def file_digest(path):
     return h.hexdigest()
 
 
-def digest_paths(paths, context=None):
-    """Names and complete contents; additions/deletions change the identity too."""
+def manifest_paths(paths, context=None):
+    """Snapshot the exact names, contents and context used by an input identity."""
     rows = []
     for name, path in sorted(paths, key=lambda row: row[0]):
         rows.append([name, file_digest(path)])
-    data = {"schema": SCHEMA, "files": rows, "context": context or {}}
-    return hashlib.sha256(json.dumps(data, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    # Detach nested context values from mutable caller state as well as files.
+    context = copy.deepcopy(context or {})
+    return {"schema": SCHEMA, "files": rows, "context": context}
+
+
+def manifest_digest(manifest):
+    return hashlib.sha256(json.dumps(manifest, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def digest_paths(paths, context=None):
+    """Names and complete contents; additions/deletions change the identity too."""
+    return manifest_digest(manifest_paths(paths, context))
+
+
+def manifest_changes(before, after):
+    """Describe differing logical inputs without reading or rehashing files."""
+    def files(manifest):
+        result = {}
+        for name, digest in manifest["files"]:
+            result.setdefault(name, []).append(digest)
+        return result
+
+    def context_keys(left, right, prefix="context"):
+        if isinstance(left, dict) and isinstance(right, dict):
+            changed = []
+            for key in sorted(left.keys() | right.keys()):
+                name = prefix + "." + key
+                if key not in left or key not in right:
+                    changed.append(name)
+                else:
+                    changed += context_keys(left[key], right[key], name)
+            return changed
+        return [prefix] if left != right else []
+
+    left, right = files(before), files(after)
+    return {"added": sorted(right.keys() - left.keys()),
+            "removed": sorted(left.keys() - right.keys()),
+            "changed": sorted(name for name in left.keys() & right.keys() if left[name] != right[name]),
+            "context": context_keys(before["context"], after["context"]),
+            "schema": before["schema"] != after["schema"]}
 
 
 def directory_inputs(name, directory, suffixes=None):
@@ -77,7 +116,7 @@ def runtime_inputs(elf):
     return [("runtime/" + name, path) for name, path in sorted(paths.items())]
 
 
-def input_digest(db, root=None):
+def input_manifest(db, root=None):
     root = Path(root) if root is not None else elfdb.ROOT
     paths = []
     for name in ("decomp", "tools/decomp", "third_party"):
@@ -113,7 +152,11 @@ def input_digest(db, root=None):
                "extra_include": os.environ.get("OTL_EXTRA_INCLUDE", ""),
                "ld_library_path": os.environ.get("LD_LIBRARY_PATH", ""),
                "locale": {key: os.environ.get(key, "") for key in ("LANG", "LC_ALL", "TZ")}}
-    return digest_paths(paths, context)
+    return manifest_paths(paths, context)
+
+
+def input_digest(db, root=None):
+    return manifest_digest(input_manifest(db, root))
 
 
 def tested(object_digest, inputs_digest, parameters):

@@ -1,3 +1,13 @@
+#include "Equipment.h"
+#include "EquipmentRef.h"
+#include <OgreEntity.h>
+#include "QuestManager.h"
+#include "Quest.h"
+#include "MasterResourceManager.h"
+#include "Settings.h"
+#include "Dungeon.h"
+#include "DungeonManager.h"
+
 #include "Achievements.h"
 #include "Achievement.h"
 #include "EmptyStrings.h"
@@ -395,6 +405,395 @@ void CPlayer::calculateNaturalArmor()
         if (graph) {
             float value = graph->getValue(float(m_iUnitLevel), 0);
             m_naturalArmor = int(ceilf(value * (float(m_naturalArmor) / 100.0f)));
+        }
+    }
+}
+
+void CPlayer::createPortals(CLevel& level)
+{
+    Ogre::Vector3 position = level.m_waypointPosition;
+    if (position != Ogre::Vector3(-1.0f, -1.0f, -1.0f))
+    {
+        for (unsigned int i = 0; i < m_dungeonTrackers.size(); ++i)
+        {
+            if (!m_dungeonTrackers[i]->m_levels.empty())
+            {
+                CBaseUnit* unit = m_pResourceManager->createUnit(L"PROPS", L"WAYPOINT PORTAL", 0, false);
+                if (unit)
+                {
+                    CItem* portal = dynamic_cast<CItem*>(unit);
+                    if (portal)
+                        level.addItem(portal, position, false);
+                }
+                break;
+            }
+        }
+    }
+    if (m_hasPortal)
+    {
+        if ((m_portalDepth != level.getLevelDepth() || level.getDungeonName() != m_portalDungeon) && !level.getLevelTemplateData()->isTown())
+            return;
+        Ogre::Vector3 returnPosition = m_portalPosition;
+        if (level.getLevelTemplateData()->isTown())
+            returnPosition = level.m_returnPortalPosition;
+        CBaseUnit* unit = m_pResourceManager->createUnit(L"PROPS", level.getLevelTemplateData()->isTown() ? L"RETURN TO DUNGEON" : L"RETURN TO TOWN", 0, false);
+        if (unit)
+        {
+            CItem* portal = dynamic_cast<CItem*>(unit);
+            if (portal)
+                level.addItem(portal, returnPosition, false);
+        }
+    }
+    level.updateAutomapIcons();
+}
+
+void CPlayer::updateAnimation(float elapsed)
+{
+    if (!m_pUnitModel)
+        return;
+    if (m_followersEnabled != getEnabled())
+    {
+        unsigned int count = getFollowerCount();
+        for (unsigned int i = 0; i < count; ++i)
+        {
+            CCharacter* follower = getFollower(i);
+            if (follower)
+                follower->setEnabled(getEnabled());
+        }
+    }
+    m_followersEnabled = getEnabled();
+    CCharacter::updateAnimation(elapsed);
+    if (m_fishingParticle && m_fishingLineNode)
+    {
+        if (m_eAIState >= 0x20 && m_eAIState <= 0x22)
+        {
+            m_fishingLineNode->setVisible(true, true);
+            updateFishingLine(elapsed);
+            if (m_fishingParticle->getVisible())
+                m_fishingParticle->updateAnimation(elapsed, false);
+        }
+        else
+        {
+            m_fishingParticle->setVisible(false);
+            m_fishingLineNode->setVisible(false, true);
+        }
+    }
+    if (HP() <= 0 && static_cast<CGenericModel*>(getUnitModel())->animationPlayingSubstring("DIE"))
+        m_deathDelay = 0.5f;
+}
+
+bool CPlayer::removeItemFromInventoryOrPetsInventoryByGuid(long long guid, bool wholeStack, bool destroy, UNITTYPES::EUNITTYPES type)
+{
+    bool removed = false;
+    CInventory* inventory = m_pInventory;
+    if (inventory)
+    {
+        TArrayList<CEquipmentRef*> items(10);
+        // The player-side query uses the original 32-bit unsigned sentinel.
+        inventory->getEquipmentsOfQuestID(static_cast<unsigned int>(-1), items);
+        if (guid != -1)
+        {
+            for (unsigned int i = 0; i < items.size(); ++i)
+            {
+                if (items[i]->m_pEquipment->getUnitGuid() != guid)
+                    items.removeAt(i--);
+            }
+        }
+        for (unsigned int i = 0; i < items.size(); ++i)
+        {
+            CEquipment* equipment = items[i]->m_pEquipment;
+            if (!equipment || !equipment->ISA(type))
+                continue;
+            bool erase = destroy;
+            if (!wholeStack)
+            {
+                equipment->incrementStackBy(-1);
+                if (equipment->m_iUnknown238 != 0)
+                {
+                    removed = true;
+                    continue;
+                }
+                erase = true;
+            }
+            inventory->removeEquipment(equipment);
+            if (erase)
+                delete equipment;
+            removed = true;
+        }
+    }
+    CCharacter* pet = getFollower(0);
+    if (pet)
+    {
+        inventory = pet->getInventory();
+        if (inventory)
+        {
+            TArrayList<CEquipmentRef*> items(10);
+            if (guid == -1)
+                inventory->getEquipmentsOfQuestID(guid, items);
+            else
+                inventory->getEquipmentsOfUnitGuid(guid, items);
+            for (unsigned int i = 0; i < items.size(); ++i)
+            {
+                CEquipment* equipment = items[i]->m_pEquipment;
+                if (!equipment || !equipment->ISA(type))
+                    continue;
+                bool erase = destroy;
+                if (!wholeStack)
+                {
+                    equipment->incrementStackBy(-1);
+                    if (equipment->m_iUnknown238 != 0)
+                    {
+                        removed = true;
+                        continue;
+                    }
+                    erase = true;
+                }
+                inventory->removeEquipment(equipment);
+                if (erase)
+                    delete equipment;
+                removed = true;
+            }
+        }
+    }
+    return removed;
+}
+
+bool CPlayer::removeQuestItemFromInventoryOrPetsInventoryByGuid(long long quest, long long guid, bool wholeStack, bool destroy, UNITTYPES::EUNITTYPES type)
+{
+    bool removed = false;
+    CInventory* inventory = m_pInventory;
+    if (inventory)
+    {
+        TArrayList<CEquipmentRef*> items(10);
+        if (guid == -1)
+            inventory->getEquipmentsOfQuestID(quest, items);
+        else if (quest == -1)
+            inventory->getEquipmentsOfUnitGuid(guid, items);
+        else
+        {
+            inventory->getEquipmentsOfQuestID(quest, items);
+            for (unsigned int i = 0; i < items.size(); ++i)
+            {
+                if (items[i]->m_pEquipment->getUnitGuid() != guid)
+                    items.removeAt(i--);
+            }
+        }
+        for (unsigned int i = 0; i < items.size(); ++i)
+        {
+            CEquipment* equipment = items[i]->m_pEquipment;
+            if (!equipment || !equipment->ISA(type))
+                continue;
+            bool erase = destroy;
+            if (!wholeStack)
+            {
+                equipment->incrementStackBy(-1);
+                if (equipment->m_iUnknown238 != 0)
+                {
+                    removed = true;
+                    continue;
+                }
+                erase = true;
+            }
+            inventory->removeEquipment(equipment);
+            if (erase)
+                delete equipment;
+            removed = true;
+        }
+    }
+    CCharacter* pet = getFollower(0);
+    if (pet)
+    {
+        inventory = pet->getInventory();
+        if (inventory)
+        {
+            TArrayList<CEquipmentRef*> items(10);
+            if (guid == -1)
+                inventory->getEquipmentsOfQuestID(quest, items);
+            else if (quest == -1)
+                inventory->getEquipmentsOfUnitGuid(guid, items);
+            else
+            {
+                inventory->getEquipmentsOfQuestID(quest, items);
+                for (unsigned int i = 0; i < items.size(); ++i)
+                {
+                    if (items[i]->m_pEquipment->getUnitGuid() != guid)
+                        items.removeAt(i--);
+                }
+            }
+            for (unsigned int i = 0; i < items.size(); ++i)
+            {
+                CEquipment* equipment = items[i]->m_pEquipment;
+                if (!equipment || !equipment->ISA(type))
+                    continue;
+                bool erase = destroy;
+                if (!wholeStack)
+                {
+                    equipment->incrementStackBy(-1);
+                    if (equipment->m_iUnknown238 != 0)
+                    {
+                        removed = true;
+                        continue;
+                    }
+                    erase = true;
+                }
+                inventory->removeEquipment(equipment);
+                if (erase)
+                    delete equipment;
+                removed = true;
+            }
+        }
+    }
+    return removed;
+}
+
+void CPlayer::loadModel(std::wstring model, std::wstring skeleton)
+{
+    if (m_fishingPole)
+    {
+        Ogre::SceneNode* parent = m_fishingPole->getSceneNode()->getParentSceneNode();
+        if (parent)
+            parent->removeChild(m_fishingPole->getSceneNode());
+        if (m_fishingPole)
+        {
+            delete m_fishingPole;
+            m_fishingPole = NULL;
+        }
+    }
+    if (m_fishingParticle)
+    {
+        Ogre::SceneNode* parent = m_fishingParticle->getSceneNode()->getParentSceneNode();
+        if (parent)
+            parent->removeChild(m_fishingParticle->getSceneNode());
+        if (m_fishingParticle)
+        {
+            delete m_fishingParticle;
+            m_fishingParticle = NULL;
+        }
+    }
+    CCharacter::loadModel(model, skeleton);
+    CResourceManager* resources = m_pResourceManager;
+    m_fishingPole = resources->createGenericModel(NULL, L"media/models/fishingpole/fishingpole.mesh", skeleton.c_str(), false, false, true);
+    m_fishingPole->getEntity()->setRenderQueueGroup(88);
+    m_fishingParticle = resources->createGenericModel(NULL, L"media/models/fish/fish.mesh", skeleton.c_str(), false, false, true);
+    m_fishingParticle->playAnimation("IDLE", true, 1.0f, -1.0f);
+    m_fishingParticle->setVisible(false);
+    m_fishingParticle->setRenderBehind(false);
+    m_fishingParticle->getEntity()->setRenderQueueGroup(88);
+    Ogre::SceneNode* fishingNode = m_fishingNode;
+    if (fishingNode)
+    {
+        Ogre::SceneNode* parent = m_fishingPole->getSceneNode()->getParentSceneNode();
+        if (parent)
+            parent->removeChild(m_fishingPole->getSceneNode());
+        fishingNode->addChild(m_fishingPole->getSceneNode());
+        fishingNode->setVisible(false, true);
+    }
+}
+
+void CPlayer::openMapPortal(std::wstring name, CLevel& level)
+{
+    Ogre::Vector3 position = level.randomOpenPosition(getPosition(true), 3.0f, false);
+    CBaseUnit* unit = m_pResourceManager->createUnit(L"PROPS", L"MAP PORTAL", 0, false);
+    if (!unit)
+        return;
+    CItem* portal = dynamic_cast<CItem*>(unit);
+    if (!portal)
+        return;
+    level.addItem(portal, position, false);
+    CEffect* effect = new CEffect(static_cast<EEFFECT_TYPE>(0x71), false, static_cast<EEFFECT_ACTIVATION>(0), -1000.0f, 0.0f, 0.0f, false);
+    effect->m_flag33 = true;
+    effect->m_sName = STRINGS::StringUpper(name);
+    portal->addNewEffect(effect);
+}
+
+void CPlayer::levelResetting()
+{
+    CCharacter::levelResetting();
+    modifyHP(static_cast<float>(maxHP()));
+    modifyMana(static_cast<float>(maxMana()));
+    if (m_pResourceManager && m_pResourceManager->getLevel() && m_pResourceManager->getGameUI()->m_returnToTownOption == 1)
+    {
+        setPosition(getLevel()->m_playerStart);
+        dropToGround(*getLevel(), 4.0f, false);
+        setToward(getLevel()->m_startDirection);
+    }
+    for (unsigned int i = 0; i < m_Followers.size(); ++i)
+    {
+        m_Followers[i]->teleportToMaster(static_cast<float>(m_Followers.size()) * 0.25f);
+        int maximum = m_Followers[i]->maxHP();
+        m_Followers[i]->modifyHP(static_cast<float>(maximum));
+    }
+    setAIState(static_cast<EAIState>(0));
+    m_pUnitModel->playAnimation("IDLE", true, 1.0f, -1.0f);
+    setEnabled(true);
+    if (m_pEffectManager)
+    {
+        m_pEffectManager->deleteAffix(L"DAMAGEEFFECTFROZENPLAYER");
+        m_pEffectManager->deleteAffix(L"DAMAGEEFFECTONFIRE");
+        m_pEffectManager->deleteAffix(L"DAMAGEEFFECTELECTRICITY");
+        m_pEffectManager->deleteAffix(L"DAMAGEEFFECTPOISONED");
+        if (m_pEffectManager)
+            m_pEffectManager->removeNonSavedEffects();
+    }
+}
+
+void CPlayer::updateDungeonTracking(std::wstring name, int depth)
+{
+    name = STRINGS::StringUpper(name);
+    CDungeon* dungeon = CDungeonManager::getSingleton()->getDungeonByName(name);
+    for (unsigned int i = 0; i < m_dungeonTrackers.size(); ++i)
+    {
+        if (m_dungeonTrackers[i]->m_name == name)
+        {
+            m_dungeonTrackers[i]->m_value8 = std::max(m_dungeonTrackers[i]->m_value8, depth);
+            if (dungeon)
+            {
+                if (m_dungeonTrackers[i]->m_value10 != dungeon->m_iDungeonIndex)
+                    m_dungeonTrackers[i]->m_rank = m_iUnitLevel;
+                m_dungeonTrackers[i]->m_value10 = dungeon->m_iDungeonIndex;
+            }
+            return;
+        }
+    }
+    CDungeonTracker* tracker = new CDungeonTracker;
+    tracker->m_name = name;
+    tracker->m_value8 = depth;
+    tracker->m_rank = m_iUnitLevel;
+    tracker->m_value10 = dungeon ? dungeon->m_iDungeonIndex : 0;
+    m_dungeonTrackers.add(tracker);
+}
+
+void CPlayer::setQuestManager(CQuestManager* manager)
+{
+    m_questManager = manager;
+    if (!m_pDataGroup || !manager)
+        return;
+    manager->setPlayer(this);
+    m_questManager->resetQuestManager(true);
+    CDataGroup* quests = m_pDataGroup->GetDataGroupByName(L"QUESTS", false);
+    if (quests)
+    {
+        for (unsigned int i = 0; i < quests->GetNumberOfDataValues(); ++i)
+        {
+            CDataValue::EDATAVALUETYPES type = quests->GetDataValue(i)->GetValueType();
+            if (type == CDataValue::DATAVALUE_TRANSLATE || type == CDataValue::DATAVALUE_STRING)
+            {
+                CQuest* quest = reinterpret_cast<CQuest*>(m_questManager->getQuestByName(STRINGS::StringUpper(quests->GetDataValue(i)->GetValueString(true))));
+                if (quest)
+                {
+                    m_questManager->giveQuest(quest, NULL, false);
+                    quest->setQuestAccepted(true);
+                }
+            }
+        }
+    }
+    if (CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_GAME_COMPLETED_ONCE) == 1)
+    {
+        CQuest* quest = reinterpret_cast<CQuest*>(m_questManager->getQuestByName(CMasterResourceManager::getSingleton()->m_pSettings->GetString(KSETTINGS_RETIREE_QUEST)));
+        if (quest && !m_questManager->getQuestComplete(CMasterResourceManager::getSingleton()->m_pSettings->GetString(KSETTINGS_RETIREE_QUEST)))
+        {
+            m_questManager->giveQuest(quest, NULL, true);
+            m_questManager->completeQuest(quest);
         }
     }
 }

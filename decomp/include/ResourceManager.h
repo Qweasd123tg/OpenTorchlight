@@ -38,12 +38,14 @@ class CCameraControl;
 class CResourceManager : public CRunicCore
 {
 public:
+    CBaseUnit* createUnit(const wchar_t* category, const wchar_t* name, int level, bool flag);
     int ISA(const std::wstring& unit, const std::wstring& parent);
 
     TArrayList<CGameClient*>* getGameClients() { return &m_GameClients; }
 
     CGraph* getGraph(const std::wstring&);
     CGameUI* getGameUI();
+    void createUnitsBySpawnClass(CSpawnClass* spawn, TArrayList<CBaseUnit*>& units, unsigned int count, CCharacter* first, CCharacter* second, int level, int flags);
     CEquipment* createEquipment(const wchar_t*,bool,bool);
     CSpawnClass* getSpawnClassByName(const std::wstring&);
     void createUnitsBySpawnClassAtPositionInLevel(CSpawnClass* spawn, unsigned int count,

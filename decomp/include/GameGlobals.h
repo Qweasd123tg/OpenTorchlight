@@ -48,7 +48,9 @@ private:
     int m_retirementAge; // +0x48
     float m_magicFindMagicInfluence;
     float m_magicFindUniqueInfluence;
-    unsigned char m_Padding54[0xc];
+    unsigned char m_Padding54[4];
+    float m_hpRegeneration; // +0x58
+    float m_petHPRegeneration; // +0x5c
     float m_manaRegeneration; // +0x60
     float m_fEnchanterSocketChance;
     float m_fEnchanterEnchantChance;

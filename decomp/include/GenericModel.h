@@ -28,6 +28,7 @@ friend class CInventoryMenu;
 friend class CSkillMenu;
 friend class CJournalMenu;
 public:
+    int findRandomAnimation(const std::string& name);
     int findKey(int animation, CKeyframe* key);
     TArrayList<int>* getValueIndexes(int animation, CKeyframe* key);
     unsigned int getAnimationCount() const;

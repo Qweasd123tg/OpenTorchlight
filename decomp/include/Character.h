@@ -22,6 +22,7 @@ class CParticle;
 namespace Ogre { class Billboard; }
 namespace CEGUI { class Window; }
 class CPathController;
+class CSpawnClass;
 class CPath;
 class CAstarPathfinder;
 class CAttackDescription;
@@ -60,7 +61,14 @@ class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 friend class CPlayer;
 friend class CGameClient;
 public:
+    void makeChampion(const std::wstring& name, int level, std::wstring type);
     void completeDeath(CLevel& level);
+    CInventory* getInventory() const { return m_pInventory; }
+    void createDefaultEquipment();
+    void generateMerchantInventory();
+    void transformCharacter(std::wstring name, float duration);
+    bool doWeaponSkill(CEquipment* equipment);
+    CSkill* performSkill();
     void doWeaponProcs(CEquipment* weapon, CBaseUnit* target);
     void playStrikeParticle(const Ogre::Vector3& source, const Ogre::Vector3& target, float radius, bool blocked, bool critical);
 
@@ -96,9 +104,11 @@ public:
     bool attemptStopOfActiveSkill();
     bool canCastCurrentSkill(CBaseUnit* target, bool, bool);
     bool validLineOfSight(CLevel& level, bool);
+    CCharacter* calculateTargetInSight(EAlignment alignment, bool attached);
     void performAttack(CEquipment* equipment, unsigned int attack, float damage, float effects, EDAMAGE_TYPES type);
 
     void updateOpacity(float elapsed, bool force);
+    void updateSkillKeys(float elapsed);
 
     // Nested trigger layout comes from its 0x60-byte allocations and destructor.
     class CParticleAnimationTrigger : public CRunicCore
@@ -107,11 +117,13 @@ public:
         virtual ~CParticleAnimationTrigger();
         CResourceManager* m_resources; // +0x10
         CParticle* m_particle; // +0x18
-        unsigned char m_Padding20[0x18];
+        bool m_stopOnDeath; // +0x20
+        unsigned char m_Padding21[0x17];
         Ogre::SceneNode* m_node; // +0x38
         std::string m_name; // +0x40
         void* m_nodeOwner; // +0x48
-        unsigned char m_Padding50[9];
+        CUnitTheme* m_theme; // +0x50
+        bool m_stopWhenHidden; // +0x58
         bool m_stopFlag59;
         bool m_stopFlag5A;
         unsigned char m_Padding5B[5];
@@ -147,6 +159,8 @@ public:
     void unLearnSpell(std::wstring name,int level);
     void performSkill(const std::wstring& name);
     void removePet(CCharacter* pet);
+    void addPet(CCharacter* pet);
+    CCharacter* updateHP(CLevel& level, float elapsed);
     float getEffectValue(EEFFECT_TYPE type,EEQUIP_LOCATIONS excluded,EDAMAGE_TYPES damage);
 
     void setMaster(CCharacter* master);
@@ -154,6 +168,8 @@ public:
     void removePets();
 
     bool inStrikeRange();
+    bool inAttackRange(EATTACK_RANGE_TYPE type);
+    int inSkillRange(long long guid, bool ignoreMinimum);
 
     void notifyOfDeletion(CCharacter* character);
 
@@ -411,7 +427,8 @@ private:
     friend class CPlayer;
     friend class CMonster;
     float m_pathTime; // +0x1e8
-    unsigned char m_Padding1EC[8];
+    float m_damageOverTimeTaken; // +0x1ec
+    unsigned char m_Padding1F0[4];
     bool m_groundFlag; // +0x1f4
     unsigned char m_Padding1F5[0xb];
 public:
@@ -472,11 +489,13 @@ private:
     bool m_skillInterrupted; // +0x37d
     unsigned char m_Padding37E[0x2];
     float m_skillTime; // +0x380
-    unsigned char m_Padding384[0xc];
+    bool m_skillEventTriggered; // +0x384
+    unsigned char m_Padding385[0xb];
     CAttackDescription* m_attack; // +0x390
     CSkill* m_activeSkill; // +0x398
     CSkill* m_previousSkill; // +0x3a0
-    unsigned char m_Padding3A8[0x8];
+    bool m_skillCanInterrupt; // +0x3a8
+    unsigned char m_Padding3A9[7];
     long long m_activeSkillGuid; // +0x3b0
     long long m_leftSkillGuid; // +0x3b8
     long long m_leftMouseSkillGuid;
@@ -499,7 +518,8 @@ private:
     unsigned int m_experience; // +0x448
     unsigned int m_fame; // +0x44c
     int m_fameLevel; // +0x450
-    unsigned char m_Padding454[8];
+    int m_experienceReward; // +0x454
+    int m_fameReward; // +0x458
     int m_iUnusedStatPoints;
     int m_iUnusedSkillPoints;
     int m_iUnusedPerkPoints;
@@ -521,7 +541,8 @@ private:
     unsigned char m_Padding4A1[7];
     TArrayList<CParticle*> m_equipmentParticles; // +0x4a8
     std::wstring m_characterDisplayName; // +0x4c0; original-owned display text
-    unsigned char m_Padding4C8[0x18];
+    unsigned char m_Padding4C8[0x14];
+    float m_attackRangeScale; // +0x4dc
     float m_attackRadius; // +0x4e0
     unsigned char m_Padding4E4[4];
     CWardrobe* m_wardrobe; // +0x4e8
@@ -550,9 +571,18 @@ private:
     bool m_allowJumpDown; // +0x682
     unsigned char m_Padding683;
     float m_townTravelTime; // +0x684
-    unsigned char m_Padding688[0x10];
+    float m_transformationTime; // +0x688
+    unsigned char m_Padding68C[4];
+    long long m_originalUnitGuid; // +0x690
     CWeaponTrail* m_weaponTrails[4]; // +0x698
-    unsigned char m_Padding6B8[0x4d];
+    unsigned char m_Padding6B8[8];
+    CSpawnClass* m_merchantSpawnClass; // +0x6c0
+    int m_merchantMinimum; // +0x6c8
+    int m_merchantMaximum; // +0x6cc
+    unsigned char m_Padding6D0[0x31];
+    bool m_experienceDisabled; // +0x701
+    bool m_champion; // +0x702
+    unsigned char m_Padding703[2];
     bool m_weaponsHidden; // +0x705
     unsigned char m_Padding706[0x6];
     bool m_targetLocked; // +0x70c
