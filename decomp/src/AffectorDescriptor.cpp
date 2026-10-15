@@ -36,3 +36,14 @@ void CAffectorDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned in
         }
     }
 }
+
+CAffectorDescriptor::CAffectorDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
+    : CPositionableObjectDescriptor(name, group, description, true, false, false, false, false)
+{
+    AddInputLogic(INPUT_EVENT_ENABLE);
+    AddInputLogic(INPUT_EVENT_DISABLE);
+    m_iFlags &= ~(DESCRIPTOR_FLAG_100 | DESCRIPTOR_FLAG_4000);
+    m_ParentFilters.add(std::wstring(L"PARTICLE"));
+    m_ParentFilters.add(std::wstring(L"EMITTER"));
+    AddProperty(L"PROPERTIES", L"ENABLE", L"Disable or Enable this affector", (void*)Set_setEnabled, (void*)Get_getEnabled, VARIABLE_TYPE_BOOL, 0);
+}

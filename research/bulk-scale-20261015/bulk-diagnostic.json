@@ -1,0 +1,1665 @@
+{
+ "mode": "DIAGNOSTIC_ONLY",
+ "acceptance_claims": 0,
+ "selected": 207,
+ "generated": 191,
+ "compiled": 135,
+ "elapsed": 178.6091554300001,
+ "states": {
+  "COMPILE_ERROR": 56,
+  "INCOMPLETE": 93,
+  "UNSUPPORTED": 16,
+  "PASSED_PROBE": 39,
+  "DIFFERENT": 3
+ },
+ "functions": [
+  {
+   "address": "0x593970",
+   "name": "CPathController::setVisible(bool)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x5939d0",
+   "name": "CPathController::getClosestPctOfPath(Ogre::Vector3 const&)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x593b10",
+   "name": "CPathController::caculatePointInFrontOfPlayer(CBaseUnit*)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x593c80",
+   "name": "CPathController::getNextPointAtPercent(float, CBaseUnit*, bool)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x593f50",
+   "name": "CPathController::childNodeMoved()",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x593fc0",
+   "name": "CPathController::positionUpdated(Ogre::Vector3 const&)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x5940a0",
+   "name": "CPathController::setUnitInteractWith(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x59be90",
+   "name": "CPathController::caculateSpline()",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x5a6860",
+   "name": "CPathNode::setVisible(bool)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x5b1380",
+   "name": "CCameraShakeDescriptor::CCameraShakeDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x5b21f0",
+   "name": "CCollisionShapeDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x5bb260",
+   "name": "CCollisionShapeDescriptor::CCollisionShapeDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x5c4c60",
+   "name": "CDamageShapeDescriptor::CDamageShapeDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x5de290",
+   "name": "CGenericModelDescriptor::CGenericModelDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x5e9920",
+   "name": "CItemDescriptor::CItemDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x5f8310",
+   "name": "CLightDescriptor::CLightDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6078b0",
+   "name": "CMonsterDescriptor::getThemeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0x612cc0",
+   "name": "CMonsterDescriptor::getThemeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0x614920",
+   "name": "CMonsterDescriptor::CMonsterDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x619260",
+   "name": "CPathControllerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0x61ca50",
+   "name": "CPathControllerDescriptor::CPathControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x62dce0",
+   "name": "CPropertyNodeDescriptor::CPropertyNodeDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x62e7b0",
+   "name": "CRandomGroupDescriptor::setDifficultyStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0x6373b0",
+   "name": "CRandomGroupDescriptor::CRandomGroupDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x63c9c0",
+   "name": "CRoomDescriptor::CRoomDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x646c50",
+   "name": "CRoomPieceDescriptor::CRoomPieceDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6516b0",
+   "name": "CSoundObjectDescriptor::CSoundObjectDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x652790",
+   "name": "CUnitSpawnerDescriptor::update(float)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x652850",
+   "name": "CUnitSpawnerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x65c410",
+   "name": "CUnitSpawnerDescriptor::CUnitSpawnerDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x662690",
+   "name": "CCounterDescriptor::CCounterDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x666610",
+   "name": "CInteractiveDescriptor::CInteractiveDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x66a940",
+   "name": "CLogicTimerDescriptor::CLogicTimerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x671fb0",
+   "name": "CPuzzleRandomizerDescriptor::CPuzzleRandomizerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6757b0",
+   "name": "CRandomChoiceDescriptor::CRandomChoiceDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x679f90",
+   "name": "CTeleportDescriptor::CTeleportDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x67d4b0",
+   "name": "CTriggerBoxDescriptor::CTriggerBoxDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x680a40",
+   "name": "CTriggerDescriptor::CTriggerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x683f90",
+   "name": "CTriggerSphereDescriptor::CTriggerSphereDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x692230",
+   "name": "CWarperDescriptor::CWarperDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x69b670",
+   "name": "CAlignDescriptor::CAlignDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x69f990",
+   "name": "CBoxColliderDescriptor::CBoxColliderDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6a41a0",
+   "name": "CColliderDescriptor::CColliderDescriptor(wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6a88c0",
+   "name": "CCollisionAvoiderDescriptor::CCollisionAvoiderDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6acbe0",
+   "name": "CColorAffectorDescriptor::CColorAffectorDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6b0db0",
+   "name": "CForceAffectorDescriptor::CForceAffectorDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6b5110",
+   "name": "CGeometryRotateDescriptor::CGeometryRotateDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6b9650",
+   "name": "CGravityAffectorDescriptor::CGravityAffectorDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6bd760",
+   "name": "CJetAffectorDescriptor::CJetAffectorDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6c18c0",
+   "name": "CLineAffectorDescriptor::CLineAffectorDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6c2130",
+   "name": "CLinearForceAffectorDescriptor::CLinearForceAffectorDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6c9eb0",
+   "name": "CPlaneColliderDescriptor::CPlaneColliderDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6ce1d0",
+   "name": "CScaleAffectorDescriptor::CScaleAffectorDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6d2980",
+   "name": "CSineForceAffectorDescriptor::CSineForceAffectorDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6d6ca0",
+   "name": "CSphereColliderDescriptor::CSphereColliderDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6dafc0",
+   "name": "CTextureAnimateDescriptor::CTextureAnimateDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6df4f0",
+   "name": "CTextureRotateDescriptor::CTextureRotateDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6e3a70",
+   "name": "CVortexAffectorDescriptor::CVortexAffectorDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6f8630",
+   "name": "CParticleWrapperDescriptor::CParticleWrapperDescriptor()",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x6f9280",
+   "name": "CDescriptor::deleteAllObjects()",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x7027c0",
+   "name": "CDescriptorManager::CDescriptorManager(CEditorScene*)",
+   "kind": "ctor",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x705b60",
+   "name": "CDescriptorManager::AddDescriptor(CDescriptor*)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x709a10",
+   "name": "CDescriptorProp::~CDescriptorProp()",
+   "kind": "dtor",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x75ecc0",
+   "name": "CLayoutScene::createDescriptors()",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x75ef30",
+   "name": "CLayoutScene::CLayoutScene()",
+   "kind": "ctor",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x76f7a0",
+   "name": "CParticleScene::createDescriptors()",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x76f910",
+   "name": "CParticleScene::CParticleScene()",
+   "kind": "ctor",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x78bca0",
+   "name": "CUndo::~CUndo()",
+   "kind": "dtor",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x795890",
+   "name": "CUndo::resetPropertiesOnObject(CUndo*)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x7b65b0",
+   "name": "CTimeline::GetProperty(long long, int, bool)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x7b6680",
+   "name": "CTimeline::GetNumberOfPropertiesForObjectInTimeline(long long)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x7b6930",
+   "name": "CTimeline::RemovePointFromProperty(long long, int, int, bool)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x7b6960",
+   "name": "CTimeline::AddPointToProperty(long long, int, bool)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x7b6990",
+   "name": "CTimeline::RemoveProperty(long long, int, bool)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x7b6a90",
+   "name": "CTimeline::RemoveObjectByID(long long)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x7b6d50",
+   "name": "CTimeline::GetPointIDInTimelinePropertyByIndex(long long, int, int, bool)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x7b6d90",
+   "name": "CTimeline::AddProperty(CEditorScene*, long long, int, bool)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x7b7110",
+   "name": "CTimeline::loadTimelineFromBinaryFile(CEditorScene*, COgreReader*, CDescriptorLoadConfiguration*)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x7bc0d0",
+   "name": "CTimeline::loadTimelineFromDataGroup(CEditorScene*, CDataGroup*, CDescriptorLoadConfiguration*)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x7cd810",
+   "name": "CAffix::setLevel(unsigned int)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x7e9f90",
+   "name": "CEffectGroupManager::getAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x7f6300",
+   "name": "CBaseUnit::addToAvoidanceMap(CLevel&)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x7f65b0",
+   "name": "CBaseUnit::removeFromAvoidanceMap(CLevel&)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x7f6850",
+   "name": "CBaseUnit::broadcastHPThreshholdEvents(float, float, float, float)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x7fea30",
+   "name": "CBaseUnit::CBaseUnit(CResourceManager*, EBASEUNIT_TYPE)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x800e80",
+   "name": "CBaseUnit::selectRandomSkill()",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x8029d0",
+   "name": "CBaseUnit::getUnitDataName()",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x802ab0",
+   "name": "CBaseUnit::reapplyEffects(bool)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x802ca0",
+   "name": "CBaseUnit::unitInitThemes()",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x802e30",
+   "name": "CBaseUnit::reapplyAffixes(bool)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x804d40",
+   "name": "CBaseUnit::activateEffect(CEffect*)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x804f50",
+   "name": "CBaseUnit::dontUseOnFull()",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x8b5be0",
+   "name": "CItem::calculateActiveRange(Ogre::Vector3 const&)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x8b6150",
+   "name": "CItem::updateAnimation(float)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x8b62a0",
+   "name": "CItem::updateOpacity(float, bool)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x8b6430",
+   "name": "CItem::update(Ogre::Camera*, Ogre::Vector3 const&, float)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0x8c1b30",
+   "name": "CItem::applySaveState(CItemSaveState&)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x8c2060",
+   "name": "CItem::setRimlight(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x8c2250",
+   "name": "CItem::unitInit(CDataGroup*, bool)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x91a980",
+   "name": "CKeyManager::capture()",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x91aaa0",
+   "name": "CKeyManager::flushAll()",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x91ab30",
+   "name": "CKeyManager::flush()",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x91ab90",
+   "name": "CKeyManager::keyEvent(unsigned int, unsigned int)",
+   "kind": "function",
+   "status": "DIFFERENT",
+   "completed": 188,
+   "different": 1,
+   "incomplete": 0
+  },
+  {
+   "address": "0x92c0c0",
+   "name": "CDungeon::CDungeon()",
+   "kind": "ctor",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x933fe0",
+   "name": "CDungeon::getRandomLevelTemplateData()",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 6,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x97f6d0",
+   "name": "CInteract::update(float)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 1,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x97f7a0",
+   "name": "CInteract::setUnitInteractWithByIndex(unsigned int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 30,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x97f850",
+   "name": "CInteract::menuEventOccured(void*, EMENU_TYPE, EMENU_EVENT)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0x987bb0",
+   "name": "CInteract::~CInteract()",
+   "kind": "dtor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x987db0",
+   "name": "CInteract::CInteract(CResourceManager*)",
+   "kind": "ctor",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x9ca7a0",
+   "name": "CFormationNode::~CFormationNode()",
+   "kind": "dtor",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x9d31a0",
+   "name": "CFormationNodeSaveAndLoad::CFormationNodeSaveAndLoad(CFormationNode*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x9d32e0",
+   "name": "CFormationNode::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0x9d3d10",
+   "name": "CLayout::setDurationModification(float)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x9d3dc0",
+   "name": "CLayout::eventFiredByDescriptor(unsigned int, CDescriptor*, CEditorBaseObject*)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x9d3e00",
+   "name": "CLayout::setHighlighted(bool)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x9ddb00",
+   "name": "CLayout::getLayoutToClone(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0x9de390",
+   "name": "CLayout::addLayoutForCloningAndControlling(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x9dfb50",
+   "name": "CLayout::~CLayout()",
+   "kind": "dtor",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0x9f26e0",
+   "name": "CRandomGroup::CRandomGroup(CResourceManager*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0x9f9950",
+   "name": "CRandomGroup::~CRandomGroup()",
+   "kind": "dtor",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa08090",
+   "name": "CSoundObject::updateSounds(float)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa081d0",
+   "name": "CSoundObject::editorSelectionChanged(bool)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa08240",
+   "name": "CSoundObject::~CSoundObject()",
+   "kind": "dtor",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa17e00",
+   "name": "CAffectorWrapper::positionUpdated(Ogre::Vector3 const&)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa180a0",
+   "name": "CAffectorWrapper::~CAffectorWrapper()",
+   "kind": "dtor",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa2ac50",
+   "name": "CParticle::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0xa30be0",
+   "name": "CParticle::~CParticle()",
+   "kind": "dtor",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa32a20",
+   "name": "CParticleEmitterWrapper::setMinLineIncrement(float)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa32f90",
+   "name": "CParticleEmitterWrapper::~CParticleEmitterWrapper()",
+   "kind": "dtor",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa3d370",
+   "name": "CParticleTechWrapper::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0xa43e00",
+   "name": "CParticleTechWrapper::~CParticleTechWrapper()",
+   "kind": "dtor",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa46790",
+   "name": "CParticleWrapper::resourceFreeing()",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa46900",
+   "name": "CParticleWrapper::resourceInit(CResourceManager*, CDataGroup*)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa469f0",
+   "name": "CParticleWrapper::~CParticleWrapper()",
+   "kind": "dtor",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xa60ea0",
+   "name": "CRoomPieceDataInformation::_GetRoomPieceCoreDataByGuid(long long)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xa61570",
+   "name": "CRoomPieceDataInformation::ParseRoomPieceData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*, int)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xa62560",
+   "name": "CRoomPieceDataInformation::CRoomPieceDataInformation(CResourceSettings*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xa630a0",
+   "name": "CSoundBankDataInformation::getSoundIndexInCategoryByName(unsigned int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xa63200",
+   "name": "CSoundBankDataInformation::getSoundNameByCategoryIndex(unsigned int, unsigned int)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xa632d0",
+   "name": "CSoundBankDataInformation::getCategoryNameByID(unsigned int)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xa63330",
+   "name": "CSoundBankDataInformation::getSoundDataObject(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xa634b0",
+   "name": "CSoundBankDataInformation::getCategoryID(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xa63560",
+   "name": "CSoundBankDataInformation::getSoundDataObject(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xa65740",
+   "name": "CSoundBankDataInformation::reload(CResourceSettings*)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xa65930",
+   "name": "CSoundBankDataInformation::CSoundBankDataInformation(CResourceSettings*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 1,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xa67550",
+   "name": "CUnitThemes::~CUnitThemes()",
+   "kind": "dtor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xa68370",
+   "name": "CUnitThemes::CUnitThemes(wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xa768c0",
+   "name": "CSpawnClassData::addUnitDataObject(CDataGroup*)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xa7ddf0",
+   "name": "CSpawnClassData::CSpawnClassData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xc2bd40",
+   "name": "CMenuManager::~CMenuManager()",
+   "kind": "dtor",
+   "status": "INCOMPLETE",
+   "completed": 1,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xc5e600",
+   "name": "CStringRepository::CStringRepository()",
+   "kind": "ctor",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xc65190",
+   "name": "CBinaryStyle::~CBinaryStyle()",
+   "kind": "dtor",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xc65410",
+   "name": "CBinaryStyle::~CBinaryStyle()",
+   "kind": "dtor",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0xc6adb0",
+   "name": "CPairStyle::~CPairStyle()",
+   "kind": "dtor",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xc6ae30",
+   "name": "CPairStyle::~CPairStyle()",
+   "kind": "dtor",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0xc78030",
+   "name": "CGameSpeed::clear()",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xc875c0",
+   "name": "CPath::Clear()",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xc87780",
+   "name": "CPath::SetRadiusLeft(unsigned int, float)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 3,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xc877a0",
+   "name": "CPath::SetRadiusRight(unsigned int, float)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 16,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xc88250",
+   "name": "CPath::ClosePath()",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xc88880",
+   "name": "CPath::~CPath()",
+   "kind": "dtor",
+   "status": "DIFFERENT",
+   "completed": 1,
+   "different": 1,
+   "incomplete": 0
+  },
+  {
+   "address": "0xc88990",
+   "name": "CPath::CalculatePathWidth(CPath&, CPath&)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 1,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xc88d90",
+   "name": "CPath::AddPoint(Ogre::Vector3 const&, float, float)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xc893b0",
+   "name": "CPath::Reverse()",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xc896b0",
+   "name": "CPath::Resize(unsigned int)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xc89880",
+   "name": "CPath::CPath(CPath&)",
+   "kind": "ctor",
+   "status": "DIFFERENT",
+   "completed": 1,
+   "different": 1,
+   "incomplete": 0
+  },
+  {
+   "address": "0xc8b0c0",
+   "name": "CCmdLineParser::~CCmdLineParser()",
+   "kind": "dtor",
+   "status": "INCOMPLETE",
+   "completed": 13,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xc938e0",
+   "name": "CExecuteSkillProps::executeSkill(CBaseUnit*, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&, CBaseUnit*, int)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xc9cb30",
+   "name": "CExecuteSkillProps::CExecuteSkillProps(CSkill*, CSkillEvent*, CDataGroup*)",
+   "kind": "ctor",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0xcdbd20",
+   "name": "CSkillParser::getSkillData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xcdbeb0",
+   "name": "CSkillParser::getSkill(CResourceManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xcdc590",
+   "name": "CSkillParser::parseSkills()",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xcf1e80",
+   "name": "CCameraShake::update(float, Ogre::Vector3&, Ogre::Vector3&, bool)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xcf2120",
+   "name": "CCameraShake::CCameraShake()",
+   "kind": "ctor",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xcf8940",
+   "name": "CCameraShake::clone(CCameraShake*)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xd067d0",
+   "name": "CMissilePreloader::notifyOfDeletion(iMissile*, CPositionableObject*)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 3,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xd0a2b0",
+   "name": "CMissilePreloader::getMissileRef(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xd0bbd0",
+   "name": "CMissilePreloader::updateMissiles(float)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xda5ff0",
+   "name": "CAnimationPlayerDescriptor::CAnimationPlayerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xda76d0",
+   "name": "CCameraControllerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0xdaaee0",
+   "name": "CCameraControllerDescriptor::CCameraControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xdaf880",
+   "name": "CSkipCutsceneDescriptor::CSkipCutsceneDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xdb9760",
+   "name": "CGameStateControllerDescriptor::CGameStateControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xdbdc40",
+   "name": "CQuestControllerDescriptor::CQuestControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xdc8310",
+   "name": "CSkillControllerDescriptor::CSkillControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xdc9d50",
+   "name": "CAnimationPlayer::CAnimationPlayer(CResourceManager*)",
+   "kind": "ctor",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xdfe5d0",
+   "name": "CQuestRequirements::parseRequirementTag(CDataGroup*)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 1,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xe17910",
+   "name": "CSkillController::getSkillTarget()",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xe17970",
+   "name": "CSkillController::CSkillController(CResourceManager*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xe29320",
+   "name": "CEditorImage::setVisible(bool)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xe33220",
+   "name": "CEditorImage::setImageFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "kind": "function",
+   "status": "COMPILE_ERROR"
+  },
+  {
+   "address": "0xe50040",
+   "name": "CFileSystem::buildMassiveDataGroup()",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xe50b00",
+   "name": "CFileSystem::CFileSystem(bool)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xe553b0",
+   "name": "CMusicObject::CMusicObject(CResourceManager*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 1,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xe5d060",
+   "name": "CMusicObject::setMusicFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "kind": "function",
+   "status": "PASSED_PROBE",
+   "completed": 200,
+   "different": 0,
+   "incomplete": 0
+  },
+  {
+   "address": "0xe665b0",
+   "name": "CMusicObjectDescriptor::CMusicObjectDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xe70290",
+   "name": "CCinematicDescriptor::CCinematicDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xe737e0",
+   "name": "CMoneyTakerDescriptor::CMoneyTakerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xe79710",
+   "name": "CCinematic::load(CDataGroup*)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xe81250",
+   "name": "CCinematicObject::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0xe812a0",
+   "name": "CCinematicObject::menuEventOccured(void*, EMENU_TYPE, EMENU_EVENT)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0xe88fd0",
+   "name": "CCinematicObject::~CCinematicObject()",
+   "kind": "dtor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xeaa1b0",
+   "name": "CSplash::Init(void*, int)",
+   "kind": "function",
+   "status": "UNSUPPORTED"
+  },
+  {
+   "address": "0xebd920",
+   "name": "CDungeonObjectDescriptor::CDungeonObjectDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+   "kind": "ctor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xebf6a0",
+   "name": "CAchievement::~CAchievement()",
+   "kind": "dtor",
+   "status": "INCOMPLETE",
+   "completed": 0,
+   "different": 0,
+   "incomplete": 1
+  },
+  {
+   "address": "0xece240",
+   "name": "CSteamStats::reloadPlayerData(CPlayer*)",
+   "kind": "function",
+   "status": "INCOMPLETE",
+   "completed": 1,
+   "different": 0,
+   "incomplete": 1
+  }
+ ],
+ "note": "Generic probes do not prove valid object lifetimes or branch coverage; 39 passes are not admitted as acceptance. Raw immutable inputs and diagnostic artifacts remain ignored in build-decomp/bulk-scale-20261015/probe-207."
+}

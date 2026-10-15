@@ -1,0 +1,6 @@
+tlhybrid: begin combinemenu_equipment_used_suppressed
+    return mismatch 0/0/0 mode 2 exits 0/15616
+    coverage combinemenu_equipment_used_suppressed 0xad4b90 completed 0 different 0 incomplete 1
+tlhybrid: timing combinemenu_equipment_used_suppressed 0.003 seconds
+tlhybrid: combinemenu_equipment_used_suppressed            FAIL (1)
+tlhybrid: 1 tests, 1 failed

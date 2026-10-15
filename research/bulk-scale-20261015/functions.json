@@ -1,0 +1,4101 @@
+[
+ {
+  "address": "0x5c93e0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CWaypointActivatorDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5c93e0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5c93e0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5c9520",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CDungeonObjectDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5c9520",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5c9520"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5c9660",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CMoneyTakerDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5c9660",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5c9660"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5c97a0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CCinematicDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5c97a0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5c97a0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5c98e0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CDamageShapeDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5c98e0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5c98e0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5c9a10",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CSkipCutsceneDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5c9a10",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5c9a10"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5c9b50",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CAnimationPlayerDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5c9b50",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5c9b50"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5c9c90",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CPathNodeDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5c9c90",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5c9c90"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5c9dd0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CPathControllerDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5c9dd0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5c9dd0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5c9f10",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CSkillControllerDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5c9f10",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5c9f10"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ca050",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CQuestControllerDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ca050",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ca050"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ca190",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CGameStateControllerDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ca190",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ca190"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ca2d0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CRandomGroupDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ca2d0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ca2d0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ca400",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CMissileDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ca400",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ca400"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ca530",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CMusicObjectDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ca530",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ca530"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ca670",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CSoundObjectDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ca670",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ca670"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ca7a0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CLightDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ca7a0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ca7a0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ca8d0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CRoomPieceDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ca8d0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ca8d0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5caa00",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CGenericModelDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5caa00",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5caa00"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cab30",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CLayoutDescriptorKLAYOUT_TYPE_UNIT_TRIGGERParam2()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cab30",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cab30"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cace0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CLayoutDescriptorKLAYOUT_TYPE_TIMELINEParam2()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cace0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cace0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cae90",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CLayoutDescriptorKLAYOUT_TYPE_PARTICLEParam2()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cae90",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cae90"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cb040",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CLayoutDescriptorKLAYOUT_TYPE_NORMALParam2()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cb040",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cb040"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cb1f0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CUnitSpawnerDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cb1f0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cb1f0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cb320",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CUnitTriggerDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cb320",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cb320"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cb460",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CItemDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cb460",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cb460"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cb5a0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CMonsterDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cb5a0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cb5a0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cb6e0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CCameraControllerDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cb6e0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cb6e0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cb820",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CPuzzleRandomizerDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cb820",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cb820"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cb960",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CPropertyNodeDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cb960",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cb960"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cba90",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CCameraShakeDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cba90",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cba90"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cbbc0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_COutputIncrementorDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cbbc0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cbbc0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cbd00",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CLogicTimerDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cbd00",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cbd00"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cbe40",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CTeleportDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cbe40",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cbe40"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cbf80",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CWarperDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cbf80",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cbf80"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cc0c0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CRandomChoiceDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cc0c0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cc0c0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cc200",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CCounterDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cc200",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cc200"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cc340",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CTriggerBoxDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cc340",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cc340"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cc480",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CTriggerSphereDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cc480",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cc480"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cc5c0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CLogicGroupDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cc5c0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cc5c0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cc700",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CTimelineDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cc700",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cc700"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cc840",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CSphereColliderDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cc840",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cc840"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cc970",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CPlaneColliderDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cc970",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cc970"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ccaa0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CBoxColliderDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ccaa0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ccaa0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ccbd0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CColorAffectorDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ccbd0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ccbd0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ccd00",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CTextureAnimateDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ccd00",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ccd00"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cce30",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CTextureRotateDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cce30",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cce30"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5ccf60",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CGeometryRotateDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5ccf60",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5ccf60"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cd090",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CJetAffectorDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cd090",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cd090"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cd1c0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CScaleAffectorDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cd1c0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cd1c0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cd2f0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CGravityAffectorDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cd2f0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cd2f0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cd420",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CVortexAffectorDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cd420",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cd420"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cd550",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CSineForceAffectorDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cd550",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cd550"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cd680",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CLinearForceAffectorDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cd680",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cd680"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cd7b0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CLineAffectorDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cd7b0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cd7b0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cd8e0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CAlignDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cd8e0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cd8e0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cda10",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CParticleEmitterWrapperDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cda10",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cda10"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cdb40",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CParticleTechWrapperDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cdb40",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cdb40"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cdc70",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CEditorButtonDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cdc70",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cdc70"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cdda0",
+  "family": "controller-factory",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "Set_CEditorImageDescriptorParam1()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_factory_5cdda0",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_factory_5cdda0"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5cded0",
+  "family": "controller",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "CDescriptorController::addDescriptorFunction(wchar_t const*, void* (*)())",
+  "accepted_by": "MATCH",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": []
+ },
+ {
+  "address": "0x5ce180",
+  "family": "controller",
+  "new_source": true,
+  "tu": "DescriptorController.cpp",
+  "demangled": "CDescriptorController::CDescriptorController()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+  "comparison_coverage": [
+   {
+    "fixture": "descriptor_controller_registration",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "559d7b321c6fe35fa144735cffe1435721fa75806647fc525d22bbd19f2912f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "descriptor_controller_registration"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x69b670",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "AlignDescriptor.cpp",
+  "demangled": "CAlignDescriptor::CAlignDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "e83261e389aea8191a7cf55c57340dff04bbfa04f592ef5631b4e7095e7b397f",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_AlignDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "e83261e389aea8191a7cf55c57340dff04bbfa04f592ef5631b4e7095e7b397f",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_AlignDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xda5ff0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "AnimationPlayerDescriptor.cpp",
+  "demangled": "CAnimationPlayerDescriptor::CAnimationPlayerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "231d44ce657e5e2c97319399b6c6f7b213190b15c76adcef6ea27847e2a6f7fe",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_AnimationPlayerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "231d44ce657e5e2c97319399b6c6f7b213190b15c76adcef6ea27847e2a6f7fe",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_AnimationPlayerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x69f990",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "BoxColliderDescriptor.cpp",
+  "demangled": "CBoxColliderDescriptor::CBoxColliderDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "4d8a8c1197ec9a123c8071094c2d991b5c28275c41ea93a9790a196910e8de28",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_BoxColliderDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "4d8a8c1197ec9a123c8071094c2d991b5c28275c41ea93a9790a196910e8de28",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_BoxColliderDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xdaaee0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "CameraControllerDescriptor.cpp",
+  "demangled": "CCameraControllerDescriptor::CCameraControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "df65e6667056825e435ca935be7e68f7e925c9db5578f8720a7d66260b9ec595",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_CameraControllerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "df65e6667056825e435ca935be7e68f7e925c9db5578f8720a7d66260b9ec595",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_CameraControllerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5b1380",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "CameraShakeDescriptor.cpp",
+  "demangled": "CCameraShakeDescriptor::CCameraShakeDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "d835ff5295e30bf3190ef5fd9529336cebf16f2ed9dad9cf0eb128678198e946",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_CameraShakeDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "d835ff5295e30bf3190ef5fd9529336cebf16f2ed9dad9cf0eb128678198e946",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_CameraShakeDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xe70290",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "CinematicDescriptor.cpp",
+  "demangled": "CCinematicDescriptor::CCinematicDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "97fcce3f13b9d233523dc7336be1ab093898df01beb5b1c8a9ca7ecf76c2d2ee",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_CinematicDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "97fcce3f13b9d233523dc7336be1ab093898df01beb5b1c8a9ca7ecf76c2d2ee",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_CinematicDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6a41a0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "ColliderDescriptor.cpp",
+  "demangled": "CColliderDescriptor::CColliderDescriptor(wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "0be944cd4ba5c711349950bc06304ea42f6e391fd584e3e112e9a9fb484956aa",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_ColliderDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "0be944cd4ba5c711349950bc06304ea42f6e391fd584e3e112e9a9fb484956aa",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_ColliderDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6a88c0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "CollisionAvoiderDescriptor.cpp",
+  "demangled": "CCollisionAvoiderDescriptor::CCollisionAvoiderDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "ab4d88d733169c28b04960135be5c98a531cc5dbbd47f20fbba369022ea0325a",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_CollisionAvoiderDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "ab4d88d733169c28b04960135be5c98a531cc5dbbd47f20fbba369022ea0325a",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_CollisionAvoiderDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5bb260",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "CollisionShapeDescriptor.cpp",
+  "demangled": "CCollisionShapeDescriptor::CCollisionShapeDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "d68b8b016ffdcff3eb144dcf920dddcc04ee343aec1fcd347ed18b43f84ada85",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_CollisionShapeDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "d68b8b016ffdcff3eb144dcf920dddcc04ee343aec1fcd347ed18b43f84ada85",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_CollisionShapeDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6acbe0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "ColorAffectorDescriptor.cpp",
+  "demangled": "CColorAffectorDescriptor::CColorAffectorDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "4dac9519559b54cd477a5a81265cc2dec86204e110fd7720bcc7e8a72725234d",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_ColorAffectorDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "4dac9519559b54cd477a5a81265cc2dec86204e110fd7720bcc7e8a72725234d",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_ColorAffectorDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x662690",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "CounterDescriptor.cpp",
+  "demangled": "CCounterDescriptor::CCounterDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "bc52965585d304c5f54b12447d6d6889d6dea6fd37bfaacc360df01cec415d79",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_CounterDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "bc52965585d304c5f54b12447d6d6889d6dea6fd37bfaacc360df01cec415d79",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_CounterDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xdaf880",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "CutsceneDescriptor.cpp",
+  "demangled": "CSkipCutsceneDescriptor::CSkipCutsceneDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "bd2562caef01ca5bc364b2dec043635c4e2be89add99add271a9574d67f23efd",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_SkipCutsceneDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "bd2562caef01ca5bc364b2dec043635c4e2be89add99add271a9574d67f23efd",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_SkipCutsceneDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5c4c60",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "DamageShapeDescriptor.cpp",
+  "demangled": "CDamageShapeDescriptor::CDamageShapeDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "e56f4ba609bf4a2a710b8b05ea20450d6623477ab576d11ae76b6eee7e572f98",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_DamageShapeDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "e56f4ba609bf4a2a710b8b05ea20450d6623477ab576d11ae76b6eee7e572f98",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_DamageShapeDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xebd920",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "DungeonObjectDescriptor.cpp",
+  "demangled": "CDungeonObjectDescriptor::CDungeonObjectDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "c867cd79f542f10cf47ef9b732eadf5bd012375eb2583c68515d2c9b7eef9d8d",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_DungeonObjectDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "c867cd79f542f10cf47ef9b732eadf5bd012375eb2583c68515d2c9b7eef9d8d",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_DungeonObjectDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6b0db0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "ForceAffectorDescriptor.cpp",
+  "demangled": "CForceAffectorDescriptor::CForceAffectorDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "d284699c39d15032d9defc005aabf6b14b01f81b7974415c8ac27fdd9b245475",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_ForceAffectorDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "d284699c39d15032d9defc005aabf6b14b01f81b7974415c8ac27fdd9b245475",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_ForceAffectorDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xdb9760",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "GameStateControllerDescriptor.cpp",
+  "demangled": "CGameStateControllerDescriptor::CGameStateControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "5f827ffcd4d8aa7e45fbcf88752b871868b2fe62eb6b2b73d506b66a1632c088",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_GameStateControllerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "5f827ffcd4d8aa7e45fbcf88752b871868b2fe62eb6b2b73d506b66a1632c088",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_GameStateControllerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5de290",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "GenericModelDescriptor.cpp",
+  "demangled": "CGenericModelDescriptor::CGenericModelDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "82e6a380dc4b4255fc1b843392575f486da01fb1aceafe1b23556cada94813d0",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_GenericModelDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "82e6a380dc4b4255fc1b843392575f486da01fb1aceafe1b23556cada94813d0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_GenericModelDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6b5110",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "GeometryRotateDescriptor.cpp",
+  "demangled": "CGeometryRotateDescriptor::CGeometryRotateDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "2e689b36c34868dde82b365e382a0c87ffb447c29ebb074941826e396372990e",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_GeometryRotateDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "2e689b36c34868dde82b365e382a0c87ffb447c29ebb074941826e396372990e",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_GeometryRotateDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6b9650",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "GravityAffectorDescriptor.cpp",
+  "demangled": "CGravityAffectorDescriptor::CGravityAffectorDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "93a9c4513229834e293d9777ae2285be28c93d45509264f5dbb3f87142b67921",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_GravityAffectorDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "93a9c4513229834e293d9777ae2285be28c93d45509264f5dbb3f87142b67921",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_GravityAffectorDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x666610",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "InteractiveDescriptor.cpp",
+  "demangled": "CInteractiveDescriptor::CInteractiveDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "d220d35021b5c99f3df965a7d15ad3c9983bec5c1f711f66e90711d011e0b7bd",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_InteractiveDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "d220d35021b5c99f3df965a7d15ad3c9983bec5c1f711f66e90711d011e0b7bd",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_InteractiveDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5e9920",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "ItemDescriptor.cpp",
+  "demangled": "CItemDescriptor::CItemDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "f6d86f8e4f3b3e1c7e80918b07fa0e2313b5f6e5ebf4197a65dbf6b38db2b855",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_ItemDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "f6d86f8e4f3b3e1c7e80918b07fa0e2313b5f6e5ebf4197a65dbf6b38db2b855",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_ItemDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6bd760",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "JetAffectorDescriptor.cpp",
+  "demangled": "CJetAffectorDescriptor::CJetAffectorDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "84dd844c73960e9d4eb2a3673348e91155450f39130e7c1e001992db98859319",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_JetAffectorDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "84dd844c73960e9d4eb2a3673348e91155450f39130e7c1e001992db98859319",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_JetAffectorDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5f8310",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "LightDescriptor.cpp",
+  "demangled": "CLightDescriptor::CLightDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "d295ceb9516364602c6f92b328e5848d50f7c69ffaee99111ba48b6469d404f1",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_LightDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "d295ceb9516364602c6f92b328e5848d50f7c69ffaee99111ba48b6469d404f1",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_LightDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6c18c0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "LineAffectorDescriptor.cpp",
+  "demangled": "CLineAffectorDescriptor::CLineAffectorDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "ff59ae1f6b239ffcd485f1bb1de9b64e84c8e82b91d879cb9e26153e706ac909",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_LineAffectorDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "ff59ae1f6b239ffcd485f1bb1de9b64e84c8e82b91d879cb9e26153e706ac909",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_LineAffectorDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6c2130",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "LinearForceAffectorDescriptor.cpp",
+  "demangled": "CLinearForceAffectorDescriptor::CLinearForceAffectorDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "33e5b7f03e3ce30c44c13a6e6e9f0c0f4b4693fa7e08412423fc3bc109569473",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_LinearForceAffectorDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "33e5b7f03e3ce30c44c13a6e6e9f0c0f4b4693fa7e08412423fc3bc109569473",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_LinearForceAffectorDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x66a940",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "LogicTimerDescriptor.cpp",
+  "demangled": "CLogicTimerDescriptor::CLogicTimerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "7d670eb8fa4b89a28a5f1b5267565b856c025b731581e604729c0bcd2885a116",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_LogicTimerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "7d670eb8fa4b89a28a5f1b5267565b856c025b731581e604729c0bcd2885a116",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_LogicTimerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xe737e0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "MoneyTakerDescriptor.cpp",
+  "demangled": "CMoneyTakerDescriptor::CMoneyTakerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "b47d353fdbeaae43a138422816333318d7f0b6661e5cb0ea90bda7ac92ece146",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_MoneyTakerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "b47d353fdbeaae43a138422816333318d7f0b6661e5cb0ea90bda7ac92ece146",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_MoneyTakerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x614920",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "MonsterDescriptor.cpp",
+  "demangled": "CMonsterDescriptor::CMonsterDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "5f9726554d18f4a4fc212055d2a66b9d307cfbf1984cdcd31617259d4ef819c9",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_MonsterDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "5f9726554d18f4a4fc212055d2a66b9d307cfbf1984cdcd31617259d4ef819c9",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_MonsterDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xe665b0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "MusicObjectDescriptor.cpp",
+  "demangled": "CMusicObjectDescriptor::CMusicObjectDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "541e3957af14a6a23bf5d2cefba8e4ef1cb2ccb2469ae593cfeed470f32f5468",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_MusicObjectDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "541e3957af14a6a23bf5d2cefba8e4ef1cb2ccb2469ae593cfeed470f32f5468",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_MusicObjectDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6f8630",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "ParticleWrapperDescriptor.cpp",
+  "demangled": "CParticleWrapperDescriptor::CParticleWrapperDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "76faf72e63d8420aa21f8ff2a55d829b87aa45e4eeb608f4ccecdd9b4add2c48",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_ParticleWrapperDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "76faf72e63d8420aa21f8ff2a55d829b87aa45e4eeb608f4ccecdd9b4add2c48",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_ParticleWrapperDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x61ca50",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "PathControllerDescriptor.cpp",
+  "demangled": "CPathControllerDescriptor::CPathControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "967f5c7215695a49a1b9a01d141dc579ced0d3c2c08b271223deb799bd56d84c",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_PathControllerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "967f5c7215695a49a1b9a01d141dc579ced0d3c2c08b271223deb799bd56d84c",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_PathControllerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6c9eb0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "PlaneColliderDescriptor.cpp",
+  "demangled": "CPlaneColliderDescriptor::CPlaneColliderDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "f84c3ce0cf16a56eb7b753b2af352a37e5b5a9d85bc1009305ea10758cb630ce",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_PlaneColliderDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "f84c3ce0cf16a56eb7b753b2af352a37e5b5a9d85bc1009305ea10758cb630ce",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_PlaneColliderDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x62dce0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "PropertyNodeDescriptor.cpp",
+  "demangled": "CPropertyNodeDescriptor::CPropertyNodeDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "898d1701a9b11e13b837fe3e7b8715a94353b248795dca03e2ee522c4abd6ccd",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_PropertyNodeDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "898d1701a9b11e13b837fe3e7b8715a94353b248795dca03e2ee522c4abd6ccd",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_PropertyNodeDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x671fb0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "PuzzleRandomizerDescriptor.cpp",
+  "demangled": "CPuzzleRandomizerDescriptor::CPuzzleRandomizerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "5585db962e1e63f014739dacea84a88cab37991f42b582a3ad35e63b97450b01",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_PuzzleRandomizerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "5585db962e1e63f014739dacea84a88cab37991f42b582a3ad35e63b97450b01",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_PuzzleRandomizerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xdbdc40",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "QuestControllerDescriptor.cpp",
+  "demangled": "CQuestControllerDescriptor::CQuestControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "c0bdc54ec2801ee8ca02771a79228c7d2b0304842c9111294bbc3459c60d55c3",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_QuestControllerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "c0bdc54ec2801ee8ca02771a79228c7d2b0304842c9111294bbc3459c60d55c3",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_QuestControllerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6757b0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "RandomChoiceDescriptor.cpp",
+  "demangled": "CRandomChoiceDescriptor::CRandomChoiceDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "273c1b058db0303eed02d39ec46aabea07a59f13603f7020c44e897d76ed5ea2",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_RandomChoiceDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "273c1b058db0303eed02d39ec46aabea07a59f13603f7020c44e897d76ed5ea2",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_RandomChoiceDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6373b0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "RandomGroupDescriptor.cpp",
+  "demangled": "CRandomGroupDescriptor::CRandomGroupDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "a46a0e8e48a8a5edd23ca46dc4ed261e56bfa5dec67bd0422a3f08548d5cfff4",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_RandomGroupDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "a46a0e8e48a8a5edd23ca46dc4ed261e56bfa5dec67bd0422a3f08548d5cfff4",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_RandomGroupDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x63c9c0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "RoomDescriptor.cpp",
+  "demangled": "CRoomDescriptor::CRoomDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "886196bdf3bb33e8c7d0d5cd658ff6cb10536a483fa78ebbeaefe9aa2cef80e6",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_RoomDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "886196bdf3bb33e8c7d0d5cd658ff6cb10536a483fa78ebbeaefe9aa2cef80e6",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_RoomDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x646c50",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "RoomPieceDescriptor.cpp",
+  "demangled": "CRoomPieceDescriptor::CRoomPieceDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "7e3fab83161cd4ca84068552fe704e460f74cc1321ae5fad4342dfeec02cc1cc",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_RoomPieceDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "7e3fab83161cd4ca84068552fe704e460f74cc1321ae5fad4342dfeec02cc1cc",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_RoomPieceDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6ce1d0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "ScaleAffectorDescriptor.cpp",
+  "demangled": "CScaleAffectorDescriptor::CScaleAffectorDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "820b0465e4e810a9263722900d5c43a8a905487f10950bfc22c579adb688a46f",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_ScaleAffectorDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "820b0465e4e810a9263722900d5c43a8a905487f10950bfc22c579adb688a46f",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_ScaleAffectorDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6d2980",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "SineForceAffectorDescriptor.cpp",
+  "demangled": "CSineForceAffectorDescriptor::CSineForceAffectorDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "0333d3b46d8e6281092366d47a061a7da26a635a81b85ff713adae62f2e55978",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_SineForceAffectorDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "0333d3b46d8e6281092366d47a061a7da26a635a81b85ff713adae62f2e55978",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_SineForceAffectorDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0xdc8310",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "SkillControllerDescriptor.cpp",
+  "demangled": "CSkillControllerDescriptor::CSkillControllerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "7806cfcd7011ba97830d8c979c23d155a663e305b51231665365addf026fa5f8",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_SkillControllerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "7806cfcd7011ba97830d8c979c23d155a663e305b51231665365addf026fa5f8",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_SkillControllerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6516b0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "SoundObjectDescriptor.cpp",
+  "demangled": "CSoundObjectDescriptor::CSoundObjectDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "533ab1c16c655fb38c187161021d8fd04e4289078ac2be182c0ce9d1f503633d",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_SoundObjectDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "533ab1c16c655fb38c187161021d8fd04e4289078ac2be182c0ce9d1f503633d",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_SoundObjectDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6d6ca0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "SphereColliderDescriptor.cpp",
+  "demangled": "CSphereColliderDescriptor::CSphereColliderDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "575360d87776bc26457acbebe5e202e0965afa3d4bb77c91cfce9dce22f4b8f7",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_SphereColliderDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "575360d87776bc26457acbebe5e202e0965afa3d4bb77c91cfce9dce22f4b8f7",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_SphereColliderDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x679f90",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "TeleportDescriptor.cpp",
+  "demangled": "CTeleportDescriptor::CTeleportDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "a6a3fa6e8828ef1f6ee5914e6dc42d6a4a8142d5de3b50af1dc229ed75239548",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_TeleportDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "a6a3fa6e8828ef1f6ee5914e6dc42d6a4a8142d5de3b50af1dc229ed75239548",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_TeleportDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6dafc0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "TextureAnimateDescriptor.cpp",
+  "demangled": "CTextureAnimateDescriptor::CTextureAnimateDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "cbc7d15dbe6cc1d5ffdded09a892dcedd08d16ad2084ef554e111cacb511ce99",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_TextureAnimateDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "cbc7d15dbe6cc1d5ffdded09a892dcedd08d16ad2084ef554e111cacb511ce99",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_TextureAnimateDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6df4f0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "TextureRotateDescriptor.cpp",
+  "demangled": "CTextureRotateDescriptor::CTextureRotateDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "a624bcb383ba51c84ce4d12bbe1e073da2dedb652bd07fec4a678ee0a73f27c3",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_TextureRotateDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "a624bcb383ba51c84ce4d12bbe1e073da2dedb652bd07fec4a678ee0a73f27c3",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_TextureRotateDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x67d4b0",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "TriggerBoxDescriptor.cpp",
+  "demangled": "CTriggerBoxDescriptor::CTriggerBoxDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "9fe000b3ad6a3359d275bf00aeca23e4db8a14e66c8fdd0c7fa246bf14bddbeb",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_TriggerBoxDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "9fe000b3ad6a3359d275bf00aeca23e4db8a14e66c8fdd0c7fa246bf14bddbeb",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_TriggerBoxDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x680a40",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "TriggerDescriptor.cpp",
+  "demangled": "CTriggerDescriptor::CTriggerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "fe5bb85f1a30578f701e35fc8f18b49df805bec672f33780fb4ad5b7d721b9b1",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_TriggerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "fe5bb85f1a30578f701e35fc8f18b49df805bec672f33780fb4ad5b7d721b9b1",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_TriggerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x683f90",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "TriggerSphereDescriptor.cpp",
+  "demangled": "CTriggerSphereDescriptor::CTriggerSphereDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "4e8bec884fcdd4f1b78cb341064ee1fb6c35ae9de01989e0056659fc28107b36",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_TriggerSphereDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "4e8bec884fcdd4f1b78cb341064ee1fb6c35ae9de01989e0056659fc28107b36",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_TriggerSphereDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x65c410",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "UnitSpawnerDescriptor.cpp",
+  "demangled": "CUnitSpawnerDescriptor::CUnitSpawnerDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "bdf2ef98b12d3ee726aacf823175b50afd06459338029ad41425ca720cef0474",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_UnitSpawnerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "bdf2ef98b12d3ee726aacf823175b50afd06459338029ad41425ca720cef0474",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_UnitSpawnerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6e3a70",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "VortexAffectorDescriptor.cpp",
+  "demangled": "CVortexAffectorDescriptor::CVortexAffectorDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "75e1ddd28d4cbb0c9316eb65d5cecda069ca895d73ccfa5324e7bc4f5c48e4fa",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_VortexAffectorDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "75e1ddd28d4cbb0c9316eb65d5cecda069ca895d73ccfa5324e7bc4f5c48e4fa",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_VortexAffectorDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x692230",
+  "family": "descriptor-constructor",
+  "new_source": false,
+  "normal_pairs": 24,
+  "tu": "WarperDescriptor.cpp",
+  "demangled": "CWarperDescriptor::CWarperDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "aaa95ac4da761daedeab7f3dbb18687056000f2ae93d561c492b025f82b4e98a",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_WarperDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "aaa95ac4da761daedeab7f3dbb18687056000f2ae93d561c492b025f82b4e98a",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_WarperDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x5adb70",
+  "family": "descriptor-constructor",
+  "new_source": true,
+  "normal_pairs": 24,
+  "tu": "BaseObjectDescriptor.cpp",
+  "demangled": "CBaseObjectDescriptor::CBaseObjectDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "MATCH",
+  "object_digest": "edd552d4671c22097343c54fc78bca94f0cc1c1dc4f158601c367f676d458eb1",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_BaseObjectDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ]
+ },
+ {
+  "address": "0x624bd0",
+  "family": "descriptor-constructor",
+  "new_source": true,
+  "normal_pairs": 768,
+  "tu": "PositionableObjectDescriptor.cpp",
+  "demangled": "CPositionableObjectDescriptor::CPositionableObjectDescriptor(wchar_t const*, wchar_t const*, wchar_t const*, bool, bool, bool, bool, bool)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "dd59c67ef99dd57f4897aec4702b6e6d90b22c962b7e25d5bac7d929e48c798f",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_PositionableObjectDescriptor",
+    "completed": 768,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "dd59c67ef99dd57f4897aec4702b6e6d90b22c962b7e25d5bac7d929e48c798f",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_PositionableObjectDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x64cc40",
+  "family": "descriptor-constructor",
+  "new_source": true,
+  "normal_pairs": 192,
+  "tu": "ShapeDescriptor.cpp",
+  "demangled": "CShapeDescriptor::CShapeDescriptor(wchar_t const*, wchar_t const*, wchar_t const*, bool, bool, bool)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "829bd86b11c055ff68089d722f82ac44ece1ecd12fc8303f122e8cf4de79ab68",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_ShapeDescriptor",
+    "completed": 192,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "829bd86b11c055ff68089d722f82ac44ece1ecd12fc8303f122e8cf4de79ab68",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_ShapeDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x68d630",
+  "family": "descriptor-constructor",
+  "new_source": true,
+  "normal_pairs": 24,
+  "tu": "UnitTriggerDescriptor.cpp",
+  "demangled": "CUnitTriggerDescriptor::CUnitTriggerDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "cea3b532c8a27dee2575ceb5edc13a58727a3e393cf276b7cfbd59d21263c344",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_UnitTriggerDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "cea3b532c8a27dee2575ceb5edc13a58727a3e393cf276b7cfbd59d21263c344",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_UnitTriggerDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x696f70",
+  "family": "descriptor-constructor",
+  "new_source": true,
+  "normal_pairs": 24,
+  "tu": "AffectorDescriptor.cpp",
+  "demangled": "CAffectorDescriptor::CAffectorDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "8deec178c0c8c70303fe2a4bbdffd8bf0c9cf5fb8902d0928551f0e820af464d",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_AffectorDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "8deec178c0c8c70303fe2a4bbdffd8bf0c9cf5fb8902d0928551f0e820af464d",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_AffectorDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6e8010",
+  "family": "descriptor-constructor",
+  "new_source": true,
+  "normal_pairs": 24,
+  "tu": "ParticleEmitterWrapperDescriptor.cpp",
+  "demangled": "CParticleEmitterWrapperDescriptor::CParticleEmitterWrapperDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "63f15381ffb09d139879b19c8c52a552cd110286a553d5de28553aba44a994f0",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_ParticleEmitterWrapperDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "63f15381ffb09d139879b19c8c52a552cd110286a553d5de28553aba44a994f0",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_ParticleEmitterWrapperDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x6f09a0",
+  "family": "descriptor-constructor",
+  "new_source": true,
+  "normal_pairs": 24,
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "demangled": "CParticleTechWrapperDescriptor::CParticleTechWrapperDescriptor()",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "5995bfd9567b2bc891da3575eba2bedecf910392a4dffe8e8e2e00ee8e767812",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_ParticleTechWrapperDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "5995bfd9567b2bc891da3575eba2bedecf910392a4dffe8e8e2e00ee8e767812",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_ParticleTechWrapperDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ },
+ {
+  "address": "0x79aee0",
+  "family": "descriptor-constructor",
+  "new_source": true,
+  "normal_pairs": 24,
+  "tu": "LogicGroupDescriptor.cpp",
+  "demangled": "CLogicGroupDescriptor::CLogicGroupDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "MATCH",
+  "object_digest": "014ab82cd7c8ceca3f8c3e6144ad293820d1943a2983f19f8a73209c733e390a",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_LogicGroupDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ]
+ },
+ {
+  "address": "0x7c7080",
+  "family": "descriptor-constructor",
+  "new_source": true,
+  "normal_pairs": 24,
+  "tu": "TimelineDescriptor.cpp",
+  "demangled": "CTimelineDescriptor::CTimelineDescriptor(wchar_t const*, wchar_t const*, wchar_t const*)",
+  "accepted_by": "BEHAVIORAL",
+  "object_digest": "352b0dfb96804c614e9792c50b97bf1376dd4d3453a27e93fbb513d35ca9a9b2",
+  "comparison_coverage": [
+   {
+    "fixture": "bulk_registration_TimelineDescriptor",
+    "completed": 24,
+    "different": 0,
+    "incomplete": 0
+   }
+  ],
+  "comparison_evidence": {
+   "policy": 1,
+   "method": "executed-call-pair",
+   "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+   "evidence": {
+    "schema": 1,
+    "object_digest": "352b0dfb96804c614e9792c50b97bf1376dd4d3453a27e93fbb513d35ca9a9b2",
+    "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+    "parameters": {
+     "fixtures": [
+      "bulk_registration_TimelineDescriptor"
+     ],
+     "runtime_abi": 2
+    }
+   }
+  }
+ }
+]

@@ -1,0 +1,2296 @@
+    coverage ai_manager_initialize_observed 0xd574f0 completed 384 different 0 incomplete 0
+tlhybrid: ai_manager_initialize_observed                   PASS (0)
+    coverage combinemenu_click 0xad7560 completed 1536 different 0 incomplete 0
+tlhybrid: combinemenu_click                                PASS (0)
+    coverage bulk_registration_MonsterDescriptor 0x614920 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_MonsterDescriptor              PASS (0)
+    coverage descriptor_factory_5cb1f0 0x5cb1f0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cb1f0                        PASS (0)
+    coverage descriptor_next_post 0x6fe380 completed 480 different 0 incomplete 0
+tlhybrid: descriptor_next_post                             PASS (0)
+    coverage editor_more_timeline 0x732950 completed 864 different 0 incomplete 0
+tlhybrid: editor_more_timeline                             PASS (0)
+    coverage equipment_damage_arrays_differential 0x879e10 completed 4096 different 0 incomplete 0
+    coverage equipment_damage_arrays_differential 0x879f60 completed 4096 different 0 incomplete 0
+    coverage equipment_damage_arrays_differential 0x86d440 completed 4096 different 0 incomplete 0
+tlhybrid: equipment_damage_arrays_differential             PASS (0)
+tlhybrid: file_reader_lines_tokens_and_encoding            PASS (0)
+    coverage gameui_entry_recovered_active_frame_characterization 0xab8100 completed 7128 different 0 incomplete 0
+tlhybrid: gameui_entry_recovered_active_frame_characterization PASS (0)
+    coverage gameui_player_rebinding 0xa9b420 completed 290 different 0 incomplete 0
+tlhybrid: gameui_player_rebinding                          PASS (0)
+    coverage inventory_next_free_slot 0x91ba50 completed 360 different 0 incomplete 0
+tlhybrid: inventory_next_free_slot                         PASS (0)
+    coverage mass3_8f5c50 0x8f5c50 completed 256 different 0 incomplete 0
+tlhybrid: mass3_8f5c50                                     PASS (0)
+tlhybrid: merchantmenu_listener_expected_exceptions        PASS (0)
+    coverage pass11_existing_screen_world_ray 0xc7a4b0 completed 320 different 0 incomplete 0
+tlhybrid: pass11_existing_screen_world_ray                 PASS (0)
+tlhybrid: questcontroller_destructor_unwind                PASS (0)
+    coverage quest_runtime_completion 0xd0cc10 completed 414 different 0 incomplete 0
+tlhybrid: quest_runtime_completion                         PASS (0)
+    coverage restore69_8e3ff0 0x8e3ff0 completed 128 different 0 incomplete 0
+tlhybrid: restore69_8e3ff0                                 PASS (0)
+    coverage skillmenu_destructor_differential 0xbdfde0 completed 64 different 0 incomplete 0
+tlhybrid: skillmenu_destructor_differential                PASS (0)
+    coverage stashmenu_click_dispatch 0xbee480 completed 960 different 0 incomplete 0
+tlhybrid: stashmenu_click_dispatch                         PASS (0)
+tlhybrid: UtilitiesMath_shadow                             PASS (0)
+    coverage ai_watcher_construct_observed 0xd5e7c0 completed 1024 different 0 incomplete 0
+tlhybrid: ai_watcher_construct_observed                    PASS (0)
+    coverage combinemenu_close 0xad4bb0 completed 768 different 0 incomplete 0
+tlhybrid: combinemenu_close                                PASS (0)
+    coverage bulk_registration_MusicObjectDescriptor 0xe665b0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_MusicObjectDescriptor          PASS (0)
+    coverage descriptor_factory_5cb320 0x5cb320 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cb320                        PASS (0)
+    coverage descriptor_next_serialize 0x6ff300 completed 480 different 0 incomplete 0
+tlhybrid: descriptor_next_serialize                        PASS (0)
+    coverage editor_more_tileset 0x7306a0 completed 864 different 0 incomplete 0
+tlhybrid: editor_more_tileset                              PASS (0)
+    coverage equipment_description_differential 0x88f420 completed 1224 different 0 incomplete 0
+tlhybrid: equipment_description_differential               PASS (0)
+    coverage filesystem_destroy_observed 0xe4dc50 completed 32 different 0 incomplete 0
+tlhybrid: filesystem_destroy_observed                      PASS (0)
+    coverage gameui_entry_recovered_context_tips_characterization 0xab8100 completed 720 different 0 incomplete 0
+tlhybrid: gameui_entry_recovered_context_tips_characterization PASS (0)
+tlhybrid: gameui_player_rebinding_exceptions               PASS (0)
+    coverage inventory_slot_transfer 0xb51bf0 completed 12996 different 0 incomplete 0
+tlhybrid: inventory_slot_transfer                          PASS (0)
+    coverage mass3_8f5670 0x8f5670 completed 256 different 0 incomplete 0
+tlhybrid: mass3_8f5670                                     PASS (0)
+    coverage merchant_pet_slot_differential 0xb6ab50 completed 12960 different 0 incomplete 0
+tlhybrid: merchant_pet_slot_differential                   PASS (0)
+    coverage pass11_existing_world_local_perspective 0xc79a00 completed 512 different 0 incomplete 0
+tlhybrid: pass11_existing_world_local_perspective          PASS (0)
+tlhybrid: questcontroller_lifetime_oracle_controls         PASS (0)
+    coverage quest_runtime_events 0xd0ce90 completed 1013 different 0 incomplete 0
+tlhybrid: quest_runtime_events                             PASS (0)
+    coverage restore69_8e41c0 0x8e41c0 completed 252 different 0 incomplete 0
+tlhybrid: restore69_8e41c0                                 PASS (0)
+    coverage skillmenu_deleting_destructor_differential 0xbdfeb0 completed 64 different 0 incomplete 0
+tlhybrid: skillmenu_deleting_destructor_differential       PASS (0)
+    coverage stash_create_menus_resources 0xbfbe20 completed 392 different 0 incomplete 0
+tlhybrid: stash_create_menus_resources                     PASS (0)
+    coverage warper_activate_differential 0x9b8e60 completed 146 different 0 incomplete 0
+tlhybrid: warper_activate_differential                     PASS (0)
+    coverage ai_watcher_targets_observed 0xd5f920 completed 1024 different 0 incomplete 0
+tlhybrid: ai_watcher_targets_observed                      PASS (0)
+    coverage combinemenu_click_dispatch 0xacd3a0 completed 768 different 0 incomplete 0
+tlhybrid: combinemenu_click_dispatch                       PASS (0)
+    coverage bulk_registration_ParticleWrapperDescriptor 0x6f8630 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_ParticleWrapperDescriptor      PASS (0)
+    coverage descriptor_factory_5cb460 0x5cb460 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cb460                        PASS (0)
+    coverage descriptor_next_list 0x700110 completed 480 different 0 incomplete 0
+tlhybrid: descriptor_next_list                             PASS (0)
+    coverage editor_more_units 0x735ee0 completed 864 different 0 incomplete 0
+tlhybrid: editor_more_units                                PASS (0)
+    coverage equipment_destroy_icon 0x86f6e0 completed 1024 different 0 incomplete 0
+tlhybrid: equipment_destroy_icon                           PASS (0)
+    coverage filesystem_newer_observed 0xe4d650 completed 1024 different 0 incomplete 0
+tlhybrid: filesystem_newer_observed                        PASS (0)
+tlhybrid: gameui_entry_recovered_drag_return               PASS (0)
+    coverage gameui_projection_exact_bits 0xa82f40 completed 244 different 0 incomplete 0
+tlhybrid: gameui_projection_exact_bits                     PASS (0)
+    coverage inventory_update_differential 0xb4f9d0 completed 1024 different 0 incomplete 0
+tlhybrid: inventory_update_differential                    PASS (0)
+    coverage mass3_8e4490 0x8e4490 completed 384 different 0 incomplete 0
+tlhybrid: mass3_8e4490                                     PASS (0)
+    coverage merchantmenu_update 0xb69c00 completed 1536 different 0 incomplete 0
+tlhybrid: merchantmenu_update                              PASS (0)
+    coverage pass11_existing_rotate_x 0xc7a3a0 completed 512 different 0 incomplete 0
+tlhybrid: pass11_existing_rotate_x                         PASS (0)
+    coverage questmanager_details_query 0xd265f0 completed 64 different 0 incomplete 0
+tlhybrid: questmanager_details_query                       PASS (0)
+    coverage quest_runtime_events_composed 0xd0ce90 completed 1030 different 0 incomplete 0
+tlhybrid: quest_runtime_events_composed                    PASS (0)
+    coverage restore69_8e47d0 0x8e47d0 completed 192 different 0 incomplete 0
+tlhybrid: restore69_8e47d0                                 PASS (0)
+tlhybrid: skillmenu_destructor_expected_exceptions         PASS (0)
+tlhybrid: stash_create_menus_differential                  PASS (0)
+    coverage strings_wide_prefix 0xc8d5f0 completed 192 different 0 incomplete 0
+tlhybrid: strings_wide_prefix                              PASS (0)
+    coverage ai_watcher_flag_observed 0xd5fde0 completed 1024 different 0 incomplete 0
+tlhybrid: ai_watcher_flag_observed                         PASS (0)
+    coverage combinemenu_destructor 0xad47b0 completed 384 different 0 incomplete 0
+tlhybrid: combinemenu_destructor                           PASS (0)
+    coverage bulk_registration_PathControllerDescriptor 0x61ca50 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_PathControllerDescriptor       PASS (0)
+    coverage descriptor_factory_5cb5a0 0x5cb5a0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cb5a0                        PASS (0)
+    coverage descriptor_observed_GetInputFuncIndex 0x6f90e0 completed 192 different 0 incomplete 0
+tlhybrid: descriptor_observed_GetInputFuncIndex            PASS (0)
+    coverage editor_more_event 0x7316c0 completed 864 different 0 incomplete 0
+tlhybrid: editor_more_event                                PASS (0)
+tlhybrid: equipment_destroy_icon_expected_exceptions       PASS (0)
+    coverage filesystem_absolute_observed 0xe4de80 completed 600 different 0 incomplete 0
+tlhybrid: filesystem_absolute_observed                     PASS (0)
+tlhybrid: gameui_entry_recovered_cinematic_entry_characterization PASS (0)
+    coverage gameui_projection_lifecycle_composed 0xa8f100 completed 40 different 0 incomplete 0
+tlhybrid: gameui_projection_lifecycle_composed             PASS (0)
+tlhybrid: item_animation_event_dispatch                    PASS (0)
+    coverage mass3_826140 0x826140 completed 384 different 0 incomplete 0
+tlhybrid: mass3_826140                                     PASS (0)
+tlhybrid: merchantmenu_update_expected_exceptions          PASS (0)
+    coverage pass11_existing_rotate_y 0xc7a400 completed 512 different 0 incomplete 0
+tlhybrid: pass11_existing_rotate_y                         PASS (0)
+    coverage questmanager_active_query 0xd2d8e0 completed 384 different 0 incomplete 0
+tlhybrid: questmanager_active_query                        PASS (0)
+    coverage quest_runtime_reentrant_completion 0xd0cc10 completed 12 different 0 incomplete 0
+tlhybrid: quest_runtime_reentrant_completion               PASS (0)
+    coverage restore69_8ef600 0x8ef600 completed 128 different 0 incomplete 0
+tlhybrid: restore69_8ef600                                 PASS (0)
+    coverage skillmenu_event_mapping 0xbe1600 completed 2304 different 0 incomplete 0
+tlhybrid: skillmenu_event_mapping                          PASS (0)
+    coverage stashmenu_destructor 0xbf5750 completed 3072 different 0 incomplete 0
+tlhybrid: stashmenu_destructor                             PASS (0)
+    coverage ai_watcher_update_observed 0xd600f0 completed 1024 different 0 incomplete 0
+tlhybrid: ai_watcher_update_observed                       PASS (0)
+    coverage combinemenu_deleting_destructor 0xad48d0 completed 384 different 0 incomplete 0
+tlhybrid: combinemenu_deleting_destructor                  PASS (0)
+    coverage bulk_registration_PlaneColliderDescriptor 0x6c9eb0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_PlaneColliderDescriptor        PASS (0)
+    coverage descriptor_factory_5cb6e0 0x5cb6e0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cb6e0                        PASS (0)
+    coverage descriptor_observed_GetOutputFuncIndex 0x6f9190 completed 192 different 0 incomplete 0
+tlhybrid: descriptor_observed_GetOutputFuncIndex           PASS (0)
+    coverage editor_more_values 0x732560 completed 864 different 0 incomplete 0
+tlhybrid: editor_more_values                               PASS (0)
+    coverage equipment_destructor_differential 0x87d770 completed 4288 different 0 incomplete 0
+tlhybrid: equipment_destructor_differential                PASS (0)
+    coverage filesystem_info_observed 0xe4e3a0 completed 2400 different 0 incomplete 0
+tlhybrid: filesystem_info_observed                         PASS (0)
+    coverage gameui_entry_recovered_hover_frames 0xab8100 completed 720 different 0 incomplete 0
+tlhybrid: gameui_entry_recovered_hover_frames              PASS (0)
+tlhybrid: gameui_retirement_modal_boundary_unwind          PASS (0)
+tlhybrid: item_opacity_transitions                         PASS (0)
+    coverage mass3_826470 0x826470 completed 384 different 0 incomplete 0
+tlhybrid: mass3_826470                                     PASS (0)
+    coverage narrow_string_plus_production 0x56aee0 completed 72 different 0 incomplete 0
+    coverage narrow_string_plus_production 0x56af70 completed 72 different 0 incomplete 0
+tlhybrid: narrow_string_plus_production                    PASS (0)
+    coverage pet_create_menus_differential 0xb93350 completed 4704 different 0 incomplete 0
+tlhybrid: pet_create_menus_differential                    PASS (0)
+    coverage questmanager_dialogs_query 0xd31140 completed 75 different 0 incomplete 0
+tlhybrid: questmanager_dialogs_query                       PASS (0)
+    coverage quest_runtime_reentrant_events 0xd0ce90 completed 6 different 0 incomplete 0
+tlhybrid: quest_runtime_reentrant_events                   PASS (0)
+    coverage restore69_8ef6c0 0x8ef6c0 completed 128 different 0 incomplete 0
+tlhybrid: restore69_8ef6c0                                 PASS (0)
+    coverage skillmenu_set_open 0xbe1130 completed 864 different 0 incomplete 0
+tlhybrid: skillmenu_set_open                               PASS (0)
+    coverage stashmenu_deleting_destructor 0xbf5810 completed 3072 different 0 incomplete 0
+tlhybrid: stashmenu_deleting_destructor                    PASS (0)
+tlhybrid: AIStatWatcher_constructor_shadow                 PASS (0)
+tlhybrid: combinemenu_destructor_expected_exceptions       PASS (0)
+    coverage bulk_registration_PropertyNodeDescriptor 0x62dce0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_PropertyNodeDescriptor         PASS (0)
+    coverage descriptor_factory_5cb820 0x5cb820 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cb820                        PASS (0)
+    coverage descriptor_observed_AddInputLogic 0x6f9c10 completed 192 different 0 incomplete 0
+tlhybrid: descriptor_observed_AddInputLogic                PASS (0)
+    coverage editor_next_animation_resources 0x731a50 completed 672 different 0 incomplete 0
+    coverage editor_next_animation_resources 0x733db0 completed 672 different 0 incomplete 0
+    coverage editor_next_animation_resources 0x7242e0 completed 672 different 0 incomplete 0
+tlhybrid: editor_next_animation_resources                  PASS (0)
+    coverage equipment_detach_differential 0x86ee20 completed 3584 different 0 incomplete 0
+tlhybrid: equipment_detach_differential                    PASS (0)
+    coverage filesystem_directory_observed 0xe4f0f0 completed 576 different 0 incomplete 0
+tlhybrid: filesystem_directory_observed                    PASS (0)
+    coverage gameui_entry_recovered_label_creation 0xab8100 completed 160 different 0 incomplete 0
+tlhybrid: gameui_entry_recovered_label_creation            PASS (0)
+    coverage gameui_skill_selection_hover 0xa94d30 completed 134 different 0 incomplete 0
+tlhybrid: gameui_skill_selection_hover                     PASS (0)
+tlhybrid: item_active_range_and_shadows                    PASS (0)
+    coverage mass3_824a50 0x824a50 completed 384 different 0 incomplete 0
+tlhybrid: mass3_824a50                                     PASS (0)
+    coverage transforms_reset_scale_observed 0x7860f0 completed 450 different 0 incomplete 0
+tlhybrid: transforms_reset_scale_observed                  PASS (0)
+    coverage pet_layout_equipped 0xba26b0 completed 864 different 0 incomplete 0
+tlhybrid: pet_layout_equipped                              PASS (0)
+    coverage quest_dialog_parse_closure 0xd24fb0 completed 129 different 0 incomplete 0
+tlhybrid: quest_dialog_parse_closure                       PASS (0)
+    coverage questmanager_npc_selection 0xd300e0 completed 102 different 0 incomplete 0
+tlhybrid: questmanager_npc_selection                       PASS (0)
+    coverage restore69_guard_8e43a0 0x8e43a0 completed 128 different 0 incomplete 0
+tlhybrid: restore69_guard_8e43a0                           PASS (0)
+tlhybrid: skillmenu_open_expected_exceptions               PASS (0)
+tlhybrid: stashmenu_destructor_expected_exceptions         PASS (0)
+tlhybrid: AIStatWatcher_behaviour_shadow                   PASS (0)
+    coverage combinemenu_mouse_over 0xacd460 completed 9216 different 0 incomplete 0
+tlhybrid: combinemenu_mouse_over                           PASS (0)
+    coverage bulk_registration_PuzzleRandomizerDescriptor 0x671fb0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_PuzzleRandomizerDescriptor     PASS (0)
+    coverage descriptor_factory_5cb960 0x5cb960 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cb960                        PASS (0)
+    coverage descriptor_observed_UniqueValue 0x6f9d70 completed 84 different 0 incomplete 0
+tlhybrid: descriptor_observed_UniqueValue                  PASS (0)
+    coverage editor_next_property_undo 0x731910 completed 360 different 0 incomplete 0
+    coverage editor_next_property_undo 0x730e80 completed 360 different 0 incomplete 0
+    coverage editor_next_property_undo 0x730fe0 completed 360 different 0 incomplete 0
+    coverage editor_next_property_undo 0x723d30 completed 360 different 0 incomplete 0
+tlhybrid: editor_next_property_undo                        PASS (0)
+    coverage equipment_effects_description_differential 0x88b180 completed 6720 different 0 incomplete 0
+tlhybrid: equipment_effects_description_differential       PASS (0)
+    coverage filesystem_list_observed 0xe4fd00 completed 2400 different 0 incomplete 0
+tlhybrid: filesystem_list_observed                         PASS (0)
+tlhybrid: gameui_entry_recovered_localization              PASS (0)
+    coverage gameui_skill_selection_select 0xa94e60 completed 262 different 0 incomplete 0
+tlhybrid: gameui_skill_selection_select                    PASS (0)
+tlhybrid: item_restore_and_spawner_binding                 PASS (0)
+    coverage mass3_824e60 0x824e60 completed 256 different 0 incomplete 0
+tlhybrid: mass3_824e60                                     PASS (0)
+    coverage transforms_reset_orientation_observed 0x7861d0 completed 450 different 0 incomplete 0
+tlhybrid: transforms_reset_orientation_observed            PASS (0)
+    coverage pet_layout_spells 0xba26b0 completed 64 different 0 incomplete 0
+tlhybrid: pet_layout_spells                                PASS (0)
+tlhybrid: quest_populated_original_parser_consumers        PASS (0)
+    coverage quest_string_tags_synthetic_boundaries 0xd181a0 completed 14 different 0 incomplete 0
+tlhybrid: quest_string_tags_synthetic_boundaries           PASS (0)
+    coverage restore69_80f410 0x80f410 completed 192 different 0 incomplete 0
+tlhybrid: restore69_80f410                                 PASS (0)
+    coverage skillmenu_set_skill 0xbe0de0 completed 1296 different 0 incomplete 0
+tlhybrid: skillmenu_set_skill                              PASS (0)
+    coverage stashmenu_mouse_over 0xbf5830 completed 2912 different 0 incomplete 0
+tlhybrid: stashmenu_mouse_over                             PASS (0)
+    coverage achievement_stat_type 0xebe190 completed 21 different 0 incomplete 0
+tlhybrid: achievement_stat_type                            PASS (0)
+    coverage combinemenu_process_input 0xacd700 completed 4096 different 0 incomplete 0
+tlhybrid: combinemenu_process_input                        PASS (0)
+    coverage bulk_registration_QuestControllerDescriptor 0xdbdc40 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_QuestControllerDescriptor      PASS (0)
+    coverage descriptor_factory_5cba90 0x5cba90 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cba90                        PASS (0)
+    coverage descriptor_observed_LinkProperty 0x6f92c0 completed 192 different 0 incomplete 0
+tlhybrid: descriptor_observed_LinkProperty                 PASS (0)
+    coverage editor_next_timeline_differential 0x732b60 completed 660 different 0 incomplete 0
+    coverage editor_next_timeline_differential 0x732c60 completed 660 different 0 incomplete 0
+    coverage editor_next_timeline_differential 0x733140 completed 660 different 0 incomplete 0
+    coverage editor_next_timeline_differential 0x732eb0 completed 660 different 0 incomplete 0
+    coverage editor_next_timeline_differential 0x732d60 completed 660 different 0 incomplete 0
+    coverage editor_next_timeline_differential 0x7327e0 completed 660 different 0 incomplete 0
+    coverage editor_next_timeline_differential 0x730d60 completed 660 different 0 incomplete 0
+tlhybrid: editor_next_timeline_differential                PASS (0)
+    coverage equipment_effects_differential 0x88c150 completed 768 different 0 incomplete 0
+tlhybrid: equipment_effects_differential                   PASS (0)
+    coverage filesystem_reload_next 0xe4d8c0 completed 420 different 0 incomplete 0
+tlhybrid: filesystem_reload_next                           PASS (0)
+tlhybrid: gameui_entry_recovered_closing_menus             PASS (0)
+    coverage gameui_skill_selection_click 0xa9dff0 completed 624 different 0 incomplete 0
+tlhybrid: gameui_skill_selection_click                     PASS (0)
+    coverage item_text_colors_and_order 0x8c01b0 completed 384 different 0 incomplete 0
+tlhybrid: item_text_colors_and_order                       PASS (0)
+    coverage mass3_811650 0x811650 completed 256 different 0 incomplete 0
+tlhybrid: mass3_811650                                     PASS (0)
+    coverage transforms_snap_observed 0x7868c0 completed 450 different 0 incomplete 0
+tlhybrid: transforms_snap_observed                         PASS (0)
+    coverage pet_layout_empty_and_bag 0xba26b0 completed 3840 different 0 incomplete 0
+tlhybrid: pet_layout_empty_and_bag                         PASS (0)
+    coverage quest_constructor_lifetime 0xd16280 completed 48 different 0 incomplete 0
+tlhybrid: quest_constructor_lifetime                       PASS (0)
+    coverage quest_acquire_tags_synthetic_boundaries 0xd1d480 completed 10 different 0 incomplete 0
+tlhybrid: quest_acquire_tags_synthetic_boundaries          PASS (0)
+    coverage restore69_80f500 0x80f500 completed 192 different 0 incomplete 0
+tlhybrid: restore69_80f500                                 PASS (0)
+tlhybrid: skillmenu_set_skill_expected_exceptions          PASS (0)
+    coverage stashmenu_pet_mouse_over 0xbf5be0 completed 2184 different 0 incomplete 0
+tlhybrid: stashmenu_pet_mouse_over                         PASS (0)
+    coverage achievement_check_achieved 0xebe1b0 completed 168 different 0 incomplete 0
+tlhybrid: achievement_check_achieved                       PASS (0)
+    coverage combinemenu_item_tracking 0xacd8d0 completed 8960 different 0 incomplete 0
+tlhybrid: combinemenu_item_tracking                        PASS (0)
+    coverage bulk_registration_RandomChoiceDescriptor 0x6757b0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_RandomChoiceDescriptor         PASS (0)
+    coverage descriptor_factory_5cbbc0 0x5cbbc0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cbbc0                        PASS (0)
+    coverage descriptor_observed_SetProperty 0x6f9540 completed 192 different 0 incomplete 0
+tlhybrid: descriptor_observed_SetProperty                  PASS (0)
+    coverage editor_object_registered 0x740a40 completed 160 different 0 incomplete 0
+tlhybrid: editor_object_registered                         PASS (0)
+tlhybrid: equipment_effects_trim_helper                    PASS (0)
+tlhybrid: FileSystem_layout                                PASS (0)
+tlhybrid: gameui_entry_recovered_menu_prefix_characterization PASS (0)
+    coverage gameui_text_event_production 0xa9ba60 completed 1920 different 0 incomplete 0
+tlhybrid: gameui_text_event_production                     PASS (0)
+tlhybrid: item_frame_visibility_sound_and_light            PASS (0)
+    coverage mass3_8245c0 0x8245c0 completed 256 different 0 incomplete 0
+tlhybrid: mass3_8245c0                                     PASS (0)
+    coverage transforms_rotation_noise_observed 0x786560 completed 450 different 0 incomplete 0
+tlhybrid: transforms_rotation_noise_observed               PASS (0)
+    coverage petmenu_constructor_differential 0xb9aa70 completed 32 different 0 incomplete 0
+tlhybrid: petmenu_constructor_differential                 PASS (0)
+tlhybrid: quest_constructor_unwind                         PASS (0)
+tlhybrid: quest_string_tags_expected_unwind                PASS (0)
+    coverage restore69_80f800 0x80f800 completed 192 different 0 incomplete 0
+tlhybrid: restore69_80f800                                 PASS (0)
+    coverage skillmenu_update_differential 0xbe3e10 completed 1728 different 0 incomplete 0
+tlhybrid: skillmenu_update_differential                    PASS (0)
+    coverage stashmenu_process_input 0xbee7e0 completed 8192 different 0 incomplete 0
+tlhybrid: stashmenu_process_input                          PASS (0)
+    coverage achievement_construct_float 0xebe650 completed 40 different 0 incomplete 0
+tlhybrid: achievement_construct_float                      PASS (0)
+    coverage combinemenu_event_mapping 0xad7690 completed 2304 different 0 incomplete 0
+tlhybrid: combinemenu_event_mapping                        PASS (0)
+    coverage bulk_registration_RandomGroupDescriptor 0x6373b0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_RandomGroupDescriptor          PASS (0)
+    coverage descriptor_factory_5cbd00 0x5cbd00 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cbd00                        PASS (0)
+    coverage descriptor_observed_CalculateDefaults 0x6fd280 completed 192 different 0 incomplete 0
+tlhybrid: descriptor_observed_CalculateDefaults            PASS (0)
+    coverage editor_object_selected 0x73f960 completed 160 different 0 incomplete 0
+tlhybrid: editor_object_selected                           PASS (0)
+    coverage equipment_elemental_differential 0x886240 completed 4608 different 0 incomplete 0
+tlhybrid: equipment_elemental_differential                 PASS (0)
+tlhybrid: FileSystem_destructor_shadow                     PASS (0)
+tlhybrid: gameui_entry_recovered_retirement_prefix_characterization PASS (0)
+    coverage gameui_text_event_callback_matrix 0xa9ba60 completed 4224 different 0 incomplete 0
+tlhybrid: gameui_text_event_callback_matrix                PASS (0)
+    coverage journal_create_menus_differential 0xe3b5e0 completed 784 different 0 incomplete 0
+tlhybrid: journal_create_menus_differential                PASS (0)
+    coverage mass3_827b20 0x827b20 completed 256 different 0 incomplete 0
+tlhybrid: mass3_827b20                                     PASS (0)
+    coverage transforms_normal_noise_observed 0x7866f0 completed 450 different 0 incomplete 0
+tlhybrid: transforms_normal_noise_observed                 PASS (0)
+tlhybrid: petmenu_constructor_expected_exceptions          PASS (0)
+    coverage quest_destructor_owned_lifetime 0xd1a390 completed 22 different 0 incomplete 0
+    coverage quest_deleting_lifetime 0xd1b5c0 completed 10 different 0 incomplete 0
+tlhybrid: quest_destructor_owned_lifetime                  PASS (0)
+    coverage quest_string_tags_original_dependencies 0xd181a0 completed 40 different 0 incomplete 0
+tlhybrid: quest_string_tags_original_dependencies          PASS (0)
+    coverage restore69_823bf0 0x823bf0 completed 192 different 0 incomplete 0
+tlhybrid: restore69_823bf0                                 PASS (0)
+    coverage skill_tooltip_cached_differential 0xaaeeb0 completed 2048 different 0 incomplete 0
+tlhybrid: skill_tooltip_cached_differential                PASS (0)
+    coverage stashmenu_layout 0xbfad60 completed 1152 different 0 incomplete 0
+tlhybrid: stashmenu_layout                                 PASS (0)
+    coverage achievement_construct_int 0xebe730 completed 32 different 0 incomplete 0
+tlhybrid: achievement_construct_int                        PASS (0)
+    coverage combinemenu_mouse_out 0xacd3d0 completed 2304 different 0 incomplete 0
+tlhybrid: combinemenu_mouse_out                            PASS (0)
+    coverage bulk_registration_RoomDescriptor 0x63c9c0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_RoomDescriptor                 PASS (0)
+    coverage descriptor_factory_5cbe40 0x5cbe40 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cbe40                        PASS (0)
+    coverage descriptor_observed_AddProperty 0x6fe870 completed 192 different 0 incomplete 0
+tlhybrid: descriptor_observed_AddProperty                  PASS (0)
+    coverage editor_operations_queries 0x7233b0 completed 288 different 0 incomplete 0
+    coverage editor_operations_queries 0x7254d0 completed 288 different 0 incomplete 0
+    coverage editor_operations_queries 0x731cc0 completed 288 different 0 incomplete 0
+    coverage editor_operations_queries 0x731be0 completed 288 different 0 incomplete 0
+    coverage editor_operations_queries 0x722fc0 completed 288 different 0 incomplete 0
+tlhybrid: editor_operations_queries                        PASS (0)
+    coverage equipment_enchant_differential 0x8845c0 completed 13120 different 0 incomplete 0
+tlhybrid: equipment_enchant_differential                   PASS (0)
+tlhybrid: FileSystem_resolve_shadow                        PASS (0)
+    coverage gameui_entry_recovered_no_character_frame_characterization 0xab8100 completed 576 different 0 incomplete 0
+tlhybrid: gameui_entry_recovered_no_character_frame_characterization PASS (0)
+tlhybrid: gameui_text_event_expected_exceptions            PASS (0)
+tlhybrid: journal_create_expected_exceptions               PASS (0)
+    coverage mass3_812950 0x812950 completed 256 different 0 incomplete 0
+tlhybrid: mass3_812950                                     PASS (0)
+    coverage transforms_scale_noise_observed 0x786300 completed 450 different 0 incomplete 0
+tlhybrid: transforms_scale_noise_observed                  PASS (0)
+    coverage petmenu_tab_click 0xb888f0 completed 48 different 0 incomplete 0
+tlhybrid: petmenu_tab_click                                PASS (0)
+tlhybrid: quest_destructor_unwind                          PASS (0)
+    coverage quest_acquire_tags_original_dependencies 0xd1d480 completed 40 different 0 incomplete 0
+tlhybrid: quest_acquire_tags_original_dependencies         PASS (0)
+    coverage restore69_837060 0x837060 completed 192 different 0 incomplete 0
+tlhybrid: restore69_837060                                 PASS (0)
+    coverage skill_tooltip_content_differential 0xaaeeb0 completed 3072 different 0 incomplete 0
+tlhybrid: skill_tooltip_content_differential               PASS (0)
+tlhybrid: stashmenu_layout_expected_exceptions             PASS (0)
+    coverage achievement_set_float 0xebe260 completed 192 different 0 incomplete 0
+tlhybrid: achievement_set_float                            PASS (0)
+    coverage combinemenu_open 0xad52e0 completed 3072 different 0 incomplete 0
+tlhybrid: combinemenu_open                                 PASS (0)
+    coverage bulk_registration_RoomPieceDescriptor 0x646c50 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_RoomPieceDescriptor            PASS (0)
+    coverage descriptor_factory_5cbf80 0x5cbf80 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cbf80                        PASS (0)
+    coverage descriptor_observed_AddPropertyWithInterpreter 0x6fede0 completed 192 different 0 incomplete 0
+tlhybrid: descriptor_observed_AddPropertyWithInterpreter   PASS (0)
+    coverage editor_operations_resources 0x730b50 completed 288 different 0 incomplete 0
+    coverage editor_operations_resources 0x724660 completed 288 different 0 incomplete 0
+    coverage editor_operations_resources 0x722b20 completed 288 different 0 incomplete 0
+    coverage editor_operations_resources 0x723990 completed 288 different 0 incomplete 0
+    coverage editor_operations_resources 0x733680 completed 288 different 0 incomplete 0
+tlhybrid: editor_operations_resources                      PASS (0)
+    coverage equipment_fire_missiles_differential 0x87f120 completed 9792 different 0 incomplete 0
+tlhybrid: equipment_fire_missiles_differential             PASS (0)
+tlhybrid: FileSystem_stringListAdd_shadow                  PASS (0)
+    coverage gameui_entry_recovered_performance_overlay 0xab8100 completed 240 different 0 incomplete 0
+tlhybrid: gameui_entry_recovered_performance_overlay       PASS (0)
+    coverage gameui_text_lifecycle_hide 0xa8ee40 completed 29 different 0 incomplete 0
+tlhybrid: gameui_text_lifecycle_hide                       PASS (0)
+    coverage journal_layout_differential 0xe3c460 completed 1152 different 0 incomplete 0
+tlhybrid: journal_layout_differential                      PASS (0)
+    coverage mass3_812e70 0x812e70 completed 256 different 0 incomplete 0
+tlhybrid: mass3_812e70                                     PASS (0)
+    coverage transforms_pivot_observed 0x774510 completed 450 different 0 incomplete 0
+tlhybrid: transforms_pivot_observed                        PASS (0)
+    coverage petmenu_click_dispatch 0xb88870 completed 576 different 0 incomplete 0
+tlhybrid: petmenu_click_dispatch                           PASS (0)
+    coverage quest_listener_add_lifetime 0xd14860 completed 28 different 0 incomplete 0
+tlhybrid: quest_listener_add_lifetime                      PASS (0)
+    coverage quest_unit_create_closure 0xd3e160 completed 349 different 0 incomplete 0
+tlhybrid: quest_unit_create_closure                        PASS (0)
+    coverage restore69_83c670 0x83c670 completed 192 different 0 incomplete 0
+tlhybrid: restore69_83c670                                 PASS (0)
+    coverage skill_tooltip_load_differential 0xa96270 completed 192 different 0 incomplete 0
+tlhybrid: skill_tooltip_load_differential                  PASS (0)
+    coverage stashmenu_event_mapping 0xbf7900 completed 2304 different 0 incomplete 0
+tlhybrid: stashmenu_event_mapping                          PASS (0)
+    coverage achievement_set_int 0xebe2c0 completed 192 different 0 incomplete 0
+tlhybrid: achievement_set_int                              PASS (0)
+tlhybrid: combinemenu_open_expected_exceptions             PASS (0)
+    coverage bulk_registration_ScaleAffectorDescriptor 0x6ce1d0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_ScaleAffectorDescriptor        PASS (0)
+    coverage descriptor_factory_5cc0c0 0x5cc0c0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cc0c0                        PASS (0)
+    coverage descriptor_observed_Clone 0x6fd150 completed 165 different 0 incomplete 0
+tlhybrid: descriptor_observed_Clone                        PASS (0)
+    coverage editor_operations_updates 0x725340 completed 288 different 0 incomplete 0
+    coverage editor_operations_updates 0x730c60 completed 288 different 0 incomplete 0
+    coverage editor_operations_updates 0x716e30 completed 288 different 0 incomplete 0
+tlhybrid: editor_operations_updates                        PASS (0)
+    coverage equipment_full_name_differential 0x884ba0 completed 7104 different 0 incomplete 0
+tlhybrid: equipment_full_name_differential                 PASS (0)
+    coverage followup_files_application 0xc739d0 completed 32 different 0 incomplete 0
+tlhybrid: followup_files_application                       PASS (0)
+    coverage gameui_entry_recovered_performance_rooms 0xab8100 completed 40 different 0 incomplete 0
+tlhybrid: gameui_entry_recovered_performance_rooms         PASS (0)
+    coverage gameui_text_lifecycle_return 0xa8efa0 completed 34 different 0 incomplete 0
+tlhybrid: gameui_text_lifecycle_return                     PASS (0)
+    coverage journalmenu_constructor_differential 0xe3c070 completed 64 different 0 incomplete 0
+tlhybrid: journalmenu_constructor_differential             PASS (0)
+    coverage mass3_811230 0x811230 completed 256 different 0 incomplete 0
+tlhybrid: mass3_811230                                     PASS (0)
+    coverage transforms_plane_observed 0x775700 completed 450 different 0 incomplete 0
+tlhybrid: transforms_plane_observed                        PASS (0)
+    coverage petmenu_destructor_differential 0xb91250 completed 512 different 0 incomplete 0
+tlhybrid: petmenu_destructor_differential                  PASS (0)
+    coverage quest_listener_remove_lifetime 0xd14b30 completed 30 different 0 incomplete 0
+tlhybrid: quest_listener_remove_lifetime                   PASS (0)
+    coverage quest_unit_defeated_closure 0xd488f0 completed 179 different 0 incomplete 0
+tlhybrid: quest_unit_defeated_closure                      PASS (0)
+    coverage restore69_827010 0x827010 completed 192 different 0 incomplete 0
+tlhybrid: restore69_827010                                 PASS (0)
+tlhybrid: skill_tooltip_load_expected_exceptions           PASS (0)
+    coverage stashmenu_mouse_out 0xbee710 completed 6144 different 0 incomplete 0
+tlhybrid: stashmenu_mouse_out                              PASS (0)
+    coverage achievement_cheat 0xebe330 completed 192 different 0 incomplete 0
+tlhybrid: achievement_cheat                                PASS (0)
+    coverage combinemenu_return_items 0xad48f0 completed 44544 different 0 incomplete 0
+tlhybrid: combinemenu_return_items                         PASS (0)
+    coverage bulk_registration_SineForceAffectorDescriptor 0x6d2980 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_SineForceAffectorDescriptor    PASS (0)
+    coverage descriptor_factory_5cc200 0x5cc200 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cc200                        PASS (0)
+    coverage descriptor_observed_LoadObject 0x6f95f0 completed 26 different 0 incomplete 0
+tlhybrid: descriptor_observed_LoadObject                   PASS (0)
+    coverage editor_scene_next_changed_id 0x74b040 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_changed_id                     PASS (0)
+    coverage equipment_graph_price_differential 0x87dfa0 completed 3024 different 0 incomplete 0
+    coverage equipment_graph_price_differential 0x87e0c0 completed 3024 different 0 incomplete 0
+    coverage equipment_graph_price_differential 0x87e1d0 completed 3024 different 0 incomplete 0
+tlhybrid: equipment_graph_price_differential               PASS (0)
+    coverage followup_files_absolute 0xc73aa0 completed 45 different 0 incomplete 0
+tlhybrid: followup_files_absolute                          PASS (0)
+tlhybrid: gameui_entry_recovered_quest_fishing             PASS (0)
+    coverage gameui_text_lifecycle_update 0xa8f100 completed 63 different 0 incomplete 0
+tlhybrid: gameui_text_lifecycle_update                     PASS (0)
+tlhybrid: journalmenu_constructor_expected_exceptions      PASS (0)
+    coverage menu_constructors_observed 0xb885b0 completed 64 different 0 incomplete 0
+    coverage menu_constructors_observed 0xbd8650 completed 64 different 0 incomplete 0
+    coverage menu_constructors_observed 0xe4d090 completed 64 different 0 incomplete 0
+    coverage menu_constructors_observed 0xb7fef0 completed 64 different 0 incomplete 0
+    coverage menu_constructors_observed 0xb05cf0 completed 64 different 0 incomplete 0
+    coverage menu_constructors_observed 0xb100c0 completed 64 different 0 incomplete 0
+    coverage menu_constructors_observed 0xbb5480 completed 64 different 0 incomplete 0
+    coverage menu_constructors_observed 0xe9b920 completed 64 different 0 incomplete 0
+tlhybrid: menu_constructors_observed                       PASS (0)
+    coverage transforms_settings_destroy_observed 0xd864a0 completed 450 different 0 incomplete 0
+tlhybrid: transforms_settings_destroy_observed             PASS (0)
+    coverage petmenu_deleting_destructor_differential 0xb914b0 completed 512 different 0 incomplete 0
+tlhybrid: petmenu_deleting_destructor_differential         PASS (0)
+tlhybrid: quest_listener_allocation_unwind                 PASS (0)
+    coverage quest_unit_interacted_closure 0xd48d00 completed 142 different 0 incomplete 0
+tlhybrid: quest_unit_interacted_closure                    PASS (0)
+    coverage restore69_80e930 0x80e930 completed 256 different 0 incomplete 0
+tlhybrid: restore69_80e930                                 PASS (0)
+    coverage smallmass2_action_facing 0x8274e0 completed 192 different 0 incomplete 0
+tlhybrid: smallmass2_action_facing                         PASS (0)
+    coverage stashmenu_pet_mouse_out 0xbee510 completed 3072 different 0 incomplete 0
+tlhybrid: stashmenu_pet_mouse_out                          PASS (0)
+    coverage achievement_force 0xebe400 completed 192 different 0 incomplete 0
+tlhybrid: achievement_force                                PASS (0)
+    coverage combinemenu_equipment_used 0xad4b90 completed 44544 different 0 incomplete 0
+tlhybrid: combinemenu_equipment_used                       PASS (0)
+    coverage bulk_registration_SkillControllerDescriptor 0xdc8310 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_SkillControllerDescriptor      PASS (0)
+    coverage descriptor_factory_5cc340 0x5cc340 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cc340                        PASS (0)
+    coverage descriptor_observed_LoadObjects 0x6f98a0 completed 117 different 0 incomplete 0
+tlhybrid: descriptor_observed_LoadObjects                  PASS (0)
+    coverage editor_scene_next_delete_all 0x74b130 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_delete_all                     PASS (0)
+    coverage equipment_heirloom_differential 0x882330 completed 4608 different 0 incomplete 0
+tlhybrid: equipment_heirloom_differential                  PASS (0)
+    coverage followup_files_exists 0xc741e0 completed 28 different 0 incomplete 0
+tlhybrid: followup_files_exists                            PASS (0)
+tlhybrid: gameui_entry_recovered_retirement_lazy           PASS (0)
+    coverage gameui_text_lifecycle_add 0xa9c2a0 completed 57 different 0 incomplete 0
+tlhybrid: gameui_text_lifecycle_add                        PASS (0)
+    coverage journalmenu_destructor_differential 0xe39e60 completed 32 different 0 incomplete 0
+tlhybrid: journalmenu_destructor_differential              PASS (0)
+    coverage quest_destructor_observed 0xbc0ea0 completed 192 different 0 incomplete 0
+tlhybrid: quest_destructor_observed                        PASS (0)
+    coverage gameui_ogre_exception_delete 0x56d1f0 completed 98 different 0 incomplete 0
+tlhybrid: gameui_ogre_exception_delete                     PASS (0)
+tlhybrid: petmenu_destructor_expected_exceptions           PASS (0)
+    coverage listener accepted-controller integration (supplemental) 0xdee380 completed 4 different 0 incomplete 0
+tlhybrid: quest_listener_controller_cross_invalidation     PASS (0)
+    coverage quest_unit_spawn_children_closure 0xd3e050 completed 28 different 0 incomplete 0
+tlhybrid: quest_unit_spawn_children_closure                PASS (0)
+    coverage restore69_80eef0 0x80eef0 completed 256 different 0 incomplete 0
+tlhybrid: restore69_80eef0                                 PASS (0)
+    coverage smallmass2_action_teleport 0x827890 completed 192 different 0 incomplete 0
+tlhybrid: smallmass2_action_teleport                       PASS (0)
+    coverage stashmenu_open 0xbf7510 completed 192 different 0 incomplete 0
+tlhybrid: stashmenu_open                                   PASS (0)
+    coverage achievement_add_float 0xebe4c0 completed 192 different 0 incomplete 0
+tlhybrid: achievement_add_float                            PASS (0)
+    coverage combinemenu_equipment_used_suppressed 0xad4b90 completed 24 different 0 incomplete 0
+tlhybrid: combinemenu_equipment_used_suppressed            PASS (0)
+    coverage bulk_registration_SoundObjectDescriptor 0x6516b0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_SoundObjectDescriptor          PASS (0)
+    coverage descriptor_factory_5cc480 0x5cc480 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cc480                        PASS (0)
+    coverage descriptor_observed_PostProcessObjects 0x6fe530 completed 141 different 0 incomplete 0
+tlhybrid: descriptor_observed_PostProcessObjects           PASS (0)
+    coverage editor_scene_next_remove 0x74b640 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_remove                         PASS (0)
+    coverage equipment_icon_differential 0x882e30 completed 2560 different 0 incomplete 0
+tlhybrid: equipment_icon_differential                      PASS (0)
+    coverage followup_files_time 0xc77530 completed 28 different 0 incomplete 0
+tlhybrid: followup_files_time                              PASS (0)
+tlhybrid: gameui_entry_recovered_tooltip_position_characterization PASS (0)
+    coverage gameui_text_presentation_small 0xa8dd00 completed 162 different 0 incomplete 0
+tlhybrid: gameui_text_presentation_small                   PASS (0)
+    coverage journalmenu_deleting_destructor_differential 0xe39f10 completed 32 different 0 incomplete 0
+tlhybrid: journalmenu_deleting_destructor_differential     PASS (0)
+    coverage menu_item_click_differential 0xa8f780 completed 3168 different 0 incomplete 0
+tlhybrid: menu_item_click_differential                     PASS (0)
+    coverage gameui_ogre_exception_complete 0x56bd50 completed 98 different 0 incomplete 0
+tlhybrid: gameui_ogre_exception_complete                   PASS (0)
+    coverage petmenu_mouse_over 0xb914d0 completed 9216 different 0 incomplete 0
+tlhybrid: petmenu_mouse_over                               PASS (0)
+    coverage questmanager_definition_load 0xd31410 completed 22 different 0 incomplete 0
+tlhybrid: questmanager_definition_load                     PASS (0)
+    coverage quest_unit_name_closure 0xd49670 completed 102 different 0 incomplete 0
+tlhybrid: quest_unit_name_closure                          PASS (0)
+    coverage restore69_80ef50 0x80ef50 completed 256 different 0 incomplete 0
+tlhybrid: restore69_80ef50                                 PASS (0)
+    coverage smallmass2_action_move 0x829f60 completed 192 different 0 incomplete 0
+tlhybrid: smallmass2_action_move                           PASS (0)
+tlhybrid: stashmenu_open_expected_exceptions               PASS (0)
+    coverage achievement_add_int 0xebe550 completed 192 different 0 incomplete 0
+tlhybrid: achievement_add_int                              PASS (0)
+    coverage combine_slot_transfer 0xadfda0 completed 12996 different 0 incomplete 0
+tlhybrid: combine_slot_transfer                            PASS (0)
+    coverage bulk_registration_SphereColliderDescriptor 0x6d6ca0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_SphereColliderDescriptor       PASS (0)
+    coverage descriptor_factory_5cc5c0 0x5cc5c0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cc5c0                        PASS (0)
+    coverage descriptor_observed_SaveObject 0x700c40 completed 48 different 0 incomplete 0
+tlhybrid: descriptor_observed_SaveObject                   PASS (0)
+    coverage editor_scene_next_children 0x74b7d0 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_children                       PASS (0)
+    coverage equipment_init_differential 0x889110 completed 1140 different 0 incomplete 0
+tlhybrid: equipment_init_differential                      PASS (0)
+    coverage followup_skill_any_cooling 0xcca7b0 completed 294 different 0 incomplete 0
+tlhybrid: followup_skill_any_cooling                       PASS (0)
+    coverage gameui_entry_recovered_visible_labels 0xab8100 completed 1440 different 0 incomplete 0
+tlhybrid: gameui_entry_recovered_visible_labels            PASS (0)
+    coverage gameui_text_presentation_big 0xa8de80 completed 162 different 0 incomplete 0
+tlhybrid: gameui_text_presentation_big                     PASS (0)
+tlhybrid: journalmenu_destructor_expected_exceptions       PASS (0)
+    coverage menu_observed_add_listener 0xb10430 completed 540 different 0 incomplete 0
+tlhybrid: menu_observed_add_listener                       PASS (0)
+    coverage gameui_ogre_exception_base 0x56bd50 completed 98 different 0 incomplete 0
+tlhybrid: gameui_ogre_exception_base                       PASS (0)
+    coverage petmenu_event_mapping 0xb93070 completed 2304 different 0 incomplete 0
+tlhybrid: petmenu_event_mapping                            PASS (0)
+tlhybrid: questmanager_definition_load_exceptions          PASS (0)
+    coverage quest_unit_parse_closure 0xd46b70 completed 82 different 0 incomplete 0
+tlhybrid: quest_unit_parse_closure                         PASS (0)
+    coverage restore69_810170 0x810170 completed 256 different 0 incomplete 0
+tlhybrid: restore69_810170                                 PASS (0)
+    coverage smallmass2_action_target 0x825310 completed 192 different 0 incomplete 0
+tlhybrid: smallmass2_action_target                         PASS (0)
+    coverage stashmenu_owner 0xbeea90 completed 8192 different 0 incomplete 0
+tlhybrid: stashmenu_owner                                  PASS (0)
+    coverage achievement_increment 0xebe5f0 completed 192 different 0 incomplete 0
+tlhybrid: achievement_increment                            PASS (0)
+    coverage combinemenu_update 0xad4f10 completed 1488 different 0 incomplete 0
+tlhybrid: combinemenu_update                               PASS (0)
+    coverage bulk_registration_TeleportDescriptor 0x679f90 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_TeleportDescriptor             PASS (0)
+    coverage descriptor_factory_5cc700 0x5cc700 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cc700                        PASS (0)
+    coverage descriptor_observed_SaveObjects 0x6f9960 completed 84 different 0 incomplete 0
+tlhybrid: descriptor_observed_SaveObjects                  PASS (0)
+    coverage editor_scene_next_save_binary 0x74b930 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_save_binary                    PASS (0)
+    coverage equipment_inventory_entry_differential 0x884a20 completed 4096 different 0 incomplete 0
+tlhybrid: equipment_inventory_entry_differential           PASS (0)
+    coverage followup_skill_find_level 0xcd2ce0 completed 120 different 0 incomplete 0
+tlhybrid: followup_skill_find_level                        PASS (0)
+    coverage gameui_equipment_tooltip_load_differential 0xa976a0 completed 256 different 0 incomplete 0
+tlhybrid: gameui_equipment_tooltip_load_differential       PASS (0)
+    coverage gameui_text_presentation_cinematic 0xa94c80 completed 111 different 0 incomplete 0
+tlhybrid: gameui_text_presentation_cinematic               PASS (0)
+    coverage journalmenu_update_differential 0xe3a180 completed 1536 different 0 incomplete 0
+tlhybrid: journalmenu_update_differential                  PASS (0)
+    coverage menu_observed_remove_listener 0xb17260 completed 540 different 0 incomplete 0
+tlhybrid: menu_observed_remove_listener                    PASS (0)
+    coverage ogre_resource_int64_read 0xc687c0 completed 20 different 0 incomplete 0
+tlhybrid: ogre_resource_int64_read                         PASS (0)
+    coverage petmenu_set_open 0xb92aa0 completed 1152 different 0 incomplete 0
+tlhybrid: petmenu_set_open                                 PASS (0)
+    coverage quest_name_map_insert_closure 0xd34040 completed 120 different 0 incomplete 0
+tlhybrid: quest_name_map_insert_closure                    PASS (0)
+    coverage quest_unit_pickup_closure 0xd48140 completed 283 different 0 incomplete 0
+tlhybrid: quest_unit_pickup_closure                        PASS (0)
+    coverage restore69_810200 0x810200 completed 256 different 0 incomplete 0
+tlhybrid: restore69_810200                                 PASS (0)
+    coverage smallmass2_action_hit 0x827310 completed 192 different 0 incomplete 0
+tlhybrid: smallmass2_action_hit                            PASS (0)
+    coverage stashmenu_player 0xbee9f0 completed 512 different 0 incomplete 0
+tlhybrid: stashmenu_player                                 PASS (0)
+    coverage astar_observed_reverse 0x592370 completed 120 different 0 incomplete 0
+tlhybrid: astar_observed_reverse                           PASS (0)
+tlhybrid: combinemenu_update_expected_exceptions           PASS (0)
+    coverage bulk_registration_TextureAnimateDescriptor 0x6dafc0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_TextureAnimateDescriptor       PASS (0)
+    coverage descriptor_factory_5cc840 0x5cc840 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cc840                        PASS (0)
+    coverage descriptor_observed_SaveBinary 0x6fe5c0 completed 192 different 0 incomplete 0
+tlhybrid: descriptor_observed_SaveBinary                   PASS (0)
+    coverage editor_scene_next_load_objects 0x74f880 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_load_objects                   PASS (0)
+    coverage equipment_loadmodel_differential 0x887b30 completed 1920 different 0 incomplete 0
+tlhybrid: equipment_loadmodel_differential                 PASS (0)
+    coverage followup_skill_find_name 0xcd3290 completed 40 different 0 incomplete 0
+tlhybrid: followup_skill_find_name                         PASS (0)
+tlhybrid: gameui_equipment_tooltip_load_expected_exceptions PASS (0)
+    coverage gameui_tip_queue 0xa8f450 completed 314 different 0 incomplete 0
+tlhybrid: gameui_tip_queue                                 PASS (0)
+    coverage layout_sound_events 0x75ec10 completed 540 different 0 incomplete 0
+tlhybrid: layout_sound_events                              PASS (0)
+    coverage menu_observed_broadcast 0xb102d0 completed 540 different 0 incomplete 0
+tlhybrid: menu_observed_broadcast                          PASS (0)
+    coverage pov_accelerate_up_down 0x7887d0 completed 48 different 0 incomplete 0
+tlhybrid: pov_accelerate_up_down                           PASS (0)
+tlhybrid: petmenu_open_expected_exceptions                 PASS (0)
+tlhybrid: quest_name_map_insert_exceptions                 PASS (0)
+    coverage quest_unit_populate_closure 0xd48ea0 completed 489 different 0 incomplete 0
+tlhybrid: quest_unit_populate_closure                      PASS (0)
+    coverage restore69_8102d0 0x8102d0 completed 256 different 0 incomplete 0
+tlhybrid: restore69_8102d0                                 PASS (0)
+    coverage smallmass2_action_monster_init 0x8e2ae0 completed 192 different 0 incomplete 0
+tlhybrid: smallmass2_action_monster_init                   PASS (0)
+tlhybrid: stashmenu_listener_expected_exceptions           PASS (0)
+    coverage astar_observed_propagate 0x5925f0 completed 120 different 0 incomplete 0
+tlhybrid: astar_observed_propagate                         PASS (0)
+    coverage gameui_count_children_closure 0xa83250 completed 105 different 0 incomplete 0
+tlhybrid: gameui_count_children_closure                    PASS (0)
+    coverage bulk_registration_TextureRotateDescriptor 0x6df4f0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_TextureRotateDescriptor        PASS (0)
+    coverage descriptor_factory_5cc970 0x5cc970 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cc970                        PASS (0)
+    coverage descriptor_observed_LoadBinary 0x6ff040 completed 192 different 0 incomplete 0
+tlhybrid: descriptor_observed_LoadBinary                   PASS (0)
+    coverage editor_scene_next_configure_groups 0x74eaf0 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_configure_groups               PASS (0)
+    coverage equipment_missile_apply_differential 0x86e540 completed 2304 different 0 incomplete 0
+tlhybrid: equipment_missile_apply_differential             PASS (0)
+    coverage followup_skill_reset_levels 0xcd5090 completed 144 different 0 incomplete 0
+tlhybrid: followup_skill_reset_levels                      PASS (0)
+    coverage gameui_event_click_dispatch 0xa83690 completed 96 different 0 incomplete 0
+tlhybrid: gameui_event_click_dispatch                      PASS (0)
+    coverage gameui_update_slots_differential 0xa98c20 completed 592 different 0 incomplete 0
+tlhybrid: gameui_update_slots_differential                 PASS (0)
+    coverage level_template_random_layout 0x9713c0 completed 640 different 0 incomplete 0
+tlhybrid: level_template_random_layout                     PASS (0)
+    coverage menu_observed_quest_over 0xbba1e0 completed 1152 different 0 incomplete 0
+tlhybrid: menu_observed_quest_over                         PASS (0)
+    coverage pov_accelerate_forward 0x788830 completed 48 different 0 incomplete 0
+tlhybrid: pov_accelerate_forward                           PASS (0)
+    coverage petmenu_set_spell 0xb88dd0 completed 7680 different 0 incomplete 0
+tlhybrid: petmenu_set_spell                                PASS (0)
+    coverage questmanager_constructor_definition_consumers 0xd32300 completed 2 different 0 incomplete 0
+tlhybrid: questmanager_constructor_definition_consumers    PASS (0)
+    coverage quest_unit_complete_closure 0xd3dd20 completed 109 different 0 incomplete 0
+tlhybrid: quest_unit_complete_closure                      PASS (0)
+    coverage restore69_8138a0 0x8138a0 completed 256 different 0 incomplete 0
+tlhybrid: restore69_8138a0                                 PASS (0)
+    coverage smallmass2_action_fidget 0x8e1390 completed 192 different 0 incomplete 0
+tlhybrid: smallmass2_action_fidget                         PASS (0)
+    coverage stashmenu_update 0xbf6ef0 completed 1536 different 0 incomplete 0
+tlhybrid: stashmenu_update                                 PASS (0)
+    coverage astar_observed_successor 0x592710 completed 120 different 0 incomplete 0
+tlhybrid: astar_observed_successor                         PASS (0)
+    coverage data_group_new_add_string 0xc5fb30 completed 36 different 0 incomplete 0
+tlhybrid: data_group_new_add_string                        PASS (0)
+    coverage bulk_registration_TriggerBoxDescriptor 0x67d4b0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_TriggerBoxDescriptor           PASS (0)
+    coverage descriptor_factory_5ccaa0 0x5ccaa0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ccaa0                        PASS (0)
+    coverage descriptor_observed_Broadcast 0x700410 completed 192 different 0 incomplete 0
+tlhybrid: descriptor_observed_Broadcast                    PASS (0)
+    coverage editor_scene_next_save_children 0x74f100 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_save_children                  PASS (0)
+    coverage equipment_missile_death_differential 0x86e360 completed 5589 different 0 incomplete 0
+tlhybrid: equipment_missile_death_differential             PASS (0)
+    coverage followup_skill_property_cooldown 0xcdd1f0 completed 196 different 0 incomplete 0
+tlhybrid: followup_skill_property_cooldown                 PASS (0)
+    coverage gameui_event_skill_hover 0xa83820 completed 168 different 0 incomplete 0
+tlhybrid: gameui_event_skill_hover                         PASS (0)
+    coverage gameui_window_bindings_events 0xa97e00 completed 309 different 0 incomplete 0
+tlhybrid: gameui_window_bindings_events                    PASS (0)
+    coverage level_template_reset_odds 0x971410 completed 640 different 0 incomplete 0
+tlhybrid: level_template_reset_odds                        PASS (0)
+    coverage menu_observed_quest_out 0xbba120 completed 1152 different 0 incomplete 0
+tlhybrid: menu_observed_quest_out                          PASS (0)
+    coverage pov_accelerate_lateral 0x788890 completed 48 different 0 incomplete 0
+tlhybrid: pov_accelerate_lateral                           PASS (0)
+tlhybrid: petmenu_spell_expected_exceptions                PASS (0)
+    coverage questmanager_reload_definition_consumers 0xd321f0 completed 2 different 0 incomplete 0
+tlhybrid: questmanager_reload_definition_consumers         PASS (0)
+    coverage quest_unit_random_closure 0xd45ac0 completed 289 different 0 incomplete 0
+tlhybrid: quest_unit_random_closure                        PASS (0)
+    coverage restore69_814440 0x814440 completed 256 different 0 incomplete 0
+tlhybrid: restore69_814440                                 PASS (0)
+    coverage smallmass2_action_defense 0x815910 completed 192 different 0 incomplete 0
+tlhybrid: smallmass2_action_defense                        PASS (0)
+tlhybrid: stashmenu_update_expected_exceptions             PASS (0)
+    coverage astar_observed_successors 0x592900 completed 512 different 0 incomplete 0
+tlhybrid: astar_observed_successors                        PASS (0)
+    coverage data_group_new_add_bool 0xc5fe70 completed 36 different 0 incomplete 0
+tlhybrid: data_group_new_add_bool                          PASS (0)
+    coverage bulk_registration_TriggerDescriptor 0x680a40 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_TriggerDescriptor              PASS (0)
+    coverage descriptor_factory_5ccbd0 0x5ccbd0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ccbd0                        PASS (0)
+    coverage followup_player_class_id 0x638bb0 completed 48 different 0 incomplete 0
+tlhybrid: followup_player_class_id                         PASS (0)
+    coverage editor_scene_next_construct 0x74ed30 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_construct                      PASS (0)
+    coverage equipment_particles_differential 0x885a70 completed 2144 different 0 incomplete 0
+tlhybrid: equipment_particles_differential                 PASS (0)
+    coverage followup_skill_controller_start 0xe20650 completed 32 different 0 incomplete 0
+tlhybrid: followup_skill_controller_start                  PASS (0)
+    coverage gameui_event_item_names 0xa83b00 completed 48 different 0 incomplete 0
+tlhybrid: gameui_event_item_names                          PASS (0)
+    coverage gameui_window_bindings_functions 0xa980e0 completed 321 different 0 incomplete 0
+tlhybrid: gameui_window_bindings_functions                 PASS (0)
+    coverage level_template_unit_count 0x971530 completed 2200 different 0 incomplete 0
+tlhybrid: level_template_unit_count                        PASS (0)
+    coverage menu_observed_scroll_down 0xc3e2c0 completed 240 different 0 incomplete 0
+tlhybrid: menu_observed_scroll_down                        PASS (0)
+    coverage pov_damp_contact 0x788690 completed 48 different 0 incomplete 0
+tlhybrid: pov_damp_contact                                 PASS (0)
+    coverage petmenu_owner 0xb88f70 completed 144 different 0 incomplete 0
+tlhybrid: petmenu_owner                                    PASS (0)
+tlhybrid: questmanager_console_reload_consumer             PASS (0)
+    coverage quest_unit_save_closure 0xd3dda0 completed 67 different 0 incomplete 0
+tlhybrid: quest_unit_save_closure                          PASS (0)
+    coverage restore69_815a20 0x815a20 completed 256 different 0 incomplete 0
+tlhybrid: restore69_815a20                                 PASS (0)
+    coverage smallmass2_action_mouse_plane 0x774b80 completed 192 different 0 incomplete 0
+tlhybrid: smallmass2_action_mouse_plane                    PASS (0)
+    coverage stash_pet_slot_transfer 0xbf7cc0 completed 12960 different 0 incomplete 0
+tlhybrid: stash_pet_slot_transfer                          PASS (0)
+    coverage astar_observed_free 0x592540 completed 120 different 0 incomplete 0
+tlhybrid: astar_observed_free                              PASS (0)
+    coverage data_group_new_add_double 0xc603e0 completed 36 different 0 incomplete 0
+tlhybrid: data_group_new_add_double                        PASS (0)
+    coverage bulk_registration_TriggerSphereDescriptor 0x683f90 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_TriggerSphereDescriptor        PASS (0)
+    coverage descriptor_factory_5ccd00 0x5ccd00 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ccd00                        PASS (0)
+    coverage button_descriptor_registration 0xd9acd0 completed 48 different 0 incomplete 0
+tlhybrid: button_descriptor_registration                   PASS (0)
+    coverage editor_scene_next_destroy 0x74e960 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_destroy                        PASS (0)
+    coverage equipment_price_differential 0x883e20 completed 9792 different 0 incomplete 0
+tlhybrid: equipment_price_differential                     PASS (0)
+    coverage followup_skill_controller_stop 0xe20620 completed 32 different 0 incomplete 0
+tlhybrid: followup_skill_controller_stop                   PASS (0)
+    coverage gameui_event_slot_hover 0xa83c30 completed 196 different 0 incomplete 0
+tlhybrid: gameui_event_slot_hover                          PASS (0)
+    coverage graph_manager_load_observed 0xa520a0 completed 210 different 0 incomplete 0
+tlhybrid: graph_manager_load_observed                      PASS (0)
+    coverage logic_group_remove_link 0x795d60 completed 216 different 0 incomplete 0
+tlhybrid: logic_group_remove_link                          PASS (0)
+    coverage menu_mass_buttons_differential 0xb800a0 completed 1080 different 0 incomplete 0
+    coverage menu_mass_buttons_differential 0xb77660 completed 1080 different 0 incomplete 0
+    coverage menu_mass_buttons_differential 0xb060c0 completed 1080 different 0 incomplete 0
+    coverage menu_mass_buttons_differential 0xb060f0 completed 1080 different 0 incomplete 0
+    coverage menu_mass_buttons_differential 0xb343d0 completed 1080 different 0 incomplete 0
+    coverage menu_mass_buttons_differential 0xb34400 completed 1080 different 0 incomplete 0
+    coverage menu_mass_buttons_differential 0xbba0f0 completed 1080 different 0 incomplete 0
+tlhybrid: menu_mass_buttons_differential                   PASS (0)
+    coverage pov_extract_orientation 0x7885d0 completed 48 different 0 incomplete 0
+tlhybrid: pov_extract_orientation                          PASS (0)
+    coverage petmenu_notifications 0xb89020 completed 4800 different 0 incomplete 0
+tlhybrid: petmenu_notifications                            PASS (0)
+    coverage questmanager_lifecycle_constructor 0xd32300 completed 32 different 0 incomplete 0
+tlhybrid: questmanager_lifecycle_constructor               PASS (0)
+    coverage quest_unit_resolver_spawn_closure 0xd47de0 completed 344 different 0 incomplete 0
+    coverage quest_unit_resolver_spawn_closure 0xd3ded0 completed 178 different 0 incomplete 0
+tlhybrid: quest_unit_resolver_spawn_closure                PASS (0)
+    coverage restore69_815ad0 0x815ad0 completed 256 different 0 incomplete 0
+tlhybrid: restore69_815ad0                                 PASS (0)
+    coverage smallmass2_action_camera_plane 0x7750e0 completed 192 different 0 incomplete 0
+tlhybrid: smallmass2_action_camera_plane                   PASS (0)
+    coverage stats_fill_add_differential 0xc21f30 completed 4320 different 0 incomplete 0
+tlhybrid: stats_fill_add_differential                      PASS (0)
+    coverage astar_observed_create 0x592da0 completed 240 different 0 incomplete 0
+tlhybrid: astar_observed_create                            PASS (0)
+    coverage data_group_new_add_float 0xc60560 completed 36 different 0 incomplete 0
+tlhybrid: data_group_new_add_float                         PASS (0)
+    coverage bulk_registration_UnitSpawnerDescriptor 0x65c410 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_UnitSpawnerDescriptor          PASS (0)
+    coverage descriptor_factory_5cce30 0x5cce30 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cce30                        PASS (0)
+    coverage image_descriptor_registration 0xda0860 completed 48 different 0 incomplete 0
+tlhybrid: image_descriptor_registration                    PASS (0)
+    coverage editor_scene_next_clone 0x750180 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_clone                          PASS (0)
+    coverage equipment_procs_differential 0x86f4a0 completed 9284 different 0 incomplete 0
+tlhybrid: equipment_procs_differential                     PASS (0)
+    coverage followup_logic_group_remove 0x795db0 completed 240 different 0 incomplete 0
+tlhybrid: followup_logic_group_remove                      PASS (0)
+    coverage gameui_event_mouse_through 0xa83e20 completed 88 different 0 incomplete 0
+tlhybrid: gameui_event_mouse_through                       PASS (0)
+    coverage graph_manager_reload_observed 0xa52480 completed 210 different 0 incomplete 0
+tlhybrid: graph_manager_reload_observed                    PASS (0)
+    coverage logic_object_removal_differential 0x7a7d40 completed 128 different 0 incomplete 0
+    coverage logic_object_removal_differential 0x7a7e00 completed 128 different 0 incomplete 0
+tlhybrid: logic_object_removal_differential                PASS (0)
+    coverage menu_mass_dispatch_differential 0xafcd10 completed 1080 different 0 incomplete 0
+    coverage menu_mass_dispatch_differential 0xc4ae80 completed 1080 different 0 incomplete 0
+    coverage menu_mass_dispatch_differential 0xc42cb0 completed 1080 different 0 incomplete 0
+    coverage menu_mass_dispatch_differential 0xc334e0 completed 1080 different 0 incomplete 0
+    coverage menu_mass_dispatch_differential 0xc3fe80 completed 1080 different 0 incomplete 0
+    coverage menu_mass_dispatch_differential 0xb17380 completed 1080 different 0 incomplete 0
+tlhybrid: menu_mass_dispatch_differential                  PASS (0)
+    coverage pov_update_flying_to 0x7889e0 completed 96 different 0 incomplete 0
+tlhybrid: pov_update_flying_to                             PASS (0)
+    coverage petmenu_mouse_out 0xb88d40 completed 1728 different 0 incomplete 0
+tlhybrid: petmenu_mouse_out                                PASS (0)
+tlhybrid: questmanager_lifecycle_constructor_unwind        PASS (0)
+    coverage quest_unit_spawn_class_closure 0xd476b0 completed 400 different 0 incomplete 0
+tlhybrid: quest_unit_spawn_class_closure                   PASS (0)
+    coverage restore69_815c90 0x815c90 completed 256 different 0 incomplete 0
+tlhybrid: restore69_815c90                                 PASS (0)
+    coverage smallmass2_inventory_console_skill 0xaf15c0 completed 128 different 0 incomplete 0
+tlhybrid: smallmass2_inventory_console_skill               PASS (0)
+    coverage stats_fill_remove_differential 0xc22200 completed 1440 different 0 incomplete 0
+tlhybrid: stats_fill_remove_differential                   PASS (0)
+    coverage astar_observed_wide 0x592f70 completed 240 different 0 incomplete 0
+tlhybrid: astar_observed_wide                              PASS (0)
+    coverage data_group_new_add_uint 0xc606e0 completed 36 different 0 incomplete 0
+tlhybrid: data_group_new_add_uint                          PASS (0)
+    coverage bulk_registration_VortexAffectorDescriptor 0x6e3a70 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_VortexAffectorDescriptor       PASS (0)
+    coverage descriptor_factory_5ccf60 0x5ccf60 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ccf60                        PASS (0)
+    coverage missile_descriptor_registration 0x602dc0 completed 48 different 0 incomplete 0
+tlhybrid: missile_descriptor_registration                  PASS (0)
+    coverage editor_scene_next_merge 0x74ef60 completed 576 different 0 incomplete 0
+tlhybrid: editor_scene_next_merge                          PASS (0)
+    coverage equipment_renderbehind_differential 0x86ebd0 completed 224 different 0 incomplete 0
+tlhybrid: equipment_renderbehind_differential              PASS (0)
+    coverage followup_strings_c8daf0 0xc8daf0 completed 84 different 0 incomplete 0
+tlhybrid: followup_strings_c8daf0                          PASS (0)
+    coverage gameui_imageset_registry_add 0xa84740 completed 45 different 0 incomplete 0
+tlhybrid: gameui_imageset_registry_add                     PASS (0)
+tlhybrid: graph_manager_loading_and_duplicates             PASS (0)
+    coverage logic_timer_observed 0x988020 completed 768 different 0 incomplete 0
+tlhybrid: logic_timer_observed                             PASS (0)
+    coverage menu_more_double_click 0xb192e0 completed 1324 different 0 incomplete 0
+tlhybrid: menu_more_double_click                           PASS (0)
+    coverage particle_emitter_parent_differential 0xa32ae0 completed 64 different 0 incomplete 0
+tlhybrid: particle_emitter_parent_differential             PASS (0)
+    coverage petmenu_input 0xb88b60 completed 3072 different 0 incomplete 0
+tlhybrid: petmenu_input                                    PASS (0)
+    coverage questmanager_lifecycle_reload 0xd321f0 completed 72 different 0 incomplete 0
+tlhybrid: questmanager_lifecycle_reload                    PASS (0)
+    coverage quest_unit_state_closure 0xd493d0 completed 104 different 0 incomplete 0
+    coverage quest_unit_state_closure 0xd494d0 completed 225 different 0 incomplete 0
+tlhybrid: quest_unit_state_closure                         PASS (0)
+    coverage restore69_816330 0x816330 completed 256 different 0 incomplete 0
+tlhybrid: restore69_816330                                 PASS (0)
+    coverage smallmass2_inventory_console_speed 0xaf16f0 completed 128 different 0 incomplete 0
+tlhybrid: smallmass2_inventory_console_speed               PASS (0)
+    coverage stats_fill_tick_differential 0xc22380 completed 4608 different 0 incomplete 0
+tlhybrid: stats_fill_tick_differential                     PASS (0)
+    coverage astar_observed_nearest 0x593160 completed 240 different 0 incomplete 0
+tlhybrid: astar_observed_nearest                           PASS (0)
+    coverage data_group_new_add_group 0xc61c00 completed 42 different 0 incomplete 0
+tlhybrid: data_group_new_add_group                         PASS (0)
+    coverage bulk_registration_WarperDescriptor 0x692230 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_WarperDescriptor               PASS (0)
+    coverage descriptor_factory_5cd090 0x5cd090 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cd090                        PASS (0)
+    coverage increment_descriptor_registration 0x66e4f0 completed 192 different 0 incomplete 0
+tlhybrid: increment_descriptor_registration                PASS (0)
+    coverage enchant_create_menus_differential 0xb2e0a0 completed 3136 different 0 incomplete 0
+tlhybrid: enchant_create_menus_differential                PASS (0)
+    coverage equipment_requirement_values_differential 0x86dc50 completed 3072 different 0 incomplete 0
+    coverage equipment_requirement_values_differential 0x86dae0 completed 3072 different 0 incomplete 0
+    coverage equipment_requirement_values_differential 0x86d970 completed 3072 different 0 incomplete 0
+    coverage equipment_requirement_values_differential 0x86d800 completed 3072 different 0 incomplete 0
+    coverage equipment_requirement_values_differential 0x86ddc0 completed 3072 different 0 incomplete 0
+tlhybrid: equipment_requirement_values_differential        PASS (0)
+    coverage followup_strings_c8e0e0 0xc8e0e0 completed 84 different 0 incomplete 0
+tlhybrid: followup_strings_c8e0e0                          PASS (0)
+    coverage gameui_imageset_registry_select 0xa98460 completed 291 different 0 incomplete 0
+tlhybrid: gameui_imageset_registry_select                  PASS (0)
+tlhybrid: graph_curve_loading                              PASS (0)
+    coverage logic_incrementor_observed 0x991e20 completed 768 different 0 incomplete 0
+tlhybrid: logic_incrementor_observed                       PASS (0)
+    coverage menu_more_click 0xb194e0 completed 1400 different 0 incomplete 0
+tlhybrid: menu_more_click                                  PASS (0)
+    coverage pass10_bool_text 0xc8dca0 completed 32 different 0 incomplete 0
+tlhybrid: pass10_bool_text                                 PASS (0)
+    coverage pet_slot_icon_transfer 0xba16b0 completed 1728 different 0 incomplete 0
+tlhybrid: pet_slot_icon_transfer                           PASS (0)
+tlhybrid: questmanager_lifecycle_reload_unwind             PASS (0)
+    coverage randomizer_remove_observed 0xc8a2c0 completed 540 different 0 incomplete 0
+tlhybrid: randomizer_remove_observed                       PASS (0)
+    coverage restore69_8163a0 0x8163a0 completed 256 different 0 incomplete 0
+tlhybrid: restore69_8163a0                                 PASS (0)
+    coverage smallmass2_inventory_console_shake 0xaef6b0 completed 128 different 0 incomplete 0
+tlhybrid: smallmass2_inventory_console_shake               PASS (0)
+    coverage stats_fill_buttons_differential 0xc18b80 completed 120 different 0 incomplete 0
+    coverage stats_fill_buttons_differential 0xc18be0 completed 120 different 0 incomplete 0
+tlhybrid: stats_fill_buttons_differential                  PASS (0)
+    coverage astar_observed_directed 0x5932e0 completed 240 different 0 incomplete 0
+tlhybrid: astar_observed_directed                          PASS (0)
+    coverage data_group_find_value 0xc5f1c0 completed 40 different 0 incomplete 0
+tlhybrid: data_group_find_value                            PASS (0)
+    coverage bulk_registration_BaseObjectDescriptor 0x5adb70 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_BaseObjectDescriptor           PASS (0)
+    coverage descriptor_factory_5cd1c0 0x5cd1c0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cd1c0                        PASS (0)
+tlhybrid: descriptor_callback_identity                     PASS (0)
+    coverage enchant_interaction_boundaries 0xb26290 completed 3520 different 0 incomplete 0
+tlhybrid: enchant_interaction_boundaries                   PASS (0)
+    coverage equipment_requirements_differential 0x880030 completed 6720 different 0 incomplete 0
+tlhybrid: equipment_requirements_differential              PASS (0)
+    coverage followup_strings_c8e190 0xc8e190 completed 84 different 0 incomplete 0
+tlhybrid: followup_strings_c8e190                          PASS (0)
+    coverage gameui_imageset_registry_image 0xa98630 completed 317 different 0 incomplete 0
+tlhybrid: gameui_imageset_registry_image                   PASS (0)
+tlhybrid: headless_environment                             PASS (0)
+tlhybrid: LogicTimer_shadow                                PASS (0)
+    coverage menu_more_die_click 0xb05ec0 completed 1440 different 0 incomplete 0
+tlhybrid: menu_more_die_click                              PASS (0)
+    coverage pass10_inventory_pane 0x91b130 completed 3600 different 0 incomplete 0
+tlhybrid: pass10_inventory_pane                            PASS (0)
+    coverage pet_update_differential 0xb9b0d0 completed 2048 different 0 incomplete 0
+tlhybrid: pet_update_differential                          PASS (0)
+    coverage questmanager_lifecycle_destructor 0xd2e930 completed 72 different 0 incomplete 0
+    coverage questmanager_lifecycle_destructor 0xd2e930 completed 72 different 0 incomplete 0
+    coverage questmanager_lifecycle_destructor 0xd2ebf0 completed 72 different 0 incomplete 0
+tlhybrid: questmanager_lifecycle_destructor                PASS (0)
+    coverage randomizer_index_observed 0xc8a8f0 completed 540 different 0 incomplete 0
+tlhybrid: randomizer_index_observed                        PASS (0)
+    coverage restore69_812580 0x812580 completed 256 different 0 incomplete 0
+tlhybrid: restore69_812580                                 PASS (0)
+    coverage smallmass2_inventory_console_spawn 0xaef980 completed 128 different 0 incomplete 0
+tlhybrid: smallmass2_inventory_console_spawn               PASS (0)
+    coverage stats_fill_constructor_differential 0xc2b080 completed 128 different 0 incomplete 0
+tlhybrid: stats_fill_constructor_differential              PASS (0)
+    coverage astar_observed_find 0x593530 completed 240 different 0 incomplete 0
+tlhybrid: astar_observed_find                              PASS (0)
+    coverage data_group_matching_groups 0xc5f910 completed 40 different 0 incomplete 0
+tlhybrid: data_group_matching_groups                       PASS (0)
+    coverage bulk_registration_PositionableObjectDescriptor 0x624bd0 completed 768 different 0 incomplete 0
+tlhybrid: bulk_registration_PositionableObjectDescriptor   PASS (0)
+    coverage descriptor_factory_5cd2f0 0x5cd2f0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cd2f0                        PASS (0)
+    coverage descriptor_remap_lookup 0x701d50 completed 180 different 0 incomplete 0
+tlhybrid: descriptor_remap_lookup                          PASS (0)
+    coverage enchant_interaction_ownership 0xb26290 completed 1152 different 0 incomplete 0
+tlhybrid: enchant_interaction_ownership                    PASS (0)
+    coverage equipment_reskin_differential 0x888920 completed 5280 different 0 incomplete 0
+tlhybrid: equipment_reskin_differential                    PASS (0)
+    coverage followup_strings_c8e350 0xc8e350 completed 84 different 0 incomplete 0
+tlhybrid: followup_strings_c8e350                          PASS (0)
+    coverage gameui_interactive_dialog 0xa8e140 completed 327 different 0 incomplete 0
+tlhybrid: gameui_interactive_dialog                        PASS (0)
+tlhybrid: Hybrid_exceptions                                PASS (0)
+tlhybrid: OutputIncrementor_shadow                         PASS (0)
+    coverage menu_more_cinematic_open 0xe98e50 completed 1440 different 0 incomplete 0
+tlhybrid: menu_more_cinematic_open                         PASS (0)
+    coverage pass10_menu_input 0x56e4d0 completed 1536 different 0 incomplete 0
+tlhybrid: pass10_menu_input                                PASS (0)
+    coverage property_list_value_differential 0x706600 completed 48 different 0 incomplete 0
+tlhybrid: property_list_value_differential                 PASS (0)
+tlhybrid: questmanager_lifecycle_destructor_unwind         PASS (0)
+    coverage randomizer_get_observed 0xc8aa10 completed 540 different 0 incomplete 0
+tlhybrid: randomizer_get_observed                          PASS (0)
+    coverage room_piece_parent_guid 0x9fa500 completed 80 different 0 incomplete 0
+tlhybrid: room_piece_parent_guid                           PASS (0)
+    coverage smallmass2_inventory_swap 0x925d30 completed 128 different 0 incomplete 0
+tlhybrid: smallmass2_inventory_swap                        PASS (0)
+tlhybrid: stats_fill_constructor_expected_exceptions       PASS (0)
+tlhybrid: Astar_reverse                                    PASS (0)
+    coverage data_group_set_wide 0xc5fd50 completed 40 different 0 incomplete 0
+tlhybrid: data_group_set_wide                              PASS (0)
+    coverage bulk_registration_ShapeDescriptor 0x64cc40 completed 192 different 0 incomplete 0
+tlhybrid: bulk_registration_ShapeDescriptor                PASS (0)
+    coverage descriptor_factory_5cd420 0x5cd420 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cd420                        PASS (0)
+tlhybrid: Descriptor_logicWrappers                         PASS (0)
+    coverage enchant_interaction_differential 0xb26290 completed 720 different 0 incomplete 0
+tlhybrid: enchant_interaction_differential                 PASS (0)
+    coverage equipment_rimlight_production 0x87e2c0 completed 512 different 0 incomplete 0
+tlhybrid: equipment_rimlight_production                    PASS (0)
+    coverage followup_strings_c8e810 0xc8e810 completed 28 different 0 incomplete 0
+tlhybrid: followup_strings_c8e810                          PASS (0)
+    coverage gameui_item_hover_clear 0xa83300 completed 192 different 0 incomplete 0
+tlhybrid: gameui_item_hover_clear                          PASS (0)
+    coverage ingame_input_control_differential 0xab6080 completed 600 different 0 incomplete 0
+tlhybrid: ingame_input_control_differential                PASS (0)
+    coverage mass3_842150 0x842150 completed 128 different 0 incomplete 0
+tlhybrid: mass3_842150                                     PASS (0)
+    coverage menu_more_cinematic_update 0xe99800 completed 1440 different 0 incomplete 0
+tlhybrid: menu_more_cinematic_update                       PASS (0)
+    coverage pass10_effect_has_type 0x7eb580 completed 2880 different 0 incomplete 0
+tlhybrid: pass10_effect_has_type                           PASS (0)
+    coverage puzzle_randomizer_update_differential 0x993870 completed 64 different 0 incomplete 0
+tlhybrid: puzzle_randomizer_update_differential            PASS (0)
+    coverage questmanager_name_lookup 0xd2dda0 completed 144 different 0 incomplete 0
+tlhybrid: questmanager_name_lookup                         PASS (0)
+tlhybrid: Randomizer_shadow                                PASS (0)
+    coverage room_piece_closest_guid 0xa60f40 completed 324 different 0 incomplete 0
+tlhybrid: room_piece_closest_guid                          PASS (0)
+    coverage smallmass2_inventory_procs 0x91c720 completed 128 different 0 incomplete 0
+tlhybrid: smallmass2_inventory_procs                       PASS (0)
+    coverage stats_fill_create_differential 0xc22580 completed 1730 different 0 incomplete 0
+tlhybrid: stats_fill_create_differential                   PASS (0)
+tlhybrid: Astar_propagate                                  PASS (0)
+    coverage data_group_set_string 0xc5fde0 completed 40 different 0 incomplete 0
+tlhybrid: data_group_set_string                            PASS (0)
+    coverage bulk_registration_UnitTriggerDescriptor 0x68d630 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_UnitTriggerDescriptor          PASS (0)
+    coverage descriptor_factory_5cd550 0x5cd550 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cd550                        PASS (0)
+tlhybrid: Descriptor_addProperty                           PASS (0)
+    coverage enchant_layout_empty 0xb2af60 completed 864 different 0 incomplete 0
+tlhybrid: enchant_layout_empty                             PASS (0)
+tlhybrid: equipment_rimlight_expected_exceptions           PASS (0)
+    coverage followup_strings_c8ea50 0xc8ea50 completed 84 different 0 incomplete 0
+tlhybrid: followup_strings_c8ea50                          PASS (0)
+    coverage gameui_item_hover_activate 0xa83cf0 completed 365 different 0 incomplete 0
+tlhybrid: gameui_item_hover_activate                       PASS (0)
+tlhybrid: ingame_input_exception_cleanup                   PASS (0)
+    coverage mass3_837630 0x837630 completed 128 different 0 incomplete 0
+tlhybrid: mass3_837630                                     PASS (0)
+    coverage menu_more_quest_open 0xbae150 completed 1440 different 0 incomplete 0
+tlhybrid: menu_more_quest_open                             PASS (0)
+    coverage pass10_effect_has_name 0x7f35e0 completed 2880 different 0 incomplete 0
+tlhybrid: pass10_effect_has_name                           PASS (0)
+    coverage questmanager_acquisition_events 0xd2f470 completed 80 different 0 incomplete 0
+tlhybrid: questmanager_acquisition_events                  PASS (0)
+    coverage questmanager_complete_lookup 0xd2dca0 completed 144 different 0 incomplete 0
+tlhybrid: questmanager_complete_lookup                     PASS (0)
+    coverage resource_manager_editor_running 0xd6f4e0 completed 64 different 0 incomplete 0
+tlhybrid: resource_manager_editor_running                  PASS (0)
+    coverage room_piece_descriptor_index_string 0x63d270 completed 60 different 0 incomplete 0
+tlhybrid: room_piece_descriptor_index_string               PASS (0)
+    coverage smallmass2_inventory_equip_specific 0x9256a0 completed 128 different 0 incomplete 0
+tlhybrid: smallmass2_inventory_equip_specific              PASS (0)
+    coverage stats_fill_hover_differential 0xc20dc0 completed 540 different 0 incomplete 0
+tlhybrid: stats_fill_hover_differential                    PASS (0)
+tlhybrid: Astar_successor                                  PASS (0)
+    coverage data_group_add_int64 0xc5fff0 completed 24 different 0 incomplete 0
+tlhybrid: data_group_add_int64                             PASS (0)
+    coverage bulk_registration_AffectorDescriptor 0x696f70 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_AffectorDescriptor             PASS (0)
+    coverage descriptor_factory_5cd680 0x5cd680 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cd680                        PASS (0)
+tlhybrid: Descriptor_propertyValues                        PASS (0)
+    coverage enchant_layout_render 0xb2af60 completed 5184 different 0 incomplete 0
+tlhybrid: enchant_layout_render                            PASS (0)
+    coverage equipment_save_differential 0x8867c0 completed 5120 different 0 incomplete 0
+tlhybrid: equipment_save_differential                      PASS (0)
+    coverage followup_strings_c90a30 0xc90a30 completed 28 different 0 incomplete 0
+tlhybrid: followup_strings_c90a30                          PASS (0)
+    coverage gameui_item_hover_cursor 0xa83d60 completed 45 different 0 incomplete 0
+tlhybrid: gameui_item_hover_cursor                         PASS (0)
+    coverage ingame_input_early_exit_differential 0xab6080 completed 96 different 0 incomplete 0
+tlhybrid: ingame_input_early_exit_differential             PASS (0)
+    coverage mass3_83c140 0x83c140 completed 128 different 0 incomplete 0
+tlhybrid: mass3_83c140                                     PASS (0)
+    coverage menu_more_delete_character 0xc3fd00 completed 1440 different 0 incomplete 0
+tlhybrid: menu_more_delete_character                       PASS (0)
+    coverage pass10_effect_value 0x7eb5f0 completed 2880 different 0 incomplete 0
+tlhybrid: pass10_effect_value                              PASS (0)
+    coverage questmanager_give_acquisition 0xd33150 completed 78 different 0 incomplete 0
+tlhybrid: questmanager_give_acquisition                    PASS (0)
+    coverage questmanager_persistence_original_quest_integration 0xd2f8a0 completed 24 different 0 incomplete 0
+tlhybrid: questmanager_persistence_original_quest_integration PASS (0)
+    coverage resource_manager_create_from_group 0xd78c50 completed 80 different 0 incomplete 0
+tlhybrid: resource_manager_create_from_group               PASS (0)
+    coverage room_piece_descriptor_string_index 0x63d310 completed 108 different 0 incomplete 0
+tlhybrid: room_piece_descriptor_string_index               PASS (0)
+    coverage smallmass2_record_learn 0x80f930 completed 96 different 0 incomplete 0
+tlhybrid: smallmass2_record_learn                          PASS (0)
+    coverage stats_fill_spent_differential 0xc18b00 completed 324 different 0 incomplete 0
+tlhybrid: stats_fill_spent_differential                    PASS (0)
+tlhybrid: Astar_successors                                 PASS (0)
+    coverage data_group_add_int32 0xc60160 completed 24 different 0 incomplete 0
+tlhybrid: data_group_add_int32                             PASS (0)
+    coverage bulk_registration_ParticleEmitterWrapperDescriptor 0x6e8010 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_ParticleEmitterWrapperDescriptor PASS (0)
+    coverage descriptor_factory_5cd7b0 0x5cd7b0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cd7b0                        PASS (0)
+tlhybrid: Descriptor_defaults                              PASS (0)
+    coverage enchant_layout_services 0xb2af60 completed 4540 different 0 incomplete 0
+tlhybrid: enchant_layout_services                          PASS (0)
+    coverage equipment_skill_description_differential 0x87e640 completed 7200 different 0 incomplete 0
+tlhybrid: equipment_skill_description_differential         PASS (0)
+    coverage game_state_switch_observed 0xdd3ca0 completed 288 different 0 incomplete 0
+tlhybrid: game_state_switch_observed                       PASS (0)
+    coverage gameui_item_hover_delete_item 0xa84050 completed 162 different 0 incomplete 0
+tlhybrid: gameui_item_hover_delete_item                    PASS (0)
+    coverage inventory_create_menus_differential 0xb569e0 completed 3136 different 0 incomplete 0
+tlhybrid: inventory_create_menus_differential              PASS (0)
+    coverage mass3_8132f0 0x8132f0 completed 192 different 0 incomplete 0
+tlhybrid: mass3_8132f0                                     PASS (0)
+    coverage menu_more_abandon_quest 0xbc1cb0 completed 1440 different 0 incomplete 0
+tlhybrid: menu_more_abandon_quest                          PASS (0)
+    coverage pass10_effect_active 0x7eb7c0 completed 2880 different 0 incomplete 0
+tlhybrid: pass10_effect_active                             PASS (0)
+tlhybrid: questmanager_acquisition_events_exceptions       PASS (0)
+    coverage questmanager_persistence_load 0xd2f8a0 completed 10 different 0 incomplete 0
+tlhybrid: questmanager_persistence_load                    PASS (0)
+    coverage restore69_80ec70 0x80ec70 completed 128 different 0 incomplete 0
+tlhybrid: restore69_80ec70                                 PASS (0)
+    coverage runic_destroy_observed 0xd79920 completed 294 different 0 incomplete 0
+tlhybrid: runic_destroy_observed                           PASS (0)
+    coverage smallmass2_record_animation 0x82e750 completed 96 different 0 incomplete 0
+tlhybrid: smallmass2_record_animation                      PASS (0)
+    coverage stats_fill_update_differential 0xc21540 completed 390 different 0 incomplete 0
+tlhybrid: stats_fill_update_differential                   PASS (0)
+tlhybrid: Astar_free                                       PASS (0)
+    coverage data_value_type_labels 0xc62f90 completed 45 different 0 incomplete 0
+tlhybrid: data_value_type_labels                           PASS (0)
+    coverage bulk_registration_ParticleTechWrapperDescriptor 0x6f09a0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_ParticleTechWrapperDescriptor  PASS (0)
+    coverage descriptor_factory_5cd8e0 0x5cd8e0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cd8e0                        PASS (0)
+tlhybrid: Descriptor_dataGroups                            PASS (0)
+    coverage enchantmenu_constructor 0xb33d30 completed 256 different 0 incomplete 0
+tlhybrid: enchantmenu_constructor                          PASS (0)
+    coverage equipment_small_effects 0x86d340 completed 2688 different 0 incomplete 0
+tlhybrid: equipment_small_effects                          PASS (0)
+    coverage game_state_update_observed 0xdd3fc0 completed 336 different 0 incomplete 0
+tlhybrid: game_state_update_observed                       PASS (0)
+    coverage gameui_item_hover_set 0xa8f390 completed 196 different 0 incomplete 0
+tlhybrid: gameui_item_hover_set                            PASS (0)
+    coverage inventory_layout_equipped 0xb53430 completed 864 different 0 incomplete 0
+tlhybrid: inventory_layout_equipped                        PASS (0)
+    coverage mass3_83e6f0 0x83e6f0 completed 128 different 0 incomplete 0
+tlhybrid: mass3_83e6f0                                     PASS (0)
+    coverage menu_next_tip_update 0xe448c0 completed 1024 different 0 incomplete 0
+tlhybrid: menu_next_tip_update                             PASS (0)
+    coverage pass10_effect_named 0x7f32f0 completed 2880 different 0 incomplete 0
+tlhybrid: pass10_effect_named                              PASS (0)
+    coverage questmanager_real_acquisition_chain 0xd33150 completed 4 different 0 incomplete 0
+tlhybrid: questmanager_real_acquisition_chain              PASS (0)
+    coverage questmanager_persistence_compatibility 0xd2f8a0 completed 24 different 0 incomplete 0
+tlhybrid: questmanager_persistence_compatibility           PASS (0)
+    coverage restore69_80f2e0 0x80f2e0 completed 96 different 0 incomplete 0
+tlhybrid: restore69_80f2e0                                 PASS (0)
+    coverage runic_add_observed 0xd797c0 completed 294 different 0 incomplete 0
+tlhybrid: runic_add_observed                               PASS (0)
+    coverage smallmass2_record_remove_pet 0x835520 completed 96 different 0 incomplete 0
+tlhybrid: smallmass2_record_remove_pet                     PASS (0)
+    coverage statsmenu_constructor_differential 0xc18470 completed 32 different 0 incomplete 0
+tlhybrid: statsmenu_constructor_differential               PASS (0)
+tlhybrid: Astar_create                                     PASS (0)
+    coverage bulk_registration_AlignDescriptor 0x69b670 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_AlignDescriptor                PASS (0)
+    coverage bulk_registration_LogicGroupDescriptor 0x79aee0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_LogicGroupDescriptor           PASS (0)
+    coverage descriptor_factory_5cda10 0x5cda10 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cda10                        PASS (0)
+tlhybrid: Descriptor_binary                                PASS (0)
+tlhybrid: enchantmenu_constructor_expected_exceptions      PASS (0)
+    coverage equipment_small_magic 0x86df50 completed 2688 different 0 incomplete 0
+tlhybrid: equipment_small_magic                            PASS (0)
+tlhybrid: game_state_switch_callbacks                      PASS (0)
+    coverage gameui_item_hover_delete_actor 0xa92c00 completed 457 different 0 incomplete 0
+tlhybrid: gameui_item_hover_delete_actor                   PASS (0)
+    coverage inventory_layout_spells 0xb53430 completed 256 different 0 incomplete 0
+tlhybrid: inventory_layout_spells                          PASS (0)
+    coverage mass3_83bd10 0x83bd10 completed 192 different 0 incomplete 0
+tlhybrid: mass3_83bd10                                     PASS (0)
+    coverage menu_next_tip_open 0xe44950 completed 1024 different 0 incomplete 0
+tlhybrid: menu_next_tip_open                               PASS (0)
+    coverage pass10_effect_remove 0x7f2c30 completed 2880 different 0 incomplete 0
+tlhybrid: pass10_effect_remove                             PASS (0)
+tlhybrid: questmanager_original_controller_acquisition_consumer PASS (0)
+tlhybrid: questmanager_persistence_load_exceptions         PASS (0)
+    coverage restore69_80f710 0x80f710 completed 128 different 0 incomplete 0
+tlhybrid: restore69_80f710                                 PASS (0)
+    coverage runic_remove_observed 0xd796e0 completed 294 different 0 incomplete 0
+tlhybrid: runic_remove_observed                            PASS (0)
+    coverage smallmass2_record_spawning 0x836820 completed 96 different 0 incomplete 0
+tlhybrid: smallmass2_record_spawning                       PASS (0)
+tlhybrid: statsmenu_constructor_expected_exceptions        PASS (0)
+tlhybrid: Astar_wide                                       PASS (0)
+    coverage bulk_registration_AnimationPlayerDescriptor 0xda5ff0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_AnimationPlayerDescriptor      PASS (0)
+    coverage bulk_registration_TimelineDescriptor 0x7c7080 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_TimelineDescriptor             PASS (0)
+    coverage descriptor_factory_5cdb40 0x5cdb40 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cdb40                        PASS (0)
+tlhybrid: Descriptor_events                                PASS (0)
+    coverage enchantmenu_click 0xb29650 completed 1536 different 0 incomplete 0
+tlhybrid: enchantmenu_click                                PASS (0)
+    coverage equipment_small_stack 0x86d5c0 completed 242 different 0 incomplete 0
+tlhybrid: equipment_small_stack                            PASS (0)
+tlhybrid: game_state_update_callbacks                      PASS (0)
+    coverage gameui_item_hover_composition 0xa8f390 completed 48 different 0 incomplete 0
+tlhybrid: gameui_item_hover_composition                    PASS (0)
+    coverage inventory_layout_empty_and_bag 0xb53430 completed 768 different 0 incomplete 0
+tlhybrid: inventory_layout_empty_and_bag                   PASS (0)
+    coverage mass3_83e8a0 0x83e8a0 completed 64 different 0 incomplete 0
+tlhybrid: mass3_83e8a0                                     PASS (0)
+    coverage menu_next_waypoint_update 0xea34b0 completed 1024 different 0 incomplete 0
+tlhybrid: menu_next_waypoint_update                        PASS (0)
+    coverage pass10_sdk_assign 0x56d680 completed 160 different 0 incomplete 0
+tlhybrid: pass10_sdk_assign                                PASS (0)
+tlhybrid: questmanager_original_client_event_consumer      PASS (0)
+    coverage questmanager_persistence_save_protocol 0xd2ec10 completed 25 different 0 incomplete 0
+tlhybrid: questmanager_persistence_save_protocol           PASS (0)
+    coverage restore69_822ce0 0x822ce0 completed 128 different 0 incomplete 0
+tlhybrid: restore69_822ce0                                 PASS (0)
+tlhybrid: RunicCore_shadow                                 PASS (0)
+    coverage smallmass2_record_path 0x836a80 completed 96 different 0 incomplete 0
+tlhybrid: smallmass2_record_path                           PASS (0)
+    coverage statsmenu_create_menus_differential 0xc14860 completed 784 different 0 incomplete 0
+tlhybrid: statsmenu_create_menus_differential              PASS (0)
+tlhybrid: Astar_nearest                                    PASS (0)
+    coverage bulk_registration_BoxColliderDescriptor 0x69f990 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_BoxColliderDescriptor          PASS (0)
+tlhybrid: bulk_descriptor_callback_identity                PASS (0)
+    coverage descriptor_factory_5cdc70 0x5cdc70 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cdc70                        PASS (0)
+    coverage animation_descriptor_update 0xda2630 completed 48 different 0 incomplete 0
+tlhybrid: animation_descriptor_update                      PASS (0)
+    coverage enchantmenu_close 0xb23ba0 completed 768 different 0 incomplete 0
+tlhybrid: enchantmenu_close                                PASS (0)
+    coverage equipment_sockets_differential 0x87f880 completed 6272 different 0 incomplete 0
+    coverage equipment_sockets_differential 0x87f960 completed 6321 different 0 incomplete 0
+tlhybrid: equipment_sockets_differential                   PASS (0)
+    coverage game_state_hp_observed 0xdd3b40 completed 236 different 0 incomplete 0
+tlhybrid: game_state_hp_observed                           PASS (0)
+    coverage gameui_item_return_dragged 0xa8f4e0 completed 113 different 0 incomplete 0
+tlhybrid: gameui_item_return_dragged                       PASS (0)
+    coverage inventory_mass_differential 0x91b050 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91b280 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91b3f0 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91b4c0 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91b5b0 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91b680 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91b7a0 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91bc50 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91c640 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91ca60 completed 510 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91cbb0 completed 510 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91ccd0 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91ce00 completed 510 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91cf50 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x91d300 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x923410 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x9235a0 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x923730 completed 504 different 0 incomplete 0
+    coverage inventory_mass_differential 0x9254b0 completed 508 different 0 incomplete 0
+tlhybrid: inventory_mass_differential                      PASS (0)
+    coverage mass3_836cb0 0x836cb0 completed 256 different 0 incomplete 0
+tlhybrid: mass3_836cb0                                     PASS (0)
+    coverage menu_next_die_update 0xb06110 completed 1024 different 0 incomplete 0
+tlhybrid: menu_next_die_update                             PASS (0)
+    coverage pass10_sdk_copy 0x8b22d0 completed 160 different 0 incomplete 0
+tlhybrid: pass10_sdk_copy                                  PASS (0)
+    coverage questcontroller_real_acquisition_chain 0xde6c00 completed 8 different 0 incomplete 0
+tlhybrid: questcontroller_real_acquisition_chain           PASS (0)
+    coverage questmanager_persistence_save_short_io 0xd2ec10 completed 2 different 0 incomplete 0
+tlhybrid: questmanager_persistence_save_short_io           PASS (0)
+    coverage restore69_823ee0 0x823ee0 completed 128 different 0 incomplete 0
+tlhybrid: restore69_823ee0                                 PASS (0)
+    coverage safe_pointer_character_destructor_closure 0x591b50 completed 44 different 0 incomplete 0
+tlhybrid: safe_pointer_character_destructor_closure        PASS (0)
+    coverage smallmass2_record_first_setup 0x8e5020 completed 96 different 0 incomplete 0
+tlhybrid: smallmass2_record_first_setup                    PASS (0)
+tlhybrid: statsmenu_create_expected_exceptions             PASS (0)
+tlhybrid: Astar_directed                                   PASS (0)
+    coverage bulk_registration_CameraControllerDescriptor 0xdaaee0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_CameraControllerDescriptor     PASS (0)
+    coverage descriptor_controller_registration 0x5ce180 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_controller_registration               PASS (0)
+    coverage descriptor_factory_5cdda0 0x5cdda0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cdda0                        PASS (0)
+    coverage game_state_descriptor_update 0xdaffb0 completed 48 different 0 incomplete 0
+tlhybrid: game_state_descriptor_update                     PASS (0)
+    coverage enchantmenu_click_dispatch 0xb1bb80 completed 768 different 0 incomplete 0
+tlhybrid: enchantmenu_click_dispatch                       PASS (0)
+    coverage equipment_stats_differential 0x893660 completed 294 different 0 incomplete 0
+tlhybrid: equipment_stats_differential                     PASS (0)
+tlhybrid: game_state_player_hp_thresholds                  PASS (0)
+    coverage gameui_item_perform_use 0xa92080 completed 212 different 0 incomplete 0
+tlhybrid: gameui_item_perform_use                          PASS (0)
+    coverage inventorymenu_weapon_toggle 0xb45e90 completed 192 different 0 incomplete 0
+tlhybrid: inventorymenu_weapon_toggle                      PASS (0)
+    coverage mass3_926260 0x926260 completed 192 different 0 incomplete 0
+tlhybrid: mass3_926260                                     PASS (0)
+    coverage menu_next_quest_dialog_broadcast 0xba5230 completed 1024 different 0 incomplete 0
+tlhybrid: menu_next_quest_dialog_broadcast                 PASS (0)
+    coverage pass10_sdk_destroy 0x56dad0 completed 160 different 0 incomplete 0
+tlhybrid: pass10_sdk_destroy                               PASS (0)
+    coverage questcontroller_accepted 0xde6c00 completed 6 different 0 incomplete 0
+tlhybrid: questcontroller_accepted                         PASS (0)
+tlhybrid: questmanager_persistence_save_unwind             PASS (0)
+    coverage restore69_8244a0 0x8244a0 completed 128 different 0 incomplete 0
+tlhybrid: restore69_8244a0                                 PASS (0)
+    coverage safe_pointer_equipment_destructor_closure 0xacbc90 completed 44 different 0 incomplete 0
+tlhybrid: safe_pointer_equipment_destructor_closure        PASS (0)
+    coverage smallmass2_record_reset_stats 0x8f4fd0 completed 96 different 0 incomplete 0
+tlhybrid: smallmass2_record_reset_stats                    PASS (0)
+    coverage statsmenu_destructor_differential 0xc0c2f0 completed 32 different 0 incomplete 0
+tlhybrid: statsmenu_destructor_differential                PASS (0)
+tlhybrid: Astar_find                                       PASS (0)
+    coverage bulk_registration_CameraShakeDescriptor 0x5b1380 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_CameraShakeDescriptor          PASS (0)
+    coverage descriptor_factory_5c93e0 0x5c93e0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5c93e0                        PASS (0)
+tlhybrid: descriptor_factory_expected_exceptions           PASS (0)
+    coverage game_state_descriptor_activation 0xdaff00 completed 48 different 0 incomplete 0
+tlhybrid: game_state_descriptor_activation                 PASS (0)
+    coverage enchantmenu_destructor 0xb23ac0 completed 64 different 0 incomplete 0
+tlhybrid: enchantmenu_destructor                           PASS (0)
+    coverage equipment_trim_production 0x899c60 completed 1266 different 0 incomplete 0
+tlhybrid: equipment_trim_production                        PASS (0)
+    coverage gameui_adapter_singleton 0xa828e0 completed 2 different 0 incomplete 0
+tlhybrid: gameui_adapter_singleton                         PASS (0)
+    coverage gameui_item_use_routing 0xa92320 completed 170 different 0 incomplete 0
+tlhybrid: gameui_item_use_routing                          PASS (0)
+    coverage inventorymenu_close 0xb4d920 completed 768 different 0 incomplete 0
+tlhybrid: inventorymenu_close                              PASS (0)
+    coverage mass3_85ad10 0x85ad10 completed 240 different 0 incomplete 0
+tlhybrid: mass3_85ad10                                     PASS (0)
+    coverage merchant_main_slot_differential 0xb6c3b0 completed 25992 different 0 incomplete 0
+tlhybrid: merchant_main_slot_differential                  PASS (0)
+    coverage pass10_sdk_short_destroy 0x56b1d0 completed 160 different 0 incomplete 0
+tlhybrid: pass10_sdk_short_destroy                         PASS (0)
+    coverage questcontroller_completed 0xde6af0 completed 2 different 0 incomplete 0
+tlhybrid: questcontroller_completed                        PASS (0)
+    coverage questmanager_persistence_save_stdio_errors 0xd2ec10 completed 4 different 0 incomplete 0
+tlhybrid: questmanager_persistence_save_stdio_errors       PASS (0)
+    coverage restore69_824920 0x824920 completed 128 different 0 incomplete 0
+tlhybrid: restore69_824920                                 PASS (0)
+tlhybrid: safe_pointer_destructor_closure_expected_exceptions PASS (0)
+    coverage smallmass2_record_reset_skills 0x8f5380 completed 96 different 0 incomplete 0
+tlhybrid: smallmass2_record_reset_skills                   PASS (0)
+    coverage statsmenu_deleting_destructor_differential 0xc0c4c0 completed 32 different 0 incomplete 0
+tlhybrid: statsmenu_deleting_destructor_differential       PASS (0)
+tlhybrid: base_unit_activate_skill_effects                 PASS (0)
+    coverage bulk_registration_CinematicDescriptor 0xe70290 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_CinematicDescriptor            PASS (0)
+    coverage descriptor_factory_5c9520 0x5c9520 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5c9520                        PASS (0)
+    coverage followup_sound_data_name 0x64dff0 completed 48 different 0 incomplete 0
+tlhybrid: followup_sound_data_name                         PASS (0)
+    coverage skill_descriptor_update 0xdbf040 completed 48 different 0 incomplete 0
+tlhybrid: skill_descriptor_update                          PASS (0)
+    coverage enchantmenu_deleting_destructor 0xb23b80 completed 64 different 0 incomplete 0
+tlhybrid: enchantmenu_deleting_destructor                  PASS (0)
+    coverage equipment_speed_text_production 0x86f790 completed 264 different 0 incomplete 0
+tlhybrid: equipment_speed_text_production                  PASS (0)
+    coverage gameui_adapter_level 0xa82f20 completed 2 different 0 incomplete 0
+tlhybrid: gameui_adapter_level                             PASS (0)
+    coverage gameui_item_use_composed 0xa92320 completed 42 different 0 incomplete 0
+tlhybrid: gameui_item_use_composed                         PASS (0)
+    coverage inventorymenu_constructor_differential 0xb60770 completed 128 different 0 incomplete 0
+tlhybrid: inventorymenu_constructor_differential           PASS (0)
+    coverage mass3_91bdc0 0x91bdc0 completed 384 different 0 incomplete 0
+tlhybrid: mass3_91bdc0                                     PASS (0)
+    coverage merchantmenu_constructor 0xb772a0 completed 32 different 0 incomplete 0
+tlhybrid: merchantmenu_constructor                         PASS (0)
+    coverage pass10_legacy_getbool 0xc8dcf0 completed 48 different 0 incomplete 0
+tlhybrid: pass10_legacy_getbool                            PASS (0)
+    coverage questcontroller_menu 0xde6cc0 completed 28 different 0 incomplete 0
+tlhybrid: questcontroller_menu                             PASS (0)
+    coverage questmanager_persistence_save_original_quest 0xd2ec10 completed 4 different 0 incomplete 0
+tlhybrid: questmanager_persistence_save_original_quest     PASS (0)
+    coverage restore69_825d40 0x825d40 completed 184 different 0 incomplete 0
+tlhybrid: restore69_825d40                                 PASS (0)
+tlhybrid: SceneNodeObject_shadow                           PASS (0)
+    coverage smallmass2_record_dungeon_load 0x8f4ad0 completed 96 different 0 incomplete 0
+tlhybrid: smallmass2_record_dungeon_load                   PASS (0)
+tlhybrid: statsmenu_destructor_expected_exceptions         PASS (0)
+tlhybrid: base_unit_avoidance_grid_changes                 PASS (0)
+    coverage bulk_registration_ColliderDescriptor 0x6a41a0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_ColliderDescriptor             PASS (0)
+    coverage descriptor_factory_5c9660 0x5c9660 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5c9660                        PASS (0)
+    coverage followup_sound_data_index 0x64e070 completed 48 different 0 incomplete 0
+tlhybrid: followup_sound_data_index                        PASS (0)
+    coverage skill_descriptor_activation 0xdbef90 completed 48 different 0 incomplete 0
+tlhybrid: skill_descriptor_activation                      PASS (0)
+tlhybrid: enchantmenu_destructor_expected_exceptions       PASS (0)
+    coverage equipment_data_text_production 0x87d5f0 completed 32 different 0 incomplete 0
+    coverage equipment_data_text_production 0x87d6b0 completed 32 different 0 incomplete 0
+tlhybrid: equipment_data_text_production                   PASS (0)
+    coverage gameui_adapter_cinematic 0xa83580 completed 324 different 0 incomplete 0
+tlhybrid: gameui_adapter_cinematic                         PASS (0)
+    coverage gameui_item_click_composed 0xa924c0 completed 22 different 0 incomplete 0
+tlhybrid: gameui_item_click_composed                       PASS (0)
+tlhybrid: inventorymenu_constructor_expected_exceptions    PASS (0)
+    coverage mass3_91c2a0 0x91c2a0 completed 384 different 0 incomplete 0
+tlhybrid: mass3_91c2a0                                     PASS (0)
+tlhybrid: merchantmenu_constructor_expected_exceptions     PASS (0)
+    coverage pass10_legacy_int64 0xc8ddc0 completed 50 different 0 incomplete 0
+tlhybrid: pass10_legacy_int64                              PASS (0)
+    coverage questcontroller_update 0xde6ec0 completed 28 different 0 incomplete 0
+tlhybrid: questcontroller_update                           PASS (0)
+    coverage questmanager_reset 0xd339d0 completed 92 different 0 incomplete 0
+tlhybrid: questmanager_reset                               PASS (0)
+    coverage restore69_825fa0 0x825fa0 completed 128 different 0 incomplete 0
+tlhybrid: restore69_825fa0                                 PASS (0)
+    coverage scenenode_resource_observed 0xa01d90 completed 512 different 0 incomplete 0
+tlhybrid: scenenode_resource_observed                      PASS (0)
+    coverage smallmass2_skill_offensive 0x8d4bf0 completed 256 different 0 incomplete 0
+tlhybrid: smallmass2_skill_offensive                       PASS (0)
+    coverage stats_utf8_verifier_differential 0x56bf40 completed 72 different 0 incomplete 0
+tlhybrid: stats_utf8_verifier_differential                 PASS (0)
+    coverage base_unit_transformed_culling_bounds 0x7fff00 completed 720 different 0 incomplete 0
+tlhybrid: base_unit_transformed_culling_bounds             PASS (0)
+    coverage bulk_registration_CollisionAvoiderDescriptor 0x6a88c0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_CollisionAvoiderDescriptor     PASS (0)
+    coverage descriptor_factory_5c97a0 0x5c97a0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5c97a0                        PASS (0)
+    coverage followup_sound_category_name 0x6515e0 completed 48 different 0 incomplete 0
+tlhybrid: followup_sound_category_name                     PASS (0)
+    coverage sound_descriptor_update 0x64e100 completed 48 different 0 incomplete 0
+tlhybrid: sound_descriptor_update                          PASS (0)
+    coverage enchantmenu_mouse_over 0xb1bc40 completed 2304 different 0 incomplete 0
+tlhybrid: enchantmenu_mouse_over                           PASS (0)
+    coverage equipment_text_colors_and_order 0x8824f0 completed 768 different 0 incomplete 0
+tlhybrid: equipment_text_colors_and_order                  PASS (0)
+    coverage gameui_adapter_tooltip 0xa83650 completed 8 different 0 incomplete 0
+tlhybrid: gameui_adapter_tooltip                           PASS (0)
+tlhybrid: gameui_item_expected_exceptions                  PASS (0)
+    coverage inventorymenu_tab_click 0xb4f570 completed 48 different 0 incomplete 0
+tlhybrid: inventorymenu_tab_click                          PASS (0)
+    coverage mass3_925970 0x925970 completed 384 different 0 incomplete 0
+tlhybrid: mass3_925970                                     PASS (0)
+    coverage merchantmenu_click 0xb61280 completed 2880 different 0 incomplete 0
+tlhybrid: merchantmenu_click                               PASS (0)
+    coverage pass10_legacy_cleanpath 0xc73b60 completed 48 different 0 incomplete 0
+tlhybrid: pass10_legacy_cleanpath                          PASS (0)
+    coverage questcontroller_menu_virtual 0xde6cb0 completed 28 different 0 incomplete 0
+tlhybrid: questcontroller_menu_virtual                     PASS (0)
+    coverage quest_map_insert_closure 0xd344d0 completed 120 different 0 incomplete 0
+tlhybrid: quest_map_insert_closure                         PASS (0)
+    coverage restore69_827720 0x827720 completed 128 different 0 incomplete 0
+tlhybrid: restore69_827720                                 PASS (0)
+    coverage scenenode_parent_observed 0xa01f30 completed 512 different 0 incomplete 0
+tlhybrid: scenenode_parent_observed                        PASS (0)
+    coverage smallmass2_skill_defensive 0x8d4d60 completed 256 different 0 incomplete 0
+tlhybrid: smallmass2_skill_defensive                       PASS (0)
+    coverage stats_utf16_mutate_differential 0x56b4b0 completed 1800 different 0 incomplete 0
+tlhybrid: stats_utf16_mutate_differential                  PASS (0)
+    coverage base_unit_real_mesh_collisions 0x800f70 completed 1920 different 0 incomplete 0
+    coverage base_unit_real_mesh_collisions 0x801610 completed 1920 different 0 incomplete 0
+tlhybrid: base_unit_real_mesh_collisions                   PASS (0)
+    coverage bulk_registration_CollisionShapeDescriptor 0x5bb260 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_CollisionShapeDescriptor       PASS (0)
+    coverage descriptor_factory_5c98e0 0x5c98e0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5c98e0                        PASS (0)
+    coverage followup_random_choice_id 0x672450 completed 24 different 0 incomplete 0
+tlhybrid: followup_random_choice_id                        PASS (0)
+    coverage sound_descriptor_activation 0x64e1e0 completed 48 different 0 incomplete 0
+tlhybrid: sound_descriptor_activation                      PASS (0)
+    coverage enchantmenu_process_input 0xb1bee0 completed 4096 different 0 incomplete 0
+tlhybrid: enchantmenu_process_input                        PASS (0)
+    coverage equipment_tooltip_cached_differential 0xaa6bf0 completed 3072 different 0 incomplete 0
+tlhybrid: equipment_tooltip_cached_differential            PASS (0)
+    coverage gameui_adapter_listener 0xa83740 completed 24 different 0 incomplete 0
+tlhybrid: gameui_adapter_listener                          PASS (0)
+    coverage gameui_keyboard_dispatch_differential 0xab4f80 completed 256 different 0 incomplete 0
+tlhybrid: gameui_keyboard_dispatch_differential            PASS (0)
+    coverage inventorymenu_click_dispatch 0xb458d0 completed 576 different 0 incomplete 0
+tlhybrid: inventorymenu_click_dispatch                     PASS (0)
+    coverage mass3_924bd0 0x924bd0 completed 448 different 0 incomplete 0
+tlhybrid: mass3_924bd0                                     PASS (0)
+    coverage merchantmenu_close 0xb68ca0 completed 768 different 0 incomplete 0
+tlhybrid: merchantmenu_close                               PASS (0)
+    coverage pass10_legacy_appdata 0xc764a0 completed 25 different 0 incomplete 0
+tlhybrid: pass10_legacy_appdata                            PASS (0)
+    coverage questcontroller_update_virtual 0xde6eb0 completed 28 different 0 incomplete 0
+tlhybrid: questcontroller_update_virtual                   PASS (0)
+tlhybrid: quest_map_insert_exceptions                      PASS (0)
+    coverage restore69_848790 0x848790 completed 128 different 0 incomplete 0
+tlhybrid: restore69_848790                                 PASS (0)
+    coverage shape_next_angle_offset 0xa02c60 completed 1400 different 0 incomplete 0
+tlhybrid: shape_next_angle_offset                          PASS (0)
+    coverage smallmass2_skill_select_offensive 0x8d4f60 completed 256 different 0 incomplete 0
+tlhybrid: smallmass2_skill_select_offensive                PASS (0)
+    coverage stats_update_differential 0xc0c4e0 completed 4608 different 0 incomplete 0
+tlhybrid: stats_update_differential                        PASS (0)
+tlhybrid: base_unit_hp_threshold_events                    PASS (0)
+    coverage bulk_registration_ColorAffectorDescriptor 0x6acbe0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_ColorAffectorDescriptor        PASS (0)
+    coverage descriptor_factory_5c9a10 0x5c9a10 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5c9a10                        PASS (0)
+    coverage followup_billboard_rotation_id 0x6ec760 completed 24 different 0 incomplete 0
+tlhybrid: followup_billboard_rotation_id                   PASS (0)
+    coverage random_group_descriptor_loaded 0x62eb50 completed 48 different 0 incomplete 0
+tlhybrid: random_group_descriptor_loaded                   PASS (0)
+    coverage enchantmenu_event_mapping 0xb252c0 completed 2304 different 0 incomplete 0
+tlhybrid: enchantmenu_event_mapping                        PASS (0)
+    coverage equipment_tooltip_differential 0xaa6bf0 completed 1152 different 0 incomplete 0
+tlhybrid: equipment_tooltip_differential                   PASS (0)
+    coverage gameui_adapter_npc 0xa837e0 completed 4 different 0 incomplete 0
+tlhybrid: gameui_adapter_npc                               PASS (0)
+    coverage gameui_layout_mouse_panel 0xa83920 completed 400 different 0 incomplete 0
+tlhybrid: gameui_layout_mouse_panel                        PASS (0)
+    coverage inventorymenu_destructor_differential 0xb4d340 completed 512 different 0 incomplete 0
+tlhybrid: inventorymenu_destructor_differential            PASS (0)
+    coverage mass3_9251b0 0x9251b0 completed 384 different 0 incomplete 0
+tlhybrid: mass3_9251b0                                     PASS (0)
+    coverage merchantmenu_click_dispatch 0xb610a0 completed 1440 different 0 incomplete 0
+tlhybrid: merchantmenu_click_dispatch                      PASS (0)
+    coverage pass10_existing_graph_clear 0xc78540 completed 1440 different 0 incomplete 0
+tlhybrid: pass10_existing_graph_clear                      PASS (0)
+tlhybrid: questcontroller_real_menu_level_consumer         PASS (0)
+    coverage quest_manager_has_quest_closure 0xd264d0 completed 38 different 0 incomplete 0
+tlhybrid: quest_manager_has_quest_closure                  PASS (0)
+    coverage restore69_831ee0 0x831ee0 completed 64 different 0 incomplete 0
+tlhybrid: restore69_831ee0                                 PASS (0)
+    coverage shape_next_sphere 0xa02f10 completed 1400 different 0 incomplete 0
+tlhybrid: shape_next_sphere                                PASS (0)
+    coverage smallmass2_skill_select_defensive 0x8d51e0 completed 256 different 0 incomplete 0
+tlhybrid: smallmass2_skill_select_defensive                PASS (0)
+    coverage steamstats_listener_differential 0xece980 completed 384 different 0 incomplete 0
+tlhybrid: steamstats_listener_differential                 PASS (0)
+    coverage base_unit_full_initialization 0x803100 completed 768 different 0 incomplete 0
+tlhybrid: base_unit_full_initialization                    PASS (0)
+    coverage bulk_registration_CounterDescriptor 0x662690 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_CounterDescriptor              PASS (0)
+    coverage descriptor_factory_5c9b50 0x5c9b50 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5c9b50                        PASS (0)
+    coverage followup_random_difficulty_id 0x62e8a0 completed 24 different 0 incomplete 0
+tlhybrid: followup_random_difficulty_id                    PASS (0)
+    coverage descriptor_update_traversal 0x702490 completed 240 different 0 incomplete 0
+tlhybrid: descriptor_update_traversal                      PASS (0)
+    coverage enchantmenu_mouse_out 0xb1bbb0 completed 576 different 0 incomplete 0
+tlhybrid: enchantmenu_mouse_out                            PASS (0)
+    coverage equipment_trade_price_differential 0x86fc20 completed 4096 different 0 incomplete 0
+    coverage equipment_trade_price_differential 0x86fb40 completed 4096 different 0 incomplete 0
+tlhybrid: equipment_trade_price_differential               PASS (0)
+    coverage gameui_adapter_camera 0xa83800 completed 4 different 0 incomplete 0
+tlhybrid: gameui_adapter_camera                            PASS (0)
+    coverage gameui_layout_convert_scale 0xa83ed0 completed 152 different 0 incomplete 0
+tlhybrid: gameui_layout_convert_scale                      PASS (0)
+    coverage inventorymenu_deleting_destructor_differential 0xb4d570 completed 512 different 0 incomplete 0
+tlhybrid: inventorymenu_deleting_destructor_differential   PASS (0)
+    coverage mass3_924440 0x924440 completed 80 different 0 incomplete 0
+tlhybrid: mass3_924440                                     PASS (0)
+    coverage merchant_create_menus_resources 0xb6ed20 completed 392 different 0 incomplete 0
+tlhybrid: merchant_create_menus_resources                  PASS (0)
+    coverage pass10_existing_worldlocal 0xc79ab0 completed 512 different 0 incomplete 0
+tlhybrid: pass10_existing_worldlocal                       PASS (0)
+    coverage questcontroller_init_frontier 0xdee380 completed 22 different 0 incomplete 0
+tlhybrid: questcontroller_init_frontier                    PASS (0)
+    coverage quest_manager_calculate_icon_closure 0xd30900 completed 108 different 0 incomplete 0
+tlhybrid: quest_manager_calculate_icon_closure             PASS (0)
+    coverage restore69_8325e0 0x8325e0 completed 64 different 0 incomplete 0
+tlhybrid: restore69_8325e0                                 PASS (0)
+    coverage shape_next_line 0xa05110 completed 1400 different 0 incomplete 0
+tlhybrid: shape_next_line                                  PASS (0)
+    coverage smallmass2_skill_update_active 0x813ba0 completed 256 different 0 incomplete 0
+tlhybrid: smallmass2_skill_update_active                   PASS (0)
+    coverage steam_stats_local_updates 0xece780 completed 140 different 0 incomplete 0
+tlhybrid: steam_stats_local_updates                        PASS (0)
+tlhybrid: base_unit_init_theme_data                        PASS (0)
+    coverage bulk_registration_SkipCutsceneDescriptor 0xdaf880 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_SkipCutsceneDescriptor         PASS (0)
+    coverage descriptor_factory_5c9c90 0x5c9c90 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5c9c90                        PASS (0)
+    coverage followup_interactive_group_id 0x662f50 completed 24 different 0 incomplete 0
+tlhybrid: followup_interactive_group_id                    PASS (0)
+    coverage descriptor_post_process_traversal 0x7026d0 completed 240 different 0 incomplete 0
+tlhybrid: descriptor_post_process_traversal                PASS (0)
+    coverage enchant_slot_transfer 0xb29780 completed 12960 different 0 incomplete 0
+tlhybrid: enchant_slot_transfer                            PASS (0)
+    coverage equipment_type_differential 0x88d040 completed 1536 different 0 incomplete 0
+tlhybrid: equipment_type_differential                      PASS (0)
+    coverage gameui_adapter_hide 0xa84c00 completed 2 different 0 incomplete 0
+tlhybrid: gameui_adapter_hide                              PASS (0)
+    coverage gameui_layout_size_combo 0xa849d0 completed 414 different 0 incomplete 0
+tlhybrid: gameui_layout_size_combo                         PASS (0)
+tlhybrid: inventorymenu_destructor_expected_exceptions     PASS (0)
+    coverage mass3_831f90 0x831f90 completed 192 different 0 incomplete 0
+tlhybrid: mass3_831f90                                     PASS (0)
+tlhybrid: merchant_create_menus_differential               PASS (0)
+    coverage pass10_legacy_panesize 0x91b0b0 completed 32 different 0 incomplete 0
+tlhybrid: pass10_legacy_panesize                           PASS (0)
+    coverage questcontroller_binding_frontier 0xdee6b0 completed 24 different 0 incomplete 0
+tlhybrid: questcontroller_binding_frontier                 PASS (0)
+    coverage quest_manager_get_icon_closure 0xd30830 completed 78 different 0 incomplete 0
+tlhybrid: quest_manager_get_icon_closure                   PASS (0)
+    coverage restore69_8326a0 0x8326a0 completed 64 different 0 incomplete 0
+tlhybrid: restore69_8326a0                                 PASS (0)
+    coverage shape_next_arc 0xa04c70 completed 1400 different 0 incomplete 0
+tlhybrid: shape_next_arc                                   PASS (0)
+    coverage smallmass2_skill_stop_active 0x83c4f0 completed 256 different 0 incomplete 0
+tlhybrid: smallmass2_skill_stop_active                     PASS (0)
+    coverage steam_stats_pending_changes 0xece450 completed 30 different 0 incomplete 0
+tlhybrid: steam_stats_pending_changes                      PASS (0)
+tlhybrid: base_unit_reapply_affix_data                     PASS (0)
+    coverage bulk_registration_DamageShapeDescriptor 0x5c4c60 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_DamageShapeDescriptor          PASS (0)
+    coverage descriptor_factory_5c9dd0 0x5c9dd0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5c9dd0                        PASS (0)
+    coverage damage_descriptor_update 0x5bb740 completed 32 different 0 incomplete 0
+tlhybrid: damage_descriptor_update                         PASS (0)
+    coverage dynamic_property_setters_differential 0xc6e650 completed 96 different 0 incomplete 0
+    coverage dynamic_property_setters_differential 0xc6e720 completed 96 different 0 incomplete 0
+tlhybrid: dynamic_property_setters_differential            PASS (0)
+    coverage enchantmenu_update 0xb23fd0 completed 3720 different 0 incomplete 0
+tlhybrid: enchantmenu_update                               PASS (0)
+    coverage equipment_update_drop_differential 0x87a400 completed 3584 different 0 incomplete 0
+tlhybrid: equipment_update_drop_differential               PASS (0)
+    coverage gameui_adapter_show 0xa84c10 completed 2 different 0 incomplete 0
+tlhybrid: gameui_adapter_show                              PASS (0)
+    coverage gameui_loading_visible 0xa9c3b0 completed 672 different 0 incomplete 0
+tlhybrid: gameui_loading_visible                           PASS (0)
+    coverage inventorymenu_mouse_over 0xb4d590 completed 9216 different 0 incomplete 0
+tlhybrid: inventorymenu_mouse_over                         PASS (0)
+    coverage mass3_822850 0x822850 completed 384 different 0 incomplete 0
+tlhybrid: mass3_822850                                     PASS (0)
+    coverage merchantmenu_destructor 0xb68410 completed 3072 different 0 incomplete 0
+tlhybrid: merchantmenu_destructor                          PASS (0)
+    coverage pass10_legacy_dequepush 0xc92630 completed 30 different 0 incomplete 0
+tlhybrid: pass10_legacy_dequepush                          PASS (0)
+tlhybrid: questcontroller_init_binding_unwind              PASS (0)
+    coverage quest_npc_collection 0xd15210 completed 148 different 0 incomplete 0
+tlhybrid: quest_npc_collection                             PASS (0)
+    coverage restore69_832750 0x832750 completed 64 different 0 incomplete 0
+tlhybrid: restore69_832750                                 PASS (0)
+    coverage shape_next_line_intersection 0xa05260 completed 1400 different 0 incomplete 0
+tlhybrid: shape_next_line_intersection                     PASS (0)
+    coverage smallmass2_skill_perform_active 0x83c730 completed 256 different 0 incomplete 0
+tlhybrid: smallmass2_skill_perform_active                  PASS (0)
+    coverage string_translate_reload_observed 0xe170b0 completed 160 different 0 incomplete 0
+tlhybrid: string_translate_reload_observed                 PASS (0)
+tlhybrid: base_unit_reapply_effect_data                    PASS (0)
+    coverage bulk_registration_DungeonObjectDescriptor 0xebd920 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_DungeonObjectDescriptor        PASS (0)
+    coverage descriptor_factory_5c9f10 0x5c9f10 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5c9f10                        PASS (0)
+    coverage damage_descriptor_activate 0x5bb840 completed 32 different 0 incomplete 0
+tlhybrid: damage_descriptor_activate                       PASS (0)
+tlhybrid: EditorBaseObject_shadow                          PASS (0)
+tlhybrid: enchantmenu_update_expected_exceptions           PASS (0)
+    coverage equipment_use_differential 0x86e910 completed 14944 different 0 incomplete 0
+tlhybrid: equipment_use_differential                       PASS (0)
+    coverage gameui_adapter_active 0xa84ca0 completed 24 different 0 incomplete 0
+tlhybrid: gameui_adapter_active                            PASS (0)
+    coverage gameui_dispatch_menu_input 0xa84160 completed 74 different 0 incomplete 0
+tlhybrid: gameui_dispatch_menu_input                       PASS (0)
+    coverage inventorymenu_event_mapping 0xb4f1b0 completed 2304 different 0 incomplete 0
+tlhybrid: inventorymenu_event_mapping                      PASS (0)
+    coverage mass3_83d930 0x83d930 completed 256 different 0 incomplete 0
+tlhybrid: mass3_83d930                                     PASS (0)
+    coverage merchantmenu_deleting_destructor 0xb68510 completed 3072 different 0 incomplete 0
+tlhybrid: merchantmenu_deleting_destructor                 PASS (0)
+    coverage pass11_graph_add_line 0xc786e0 completed 64 different 0 incomplete 0
+tlhybrid: pass11_graph_add_line                            PASS (0)
+tlhybrid: questcontroller_property_consumer                PASS (0)
+    coverage quest_persistence_load_bounded_framing 0xd17b20 completed 2 different 0 incomplete 0
+tlhybrid: quest_persistence_load_bounded_framing           PASS (0)
+    coverage restore69_832800 0x832800 completed 64 different 0 incomplete 0
+tlhybrid: restore69_832800                                 PASS (0)
+    coverage shape_next_box_intersection 0xa04a20 completed 1400 different 0 incomplete 0
+tlhybrid: shape_next_box_intersection                      PASS (0)
+    coverage small_model_viewer_observed 0x76ad20 completed 128 different 0 incomplete 0
+    coverage small_model_viewer_observed 0x76acb0 completed 128 different 0 incomplete 0
+tlhybrid: small_model_viewer_observed                      PASS (0)
+tlhybrid: StringTranslate_reload                           PASS (0)
+tlhybrid: base_unit_editor_theme_selection                 PASS (0)
+    coverage bulk_registration_ForceAffectorDescriptor 0x6b0db0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_ForceAffectorDescriptor        PASS (0)
+    coverage descriptor_factory_5ca050 0x5ca050 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ca050                        PASS (0)
+    coverage timeline_descriptor_activate 0x7bd570 completed 32 different 0 incomplete 0
+tlhybrid: timeline_descriptor_activate                     PASS (0)
+    coverage editor_descriptor_id_observed 0x721ec0 completed 512 different 0 incomplete 0
+tlhybrid: editor_descriptor_id_observed                    PASS (0)
+tlhybrid: enchantmenu_retirement_expected_exception        PASS (0)
+    coverage equipment_utf8_constructor_production 0x754520 completed 80 different 0 incomplete 0
+tlhybrid: equipment_utf8_constructor_production            PASS (0)
+    coverage gameui_adapter_load 0xa84d20 completed 4 different 0 incomplete 0
+tlhybrid: gameui_adapter_load                              PASS (0)
+    coverage gameui_dispatch_mouse_event 0xa842c0 completed 56 different 0 incomplete 0
+tlhybrid: gameui_dispatch_mouse_event                      PASS (0)
+    coverage inventorymenu_set_open 0xb4eb70 completed 1728 different 0 incomplete 0
+tlhybrid: inventorymenu_set_open                           PASS (0)
+    coverage mass3_8d59a0 0x8d59a0 completed 384 different 0 incomplete 0
+tlhybrid: mass3_8d59a0                                     PASS (0)
+tlhybrid: merchantmenu_destructor_expected_exceptions      PASS (0)
+    coverage pass11_graph_load_line 0xc78930 completed 64 different 0 incomplete 0
+tlhybrid: pass11_graph_load_line                           PASS (0)
+tlhybrid: questcontroller_scene_consumer                   PASS (0)
+    coverage quest_persistence_reset 0xd17200 completed 128 different 0 incomplete 0
+tlhybrid: quest_persistence_reset                          PASS (0)
+    coverage restore69_8328b0 0x8328b0 completed 64 different 0 incomplete 0
+tlhybrid: restore69_8328b0                                 PASS (0)
+    coverage shape_next_contains 0xa05cc0 completed 1400 different 0 incomplete 0
+tlhybrid: shape_next_contains                              PASS (0)
+    coverage small_resource_settings_observed 0xa60190 completed 128 different 0 incomplete 0
+tlhybrid: small_resource_settings_observed                 PASS (0)
+    coverage tarraylist_wstring_destructor_differential 0x5f8e90 completed 252 different 0 incomplete 0
+tlhybrid: tarraylist_wstring_destructor_differential       PASS (0)
+    coverage cegui_utf8_constructor_differential 0x899960 completed 80 different 0 incomplete 0
+tlhybrid: cegui_utf8_constructor_differential              PASS (0)
+    coverage bulk_registration_GameStateControllerDescriptor 0xdb9760 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_GameStateControllerDescriptor  PASS (0)
+    coverage descriptor_factory_5ca190 0x5ca190 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ca190                        PASS (0)
+    coverage random_group_descriptor_activate 0x62eab0 completed 32 different 0 incomplete 0
+tlhybrid: random_group_descriptor_activate                 PASS (0)
+    coverage editor_particle_config_observed 0x721f40 completed 512 different 0 incomplete 0
+tlhybrid: editor_particle_config_observed                  PASS (0)
+    coverage enchant_set_open_differential 0xb243c0 completed 768 different 0 incomplete 0
+tlhybrid: enchant_set_open_differential                    PASS (0)
+tlhybrid: equipment_utf8_constructor_expected_exceptions   PASS (0)
+    coverage gameui_adapter_continue 0xa84d30 completed 4 different 0 incomplete 0
+tlhybrid: gameui_adapter_continue                          PASS (0)
+    coverage gameui_dispatch_key_event 0xa843a0 completed 132 different 0 incomplete 0
+tlhybrid: gameui_dispatch_key_event                        PASS (0)
+tlhybrid: inventorymenu_open_expected_exceptions           PASS (0)
+    coverage mass3_8e0eb0 0x8e0eb0 completed 512 different 0 incomplete 0
+tlhybrid: mass3_8e0eb0                                     PASS (0)
+    coverage merchantmenu_mouse_over 0xb688e0 completed 2912 different 0 incomplete 0
+tlhybrid: merchantmenu_mouse_over                          PASS (0)
+    coverage pass11_graph_process 0xc78480 completed 64 different 0 incomplete 0
+tlhybrid: pass11_graph_process                             PASS (0)
+    coverage questcontroller_set_complete 0xde6b20 completed 18 different 0 incomplete 0
+tlhybrid: questcontroller_set_complete                     PASS (0)
+    coverage quest_persistence_load 0xd17b20 completed 44 different 0 incomplete 0
+tlhybrid: quest_persistence_load                           PASS (0)
+    coverage restore69_834700 0x834700 completed 64 different 0 incomplete 0
+tlhybrid: restore69_834700                                 PASS (0)
+    coverage shape_next_box 0xa05330 completed 1400 different 0 incomplete 0
+tlhybrid: shape_next_box                                   PASS (0)
+    coverage small_environment_observed 0xc92cd0 completed 128 different 0 incomplete 0
+tlhybrid: small_environment_observed                       PASS (0)
+tlhybrid: teleport_activate_differential                   PASS (0)
+    coverage camera_cinematic_state 0xce9fd0 completed 676 different 0 incomplete 0
+tlhybrid: camera_cinematic_state                           PASS (0)
+    coverage bulk_registration_GenericModelDescriptor 0x5de290 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_GenericModelDescriptor         PASS (0)
+    coverage descriptor_factory_5ca2d0 0x5ca2d0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ca2d0                        PASS (0)
+    coverage image_descriptor_update 0xd9d560 completed 32 different 0 incomplete 0
+tlhybrid: image_descriptor_update                          PASS (0)
+    coverage editor_core_mass_differential 0x70d660 completed 420 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x70dd10 completed 420 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x70ddb0 completed 420 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x70de50 completed 420 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x70dfb0 completed 420 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x70d850 completed 420 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x715050 completed 420 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x71b800 completed 336 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x741530 completed 420 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x741620 completed 420 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x7416b0 completed 420 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x741880 completed 420 different 0 incomplete 0
+    coverage editor_core_mass_differential 0x774290 completed 420 different 0 incomplete 0
+tlhybrid: editor_core_mass_differential                    PASS (0)
+    coverage equipment_active_differential 0x886100 completed 2304 different 0 incomplete 0
+tlhybrid: equipment_active_differential                    PASS (0)
+    coverage equipment_visual_production 0x86d670 completed 1280 different 0 incomplete 0
+tlhybrid: equipment_visual_production                      PASS (0)
+    coverage gameui_cleanup_references 0xa988b0 completed 243 different 0 incomplete 0
+tlhybrid: gameui_cleanup_references                        PASS (0)
+    coverage gameui_dispatch_menu_ui 0xa844d0 completed 149 different 0 incomplete 0
+tlhybrid: gameui_dispatch_menu_ui                          PASS (0)
+    coverage inventorymenu_set_spell 0xb45940 completed 13824 different 0 incomplete 0
+tlhybrid: inventorymenu_set_spell                          PASS (0)
+    coverage mass3_8e0b90 0x8e0b90 completed 512 different 0 incomplete 0
+tlhybrid: mass3_8e0b90                                     PASS (0)
+    coverage merchantmenu_pet_mouse_over 0xb68530 completed 2184 different 0 incomplete 0
+tlhybrid: merchantmenu_pet_mouse_over                      PASS (0)
+    coverage pass11_graph_control_count 0xc784e0 completed 64 different 0 incomplete 0
+tlhybrid: pass11_graph_control_count                       PASS (0)
+tlhybrid: questcontroller_set_complete_unwind              PASS (0)
+    coverage quest_persistence_reset_load_combined 0xd17b20 completed 105 different 0 incomplete 0
+tlhybrid: quest_persistence_reset_load_combined            PASS (0)
+    coverage restore69_8347c0 0x8347c0 completed 64 different 0 incomplete 0
+tlhybrid: restore69_8347c0                                 PASS (0)
+    coverage shape_next_segment 0xa04e50 completed 1400 different 0 incomplete 0
+tlhybrid: shape_next_segment                               PASS (0)
+    coverage sound_manager_stop_sound 0xa6b1c0 completed 60 different 0 incomplete 0
+tlhybrid: sound_manager_stop_sound                         PASS (0)
+    coverage timeline_controls_differential 0x7bb070 completed 64 different 0 incomplete 0
+    coverage timeline_controls_differential 0x7bb000 completed 32 different 0 incomplete 0
+    coverage timeline_controls_differential 0x7b6c70 completed 40 different 0 incomplete 0
+tlhybrid: timeline_controls_differential                   PASS (0)
+    coverage mod_filter_active_count 0xc839d0 completed 140 different 0 incomplete 0
+tlhybrid: mod_filter_active_count                          PASS (0)
+    coverage bulk_registration_GeometryRotateDescriptor 0x6b5110 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_GeometryRotateDescriptor       PASS (0)
+    coverage descriptor_factory_5ca400 0x5ca400 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ca400                        PASS (0)
+    coverage button_descriptor_update 0xd97a90 completed 32 different 0 incomplete 0
+tlhybrid: button_descriptor_update                         PASS (0)
+    coverage editor_mass_animation_resources_differential 0x736db0 completed 505 different 0 incomplete 0
+    coverage editor_mass_animation_resources_differential 0x722f30 completed 504 different 0 incomplete 0
+    coverage editor_mass_animation_resources_differential 0x7230c0 completed 504 different 0 incomplete 0
+    coverage editor_mass_animation_resources_differential 0x723140 completed 504 different 0 incomplete 0
+    coverage editor_mass_animation_resources_differential 0x723290 completed 504 different 0 incomplete 0
+    coverage editor_mass_animation_resources_differential 0x724000 completed 504 different 0 incomplete 0
+    coverage editor_mass_animation_resources_differential 0x7240c0 completed 504 different 0 incomplete 0
+    coverage editor_mass_animation_resources_differential 0x724180 completed 504 different 0 incomplete 0
+    coverage editor_mass_animation_resources_differential 0x724240 completed 504 different 0 incomplete 0
+tlhybrid: editor_mass_animation_resources_differential     PASS (0)
+    coverage equipment_affixfilter_differential 0x86e020 completed 3840 different 0 incomplete 0
+tlhybrid: equipment_affixfilter_differential               PASS (0)
+tlhybrid: equipment_visual_expected_exceptions             PASS (0)
+tlhybrid: gameui_cleanup_references_exceptions             PASS (0)
+    coverage gameui_dispatch_process_input 0xab80c0 completed 56 different 0 incomplete 0
+tlhybrid: gameui_dispatch_process_input                    PASS (0)
+tlhybrid: inventorymenu_spell_expected_exceptions          PASS (0)
+    coverage mass3_8e1580 0x8e1580 completed 256 different 0 incomplete 0
+tlhybrid: mass3_8e1580                                     PASS (0)
+    coverage merchantmenu_process_input 0xb61530 completed 8192 different 0 incomplete 0
+tlhybrid: merchantmenu_process_input                       PASS (0)
+    coverage pass11_graph_add_value 0xc78880 completed 64 different 0 incomplete 0
+tlhybrid: pass11_graph_add_value                           PASS (0)
+tlhybrid: questcontroller_completion_descriptor_consumer   PASS (0)
+tlhybrid: quest_persistence_reset_load_unwind              PASS (0)
+    coverage restore69_834ad0 0x834ad0 completed 64 different 0 incomplete 0
+tlhybrid: restore69_834ad0                                 PASS (0)
+    coverage skill_foldout_load_differential 0xa95530 completed 48 different 0 incomplete 0
+tlhybrid: skill_foldout_load_differential                  PASS (0)
+    coverage sound_manager_channel_distance 0xa6b300 completed 48 different 0 incomplete 0
+tlhybrid: sound_manager_channel_distance                   PASS (0)
+    coverage timeline_property_points_differential 0x7c82a0 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c82e0 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c8320 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c8360 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c86e0 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c8880 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c8ae0 completed 48 different 0 incomplete 0
+    coverage timeline_property_points_differential 0x7c9610 completed 48 different 0 incomplete 0
+tlhybrid: timeline_property_points_differential            PASS (0)
+    coverage character_gold_differential 0x811a70 completed 648 different 0 incomplete 0
+tlhybrid: character_gold_differential                      PASS (0)
+    coverage bulk_registration_GravityAffectorDescriptor 0x6b9650 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_GravityAffectorDescriptor      PASS (0)
+    coverage descriptor_factory_5ca530 0x5ca530 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ca530                        PASS (0)
+    coverage animation_descriptor_start_on_load 0xda2580 completed 32 different 0 incomplete 0
+tlhybrid: animation_descriptor_start_on_load               PASS (0)
+    coverage editor_mass_controls_differential 0x7234e0 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x723b70 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x723bb0 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x723bf0 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x723c30 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x723c70 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x723cb0 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x723cf0 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x725170 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x7251e0 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x7229a0 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x723220 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x724420 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x7250e0 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x725250 completed 384 different 0 incomplete 0
+    coverage editor_mass_controls_differential 0x722e50 completed 384 different 0 incomplete 0
+tlhybrid: editor_mass_controls_differential                PASS (0)
+    coverage equipment_container_differential 0x86e1d0 completed 4480 different 0 incomplete 0
+tlhybrid: equipment_container_differential                 PASS (0)
+    coverage equipment_wardrobe_differential 0x87fa70 completed 1540 different 0 incomplete 0
+tlhybrid: equipment_wardrobe_differential                  PASS (0)
+    coverage gameui_click_dispatch_regression 0xa924c0 completed 1111 different 0 incomplete 0
+tlhybrid: gameui_click_dispatch_regression                 PASS (0)
+    coverage gameui_dispatch_update 0xacbb40 completed 56 different 0 incomplete 0
+tlhybrid: gameui_dispatch_update                           PASS (0)
+    coverage inventorymenu_owner 0xb45dc0 completed 144 different 0 incomplete 0
+tlhybrid: inventorymenu_owner                              PASS (0)
+    coverage mass3_8e02b0 0x8e02b0 completed 512 different 0 incomplete 0
+tlhybrid: mass3_8e02b0                                     PASS (0)
+    coverage merchantmenu_layout 0xb6dc70 completed 18432 different 0 incomplete 0
+tlhybrid: merchantmenu_layout                              PASS (0)
+    coverage pass11_graph_load 0xc78da0 completed 64 different 0 incomplete 0
+tlhybrid: pass11_graph_load                                PASS (0)
+    coverage questcontroller_interact 0xde6d40 completed 60 different 0 incomplete 0
+tlhybrid: questcontroller_interact                         PASS (0)
+    coverage questmanager_remove_quest 0xd2f020 completed 72 different 0 incomplete 0
+tlhybrid: questmanager_remove_quest                        PASS (0)
+    coverage restore69_834b90 0x834b90 completed 64 different 0 incomplete 0
+tlhybrid: restore69_834b90                                 PASS (0)
+tlhybrid: skill_foldout_load_expected_exceptions           PASS (0)
+    coverage sound_manager_channel_playing 0xa6b350 completed 48 different 0 incomplete 0
+tlhybrid: sound_manager_channel_playing                    PASS (0)
+    coverage trigger_sphere_observed 0x9aa6e0 completed 1280 different 0 incomplete 0
+tlhybrid: trigger_sphere_observed                          PASS (0)
+    coverage collision_avoider_constructor_observed 0xa1ced0 completed 192 different 0 incomplete 0
+tlhybrid: collision_avoider_constructor_observed           PASS (0)
+    coverage bulk_registration_InteractiveDescriptor 0x666610 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_InteractiveDescriptor          PASS (0)
+    coverage descriptor_factory_5ca670 0x5ca670 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ca670                        PASS (0)
+    coverage camera_descriptor_group_names 0xda7620 completed 24 different 0 incomplete 0
+tlhybrid: camera_descriptor_group_names                    PASS (0)
+    coverage editor_mass_lists_differential 0x734820 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x734d20 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x735010 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x7351c0 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x7359d0 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x735b80 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x735d30 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x734b60 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x733f90 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x735370 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x734150 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x7356c0 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x734280 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x7343f0 completed 29 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x735590 completed 29 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x7346b0 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x734520 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x7349d0 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x734ed0 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x735890 completed 28 different 0 incomplete 0
+    coverage editor_mass_lists_differential 0x736130 completed 28 different 0 incomplete 0
+tlhybrid: editor_mass_lists_differential                   PASS (0)
+tlhybrid: equipment_applysave_differential                 PASS (0)
+    coverage execute_skill_stats_query 0xc93b10 completed 150 different 0 incomplete 0
+tlhybrid: execute_skill_stats_query                        PASS (0)
+tlhybrid: gameui_click_expected_warning_exceptions         PASS (0)
+tlhybrid: gameui_dispatch_exceptions                       PASS (0)
+    coverage inventorymenu_notifications 0xb45f00 completed 4800 different 0 incomplete 0
+tlhybrid: inventorymenu_notifications                      PASS (0)
+    coverage mass3_8e06e0 0x8e06e0 completed 512 different 0 incomplete 0
+tlhybrid: mass3_8e06e0                                     PASS (0)
+tlhybrid: merchantmenu_layout_expected_exceptions          PASS (0)
+    coverage pass11_graph_ctor_c1 0xc792d0 completed 64 different 0 incomplete 0
+tlhybrid: pass11_graph_ctor_c1                             PASS (0)
+tlhybrid: questcontroller_interact_unwind                  PASS (0)
+    coverage questmanager_complete_quest 0xd32600 completed 134 different 0 incomplete 0
+tlhybrid: questmanager_complete_quest                      PASS (0)
+    coverage restore69_834870 0x834870 completed 64 different 0 incomplete 0
+tlhybrid: restore69_834870                                 PASS (0)
+    coverage skill_foldout_show_differential 0xa9c680 completed 3168 different 0 incomplete 0
+tlhybrid: skill_foldout_show_differential                  PASS (0)
+    coverage sound_manager_channel_volume 0xa6b3a0 completed 48 different 0 incomplete 0
+tlhybrid: sound_manager_channel_volume                     PASS (0)
+    coverage trigger_box_observed 0x9a3cc0 completed 1280 different 0 incomplete 0
+tlhybrid: trigger_box_observed                             PASS (0)
+    coverage combine_create_menus_differential 0xad7a50 completed 3136 different 0 incomplete 0
+tlhybrid: combine_create_menus_differential                PASS (0)
+    coverage bulk_registration_ItemDescriptor 0x5e9920 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_ItemDescriptor                 PASS (0)
+    coverage descriptor_factory_5ca7a0 0x5ca7a0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ca7a0                        PASS (0)
+    coverage interactive_descriptor_group_names 0x662eb0 completed 24 different 0 incomplete 0
+tlhybrid: interactive_descriptor_group_names               PASS (0)
+    coverage editor_mass_logic_timeline_differential 0x731f20 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x731fd0 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x732190 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x732260 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x732310 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x7323d0 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x732460 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x7324c0 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x731ec0 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x7328e0 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x723840 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x723530 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x732fb0 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x733080 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x733230 completed 720 different 0 incomplete 0
+    coverage editor_mass_logic_timeline_differential 0x733330 completed 720 different 0 incomplete 0
+tlhybrid: editor_mass_logic_timeline_differential          PASS (0)
+    coverage equipment_attach_differential 0x886d40 completed 3456 different 0 incomplete 0
+tlhybrid: equipment_attach_differential                    PASS (0)
+    coverage execute_skill_description_query 0xc93bd0 completed 150 different 0 incomplete 0
+tlhybrid: execute_skill_description_query                  PASS (0)
+    coverage gameui_constructor_lifetime_differential 0xaa6380 completed 32 different 0 incomplete 0
+tlhybrid: gameui_constructor_lifetime_differential         PASS (0)
+    coverage gameui_menu_visibility_covered 0xa82ae0 completed 236 different 0 incomplete 0
+tlhybrid: gameui_menu_visibility_covered                   PASS (0)
+    coverage inventorymenu_mouse_out 0xb45d30 completed 1728 different 0 incomplete 0
+tlhybrid: inventorymenu_mouse_out                          PASS (0)
+    coverage mass3_8f1380 0x8f1380 completed 256 different 0 incomplete 0
+tlhybrid: mass3_8f1380                                     PASS (0)
+    coverage merchantmenu_event_mapping 0xb6a790 completed 2304 different 0 incomplete 0
+tlhybrid: merchantmenu_event_mapping                       PASS (0)
+    coverage pass11_graph_ctor_c2 0xc792d0 completed 64 different 0 incomplete 0
+tlhybrid: pass11_graph_ctor_c2                             PASS (0)
+tlhybrid: questcontroller_interact_descriptor_consumer     PASS (0)
+tlhybrid: questmanager_removal_completion_exceptions       PASS (0)
+    coverage restore69_834990 0x834990 completed 64 different 0 incomplete 0
+tlhybrid: restore69_834990                                 PASS (0)
+    coverage skill_layout_differential 0xbe59e0 completed 2048 different 0 incomplete 0
+tlhybrid: skill_layout_differential                        PASS (0)
+    coverage sound_manager_channel_pause 0xa6b3e0 completed 48 different 0 incomplete 0
+tlhybrid: sound_manager_channel_pause                      PASS (0)
+tlhybrid: trigger_geometry_boundaries_and_events           PASS (0)
+    coverage combine_interaction_differential 0xad6470 completed 256 different 0 incomplete 0
+tlhybrid: combine_interaction_differential                 PASS (0)
+    coverage bulk_registration_JetAffectorDescriptor 0x6bd760 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_JetAffectorDescriptor          PASS (0)
+    coverage descriptor_factory_5ca8d0 0x5ca8d0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5ca8d0                        PASS (0)
+    coverage button_descriptor_input_gate 0xd979b0 completed 64 different 0 incomplete 0
+tlhybrid: button_descriptor_input_gate                     PASS (0)
+    coverage editor_mass_values_differential 0x724c40 completed 588 different 0 incomplete 0
+    coverage editor_mass_values_differential 0x724cf0 completed 588 different 0 incomplete 0
+    coverage editor_mass_values_differential 0x724df0 completed 588 different 0 incomplete 0
+    coverage editor_mass_values_differential 0x722910 completed 588 different 0 incomplete 0
+    coverage editor_mass_values_differential 0x7237e0 completed 588 different 0 incomplete 0
+    coverage editor_mass_values_differential 0x722a10 completed 588 different 0 incomplete 0
+tlhybrid: editor_mass_values_differential                  PASS (0)
+    coverage equipment_canequip_differential 0x86f150 completed 6939 different 0 incomplete 0
+tlhybrid: equipment_canequip_differential                  PASS (0)
+    coverage fileinfo_destructor_differential 0x73d660 completed 512 different 0 incomplete 0
+tlhybrid: fileinfo_destructor_differential                 PASS (0)
+tlhybrid: gameui_constructor_lifetime_expected_exceptions  PASS (0)
+    coverage gameui_menu_visibility_interactive 0xa83b30 completed 148 different 0 incomplete 0
+tlhybrid: gameui_menu_visibility_interactive               PASS (0)
+    coverage inventorymenu_input 0xb45b50 completed 3072 different 0 incomplete 0
+tlhybrid: inventorymenu_input                              PASS (0)
+    coverage mass3_8f16e0 0x8f16e0 completed 256 different 0 incomplete 0
+tlhybrid: mass3_8f16e0                                     PASS (0)
+    coverage merchantmenu_mouse_out 0xb611f0 completed 6144 different 0 incomplete 0
+tlhybrid: merchantmenu_mouse_out                           PASS (0)
+    coverage pass11_graph_dtor_d1 0xc785a0 completed 64 different 0 incomplete 0
+tlhybrid: pass11_graph_dtor_d1                             PASS (0)
+    coverage questcontroller_interact_real_menu_level 0xde6d40 completed 12 different 0 incomplete 0
+tlhybrid: questcontroller_interact_real_menu_level         PASS (0)
+    coverage questmanager_reset_all 0xd26560 completed 40 different 0 incomplete 0
+tlhybrid: questmanager_reset_all                           PASS (0)
+    coverage restore69_8f52a0 0x8f52a0 completed 64 different 0 incomplete 0
+tlhybrid: restore69_8f52a0                                 PASS (0)
+    coverage skillmenu_constructor_differential 0xbe39e0 completed 64 different 0 incomplete 0
+tlhybrid: skillmenu_constructor_differential               PASS (0)
+    coverage sound_manager_release_sound 0xa6aee0 completed 45 different 0 incomplete 0
+tlhybrid: sound_manager_release_sound                      PASS (0)
+    coverage unit_resources_guid 0xe7a4b0 completed 64 different 0 incomplete 0
+tlhybrid: unit_resources_guid                              PASS (0)
+tlhybrid: combine_interaction_expected_exceptions          PASS (0)
+    coverage bulk_registration_LightDescriptor 0x5f8310 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_LightDescriptor                PASS (0)
+    coverage descriptor_factory_5caa00 0x5caa00 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5caa00                        PASS (0)
+    coverage image_descriptor_input_gate 0xd9d4b0 completed 64 different 0 incomplete 0
+tlhybrid: image_descriptor_input_gate                      PASS (0)
+    coverage editor_more_roll 0x723f10 completed 864 different 0 incomplete 0
+tlhybrid: editor_more_roll                                 PASS (0)
+    coverage equipment_canuse_differential 0x86e710 completed 8192 different 0 incomplete 0
+tlhybrid: equipment_canuse_differential                    PASS (0)
+    coverage reader_file_observed 0xc731f0 completed 704 different 0 incomplete 0
+tlhybrid: reader_file_observed                             PASS (0)
+tlhybrid: gameui_constructor_lifetime_oracle_negative_controls PASS (0)
+    coverage gameui_menu_visibility_ingame 0xa84870 completed 130 different 0 incomplete 0
+tlhybrid: gameui_menu_visibility_ingame                    PASS (0)
+    coverage inventory_next_listener 0x91b890 completed 360 different 0 incomplete 0
+tlhybrid: inventory_next_listener                          PASS (0)
+    coverage mass3_aec900 0xaec900 completed 128 different 0 incomplete 0
+tlhybrid: mass3_aec900                                     PASS (0)
+    coverage merchantmenu_pet_mouse_out 0xb61140 completed 3072 different 0 incomplete 0
+tlhybrid: merchantmenu_pet_mouse_out                       PASS (0)
+    coverage pass11_graph_dtor_d2 0xc785a0 completed 64 different 0 incomplete 0
+tlhybrid: pass11_graph_dtor_d2                             PASS (0)
+    coverage questcontroller_complete_real_manager_chain 0xde6b20 completed 6 different 0 incomplete 0
+tlhybrid: questcontroller_complete_real_manager_chain      PASS (0)
+tlhybrid: questmanager_reset_all_exceptions                PASS (0)
+    coverage restore69_8f8510 0x8f8510 completed 64 different 0 incomplete 0
+tlhybrid: restore69_8f8510                                 PASS (0)
+tlhybrid: skillmenu_constructor_expected_exceptions        PASS (0)
+    coverage stash_main_slot_transfer 0xbf9520 completed 12996 different 0 incomplete 0
+tlhybrid: stash_main_slot_transfer                         PASS (0)
+    coverage unit_resources_names 0xe7ad00 completed 64 different 0 incomplete 0
+tlhybrid: unit_resources_names                             PASS (0)
+    coverage combine_layout_empty 0xadde00 completed 48 different 0 incomplete 0
+tlhybrid: combine_layout_empty                             PASS (0)
+    coverage bulk_registration_LineAffectorDescriptor 0x6c18c0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_LineAffectorDescriptor         PASS (0)
+    coverage descriptor_factory_5cab30 0x5cab30 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cab30                        PASS (0)
+    coverage descriptor_manager_scene_loaded 0x702510 completed 48 different 0 incomplete 0
+tlhybrid: descriptor_manager_scene_loaded                  PASS (0)
+    coverage editor_more_collision 0x724f70 completed 864 different 0 incomplete 0
+tlhybrid: editor_more_collision                            PASS (0)
+    coverage equipment_combat_stats_differential 0x880950 completed 1122 different 0 incomplete 0
+tlhybrid: equipment_combat_stats_differential              PASS (0)
+    coverage reader_observed_line 0xc72960 completed 180 different 0 incomplete 0
+tlhybrid: reader_observed_line                             PASS (0)
+    coverage gameui_create_differential 0xa9e4a0 completed 256 different 0 incomplete 0
+tlhybrid: gameui_create_differential                       PASS (0)
+    coverage gameui_menu_visibility_pause 0xa8e2d0 completed 176 different 0 incomplete 0
+tlhybrid: gameui_menu_visibility_pause                     PASS (0)
+    coverage inventory_next_verify 0x924ab0 completed 360 different 0 incomplete 0
+tlhybrid: inventory_next_verify                            PASS (0)
+    coverage mass3_8f0d10 0x8f0d10 completed 256 different 0 incomplete 0
+tlhybrid: mass3_8f0d10                                     PASS (0)
+    coverage merchantmenu_open 0xb6a220 completed 1152 different 0 incomplete 0
+tlhybrid: merchantmenu_open                                PASS (0)
+    coverage pass11_graph_get_value 0xc78310 completed 64 different 0 incomplete 0
+tlhybrid: pass11_graph_get_value                           PASS (0)
+tlhybrid: questcontroller_descriptor_noncontroller_inputs  PASS (0)
+    coverage questmanager_names 0xd2e700 completed 80 different 0 incomplete 0
+tlhybrid: questmanager_names                               PASS (0)
+    coverage restore69_82a4e0 0x82a4e0 completed 64 different 0 incomplete 0
+tlhybrid: restore69_82a4e0                                 PASS (0)
+    coverage skillmenu_tab_click 0xbd88b0 completed 48 different 0 incomplete 0
+tlhybrid: skillmenu_tab_click                              PASS (0)
+    coverage stashmenu_constructor 0xc03f40 completed 32 different 0 incomplete 0
+tlhybrid: stashmenu_constructor                            PASS (0)
+    coverage unit_resources_clear 0xe7b1d0 completed 64 different 0 incomplete 0
+tlhybrid: unit_resources_clear                             PASS (0)
+    coverage combine_layout_equipped 0xadde00 completed 10368 different 0 incomplete 0
+tlhybrid: combine_layout_equipped                          PASS (0)
+    coverage bulk_registration_LinearForceAffectorDescriptor 0x6c2130 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_LinearForceAffectorDescriptor  PASS (0)
+    coverage descriptor_factory_5cace0 0x5cace0 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cace0                        PASS (0)
+    coverage descriptor_manager_deactivated 0x702570 completed 48 different 0 incomplete 0
+tlhybrid: descriptor_manager_deactivated                   PASS (0)
+    coverage editor_more_shake 0x7308e0 completed 792 different 0 incomplete 0
+tlhybrid: editor_more_shake                                PASS (0)
+    coverage equipment_convert 0x87de20 completed 96 different 0 incomplete 0
+tlhybrid: equipment_convert                                PASS (0)
+    coverage reader_observed_tokenize 0xc72c40 completed 180 different 0 incomplete 0
+tlhybrid: reader_observed_tokenize                         PASS (0)
+    coverage gameui_destructor_lifetime_differential 0xa94240 completed 208 different 0 incomplete 0
+tlhybrid: gameui_destructor_lifetime_differential          PASS (0)
+    coverage gameui_menu_visibility_console 0xa8e560 completed 415 different 0 incomplete 0
+tlhybrid: gameui_menu_visibility_console                   PASS (0)
+    coverage inventory_next_remove_guid 0x925580 completed 360 different 0 incomplete 0
+tlhybrid: inventory_next_remove_guid                       PASS (0)
+    coverage mass3_8f4780 0x8f4780 completed 128 different 0 incomplete 0
+tlhybrid: mass3_8f4780                                     PASS (0)
+tlhybrid: merchantmenu_open_expected_exceptions            PASS (0)
+    coverage pass11_levelstate_ctor_c1 0x968ef0 completed 64 different 0 incomplete 0
+tlhybrid: pass11_levelstate_ctor_c1                        PASS (0)
+    coverage questcontroller_constructor_lifetime 0xdef0a0 completed 24 different 0 incomplete 0
+tlhybrid: questcontroller_constructor_lifetime             PASS (0)
+tlhybrid: questmanager_names_exceptions                    PASS (0)
+    coverage restore69_8c2760 0x8c2760 completed 128 different 0 incomplete 0
+tlhybrid: restore69_8c2760                                 PASS (0)
+    coverage skillmenu_click_dispatch 0xbd8880 completed 576 different 0 incomplete 0
+tlhybrid: skillmenu_click_dispatch                         PASS (0)
+tlhybrid: stashmenu_constructor_expected_exceptions        PASS (0)
+    coverage unit_resources_object_name 0xe7b590 completed 64 different 0 incomplete 0
+tlhybrid: unit_resources_object_name                       PASS (0)
+    coverage combinemenu_constructor 0xadd8a0 completed 256 different 0 incomplete 0
+tlhybrid: combinemenu_constructor                          PASS (0)
+    coverage bulk_registration_LogicTimerDescriptor 0x66a940 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_LogicTimerDescriptor           PASS (0)
+    coverage descriptor_factory_5cae90 0x5cae90 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cae90                        PASS (0)
+    coverage descriptor_manager_load_objects 0x702740 completed 48 different 0 incomplete 0
+tlhybrid: descriptor_manager_load_objects                  PASS (0)
+    coverage editor_more_sound 0x733890 completed 864 different 0 incomplete 0
+tlhybrid: editor_more_sound                                PASS (0)
+tlhybrid: equipment_convert_expected_exceptions            PASS (0)
+    coverage reader_observed_encoding 0xc72e80 completed 32 different 0 incomplete 0
+tlhybrid: reader_observed_encoding                         PASS (0)
+    coverage gameui_deleting_destructor_lifetime_differential 0xa94c60 completed 208 different 0 incomplete 0
+tlhybrid: gameui_deleting_destructor_lifetime_differential PASS (0)
+    coverage gameui_menu_visibility_inventory 0xa8ea20 completed 288 different 0 incomplete 0
+tlhybrid: gameui_menu_visibility_inventory                 PASS (0)
+    coverage inventory_next_remove 0x924810 completed 360 different 0 incomplete 0
+tlhybrid: inventory_next_remove                            PASS (0)
+    coverage mass3_8f5810 0x8f5810 completed 128 different 0 incomplete 0
+tlhybrid: mass3_8f5810                                     PASS (0)
+    coverage merchantmenu_owner 0xb617e0 completed 512 different 0 incomplete 0
+tlhybrid: merchantmenu_owner                               PASS (0)
+    coverage pass11_levelstate_ctor_c2 0x968ef0 completed 64 different 0 incomplete 0
+tlhybrid: pass11_levelstate_ctor_c2                        PASS (0)
+tlhybrid: questcontroller_constructor_unwind               PASS (0)
+    coverage quest_reward_parse_closure 0xd3c0c0 completed 85 different 0 incomplete 0
+tlhybrid: quest_reward_parse_closure                       PASS (0)
+    coverage restore69_a06700 0xa06700 completed 140 different 0 incomplete 0
+tlhybrid: restore69_a06700                                 PASS (0)
+    coverage skillmenu_create_menus_differential 0xbe19c0 completed 784 different 0 incomplete 0
+tlhybrid: skillmenu_create_menus_differential              PASS (0)
+    coverage stashmenu_click 0xbee5c0 completed 1920 different 0 incomplete 0
+tlhybrid: stashmenu_click                                  PASS (0)
+    coverage utf16_append_differential 0x56b360 completed 1920 different 0 incomplete 0
+tlhybrid: utf16_append_differential                        PASS (0)
+tlhybrid: combinemenu_constructor_expected_exceptions      PASS (0)
+    coverage bulk_registration_MoneyTakerDescriptor 0xe737e0 completed 24 different 0 incomplete 0
+tlhybrid: bulk_registration_MoneyTakerDescriptor           PASS (0)
+    coverage descriptor_factory_5cb040 0x5cb040 completed 24 different 0 incomplete 0
+tlhybrid: descriptor_factory_5cb040                        PASS (0)
+    coverage descriptor_next_ctor 0x6f9e70 completed 480 different 0 incomplete 0
+tlhybrid: descriptor_next_ctor                             PASS (0)
+    coverage editor_more_assets 0x724830 completed 864 different 0 incomplete 0
+tlhybrid: editor_more_assets                               PASS (0)
+    coverage equipment_dps_differential 0x86f360 completed 3584 different 0 incomplete 0
+tlhybrid: equipment_dps_differential                       PASS (0)
+    coverage reader_observed_construct 0xc72b70 completed 32 different 0 incomplete 0
+tlhybrid: reader_observed_construct                        PASS (0)
+tlhybrid: gameui_destructor_lifetime_expected_exceptions   PASS (0)
+    coverage gameui_modal_dialog 0xa8ec90 completed 384 different 0 incomplete 0
+tlhybrid: gameui_modal_dialog                              PASS (0)
+    coverage inventory_next_free 0x91cfe0 completed 360 different 0 incomplete 0
+tlhybrid: inventory_next_free                              PASS (0)
+    coverage mass3_8f8260 0x8f8260 completed 192 different 0 incomplete 0
+tlhybrid: mass3_8f8260                                     PASS (0)
+    coverage merchantmenu_player 0xb61740 completed 512 different 0 incomplete 0
+tlhybrid: merchantmenu_player                              PASS (0)
+    coverage pass11_quest_destroy_icons 0xd34aa0 completed 768 different 0 incomplete 0
+tlhybrid: pass11_quest_destroy_icons                       PASS (0)
+    coverage questcontroller_destructor_lifetime 0xdef220 completed 48 different 0 incomplete 0
+    coverage questcontroller_destructor_lifetime 0xdef220 completed 48 different 0 incomplete 0
+    coverage questcontroller_destructor_lifetime 0xdef510 completed 48 different 0 incomplete 0
+    coverage questcontroller_destructor_lifetime 0xdef4e0 completed 48 different 0 incomplete 0
+    coverage questcontroller_destructor_lifetime 0xdef500 completed 48 different 0 incomplete 0
+    coverage questcontroller_destructor_lifetime 0xdef4d0 completed 48 different 0 incomplete 0
+    coverage questcontroller_destructor_lifetime 0xdef4f0 completed 48 different 0 incomplete 0
+tlhybrid: questcontroller_destructor_lifetime              PASS (0)
+    coverage quest_reward_string_closure 0xd3d5a0 completed 167 different 0 incomplete 0
+tlhybrid: quest_reward_string_closure                      PASS (0)
+    coverage restore69_aed310 0xaed310 completed 64 different 0 incomplete 0
+tlhybrid: restore69_aed310                                 PASS (0)
+tlhybrid: skillmenu_create_expected_exceptions             PASS (0)
+    coverage stashmenu_close 0xbf5f90 completed 768 different 0 incomplete 0
+tlhybrid: stashmenu_close                                  PASS (0)
+    coverage utf16_reserve_differential 0x56b2c0 completed 1600 different 0 incomplete 0
+tlhybrid: utf16_reserve_differential                       PASS (0)
+tlhybrid: 1143 tests, 0 failed
+hybrid self-test: PASS
+handwritten fixtures: 1135 declared originals; 1086 with executed per-function comparison evidence (declarations alone do not accept DIFF)
+accepted: 3393 of 5247 game functions (1642317 bytes); 958 by self-test, 0 by generated tests

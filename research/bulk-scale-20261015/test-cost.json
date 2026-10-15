@@ -1,0 +1,25 @@
+{
+ "source": "decomp/hybrid/tests/CombineMenuReturnTest.cpp",
+ "original_address": "0xad4b90",
+ "baseline_cases": 44544,
+ "new_cases": 24,
+ "normal_case_reduction": 44520,
+ "unchanged_unsuppressed_cases_per_registration": 44544,
+ "old_historical_fixture_seconds": [
+  251,
+  256
+ ],
+ "new_focused_fixture_seconds": 0.056,
+ "new_focused_process_seconds": 0.27192456599732395,
+ "new_focused_build_seconds": 40.9893404559989,
+ "observations": [
+  "Exactly one virtual updateLayout call with correct receiver",
+  "Clicked slot mutation retained",
+  "No inventory/drop collaborators",
+  "Original map entries, key presence, inventory identity and all six equip locations retained",
+  "A deliberate early-return defect is rejected by the reduced test"
+ ],
+ "full_run_before_seconds": 1227.6706858710022,
+ "full_run_after_seconds": 1298.395178206003,
+ "caveat": "Historical and current samples have different test inventories. Only this redundant suppressed matrix was reduced; full regression inventory and acceptance guards are retained."
+}

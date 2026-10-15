@@ -71,3 +71,29 @@ bool CLogicGroupDescriptor::saveAdditionalInfo(CEditorBaseObject* object, std::b
     }
     return false;
 }
+
+CLogicGroupDescriptor::CLogicGroupDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
+    : CDescriptor(0)
+{
+    m_sName = std::wstring(name);
+    m_sIcon = std::wstring(description);
+    m_sDescription = std::wstring(group);
+    m_iFlags &= ~DESCRIPTOR_FLAG_CLONABLE;
+    AddInputLogic(INPUT_EVENT_STOP_4);
+    AddInputLogic(INPUT_EVENT_START);
+    AddInputLogic(INPUT_EVENT_PAUSE_3);
+    AddInputLogic(INPUT_EVENT_INPUT1);
+    AddInputLogic(INPUT_EVENT_INPUT2);
+    AddInputLogic(INPUT_EVENT_INPUT3);
+    AddInputLogic(INPUT_EVENT_INPUT4);
+    AddInputLogic(INPUT_EVENT_INPUT5);
+    AddOutputLogic(OUTPUT_EVENT_STOP);
+    AddOutputLogic(OUTPUT_EVENT_START);
+    AddOutputLogic(OUTPUT_EVENT_PAUSE);
+    AddOutputLogic(OUTPUT_EVENT_OUTPUT_1);
+    AddOutputLogic(OUTPUT_EVENT_OUTPUT_2);
+    AddOutputLogic(OUTPUT_EVENT_OUTPUT_3);
+    AddOutputLogic(OUTPUT_EVENT_OUTPUT_4);
+    AddOutputLogic(OUTPUT_EVENT_OUTPUT_5);
+    AddOutputLogic(OUTPUT_EVENT_LEVEL_ACTIVATED);
+}

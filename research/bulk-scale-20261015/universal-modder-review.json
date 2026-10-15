@@ -1,0 +1,38 @@
+{
+ "repository": "https://github.com/rehan-remade/universal-modder",
+ "inspected_tree": "23902ef42e8ea9b077bfbbf6911eb8ea0348e55a",
+ "installed": false,
+ "sources": [
+  "https://github.com/rehan-remade/universal-modder/blob/main/skills/reverse-engineering/SKILL.md",
+  "https://github.com/rehan-remade/universal-modder/blob/main/skills/port-a-mod/SKILL.md",
+  "https://github.com/rehan-remade/universal-modder/blob/main/knowledge/techniques/oracles-how-agents-know-a-mod-works.md",
+  "https://github.com/rehan-remade/universal-modder/blob/main/knowledge/games/might-and-magic-6/matching-decomp-vc6-byte-identical-text.md",
+  "https://github.com/rehan-remade/universal-modder/blob/main/um/cli.py",
+  "https://momo5502.com/posts/2026-10-09-game-decompilation/",
+  "https://github.com/rehan-remade/universal-modder/blob/main/skills/mod-any-game/references/engines/native.md",
+  "https://github.com/rehan-remade/universal-modder/blob/main/skills/mod-any-game/references/engines/retro-decomp.md",
+  "https://github.com/rehan-remade/universal-modder/blob/main/knowledge/games/kenshi/first-person-camera-and-wasd-on-vanilla-kenshi-1-0-68-an-ogr.md"
+ ],
+ "findings": {
+  "direct_Cpp_recovery_engine_found": false,
+  "torchlight_specific_files_found": false,
+  "relevant_ideas": [
+   "Batch code-capable headless Ghidra queries instead of many tiny calls",
+   "Extract repetitive registration chains mechanically, preserving order",
+   "Use exact comparison and one-defect negative controls",
+   "Use trace replay or live coverage for remaining integration paths; requires separately authorized GUI work here",
+   "Kenshi case study: a headless host constructs real OGRE managers and scene objects for ABI/behavior tests. Candidate for richer legal Torchlight fixture objects; their OGRE2/MSVC layouts and offsets cannot be reused for pinned OGRE1.6.5/GCC4.4.7. No such host implemented here."
+  ],
+  "already_present": [
+   "Original compiler and strict relocation/data/EH comparison",
+   "Prepared per-TU source context",
+   "Branch-covering original/replacement hybrid fixtures",
+   "One full final gate per integrated batch"
+  ],
+  "not_run": [
+   "No universal-modder commands or install scripts",
+   "No new MCP services, cloud asset services or GUI game automation"
+  ]
+ },
+ "claim_boundary": "The external project reports its own case studies; no external reconstructed binary or its claimed function counts were independently verified."
+}

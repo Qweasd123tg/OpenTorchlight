@@ -1,0 +1,49 @@
+{
+ "baseline": "6bb574a04b25d2b6f31047640db73c67b0bd01be",
+ "command": "python3 tools/decomp/check.py",
+ "environment": {
+  "LANG": "C.UTF-8",
+  "LC_ALL": "",
+  "TZ": "",
+  "OTL_JOBS": "2",
+  "OTL_COMPARE_JOBS": "2",
+  "OTL_BUILD_JOBS": "2",
+  "OTL_SELFTEST_JOBS": "6",
+  "OTL_SELFTEST_SHARDS": "60",
+  "OTL_SELFTEST_TIMEOUT": "1800"
+ },
+ "result": "PASS",
+ "tests": 1143,
+ "failed": 0,
+ "selftest_seconds": 1298.395178206003,
+ "selftest_shards": 60,
+ "hybrid_build_seconds": 75.08467668500089,
+ "accepted_before": 3269,
+ "accepted_after": 3393,
+ "newly_accepted": 124,
+ "new_source_definitions": 71,
+ "existing_definitions_newly_compared": 53,
+ "lost_accepted": [],
+ "game_functions": 5247,
+ "matched_game": 2435,
+ "behavioral_game": 958,
+ "prior_strong_match": 3283,
+ "current_strong_match": 3292,
+ "prior_strong_match_code_changed": [],
+ "all_accepted_behavioral_receipts_current": true,
+ "input_manifest_unchanged": true,
+ "inputs_digest": "ac129b1ad62f4b1b34d3bc28c209b882feeba598a1046150f188f4a0feb8e7c6",
+ "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+ "full_log_sha256": "60388dbb06fd28714a30801233cd33a46488edd946815a4f03ec0e810547671a",
+ "tool_tests": {
+  "context": 158,
+  "callback_alias": 10,
+  "bulk_diagnostic": 4,
+  "headers": 13,
+  "pipeline": 65,
+  "total": 250
+ },
+ "limitations": [
+  "Headless comparison does not establish windowed gameplay or standalone reconstructed-game linking."
+ ]
+}

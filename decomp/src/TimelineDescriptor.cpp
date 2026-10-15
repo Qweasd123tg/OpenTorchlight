@@ -139,3 +139,44 @@ unsigned int CTimelineDescriptor::GetTimelineModIDByString(CEditorScene* scene, 
     }
     return 0;
 }
+
+CTimelineDescriptor::CTimelineDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
+    : CDescriptor(0)
+{
+    AddInputLogic(INPUT_EVENT_ENABLE);
+    AddInputLogic(INPUT_EVENT_DISABLE);
+    AddOutputLogic(OUTPUT_EVENT_ENABLED);
+    AddOutputLogic(OUTPUT_EVENT_DISABLED);
+    AddInputLogic(INPUT_EVENT_PLAY_2);
+    AddInputLogic(INPUT_EVENT_PLAY_BACKWARDS);
+    AddInputLogic(INPUT_EVENT_STOP_2);
+    AddInputLogic(INPUT_EVENT_STOP_TO_END);
+    AddInputLogic(INPUT_EVENT_PAUSE_2);
+    AddInputLogic(INPUT_EVENT_RESET_2);
+    AddInputLogic(INPUT_EVENT_RESET_TO_END);
+    AddInputLogic(INPUT_EVENT_FAST_FORWARD_TO_END);
+    AddInputLogic(INPUT_EVENT_REWIND_TO_START);
+    AddOutputLogic(OUTPUT_EVENT_STARTED);
+    AddOutputLogic(OUTPUT_EVENT_STARTED_FORWARDS);
+    AddOutputLogic(OUTPUT_EVENT_STARTED_BACKWARDS);
+    AddOutputLogic(OUTPUT_EVENT_STOPPED_2);
+    AddOutputLogic(OUTPUT_EVENT_STOPPED_FORWARDS);
+    AddOutputLogic(OUTPUT_EVENT_STOPPED_BACKWARDS);
+    AddOutputLogic(OUTPUT_EVENT_LOOPED);
+    AddOutputLogic(OUTPUT_EVENT_PAUSED_2);
+    AddOutputLogic(OUTPUT_EVENT_RESET_TO_BEGINNING);
+    AddOutputLogic(OUTPUT_EVENT_RESET_TO_END);
+    AddOutputLogic(OUTPUT_EVENT_FINISHED);
+    m_sName = std::wstring(name);
+    m_sIcon = std::wstring(description);
+    m_sDescription = std::wstring(group);
+    m_iFlags &= ~(DESCRIPTOR_FLAG_CLONABLE | DESCRIPTOR_FLAG_CHILDREN);
+    AddProperty(L"TIMELINE", L"DURATION", L"Duration of the timeline", (void*)Set_SetTimelineDuration, (void*)Get_GetTimelineDuration, VARIABLE_TYPE_FLOAT, 0);
+    AddProperty(L"TIMELINE", L"STEP", L"The update step", (void*)Set_SetTimelineStep, (void*)Get_GetTimelineStep, VARIABLE_TYPE_FLOAT, 0);
+    AddProperty(L"TIMELINE", L"LOOPS", L"Duration", (void*)Set_SetTimelineLoops, (void*)Get_GetTimelineLoops, VARIABLE_TYPE_BOOL, 0);
+    AddProperty(L"LOAD", L"RESET PROPERTIES", L"if true the timeline will reset the properties of the objects.", (void*)Set_setSetPropertiesOnLoad, (void*)Get_getSetPropertiesOnLoad, VARIABLE_TYPE_BOOL, 0);
+    AddProperty(L"LOAD", L"START ON LOAD", L"if set to true it will automatically start when the layout loads", (void*)Set_SetStartOnLoad, (void*)Get_GetStartOnLoad, VARIABLE_TYPE_BOOL, 0);
+    AddPropertyWithInterpreterFunctions(L"TIMELINE", L"DEFAULT INTERPOLATION TYPE", L"The interpolation type that all timeline properties will default to.", (void*)Set_setDefaultInterpolationType, (void*)Get_getDefaultInterpolationType, GetTimelineInterpolationIDByString, GetTimelineInterpolationStringByID, NULL, VARIABLE_TYPE_UNSIGNED_INTEGER, 4);
+    AddProperty(L"MODIFICATION", L"LAYOUT CONTROL", L"if set to true timeline layout links can start and stop the timeline.", (void*)Set_setLayoutCanControl, (void*)Get_getLayoutCanControl, VARIABLE_TYPE_BOOL, 0);
+    AddPropertyWithInterpreterFunctions(L"MODIFICATION", L"TYPE", L"When a layout link loads a timeline, it can adjust the length by the type of modification specified here.", (void*)Set_setDurationModicationType, (void*)Get_getDurationModicationType, GetTimelineModIDByString, GetTimelineModStringByID, NULL, VARIABLE_TYPE_UNSIGNED_INTEGER, 4);
+}

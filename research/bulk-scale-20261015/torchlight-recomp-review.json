@@ -1,0 +1,40 @@
+{
+ "repository": "https://github.com/YaPeL/torchlight-recomp",
+ "inspected_commit": "9c68173f97c6f515fe861527ef7af2d60811664c",
+ "method": "Static recompilation of Xbox 360 PowerPC machine code through ReXGlue, plus native host renderer and platform integration",
+ "source_evidence": {
+  "input_and_codegen": "https://github.com/YaPeL/torchlight-recomp/blob/9c68173f97c6f515fe861527ef7af2d60811664c/torchlight_manifest.toml#L3-L20",
+  "Cpp23_and_generated_input": "https://github.com/YaPeL/torchlight-recomp/blob/9c68173f97c6f515fe861527ef7af2d60811664c/CMakeLists.txt#L1-L27",
+  "register_and_address_based_hooks": "https://github.com/YaPeL/torchlight-recomp/blob/9c68173f97c6f515fe861527ef7af2d60811664c/src/hooks/render_system_hooks.cpp#L37-L80",
+  "guest_calls_and_memory": "https://github.com/YaPeL/torchlight-recomp/blob/9c68173f97c6f515fe861527ef7af2d60811664c/src/game_menu/guest_call.cpp#L23-L105",
+  "host_OGRE14": "https://github.com/YaPeL/torchlight-recomp/blob/9c68173f97c6f515fe861527ef7af2d60811664c/src/backend/CMakeLists.txt#L1-L28",
+  "guest_OGRE17_PPC_layout": "https://github.com/YaPeL/torchlight-recomp/blob/9c68173f97c6f515fe861527ef7af2d60811664c/src/guest_abi/ogre_layout.h#L1-L23",
+  "original_executable_runtime_validation": "https://github.com/YaPeL/torchlight-recomp/blob/9c68173f97c6f515fe861527ef7af2d60811664c/src/game_setup/game_files.cpp#L58-L95",
+  "reported_gameplay_route": "https://github.com/YaPeL/torchlight-recomp/blob/9c68173f97c6f515fe861527ef7af2d60811664c/docs/performance-profile.md#L45-L64",
+  "reported_runtime_measurement": "https://github.com/YaPeL/torchlight-recomp/blob/9c68173f97c6f515fe861527ef7af2d60811664c/docs/performance-profile.md#L645-L662",
+  "remaining_exception_limitations": "https://github.com/YaPeL/torchlight-recomp/blob/9c68173f97c6f515fe861527ef7af2d60811664c/docs/ARCHITECTURE.md#L277-L298",
+  "nogame_CI": "https://github.com/YaPeL/torchlight-recomp/blob/9c68173f97c6f515fe861527ef7af2d60811664c/.github/workflows/ci.yml#L1-L4",
+  "beta_release": "https://github.com/YaPeL/torchlight-recomp/releases/tag/v0.7.6-beta"
+ },
+ "observations": [
+  "A substantial usable-port effort with published beta packages for Linux, Windows and Apple Silicon macOS; author reports menus, dungeons, inventory, pets and saves.",
+  "Gameplay code is generated from default.xex into ignored generated/. Public host hooks keep PPCContext registers, guest memory, byte-swapping and address-named functions; this is compiled translation, not a CPU interpreter.",
+  "This does not reconstruct the original PC Linux C++98 translation units, classes and method bodies targeted by OpenTorchlight.",
+  "Host renderer uses OGRE 14.6 while guest ABI maps describe OGRE 1.7.0 on 32-bit big-endian PPC/MSVC. Layouts and offsets cannot be copied to our OGRE 1.6.5/GCC Linux ELF.",
+  "The October 13 v0.7.6-beta release lists Android for a next iteration; no Android release was established by this review.",
+  "Generated gameplay source is absent from public Git and requires the original XEX. The XEX also appears in verified installed runtime inputs.",
+  "Published gameplay/performance reports are author evidence, not our independent launch or proof of completing the full game. The ordinary CI uses nogame builds."
+ ],
+ "implication": "The practical modern-platform and eventual Android goals overlap substantially. Compare this port before funding another long recovery tranche; readable-original-source recovery remains a separate deliverable.",
+ "potential_reuse": [
+  "Independent format and ABI research, checked against our original before use",
+  "PC save/mod conversion and compatibility findings",
+  "Gameplay scenarios and measured failure paths"
+ ],
+ "execution": {
+  "downloaded_or_ran_binaries": false,
+  "installed": false,
+  "windowed_game_launched": false,
+  "canonical_decomp_inputs_modified_by_review": false
+ }
+}

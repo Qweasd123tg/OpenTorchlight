@@ -33,20 +33,20 @@ unsigned int CUnitTriggerDescriptor::GetLoopTypeIDByString(CEditorScene* scene, 
     return 0;
 }
 
-void CUnitTriggerDescriptor::AddInputsAndOutputs(CDescriptor*)
+void CUnitTriggerDescriptor::AddInputsAndOutputs(CDescriptor* descriptor)
 {
-    AddInputLogic(INPUT_EVENT_COLLIDABLE);
-    AddInputLogic(INPUT_EVENT_NOT_COLLIDABLE);
-    AddInputLogic(INPUT_EVENT_RESET);
-    AddInputLogic(INPUT_EVENT_RESET);
-    AddInputLogic(INPUT_EVENT_TRIGGER);
-    AddInputLogic(INPUT_EVENT_SET_STATE_ONE);
-    AddInputLogic(INPUT_EVENT_SET_STATE_TWO);
-    AddOutputLogic(OUTPUT_EVENT_RESET);
-    AddOutputLogic(OUTPUT_EVENT_TRIGGERED);
-    AddOutputLogic(OUTPUT_EVENT_STATE_ONE);
-    AddOutputLogic(OUTPUT_EVENT_STATE_TWO);
-    AddOutputLogic(OUTPUT_EVENT_ACTIVATION_FAILED);
+    descriptor->AddInputLogic(INPUT_EVENT_COLLIDABLE);
+    descriptor->AddInputLogic(INPUT_EVENT_NOT_COLLIDABLE);
+    descriptor->AddInputLogic(INPUT_EVENT_RESET);
+    descriptor->AddInputLogic(INPUT_EVENT_RESET);
+    descriptor->AddInputLogic(INPUT_EVENT_TRIGGER);
+    descriptor->AddInputLogic(INPUT_EVENT_SET_STATE_ONE);
+    descriptor->AddInputLogic(INPUT_EVENT_SET_STATE_TWO);
+    descriptor->AddOutputLogic(OUTPUT_EVENT_RESET);
+    descriptor->AddOutputLogic(OUTPUT_EVENT_TRIGGERED);
+    descriptor->AddOutputLogic(OUTPUT_EVENT_STATE_ONE);
+    descriptor->AddOutputLogic(OUTPUT_EVENT_STATE_TWO);
+    descriptor->AddOutputLogic(OUTPUT_EVENT_ACTIVATION_FAILED);
 }
 
 std::wstring CUnitTriggerDescriptor::getQuestStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
@@ -72,4 +72,21 @@ unsigned int CUnitTriggerDescriptor::getQuestIDByString(CEditorScene*, CEditorBa
         if (it->second->m_sUnknown50 == name)
             return index;
     return 0;
+}
+
+CUnitTriggerDescriptor::CUnitTriggerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
+    : CPositionableObjectDescriptor(name, group, description, true, true, true, true, false)
+{
+    AddProperty(L"PROPERTIES", L"ENABLED", L"Sets the trigger enabled or disabled.", (void*)Set_setEnabled, (void*)Get_getEnabled, VARIABLE_TYPE_BOOL, 0);
+    AddPropertyWithInterpreterFunctions(L"PROPERTIES", L"MODEL", L"The model you want to use for the trigger.", (void*)Set_setUnitModelName, (void*)Get_getUnitModelName, GetTriggerModelIDByString, GetTriggerModelStringByID, NULL, VARIABLE_TYPE_STRING, 4);
+    AddPropertyWithInterpreterFunctions(L"PROPERTIES", L"LOOP STYLE", L"The style of the trigger loop.", (void*)Set_setLoopType, (void*)Get_getLoopType, GetLoopTypeIDByString, GetLoopTypeStringByID, NULL, VARIABLE_TYPE_UNSIGNED_INTEGER, 4);
+    AddPropertyWithInterpreterFunctions(L"REQUIREMENTS", L"REQUIRED QUEST", L"Quest required to interact with this trigger", (void*)Set_setRequiredQuest, (void*)Get_getRequiredQuest, getQuestIDByString, getQuestStringByID, NULL, VARIABLE_TYPE_STRING, 4);
+    AddPropertyWithInterpreterFunctions(L"REQUIREMENTS", L"REQUIRED ITEM", L"Item required to interact with this trigger", (void*)Set_setRequiredUnit, (void*)Get_getRequiredUnit, getItemIDByString, getItemStringByID, NULL, VARIABLE_TYPE_STRING, 4);
+    AddProperty(L"REQUIREMENTS", L"NUMBER REQUIRED", L"Number of items required to interact with the unit", (void*)Set_setRequiredUnitCount, (void*)Get_getRequiredUnitCount, VARIABLE_TYPE_UNSIGNED_INTEGER, 0);
+    AddProperty(L"REQUIREMENTS", L"TAKE ITEMS", L"Take the items upon interaction", (void*)Set_setTakeRequiredUnit, (void*)Get_getTakeRequiredUnit, VARIABLE_TYPE_BOOL, 0);
+    AddInputLogic(INPUT_EVENT_ENABLE);
+    AddInputLogic(INPUT_EVENT_DISABLE);
+    AddOutputLogic(OUTPUT_EVENT_ENABLED);
+    AddOutputLogic(OUTPUT_EVENT_DISABLED);
+    AddInputsAndOutputs(this);
 }

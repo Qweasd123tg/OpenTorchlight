@@ -35,6 +35,8 @@ public:
     static UNIONDATA8BIT* Get_getAngleOfRelease(CEditorBaseObject* object, unsigned int& count);
     static void Set_setAngleOffset(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
     static UNIONDATA8BIT* Get_getAngleOffset(CEditorBaseObject* object, unsigned int& count);
+    static void Set_setPointOrder(CEditorBaseObject* object, const UNIONDATA8BIT* data, unsigned int count);
+    static UNIONDATA8BIT* Get_getPointOrder(CEditorBaseObject* object, unsigned int& count);
 };
 
 #endif
