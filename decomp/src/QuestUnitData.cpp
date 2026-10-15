@@ -761,3 +761,130 @@ CDataGroup* CQuestUnitData::getSpawnClassUnitDataLookingFor()
                                itemPreset ? -1 : 0, itemPreset ? 1 : -1, 0, 0);
     return groups.size() != 0 ? groups[0] : NULL;
 }
+
+#include "RandomNames.h"
+#include "UnitResourceList.h"
+
+CDataGroup* CQuestUnitData::getBaseUnitDataGroup()
+{
+    if (m_pQuest == NULL)
+        return NULL;
+
+    if (m_pQuestDataGroup != NULL)
+    {
+        {
+            const std::wstring key(L"UNIT_GUID");
+            m_baseUnitGuid = m_pQuest->m_pResourceManager->getUnitGuidByDataGroup(
+                m_pQuestDataGroup, key);
+        }
+        return m_pQuestDataGroup;
+    }
+
+    if (m_baseUnitGuid != -1)
+    {
+        CDataGroup* cached = m_pQuest->m_pResourceManager->getUnitDataByGuid(m_baseUnitGuid);
+        if (cached != NULL)
+            return cached;
+    }
+
+    CDataGroup* selected = NULL;
+    bool generateChampionName = true;
+    if (m_spawnClass != EMPTY_WSTRING)
+        selected = getSpawnClassUnitDataLookingFor();
+    else if (m_unitTypeName != EMPTY_WSTRING)
+    {
+        const unsigned int type = CMasterResourceManager::getSingleton()->m_pHierarchy->
+            getTypeIDByName(m_unitTypeName);
+        m_unitType = type;
+        m_displayName = CMasterResourceManager::getSingleton()->m_pHierarchy->getTypeName(type);
+    }
+    else if (m_itemName != EMPTY_WSTRING)
+    {
+        const std::wstring* resourceNames =
+            reinterpret_cast<const std::wstring*>(gRESOURCE_GROUP_NAMES);
+        selected = CUnitResourceList::getSingleton()->getDataGroupByObjectName(
+            resourceNames[0], m_itemName);
+        generateChampionName = false;
+    }
+    else if (m_monsterName != EMPTY_WSTRING)
+    {
+        const std::wstring* resourceNames =
+            reinterpret_cast<const std::wstring*>(gRESOURCE_GROUP_NAMES);
+        selected = CUnitResourceList::getSingleton()->getDataGroupByObjectName(
+            resourceNames[1], m_monsterName);
+        m_removeFromInventory = false;
+    }
+    else
+    {
+        const std::wstring* presetNames =
+            reinterpret_cast<const std::wstring*>(g_QUESTUNIT_SPAWNCLASS_PREDEFINE_NAMES);
+        if (m_unitSearchMode == 1)
+        {
+            m_spawnClass = presetNames[3];
+            selected = getSpawnClassUnitDataLookingFor();
+            generateChampionName = false;
+        }
+        else
+        {
+            m_spawnClass = presetNames[m_makeChampion ? 2 : 1];
+            selected = getSpawnClassUnitDataLookingFor();
+        }
+    }
+
+    if (generateChampionName && m_makeChampion)
+    {
+        const int savedState = UTILITIES::getRandState();
+        UTILITIES::setSeed(m_pQuest->m_iUnknown1C);
+        m_generatedChampionName = CRandomNames::getSingleton()->generateName(true);
+        UTILITIES::setSeed(savedState);
+    }
+
+    if (selected != NULL)
+    {
+        const std::wstring key(L"UNIT_GUID");
+        m_baseUnitGuid = m_pQuest->m_pResourceManager->getUnitGuidByDataGroup(selected, key);
+    }
+    else
+        m_baseUnitGuid = -1;
+    return selected;
+}
+
+CBaseUnit* CQuestUnitData::spawnUnit(CResourceManager* resourceManager,
+                                   Ogre::Vector3 const& position)
+{
+    if (resourceManager == NULL || m_pBaseUnitDataGroup == NULL)
+        return NULL;
+    CLevel* level = resourceManager->getLevel();
+    if (level == NULL || m_completed)
+        return NULL;
+
+    CBaseUnit* unit = resourceManager->createUnit(m_pBaseUnitDataGroup,
+                                                 level->m_dungeonDepth, false, false);
+    if (unit == NULL)
+        return NULL;
+    level->addUnit(unit, position);
+    unit->m_iQuestGuid = m_pQuest->m_iUnknown1C8;
+    unit->m_iQuestState = m_questUnitDataId;
+
+    if (m_makeChampion)
+    {
+        CCharacter* character = dynamic_cast<CCharacter*>(unit);
+        if (character != NULL)
+        {
+            character->makeChampion(m_generatedChampionName,
+                static_cast<int>(static_cast<unsigned int>(level->m_dungeonDepth) +
+                                 static_cast<unsigned int>(UTILITIES::randomIntegerBetween(0, 2))),
+                std::wstring(L"CHAMPION"));
+            m_pQuest->m_pQuestManager->calculateNPCIcon(character);
+        }
+    }
+
+    CEquipment* equipment = dynamic_cast<CEquipment*>(unit);
+    if (equipment != NULL)
+    {
+        equipment->m_bUnknown348 = true;
+        equipment->destroyItemText();
+        equipment->destroyItemText();
+    }
+    return unit;
+}

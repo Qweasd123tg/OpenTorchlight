@@ -14,7 +14,7 @@ public:
     static CRandomNames* getSingleton();
     void load(const wchar_t* filename);
     CRandomNames(const wchar_t* filename);
-    CRandomNames* generateName(bool withTitle);
+    std::wstring generateName(bool withTitle);
     ~CRandomNames();
 
     int m_nWeight;

@@ -35,6 +35,7 @@ class CPropertyNode;
 class CLevel : public CRunicCore
 {
 public:
+    CBaseUnit* addUnit(CBaseUnit* unit, const Ogre::Vector3& position);
     void addUpdateObject(iLevelUpdate* object);
     CBaseUnit* getBaseUnitByDataGroup(CDataGroup* dataGroup);
     void getUnitsByUnitType(UNITTYPES::EUNITTYPES type, TArrayList<CBaseUnit*>& units);

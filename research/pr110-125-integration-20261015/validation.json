@@ -1,0 +1,58 @@
+{
+ "schema": 1,
+ "source_prs": [
+  110,
+  125
+ ],
+ "source_heads": [
+  "f07a5818bf665f57fed7907b71455da745b811d7",
+  "d4dc655af948da136c74afbdc22cc1ba5bfc8ee5"
+ ],
+ "integration_base": "884fc68b59760bef0e63f3201a46514968990207",
+ "acceptance_status": "PASS",
+ "canonical_check_exit": 0,
+ "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+ "inputs_digest": "969559705c274be00dfdedd85434d70dca801eef8efd74a4f4d529efb4fa6554",
+ "accepted_functions": 2932,
+ "matched_functions": 2214,
+ "behavioral_functions": 718,
+ "accepted_bytes": 1426304,
+ "game_functions": 5247,
+ "game_bytes": 3702188,
+ "new_game_functions": 46,
+ "new_game_bytes": 38735,
+ "new_match": 1,
+ "new_behavioral": 45,
+ "previous_main_accepted_reconfirmed": 2886,
+ "previous_main_match_addresses_accepted": 2214,
+ "previous_main_matches_now_behavioral": [
+  "0x91cf50"
+ ],
+ "explicit_old_definitions_unchanged": 358,
+ "production_tus": 281,
+ "changed_object_tus": [
+  "decomp/src/Console.cpp",
+  "decomp/src/Inventory.cpp",
+  "decomp/src/QuestUnitData.cpp",
+  "decomp/src/character.cpp",
+  "decomp/src/monster.cpp",
+  "decomp/src/player.cpp"
+ ],
+ "unchanged_object_tus": 275,
+ "previous_hooks_preserved": 3625,
+ "new_hooks": 49,
+ "selftest_tests": 902,
+ "selftest_failed": 0,
+ "selftest_shards": 60,
+ "selftest_workers": 4,
+ "compiler_slots": 2,
+ "selftest_elapsed_seconds": 1395.353758873,
+ "tool_unit_tests": 88,
+ "tool_unit_failed": 0,
+ "full_check_log_sha256": "12cd6d67a463276dca942d13025a1565ce08f4df921d9c5d1d42c466b9c5ec26",
+ "blob_sha256": "98a6ebc2482ca5a9085767f3be3b5bddc0a641108bfbd0cd42a1f2ab6e0fc856",
+ "loader_sha256": "ce2686eaf8a40b71f08d21e721abeb40e8f78c243ec840a36aede29e24f48752",
+ "baseline_validation": "fresh static comparison; no full behavioral baseline claimed",
+ "previous_input_mismatch": "historical cause remains unknown; this fresh canonical run has identical complete before/after inputs",
+ "pr100": "MERGE HOLD: unexplained historical Graph C2 differences"
+}

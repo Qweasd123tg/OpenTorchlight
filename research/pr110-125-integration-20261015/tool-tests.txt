@@ -1,0 +1,6 @@
+Commands executed on this integration snapshot:
+python3 -B -m unittest discover -s tools/decomp -p 'test_check*.py': 7 tests PASS
+python3 -B -m unittest discover -s tools/decomp -p 'test_mutation_evidence.py': 10 tests PASS
+python3 -B -m unittest discover -s tools/decomp -p 'test_hybrid*.py': 17 tests PASS
+python3 -B -m unittest discover -s tools/decomp -p 'test_publication*.py': 54 tests PASS
+git diff --check: PASS

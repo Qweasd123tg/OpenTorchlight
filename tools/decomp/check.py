@@ -114,6 +114,41 @@ def generated_tests(db, diff):
     return [f["address"] for f in made]
 
 
+def save_input_manifest(label, manifest):
+    """Best-effort diagnostics must not affect the acceptance decision."""
+    path = ROOT / "build-decomp" / f"check-inputs-{label}.json"
+    temporary = path.with_suffix(".json.tmp")
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary.write_text(json.dumps(manifest, indent=1) + "\n")
+        temporary.replace(path)
+        return path
+    except OSError as error:
+        print(f"  cannot save {label} input manifest: {error}")
+        return None
+
+
+def unchanged_inputs(before, after, failure):
+    """Keep the acceptance guard fail-closed and retain its exact differing inputs."""
+    if evidence.manifest_digest(before) == evidence.manifest_digest(after):
+        return True
+    print(f"FAIL: {failure}")
+    changes = evidence.manifest_changes(before, after)
+    for kind in ("added", "removed", "changed", "context"):
+        names = changes[kind]
+        if names:
+            shown = ", ".join(names[:20])
+            rest = f" (+{len(names) - 20} more)" if len(names) > 20 else ""
+            print(f"  {kind} ({len(names)}): {shown}{rest}")
+    if changes["schema"]:
+        print("  input manifest schema changed")
+    for label, manifest in (("before", before), ("after", after)):
+        path = save_input_manifest(label, manifest)
+        if path:
+            print(f"  {label} input manifest: {path}")
+    return False
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--no-game", action="store_true")
@@ -124,7 +159,9 @@ def main():
     db = ensure_db()
     ensure_types()
     comparison_evidence = acceptance.load_comparisons(ROOT, db)
-    inputs_before = evidence.input_digest(db) if not args.no_game or comparison_evidence else None
+    inputs_before = evidence.input_manifest(db) if not args.no_game or comparison_evidence else None
+    if inputs_before is not None:
+        save_input_manifest("before", inputs_before)
     game_tus = {t["id"] for t in db["tus"] if t["kind"] == "game"}
     total = [f for f in db["functions"].values() if f["tu"] in game_tus and f["kind"] in WRITTEN]
     total_bytes = sum(f["size"] for f in total)
@@ -180,10 +217,10 @@ def main():
             declared = shadow_declared(db)
             print(f"handwritten fixtures: {len(declared)} declared originals; {len(covered)} with executed "
                   "per-function comparison evidence (declarations alone do not accept DIFF)")
-            inputs_after = evidence.input_digest(db)
-            if inputs_after != inputs_before:
-                print("FAIL: comparison inputs changed during the check")
+            manifest_after = evidence.input_manifest(db)
+            if not unchanged_inputs(inputs_before, manifest_after, "comparison inputs changed during the check"):
                 return 2
+            inputs_after = evidence.manifest_digest(manifest_after)
             fresh_bindings = acceptance.comparison_bindings(db, units, report, ROOT, inputs_after)
             comparison_evidence.update(fresh_bindings)
             for address, row in diff.items():
@@ -195,10 +232,10 @@ def main():
                   f"{sum(1 for a in accepted if a not in matched and a not in covered)} by generated tests")
 
     if args.no_game and comparison_evidence:
-        inputs_after = evidence.input_digest(db)
-        if inputs_after != inputs_before:
-            print("FAIL: inputs changed during object comparison")
+        manifest_after = evidence.input_manifest(db)
+        if not unchanged_inputs(inputs_before, manifest_after, "inputs changed during object comparison"):
             return 2
+        inputs_after = evidence.manifest_digest(manifest_after)
         for unit in units:
             for row in unit["functions"]:
                 address = row.get("address")

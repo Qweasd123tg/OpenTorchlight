@@ -1,5 +1,10 @@
 # PR110 integration candidate, 2026-10-14
 
+Historical snapshot: this candidate was superseded by the fresh successful
+[PR110 + PR125 integration](../pr110-125-integration-20261015/README.md).
+The old mismatch remains unexplained; its passing tests were not reused for
+acceptance. The newer run completed with identical full input fingerprints.
+
 **MERGE HOLD.** The full canonical check ran all 901 headless tests successfully,
 but exited 2 because its input fingerprint changed during execution. No fresh
 accepted count or behavioral acceptance receipts are published from that run.

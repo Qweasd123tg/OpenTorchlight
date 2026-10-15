@@ -1,0 +1,302 @@
+{
+ "baseline_source_hashes_current": true,
+ "baseline_hooks": 3625,
+ "final_hooks": 3674,
+ "lost": [],
+ "new": [
+  {
+   "original": "0xaec900",
+   "symbol": "__tlhybrid_local_186__ZL14SetPetsEnabledP10CCharacterb",
+   "demangled": "SetPetsEnabled(CCharacter*, bool)",
+   "unit": "decomp/src/Console.cpp"
+  },
+  {
+   "original": "0x91c2a0",
+   "symbol": "_ZN10CInventory18getComparisonItemsEP10CEquipmentPS1_S2_",
+   "demangled": "CInventory::getComparisonItems(CEquipment*, CEquipment**, CEquipment**)",
+   "unit": "decomp/src/Inventory.cpp"
+  },
+  {
+   "original": "0x91bdc0",
+   "symbol": "_ZN10CInventory8canEquipEP10CEquipmentb",
+   "demangled": "CInventory::canEquip(CEquipment*, bool)",
+   "unit": "decomp/src/Inventory.cpp"
+  },
+  {
+   "original": "0x926260",
+   "symbol": "_ZN10TArrayListIP13CEquipmentRefE3addES1_",
+   "demangled": "TArrayList<CEquipmentRef*>::add(CEquipmentRef*)",
+   "unit": "decomp/src/Inventory.cpp"
+  },
+  {
+   "original": "0x926820",
+   "symbol": "_ZNSt6vectorIP4CSetSaIS1_EE13_M_insert_auxEN9__gnu_cxx17__normal_iteratorIPS1_S3_EERKS1_",
+   "demangled": "std::vector<CSet*, std::allocator<CSet*> >::_M_insert_aux(__gnu_cxx::__normal_iterator<CSet**, std::vector<CSet*, std::allocator<CSet*> > >, CSet* const&)",
+   "unit": "decomp/src/Inventory.cpp"
+  },
+  {
+   "original": "0x924440",
+   "symbol": "_ZN10CInventory21calculateEffectValuesEv",
+   "demangled": "CInventory::calculateEffectValues()",
+   "unit": "decomp/src/Inventory.cpp"
+  },
+  {
+   "original": "0x924bd0",
+   "symbol": "_ZN10CInventory15pickupEquipmentEP10CEquipmentib",
+   "demangled": "CInventory::pickupEquipment(CEquipment*, int, bool)",
+   "unit": "decomp/src/Inventory.cpp"
+  },
+  {
+   "original": "0x9251b0",
+   "symbol": "_ZN10CInventory15pickupEquipmentEP10CEquipmentb",
+   "demangled": "CInventory::pickupEquipment(CEquipment*, bool)",
+   "unit": "decomp/src/Inventory.cpp"
+  },
+  {
+   "original": "0x925970",
+   "symbol": "_ZN10CInventory35equipEquipmentIntoFirstFreeLocationEP10CEquipment",
+   "demangled": "CInventory::equipEquipmentIntoFirstFreeLocation(CEquipment*)",
+   "unit": "decomp/src/Inventory.cpp"
+  },
+  {
+   "original": "0xd3ded0",
+   "symbol": "_ZN14CQuestUnitData9spawnUnitEP16CResourceManagerRKN4Ogre7Vector3E",
+   "demangled": "CQuestUnitData::spawnUnit(CResourceManager*, Ogre::Vector3 const&)",
+   "unit": "decomp/src/QuestUnitData.cpp"
+  },
+  {
+   "original": "0xd47de0",
+   "symbol": "_ZN14CQuestUnitData20getBaseUnitDataGroupEv",
+   "demangled": "CQuestUnitData::getBaseUnitDataGroup()",
+   "unit": "decomp/src/QuestUnitData.cpp"
+  },
+  {
+   "original": "0x8132f0",
+   "symbol": "__tlhybrid_local_96__ZL23createEquipmentAndEquipP10CCharacterP10CDataGroupPKw16EEQUIP_LOCATIONSb",
+   "demangled": "createEquipmentAndEquip(CCharacter*, CDataGroup*, wchar_t const*, EEQUIP_LOCATIONS, bool)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x83e6f0",
+   "symbol": "__tlhybrid_local_96__ZL12loadAndEquipP10CCharacterP10CDataGroupPKw16EEQUIP_LOCATIONS",
+   "demangled": "loadAndEquip(CCharacter*, CDataGroup*, wchar_t const*, EEQUIP_LOCATIONS)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x83bd10",
+   "symbol": "__tlhybrid_local_96__ZL22loadAndEquipSpawnClassP10CCharacterP10CDataGroupPKw16EEQUIP_LOCATIONS",
+   "demangled": "loadAndEquipSpawnClass(CCharacter*, CDataGroup*, wchar_t const*, EEQUIP_LOCATIONS)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x85ad10",
+   "symbol": "_ZNSt6vectorIbSaIbEE13_M_insert_auxESt13_Bit_iteratorb",
+   "demangled": "std::vector<bool, std::allocator<bool> >::_M_insert_aux(std::_Bit_iterator, bool)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x827b20",
+   "symbol": "_ZN10CCharacter12performSkillEv",
+   "demangled": "CCharacter::performSkill()",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x812950",
+   "symbol": "_ZN10CCharacter10setVisibleEbb",
+   "demangled": "CCharacter::setVisible(bool, bool)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x812e70",
+   "symbol": "_ZN10CCharacter13updateOpacityEfb",
+   "demangled": "CCharacter::updateOpacity(float, bool)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x811650",
+   "symbol": "_ZN10CCharacter15updateSkillKeysEf",
+   "demangled": "CCharacter::updateSkillKeys(float)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x811230",
+   "symbol": "_ZN10CCharacter9interruptEb",
+   "demangled": "CCharacter::interrupt(bool)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x822850",
+   "symbol": "_ZN10CCharacter15awardExperienceER6CLevelPS_ib",
+   "demangled": "CCharacter::awardExperience(CLevel&, CCharacter*, int, bool)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x83d930",
+   "symbol": "_ZN10CCharacter8updateHPER6CLevelf",
+   "demangled": "CCharacter::updateHP(CLevel&, float)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x8245c0",
+   "symbol": "_ZN10CCharacter13doWeaponSkillEP10CEquipment",
+   "demangled": "CCharacter::doWeaponSkill(CEquipment*)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x824e60",
+   "symbol": "_ZN10CCharacter16validLineOfSightER6CLevelb",
+   "demangled": "CCharacter::validLineOfSight(CLevel&, bool)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x826140",
+   "symbol": "_ZN10CCharacter13inAttackRangeE18EATTACK_RANGE_TYPE",
+   "demangled": "CCharacter::inAttackRange(EATTACK_RANGE_TYPE)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x826470",
+   "symbol": "_ZN10CCharacter12inSkillRangeExb",
+   "demangled": "CCharacter::inSkillRange(long long, bool)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x824a50",
+   "symbol": "_ZN10CCharacter13inStrikeRangeEPS_P5CItemP10CEquipment",
+   "demangled": "CCharacter::inStrikeRange(CCharacter*, CItem*, CEquipment*)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x82e4b0",
+   "symbol": "_ZN10CCharacter12startFishingEv",
+   "demangled": "CCharacter::startFishing()",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x831f90",
+   "symbol": "_ZN10CCharacter6addPetEPS_",
+   "demangled": "CCharacter::addPet(CCharacter*)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x842150",
+   "symbol": "_ZN10CCharacter18transformCharacterESbIwSt11char_traitsIwESaIwEEf",
+   "demangled": "CCharacter::transformCharacter(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, float)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x836cb0",
+   "symbol": "_ZN10CCharacter25generateMerchantInventoryEv",
+   "demangled": "CCharacter::generateMerchantInventory()",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x837630",
+   "symbol": "_ZN10CCharacter6fameUpEv",
+   "demangled": "CCharacter::fameUp()",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x83e8a0",
+   "symbol": "_ZN10CCharacter22createDefaultEquipmentEv",
+   "demangled": "CCharacter::createDefaultEquipment()",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x83c140",
+   "symbol": "_ZN10CCharacter14fishingAICatchEfR6CLevel",
+   "demangled": "CCharacter::fishingAICatch(float, CLevel&)",
+   "unit": "decomp/src/character.cpp"
+  },
+  {
+   "original": "0x8d59a0",
+   "symbol": "_ZN8CMonster6fleeAIEfR6CLevel",
+   "demangled": "CMonster::fleeAI(float, CLevel&)",
+   "unit": "decomp/src/monster.cpp"
+  },
+  {
+   "original": "0x8e06e0",
+   "symbol": "_ZN8CMonster13idleAICirclerEfR6CLevelb",
+   "demangled": "CMonster::idleAICircler(float, CLevel&, bool)",
+   "unit": "decomp/src/monster.cpp"
+  },
+  {
+   "original": "0x8e02b0",
+   "symbol": "_ZN8CMonster12idleAINormalEfR6CLevelb",
+   "demangled": "CMonster::idleAINormal(float, CLevel&, bool)",
+   "unit": "decomp/src/monster.cpp"
+  },
+  {
+   "original": "0x8e0eb0",
+   "symbol": "_ZN8CMonster20idleAIRangedDefenderEfR6CLevelb",
+   "demangled": "CMonster::idleAIRangedDefender(float, CLevel&, bool)",
+   "unit": "decomp/src/monster.cpp"
+  },
+  {
+   "original": "0x8e0b90",
+   "symbol": "_ZN8CMonster18idleAIRangedCasterEfR6CLevelb",
+   "demangled": "CMonster::idleAIRangedCaster(float, CLevel&, bool)",
+   "unit": "decomp/src/monster.cpp"
+  },
+  {
+   "original": "0x8e1580",
+   "symbol": "_ZN8CMonster10jumpDownAIEfR6CLevel",
+   "demangled": "CMonster::jumpDownAI(float, CLevel&)",
+   "unit": "decomp/src/monster.cpp"
+  },
+  {
+   "original": "0x8e4490",
+   "symbol": "_ZN7CPlayer13createPortalsER6CLevel",
+   "demangled": "CPlayer::createPortals(CLevel&)",
+   "unit": "decomp/src/player.cpp"
+  },
+  {
+   "original": "0x8f16e0",
+   "symbol": "_ZN7CPlayer49removeQuestItemFromInventoryOrPetsInventoryByGuidExxbbN9UNITTYPES10EUNITTYPESE",
+   "demangled": "CPlayer::removeQuestItemFromInventoryOrPetsInventoryByGuid(long long, long long, bool, bool, UNITTYPES::EUNITTYPES)",
+   "unit": "decomp/src/player.cpp"
+  },
+  {
+   "original": "0x8f1380",
+   "symbol": "_ZN7CPlayer44removeItemFromInventoryOrPetsInventoryByGuidExbbN9UNITTYPES10EUNITTYPESE",
+   "demangled": "CPlayer::removeItemFromInventoryOrPetsInventoryByGuid(long long, bool, bool, UNITTYPES::EUNITTYPES)",
+   "unit": "decomp/src/player.cpp"
+  },
+  {
+   "original": "0x8f0d10",
+   "symbol": "_ZN7CPlayer15updateAnimationEf",
+   "demangled": "CPlayer::updateAnimation(float)",
+   "unit": "decomp/src/player.cpp"
+  },
+  {
+   "original": "0x8f5c50",
+   "symbol": "_ZN7CPlayer21updateDungeonTrackingESbIwSt11char_traitsIwESaIwEEi",
+   "demangled": "CPlayer::updateDungeonTracking(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, int)",
+   "unit": "decomp/src/player.cpp"
+  },
+  {
+   "original": "0x8f4780",
+   "symbol": "_ZN7CPlayer9loadModelESbIwSt11char_traitsIwESaIwEES3_",
+   "demangled": "CPlayer::loadModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "unit": "decomp/src/player.cpp"
+  },
+  {
+   "original": "0x8f5810",
+   "symbol": "_ZN7CPlayer14levelResettingEv",
+   "demangled": "CPlayer::levelResetting()",
+   "unit": "decomp/src/player.cpp"
+  },
+  {
+   "original": "0x8f5670",
+   "symbol": "_ZN7CPlayer13openMapPortalESbIwSt11char_traitsIwESaIwEER6CLevel",
+   "demangled": "CPlayer::openMapPortal(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CLevel&)",
+   "unit": "decomp/src/player.cpp"
+  },
+  {
+   "original": "0x8f8260",
+   "symbol": "_ZN7CPlayer15setQuestManagerEP13CQuestManager",
+   "demangled": "CPlayer::setQuestManager(CQuestManager*)",
+   "unit": "decomp/src/player.cpp"
+  }
+ ]
+}

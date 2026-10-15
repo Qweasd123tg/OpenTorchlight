@@ -61,6 +61,7 @@ class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 friend class CPlayer;
 friend class CGameClient;
 public:
+    void makeChampion(const std::wstring& name, int level, std::wstring type);
     void completeDeath(CLevel& level);
     CInventory* getInventory() const { return m_pInventory; }
     void createDefaultEquipment();
