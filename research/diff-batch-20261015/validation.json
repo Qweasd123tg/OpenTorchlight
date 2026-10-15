@@ -1,0 +1,33 @@
+{
+ "base_commit": "987aca5a9bdb22851a48d2fb7671d1f0c1afb756",
+ "main_base_commit": "3ad959f437ef58a66e1ae521a91befb0a5729f65",
+ "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+ "game_functions": 5247,
+ "accepted_before": 3062,
+ "accepted_after": 3082,
+ "matched_after": 2359,
+ "behavioral_after": 723,
+ "new_game_addresses": 20,
+ "new_match": 15,
+ "new_behavioral": 5,
+ "new_original_bytes": 1571,
+ "accepted_original_bytes": 1435226,
+ "prior_accepted_preserved": 3062,
+ "prior_strong_matches_preserved": 3179,
+ "modified_source_bodies": 16,
+ "other_source_definitions_preserved": 79,
+ "production_tus": 285,
+ "headless_tests": 906,
+ "hybrid_selftest_exit": 0,
+ "targeted_tests": 3,
+ "targeted_fixture_files": 2,
+ "targeted_completed_pairs": 184,
+ "build_tool_tests": 61,
+ "existing_destructor_regression_completed_pairs": 768,
+ "existing_destructor_expected_unwinds": 18,
+ "inputs_digests": [
+  "e3cbb02a0b9416bb8b05f94f8e3a17e0d7bf55bcfac03c1689f9b01a7fdd42c2"
+ ],
+ "types_source_inputs_current": true,
+ "note": "Fresh strict MATCH and exact paired headless comparisons; no windowed gameplay claim."
+}

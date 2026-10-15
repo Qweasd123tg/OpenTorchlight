@@ -30,7 +30,7 @@ void CTimeline::Pause()
         return;
 
     m_bEnabled = false;
-    BroadcastEvent(OUTPUT_EVENT_PAUSED);
+    BroadcastEvent(OUTPUT_EVENT_PAUSED_2);
 }
 
 CTimelineProperty* CTimeline::GetProperty(long long objectID, int propertyID,
@@ -199,20 +199,17 @@ long long CTimeline::RemoveObjectByID(long long objectID)
 long long CTimeline::GetObjectIDInTimelineByIndex(int index)
 {
     if (index < 0 || static_cast<unsigned int>(index) >= m_timelineProperties.size())
-    {
         return -1;
-    }
 
     std::map<long long, std::map<std::pair<int, bool>, CTimelineProperty*> >::iterator it =
         m_timelineProperties.begin();
-
-    while (index > 0)
-    {
+    while (it != m_timelineProperties.end()) {
+        if (index == 0)
+            return it->first;
         ++it;
         --index;
     }
-
-    return it->first;
+    return -1;
 }
 
 long long CTimeline::GetPointIDInTimelinePropertyByIndex(long long objectID, int propertyID,
@@ -403,10 +400,10 @@ void CTimeline::StopToBeginning()
         return;
 
     m_bEnabled = false;
-    resetPropertiesToPercent(0.01f);
-    SetTimelinePercentDone(0.01f);
+    resetPropertiesToPercent(-0.01f);
+    SetTimelinePercentDone(-0.01f);
     BroadcastEvent(OUTPUT_EVENT_STOPPED_2);
-    BroadcastEvent(m_bTimelineLoops ? 43 : 44);
+    BroadcastEvent(m_bIsPlayingBackwards ? 43 : 44);
 }
 
 void CTimeline::StopToEnd()
@@ -418,21 +415,16 @@ void CTimeline::StopToEnd()
     resetPropertiesToPercent(1.01f);
     SetTimelinePercentDone(1.01f);
     BroadcastEvent(OUTPUT_EVENT_STOPPED_2);
-
-    if (m_bIsPlayingBackwards)
-        BroadcastEvent(43);
-    else
-        BroadcastEvent(44);
+    BroadcastEvent(m_bIsPlayingBackwards ? 43 : 44);
 }
 
 void CTimeline::Stop()
 {
-    if (!m_bIsPlayingBackwards) {
-        if (m_fTimelinePosition > 0.0f) {
-            StopToBeginning();
-        }
-    } else if (m_fTimelinePosition < 1.0f) {
-        StopToEnd();
+    if (m_bIsPlayingBackwards) {
+        if (m_fTimelinePosition < 1.0f)
+            StopToEnd();
+    } else if (m_fTimelinePosition > 0.0f) {
+        StopToBeginning();
     }
 }
 

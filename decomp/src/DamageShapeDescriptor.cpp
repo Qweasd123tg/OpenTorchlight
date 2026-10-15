@@ -63,22 +63,16 @@ unsigned int CDamageShapeDescriptor::GetDamageTypeIDByString(
 
 void CDamageShapeDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
 {
-    if (object != NULL) {
-        CDamageShape* damageShape = dynamic_cast<CDamageShape*>(object);
-        if (damageShape != NULL) {
-            typedef void (*InputLogicMethod)(CDamageShape*, bool);
-            InputLogicMethod method = reinterpret_cast<InputLogicMethod>(
-                *reinterpret_cast<void**>(damageShape) + 0x40 / sizeof(void*));
-
-            if (event == 2) {
-                method(damageShape, true);
-                return;
-            }
-            if (event == 3) {
-                method(damageShape, false);
-                return;
-            }
-        }
+    CDamageShape* damageShape = dynamic_cast<CDamageShape*>(object);
+    if (damageShape == NULL)
+        return;
+    if (event == 2) {
+        damageShape->setEnabled(true);
+        return;
+    }
+    if (event == 3) {
+        damageShape->setEnabled(false);
+        return;
     }
 }
 

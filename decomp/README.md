@@ -218,6 +218,31 @@ python3 tools/decomp/resource_slots.py selftest 1
 не измерена. Для долгих полных проверок этой машины использовался
 `OTL_SELFTEST_TIMEOUT=1800`.
 
+Для адресной проверки собирай все production TU, но только нужные фикстуры и
+общий AutoTestRuntime. Отдельный ignored-каталог сохраняет полную сборку:
+
+```sh
+python3 -B - <<'PY'
+import sys
+from pathlib import Path
+sys.path.insert(0, 'tools/decomp')
+import autotest, hybrid
+fixtures = [hybrid.HYBRID / 'tests' / 'TimelineControlsTest.cpp']
+runtime = autotest.write_runtime(hybrid.OUT / 'autotests')
+blob, loader = hybrid.build(out=Path('build-decomp/focused').resolve(),
+                            tests=fixtures + [runtime])
+code, report = hybrid.selftest(blob, loader, shards=1)
+print('\n'.join(report))
+sys.exit(code)
+PY
+```
+
+Замени список фикстур своим срезом. Это сокращает подготовку адресного прогона;
+перед коммитом по-прежнему нужен полный `python3 tools/decomp/check.py`.
+Production TU используют тот же ключ backend-кэша, что и objdiff; путь заголовков
+фикстур добавляется только при их компиляции. Свежее препроцессирование и
+проверка зависимостей сохраняются.
+
 Stage используют общий кэш backend-компиляции полного свежего preprocessed input
 со стабильным путём и проверенными зависимостями. Неподдерживаемые режимы
 остаются на исходном маршруте сборки; произвольные абсолютные пути из ключей

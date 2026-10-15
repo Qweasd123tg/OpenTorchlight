@@ -33,13 +33,11 @@ void CRandomChoiceDescriptor::InputLogicEvent(CEditorBaseObject* object,
                                                unsigned int eventType,
                                                CEditorBaseObject* param_3)
 {
-    if (object != NULL) {
-        CRandomChoice* choice = dynamic_cast<CRandomChoice*>(object);
-
-        if (choice != NULL && eventType == 0x27) {
-            choice->roll();
-            return;
-        }
+    CRandomChoice* choice = dynamic_cast<CRandomChoice*>(object);
+    if (choice == NULL)
+        return;
+    if (eventType == 0x27) {
+        choice->roll();
     }
 }
 

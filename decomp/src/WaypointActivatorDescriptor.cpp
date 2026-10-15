@@ -18,11 +18,11 @@ CWaypointActivatorDescriptor::~CWaypointActivatorDescriptor()
 
 void CWaypointActivatorDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
 {
-    if (object != NULL) {
-        CWaypointActivator* waypoint = dynamic_cast<CWaypointActivator*>(object);
-        if (waypoint != NULL && event == 0xf) {
-            waypoint->activate();
-        }
+    CWaypointActivator* waypoint = dynamic_cast<CWaypointActivator*>(object);
+    if (waypoint == NULL)
+        return;
+    if (event == 0xf) {
+        waypoint->activate();
     }
 }
 

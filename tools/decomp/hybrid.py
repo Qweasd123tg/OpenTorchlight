@@ -505,7 +505,8 @@ def _build_impl(out, verbose, src, tests, timing):
     def compile_unit(unit):
         source, is_test = unit
         asm = out / f"{'test_' if is_test else ''}{source.stem}.s"
-        toolchain.compile_source(source, asm, ["-I", str(HYBRID)], assembly=True)
+        extra = ["-I", str(HYBRID)] if is_test else []
+        toolchain.compile_source(source, asm, extra, assembly=True)
     timing.phase("compile")
     toolchain.parallel_map(compile_unit, units, phase="build")
     timing.phase("rewrite_assemble_metadata")

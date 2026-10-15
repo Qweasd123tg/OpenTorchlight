@@ -49,22 +49,16 @@ std::wstring CPathControllerDescriptor::GetGroupStringByID(CEditorScene*, CEdito
 
 void CPathControllerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
 {
-    if (object != 0)
-    {
-        CPathController* controller = dynamic_cast<CPathController*>(object);
-        if (controller != 0)
-        {
-            if (event == 2)
-            {
-                controller->setVisible(true);
-                return;
-            }
-            if (event == 3)
-            {
-                controller->setVisible(false);
-                return;
-            }
-        }
+    CPathController* controller = dynamic_cast<CPathController*>(object);
+    if (controller == NULL)
+        return;
+    if (event == 2) {
+        controller->setEnabled(true);
+        return;
+    }
+    if (event == 3) {
+        controller->setEnabled(false);
+        return;
     }
 }
 

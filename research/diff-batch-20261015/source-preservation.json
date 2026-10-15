@@ -1,0 +1,193 @@
+[
+ {
+  "source": "decomp/src/CinematicDescriptor.cpp",
+  "unchanged_definitions": 3,
+  "unchanged_addresses": [
+   "0xe66bd0",
+   "0xe66c30",
+   "0xe70290"
+  ],
+  "modified_addresses": [
+   "0xe66b90"
+  ]
+ },
+ {
+  "source": "decomp/src/DamageShapeDescriptor.cpp",
+  "unchanged_definitions": 8,
+  "unchanged_addresses": [
+   "0x5bb4d0",
+   "0x5bb500",
+   "0x5bb530",
+   "0x5bb5b0",
+   "0x5bb910",
+   "0x5bb970",
+   "0x5c4c60",
+   "0x5c6840"
+  ],
+  "modified_addresses": [
+   "0x5bb7d0"
+  ]
+ },
+ {
+  "source": "decomp/src/DungeonObjectDescriptor.cpp",
+  "unchanged_definitions": 3,
+  "unchanged_addresses": [
+   "0xeba680",
+   "0xeba6e0",
+   "0xebd920"
+  ],
+  "modified_addresses": [
+   "0xeba640"
+  ]
+ },
+ {
+  "source": "decomp/src/MoneyTakerDescriptor.cpp",
+  "unchanged_definitions": 3,
+  "unchanged_addresses": [
+   "0xe70650",
+   "0xe706b0",
+   "0xe737e0"
+  ],
+  "modified_addresses": [
+   "0xe70610"
+  ]
+ },
+ {
+  "source": "decomp/src/MusicObjectDescriptor.cpp",
+  "unchanged_definitions": 4,
+  "unchanged_addresses": [
+   "0xe5d410",
+   "0xe5d480",
+   "0xe5d4e0",
+   "0xe665b0"
+  ],
+  "modified_addresses": [
+   "0xe5d3a0"
+  ]
+ },
+ {
+  "source": "decomp/src/PathControllerDescriptor.cpp",
+  "unchanged_definitions": 7,
+  "unchanged_addresses": [
+   "0x619250",
+   "0x619260",
+   "0x619330",
+   "0x6193e0",
+   "0x619420",
+   "0x619480",
+   "0x61ca50"
+  ],
+  "modified_addresses": [
+   "0x6192c0"
+  ]
+ },
+ {
+  "source": "decomp/src/RandomChoiceDescriptor.cpp",
+  "unchanged_definitions": 4,
+  "unchanged_addresses": [
+   "0x672410",
+   "0x672520",
+   "0x672570",
+   "0x6757b0"
+  ],
+  "modified_addresses": [
+   "0x6724e0"
+  ]
+ },
+ {
+  "source": "decomp/src/RandomGroupDescriptor.cpp",
+  "unchanged_definitions": 9,
+  "unchanged_addresses": [
+   "0x62e720",
+   "0x62e7b0",
+   "0x62e870",
+   "0x62e920",
+   "0x62eb50",
+   "0x62ec00",
+   "0x62ec60",
+   "0x636880",
+   "0x6373b0"
+  ],
+  "modified_addresses": [
+   "0x62ea50"
+  ]
+ },
+ {
+  "source": "decomp/src/SkillParser.cpp",
+  "unchanged_definitions": 7,
+  "unchanged_addresses": [
+   "0xcd5cf0",
+   "0xcdb950",
+   "0xcdb9c0",
+   "0xcdbd20",
+   "0xcdbeb0",
+   "0xcdc590",
+   "0xcdc860"
+  ],
+  "modified_addresses": [
+   "0xcdc840"
+  ]
+ },
+ {
+  "source": "decomp/src/Timeline.cpp",
+  "unchanged_definitions": 25,
+  "unchanged_addresses": [
+   "0x7b6540",
+   "0x7b65b0",
+   "0x7b6680",
+   "0x7b6720",
+   "0x7b6780",
+   "0x7b67f0",
+   "0x7b6820",
+   "0x7b6870",
+   "0x7b68b0",
+   "0x7b6900",
+   "0x7b6930",
+   "0x7b6960",
+   "0x7b6990",
+   "0x7b6a90",
+   "0x7b6d50",
+   "0x7b6d90",
+   "0x7b7110",
+   "0x7b78e0",
+   "0x7bb000",
+   "0x7bb070",
+   "0x7bb200",
+   "0x7bb250",
+   "0x7bb2a0",
+   "0x7bb300",
+   "0x7bc0d0"
+  ],
+  "modified_addresses": [
+   "0x7b6580",
+   "0x7b6c70",
+   "0x7bb0f0",
+   "0x7bb150",
+   "0x7bb1b0"
+  ]
+ },
+ {
+  "source": "decomp/src/WarperDescriptor.cpp",
+  "unchanged_definitions": 3,
+  "unchanged_addresses": [
+   "0x68ef90",
+   "0x68eff0",
+   "0x692230"
+  ],
+  "modified_addresses": [
+   "0x68ef20"
+  ]
+ },
+ {
+  "source": "decomp/src/WaypointActivatorDescriptor.cpp",
+  "unchanged_definitions": 3,
+  "unchanged_addresses": [
+   "0xea66a0",
+   "0xea6700",
+   "0xea6730"
+  ],
+  "modified_addresses": [
+   "0xea6660"
+  ]
+ }
+]

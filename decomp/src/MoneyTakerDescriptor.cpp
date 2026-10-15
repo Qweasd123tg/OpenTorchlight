@@ -21,11 +21,11 @@ CMoneyTakerDescriptor::~CMoneyTakerDescriptor()
 
 void CMoneyTakerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject* param)
 {
-    if (object != NULL) {
-        CMoneyTaker* moneyTaker = dynamic_cast<CMoneyTaker*>(object);
-        if (moneyTaker != NULL && event == 0x4f) {
-            moneyTaker->takeMoney();
-        }
+    CMoneyTaker* moneyTaker = dynamic_cast<CMoneyTaker*>(object);
+    if (moneyTaker == NULL)
+        return;
+    if (event == 0x4f) {
+        moneyTaker->takeMoney();
     }
 }
 

@@ -83,8 +83,9 @@ void CSkillParser::parseSkills()
 
 void CSkillParser::reloadSkills()
 {
-    if (g_SkillParser != NULL) {
-        parseSkills();
+    CSkillParser* parser = getSingleton();
+    if (parser != NULL) {
+        parser->parseSkills();
     }
 }
 

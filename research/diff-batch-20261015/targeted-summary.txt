@@ -1,0 +1,12 @@
+    coverage camera_descriptor_group_names 0xda7620 completed 24 different 0 incomplete 0
+tlhybrid: camera_descriptor_group_names                    PASS (0)
+    coverage interactive_descriptor_group_names 0x662eb0 completed 24 different 0 incomplete 0
+tlhybrid: interactive_descriptor_group_names               PASS (0)
+    coverage timeline_controls_differential 0x7bb070 completed 64 different 0 incomplete 0
+    timeline controls op 0 live 48 idle 16 valid-index 0 invalid-index 0
+    coverage timeline_controls_differential 0x7bb000 completed 32 different 0 incomplete 0
+    timeline controls op 1 live 24 idle 8 valid-index 0 invalid-index 0
+    coverage timeline_controls_differential 0x7b6c70 completed 40 different 0 incomplete 0
+    timeline controls op 2 live 0 idle 0 valid-index 9 invalid-index 31
+tlhybrid: timeline_controls_differential                   PASS (0)
+tlhybrid: 3 tests, 0 failed

@@ -84,12 +84,15 @@ void CRandomGroupDescriptor::InputLogicEvent(CEditorBaseObject* object,
                                                 CEditorBaseObject* param)
 {
     CRandomGroup* randomGroup = dynamic_cast<CRandomGroup*>(object);
-    if (randomGroup != 0) {
-        if (event == 0) {
-            randomGroup->setVisible(true);
-        } else if (event == 1) {
-            randomGroup->setVisible(false);
-        }
+    if (randomGroup == NULL)
+        return;
+    switch (event) {
+    case 0:
+        randomGroup->setVisible(true);
+        break;
+    case 1:
+        randomGroup->setVisible(false);
+        break;
     }
 }
 

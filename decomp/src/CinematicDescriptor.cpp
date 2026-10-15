@@ -20,11 +20,11 @@ CCinematicDescriptor::~CCinematicDescriptor()
 
 void CCinematicDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject* param_3)
 {
-    if (object != NULL) {
-        CCinematicObject* cinematic = dynamic_cast<CCinematicObject*>(object);
-        if (cinematic != NULL && event == 9) {
-            cinematic->play();
-        }
+    CCinematicObject* cinematic = dynamic_cast<CCinematicObject*>(object);
+    if (cinematic == NULL)
+        return;
+    if (event == 9) {
+        cinematic->play();
     }
 }
 
