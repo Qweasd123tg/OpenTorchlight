@@ -1,0 +1,749 @@
+[
+ {
+  "address": "0x5f90e0",
+  "tu": "MissileDescriptor.cpp",
+  "name": "CMissileDescriptor::GetDamageTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 113,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "6d25208e777823fe5d4b6dfa076b52ea19b84880fc33f814fab7b6056d01c025"
+ },
+ {
+  "address": "0x648390",
+  "tu": "ShapeDescriptor.cpp",
+  "name": "CShapeDescriptor::GetSpawnOrderIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 113,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "d7859ab072c15007a7693a95990b256f179c28a91cba6cab9ff00225ecdd5417"
+ },
+ {
+  "address": "0x64c050",
+  "tu": "ShapeDescriptor.cpp",
+  "name": "CShapeDescriptor::GetSpawnDirectionIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 113,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "d7859ab072c15007a7693a95990b256f179c28a91cba6cab9ff00225ecdd5417"
+ },
+ {
+  "address": "0x64c0d0",
+  "tu": "ShapeDescriptor.cpp",
+  "name": "CShapeDescriptor::GetSpawnShapeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 113,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "d7859ab072c15007a7693a95990b256f179c28a91cba6cab9ff00225ecdd5417"
+ },
+ {
+  "address": "0x65b0c0",
+  "tu": "UnitSpawnerDescriptor.cpp",
+  "name": "CUnitSpawnerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 121,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "479c6d9233911b2879c49e6c2c7e449f1a6806b6885c39044a401ec5664fb6f6"
+ },
+ {
+  "address": "0x68c5f0",
+  "tu": "UnitTriggerDescriptor.cpp",
+  "name": "CUnitTriggerDescriptor::GetLoopTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 113,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "bfc4fd0b4fba5fb78fa378550d2847ea6e3f267b53c8106b3049b15b7e9c6178"
+ },
+ {
+  "address": "0x6e3fa0",
+  "tu": "ParticleEmitterWrapperDescriptor.cpp",
+  "name": "CParticleEmitterWrapperDescriptor::GetEmitterTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 113,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "8226cc34a2dd0f53a04f27680d435bb0ec72d3c1797da5d8158ce0c63a78aa60"
+ },
+ {
+  "address": "0x6e4120",
+  "tu": "ParticleEmitterWrapperDescriptor.cpp",
+  "name": "CParticleEmitterWrapperDescriptor::CreateObject(CEditorScene*)",
+  "original_bytes": 85,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "8226cc34a2dd0f53a04f27680d435bb0ec72d3c1797da5d8158ce0c63a78aa60"
+ },
+ {
+  "address": "0x6f00b0",
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "name": "CParticleTechWrapperDescriptor::GetParticleRenderStyleIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 113,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "80ee9f3fd66c79f459d49799769aaf77170e5cbe35a4b4b0a05d992770b9a0ee"
+ },
+ {
+  "address": "0x6f0130",
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "name": "CParticleTechWrapperDescriptor::GetBillboardOriginTypeIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 100,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "80ee9f3fd66c79f459d49799769aaf77170e5cbe35a4b4b0a05d992770b9a0ee"
+ },
+ {
+  "address": "0x6f01a0",
+  "tu": "ParticleTechWrapperDescriptor.cpp",
+  "name": "CParticleTechWrapperDescriptor::GetParticleRenderIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 103,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "80ee9f3fd66c79f459d49799769aaf77170e5cbe35a4b4b0a05d992770b9a0ee"
+ },
+ {
+  "address": "0x73f480",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::getSelectedPivot()",
+  "original_bytes": 83,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f4e0",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorGetWorkingPlaneHeight()",
+  "original_bytes": 28,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f500",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorSetSnapToGroundBias(float)",
+  "original_bytes": 19,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f520",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorSetPosHSnapSize(float)",
+  "original_bytes": 19,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f540",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorSetPosVSnapSize(float)",
+  "original_bytes": 19,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f560",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorSetOrientSnapSize(float)",
+  "original_bytes": 19,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f580",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorSetChunkTemplateBasisSize(float)",
+  "original_bytes": 19,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f5a0",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorSetChunkTemplateWidth(float)",
+  "original_bytes": 19,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f5c0",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorSetChunkTemplateHeight(float)",
+  "original_bytes": 19,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f5e0",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorSetChunkTemplateExits(int)",
+  "original_bytes": 17,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f630",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::highlightObject(CEditorBaseObject*)",
+  "original_bytes": 69,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f680",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::dehighlightObject(CEditorBaseObject*)",
+  "original_bytes": 69,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f780",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::mouseEvent(unsigned int, unsigned int)",
+  "original_bytes": 18,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f7a0",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::keyEvent(unsigned int, unsigned int)",
+  "original_bytes": 18,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f7c0",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorGetWorkingPlanePosition()",
+  "original_bytes": 88,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f820",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorSetWorkingPlaneHeight(float)",
+  "original_bytes": 34,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73f870",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::flushKeyManager()",
+  "original_bytes": 18,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73fcf0",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorResnapSelectedObjects(bool)",
+  "original_bytes": 34,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73fd20",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorSnapObjectsToGround(bool)",
+  "original_bytes": 34,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73fd50",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorResetOrientation()",
+  "original_bytes": 26,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73fd70",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorResetScale()",
+  "original_bytes": 26,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73fd90",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorApplyRotationNoise(float)",
+  "original_bytes": 26,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73fdb0",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorApplyNormalNoise(float)",
+  "original_bytes": 26,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73fdd0",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorApplyScaleNoise(float, bool)",
+  "original_bytes": 34,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73fe00",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::EditorUpdate(float)",
+  "original_bytes": 65,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x73fe50",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::CEditorObjectManager(CResourceManager*)",
+  "original_bytes": 271,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x740780",
+  "tu": "EditorObjectManager.cpp",
+  "name": "CEditorObjectManager::~CEditorObjectManager()",
+  "original_bytes": 167,
+  "acceptance": "MATCH",
+  "origin": "existing_editor_destructor",
+  "object_digest": "386e24462e6e4c266f56e9c06ec8117a8bb3e191c0e185059be569959e5076df"
+ },
+ {
+  "address": "0x7bd380",
+  "tu": "TimelineDescriptor.cpp",
+  "name": "CTimelineDescriptor::GetTimelineModIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 113,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "e2dfd6460d4f21bde8b2ec6d137a95f44028fe2bd24770d4d2826b1007a01dc2"
+ },
+ {
+  "address": "0x9e7db0",
+  "tu": "PropertyNode.cpp",
+  "name": "CPropertyNode::setPropertyNodeType(unsigned int)",
+  "original_bytes": 7,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "9fd1825bca4140697f201184734108a650dc8a16497eb3403ebcf8554002fb19"
+ },
+ {
+  "address": "0x9e7dc0",
+  "tu": "PropertyNode.cpp",
+  "name": "CPropertyNode::createEntity()",
+  "original_bytes": 2,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "9fd1825bca4140697f201184734108a650dc8a16497eb3403ebcf8554002fb19"
+ },
+ {
+  "address": "0x9e8480",
+  "tu": "PropertyNode.cpp",
+  "name": "CPropertyNode::setEnabled(bool)",
+  "original_bytes": 97,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "9fd1825bca4140697f201184734108a650dc8a16497eb3403ebcf8554002fb19"
+ },
+ {
+  "address": "0x9f0e70",
+  "tu": "PropertyNode.cpp",
+  "name": "CPropertyNode::orientationUpdated(Ogre::Matrix4 const&)",
+  "original_bytes": 5,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "9fd1825bca4140697f201184734108a650dc8a16497eb3403ebcf8554002fb19"
+ },
+ {
+  "address": "0x9f0e80",
+  "tu": "PropertyNode.cpp",
+  "name": "CPropertyNode::positionUpdated(Ogre::Vector3 const&)",
+  "original_bytes": 5,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "9fd1825bca4140697f201184734108a650dc8a16497eb3403ebcf8554002fb19"
+ },
+ {
+  "address": "0xa21060",
+  "tu": "JetWrapper.cpp",
+  "name": "CJetWrapper::setDynamicPropAcceleration(float const*, unsigned int)",
+  "original_bytes": 30,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "488969b5ba4312613954626992c7e09a7ec779607a7be09e9f33add5e39705b6"
+ },
+ {
+  "address": "0xa24920",
+  "tu": "ScaleWrapper.cpp",
+  "name": "CScaleWrapper::setDynamicPropZScale(float const*, unsigned int)",
+  "original_bytes": 30,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "d01f66e4fca3e08915b6d203c1dd9be671862a56cfa193812684f5e64a186de8"
+ },
+ {
+  "address": "0xa249c0",
+  "tu": "ScaleWrapper.cpp",
+  "name": "CScaleWrapper::setDynamicPropXScale(float const*, unsigned int)",
+  "original_bytes": 30,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "d01f66e4fca3e08915b6d203c1dd9be671862a56cfa193812684f5e64a186de8"
+ },
+ {
+  "address": "0xa28260",
+  "tu": "TextureRotateWrapper.cpp",
+  "name": "CTextureRotateWrapper::setDynamicPropRotation(float const*, unsigned int)",
+  "original_bytes": 30,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "0fe3b88256fc4bcc6e37fc80c98295633f5a6b1949f7574260a54138c4200702"
+ },
+ {
+  "address": "0xa28280",
+  "tu": "TextureRotateWrapper.cpp",
+  "name": "CTextureRotateWrapper::getDynamicPropRotation(unsigned int&)",
+  "original_bytes": 28,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "0fe3b88256fc4bcc6e37fc80c98295633f5a6b1949f7574260a54138c4200702"
+ },
+ {
+  "address": "0xa282a0",
+  "tu": "TextureRotateWrapper.cpp",
+  "name": "CTextureRotateWrapper::setDynamicPropRotationSpeed(float const*, unsigned int)",
+  "original_bytes": 30,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "0fe3b88256fc4bcc6e37fc80c98295633f5a6b1949f7574260a54138c4200702"
+ },
+ {
+  "address": "0xa282c0",
+  "tu": "TextureRotateWrapper.cpp",
+  "name": "CTextureRotateWrapper::getDynamicPropRotationSpeed(unsigned int&)",
+  "original_bytes": 28,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "0fe3b88256fc4bcc6e37fc80c98295633f5a6b1949f7574260a54138c4200702"
+ },
+ {
+  "address": "0xa32c10",
+  "tu": "ParticleEmitterWrapper.cpp",
+  "name": "CParticleEmitterWrapper::setKeepLocal(bool)",
+  "original_bytes": 95,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "240e1bccd787b02a0d4e50b650ba83c97462b2b1ad0b3545c4312dce5fec1764"
+ },
+ {
+  "address": "0xa3cdc0",
+  "tu": "ParticleTechWrapper.cpp",
+  "name": "CParticleTechWrapper::setFlipbookHeight(int)",
+  "original_bytes": 26,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "bf48a4dc613054bc8afc7963c4aaf12214518c37e2f44f16f19618bc0d6b4a13"
+ },
+ {
+  "address": "0xa3cde0",
+  "tu": "ParticleTechWrapper.cpp",
+  "name": "CParticleTechWrapper::setFlipbookWidth(int)",
+  "original_bytes": 24,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "bf48a4dc613054bc8afc7963c4aaf12214518c37e2f44f16f19618bc0d6b4a13"
+ },
+ {
+  "address": "0xa3ce00",
+  "tu": "ParticleTechWrapper.cpp",
+  "name": "CParticleTechWrapper::setRibbonLocalTrail(bool)",
+  "original_bytes": 34,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "bf48a4dc613054bc8afc7963c4aaf12214518c37e2f44f16f19618bc0d6b4a13"
+ },
+ {
+  "address": "0xa3cf20",
+  "tu": "ParticleTechWrapper.cpp",
+  "name": "CParticleTechWrapper::setRibbonMaxChains(unsigned int)",
+  "original_bytes": 42,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "bf48a4dc613054bc8afc7963c4aaf12214518c37e2f44f16f19618bc0d6b4a13"
+ },
+ {
+  "address": "0xa3cf50",
+  "tu": "ParticleTechWrapper.cpp",
+  "name": "CParticleTechWrapper::setRibbonLength(float)",
+  "original_bytes": 34,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "bf48a4dc613054bc8afc7963c4aaf12214518c37e2f44f16f19618bc0d6b4a13"
+ },
+ {
+  "address": "0xa3cf80",
+  "tu": "ParticleTechWrapper.cpp",
+  "name": "CParticleTechWrapper::setRibbonWidth(float)",
+  "original_bytes": 34,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "bf48a4dc613054bc8afc7963c4aaf12214518c37e2f44f16f19618bc0d6b4a13"
+ },
+ {
+  "address": "0xa3d040",
+  "tu": "ParticleTechWrapper.cpp",
+  "name": "CParticleTechWrapper::setSortIndex(unsigned int)",
+  "original_bytes": 40,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "bf48a4dc613054bc8afc7963c4aaf12214518c37e2f44f16f19618bc0d6b4a13"
+ },
+ {
+  "address": "0xa3d0a0",
+  "tu": "ParticleTechWrapper.cpp",
+  "name": "CParticleTechWrapper::setSorts(bool)",
+  "original_bytes": 103,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "bf48a4dc613054bc8afc7963c4aaf12214518c37e2f44f16f19618bc0d6b4a13"
+ },
+ {
+  "address": "0xc6e410",
+  "tu": "DynamicPropertyFile.cpp",
+  "name": "CDynamicPropertyFile::GetFloat(unsigned int)",
+  "original_bytes": 41,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "7ecda8926e7d753a355c72b43af11cadd6eb82f82a56754a67244aa5a1d0beb1"
+ },
+ {
+  "address": "0xc6e440",
+  "tu": "DynamicPropertyFile.cpp",
+  "name": "CDynamicPropertyFile::GetInt(unsigned int)",
+  "original_bytes": 32,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "7ecda8926e7d753a355c72b43af11cadd6eb82f82a56754a67244aa5a1d0beb1"
+ },
+ {
+  "address": "0xc6e460",
+  "tu": "DynamicPropertyFile.cpp",
+  "name": "CDynamicPropertyFile::GetString(unsigned int)",
+  "original_bytes": 36,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "7ecda8926e7d753a355c72b43af11cadd6eb82f82a56754a67244aa5a1d0beb1"
+ },
+ {
+  "address": "0xc6e500",
+  "tu": "DynamicPropertyFile.cpp",
+  "name": "CDynamicPropertyFile::isNonLocalVariable(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "original_bytes": 102,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "7ecda8926e7d753a355c72b43af11cadd6eb82f82a56754a67244aa5a1d0beb1"
+ },
+ {
+  "address": "0xc6e570",
+  "tu": "DynamicPropertyFile.cpp",
+  "name": "CDynamicPropertyFile::SetString(unsigned int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "original_bytes": 216,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "7ecda8926e7d753a355c72b43af11cadd6eb82f82a56754a67244aa5a1d0beb1"
+ },
+ {
+  "address": "0xc6f740",
+  "tu": "DynamicPropertyFile.cpp",
+  "name": "CDynamicPropertyFile::SaveSettings(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "original_bytes": 58,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "7ecda8926e7d753a355c72b43af11cadd6eb82f82a56754a67244aa5a1d0beb1"
+ },
+ {
+  "address": "0xc6faa0",
+  "tu": "DynamicPropertyFile.cpp",
+  "name": "CDynamicPropertyFile::SetStatChangeCallback(unsigned int, void (*)(unsigned int))",
+  "original_bytes": 87,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "7ecda8926e7d753a355c72b43af11cadd6eb82f82a56754a67244aa5a1d0beb1"
+ },
+ {
+  "address": "0xc718d0",
+  "tu": "DynamicPropertyFile.cpp",
+  "name": "CDynamicPropertyFile::LoadSettings(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "original_bytes": 53,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "7ecda8926e7d753a355c72b43af11cadd6eb82f82a56754a67244aa5a1d0beb1"
+ },
+ {
+  "address": "0xcca560",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::globallyDisableSkills(bool)",
+  "original_bytes": 8,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xcca570",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::getSkillLevel(CSkill*)",
+  "original_bytes": 15,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xcca580",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::getSkillByGuid(long long, int)",
+  "original_bytes": 150,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xcca620",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::getSkillByGuid(long long)",
+  "original_bytes": 118,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xcca6a0",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::knownSkills(ESKILL_ACTIVATION_TYPE)",
+  "original_bytes": 92,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xcca710",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::hideWeaponTrailsOnCurrentSkill()",
+  "original_bytes": 2,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xcca720",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::getNumOfSkillsExecutableByActivationType(ESKILL_ACTIVATION_TYPE)",
+  "original_bytes": 137,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xccab50",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::getSkillPoints()",
+  "original_bytes": 162,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xccac00",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::getSkillCanBeExecuted(CSkill*, CBaseUnit*, ESKILL_ACTIVATION_TYPE, Ogre::Vector3 const&, CBaseUnit*, bool)",
+  "original_bytes": 170,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xcd3420",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::getSkillLevel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+  "original_bytes": 30,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xcd3fa0",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::deleteSkill(CSkill*)",
+  "original_bytes": 34,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xcd5220",
+  "tu": "SkillManager.cpp",
+  "name": "CSkillManager::setSkillLevel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int)",
+  "original_bytes": 51,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "cbf88693e9883841b8499d2f30d5d2039a1820e41cf03df06d39e37038e76e1e"
+ },
+ {
+  "address": "0xcdce20",
+  "tu": "SkillProperty.cpp",
+  "name": "CSkillProperty::getOwner()",
+  "original_bytes": 17,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "d81702cf1c18a84afef23a1f0163d185f2c16176b308a39d79ffd5e14e8d6f7b"
+ },
+ {
+  "address": "0xcdce40",
+  "tu": "SkillProperty.cpp",
+  "name": "CSkillProperty::getOwnerCharacter()",
+  "original_bytes": 37,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "d81702cf1c18a84afef23a1f0163d185f2c16176b308a39d79ffd5e14e8d6f7b"
+ },
+ {
+  "address": "0xdafce0",
+  "tu": "GameStateControllerDescriptor.cpp",
+  "name": "CGameStateControllerDescriptor::getTipIDByString(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*)",
+  "original_bytes": 104,
+  "acceptance": "MATCH",
+  "origin": "archive_transfer",
+  "object_digest": "5f827ffcd4d8aa7e45fbcf88752b871868b2fe62eb6b2b73d506b66a1632c088"
+ }
+]

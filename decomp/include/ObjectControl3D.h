@@ -34,7 +34,11 @@ public:
     void configureSceneManager(CPositionableObject* object);
     void UpdateWorkingPlane();
     Ogre::Vector3 getWorkingPlanePosition();
+    void updateControls(float elapsed);
+    void resnapObjects(TArrayList<CEditorBaseObject*>& objects, bool flag);
+    void update(float elapsed, TArrayList<CEditorBaseObject*>& objects, bool flag);
 
+    CObjectControl3D(CResourceManager* resources);
     virtual ~CObjectControl3D();
     void doCameraMovement(float elapsed);
     Ogre::Quaternion GetSelectionOrientation();
@@ -44,22 +48,27 @@ public:
     void keyEvent(unsigned int event, unsigned int value);
 
 private:
-    unsigned char m_unrecovered10[8];
+    friend class CEditorObjectManager;
+    bool m_editorEnabled; // +0x10
+    unsigned char m_unrecovered11[7];
     CMouseHandler* m_mouseHandler; // +0x18
     CGenericModel* m_boxModel; // +0x20
     Ogre::SceneManager* m_sceneManager; // +0x28
     CResourceManager* m_resources; // +0x30
-    unsigned char m_unrecovered38[0x90];
+    unsigned char m_unrecovered38[0x74];
+    Ogre::Vector3 m_selectedPivot; // +0xac
+    unsigned char m_unrecoveredB8[0x10];
     std::vector<CGenericModel*> m_models; // +0xc8
     unsigned char m_unrecoveredE0[0xc];
     float m_planeScale; // +0xec
-    unsigned char m_unrecoveredF0[8];
+    float m_positionVerticalSnap; // +0xf0
+    float m_orientationSnap; // +0xf4
     float m_chunkSize; // +0xf8
     float m_chunkWidth; // +0xfc
     float m_chunkDepth; // +0x100
     Ogre::Vector3 m_chunkPositions[20]; // +0x104
     int m_chunkCount; // +0x1f4
-    unsigned char m_unrecovered1F8[4];
+    float m_snapToGroundBias; // +0x1f8
     float m_workingHeight; // +0x1fc
     Ogre::Plane m_workingPlane; // +0x200
     CKeyManager m_keys;

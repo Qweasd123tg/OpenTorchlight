@@ -75,3 +75,33 @@ std::wstring CParticleTechWrapperDescriptor::GetParticleRenderStringByID(
         return gPARTICLE_RENDER_TYPE_NAMES[0];
     return gPARTICLE_RENDER_TYPE_NAMES[index];
 }
+
+unsigned int CParticleTechWrapperDescriptor::GetParticleRenderStyleIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 4; ++index)
+    {
+        if (value == gPARTICLE_MATERIAL_TYPES[index])
+            return index;
+    }
+    return 0;
+}
+
+unsigned int CParticleTechWrapperDescriptor::GetBillboardOriginTypeIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 9; ++index)
+    {
+        if (value == gPARTICLE_BILLBOARD_ORIGIN_POSITIONS[index])
+            return index;
+    }
+    return 0;
+}
+
+unsigned int CParticleTechWrapperDescriptor::GetParticleRenderIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 13; ++index)
+    {
+        if (value == gPARTICLE_RENDER_TYPE_NAMES[index])
+            return index;
+    }
+    return 0;
+}

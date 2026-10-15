@@ -67,5 +67,11 @@ TL_TEST(descriptor_callback_identity)
     if (callbackIdentity(&unknown) != (uintptr_t)&unknown ||
         callbackIdentity(NULL) != 0)
         return 3;
+    const uintptr_t inverse = (uintptr_t)callback55_original;
+    if (callbackIdentity((void*)callback55_original) != inverse ||
+        callbackIdentity((void*)callback55_linked) != inverse)
+        return 4;
+    if (inverse == expected || callbackIdentity((void*)callback0_original) == inverse)
+        return 5;
     return 0;
 }

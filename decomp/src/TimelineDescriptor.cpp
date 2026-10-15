@@ -73,3 +73,13 @@ std::wstring CTimelineDescriptor::GetTimelineModStringByID(
         return gTIMELINE_MODIFICATION_TYPE_NAMES[0];
     return gTIMELINE_MODIFICATION_TYPE_NAMES[index];
 }
+
+unsigned int CTimelineDescriptor::GetTimelineModIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 3; ++index)
+    {
+        if (value == gTIMELINE_MODIFICATION_TYPE_NAMES[index])
+            return index;
+    }
+    return 0;
+}

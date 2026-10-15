@@ -106,3 +106,13 @@ std::wstring CGameStateControllerDescriptor::getGameStateStringByID(
         return gGAMESTATE_NAMES[1];
     return gGAMESTATE_NAMES[index];
 }
+
+unsigned int CGameStateControllerDescriptor::getTipIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 34; ++index)
+    {
+        if (KContextTipNames[index] == value)
+            return index;
+    }
+    return 0;
+}

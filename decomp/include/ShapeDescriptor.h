@@ -11,7 +11,7 @@ class CShapeDescriptor : public CPositionableObjectDescriptor
 public:
     virtual ~CShapeDescriptor();
     static std::wstring GetSpawnOrderStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*);
-    int GetSpawnOrderIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring&, void*);
+    static unsigned int GetSpawnOrderIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring&, void*);
     CShapeDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description, bool option1, bool option2, bool option3);
 
 

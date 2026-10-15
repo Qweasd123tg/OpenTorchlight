@@ -26,3 +26,13 @@ CJetWrapper::CJetWrapper(CResourceManager* resourceManager)
     : CAffectorWrapper(resourceManager, "Jet")
 {
 }
+
+namespace ParticleUniverse {
+class JetAffector { public: void setDynAcceleration(DynamicAttribute*); };
+}
+extern ParticleUniverse::DynamicAttribute* getDynPropFromArray(const float*, unsigned int);
+
+void CJetWrapper::setDynamicPropAcceleration(const float* values, unsigned int count)
+{
+    reinterpret_cast<ParticleUniverse::JetAffector*>(m_pAffector)->setDynAcceleration(getDynPropFromArray(values, count));
+}

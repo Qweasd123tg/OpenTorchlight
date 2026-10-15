@@ -18,6 +18,7 @@ class CSkillProperty;
 class CSkill : public CRunicCore, public iUnitObserver
 {
 public:
+    bool requirementsMet(CBaseUnit*, ESKILL_ACTIVATION_TYPE, const Ogre::Vector3*, CBaseUnit*, bool);
     bool getCanStop();
     bool getIsExclusive();
     bool getCanBeInterrupted();
@@ -78,6 +79,13 @@ public:
     void setEnabled(bool enabled) { m_bEnabled = enabled; }
 
 private:
+    long long getGuid() const { return m_Guid; }
+    unsigned int getLevel() const { return m_skillLevel; }
+    ESKILL_ACTIVATION_TYPE getActivationType() const { return m_eActivationType; }
+    bool enabledWithoutProperty() const { return m_bEnabled & !m_bExecutedByProperty; }
+
+    friend class CSkillManager;
+    friend class CSkillProperty;
     friend class CCharacter;
     friend class CMonster;
     CResourceManager* m_resources;
@@ -109,14 +117,16 @@ private:
     char m_SkillDataB4[0xd0-0xb4];
     std::wstring m_sRequiredSkill;
     unsigned int m_iRequiredLevel;
-    char m_SkillDataDC[4];
+    unsigned int m_skillLevel; // +0xdc
     unsigned int m_iEffectiveSkillLevel; // 0xe0
     unsigned int m_animationIndex;
     unsigned int m_animationIndexDW;
     union { unsigned int m_animationIndexLoopInto; int m_animationID; };
     unsigned int m_animationIndexDWLoopInto;
     unsigned int m_animationIndexLoopEnd;
-    char m_SkillDataF8[0x108-0xf8];
+    char m_SkillDataF8[4];
+    float m_coolingTime; // +0xfc
+    char m_SkillData100[8];
     float m_elapsedSkillTime;
     int m_iColumn;
     int m_iRow;

@@ -5,6 +5,24 @@
 #include "ParticlePropertyConversions.h"
 #include "ParticleWrapper.h"
 
+namespace ParticleUniverse {
+class ParticleRenderer { public: void setSorted(bool); };
+class ParticleTechnique {
+public:
+    void setFlipbookWidthHeight(int, int);
+    void setKeepLocal(bool);
+    ParticleRenderer* getRenderer() const;
+};
+class RibbonTrailRenderer {
+public:
+    void setTrailLocal(bool);
+    void setMaxChainElements(unsigned long);
+    void setTrailLength(float);
+    void setTrailWidth(float);
+};
+class ParticleEmitter { public: void setKeepLocal(bool); };
+}
+
 void CParticleEmitterWrapper::starting()
 {
     setEnabled(m_bEnabled);
@@ -257,4 +275,11 @@ float* CParticleEmitterWrapper::getMaxRadius(unsigned int& count)
 float* CParticleEmitterWrapper::getMinRadius(unsigned int& count)
 {
     return getArrayFromDynProp(static_cast<ParticleUniverse::DynamicAttribute*>(m_pUnknown148), count);
+}
+
+void CParticleEmitterWrapper::setKeepLocal(bool local)
+{
+    (*reinterpret_cast<ParticleUniverse::ParticleEmitter**>(m_ParticleDirection))->setKeepLocal(local);
+    if (m_pParticleTechWrapper)
+        m_pParticleTechWrapper->m_technique->setKeepLocal(local);
 }

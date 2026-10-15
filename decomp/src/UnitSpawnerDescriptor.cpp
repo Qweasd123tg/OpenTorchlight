@@ -93,3 +93,13 @@ std::wstring CUnitSpawnerDescriptor::GetGroupStringByID(
         return gSPAWN_TYPE_NAMES[0];
     return gSPAWN_TYPE_NAMES[index];
 }
+
+unsigned int CUnitSpawnerDescriptor::GetGroupIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 7; ++index)
+    {
+        if (gSPAWN_TYPE_NAMES[index] == value)
+            return index;
+    }
+    return 0;
+}

@@ -68,3 +68,13 @@ std::wstring CMissileDescriptor::GetDamageTypeStringByID(
         return gDAMAGE_TYPES[0];
     return gDAMAGE_TYPES[index];
 }
+
+unsigned int CMissileDescriptor::GetDamageTypeIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 7; ++index)
+    {
+        if (gDAMAGE_TYPES[index] == value)
+            return index;
+    }
+    return 0;
+}

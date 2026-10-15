@@ -37,3 +37,33 @@ std::wstring CShapeDescriptor::GetSpawnOrderStringByID(
         return gPOINT_ORDER_NAMES[0];
     return gPOINT_ORDER_NAMES[index];
 }
+
+unsigned int CShapeDescriptor::GetSpawnOrderIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 3; ++index)
+    {
+        if (gPOINT_ORDER_NAMES[index] == value)
+            return index;
+    }
+    return 0;
+}
+
+unsigned int CShapeDescriptor::GetSpawnDirectionIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 5; ++index)
+    {
+        if (gSHAPE_DIRECTION_NAMES[index] == value)
+            return index;
+    }
+    return 0;
+}
+
+unsigned int CShapeDescriptor::GetSpawnShapeIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 5; ++index)
+    {
+        if (gSHAPE_NAMES[index] == value)
+            return index;
+    }
+    return 0;
+}

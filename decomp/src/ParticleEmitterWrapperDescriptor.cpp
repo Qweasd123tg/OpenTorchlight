@@ -14,6 +14,7 @@ CParticleEmitterWrapperDescriptor::~CParticleEmitterWrapperDescriptor()
 #include <map>
 #include <string>
 #include "ParticleEmitterWrapperDescriptorNames.h"
+#include "ParticleEmitterWrapper.h"
 
 bool CParticleEmitterWrapperDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject* object)
 {
@@ -47,4 +48,19 @@ std::wstring CParticleEmitterWrapperDescriptor::GetEmitterTypeStringByID(
     if (index > 4)
         return gEMITTER_TYPES[0];
     return gEMITTER_TYPES[index];
+}
+
+unsigned int CParticleEmitterWrapperDescriptor::GetEmitterTypeIDByString(CEditorScene* scene, CEditorBaseObject* object, const std::wstring& value, void* userData)
+{
+    for (unsigned int index = 0; index < 5; ++index)
+    {
+        if (value == gEMITTER_TYPES[index])
+            return index;
+    }
+    return 0;
+}
+
+CEditorBaseObject* CParticleEmitterWrapperDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CParticleEmitterWrapper(scene->getResourceManager());
 }
