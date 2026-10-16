@@ -46,6 +46,7 @@ static detour::Set *copyPatch,*literalPatch,*randomPatch,*corePatch,*repPatch,*s
 static void* forwardedRep;
 static const wchar_t* filename;
 static Wide* keepers;
+static Wide* filenameStorage;
 static TSafePointer<CRunicCore>* witnesses;
 static void* objects[48];static unsigned objectCount;
 static void* allocations[256];static unsigned allocationKinds[256],allocationCount,freed[256];
@@ -79,7 +80,16 @@ static void boundary(unsigned off){if(!active||!constructing)return;n(1000+off);
 static void copy(Wide* dest,const Wide& src){unsigned off=offset(dest);if(off!=~0u)boundary(off);copyPatch->restore();reinterpret_cast<void(*)(Wide*,const Wide&)>(ltlCopy)(dest,src);if(active&&constructing&&off!=~0u)constructedString(dest);copyPatch->redirect(ltlCopy,ltlCopy,&copy);need(!copyPatch->failed(),4);}
 static void literal(Wide* dest,const wchar_t* src,const void* allocator){unsigned off=offset(dest);if(off!=~0u)boundary(off);literalPatch->restore();reinterpret_cast<void(*)(Wide*,const wchar_t*,const void*)>(ltlLiteral)(dest,src,allocator);if(active&&constructing&&off!=~0u)constructedString(dest);literalPatch->redirect(ltlLiteral,ltlLiteral,&literal);need(!literalPatch->failed(),5);}
 static void randomCtor(CRandomizer* p,int type){unsigned off=offset(p);if(active&&constructing){boundary(off);need(off==0x108+randomCalls*0x68&&type==0,6);++randomCalls;}randomPatch->restore();reinterpret_cast<void(*)(CRandomizer*,int)>(ltlRandomCtor_original)(p,type);TL_REDIRECT(*randomPatch,ltlRandomCtor,&randomCtor);need(!randomPatch->failed(),7);}
-static void load(CLevelTemplateData* p,const wchar_t* name){if(!active)return;++loadCalls;need(p==owner&&name==filename,8);n(5000);if(input->ctor){for(unsigned i=0;i<39;++i)constructedString(&at<Wide>(owner,stringOffsets[i]));scalarSnapshot();if(input->fault==0x1000){++faultHits;throw std::bad_alloc();}}}
+static void load(CLevelTemplateData* p,const wchar_t* name){if(!active)return;++loadCalls;need(p==owner&&name==filename,8);n(5000);if(input->ctor){for(unsigned i=0;i<39;++i)constructedString(&at<Wide>(owner,stringOffsets[i]));scalarSnapshot();
+ if(input->shape){
+  // Real owning state written by the intercepted synchronous load dependency.
+  Wide& loaded=owner->m_string60;
+  if(input->shape==1)loaded.assign(name);
+  else {const wchar_t content[]={L'A',0,L'\u03a9',L'Z'};loaded.assign(content,4);}
+  owner->m_minChunks=input->shape==1?17:29;
+  constructedString(&loaded);
+ }
+ if(input->fault==0x1000){++faultHits;throw std::bad_alloc();}}}
 static void releaseRep(void* rep){if(!active)return;for(unsigned i=0;i<39;++i)if(reps[i]==rep){++repReleased[i];n(6000+i);need(repReleased[i]==1,9);}}
 static void repDestroy(void* rep,const void* allocator){if(rep!=forwardedRep)releaseRep(rep);repPatch->restore();reinterpret_cast<void(*)(void*,const void*)>(ltlRepDestroy)(rep,allocator);repPatch->redirect(ltlRepDestroy,ltlRepDestroy,&repDestroy);need(!repPatch->failed(),10);}
 static void stringDtor(Wide* value){void* rep=const_cast<char*>(reinterpret_cast<const char*>(value->c_str()))-24;void* prior=forwardedRep;forwardedRep=rep;bool unique=!value->empty()&&refs(*value)<1;stringPatch->restore();reinterpret_cast<void(*)(Wide*)>(ltlStringDtor)(value);if(unique)releaseRep(rep);stringPatch->redirect(ltlStringDtor,ltlStringDtor,&stringDtor);forwardedRep=prior;need(!stringPatch->failed(),11);}
@@ -109,7 +119,11 @@ static void normalized(bool candidate){
  const unsigned untouched[]={0x6f8,0x6fc,0x750,0x754,0x758,0x75c};unsigned poison=input->poison?0xa5a5a5a5u:0x5a5a5a5au;for(unsigned i=0;i<6;++i){unsigned bits;std::memcpy(&bits,reinterpret_cast<char*>(owner)+untouched[i],4);need(bits==poison,29);n(bits);}
 }
 static void construct(void* p,autotest::Capture& out,bool candidate){
- Case& c=*static_cast<Case*>(p);reset(c,out);constructing=true;remember(owner);
+ Case& c=*static_cast<Case*>(p);reset(c,out);
+ Wide filenameOwner(L"prefix/fixture/heap_\u041a\u4e2d_filename.dat");
+ filenameStorage=&filenameOwner;
+ if(c.shape)filename=filenameOwner.c_str()+7;
+ constructing=true;remember(owner);
  detour::Set loads,copies,literals,randoms,cores,representations,strings;repPatch=&representations;stringPatch=&strings;copyPatch=&copies;literalPatch=&literals;randomPatch=&randoms;corePatch=&cores;
  TL_REDIRECT(loads,ltlLoad,&load);copies.redirect(ltlCopy,ltlCopy,&copy);literals.redirect(ltlLiteral,ltlLiteral,&literal);TL_REDIRECT(randoms,ltlRandomCtor,&randomCtor);TL_REDIRECT(cores,ltlCoreDtor,&coreDtor);
  representations.redirect(ltlRepDestroy,ltlRepDestroy,&repDestroy);strings.redirect(ltlStringDtor,ltlStringDtor,&stringDtor);
@@ -118,7 +132,19 @@ static void construct(void* p,autotest::Capture& out,bool candidate){
  if(!autotest::beginInvocation(out,fn))return;try{fn(owner,filename);out.callCompleted=1;}catch(const std::bad_alloc&){threw=true;}
  need(threw==(c.fault!=0)&&faultHits==(c.fault?1u:0u),30);
  copies.restore();literals.restore();randoms.restore();
- if(!threw){need(randomCalls==10&&loadCalls==1,31);normalized(candidate);ltlOldD1(owner);}else need(loadCalls==(c.fault==0x1000?1u:0u),32);
+ if(!threw){need(randomCalls==10&&loadCalls==1,31);normalized(candidate);
+ if(c.shape){
+  const Wide expected=c.shape==1?Wide(filename):Wide(L"A\0\u03a9Z",4);
+  need(owner->m_string60.size()==expected.size(),37);
+  need(owner->m_string60==expected,38);
+  need(owner->m_minChunks==(c.shape==1?17:29),39);
+  // Mutate the live input owner only after the synchronous call returned.
+  (*filenameStorage)[7]=L'X';
+  need(owner->m_string60==expected,41);
+  n(unsigned(owner->m_string60.size()));
+  capture->add(owner->m_string60.data(),owner->m_string60.size()*sizeof(wchar_t));
+ }
+ ltlOldD1(owner);}else need(loadCalls==(c.fault==0x1000?1u:0u),32);
  for(unsigned i=0;i<39;++i){need(repReleased[i]==(reps[i]?1u:0u),800+i);n(repReleased[i]);}
  need(constructedCount()==initialObjects+11,33);need(coreSeen[0]==1,34);active=false;Ogre::NedAllocImpl::deallocBytes(owner);n(0x4c544c46);n(errors);
 }
@@ -165,7 +191,9 @@ static bool pair(const tlhybrid_host* host,autotest::Coverage& coverage,Case& c)
  if(!ok){host->log("tlhybrid: LevelTemplate lifetime ctor=%u alias=%u shape=%u text=%u poison=%u fault=%x status=%d/%d valid=%u/%u bytes=%lu/%lu\n",c.ctor,c.alias,c.shape,c.text,c.poison,c.fault,a.childStatus,b.childStatus,good(a),good(b),(unsigned long)a.capture.length,(unsigned long)b.capture.length);for(unsigned i=0;i<a.capture.length&&i<b.capture.length;++i)if(a.capture.data[i]!=b.capture.data[i]){host->log("tlhybrid: first difference %u = %u/%u\n",i,(unsigned char)a.capture.data[i],(unsigned char)b.capture.data[i]);break;}for(unsigned side=0;side<2;++side){const autotest::Capture& z=side?b.capture:a.capture;for(size_t i=0;i+4<=z.length;i+=4){unsigned v;std::memcpy(&v,z.data+i,4);if((v&0xffff0000u)==0xf1000000u)host->log("tlhybrid: side %u semantic check %u at byte %lu\n",side,v-0xf1000000u,(unsigned long)i);}}}return ok;
 }
 }
-TL_TEST(level_template_constructor_lifetime){using namespace level_template_lifetime;autotest::Coverage cv("level_template_constructor_lifetime",0x97bfa0);for(unsigned alias=0;alias<2;++alias)for(unsigned text=0;text<4;++text)for(unsigned poison=0;poison<2;++poison){Case c={1,alias,0,text,poison,0};if(!pair(host,cv,c)){cv.report(host);return 1;}}cv.report(host);return cv.completed!=16||cv.different||cv.missing;}
+TL_TEST(level_template_constructor_lifetime){using namespace level_template_lifetime;autotest::Coverage cv("level_template_constructor_lifetime",0x97bfa0);for(unsigned alias=0;alias<2;++alias)for(unsigned text=0;text<4;++text)for(unsigned poison=0;poison<2;++poison){Case c={1,alias,0,text,poison,0};if(!pair(host,cv,c)){cv.report(host);return 1;}}
+ for(unsigned shape=1;shape<=2;++shape)for(unsigned alias=0;alias<2;++alias)for(unsigned poison=0;poison<2;++poison){Case c={1,alias,shape,2,poison,0};if(!pair(host,cv,c)){cv.report(host);return 1;}}
+ cv.report(host);return cv.completed!=24||cv.different||cv.missing;}
 TL_TEST(level_template_constructor_unwind){using namespace level_template_lifetime;autotest::Coverage cv("expected constructor unwinds excluded",0x97bfa0);const unsigned faults[]={0x518,0x6d0,0x6d8,0x6e0,0x6e8,0x6f0,0x770,0x1000};for(unsigned alias=0;alias<2;++alias)for(unsigned i=0;i<8;++i){Case c={1,alias,0,2,i&1,faults[i]};if(!pair(host,cv,c))return 1;}host->log("tlhybrid: LevelTemplate C1/C2: 16 expected dependency-boundary bad_alloc unwinds, no completed-call credit\n");return 0;}
 TL_TEST(level_template_destructor_lifetime)
 {

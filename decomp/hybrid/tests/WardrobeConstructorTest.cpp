@@ -35,16 +35,45 @@ typedef char imageSize[sizeof(Ogre::Image)==0x50?1:-1];
 typedef char logManagerSize[sizeof(Ogre::LogManager)==0x38?1:-1];
 extern "C" void groupConstruct(void*) __asm__("_ZN4Ogre20ResourceGroupManagerC1Ev");
 extern "C" void groupDestroy(void*) __asm__("_ZN4Ogre20ResourceGroupManagerD1Ev");
+void require(bool);
+unsigned logsCreated, logsDestroyed, groupsCreated, groupsDestroyed;
+class OptionalLogManager {
+    Ogre::LogManager* before;
+    Ogre::LogManager* owned;
+    OptionalLogManager(const OptionalLogManager&);
+    OptionalLogManager& operator=(const OptionalLogManager&);
+public:
+    OptionalLogManager():before(Ogre::LogManager::getSingletonPtr()),owned(0) {
+        // A prior test may already own the genuine service. Never replace it.
+        if(!before){owned=new Ogre::LogManager;++logsCreated;}
+        require(Ogre::LogManager::getSingletonPtr()==(owned?owned:before));
+    }
+    ~OptionalLogManager(){
+        require(Ogre::LogManager::getSingletonPtr()==(owned?owned:before));
+        if(owned){delete owned;++logsDestroyed;}
+        require(Ogre::LogManager::getSingletonPtr()==before);
+    }
+};
 class OriginalResourceGroups {
+    Ogre::ResourceGroupManager* before;
     void* storage;
     OriginalResourceGroups(const OriginalResourceGroups&);
     OriginalResourceGroups& operator=(const OriginalResourceGroups&);
 public:
     // Root at 0x2736a4 requests 0x118; alloc at 0x27370e, C1 at 0x273719.
-    OriginalResourceGroups():storage(Ogre::NedAllocImpl::allocBytes(0x118,0,0,0)) {
-        try {groupConstruct(storage);} catch(...) {Ogre::NedAllocImpl::deallocBytes(storage);throw;}
+    OriginalResourceGroups():before(Ogre::ResourceGroupManager::getSingletonPtr()),storage(0) {
+        if(!before){
+            storage=Ogre::NedAllocImpl::allocBytes(0x118,0,0,0);
+            try {groupConstruct(storage);++groupsCreated;}
+            catch(...) {Ogre::NedAllocImpl::deallocBytes(storage);storage=0;throw;}
+        }
+        require(static_cast<void*>(Ogre::ResourceGroupManager::getSingletonPtr())==(storage?storage:before));
     }
-    ~OriginalResourceGroups(){groupDestroy(storage);Ogre::NedAllocImpl::deallocBytes(storage);}
+    ~OriginalResourceGroups(){
+        require(static_cast<void*>(Ogre::ResourceGroupManager::getSingletonPtr())==(storage?storage:before));
+        if(storage){groupDestroy(storage);Ogre::NedAllocImpl::deallocBytes(storage);++groupsDestroyed;}
+        require(Ogre::ResourceGroupManager::getSingletonPtr()==before);
+    }
 };
 struct Fault { unsigned site; explicit Fault(unsigned s):site(s){} };
 struct Case { unsigned mask, variant, fault, slot, replace; };
@@ -143,19 +172,21 @@ void invokeCtor(bool ours){
 }
 void side(void* p,autotest::Capture& out,bool ours,bool setter){
     input=static_cast<Case*>(p);output=&out;textureConstructed=textureDestroyed=0;setterPhase=false;activeFault=setter?0:input->fault;resetCounters();
+    logsCreated=logsDestroyed=groupsCreated=groupsDestroyed=0;
+    Ogre::LogManager* initialLog=Ogre::LogManager::getSingletonPtr();
+    Ogre::ResourceGroupManager* initialGroups=Ogre::ResourceGroupManager::getSingletonPtr();
     std::memset(pixels,0x5a,sizeof pixels);
     owner=static_cast<CWardrobe*>(::operator new(sizeof(CWardrobe)));
     // Raw owner storage only; no nontrivial object is zero-initialized.
     detour::Set patches;TL_REDIRECT(patches,updateFn,&update);TL_REDIRECT(patches,fileSingleton,&singleton);TL_REDIRECT(patches,fileInfo,&lookup);patches.redirect(imageLoad,imageLoad,&load);TL_REDIRECT(patches,uniqueName,&name);
     if(patches.failed()){out.issue=autotest::Capture::InvalidReport;::operator delete(owner);return;}
     require(Ogre::TextureManager::getSingletonPtr()==0);
-    require(Ogre::LogManager::getSingletonPtr()==0&&Ogre::ResourceGroupManager::getSingletonPtr()==0);
     if(out.issue!=autotest::Capture::Complete){::operator delete(owner);return;}
     unsigned fault=0;bool complete=false;
     {
         // Real managers provide legal empty-resource teardown, with no renderer,
         // resource locations, codecs, or log files created.
-        Ogre::LogManager logManager;
+        OptionalLogManager logManager;
         OriginalResourceGroups resourceGroups;
         Manager tm;
         require(reinterpret_cast<char*>(&tm.retained)-reinterpret_cast<char*>(&tm)==0xc0);
@@ -182,6 +213,12 @@ void side(void* p,autotest::Capture& out,bool ours,bool setter){
         require(tm.retained.isNull()||tm.retained.useCount()==1);
         tm.retained.setNull();require(textureDestroyed==textureConstructed);number(textureConstructed);number(textureDestroyed);
     }
+    require(Ogre::LogManager::getSingletonPtr()==initialLog);
+    require(Ogre::ResourceGroupManager::getSingletonPtr()==initialGroups);
+    require(Ogre::TextureManager::getSingletonPtr()==0);
+    require(logsCreated==(initialLog?0u:1u)&&logsDestroyed==logsCreated);
+    require(groupsCreated==(initialGroups?0u:1u)&&groupsDestroyed==groupsCreated);
+    number(logsCreated);number(logsDestroyed);number(groupsCreated);number(groupsDestroyed);
     ::operator delete(owner);patches.restore();require(!patches.failed());observed_witness::finish(out,fault);
 }
 void ctorOld(void*p,autotest::Capture&o){side(p,o,false,false);}void ctorNew(void*p,autotest::Capture&o){side(p,o,true,false);}

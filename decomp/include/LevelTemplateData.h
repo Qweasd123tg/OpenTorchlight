@@ -71,6 +71,9 @@ public:
 
     CChunk* getRandomChunk(unsigned int index);
     CLevelLayout* getRandomLayout();
+    // ABI-preserving reconstruction: normal return carries the input seed bits.
+    int createRandomLayout(int seed);
+    void matchExits(CChunkInstance* chunk, std::vector<CChunkInstance*>& chunks);
     bool intersectsChunks(CChunkInstance* chunk, std::vector<CChunkInstance*>& chunks);
     bool exitsMatch(CChunkInstance* chunk, std::vector<CChunkInstance*>& chunks);
     void resetOdds();
