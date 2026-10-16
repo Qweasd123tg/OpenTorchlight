@@ -201,3 +201,26 @@ std::wstring CDescriptorProp::getPropertyValueAsString(CEditorBaseObject* object
     }
     return result;
 }
+
+void CDescriptorProp::setPropertyInterpreterFunctions(
+    PropertyStringToIndexFunction stringToIndex,
+    PropertyIndexToStringFunction indexToString, void* userData)
+{
+    if (stringToIndex && indexToString) {
+        if (m_pInterpreter)
+            m_pInterpreter->SetInterpreterFunctions(stringToIndex, indexToString, userData);
+        else
+            m_pInterpreter = new CDescriptorPropertyInterpreter(stringToIndex, indexToString, userData);
+    } else {
+        delete m_pInterpreter;
+    }
+}
+
+CDescriptorProp::CDescriptorProp(CDescriptorProp* source, CEditorBaseObject* object)
+    : CRunicCore(), m_sName(EMPTY_WSTRING), m_sDescription(EMPTY_WSTRING),
+      m_pInterpreter(NULL), m_pSetFunction(NULL), m_pGetFunction(NULL),
+      m_eType(VARIABLE_TYPE_NOT_SET), m_iFlags(0), m_sCategory(EMPTY_WSTRING),
+      m_DefaultValue(10), m_LinkedProperties(10), m_pValueBuffer(NULL)
+{
+    if (source) copy(*source, object);
+}

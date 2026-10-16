@@ -21,6 +21,16 @@ CUndo::CUndo(CEditorBaseObject* pObject, unsigned int uiProperty)
     AddUndoProperty(pObject, uiProperty);
 }
 
+
+CUndo::CUndoData::~CUndoData()
+{
+    if (m_data) {
+        Ogre::NedAllocImpl::deallocBytes(m_data);
+        m_data = NULL;
+    }
+    m_object = NULL;
+}
+
 CUndo::~CUndo()
 {
     m_undoData.deleteAll();
@@ -29,8 +39,7 @@ CUndo::~CUndo()
 void CUndo::resetPropertiesOnObject(CUndo* pUndo)
 {
     for (unsigned int i = 0; i < m_undoData.size(); ++i) {
-        switch (*reinterpret_cast<int*>(
-                    reinterpret_cast<char*>(m_undoData[i]) + 0x18)) {
+        switch (m_undoData[i]->m_action) {
         case 0:
             DoUndoOnProperty(m_undoData[i], pUndo);
             break;

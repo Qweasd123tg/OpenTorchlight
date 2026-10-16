@@ -13,6 +13,7 @@ class TRepository : public Ogre::GeneralAllocatedObject
 {
 public:
     TRepository(T defaultValue) : m_iNextID(0), m_DefaultValue(defaultValue) {}
+    unsigned int addItem(T& value);
 
     void clear()
     {

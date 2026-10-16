@@ -81,3 +81,47 @@ int CSpawnClassData::getUnitObjectCount()
                m_pType2Randomizer->getChoiceCount();
     return m_lUnitDataObjects.size();
 }
+
+
+void CSpawnClassData::addUnitDataObjects(TArrayList<CDataGroup*>& groups)
+{
+    if (m_pSpawnClass == NULL)
+    {
+        m_iMinimumLevel = -999;
+        m_iLevelOffset = -999;
+        m_iRarityOverride = -999;
+        m_iFlags = -999;
+        m_lUnitDataObjects.setGrowBy(groups.size() + 1);
+        for (unsigned int i = 0; i < groups.size(); ++i)
+            m_lUnitDataObjects.add(groups[i]);
+    }
+}
+
+unsigned int CSpawnClassData::calculateChoices(CCharacter* character, int minimumLevel,
+                                             int levelOffset, int rarityOverride, int flags)
+{
+    if (m_pSpawnClass)
+        return m_pSpawnClass->calculateNumberOfChoices(character, minimumLevel, levelOffset, rarityOverride, flags);
+    if (m_lUnitDataObjects.size() == 0)
+        return 0;
+    if (m_pRandomizer && m_iFlags == flags && m_iMinimumLevel == minimumLevel &&
+        m_iLevelOffset == levelOffset && m_iRarityOverride == rarityOverride)
+        return m_pRandomizer->getChoiceCount() + m_pType1Randomizer->getChoiceCount() +
+               m_pType2Randomizer->getChoiceCount();
+    if (m_pRandomizer)
+    {
+        m_pRandomizer->clear();
+        m_pType1Randomizer->clear();
+        m_pType2Randomizer->clear();
+        m_lPrimaryRandomizerIDs.clear();
+    }
+    m_iMinimumLevel = minimumLevel;
+    m_iLevelOffset = levelOffset;
+    m_iRarityOverride = rarityOverride;
+    m_iFlags = flags;
+    fillRandomizer(character, minimumLevel, levelOffset, rarityOverride, flags);
+    if (m_pRandomizer)
+        return m_pRandomizer->getChoiceCount() + m_pType1Randomizer->getChoiceCount() +
+               m_pType2Randomizer->getChoiceCount();
+    return m_lUnitDataObjects.size();
+}

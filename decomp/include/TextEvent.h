@@ -2,6 +2,7 @@
 #define OTL_TEXT_EVENT_H
 #include "RunicCore.h"
 #include <CEGUIcolour.h>
+#include <OgreVector3.h>
 #include <string>
 class CGameUI;
 namespace CEGUI { class Window; }
@@ -12,6 +13,8 @@ public:
     CTextEvent(const std::string&,const CEGUI::colour&,const CEGUI::colour&);
     void createText(CGameUI*,CEGUI::Window*);
     void update(CEGUI::Window*, float);
+    void setText(const Ogre::Vector3&, const std::string&, float, float,
+                 CEGUI::colour, CEGUI::colour);
     float m_Value10,m_Value14,m_Value18;
     char m_Padding1C[4];
     std::string m_Text;

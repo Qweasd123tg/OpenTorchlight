@@ -22,6 +22,8 @@ public:
     unsigned int getNumberOfActiveMods();
     unsigned int getNumberOfEnabledMods();
     void refreshAllMods();
+    void refreshMod(const std::string& name);
+    void saveModFile(bool flag);
     std::wstring getFilePath(const std::wstring& path, std::string& resourceGroup, CFileInfo& info);
     void getEnabledModNames(TArrayList<std::wstring>* names);
     void getModNames(TArrayList<std::wstring>* names);

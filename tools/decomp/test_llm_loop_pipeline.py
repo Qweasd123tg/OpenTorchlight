@@ -810,6 +810,70 @@ class RepairWorkflow(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'object differs'):
             self.snapshot([dict(self.row, object_digest='b' * 64)])
 
+    def add_adjustment_thunk(self):
+        self.loop.funcs[0]['names'] = ['_ZN6CProbe4workEv']
+        self.row['name'] = self.loop.funcs[0]['names'][0]
+        thunk = function('0x3', 'non-virtual thunk to CProbe::work()',
+                         names=['_ZThn16_N6CProbe4workEv'])
+        self.loop.db['functions']['0x3'] = thunk
+        row = dict(self.row, address='0x3', name=thunk['names'][0],
+                   status='MATCH', code='0123456789abcdef')
+        self.progress['units'][0]['functions'].append(row)
+        self.progress.update(accepted=['0x3'], accepted_functions=1)
+        self.write_progress()
+        return row
+
+    def test_independent_match_adjustment_thunk_does_not_accept_its_body(self):
+        thunk = self.add_adjustment_thunk()
+        saved = self.snapshot([self.row, thunk])
+        self.assertEqual(['0x2'], saved['addresses'])
+        self.assertEqual([{'address': '0x3', 'name': thunk['name'], 'code': thunk['code']}],
+                         saved['protected_thunks'])
+        llm_loop.validate_repair_thunks(saved, [dict(self.row, object_digest='b' * 64),
+                                               dict(thunk, object_digest='b' * 64)])
+
+    def test_adjustment_thunk_proof_must_be_strong_unique_exact_and_current(self):
+        thunk = self.add_adjustment_thunk()
+        for rows in ([self.row], [self.row, dict(thunk, weak=True)],
+                     [self.row, dict(thunk, status='DIFF')],
+                     [self.row, dict(thunk, code='f' * 16)],
+                     [self.row, dict(thunk, code=None)],
+                     [self.row, dict(thunk, name='another_symbol')],
+                     [self.row, thunk, thunk]):
+            with self.subTest(rows=rows), self.assertRaises(ValueError):
+                self.snapshot(rows)
+
+    def test_only_proven_nonvirtual_adjustment_thunk_gets_exception(self):
+        thunk = self.add_adjustment_thunk()
+        original = dict(self.loop.db['functions']['0x3'])
+        variants = [dict(demangled='virtual thunk to CProbe::work()'),
+                    dict(demangled='covariant return thunk to CProbe::work()'),
+                    dict(demangled='CProbe::work()'), dict(names=['_ZTv0_n16_N6CProbe4workEv']),
+                    dict(names=['unknown_symbol']), dict(names=['_ZThn16_N6COther4workEv']),
+                    dict(names=[]), dict(kind='dtor')]
+        for changes in variants:
+            self.loop.db['functions']['0x3'] = dict(original, **changes)
+            with self.subTest(changes=changes), self.assertRaises(ValueError):
+                self.snapshot([self.row, thunk])
+        self.loop.db['functions']['0x3'] = original
+        self.progress['accepted'].append('0x2'); self.progress['accepted_functions'] += 1
+        self.write_progress()
+        with self.assertRaises(ValueError):
+            self.snapshot([self.row, thunk])
+
+    def test_final_body_comparison_cannot_replace_or_omit_protected_thunk(self):
+        thunk = self.add_adjustment_thunk()
+        saved = self.snapshot([self.row, thunk])
+        for rows in ([dict(self.row, status='MATCH')],
+                     [self.row, dict(thunk, status='DIFF')],
+                     [self.row, dict(thunk, status='MISSING')],
+                     [self.row, dict(thunk, weak=True)],
+                     [self.row, dict(thunk, code='f' * 16)],
+                     [self.row, dict(thunk, name='another_symbol')],
+                     [self.row, thunk, thunk]):
+            with self.subTest(rows=rows), self.assertRaisesRegex(RuntimeError, 'protected MATCH adjustment thunk'):
+                llm_loop.validate_repair_thunks(saved, rows)
+
     def test_exact_source_signature_not_just_arity(self):
         cp = self.prepared_checkpoint()
         # Hash-pinned source work() does not implement selected work(int).

@@ -243,3 +243,10 @@ void CSkillManager::fireSkillsOnCreate(CBaseUnit* caster, ESKILL_ACTIVATION_TYPE
             executeSkill(m_OtherSkills[i], caster, activation, position, orientation, targetPosition, target);
     triggerSkillEvent(static_cast<ESKILL_EVENT_TYPE>(10), position, orientation, target);
 }
+
+CSkillManager::CSkillManager(CResourceManager* resources, CBaseUnit* owner)
+    : CRunicCore(), m_pResourceManager(resources), m_UpdatingSkills(10),
+      m_OtherSkills(10)
+{
+    m_Owner.setObject(owner);
+}

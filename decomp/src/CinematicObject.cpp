@@ -17,6 +17,12 @@
 bool CCinematicObject::updateLevelObject(float fTime, Ogre::Camera* pCamera,
                                                const Ogre::Vector3& vPosition)
 {
+    if (m_eMenuEvent == static_cast<EMENU_EVENT>(3) ||
+        m_eMenuEvent == static_cast<EMENU_EVENT>(4) ||
+        m_eMenuEvent == static_cast<EMENU_EVENT>(2))
+        BroadcastEvent(92);
+    CGameUI::getSingleton()->removeMenuListener(static_cast<EMENU_TYPE>(1), this);
+    return false;
 }
 
 void CCinematicObject::menuEventOccured(void* pTarget,

@@ -92,6 +92,12 @@ void CSoundObject::updateSounds(float elapsedTime)
 
 void CSoundObject::editorSelectionChanged(bool selected)
 {
+    if (m_pResourceManager && m_pResourceManager->getEditorIsRunning()) {
+        if (selected)
+            sceneNodeAttachEntity(m_pEntity);
+        else
+            sceneNodeDetachEntity();
+    }
 }
 
 CSoundObject::~CSoundObject()

@@ -9,8 +9,11 @@
 #include "ResourceManager.h"
 #include "RunicCore.h"
 #include "Settings.h"
+#include "SafePointer.h"
+#include "TArrayList.h"
 class CKeyManager;
 class CMouseManager;
+class CCameraShake;
 
 class CCameraControl : public CRunicCore
 {
@@ -27,11 +30,18 @@ public:
     CCameraControl(Ogre::Camera*, Ogre::Camera*, Ogre::Camera*, Ogre::Camera*, Ogre::Camera*);
 
     // fields
-    void* m_pUnknown10;
-    void* m_pUnknown18;
-    void* m_pUnknown20;
-    void* m_pUnknown28;
-    void* m_pUnknown30;
+    union
+    {
+        Ogre::Camera* m_cameras[5];
+        struct
+        {
+            Ogre::Camera* m_pUnknown10;
+            Ogre::Camera* m_pUnknown18;
+            Ogre::Camera* m_pUnknown20;
+            Ogre::Camera* m_pUnknown28;
+            Ogre::Camera* m_pUnknown30;
+        };
+    };
     float m_fUnknown38;
     float m_fUnknown3C;
     float m_fUnknown40;
@@ -40,8 +50,8 @@ public:
     float m_fUnknown4C;
     float m_fUnknown50;
     float m_fUnknown54;
-    unsigned char m_Unknown58[0x18] __attribute__((aligned(8)));
-    unsigned char m_Unknown70[0x18] __attribute__((aligned(8)));
+    TArrayList<TSafePointer<CCameraShake>*> m_cameraShakes;
+    TArrayList<TSafePointer<CCameraShake>*> m_cameraShakesSecondary;
     bool m_bUnknown88;
     unsigned char m_gap89[0x3];
     float m_fUnknown8C;

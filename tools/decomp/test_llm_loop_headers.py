@@ -160,6 +160,53 @@ class DeclarationReadiness(unittest.TestCase):
         self.assertIsNotNone(self.check(files, "CUnit", "work", "Point*"))
         self.assertIsNotNone(self.check(files, "CUnit", "work", "COther::Point*"))
 
+    def test_nested_owner_and_enum_use_complete_lexical_scope(self):
+        files = {"Undo.h": "class CUndo { public: class CUndoData { public: ~CUndoData(); }; enum Kind { A }; void work(CUndoData*, Kind); };"}
+        self.assertIsNone(self.check(files, "CUndo::CUndoData", "~CUndoData", ""))
+        self.assertIsNone(self.check(files, "CUndo", "work", "CUndo::CUndoData*, CUndo::Kind"))
+        self.assertIsNotNone(self.check(files, "CUndo", "work", "CUndoData*, CUndo::Kind"))
+        self.assertIsNotNone(self.check(files, "Other::CUndoData", "~CUndoData", ""))
+
+    def test_named_fixed_array_reference_preserves_extent_and_element_cv(self):
+        files = {"Affix.h": "class CAffix { public: void fill(const unsigned int (&values)[6]); };"}
+        self.assertIsNone(self.check(files, "CAffix", "fill", "unsigned int const (&) [6]"))
+        for wrong in ("unsigned int (&) [6]", "unsigned int const (&) [5]", "unsigned int const*", "unsignedint const (&) [6]"):
+            with self.subTest(wrong=wrong):
+                self.assertIsNotNone(self.check(files, "CAffix", "fill", wrong))
+
+    def test_global_callback_typedef_is_exact_and_shadowing_stays_blocked(self):
+        files = {"Prop.h": "typedef unsigned int (*Callback)(CScene*, const std::wstring&, void*); class CProp { public: void work(Callback callback); };"}
+        exact = "unsigned int (*)(CScene*, std::wstring const&, void*)"
+        self.assertIsNone(self.check(files, "CProp", "work", exact))
+        for wrong in (exact.replace("unsigned int", "int"), exact.replace(" const&", "&"), exact.replace("CScene*", "Other::CScene*")):
+            self.assertIsNotNone(self.check(files, "CProp", "work", wrong))
+        files["Shadow.h"] = "namespace N { typedef int Callback; }"
+        self.assertIsNotNone(self.check(files, "CProp", "work", exact))
+
+    def test_scoped_callback_identity_and_definition_scope_are_exact(self):
+        source = "class CProp { public: struct Scene; typedef int (*Callback)(Scene*, const std::wstring&); CProp(Callback callback); void work(Callback callback); };"
+        files = {"Prop.h": source}
+        exact = "int (*)(CProp::Scene*, std::wstring const&)"
+        self.assertIsNone(self.check(files, "CProp", "CProp", exact))
+        self.assertIsNone(self.check(files, "CProp", "work", exact))
+        self.assertIsNotNone(self.check(files, "CProp", "work", exact.replace("CProp::Scene", "Scene")))
+        for wrong in (source.replace("void work(Callback", "void work(Other::Callback"), source.replace("void work(Callback", "typedef float Callback; void work(Callback"), source.replace("void work(Callback", "typedef int (*Callback)(Scene*, const std::wstring&); void work(Callback")):
+            self.assertIsNotNone(self.check({"Prop.h": wrong}, "CProp", "work", exact))
+
+    def test_FILE_alias_requires_actual_stdio_include_and_no_shadow(self):
+        files = {"File.h": "#include <cstdio>\nnamespace FILEUTILS { void write(FILE* stream); }"}
+        self.assertIsNone(self.check(files, "FILEUTILS", "write", "_IO_FILE*"))
+        self.assertIsNotNone(self.check(files, "FILEUTILS", "write", "Other::_IO_FILE*"))
+        files["Shadow.h"] = "namespace N { struct FILE; }"
+        self.assertIsNotNone(self.check(files, "FILEUTILS", "write", "_IO_FILE*"))
+        files.pop("Shadow.h")
+        files["File.h"] = "/*\n#include <cstdio>\n*/ namespace FILEUTILS { void write(FILE*); }"
+        self.assertIsNotNone(self.check(files, "FILEUTILS", "write", "_IO_FILE*"))
+
+    def test_nested_inline_body_and_anonymous_owner_are_not_declarations(self):
+        for source in ("class CUnit { public: void work(int) {} };", "namespace { class CUnit { void work(int); }; }"):
+            self.assertIsNotNone(self.check({"Unit.h": source}, "CUnit", "work", "int"))
+
 
 class AsmLabels(unittest.TestCase):
     def test_labels_bound_to_mangled_names_are_refused(self):

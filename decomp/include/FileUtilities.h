@@ -10,6 +10,10 @@
 // Partial: declarations from FileUtilities.cpp used by recovered TUs.
 namespace FILESYSTEM
 {
+    bool FileIsOlder(const std::wstring& first, const std::wstring& second);
+    std::string AssembleAbsolutePath(const std::string& base, const std::string& path);
+    bool CreateLocalDirectory(const std::wstring& path);
+    void GetFileListSorted(const std::wstring& path, TArrayList<std::wstring>& files, std::wstring pattern);
     _WIN32_FIND_DATA GetFileData(const std::wstring& path);
     unsigned char ReadByte(FILE* file);
     std::string ReadString(FILE* file, unsigned int length);

@@ -72,3 +72,27 @@ void CModFileFilter::getModNames(TArrayList<std::wstring>* names)
         names->add(name);
     }
 }
+
+void CModFileFilter::refreshMod(const std::string& name)
+{
+    for (unsigned int i = 0; i < m_Mods.size(); ++i)
+        if (m_Mods[i]->m_sUnknown48 == name)
+            m_Mods[i]->reloadModFiles();
+}
+
+void CModFileFilter::addNewMod(const std::wstring& name)
+{
+    int priority = 1;
+    for (unsigned int i = 0; i < m_Mods.size(); ++i)
+        priority = std::max(0, m_Mods[i]->m_iUnknown74);
+    if (m_Mods.size())
+        ++priority;
+    m_Mods.add(new CMod(name, priority));
+}
+
+void CModFileFilter::refreshAllMods()
+{
+    for (unsigned int i = 0; i < m_Mods.size(); ++i)
+        m_Mods[i]->reloadModFiles();
+    saveModFile(true);
+}

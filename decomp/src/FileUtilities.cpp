@@ -263,3 +263,147 @@ std::wstring FILESYSTEM::FindFullFileName(const std::wstring& path, const std::w
     }
     return result;
 }
+
+
+unsigned char FILESYSTEM::ReadByte(FILE* file)
+{
+    unsigned char value;
+    return fread(&value, sizeof(value), 1, file) == 1 ? value : 0;
+}
+
+std::wstring FILESYSTEM::RemoveFileName(const std::wstring& path)
+{
+    std::wstring result(path);
+    std::wstring::size_type position = path.rfind(L"/", std::wstring::npos, 1);
+    if (position != std::wstring::npos)
+        result = path.substr(0, position + 1);
+    if (result.length() == path.length())
+    {
+        position = path.rfind(L"\\", std::wstring::npos, 1);
+        if (position != std::wstring::npos)
+            result = path.substr(0, position + 1);
+    }
+    return result;
+}
+
+std::string FILESYSTEM::ReadString(FILE* file, unsigned int length)
+{
+    std::string result;
+    char value;
+    for (unsigned int i = 0; i < length; ++i)
+    {
+        fread(&value, 1, 1, file);
+        result = result + value;
+    }
+    return result;
+}
+
+std::string FILESYSTEM::ReadString(FILE* file)
+{
+    std::string result;
+    char value;
+    fread(&value, 1, 1, file);
+    while (value != 0)
+    {
+        result = result + value;
+        fread(&value, 1, 1, file);
+    }
+    return result;
+}
+
+std::wstring FILESYSTEM::ReadWString(FILE* file)
+{
+    std::wstring result;
+    unsigned short value;
+    fread(&value, 2, 1, file);
+    while (value != 0)
+    {
+        result = result + static_cast<wchar_t>(value);
+        fread(&value, 2, 1, file);
+    }
+    return result;
+}
+
+bool FILESYSTEM::FileIsOlder(const std::wstring& first, const std::wstring& second)
+{
+    std::string firstPath = STRINGS::StringConvertToUTF8(first);
+    std::string secondPath = STRINGS::StringConvertToUTF8(second);
+    struct stat firstInfo, secondInfo;
+    if (stat(firstPath.c_str(), &firstInfo) != 0)
+        return true;
+    if (stat(secondPath.c_str(), &secondInfo) != 0)
+        return false;
+    return firstInfo.st_mtime < secondInfo.st_mtime;
+}
+
+std::string FILESYSTEM::AssembleAbsolutePath(const std::string& base, const std::string& path)
+{
+    std::string result(path);
+    if (!path.empty())
+    {
+        std::string::size_type position = path.find("/");
+        if (!FileExists(path) && position != 0)
+            result = base + path;
+    }
+    return result;
+}
+
+void FILESYSTEM::GetFileList(const std::wstring& path, TArrayList<std::wstring>& files, std::wstring pattern)
+{
+    std::string search = STRINGS::StringConvertToUTF8(path);
+    std::string filter = STRINGS::StringConvertToUTF8(pattern);
+    search += "/";
+    search += filter;
+    _WIN32_FIND_DATA data;
+    void* handle = FindFirstFile(search.c_str(), &data);
+    if (handle)
+    {
+        do
+        {
+            std::wstring name = STRINGS::StringConvertUTF8ToWide(std::string(data.fileName));
+            if (!(data.attributes & 0x10) && !name.empty() && name != L"." && name != L"..")
+                files.add(path + name);
+        }
+        while (FindNextFile(handle, &data) == true);
+    }
+    FindClose(handle);
+}
+
+#include <algorithm>
+
+// Original TU-local CFilePair: wstring at +0, signed 64-bit timestamp at +8.
+class CFilePair
+{
+public:
+    CFilePair() : time(0) {}
+    std::wstring name;
+    long long time;
+};
+
+struct FileTimeSorter
+{
+    bool operator()(const CFilePair* first, const CFilePair* second) const
+    {
+        return first->time > second->time;
+    }
+};
+
+void FILESYSTEM::GetFileListSorted(const std::wstring& path, TArrayList<std::wstring>& files, std::wstring pattern)
+{
+    GetFileList(path, files, pattern);
+    std::vector<CFilePair*> pairs;
+    for (unsigned int i = 0; i < files.size(); ++i)
+    {
+        CFilePair* pair = new CFilePair;
+        pair->name = files[i];
+        pair->time = GetFileTime(pair->name.c_str());
+        pairs.push_back(pair);
+    }
+    std::sort(pairs.begin(), pairs.end(), FileTimeSorter());
+    files.clear();
+    for (unsigned int i = 0; i < pairs.size(); ++i)
+    {
+        files.add(pairs[i]->name);
+        delete pairs[i];
+    }
+}

@@ -1902,7 +1902,7 @@ void EditorTestCameraShake(wchar_t* name, float duration)
     CCameraControl* camera = gEditor->getResourceManager()->getCameraControl();
     TSafePointer<CCameraShake>* reference = OGRE_NEW_T(TSafePointer<CCameraShake>, Ogre::MEMCATEGORY_GENERAL)();
     reference->setObject(shake);
-    reinterpret_cast<TArrayList<TSafePointer<CCameraShake>*>*>(camera->m_Unknown58)->add(reference);
+    camera->m_cameraShakes.add(reference);
 }
 
 void EditorPlaySound(wchar_t* name, float volume, float minimumDistance, float maximumDistance)

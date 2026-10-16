@@ -1000,11 +1000,11 @@ class PacketContextTests(TestCase):
     def ogre_value_setup(self, kind="Vector3"):
         sdk, configuration = self.ogre_data_setup()
         values = {
-            "OgreMath.h": "namespace Ogre { class _OgreExport Math { public: static const Real POS_INFINITY; }; }",
+            "OgreMath.h": "namespace Ogre { class _OgreExport Math { public: static const Real POS_INFINITY; static const Real fRad2Deg; static const Real fDeg2Rad; }; }",
             "OgrePrerequisites.h": "namespace Ogre { typedef float Real; typedef std::string _StringBase; typedef _StringBase String; }",
             "OgrePlatform.h": "// pinned platform\n",
             "OgreConfig.h": "#define OGRE_DOUBLE_PRECISION 0\n",
-            "OgreVector3.h": "namespace Ogre { class _OgreExport Vector3 { public: Real x,y,z; static const Vector3 ZERO; static const Vector3 UNIT_Y; }; }",
+            "OgreVector3.h": "namespace Ogre { class _OgreExport Vector3 { public: Real x,y,z; static const Vector3 ZERO; static const Vector3 UNIT_Y; static const Vector3 UNIT_Z; }; }",
             "OgreMatrix4.h": "namespace Ogre { class _OgreExport Matrix4 { public: Real m[4][4]; static const Matrix4 IDENTITY; }; }",
             "OgreQuaternion.h": "namespace Ogre { class _OgreExport Quaternion { public: Real w,x,y,z; static const Quaternion IDENTITY; }; }",
             "OgreString.h": "namespace Ogre { class _OgreExport StringUtil { public: static const String BLANK; }; }",
@@ -1014,6 +1014,9 @@ class PacketContextTests(TestCase):
         patch = mock.patch.dict(ContextIndex.OGRE_VALUE_HEADER_SHA256, pins, clear=True)
         patch.start(); self.addCleanup(patch.stop)
         identities = {
+            "UnitZ": ("Ogre::Vector3::UNIT_Z", "_ZN4Ogre7Vector36UNIT_ZE", 12),
+            "Rad2Deg": ("Ogre::Math::fRad2Deg", "_ZN4Ogre4Math8fRad2DegE", 4),
+            "Deg2Rad": ("Ogre::Math::fDeg2Rad", "_ZN4Ogre4Math8fDeg2RadE", 4),
             "UnitY": ("Ogre::Vector3::UNIT_Y", "_ZN4Ogre7Vector36UNIT_YE", 12),
             "Infinity": ("Ogre::Math::POS_INFINITY", "_ZN4Ogre4Math12POS_INFINITYE", 4),
             "Vector3": ("Ogre::Vector3::ZERO", "_ZN4Ogre7Vector34ZEROE", 12),
@@ -1025,7 +1028,7 @@ class PacketContextTests(TestCase):
         return sdk, configuration
 
     def test_ogre_values_exact_constants_and_interior_references(self):
-        for kind, size in (("Vector3",12),("Quaternion",16),("StringUtil",8),("Matrix4",64),("UnitY",12),("Infinity",4)):
+        for kind, size in (("Vector3",12),("Quaternion",16),("StringUtil",8),("Matrix4",64),("UnitY",12),("Infinity",4),("UnitZ",12),("Rad2Deg",4),("Deg2Rad",4)):
             with self.subTest(kind=kind):
                 self.ogre_value_setup(kind)
                 for offset in range(0,size,4):
@@ -1035,7 +1038,7 @@ class PacketContextTests(TestCase):
                     self.assertNotIn("Referenced data declaration",result.text)
 
     def test_missile_constants_reject_metadata_mismatches(self):
-        for kind in ("UnitY", "Infinity"):
+        for kind in ("UnitY", "Infinity", "UnitZ", "Rad2Deg", "Deg2Rad"):
             for change in ("no_copy", "wrong_copy", "no_symbol", "wrong_size", "wrong_db_size", "wrong_type", "wrong_label", "readonly", "short"):
                 with self.subTest(kind=kind,change=change):
                     self.ogre_value_setup(kind)
@@ -1051,7 +1054,7 @@ class PacketContextTests(TestCase):
                     with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
 
     def test_missile_constants_reject_declaration_mismatches(self):
-        for kind,header,owner,typ,member in (("UnitY","OgreVector3.h","Vector3","Vector3","UNIT_Y"),("Infinity","OgreMath.h","Math","Real","POS_INFINITY")):
+        for kind,header,owner,typ,member in (("UnitY","OgreVector3.h","Vector3","Vector3","UNIT_Y"),("Infinity","OgreMath.h","Math","Real","POS_INFINITY"),("UnitZ","OgreVector3.h","Vector3","Vector3","UNIT_Z"),("Rad2Deg","OgreMath.h","Math","Real","fRad2Deg"),("Deg2Rad","OgreMath.h","Math","Real","fDeg2Rad")):
             for declaration in ("static {typ} {member};", "static const int {member};", "static const {typ} WRONG;", "static const {typ} {member}; static const {typ} {member};"):
                 with self.subTest(kind=kind,declaration=declaration):
                     sdk,_=self.ogre_value_setup(kind)
@@ -1597,6 +1600,171 @@ class PacketContextTests(TestCase):
         self.assertEqual(result.headers, ("ActualStrings.h", "Free.h"))
         self.assertIn("namespace STRINGS { int GetInt(const wchar_t*); }", result.text)
         self.assertNotIn("WRONG_NAMESPACE", result.text)
+
+    def test_shared_identity_nested_enum_array_and_FILE(self):
+        self.write_header("Nested.h", "#include <cstdio>\nclass CUndo { public: class Data { public: ~Data(); }; enum Kind { K }; void work(Data*, Kind, unsigned int (&values)[6], FILE*); };")
+        self.mapping["CUndo"] = "Nested.h"
+        exact = "CUndo::Data*, CUndo::Kind, unsigned int (&)[6], _IO_FILE*"
+        callee = function(0x2000, "CUndo", "work", params=exact)
+        self.add_function(callee)
+        self.assertFalse(self.index().build(self.target, "1000: call 2000").gaps)
+        for wrong in (exact.replace("CUndo::Data", "Other::Data"), exact.replace("[6]", "[5]"), exact.replace("unsigned int", "const unsigned int"), exact.replace("_IO_FILE*", "Other::_IO_FILE*")):
+            callee["params"] = wrong
+            self.assertTrue(self.index().build(self.target, "1000: call 2000").gaps)
+        callee.update(scope="CUndo::Data", qualified="CUndo::Data::~Data", method="~Data", params="")
+        self.assertFalse(self.index().build(self.target, "1000: call 2000").gaps)
+
+    def test_direct_callee_scoped_callback_alias_uses_complete_lexical_identity(self):
+        self.write_header("Interpreter.h", "class CInterpreter { public: typedef unsigned int (*Value)(CScene*, const std::wstring&); CInterpreter(Value callback); void set(Value callback); };")
+        self.mapping["CInterpreter"] = "Interpreter.h"
+        f = function(0x2000, "CInterpreter", "CInterpreter", params="unsigned int (*)(CScene*, std::wstring const&)")
+        self.add_function(f)
+        self.assertFalse(self.index().build(self.target, "1000: call 2000").gaps)
+        for params in ("int (*)(CScene*, std::wstring const&)", "unsigned int (*)(Other::CScene*, std::wstring const&)", "unsigned int (*)(CScene*, std::wstring&)"):
+            f["params"] = params
+            self.assertTrue(self.index().build(self.target, "1000: call 2000").gaps)
+
+    def test_cross_header_scoped_callback_includes_exact_defining_header_whole(self):
+        callback_source = "namespace N { struct Result; struct Arg; typedef Result* (*Callback)(Arg*); }"
+        self.write_header("Callbacks.h", callback_source)
+        self.write_header("Prop.h", '#include "Callbacks.h"\nclass CProp { public: void work(N::Callback callback); };')
+        self.write_header("OtherCallbacks.h", "namespace Other { typedef int (*Callback)(float); }")
+        self.mapping["CProp"] = "Prop.h"
+        self.add_function(function(0x2000, "CProp", "work", params="N::Result* (*)(N::Arg*)"))
+        result = self.index().build(self.target, "1000: call 2000").require_complete()
+        self.assertEqual(result.headers, ("Callbacks.h", "Prop.h"))
+        self.assertIn(callback_source, result.text)
+        self.assertNotIn("namespace Other", result.text)
+        # An already shown defining header is not repeated or omitted from the
+        # completeness accounting; the untouched original source remains shown.
+        shown = self.index().build(self.target, "1000: call 2000", already_shown=["Callbacks.h"]).require_complete()
+        self.assertEqual(shown.headers, ("Prop.h",))
+
+    def test_failed_or_shadowed_scoped_callback_never_contributes_dependency(self):
+        self.write_header("Callbacks.h", "namespace N { struct Result; struct Arg; typedef Result* (*Callback)(Arg*); }")
+        self.write_header("Prop.h", "class CProp { public: void work(N::Callback callback); };")
+        self.mapping["CProp"] = "Prop.h"
+        f = function(0x2000, "CProp", "work", params="Other::Result* (*)(N::Arg*)")
+        self.add_function(f)
+        index = self.index()
+        declaration = next(d for d in index.declarations["Prop.h"] if d.kind == "function")
+        dependencies = set()
+        self.assertFalse(index.identity.matches(declaration, f, "Prop.h", dependencies=dependencies))
+        self.assertEqual(dependencies, set())
+        self.assertTrue(index.build(self.target, "1000: call 2000").gaps)
+        f["params"] = "N::Result* (*)(N::Arg*)"
+        for source in ("class CProp { public: typedef int Callback; void work(Callback callback); };", "class CProp { public: void work(Other::Callback callback); };"):
+            self.write_header("Prop.h", source)
+            result = self.index().build(self.target, "1000: call 2000")
+            self.assertTrue(result.gaps)
+            self.assertNotIn("Callbacks.h", result.headers)
+        self.write_header("Prop.h", "class CProp { public: void work(N::Callback callback); };")
+        self.write_header("Duplicate.h", "namespace N { typedef Result* (*Callback)(Arg*); }")
+        result = self.index().build(self.target, "1000: call 2000")
+        self.assertTrue(result.gaps)
+        self.assertNotIn("Callbacks.h", result.headers)
+        self.assertNotIn("Duplicate.h", result.headers)
+
+    def namespace_local(self, source=None):
+        self.write_header("Achievement.h", "namespace ParticleUniverse { class Technique; } class CAchievement { ParticleUniverse::Technique* p; };")
+        (self.src / "Achievement.cpp").write_text(source or "namespace ParticleUniverse { class Technique { public: void set(float); }; }")
+        self.add_function(function(0x2000, "ParticleUniverse::Technique", "set", params="float", tu=2))
+
+    def test_named_namespace_local_opaque_calls_keep_original_wrapper(self):
+        self.namespace_local()
+        result = self.index().build(self.target, "1000: call 2000").require_complete()
+        self.assertIn("namespace ParticleUniverse {\nclass Technique { public: void set(float); };\n}", result.text)
+        self.db["functions"]["0x2000"]["params"] = "int"
+        self.assertTrue(self.index().build(self.target, "1000: call 2000").gaps)
+
+    def test_namespace_local_never_reads_foreign_TU_or_borrows_other_scope(self):
+        self.namespace_local("namespace Other { class Technique { void set(float); }; }")
+        (self.src / "Other.cpp").write_text("namespace ParticleUniverse { class Technique { void set(float); }; }")
+        result = self.index().build(self.target, "1000: retq")
+        self.assertNotIn("class Technique { void set(float); };", result.text)
+        self.namespace_local()
+        self.db["functions"]["0x2000"].update(scope="Other::Technique", qualified="Other::Technique::set")
+        self.assertTrue(self.index().build(self.target, "1000: call 2000").gaps)
+
+    def test_namespace_local_rejects_fields_virtuals_bases_inline_and_duplicates(self):
+        for body in ("int data; void set(float);", "void (*callback)(float); void set(float);", "int data = call(); void set(float);", "virtual void set(float);", "void set(float) {}", "void set(float); class Inner {};", "void set(float);"):
+            if body == "void set(float);":
+                source = "namespace ParticleUniverse { class Technique : Base { " + body + " }; }"
+            else:
+                source = "namespace ParticleUniverse { class Technique { " + body + " }; }"
+            self.namespace_local(source)
+            with self.subTest(source=source), self.assertRaises(ContextError):
+                self.index().build(self.target, "1000: call 2000")
+        self.namespace_local("namespace ParticleUniverse { class Technique { void set(float); }; class Technique { void set(float); }; }")
+        with self.assertRaisesRegex(ContextError, "ambiguous"):
+            self.index().build(self.target, "1000: call 2000")
+
+    def test_existing_typed_global_initializer_and_template_arguments_are_verbatim(self):
+        declarations = [
+            ("static long long g_DescriptionVersion = 0;", "g_DescriptionVersion"),
+            ("extern std::map<std::wstring, TArrayList<CEditorBaseObject*>*> g_CachedObjects;", "g_CachedObjects"),
+            ("static TRepository<std::wstring> g_GlobalRepository(EMPTY_WSTRING);", "g_GlobalRepository")]
+        for declaration, name in declarations:
+            source = '#include "Dependency.h"\n' + declaration
+            self.write_header("TypedData.h", source)
+            self.db["globals"] = [object_symbol(0x6000, name, bind="local", file="Achievement.cpp")]
+            with self.subTest(name=name):
+                result = self.index().build(self.target, "1000: mov $0x6000,%rax").require_complete()
+                self.assertIn(declaration, result.text)
+                if name != "g_DescriptionVersion":
+                    self.assertIn('#include "Dependency.h"', result.text)
+                self.db["globals"][0]["file"] = "Other.cpp"
+                self.assertTrue(self.index().build(self.target, "1000: mov $0x6000,%rax").gaps)
+
+    def test_typed_global_parser_never_accepts_expressions_compound_body_or_duplicates(self):
+        for declaration in ("static long long value = macro();", "static long long value = ZERO;", "static long long value = 0, other = 0;", "extern std::map<int, int> value, other;", "void f() { static long long value = 0; }", "static TRepository<std::wstring> value(EMPTY_WSTRING);", "static TRepository<std::wstring> g_GlobalRepository(call());"):
+            self.write_header("TypedData.h", declaration)
+            self.db["globals"] = [object_symbol(0x6000, "value")]
+            with self.subTest(declaration=declaration):
+                self.assertTrue(self.index().build(self.target, "1000: mov $0x6000,%rax").gaps)
+        self.write_header("TypedData.h", "extern std::map<int, int> value; extern std::map<int, int> value;")
+        self.assertTrue(self.index().build(self.target, "1000: mov $0x6000,%rax").gaps)
+
+    def new_reviewed_destructor(self, variant):
+        actual = Path(__file__).resolve().parents[2] / "decomp/include"
+        self.write_header("TArrayList.h", (actual / "TArrayList.h").read_text())
+        if variant == "union":
+            scope, address, prefix, owner = "TArrayList<UNIONDATA32BIT>", 0x70ca90, "_ZN10TArrayListI14UNIONDATA32BITE", "DescriptorProp.cpp"
+            self.write_header("DescriptorProp.h", (actual / "DescriptorProp.h").read_text())
+        else:
+            scope, address, prefix, owner = "TArrayList<CSkill*>", 0xcd57a0, "_ZN10TArrayListIP6CSkillE", "SkillManager.cpp"
+            self.write_header("Skill.h", "class CSkill { public: void work(); };")
+            self.mapping["CSkill"] = "Skill.h"
+        self.db["tus"][2]["name"] = owner
+        names = [prefix + "D1Ev", prefix + "D2Ev"]
+        f = function(address, scope, "~TArrayList", size=26, tu=2, kind="inline_or_template", bind=["weak", "weak"], names=names)
+        f["mangled"] = names[0]
+        self.add_function(f)
+        self.image.symbols = [SimpleNamespace(type=2, bind=2, defined=True, value=address, name=n, size=26) for n in names]
+        return f
+
+    def test_two_new_destructors_require_exact_ELF_source_element_and_owner(self):
+        for variant in ("union", "skill"):
+            for change in (None, "variant", "size", "owner", "header", "element", "other_instantiation"):
+                with self.subTest(variant=variant, change=change):
+                    self.db["functions"] = {}
+                    f = self.new_reviewed_destructor(variant)
+                    if change == "variant": self.image.symbols.pop()
+                    elif change == "size": self.image.symbols[0].size = 27
+                    elif change == "owner": self.db["tus"][2]["name"] = "Other.cpp"
+                    elif change == "header": (self.include / "TArrayList.h").write_text("// changed\n" + (self.include / "TArrayList.h").read_text())
+                    elif change == "element":
+                        name = "DescriptorProp.h" if variant == "union" else "Skill.h"
+                        (self.include / name).write_text("class CSkill; union UNIONDATA32BIT;")
+                    elif change == "other_instantiation":
+                        f["scope"] = "TArrayList<Other*>"
+                        f["qualified"] = f["scope"] + "::~TArrayList"
+                    result = self.index().build(self.target, "1000: call " + f["address"])
+                    if change is None:
+                        self.assertFalse(result.gaps)
+                        self.assertIn("TArrayList.h", result.headers)
+                    else:
+                        self.assertTrue(result.gaps)
 
     def test_free_target_does_not_include_every_mapped_header(self):
         target = function(0x1000, "", "freeTarget", size=0x40)

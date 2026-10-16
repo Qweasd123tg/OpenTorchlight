@@ -40,6 +40,7 @@ class Declaration:
     scopes: tuple[tuple[str, str], ...]
     array_width: int = 0
     int_array_values: tuple[int, ...] | None = None
+    whole_header: bool = False
 
 
 @dataclass(frozen=True)
@@ -48,6 +49,7 @@ class LocalType:
     text: str
     safe: bool
     reason: str = ""
+    qualified: str = ""
 
 
 def _address(value):
@@ -69,7 +71,7 @@ def _mask(text):
                   lambda m: re.sub(r"[^\n]", " ", m[0]), masked, flags=re.M)
 
 
-def _scan(text):
+def _scan(text, *, typedefs=False):
     """Only simple declarations outside function bodies; exact source slices.
 
     Namespace/class scopes are retained. Function-pointer/compound declarations,
@@ -84,8 +86,9 @@ def _scan(text):
         i, token = delimiter.start(), delimiter[0]
         head = masked[start:i].strip()
         if token == "{":
+            head = re.sub(r"^(?:public|protected|private)\s*:\s*", "", head)
             ns = re.fullmatch(r"namespace\s+(\w+)", head)
-            cls = re.fullmatch(r"(?:class|struct)\s+(?:__attribute__\(\(\w+\)\)\s+)?(\w+)\s*(?::[^{};]*)?", head)
+            cls = re.fullmatch(r"(?:class|struct|union)\s+(?:__attribute__\(\(\w+\)\)\s+)?(\w+)\s*(?::[^{};]*)?", head)
             array = re.fullmatch(r"(?:static\s+)?(?:const\s+)?std::(?:w?string)\s+(\w+)\s*\[\s*(?:[0-9]+)?\s*\]\s*=", head)
             integer_array = re.fullmatch(r"static\s+const\s+int\s+(\w+)\s*\[\s*([1-9][0-9]{0,3})\s*\]\s*=", head)
             kind, name = (("namespace", ns[1]) if ns else
@@ -133,10 +136,24 @@ def _scan(text):
                     if semicolon:
                         end += semicolon.end()
                         beginning += re.search(r"\S", masked[beginning:opening]).start()
-                        reason = ("non-top-level/anonymous scope" if scopes else
+                        reason = ("non-top-level/anonymous scope" if any(k != "namespace" for k, _ in scopes) else
                                   "nested braces/inline bodies" if re.search(r"[{}]", masked[opening + 1:i]) else "")
-                        types.append(LocalType(name, text[beginning:end].strip(),
-                                               not reason, reason))
+                        if scopes and not reason:
+                            body = re.sub(r"\b(?:public|protected|private)\s*:", "", masked[opening + 1:i])
+                            members = [part.strip() for part in body.split(";") if part.strip()]
+                            class_head = masked[beginning:opening]
+                            def call_declaration(part):
+                                method = re.search(r"(?<![\w:])(~?\w+)\s*\(", part)
+                                return (method and "=" not in part[:method.start()]
+                                        and declaration_headers.declared_signatures(part + ";", method[1]))
+                            if (":" in class_head or re.search(r"\bvirtual\b", body)
+                                    or any(not call_declaration(part) for part in members)):
+                                reason = "namespace type is not opaque declaration-only calls (fields/bases/virtuals)"
+                        snippet = text[beginning:end].strip()
+                        for _, namespace in reversed(scopes):
+                            snippet = f"namespace {namespace} {{\n{snippet}\n}}"
+                        qualified = "::".join([n for _, n in scopes if n] + [name])
+                        types.append(LocalType(name, snippet, not reason, reason, qualified))
             start = i + 1
         else:
             scopes = tuple((k, n) for k, n, *_ in stack)
@@ -148,23 +165,49 @@ def _scan(text):
                 original = re.sub(r"^(?:public|protected|private)\s*:\s*", "", original)
                 fn = re.search(r"(?<![\w:])(~?\w+)\s*\(", clean)
                 list_object = re.fullmatch(r"(?:static\s+)?TArrayList\s*<\s*std::(?:w?string)\s*>\s+(\w+)\s*\(\s*[1-9][0-9]*\s*\)", clean)
-                if list_object and all(k == "namespace" for k, _ in scopes):
+                zero_scalar = re.fullmatch(r"static\s+long\s+long\s+(\w+)\s*=\s*0", clean)
+                repository = re.fullmatch(r"static\s+TRepository\s*<\s*std::wstring\s*>\s+(g_GlobalRepository)\s*\(\s*EMPTY_WSTRING\s*\)", clean)
+                callback = re.fullmatch(r"typedef\s+([^;{}]+?)\s*\(\s*\*\s*(\w+)\s*\)\s*\(([^;{}]*)\)", clean)
+                typedef = re.fullmatch(r"typedef\s+[^;{}()]+?\s+(\w+)", clean)
+                whole_header = False
+                if callback and typedefs:
+                    name, kind, width = callback[2], "callback", 0
+                elif typedef and typedefs:
+                    name, kind, width = typedef[1], "typedef", 0
+                elif (zero_scalar or repository) and not scopes:
+                    name, kind, width = (zero_scalar or repository)[1], "data", 0
+                    whole_header = bool(repository)
+                elif list_object and all(k == "namespace" for k, _ in scopes):
                     name, kind, width = list_object[1], "data", 0
                 elif fn and "=" not in clean[:fn.start()] and not clean.startswith(("typedef ", "using ")):
                     name, kind, width = fn[1], "function", 0
                 else:
                     var = re.fullmatch(r"(.+?)\b((?:\w+::)*\w+)\s*((?:\[[^\]]*\]\s*)*)", clean)
-                    if (not var or any(c in clean for c in "(),=")
+                    if (not var or any(c in clean for c in "()=")
+                            or len(ghidra_cpp.split_args(clean)) != 1
                             or clean.startswith(("typedef ", "using ", "class ", "struct ", "enum "))):
                         start = i + 1
                         continue
                     name, kind, width = var[2], "data", 0
                     # A pointer object is not its pointee; unsigned-char blobs are not strings.
                     typ = var[1].strip()
+                    # Commas are type arguments only, never compound objects.
+                    # Unbalanced/unsupported expressions do not establish a type.
+                    if "," in typ:
+                        depth = 0
+                        for ch in typ:
+                            if ch == "<": depth += 1
+                            elif ch == ">": depth -= 1
+                            if depth < 0: break
+                        if depth or not re.fullmatch(r"[\w\s:<>,*&]+", typ):
+                            start = i + 1
+                            continue
+                        whole_header = True
                     if var[3] and re.fullmatch(r"(?:(?:extern|static|const)\s+)*(?:char|wchar_t)(?:\s+const)?", typ):
                         width = 4 if re.search(r"\bwchar_t\b", typ) else 1
                 qualified = "::".join([n for _, n in scopes] + [name])
-                declarations.append(Declaration(qualified, kind, original, scopes, width))
+                declarations.append(Declaration(qualified, kind, original, scopes, width,
+                                                whole_header=whole_header))
             start = i + 1
     return declarations, types
 
@@ -285,32 +328,123 @@ def _callback_cv_spelling(text):
 
 
 def _declares_callee(declaration, callee, aliases=None):
-    """Match parameter and member-cv identity, never a name-only overload.
+    """Compatibility entry point; selection and direct calls use one identity."""
+    identity = DeclarationIdentity({})
+    identity.aliases = aliases or {}
+    return identity.matches(declaration, callee, header="")
 
-    Reuse the existing conservative declaration parser. Return type and static
-    status are not encoded by ordinary Itanium names and are deliberately not
-    inferred here. Unsupported declarators / unresolved typedefs remain gaps.
+
+class DeclarationIdentity:
+    """The same conservative parameter identity for selection and direct calls.
+
+    Qualification uses complete lexical type names, never short-name matching.
+    Callback aliases retain their defining global scope. This does not establish
+    return types, static/member ABI, layouts, or missing declarations.
     """
-    if "params" not in callee or "cv" not in callee:
-        return False
-    method = callee.get("method", "")
-    if not re.fullmatch(r"~?[A-Za-z_]\w*", method):
-        return False
-    try:
-        text = _standard_vector_defaults(_standard_string_aliases(_expand_callback_aliases(declaration.text, aliases)))
-        params = _standard_vector_defaults(_standard_string_aliases(callee["params"]))
-    except ValueError:
-        return False
-    # The shared parser's word boundary is before an identifier, not '~'.
-    if method.startswith("~"):
-        text = re.sub(r"~\s*" + re.escape(method[1:]) + r"(?=\s*\()", method[1:], text)
-        method = method[1:]
-    text = _callback_cv_spelling(text)
-    params = _callback_cv_spelling(params)
-    canonical = dict(callee, params=params)
-    expected = ghidra_cpp.signature_key(canonical)[1:3]
-    declared = declaration_headers.declared_signatures(text, method)
-    return any((params, cv) == expected for params, cv, _static in declared)
+
+    def __init__(self, sources):
+        # Reuse the existing bounded type/default walkers, not a second parser.
+        # Import lazily: smallmatch itself uses the packet scanner.
+        from smallmatch import _declared_types, _map_defaults
+        self.types = _declared_types(sources)
+        self.map_defaults = _map_defaults
+        self.aliases = _callback_aliases(sources)
+        self.scoped_aliases, self.typedef_names = {}, set()
+        for header, source in sources.items():
+            for declaration in _scan(source, typedefs=True)[0]:
+                if declaration.kind not in ("callback", "typedef") or not declaration.scopes:
+                    continue
+                self.typedef_names.add(declaration.qualified)
+                self.scoped_aliases.setdefault(declaration.qualified, []).append((header, declaration))
+        self.file_headers = {name for name, source in sources.items()
+                             if re.search(r"(?m)^[ \t]*#[ \t]*include\s*<(?:stdio.h|cstdio)>",
+                                          ghidra_cpp.protect_lexical(source)[0])}
+        if any(re.search(r"\b(?:typedef\b[^;]*\bFILE|(?:class|struct|enum)\s+FILE)\b",
+                         _mask(source)) for source in sources.values()):
+            self.file_headers.clear()
+
+    def parameter(self, text, *, scope=(), header=None, dependencies=None):
+        if scope or header is not None:
+            for token in re.findall(r"(?<![\w:])[A-Za-z_]\w*(?![\w:])", text):
+                for depth in range(len(scope), 0, -1):
+                    qualified = "::".join([*scope[:depth], token])
+                    if qualified in self.types:
+                        text = re.sub(r"(?<![\w:])" + re.escape(token) + r"(?![\w:])", qualified, text)
+                        break
+            # A scoped typedef is expanded only at its complete lexical identity.
+            # A nearer noncallback typedef or any duplicate blocks substitution.
+            alias = re.fullmatch(r"\s*((?:[A-Za-z_]\w*::)*[A-Za-z_]\w*)(?:\s+[A-Za-z_]\w*)?\s*", text)
+            if alias:
+                names = (["::".join([*scope[:depth], alias[1]]) for depth in range(len(scope), 0, -1)]
+                         if "::" not in alias[1] else []) + [alias[1]]
+                for qualified in names:
+                    if qualified not in self.typedef_names:
+                        continue
+                    declarations = self.scoped_aliases.get(qualified, [])
+                    if len(declarations) != 1 or declarations[0][1].kind != "callback":
+                        raise ValueError("ambiguous/shadowed scoped callback")
+                    defining_header, declaration = declarations[0]
+                    callback = re.fullmatch(r"typedef\s+([^;{}]+?)\s*\(\s*\*\s*\w+\s*\)\s*\(([^;{}]*)\)\s*;", _mask(declaration.text))
+                    spelling = callback[1].strip() + " (*) (" + callback[2].strip() + ")" if callback else ""
+                    if not declaration_headers._unnamed_callback(spelling):
+                        raise ValueError("unsupported scoped callback")
+                    defining_scope = tuple(n for _, n in declaration.scopes)
+                    for token in re.findall(r"(?<![\w:])[A-Za-z_]\w*(?![\w:])", spelling):
+                        for depth in range(len(defining_scope), 0, -1):
+                            typ = "::".join([*defining_scope[:depth], token])
+                            if typ in self.types:
+                                spelling = re.sub(r"(?<![\w:])" + re.escape(token) + r"(?![\w:])", typ, spelling)
+                                break
+                    text = spelling
+                    if dependencies is not None:
+                        dependencies.add(defining_header)
+                    break
+            if dependencies is not None:
+                for name, (_, defining_header) in self.aliases.items():
+                    if re.search(r"(?<![\w:])" + re.escape(name)
+                                 + r"(?:\s+[A-Za-z_]\w*)?(?=\s*[,)]|\s*$)", text):
+                        dependencies.add(defining_header)
+            text = _expand_callback_aliases(text, self.aliases)
+            if header in self.file_headers:
+                text = re.sub(r"(?<![\w:])FILE\b", "_IO_FILE", text)
+        text = _standard_vector_defaults(_standard_string_aliases(text))
+        text = self.map_defaults(text)
+        array = re.fullmatch(r"([^()\[\]]+)\(\s*&\s*([A-Za-z_]\w*)?\s*\)\s*\[\s*([1-9][0-9]*)\s*\]", text.strip())
+        if array and declaration_headers._callback_type(array[1]):
+            base = ghidra_cpp.cxx_type(array[1].strip())
+            if "*" not in base:
+                words = base.split()
+                cv = [word for word in ("const", "volatile") if word in words]
+                base = " ".join(cv + [word for word in words if word not in cv])
+            text = base + " (&" + (array[2] or "") + ")[" + array[3] + "]"
+        if (declaration_headers._unnamed_callback(text)
+                and re.search(r"\*\s*(?:const|volatile)\b", text)):
+            raise ValueError("callback pointer-object cv is unresolved")
+        return _callback_cv_spelling(text)
+
+    def matches(self, declaration, callee, header=None, *, dependencies=None):
+        if "params" not in callee or "cv" not in callee:
+            return False
+        method = callee.get("method", "")
+        if not re.fullmatch(r"~?[A-Za-z_]\w*", method):
+            return False
+        if declaration.qualified != (callee.get("qualified") or
+                                     ((callee.get("scope") + "::") if callee.get("scope") else "") + method):
+            return False
+        try:
+            used_headers = set()
+            params = ", ".join(self.parameter(p) for p in ghidra_cpp.split_args(callee["params"]))
+            expected = ghidra_cpp.signature_key(dict(callee, params=params))[1:3]
+            scope = tuple(n for k, n in declaration.scopes)
+            declared = declaration_headers.declared_signatures(
+                declaration.text, method,
+                lambda p: self.parameter(p, scope=scope, header=header, dependencies=used_headers))
+        except ValueError:
+            return False
+        matched = any((params, cv) == expected for params, cv, _static in declared)
+        if matched and dependencies is not None:
+            dependencies.update(used_headers)
+        return matched
 
 
 def _instructions(f, asm):
@@ -424,6 +558,7 @@ class ContextIndex:
             self.sources[path.name] = text
             self.declarations[path.name] = decls
         self.callback_aliases = _callback_aliases(self.sources)
+        self.identity = DeclarationIdentity(self.sources)
 
     def _path(self, directory, name):
         name = _basename(name)
@@ -676,8 +811,11 @@ class ContextIndex:
         return value
 
     def _ogre_value_data(self, obj):
-        """Only six reviewed COPY-imported constants in the pinned default ABI."""
+        """Only reviewed COPY-imported constants in the pinned default ABI."""
         identities = {
+            "_ZN4Ogre4Math8fRad2DegE": ("Ogre::Math::fRad2Deg", 4, "OgreMath.h", "Real", "fRad2Deg"),
+            "_ZN4Ogre4Math8fDeg2RadE": ("Ogre::Math::fDeg2Rad", 4, "OgreMath.h", "Real", "fDeg2Rad"),
+            "_ZN4Ogre7Vector36UNIT_ZE": ("Ogre::Vector3::UNIT_Z", 12, "OgreVector3.h", "Vector3", "UNIT_Z"),
             "_ZN4Ogre4Math12POS_INFINITYE": ("Ogre::Math::POS_INFINITY", 4, "OgreMath.h", "Real", "POS_INFINITY"),
             "_ZN4Ogre7Vector36UNIT_YE": ("Ogre::Vector3::UNIT_Y", 12, "OgreVector3.h", "Vector3", "UNIT_Y"),
             "_ZN4Ogre7Matrix48IDENTITYE": ("Ogre::Matrix4::IDENTITY", 64, "OgreMatrix4.h", "Matrix4", "IDENTITY"),
@@ -903,7 +1041,7 @@ class ContextIndex:
         return {header}
 
     def _pinned_destructor_headers(self, callee, scope):
-        """Ten reviewed existing template bodies, never a generic exemption.
+        """Twelve reviewed existing template bodies, never a generic exemption.
 
         Original ASM: wstring delete[] destroys elements using the array cookie,
         then frees and clears data; safe pointers unregister and reset both fields.
@@ -912,6 +1050,12 @@ class ContextIndex:
         """
         wide = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
         reviewed = {
+            "TArrayList<UNIONDATA32BIT>":
+                (0x70ca90, 26, "_ZN10TArrayListI14UNIONDATA32BITE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<CSkill*>":
+                (0xcd57a0, 26, "_ZN10TArrayListIP6CSkillE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CSkill"),
             "TArrayList<CChunk*>":
                 (0x97cb30, 26, "_ZN10TArrayListIP6CChunkE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
@@ -963,6 +1107,22 @@ class ContextIndex:
         if hashlib.sha256(raw).hexdigest() != digest or raw.decode("utf-8") != self.sources[header]:
             return set()
         headers = {header}
+        if scope in ("TArrayList<UNIONDATA32BIT>", "TArrayList<CSkill*>"):
+            owner = "DescriptorProp.cpp" if scope == "TArrayList<UNIONDATA32BIT>" else "SkillManager.cpp"
+            if self._tu(callee, None) != owner:
+                return set()
+        if scope == "TArrayList<UNIONDATA32BIT>":
+            # The value element (unlike a pointer element) must be complete and
+            # have the reviewed trivial destruction semantics. Pin its actual
+            # defining header; do not generalize this to arbitrary unions.
+            element_header = "DescriptorProp.h"
+            expected = "4995f4b33858d32a1313ca67a7a4697a568ac5bf54c63c87b37c00b5b3737721"
+            source = self.sources.get(element_header)
+            if (source is None or hashlib.sha256(source.encode()).hexdigest() != expected
+                    or self._path("include", element_header).read_text() != source
+                    or "UNIONDATA32BIT" not in self.header_classes.get(element_header, ())):
+                return set()
+            headers.add(element_header)
         if pointee:
             complete = {h for h in self._mapped(pointee)
                         if pointee in self.header_classes.get(h, ())}
@@ -1069,9 +1229,10 @@ class ContextIndex:
                 local_decls, local_defs = _scan(self._read("src", tu)) if path.exists() else ([], [])
                 self.local_declarations[tu] = tuple(d for d in local_decls if d.kind == "function")
                 self.local_cache[tu] = local_defs
-            local_types = {t.name: t for t in self.local_cache[tu]}
+            local_types = {t.qualified: t for t in self.local_cache[tu]}
             duplicated_local_names = {name for name in local_types
-                                      if sum(t.name == name for t in self.local_cache[tu]) > 1}
+                                      if sum(t.qualified == name for t in self.local_cache[tu]) > 1
+                                      or ("::" not in name and sum(t.name == name for t in self.local_cache[tu]) > 1)}
         else:
             local_types = {}
             duplicated_local_names = set()
@@ -1084,25 +1245,26 @@ class ContextIndex:
             if not callee or self.tus.get(callee.get("tu"), {}).get("kind") != "game":
                 continue  # no library headers and no transitive call graph
             scope = callee.get("scope") or ""
-            if scope.split("::")[0] in self.LIBRARY_SCOPES or callee.get("kind") == "compiler":
+            if ((scope.split("::")[0] in self.LIBRARY_SCOPES
+                 and scope not in local_types)
+                    or callee.get("kind") == "compiler"):
                 continue  # weak library instantiations can be linked into a game STT_FILE group
             qualified = callee.get("qualified") or (scope + "::" if scope else "") + callee.get("method", "")
             label = callee.get("demangled") or qualified or f"{address:#x}"
             facts.append(f"Direct game call/tail-call {address:#x}: {label}; return/static not encoded by symbol.")
             candidates = self._mapped(scope) if scope else []
             matches = self._matching(qualified, "function")
-            matched_headers = {name for name, decl in matches
-                               if (not candidates or name in candidates) and _declares_callee(decl, callee, self.callback_aliases)}
+            matched_headers, matched_dependencies = set(), set()
+            for name, decl in matches:
+                if ((not candidates or name in candidates)
+                        and self.identity.matches(decl, callee, name, dependencies=matched_dependencies)):
+                    matched_headers.add(name)
             implicit_headers = self._implicit_destructor_headers(callee, scope, candidates)
             template_headers = self._safe_pointer_headers(callee, scope)
             window_array_headers = self._window_array_headers(callee, scope)
             pinned_destructor_headers = self._pinned_destructor_headers(callee, scope)
             if matched_headers:
-                wanted.update(matched_headers)
-                for name, decl in matches:
-                    if name in matched_headers:
-                        wanted.update(filename for alias, (_, filename) in self.callback_aliases.items()
-                                      if re.search(r"(?<![\w:])" + re.escape(alias) + r"\b", decl.text))
+                wanted.update(matched_headers | matched_dependencies)
             elif implicit_headers:
                 wanted.update(implicit_headers)
                 notes.append(f"{address:#x}: weak D1/D2 destructor implicitly declared by the existing complete class header; no guessed return type.")
@@ -1122,11 +1284,14 @@ class ContextIndex:
                              "exact reviewed address/size and both weak ELF/DB identities; "
                              f"template source SHA256 {self.SAFE_POINTER_HEADER_SHA256 if scope.startswith('TSafePointer<') else self.WINDOW_ARRAY_HEADER_SHA256}. "
                              "No specialization or prototype synthesized.")
-            elif scope in local_types and self._tu(callee, None) == tu:
+            elif scope in local_types and ("::" in scope or self._tu(callee, None) == tu):
                 local_names.add(scope)
-                if not any(d.qualified == qualified and _declares_callee(d, callee)
+                local_dependencies = set()
+                if not any(d.qualified == qualified and self.identity.matches(d, callee, dependencies=local_dependencies)
                            for d in self.local_declarations[tu]):
                     gaps.append(f"No declaration of direct callee {label} in its existing TU-local type")
+                else:
+                    wanted.update(local_dependencies)
             else:
                 # Include known class headers even if the method was not restored yet,
                 # but flag the absent declaration; never synthesize it from return_hint.
@@ -1182,6 +1347,9 @@ class ContextIndex:
                 matches = self._matching(name, "data")
                 if not matches:
                     gaps.append(f"No existing header declaration for referenced data {name} ({address:#x})")
+                elif len(matches) != 1:
+                    gaps.append(f"Ambiguous header declarations for referenced data {name} ({address:#x})")
+                    continue
                 for header, declaration in matches:
                     if declaration.int_array_values is not None:
                         expected = b"".join(n.to_bytes(4, "little", signed=True)
@@ -1197,7 +1365,7 @@ class ContextIndex:
                             continue
                     if declaration.array_width:
                         widths.add(declaration.array_width)
-                    if any(k == "class" for k, _ in declaration.scopes):
+                    if declaration.whole_header or any(k == "class" for k, _ in declaration.scopes):
                         wanted.add(header)  # preserve class layout, not a trimmed fake class
                     elif header not in shown:
                         text = _standard_string_aliases(declaration.text)

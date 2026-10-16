@@ -29,14 +29,20 @@ public:
     int m_iActiveInputs;
     bool m_bEnabled;
     unsigned char m_gap69[0x3];
-    int m_iUnknown6C;
-    unsigned char m_gap70[0x14] __attribute__((aligned(4)));
-    bool m_bUnknown84;
-    bool m_bUnknown85;
-    bool m_bUnknown86;
-    bool m_bUnknown87;
-    bool m_bUnknown88;
-    bool m_bUnknown89;
+    unsigned int m_inputOrder[6];
+    union
+    {
+        bool m_inputTriggered[6];
+        struct
+        {
+            bool m_bUnknown84;
+            bool m_bUnknown85;
+            bool m_bUnknown86;
+            bool m_bUnknown87;
+            bool m_bUnknown88;
+            bool m_bUnknown89;
+        };
+    };
     unsigned char m_gap8A[0x2];
     int m_iUnknown8C;
     CResourceManager* m_pResourceManager;

@@ -8,3 +8,17 @@ void CLight::scaleUpdated(const Ogre::Vector3& scale)
 void CLight::orientationUpdated(const Ogre::Matrix4&)
 {
 }
+
+float CLight::getRotation()
+{
+    Ogre::Matrix3 orientation;
+    getOrientation(orientation);
+    Ogre::Quaternion rotation(orientation);
+    return rotation.getYaw().valueDegrees();
+}
+
+void CLight::setRotation(float rotation)
+{
+    Ogre::Quaternion orientation(Ogre::Degree(rotation), Ogre::Vector3::UNIT_Y);
+    setOrientation(orientation);
+}

@@ -458,6 +458,10 @@ class Cycle:
         self.state['phases']['compare']['artifacts'] = artifacts
         if row.get('unknown') or not set(self.spec['addresses']) <= addresses:
             raise RuntimeError('candidate has unknown signatures or missing targets')
+        checkpoint = json.loads((stage.path / 'build-decomp/llm-loop' / self.spec['tu'] / 'checkpoint.json').read_text())
+        if checkpoint.get('repair'):
+            import llm_loop
+            llm_loop.validate_repair_thunks(checkpoint['repair'], row['functions'])
         return {'artifacts': artifacts}
 
     def _tests(self, label, fixtures, control=None):

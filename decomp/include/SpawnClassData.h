@@ -21,7 +21,7 @@ public:
     void addUnitDataObjects(TArrayList<CDataGroup*>& dataGroups);
     void fillRandomizer(CCharacter* character, int minimumLevel, int levelOffset,
                         int rarityOverride, int flags);
-    unsigned long calculateChoices(CCharacter* character, int minimumLevel,
+    unsigned int calculateChoices(CCharacter* character, int minimumLevel,
                                    int levelOffset, int rarityOverride, int flags);
 
     CSpawnClassData(const std::wstring& name);

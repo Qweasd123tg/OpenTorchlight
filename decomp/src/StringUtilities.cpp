@@ -152,9 +152,9 @@ long STRINGS::GetInt64(const std::string& text)
     return strtod(text.c_str(), 0);
 }
 
-void STRINGS::GetFloat64(const std::string& text)
+double STRINGS::GetFloat64(const std::string& text)
 {
-    strtod(text.c_str(), 0);
+    return strtod(text.c_str(), 0);
 }
 
 long long STRINGS::GetInt64(const std::wstring& text)
@@ -181,10 +181,10 @@ namespace STRINGS
     }
 }
 
-void STRINGS::GetFloat64(const std::wstring& text)
+double STRINGS::GetFloat64(const std::wstring& text)
 {
     wchar_t* end = 0;
-    wcstod(text.c_str(), &end);
+    return wcstod(text.c_str(), &end);
 }
 
 namespace STRINGS
@@ -217,7 +217,7 @@ void STRINGS::StringConvertToNarrow(const std::wstring& text, std::string& resul
     result = std::string(text.begin(), text.end());
 }
 
-long long STRINGS::StringCopyWCharArray(wchar_t* output, unsigned int outputSize,
+unsigned int STRINGS::StringCopyWCharArray(wchar_t* output, unsigned int outputSize,
                                         std::string text)
 {
     return output != 0 ? StringCopyWCharArray(output, outputSize, text.c_str()) : 0;
@@ -434,4 +434,107 @@ std::wstring STRINGS::GetApplicationPath()
 {
     std::wstring path;
     return LinuxUtils::GetAppDir();
+}
+
+unsigned int STRINGS::StringSizeOfWCharArray(const wchar_t* text, unsigned int size)
+{
+    unsigned int length = 0;
+    while (size && text[length] && length < size)
+        ++length;
+    return length + 1;
+}
+
+unsigned int STRINGS::StringSizeOfCharArray(const char* text, unsigned int size)
+{
+    unsigned int length = 0;
+    while (size && text[length] && length < size)
+        ++length;
+    return length + 1;
+}
+
+int STRINGS::StringConvertToWide(const std::string& text, wchar_t* dest, int capacity)
+{
+    int length = text.size();
+    if (length >= capacity)
+        return 0;
+    memset(dest, 0, capacity * sizeof(wchar_t));
+    const char* source = text.c_str();
+    for (int i = 0; i < length; ++i)
+        dest[i] = source[i];
+    return length;
+}
+
+std::string STRINGS::StringLower(const std::string& text)
+{
+    std::string result(text);
+    for (unsigned int i = 0; i < result.size(); ++i)
+        result[i] = tolower(result[i]);
+    return result;
+}
+
+std::wstring STRINGS::StringLower(const std::wstring& text)
+{
+    std::wstring result(text);
+    for (unsigned int i = 0; i < result.size(); ++i)
+        result[i] = towlower(result[i]);
+    return result;
+}
+
+unsigned int STRINGS::StringCopyWCharArray(wchar_t* dest, unsigned int size, const char* source)
+{
+    if (!source || !dest)
+        return 0;
+    wchar_t buffer[1000];
+    StringConvertToWide(std::string(source), buffer, 1000);
+    return StringCopyWCharArray(dest, size, buffer);
+}
+
+void STRINGS::TokenizeString(std::queue<std::string>* result, const std::string& text, const char* separator)
+{
+    std::string delimiter(separator);
+    std::string::size_type first = 0;
+    std::string::size_type found = text.find(separator);
+    while (found != std::string::npos)
+    {
+        result->push(text.substr(first, found - first));
+        first = found + delimiter.size();
+        found = text.find(separator, first);
+    }
+    if (first < text.size() && first != 0)
+        result->push(text.substr(first, text.size() - first));
+    if (result->empty())
+    {
+        unsigned int begin = 0;
+        for (unsigned int i = 0; i < text.size(); ++i)
+            if (text[i] == *separator)
+            {
+                result->push(text.substr(begin, i));
+                begin = i + 1;
+            }
+    }
+}
+
+void STRINGS::TokenizeString(std::queue<std::wstring>* result, const std::wstring& text, const wchar_t* separator)
+{
+    std::wstring delimiter(separator);
+    std::wstring::size_type first = 0;
+    std::wstring::size_type found = text.find(separator);
+    while (found != std::wstring::npos)
+    {
+        result->push(text.substr(first, found - first));
+        first = found + delimiter.size();
+        found = text.find(separator, first);
+    }
+    if (first < text.size() && first != 0)
+        result->push(text.substr(first, text.size() - first));
+    if (result->empty())
+    {
+        unsigned int begin = 0;
+        for (unsigned int i = 0; i < text.size(); ++i)
+            if (text[i] == *separator)
+            {
+                result->push(text.substr(begin, i));
+                begin = i + 1;
+            }
+    }
 }

@@ -15,7 +15,7 @@ class COgreResourceFile : public iDataFileSaveAndLoad
 public:
     virtual ~COgreResourceFile();
 
-    virtual void SaveDataGroupToFile(const std::wstring& fileName,
+    virtual int SaveDataGroupToFile(const std::wstring& fileName,
                                       CDataGroup* dataGroup);
     virtual void LoadDataGroupToFile(const std::wstring& fileName,
                                       CDataGroup* dataGroup,

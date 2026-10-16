@@ -10,8 +10,11 @@
 #include "BaseUnit.h"
 #include "PositionableObject.h"
 #include "ResourceManager.h"
+#include "SafePointer.h"
 
 class CDataGroup;
+class CCharacter;
+class CPathNode;
 
 class CPathController : public CPositionableObject
 {
@@ -22,14 +25,14 @@ public:
     virtual void setVisible(bool);
     virtual void positionUpdated(const Ogre::Vector3&);
     float getClosestPctOfPath(const Ogre::Vector3&);
-    float caculatePointInFrontOfPlayer(CBaseUnit*);
-    long long getNextPointAtPercent(float, CBaseUnit*, bool);
+    Ogre::Vector3 caculatePointInFrontOfPlayer(CBaseUnit*);
+    Ogre::Vector3 getNextPointAtPercent(float, CBaseUnit*, bool);
     void childNodeMoved();
     void setUnitInteractWith(std::wstring);
     CPathController(CResourceManager*);
     void caculateSpline();
     void initPathController();
-    long long getArrayOfVectors(unsigned int&);
+    float* getArrayOfVectors(unsigned int&);
     void setPathName(const std::wstring&);
     void setNumberOfPathPoints(unsigned int);
     void setArrayOfVectors(const float*, unsigned int);
@@ -37,7 +40,7 @@ public:
 
     // fields
     CDataGroup* m_pUnitInteractDataGroup;
-    unsigned char m_Unknown108[0x18] __attribute__((aligned(8)));
+    TArrayList<TSafePointer<CCharacter>*> m_units;
     std::wstring m_pCategory;
     std::wstring m_sUnitInteractWith;
     bool m_bVisible;
@@ -48,7 +51,7 @@ public:
     bool m_bWalkToPlayer;
     bool m_bUnknown136;
     bool m_bUnknown137;
-    unsigned char m_Unknown138[0x18] __attribute__((aligned(8)));
+    TArrayList<CPathNode*> m_pathNodes;
     TArrayList<float> m_pathCoordinates; // +0x150
     TArrayList<float> m_pathDistances; // +0x168
     float m_fUnknown180;

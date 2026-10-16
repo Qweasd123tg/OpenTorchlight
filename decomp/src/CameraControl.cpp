@@ -124,3 +124,40 @@ CCameraControl::CCameraControl(Ogre::Camera* camera1, Ogre::Camera* camera2,
     m_pUnknown28 = camera4;
     m_pUnknown30 = camera5;
 }
+
+#include "CameraShake.h"
+
+void CCameraControl::clearCameraShakes()
+{
+    for (unsigned int i = 0; i < m_cameraShakes.size(); ++i)
+        if (m_cameraShakes[i]->getObject())
+            delete m_cameraShakes[i]->getObject();
+    for (unsigned int i = 0; i < m_cameraShakes.size(); ++i) {
+        if (m_cameraShakes[i]) {
+            OGRE_DELETE_T(m_cameraShakes[i], TSafePointer<CCameraShake>, Ogre::MEMCATEGORY_GENERAL);
+            m_cameraShakes[i] = NULL;
+        }
+    }
+    m_cameraShakes.clear();
+    m_cameraShakesSecondary.clear();
+}
+
+CCameraControl::~CCameraControl()
+{
+    clearCameraShakes();
+    g_pCameraControl = 0;
+}
+
+void CCameraControl::setAspectRatio(ECAMERAS camera, float width, float height)
+{
+    m_cameras[camera]->setAspectRatio(width / height);
+    m_cameras[camera]->setWindow(0.0f, 0.0f, width, height);
+    if (camera == 1)
+    {
+        float scale = 768.0f / height;
+        float scaledWidth = width * scale;
+        float scaledHeight = height * scale;
+        m_cameras[1]->setFrustumExtents(scaledWidth * -0.5f, scaledWidth * 0.5f,
+                                     scaledHeight * 0.5f, scaledHeight * -0.5f);
+    }
+}

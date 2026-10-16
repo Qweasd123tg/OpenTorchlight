@@ -9,6 +9,11 @@
 #include "PositionableObject.h"
 #include "ResourceManager.h"
 #include "RunicCore.h"
+#include "BaseUnit.h"
+#include "Graph.h"
+#include "SafePointer.h"
+
+class CDataGroup;
 
 class CCameraController : public CPositionableObject
 {
@@ -26,10 +31,8 @@ public:
     CResourceManager* m_pResourceManager;
     std::wstring m_pCategory;
     std::wstring m_sUnitInteractWith;
-    long long m_iUnknown118;
-    CRunicCore* m_pRunicCore;
-    int m_iUnknown128;
-    unsigned char m_gap12C[0x4] __attribute__((aligned(4)));
+    CDataGroup* m_unitDataGroup;
+    TSafePointer<CBaseUnit> m_unit;
     float m_fUnknown130;
     float m_fUnknown134;
     float m_fUnknown138;
@@ -47,8 +50,7 @@ public:
     bool m_bFollowUnit;
     bool m_bUnknown163;
     unsigned char m_gap164[0x4] __attribute__((aligned(4)));
-    long long m_Unknown168;
-    unsigned char m_gap170[0x50] __attribute__((aligned(8)));
+    CGraph m_cameraGraph;
     int m_iCameraType;
 
 public:

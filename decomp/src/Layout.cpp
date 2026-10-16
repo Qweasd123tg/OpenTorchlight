@@ -1,3 +1,6 @@
+#include "Editor.h"
+#include "OgreUtilities.h"
+#include <OgreEntity.h>
 #include "Particle.h"
 #include "EmptyStrings.h"
 #include "GameEnums.h"
@@ -57,6 +60,11 @@ void CLayout::eventFiredByDescriptor(unsigned int eventID,
 
 void CLayout::setHighlighted(bool highlighted)
 {
+    std::map<long long, CEditorBaseObject*>& objects = getObjects();
+    for (std::map<long long, CEditorBaseObject*>::iterator it = objects.begin(); it != objects.end(); ++it) {
+        iHighlight* highlight = dynamic_cast<iHighlight*>(it->second);
+        if (highlight) highlight->setHighlighted(highlighted);
+    }
 }
 
 CLayout* CLayout::getLayoutToClone(const std::wstring& layoutName)
@@ -176,4 +184,22 @@ void CLayout::initOnLoad()
     if (!objects) return;
     for (unsigned int i = 0; i < objects->size(); ++i)
         static_cast<CTimeline*>((*objects)[i])->m_bStartOnLoad = false;
+}
+
+void CLayout::SetSceneOwner(CEditorScene* sceneOwner)
+{
+    CSceneNodeObject::SetSceneOwner(sceneOwner);
+    if (m_pResourceManager->getEditorIsRunning()) {
+        CEditor* editor = gEditor;
+        TArrayList<CEditorScene*>& scenes = editor->getEditorScenes();
+        for (unsigned int i = 0; i < scenes.size(); ++i) {
+            if (scenes[i] == sceneOwner && m_pSceneNode) {
+                sceneNodeAttachEntity(OGRE_UTILITIES::createEntity(
+                    m_pResourceManager->getSceneManager(), static_cast<OGRE_UTILITIES::EPRIMITIVES>(0),
+                    static_cast<OGRE_UTILITIES::EQUERYMASK>(8), "gm"));
+                m_pEntity->setMaterialName("lightBlue");
+                setScale(1.0f);
+            }
+        }
+    }
 }

@@ -649,3 +649,31 @@ CDescriptorProp* CDescriptorController::getDescriptorPropertyByName(
             return (*list)[i];
     return NULL;
 }
+
+long long CDescriptorController::getDescriptionVersion()
+{
+    if (g_DescriptionVersion == 0) {
+        unsigned int shift = 0;
+        for (unsigned int i = 0; i < g_DescriptorNameOrder.size(); ++i) {
+            CDescriptor* descriptor = getNewDescriptorByName(g_DescriptorNameOrder[i]);
+            long long value = descriptor->getUniqueNumericValueRepresentation();
+            g_DescriptionVersion += (value << shift) + (value >> (64 - shift));
+            delete descriptor;
+            shift += 3;
+            if (shift >= 64) shift -= 64;
+        }
+        g_DescriptionVersion += 18;
+    }
+    return g_DescriptionVersion;
+}
+
+CEditorBaseObject* CDescriptorController::getCachedObject(const std::wstring& name)
+{
+    std::map<std::wstring, TArrayList<CEditorBaseObject*>*>::iterator it = g_CachedObjects.find(name);
+    if (it == g_CachedObjects.end()) return NULL;
+    TArrayList<CEditorBaseObject*>* objects = it->second;
+    if (objects->size() == 0) return NULL;
+    CEditorBaseObject* object = (*objects)[0];
+    objects->removeAt(0);
+    return object;
+}
