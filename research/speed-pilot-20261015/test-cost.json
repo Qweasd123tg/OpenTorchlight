@@ -1,0 +1,179 @@
+{
+ "status": "FOCUSED_AB_AND_17_NEGATIVE_CONTROLS_PASS",
+ "scope": "Isolated unchanged frozen291 production TUs; only before/after matrix fixture differs. Not canonical full acceptance.",
+ "settings": {
+  "LANG": "C.UTF-8",
+  "LC_ALL": "",
+  "TZ": "",
+  "OTL_JOBS": 2,
+  "OTL_COMPARE_JOBS": 2,
+  "OTL_BUILD_JOBS": 2,
+  "OTL_SELFTEST_JOBS": 6,
+  "shards": 6,
+  "OTL_SELFTEST_TIMEOUT": 1800
+ },
+ "compiler_work_during_timed_samples": false,
+ "samples_per_variant": 1,
+ "workload": {
+  "before_normal_pairs": 89112,
+  "after_normal_pairs": 2752,
+  "inventory_test_names": [
+   "combinemenu_return_items",
+   "combinemenu_equipment_used",
+   "combinemenu_equipment_used_suppressed"
+  ]
+ },
+ "results": {
+  "before": {
+   "seconds": 102.46160348199919,
+   "returncode": 0,
+   "filter": "combinemenu_",
+   "shards": 6,
+   "build_seconds": 45.29142581800261,
+   "binaries_and_inputs": {
+    "before/hybrid/tlhybrid-blob.elf": "02433a04a821de41c1177dd142bb268a8e3b65f4747909e0362df08a399b434b",
+    "before/hybrid/libtlhybrid.so": "ce2686eaf8a40b71f08d21e721abeb40e8f78c243ec840a36aede29e24f48752",
+    "before.cpp": "d141bc1a0e48f93d729a1aac7b30d36ac3c68d58e469fcd6f87885e7d3bb12f0",
+    "before/hybrid/selftest-inputs.json": "d5e7477cb95fe3a6be0b195b0d3b347bd2c0be8d488a8f9504585f10183344e5"
+   },
+   "coverage": [
+    {
+     "fixture": "combinemenu_return_items",
+     "address": "0xad48f0",
+     "completed": 44544,
+     "different": 0,
+     "incomplete": 0
+    },
+    {
+     "fixture": "combinemenu_equipment_used",
+     "address": "0xad4b90",
+     "completed": 44544,
+     "different": 0,
+     "incomplete": 0
+    },
+    {
+     "fixture": "combinemenu_equipment_used_suppressed",
+     "address": "0xad4b90",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ],
+   "fixture_seconds": {
+    "combinemenu_return_items": 102.178,
+    "combinemenu_equipment_used": 102.116,
+    "combinemenu_equipment_used_suppressed": 0.057
+   },
+   "tests": 3,
+   "failed": 0,
+   "schedule_method": "index",
+   "linked_inventory": [
+    "combinemenu_return_items",
+    "combinemenu_equipment_used",
+    "combinemenu_equipment_used_suppressed"
+   ],
+   "selected_inventory": [
+    "combinemenu_return_items",
+    "combinemenu_equipment_used",
+    "combinemenu_equipment_used_suppressed"
+   ],
+   "test_object_sha256": [
+    [
+     "test_AutoTestRuntime.o",
+     "1291b20189f8dcb665858c1277ef133fdfad035a6545fa288dd06710ef796d93"
+    ],
+    [
+     "test_before.o",
+     "7d7ef76207017bd7e7ca1d2d2d69a111e7c7a696010611e8d618c63cca9259a3"
+    ]
+   ]
+  },
+  "after": {
+   "seconds": 3.338278477000131,
+   "returncode": 0,
+   "filter": "combinemenu_",
+   "shards": 6,
+   "build_seconds": 44.97761354899558,
+   "binaries_and_inputs": {
+    "after/hybrid/tlhybrid-blob.elf": "30d829eb57763b8b490b4be6249f8ad0714f1be00ff221a93cdcde176cfc65e3",
+    "after/hybrid/libtlhybrid.so": "ce2686eaf8a40b71f08d21e721abeb40e8f78c243ec840a36aede29e24f48752",
+    "after.cpp": "9a460be651347bd13527110eaa0ca97eb7792e5567068f5943e035f669517f27",
+    "after/hybrid/selftest-inputs.json": "b3d9fd441213661581bdd33b2557c271e19cb72c8285bd32ca0312ffbf6b3a4c"
+   },
+   "coverage": [
+    {
+     "fixture": "combinemenu_return_items",
+     "address": "0xad48f0",
+     "completed": 1364,
+     "different": 0,
+     "incomplete": 0
+    },
+    {
+     "fixture": "combinemenu_equipment_used",
+     "address": "0xad4b90",
+     "completed": 1364,
+     "different": 0,
+     "incomplete": 0
+    },
+    {
+     "fixture": "combinemenu_equipment_used_suppressed",
+     "address": "0xad4b90",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ],
+   "fixture_seconds": {
+    "combinemenu_return_items": 3.063,
+    "combinemenu_equipment_used": 3.101,
+    "combinemenu_equipment_used_suppressed": 0.058
+   },
+   "tests": 3,
+   "failed": 0,
+   "schedule_method": "index",
+   "linked_inventory": [
+    "combinemenu_return_items",
+    "combinemenu_equipment_used",
+    "combinemenu_equipment_used_suppressed"
+   ],
+   "selected_inventory": [
+    "combinemenu_return_items",
+    "combinemenu_equipment_used",
+    "combinemenu_equipment_used_suppressed"
+   ],
+   "test_object_sha256": [
+    [
+     "test_AutoTestRuntime.o",
+     "1291b20189f8dcb665858c1277ef133fdfad035a6545fa288dd06710ef796d93"
+    ],
+    [
+     "test_after.o",
+     "c64f57a62642ca82ccc78f0c4b7a78ed07093d633ef08ec524f05581e45a3a90"
+    ]
+   ]
+  }
+ },
+ "focused_wall_speedup": 30.692946735250803,
+ "limits": [
+  "Single focused measurement, six shards with three selected tests; not a projectwide/full-gate speedup estimate.",
+  "Both binaries compiled against pinned frozen baseline source and headers. A separate canonical header edit occurred after compilation and did not affect them.",
+  "Compilation workload is unchanged; build times are descriptive and include shared pool contention, not a controlled compiler speed benchmark.",
+  "Other mutation of inventory pointer after the final pickup has no later inventory read in the original; dead reload alone cannot be rejected as an observable behavior change."
+ ],
+ "negative_controls_pending": false,
+ "negative_controls_initial_attempt_rejected_as_invalid": "Direct wrapper invocation failed target-identity guard at first case for every mutant; not counted. Corrected harness patches linked candidate entry in replacement child only and adds equivalent positive controls.",
+ "negative_controls": {
+  "report": "negative-controls.json",
+  "rejected_by_normal_difference": 17,
+  "equivalent_controls_passed": 2
+ },
+ "selector_proof": "selector-proof.json",
+ "canonical_fixture_final_sha256": "9a460be651347bd13527110eaa0ca97eb7792e5567068f5943e035f669517f27",
+ "prior_full_work_estimate": {
+  "summed_fixture_wall_seconds": 7663.461,
+  "two_original_fixture_wall_seconds": 509.734,
+  "fraction_of_sum": 0.06651485536365358,
+  "idealized_full_speedup_from_this_change_only": 1.0687731470700679,
+  "note": "Amdahl estimate using previous full-run summed fixture durations and focused speedup; not measured full-run wall speedup."
+ }
+}

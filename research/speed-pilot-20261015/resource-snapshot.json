@@ -1,0 +1,17 @@
+{
+ "scope": "Read-only five-second live host snapshot during full gate; descriptive, no settings changed",
+ "logical_cpus": 6,
+ "affinity_cpus": 6,
+ "cgroup_cpu_max": null,
+ "host_busy_percent": 98.76666666666667,
+ "host_iowait_percent": 0.0,
+ "sample_seconds": 5.0001858819999825,
+ "active_parent_count": 6,
+ "shard_cores_from_parent_and_reaped_child_cpu": 5.377800072753394,
+ "mem_available_kib": 10663236,
+ "limits": [
+  "Counts host CPU work outside the gate.",
+  "Parent/reaped-child counters can miss live short-lived children at sample boundaries.",
+  "A short snapshot does not establish optimal concurrency or safe memory capacity."
+ ]
+}

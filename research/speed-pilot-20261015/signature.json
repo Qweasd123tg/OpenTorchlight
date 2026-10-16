@@ -1,0 +1,484 @@
+{
+ "scope": "bounded exact source declaration lookup fix; no game source, ABI guesses, acceptance changes or new codegen families",
+ "canonical_files": [
+  "tools/decomp/smallmatch.py",
+  "tools/decomp/test_smallmatch_declarations.py"
+ ],
+ "comparison": {
+  "same_frozen_headers_types_db": true,
+  "real_positive_addresses": 11,
+  "resolved_before": 0,
+  "resolved_after": 11,
+  "real_negative_addresses": 35,
+  "negative_resolved_before": 0,
+  "negative_resolved_after": 0,
+  "hypotheses_before": 0,
+  "hypotheses_after": 0,
+  "remaining_reason_all_11": "no supported semantic idiom",
+  "accepted_new_addresses": 0
+ },
+ "single_run_timings_seconds": {
+  "before_init": 0.7574364969987073,
+  "after_init": 0.9787629519996699,
+  "before_lookup_11": 0.0018994159981957637,
+  "after_lookup_11": 0.004693294999015052
+ },
+ "interpretation": "Eliminates 11 false lookup blockers. Does not accelerate parsing or implement these functions. Existing semantic generator still produces zero hypotheses for the 11; measured accepted throughput improvement is zero in this bounded lookup experiment.",
+ "normalizations": [
+  "unique global callback typedefs via existing conservative parser",
+  "declared nested type lexical qualification",
+  "exact fixed one-dimensional array references",
+  "pinned glibc FILE alias only with real system include and no header shadow",
+  "exact std::map default comparator/allocator",
+  "leading comments removed before return spelling extraction"
+ ],
+ "fail_closed": [
+  "conflicting/scoped callback aliases",
+  "unknown nested scope",
+  "array extents/qualifiers and unsupported arrays",
+  "FILE shadowing/missing include/namespaces",
+  "custom comparator/allocator and token boundaries",
+  "overload/member cv",
+  "ambiguous return declarations",
+  "existing trusted/static/variadic/sret gates"
+ ],
+ "validation": {
+  "focused_declaration_tests": 42,
+  "all_smallmatch_tests_including_focused": 116,
+  "llm_context_tests": 158,
+  "callback_alias_tests": 10,
+  "callback_declaration_tests": 13,
+  "unique_tests_total": 297,
+  "diff_check": "PASS",
+  "full_check": "not run as assigned",
+  "compile_or_game": "none"
+ },
+ "artifacts": [
+  "benchmark-after.json",
+  "benchmark-before.json",
+  "hypotheses-after.json",
+  "hypotheses-before.json",
+  "negative-real-after.json",
+  "negative-real-before.json"
+ ],
+ "canonical_tool_sha256": "9bc84394a2a3c2fd35c06320e734e5f85814449fe6f939a3ae945c4cb9572d8d",
+ "pointer_key_review_fix": {
+  "default_allocator_const": "Top-level pointer key uses Key const only; prefix const allowed only when key has no top-level pointer/reference. Pointers nested in template arguments do not make the key itself a pointer.",
+  "regressions": [
+   "Item* default pair<Item* const, bool> resolves",
+   "non-default pair<const Item*, bool> remains blocked",
+   "std::vector<Item*> key accepts prefix const on vector object"
+  ]
+ },
+ "scope_identity_review_fix": {
+  "header_only": "Only source declaration type spellings receive lexical qualification. Original demangled parameters retain global identity; source parameter names are removed first.",
+  "global_alias_defining_scope": "Class lexical qualification precedes expansion of verified global callback aliases, so alias argument types retain their global defining scope.",
+  "regressions": [
+   "global D* cannot match class nested C::D*",
+   "C::D* matches actual nested header type",
+   "global callback D* stays global despite nested D",
+   "nested class type shadows global callback typedef",
+   "parameter name matching nested type is ignored",
+   "nominal original FILE is not alias-expanded"
+  ]
+ },
+ "callback_pointer_cv_review_fix": {
+  "policy": "Conservatively defer callback types with pointer-object const/volatile before the shared callback cv normalizer, which otherwise relocates pointer const onto pointee.",
+  "regressions": [
+   "D* const& is not const D*&",
+   "D* const* is not const D**",
+   "exact pointer-object const/volatile stays deferred",
+   "pointee const D*& remains matched"
+  ]
+ },
+ "all_baseline_remaining": {
+  "scope": "All baseline remaining game addresses; exact declaration lookup only, same frozen headers/types/db; no generation or acceptance",
+  "count": 1854,
+  "before": {
+   "BLOCKED": 1242,
+   "RESOLVED": 612
+  },
+  "after": {
+   "BLOCKED": 1226,
+   "RESOLVED": 628
+  },
+  "newly_resolved_count": 16,
+  "lost_resolved_count": 0,
+  "newly_resolved": [
+   {
+    "address": "0x706700",
+    "tu": 66,
+    "demangled": "CDescriptorProp::setPropertyInterpreterFunctions(unsigned int (*)(CEditorScene*, CEditorBaseObject*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, void*), std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > (*)(CEditorScene*, CEditorBaseObject*, unsigned int, void*), void*)",
+    "declaration": {
+     "header": "DescriptorProp.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "unsigned int (*)(CEditorScene*, CEditorBaseObject*, std::wstring const&, void*)",
+       "arg1"
+      ],
+      [
+       "std::wstring (*)(CEditorScene*, CEditorBaseObject*, unsigned int, void*)",
+       "arg2"
+      ],
+      [
+       "void*",
+       "userData"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": true
+   },
+   {
+    "address": "0x78be20",
+    "tu": 81,
+    "demangled": "CUndo::DoUndoOnProperty(CUndo::CUndoData*, CUndo*)",
+    "declaration": {
+     "header": "Undo.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "CUndo::CUndoData*",
+       "arg1"
+      ],
+      [
+       "CUndo*",
+       "pUndo"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": true
+   },
+   {
+    "address": "0x795550",
+    "tu": 81,
+    "demangled": "CUndo::DoUndoUndelete(CUndo::CUndoData*, CUndo*)",
+    "declaration": {
+     "header": "Undo.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "CUndo::CUndoData*",
+       "arg1"
+      ],
+      [
+       "CUndo*",
+       "pUndo"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": true
+   },
+   {
+    "address": "0x7957d0",
+    "tu": 81,
+    "demangled": "CUndo::DoUndoCreate(CUndo::CUndoData*, CUndo*)",
+    "declaration": {
+     "header": "Undo.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "CUndo::CUndoData*",
+       "arg1"
+      ],
+      [
+       "CUndo*",
+       "pUndo"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": true
+   },
+   {
+    "address": "0x7c8730",
+    "tu": 89,
+    "demangled": "CTimelineProperty::getValueOfLinearPropertyByPercent(unsigned int, double, CTimelineProperty::CTimelinePoint*, CTimelineProperty::CTimelinePoint*, unsigned int)",
+    "declaration": {
+     "header": "TimelineProperty.h",
+     "ret": "double",
+     "static": false,
+     "params": [
+      [
+       "unsigned int",
+       "interpolationType"
+      ],
+      [
+       "double",
+       "timePercent"
+      ],
+      [
+       "CTimelineProperty::CTimelinePoint*",
+       "arg3"
+      ],
+      [
+       "CTimelineProperty::CTimelinePoint*",
+       "arg4"
+      ],
+      [
+       "unsigned int",
+       "componentIndex"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": true
+   },
+   {
+    "address": "0x7c8c40",
+    "tu": 89,
+    "demangled": "CTimelineProperty::DoLinearInterpolation(CTimeline*, float, CTimelineProperty::CTimelinePoint*, CTimelineProperty::CTimelinePoint*)",
+    "declaration": {
+     "header": "TimelineProperty.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "CTimeline*",
+       "timeline"
+      ],
+      [
+       "float",
+       "timePercent"
+      ],
+      [
+       "CTimelineProperty::CTimelinePoint*",
+       "arg3"
+      ],
+      [
+       "CTimelineProperty::CTimelinePoint*",
+       "arg4"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": false
+   },
+   {
+    "address": "0x7cd0f0",
+    "tu": 90,
+    "demangled": "CAffix::fillOutStatBonuses(float (&) [6], bool)",
+    "declaration": {
+     "header": "Affix.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "float (&) [6]",
+       "arg1"
+      ],
+      [
+       "bool",
+       "bTakeHighest"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": true
+   },
+   {
+    "address": "0x7dc9f0",
+    "tu": 91,
+    "demangled": "CEffect::calculateBaseValue(CEffect::ECALCULATETYPES)",
+    "declaration": {
+     "header": "Effect.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "CEffect::ECALCULATETYPES",
+       "value"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": false
+   },
+   {
+    "address": "0x9ca630",
+    "tu": 131,
+    "demangled": "CFormationNodeSaveAndLoad::saveFormationNode(_IO_FILE*)",
+    "declaration": {
+     "header": "FormationNodeSaveAndLoad.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "_IO_FILE*",
+       "value"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": true
+   },
+   {
+    "address": "0x9ca6c0",
+    "tu": 131,
+    "demangled": "CFormationNodeSaveAndLoad::loadFormationNode(_IO_FILE*)",
+    "declaration": {
+     "header": "FormationNodeSaveAndLoad.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "_IO_FILE*",
+       "value"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": true
+   },
+   {
+    "address": "0x9ddc00",
+    "tu": 133,
+    "demangled": "CLayout::callFunctionOnObjects(CLayout::ELAYOUT_FUNCTION_TYPES, bool)",
+    "declaration": {
+     "header": "Layout.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "CLayout::ELAYOUT_FUNCTION_TYPES",
+       "arg1"
+      ],
+      [
+       "bool",
+       "stopImmediately"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": false
+   },
+   {
+    "address": "0xa53150",
+    "tu": 173,
+    "demangled": "CHierarchy::ISA(unsigned int, unsigned int)",
+    "declaration": {
+     "header": "Hierarchy.h",
+     "ret": "bool",
+     "static": false,
+     "params": [
+      [
+       "unsigned int",
+       "type"
+      ],
+      [
+       "unsigned int",
+       "parent"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": true
+   },
+   {
+    "address": "0xc688a0",
+    "tu": 214,
+    "demangled": "COgreResourceFile::getStringIndexs(CDataGroup*, std::map<unsigned int, bool, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, bool> > >&)",
+    "declaration": {
+     "header": "OgreResourceFile.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "CDataGroup*",
+       "dataGroup"
+      ],
+      [
+       "std::map<unsigned int, bool, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, bool> > >&",
+       "arg2"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": true
+   },
+   {
+    "address": "0xc68b90",
+    "tu": 214,
+    "demangled": "COgreResourceFile::LoadDataValues(COgreReader*, CDataGroup*, std::map<unsigned int, unsigned int, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned int> > >&, unsigned int, CTimerStatics*)",
+    "declaration": {
+     "header": "OgreResourceFile.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "COgreReader*",
+       "reader"
+      ],
+      [
+       "CDataGroup*",
+       "dataGroup"
+      ],
+      [
+       "std::map<unsigned int, unsigned int, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned int> > >&",
+       "arg3"
+      ],
+      [
+       "unsigned int",
+       "reserved"
+      ],
+      [
+       "CTimerStatics*",
+       "timerStatics"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": false
+   },
+   {
+    "address": "0xc690d0",
+    "tu": 214,
+    "demangled": "COgreResourceFile::Load(COgreReader*, CDataGroup*, std::map<unsigned int, unsigned int, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned int> > >&, unsigned int, CTimerStatics*)",
+    "declaration": {
+     "header": "OgreResourceFile.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "COgreReader*",
+       "reader"
+      ],
+      [
+       "CDataGroup*",
+       "dataGroup"
+      ],
+      [
+       "std::map<unsigned int, unsigned int, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned int> > >&",
+       "arg3"
+      ],
+      [
+       "unsigned int",
+       "reserved"
+      ],
+      [
+       "CTimerStatics*",
+       "timerStatics"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": false
+   },
+   {
+    "address": "0xcdce70",
+    "tu": 237,
+    "demangled": "CSkillProperty::fillOutStatBonuses(float (&) [6], bool)",
+    "declaration": {
+     "header": "SkillProperty.h",
+     "ret": "void",
+     "static": false,
+     "params": [
+      [
+       "float (&) [6]",
+       "arg1"
+      ],
+      [
+       "bool",
+       "includeBaseValues"
+      ]
+     ]
+    },
+    "previously_in_11_counterexamples": true
+   }
+  ],
+  "accepted_new_addresses_from_lookup": 0,
+  "timings_not_controlled": true
+ }
+}

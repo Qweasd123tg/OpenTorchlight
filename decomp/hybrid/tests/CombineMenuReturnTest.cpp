@@ -56,6 +56,47 @@ void side(void* data,autotest::Capture& out,bool ours){Case c=*(Case*)data;cs=&c
  n(menu->m_OriginalItemLocations.size());for(unsigned i=0;i<2;++i){Locations::iterator it=menu->m_OriginalItemLocations.find(items[i]);n(it!=menu->m_OriginalItemLocations.end());if(it!=menu->m_OriginalItemLocations.end()){n(id(it->second.first,inventories[0],inventories[1]));n(int(it->second.second));}}n(id(menu->m_pCharacter,actors[0],actors[1]));n(menu->m_ClickedSlot);menu->m_OriginalItemLocations.~Locations();
 }
 void a(void* p,autotest::Capture& o){side(p,o,false);}void b(void* p,autotest::Capture& o){side(p,o,true);}
+// Keep only reply bits reached by the original control flow. This follows
+// 0xad48f0..0xad4b75, including callback mutations; it never inspects output.
+// The initial player/map bits also describe captured final fixture state.
+unsigned usedMaskBits(unsigned mask,unsigned location,unsigned mutation)
+{
+ unsigned used=1U|2U|8U;
+ bool player=(mask&2U)!=0;
+ if(mask&8U)used|=512U;
+ // Preserve the unchanged valid-domain prefilter even on successful equip.
+ if(!player&&(mask&1U)&&(mask&8U))used|=128U;
+ if(!(mask&1U))return used;
+ if(player)used|=4U; // Initial inventory load occurs even before map override.
+ bool inventory=player&&(mask&4U);
+ if(mask&8U){
+  inventory=(mask&512U)!=0;
+  if(!inventory)return used|256U; // Drop reads the current actor's resource.
+  bool equipped=false;
+  if(location==1U||location==2U){ // The retained equipment locations are 0,18.
+   used|=16U;
+   if(mutation==1U)player=true;
+   if(!(mask&16U)){
+    used|=32U;
+    if(mutation==2U)player=true;
+    equipped=(mask&32U)!=0;
+   }
+  }
+  if(!equipped){
+   used|=128U;
+   if(!(mask&128U))used|=256U;
+   return used;
+  }
+ }
+ if(player&&inventory){
+  used|=64U;
+  if(!(mask&64U)){
+   used|=128U;
+   if(!(mask&128U))used|=256U;
+  }
+ }
+ return used;
+}
 int run(const tlhybrid_host* host,unsigned mode)
 {
  const char* name=mode==2?"combinemenu_equipment_used_suppressed":mode?"combinemenu_equipment_used":"combinemenu_return_items";
@@ -69,6 +110,7 @@ int run(const tlhybrid_host* host,unsigned mode)
  for(unsigned mutation=0;mutation<(mode==2?1U:8U);++mutation){
   unsigned mask=mode==2?suppressedMasks[index]:index;
   if(!(mask&2)&&(mask&1)&&(mask&8)&&(!(mask&512)||!(mask&128)))continue;
+  if(mode!=2&&(mask&~usedMaskBits(mask,location,mutation)))continue;
   Case c={mask,location,mutation,mode};autotest::Outcome u,v;
   autotest::runChild(a,&c,u);autotest::runChild(b,&c,v);
   int pair=coverage.observe(host,u,v);

@@ -21,3 +21,7 @@ long long COgreResourceFile::Get64BitData(COgreReader* reader)
     reader->read(&value, sizeof(value));
     return value;
 }
+
+COgreResourceFile::~COgreResourceFile()
+{
+}

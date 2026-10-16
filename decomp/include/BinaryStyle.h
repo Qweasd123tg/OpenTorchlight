@@ -10,7 +10,7 @@ class CTimerStatics;
 class iDataFileSaveAndLoad
 {
 public:
-    virtual ~iDataFileSaveAndLoad();
+    virtual ~iDataFileSaveAndLoad() {}
     virtual void SaveDataGroupToFile(const std::wstring& file, CDataGroup* group) = 0;
     virtual void LoadDataGroupToFile(const std::wstring& file, CDataGroup* group, CTimerStatics* timers) = 0;
 };

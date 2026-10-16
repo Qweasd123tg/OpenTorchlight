@@ -1,0 +1,74 @@
+[
+ {
+  "address": "0x5ea600",
+  "tu": "LayoutDescriptor.cpp",
+  "demangled": "CLayoutDescriptor::~CLayoutDescriptor()",
+  "accepted_by": "MATCH",
+  "object_digest": "bcf7938bfd6b9a47334951b2b654ae069290c60c701acb52f38991e4e23d1cb4",
+  "normalized_code_digest": "107da572d73ac4ee",
+  "new_source": true
+ },
+ {
+  "address": "0x5ea610",
+  "tu": "LayoutDescriptor.cpp",
+  "demangled": "CLayoutDescriptor::~CLayoutDescriptor()",
+  "accepted_by": "MATCH",
+  "object_digest": "bcf7938bfd6b9a47334951b2b654ae069290c60c701acb52f38991e4e23d1cb4",
+  "normalized_code_digest": "0d24b69959c530ad",
+  "new_source": true
+ },
+ {
+  "address": "0xc65190",
+  "tu": "BinaryStyle.cpp",
+  "demangled": "CBinaryStyle::~CBinaryStyle()",
+  "accepted_by": "MATCH",
+  "object_digest": "d29d9bcd6bad5e595ef40889a90dd172086fd433a311bf47f4df2ac43e614e39",
+  "normalized_code_digest": "b523398fbb515526",
+  "new_source": false
+ },
+ {
+  "address": "0xc65410",
+  "tu": "BinaryStyle.cpp",
+  "demangled": "CBinaryStyle::~CBinaryStyle()",
+  "accepted_by": "MATCH",
+  "object_digest": "d29d9bcd6bad5e595ef40889a90dd172086fd433a311bf47f4df2ac43e614e39",
+  "normalized_code_digest": "c6c98b89fd70dad1",
+  "new_source": false
+ },
+ {
+  "address": "0xc68710",
+  "tu": "OgreResourceFile.cpp",
+  "demangled": "COgreResourceFile::~COgreResourceFile()",
+  "accepted_by": "MATCH",
+  "object_digest": "9da745b20094a0d3925d738cdc86bb353cca37f910522f901a05255386d2fc25",
+  "normalized_code_digest": "b523398fbb515526",
+  "new_source": true
+ },
+ {
+  "address": "0xc68890",
+  "tu": "OgreResourceFile.cpp",
+  "demangled": "COgreResourceFile::~COgreResourceFile()",
+  "accepted_by": "MATCH",
+  "object_digest": "9da745b20094a0d3925d738cdc86bb353cca37f910522f901a05255386d2fc25",
+  "normalized_code_digest": "c6c98b89fd70dad1",
+  "new_source": true
+ },
+ {
+  "address": "0xc6adb0",
+  "tu": "PairStyle.cpp",
+  "demangled": "CPairStyle::~CPairStyle()",
+  "accepted_by": "MATCH",
+  "object_digest": "a90b08af4e54de335846b84236b15b4e78a441bf6c34df1a55949c98c2d5519e",
+  "normalized_code_digest": "b523398fbb515526",
+  "new_source": false
+ },
+ {
+  "address": "0xc6ae30",
+  "tu": "PairStyle.cpp",
+  "demangled": "CPairStyle::~CPairStyle()",
+  "accepted_by": "MATCH",
+  "object_digest": "a90b08af4e54de335846b84236b15b4e78a441bf6c34df1a55949c98c2d5519e",
+  "normalized_code_digest": "c6c98b89fd70dad1",
+  "new_source": false
+ }
+]
