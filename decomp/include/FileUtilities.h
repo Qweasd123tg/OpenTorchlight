@@ -15,7 +15,9 @@ namespace FILESYSTEM
     std::wstring GetSaveDataPath();
     std::wstring AssembleAbsolutePath(const std::wstring& base, const std::wstring& path);
     std::wstring CleanPath(const std::wstring& path);
+    std::wstring GetFileName(const std::wstring& path);
     std::string RemoveFileName(const std::string& path);
+    std::wstring RemoveFileName(const std::wstring& path);
     bool FileExists(const std::wstring& path);
     bool CreateAppDataDirectory(const std::wstring& path);
     long long GetFileTime(const wchar_t* path);

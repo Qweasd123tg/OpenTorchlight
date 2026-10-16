@@ -773,7 +773,52 @@ class Loop:
         mine = next((v["norm"] for k, v in ours.items() if k in f["names"]), [])
         theirs = self.original.normalized(f)
         diff = [l for l in difflib.unified_diff(mine, theirs, "yours", "original", lineterm="", n=2)]
-        return "\n".join(diff[:80])
+        # Repair feedback is bounded, but later hunks must remain discoverable.
+        # Content-addressed files keep feedback from older rounds reproducible.
+        full = "\n".join(diff) + ("\n" if diff else "")
+        digest = hashlib.sha256(full.encode()).hexdigest()
+        directory = self.work / "instruction-diffs"
+        directory.mkdir(parents=True, exist_ok=True)
+        stem = f"{int(f['address'], 16):#x}-{digest}"
+        artifact = directory / (stem + ".diff")
+        import publication
+        publication._replace_file(directory, artifact.name, full.encode("utf-8"))
+        starts = [i for i, line in enumerate(diff) if line.startswith("@@ ")]
+        hunks = [{"id": f"hunk-{i + 1}", "header": diff[start],
+                  "start_line": start + 1,
+                  "end_line": starts[i + 1] if i + 1 < len(starts) else len(diff)}
+                 for i, start in enumerate(starts)]
+        index = directory / (stem + ".json")
+        atomic_json(index, {"schema": 1, "address": f["address"], "sha256": digest,
+                            "diff": artifact.name, "line_count": len(diff), "hunks": hunks})
+        # The model has no filesystem tools: rotate actual diff text into feedback.
+        # Split very long operands too, so one literal cannot consume the budget
+        # or permanently hide all following lines. The artifact stays unchanged.
+        pages, page, chars = [], [], 0
+        for number, line in enumerate(diff, 1):
+            chunks = [line[i:i + 4096] for i in range(0, len(line), 4096)] or [""]
+            for part, chunk in enumerate(chunks, 1):
+                text = (f"[diff line {number}, part {part}/{len(chunks)}] " + chunk
+                        if len(chunks) > 1 else chunk)
+                if page and (len(page) >= 80 or chars + len(text) + 1 > 8192):
+                    pages.append(page)
+                    page, chars = [], 0
+                page.append((number, text))
+                chars += len(text) + 1
+        if page or not pages:
+            pages.append(page)
+        selected = getattr(self, "round_no", 0) % len(pages)
+        preview = pages[selected]
+        visible = {number for number, _ in preview}
+        shown_hunks = [h["id"] for h in hunks
+                       if any(h["start_line"] <= number <= h["end_line"] for number in visible)]
+        summary = (f"Diff page {selected + 1}/{len(pages)}: {len(visible)}/{len(diff)} original lines; "
+                   f"{len(diff) - len(visible)} lines not shown. Long lines/hunks may span pages.\n"
+                   f"Visible hunks: {', '.join(shown_hunks) or 'none'}; {len(hunks)} total. "
+                   "Pages rotate on later rounds; a bounded run may not show every page.\n"
+                   f"Full diff (external review): {artifact}\n"
+                   f"Hunk index (1-based inclusive diff lines): {index}\n")
+        return summary + "\n".join(text for _, text in preview)
 
     def prompt_for(self, f):
         if not hasattr(self, "_packet_prompts"):
