@@ -6,6 +6,7 @@
 // and return types are placeholders until the class's own TU is recovered.
 
 #include "RunicCore.h"
+class CSoundInstance;
 
 class CChannelInstance : public CRunicCore
 {
@@ -15,7 +16,7 @@ public:
     void clear();
 
     // fields
-    long long m_iUnknown10;
+    CSoundInstance* m_iUnknown10;
 };
 
 #endif

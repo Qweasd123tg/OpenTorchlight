@@ -89,3 +89,39 @@ bool CDynamicPropertyFile::SetFloat(unsigned int property, float value)
             m_callbacks[property][i](property);
     return true;
 }
+
+unsigned int CDynamicPropertyFile::GetStringPropertyIndex(const std::wstring& name, std::wstring value, bool nonLocal)
+{
+    if (m_stringIndices.find(name) != m_stringIndices.end())
+        return m_stringIndices[name];
+    m_stringValues.push_back(value);
+    unsigned int index = m_stringValues.size() - 1;
+    m_stringIndices[name] = index;
+    if (nonLocal)
+        m_nonLocalVariables.push_back(name);
+    return index;
+}
+
+unsigned int CDynamicPropertyFile::GetFloatPropertyIndex(const std::wstring& name, float value, bool nonLocal)
+{
+    if (m_floatIndices.find(name) != m_floatIndices.end())
+        return m_floatIndices[name];
+    m_floatValues.push_back(value);
+    unsigned int index = m_floatValues.size() - 1;
+    m_floatIndices[name] = index;
+    if (nonLocal)
+        m_nonLocalVariables.push_back(name);
+    return index;
+}
+
+unsigned int CDynamicPropertyFile::GetIntPropertyIndex(const std::wstring& name, int value, bool nonLocal)
+{
+    if (m_intIndices.find(name) != m_intIndices.end())
+        return m_intIndices[name];
+    m_intValues.push_back(value);
+    unsigned int index = m_intValues.size() - 1;
+    m_intIndices[name] = index;
+    if (nonLocal)
+        m_nonLocalVariables.push_back(name);
+    return index;
+}

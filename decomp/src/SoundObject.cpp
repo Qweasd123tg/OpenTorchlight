@@ -1,4 +1,5 @@
 #include "EmptyStrings.h"
+#include "SoundManager.h"
 #include "SoundObject.h"
 #include "SceneNodeObject.h"
 #include "SoundBank.h"
@@ -78,59 +79,14 @@ void CSoundObject::setEnabled(bool enabled)
 
 void CSoundObject::updateSounds(float elapsedTime)
 {
-    struct CSoundManagerAccess
-    {
-        unsigned char padding[0x6a8];
-        unsigned char m_bSoundEnabled;
-        unsigned char m_bSoundPlaybackEnabled;
-    };
-
-    struct CSoundBankAccess
-    {
-        unsigned char padding0[0x10];
-        CSoundManagerAccess* m_pSoundManager;
-        unsigned char padding1[0x10];
-        int m_iSoundCount;
-
-        void update(float, Ogre::SceneNode*)
-            __asm__("_ZN10CSoundBank6updateEfPN4Ogre9SceneNodeE");
-    };
-
-    struct CVirtualAccess
-    {
-        virtual void v0() = 0;
-        virtual void v1() = 0;
-        virtual void v2() = 0;
-        virtual void v3() = 0;
-        virtual void v4() = 0;
-        virtual void v5() = 0;
-        virtual void broadcastEvent(int) = 0;
-        virtual void v7() = 0;
-        virtual void v8() = 0;
-        virtual bool getEnabled() const = 0;
-    };
-
-    CSoundBankAccess* soundBank =
-        reinterpret_cast<CSoundBankAccess*>(m_pSoundBank);
-
-    if (soundBank == NULL)
+    if (!m_pSoundBank || !getEnabled() || !m_bSoundPlaying || m_bSoundPaused)
         return;
-
-    CVirtualAccess* object = reinterpret_cast<CVirtualAccess*>(this);
-
-    if (!object->getEnabled() || !m_bSoundPlaying || m_bSoundPaused)
+    if (!m_pSoundBank->m_soundManager->m_bUnknown6A9 || !m_pSoundBank->m_soundManager->m_bUnknown6A8)
         return;
-
-    if (!soundBank->m_pSoundManager->m_bSoundPlaybackEnabled ||
-        !soundBank->m_pSoundManager->m_bSoundEnabled)
-        return;
-
-    soundBank->update(elapsedTime,
-                      m_bEnvironmental ? m_pSceneNode : NULL);
-
-    if (soundBank->m_iSoundCount == 0 && !m_bEnvironmental) {
+    m_pSoundBank->update(elapsedTime, m_bEnvironmental ? m_pSceneNode : 0);
+    if (m_pSoundBank->m_channels.size() == 0 && !m_bEnvironmental) {
         m_bSoundPlaying = false;
-        object->broadcastEvent(13);
+        BroadcastEvent(13);
     }
 }
 
@@ -146,4 +102,74 @@ void CSoundObject::reset()
 {
     m_pSoundBank->stop();
     play();
+}
+
+#include "MasterResourceManager.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+
+void CSoundObject::play()
+{
+    if (!m_pSoundBank)
+        return;
+    if ((!m_pSoundBank->m_soundManager->m_bUnknown6A9 ||
+         !m_pSoundBank->m_soundManager->m_bUnknown6A8) && !m_bEnvironmental)
+        return;
+    m_pSoundBank->m_dirty = true;
+    if (!m_bVisible)
+        CSceneNodeObject::setVisible(true);
+    m_pSoundBank->stop();
+    m_bSoundPlaying = true;
+    if (!m_bEnvironmental)
+        m_pSoundBank->setRadius(0.0f);
+    if (!m_pSoundBank->m_loop || !m_bEnvironmental)
+        if (m_pSoundBank->playSample(0, m_bEnvironmental ? m_pSceneNode : 0, 0.0f, 0.0f, false) < 0)
+            m_bSoundPlaying = false;
+    BroadcastEvent(11);
+    if (m_bSoundPaused)
+        pause();
+}
+
+void CSoundObject::setSoundBankGuid(long long guid)
+{
+    if (!m_pSoundBank)
+        return;
+    m_iSoundBankGuid = guid;
+    m_pSoundBank->clear();
+    if (m_iSoundBankGuid != -1) {
+        m_pSoundBank->addSample(0, guid);
+        if (m_bSoundPlaying)
+            reset();
+    }
+}
+
+void CSoundObject::setSoundBankNameIndex(unsigned int index)
+{
+    m_iSoundBankNameIndex = index;
+    CSoundBankDataInformation* information = CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation;
+    if (!information)
+        return;
+    CSoundData* sound = information->getSoundDataObject(
+        information->getCategoryNameByID(m_iSoundBankCategory),
+        information->getSoundNameByCategoryIndex(m_iSoundBankCategory, index));
+    if (sound) {
+        setSoundBankGuid(sound->m_iGuid);
+        if (m_bSoundPlaying || m_bSoundStartsOnActivated)
+            play();
+    }
+}
+
+CSoundObject::CSoundObject(CResourceManager* resources)
+    : CPositionableObject(resources, 0), m_iSoundBankGuid(-1), m_iSoundBankCategory(0),
+      m_iSoundBankNameIndex(0), m_pSoundBank(0), m_bSoundStartsOnActivated(true),
+      m_bSoundPlaying(false), m_bSoundPaused(false), m_bEnvironmental(true)
+{
+    if (CMasterResourceManager::getSingleton()->m_pSoundManager) {
+        m_pSoundBank = new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager, true);
+        if (m_pSoundBank) {
+            m_pSoundBank->setRadius(5.0f);
+            setScale(m_pSoundBank->m_radius);
+            m_pSoundBank->m_dirty = true;
+        }
+    }
 }

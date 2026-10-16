@@ -11,7 +11,8 @@
 #include "ParticleWrapper.h"
 #include "ResourceManager.h"
 #include "iLevelUpdate.h"
-namespace ParticleUniverse { class ParticleTechnique; class RibbonTrailRenderer; }
+namespace ParticleUniverse { class ParticleTechnique; class RibbonTrailRenderer; class BillboardRenderer; }
+class CGenericModel;
 class CAffectorWrapper;
 class CParticleEmitterWrapper;
 
@@ -25,7 +26,7 @@ public:
     virtual void start();
     virtual bool isPlaying();
     virtual void setActivated(bool);
-    virtual long long updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&);
+    virtual bool updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&);
     void setBillboardOrigin(unsigned int);
     void removeAffector(CAffectorWrapper*);
     void addAffector(CAffectorWrapper*);
@@ -58,7 +59,13 @@ public:
     // fields
     union {
         unsigned char m_AlwaysUp[0x18] __attribute__((aligned(8)));
-        ParticleUniverse::ParticleTechnique* m_technique;
+        struct {
+            ParticleUniverse::ParticleTechnique* m_technique; // +0x140
+            unsigned int m_renderType; // +0x148
+            unsigned int m_renderQueue; // +0x14c
+            unsigned int m_billboardRotation; // +0x150
+            unsigned int m_billboardOrigin; // +0x154
+        };
     };
     float m_fRibbonLength;
     float m_fRibbonWidth;
@@ -72,7 +79,7 @@ public:
     float m_fVScroll;
     bool m_bSorts;
     unsigned char m_gap179[0x7];
-    unsigned char m_pUnknown180[0x8] __attribute__((aligned(8)));
+    ParticleUniverse::BillboardRenderer* m_pUnknown180;
     long long m_iUnknown188;
     long long m_iUnknown190;
     long long m_iUnknown198;
@@ -80,9 +87,9 @@ public:
         unsigned char m_pUnknown1A0[0x8] __attribute__((aligned(8)));
         ParticleUniverse::RibbonTrailRenderer* m_ribbonRenderer;
     };
-    void* m_pUnknown1A8;
+    CGenericModel* m_pUnknown1A8;
     void* m_pTexturePath;
-    void* m_pModelPath;
+    std::wstring m_pModelPath;
     void* m_pUnknown1C0;
     unsigned int m_iParticleRenderStyle;
     bool m_bDepthCheck;
@@ -91,8 +98,8 @@ public:
     unsigned char m_gap1CF[0x1];
     unsigned int m_iSortIndex;
     float m_fDepthBias;
-    unsigned char m_Unknown1D8[0x18] __attribute__((aligned(8)));
-    unsigned char m_Unknown1F0[0x18] __attribute__((aligned(8)));
+    TArrayList<CParticleEmitterWrapper*> m_Unknown1D8;
+    TArrayList<CAffectorWrapper*> m_Unknown1F0;
     bool m_bUnknown208;
 };
 

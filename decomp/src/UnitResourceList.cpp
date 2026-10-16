@@ -79,3 +79,28 @@ CDataGroup* CUnitResourceList::getDataGroupByObjectName(const std::wstring& reso
         return data->second;
     return NULL;
 }
+
+#include "MasterResourceManager.h"
+#include "EmptyStrings.h"
+
+CUnitResourceList* CUnitResourceList::getSingleton()
+{
+    return m_pGlobalUnitResourceList;
+}
+
+unsigned int CUnitResourceList::getDataGroupsByUnitType(unsigned int type, TArrayList<CDataGroup*>& groups)
+{
+    CHierarchy* hierarchy = CMasterResourceManager::getSingleton()->m_pHierarchy;
+    if (!hierarchy)
+        return 0;
+    typedef std::map<std::wstring, std::map<std::wstring,CDataGroup*> > Groups;
+    for (Groups::iterator group = m_dataGroupsByResourceGroupAndName.begin(); group != m_dataGroupsByResourceGroupAndName.end(); ++group) {
+        for (std::map<std::wstring,CDataGroup*>::iterator item = group->second.begin(); item != group->second.end(); ++item) {
+            CDataGroup* data = item->second;
+            std::wstring unitType = data->GetDataValue(L"UNITTYPE", EMPTY_WSTRING);
+            if (unitType != EMPTY_WSTRING && hierarchy->ISA(hierarchy->getTypeIDByName(unitType), type))
+                groups.add(data);
+        }
+    }
+    return groups.size();
+}

@@ -17,7 +17,8 @@ public:
     static void addDescriptorFunction(const wchar_t* name, void* (*)());
     static CDescriptor* getNewDescriptorByName(const std::wstring& name);
 
-    static unsigned int getDescriptionVersion();
+    static long long getDescriptionVersion();
+    static CEditorBaseObject* getCachedObject(const std::wstring& name);
     static CDescriptor* getNewDescriptorByCreatedIndex(unsigned int index);
 
     static CDescriptorProp* getDescriptorPropertyByName(CDescriptor* descriptor, const std::wstring& name,

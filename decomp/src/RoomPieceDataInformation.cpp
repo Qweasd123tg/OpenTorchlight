@@ -17,9 +17,9 @@ CRoomPieceDataInformation* CRoomPieceDataInformation::getSingleton()
 CRoomPieceDataInformation::CRoomPieceCoreData* CRoomPieceDataInformation::_GetRoomPieceCoreDataByGuid(long long guid)
 {
     std::map<long long, CRoomPieceDataInformation::CRoomPieceCoreData*>::iterator it =
-        m_RoomPieceCoreDataByGuid.lower_bound(guid);
+        m_RoomPieceCoreDataByGuid.find(guid);
 
-    if (it != m_RoomPieceCoreDataByGuid.end() && it->first <= guid)
+    if (it != m_RoomPieceCoreDataByGuid.end())
         return it->second;
 
     return m_pDefaultRoomPieceCoreData;

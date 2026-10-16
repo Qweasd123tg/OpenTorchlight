@@ -4,6 +4,7 @@
 #include "EffectDefines.h"
 #include "Constants.h"
 #include "TArrayList.h"
+#include "SafePointer.h"
 #include <string>
 class CBaseUnit;
 class CCharacter;
@@ -36,7 +37,9 @@ public:
     CAffix* addAffix(const std::wstring& name,unsigned int level,CBaseUnit* source,CResourceManager* resources,float scale);
     CEffect* addNewEffect(CEffect* effect);
     CEffect* cloneEffect(CBaseUnit* source,CEffect* effect);
+    void cloneEffects(CBaseUnit* source, TArrayList<CEffect*>* effects);
     bool removeEffect(const std::wstring& name, bool flag);
+    bool removeEffect(CEffect* effect, bool flag);
     bool deleteAffix(const std::wstring& name);
     void removeNonSavedEffects();
     bool deleteAffix(CAffix*);
@@ -55,9 +58,12 @@ public:
     void addAffixEffectsBackIn();
     const std::wstring& getVisualDescription(EEFFECT_ACTIVATION,unsigned int,bool,bool);
     unsigned int createEffects(CDataGroup* data,bool flag);
+    void createEffect(CDataGroup* data, bool flag);
     CAffix* getAffix(const std::wstring& name);
     TArrayList<CUnitTheme*>* getUnitThemes() { return &m_UnitThemes; }
     TArrayList<CEffect*>& getActiveEffects(unsigned int group) { return *reinterpret_cast<TArrayList<CEffect*>*>(m_EffectData10 + 0x18 + group * 0x18); }
+    // Original owner safe reference at object +0x70.
+    TSafePointer<CBaseUnit>& getOwnerReference() { return *reinterpret_cast<TSafePointer<CBaseUnit>*>(m_EffectData10 + 0x60); }
     // Partial layout: the affix list occupies the beginning of the opaque region.
     TArrayList<CAffix*>& getAffixes() { return *reinterpret_cast<TArrayList<CAffix*>*>(m_EffectData10); }
 private:

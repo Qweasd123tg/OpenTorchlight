@@ -1,10 +1,17 @@
 #ifndef LOGICOBJECT_H
 #define LOGICOBJECT_H
 
+#include <fstream>
+#include <map>
+
 #include "EditorBaseObject.h"
 #include "TArrayList.h"
 
 class CLogicLink;
+class CLogicWrapper;
+class CLogicGroup;
+class COgreReader;
+class CDescriptorLoadConfiguration;
 
 // Partial: LogicObject.cpp. Node of a logic graph that wraps an editor object
 // and forwards its output events along the logic links. Layout from the
@@ -12,6 +19,14 @@ class CLogicLink;
 class CLogicObject : public CEditorBaseObject
 {
 public:
+    void SetPosition(int x, int y);
+    void SetSize(int width, int height);
+    void saveLogicObjectLinksToBinaryFile(std::basic_ofstream<char, std::char_traits<char> >* stream);
+    unsigned int AddLogicLink(CLogicWrapper* output, CLogicObject* input, CLogicWrapper* function);
+    void saveLogicObjectToBinaryFile(std::basic_ofstream<char, std::char_traits<char> >* stream);
+    void loadLogicObjectByBinaryFile(CLogicGroup* group, COgreReader* reader,
+                                    CDescriptorLoadConfiguration* configuration,
+                                    std::map<int, int>& remappedIDs);
     unsigned int AddLogicLink(unsigned int output, CLogicObject* input, unsigned int function);
 
     void SetXPosition(int position);

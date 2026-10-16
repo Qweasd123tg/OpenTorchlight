@@ -30,14 +30,14 @@ TL_ORIGINAL(int,original8,(long long),"_Z40EditorGetCountOfLogicObjectsInLogicGr
 extern "C" int candidate8(long long) __asm__("_Z40EditorGetCountOfLogicObjectsInLogicGroupx");
 TL_ORIGINAL(float,original9,(long long,float),"_Z20EditorTimelineUpdatexf")
 extern "C" float candidate9(long long,float) __asm__("_Z20EditorTimelineUpdatexf");
-TL_ORIGINAL(long long,original10,(long long,long long,int,bool),"_Z32EditorTimelineAddPointToPropertyxxib")
-extern "C" long long candidate10(long long,long long,int,bool) __asm__("_Z32EditorTimelineAddPointToPropertyxxib");
-TL_ORIGINAL(long long,original11,(long long,long long,int,int,bool),"_Z49EditorTimelineGetPointIDInTimelinePropertyByIndexxxiib")
-extern "C" long long candidate11(long long,long long,int,int,bool) __asm__("_Z49EditorTimelineGetPointIDInTimelinePropertyByIndexxxiib");
-TL_ORIGINAL(long long,original12,(long long,long long,int,int,bool),"_Z37EditorTimelineRemovePointFromPropertyxxiib")
-extern "C" long long candidate12(long long,long long,int,int,bool) __asm__("_Z37EditorTimelineRemovePointFromPropertyxxiib");
-TL_ORIGINAL(long long,original13,(long long,long long,int,bool),"_Z28EditorTimelineRemovePropertyxxib")
-extern "C" long long candidate13(long long,long long,int,bool) __asm__("_Z28EditorTimelineRemovePropertyxxib");
+TL_ORIGINAL(int,original10,(long long,long long,int,bool),"_Z32EditorTimelineAddPointToPropertyxxib")
+extern "C" int candidate10(long long,long long,int,bool) __asm__("_Z32EditorTimelineAddPointToPropertyxxib");
+TL_ORIGINAL(int,original11,(long long,long long,int,int,bool),"_Z49EditorTimelineGetPointIDInTimelinePropertyByIndexxxiib")
+extern "C" int candidate11(long long,long long,int,int,bool) __asm__("_Z49EditorTimelineGetPointIDInTimelinePropertyByIndexxxiib");
+TL_ORIGINAL(bool,original12,(long long,long long,int,int,bool),"_Z37EditorTimelineRemovePointFromPropertyxxiib")
+extern "C" bool candidate12(long long,long long,int,int,bool) __asm__("_Z37EditorTimelineRemovePointFromPropertyxxiib");
+TL_ORIGINAL(bool,original13,(long long,long long,int,bool),"_Z28EditorTimelineRemovePropertyxxib")
+extern "C" bool candidate13(long long,long long,int,bool) __asm__("_Z28EditorTimelineRemovePropertyxxib");
 TL_ORIGINAL(float,original14,(long long,long long,int,int,bool),"_Z35EditorTimelineGetTimePercentAtPointxxiib")
 extern "C" float candidate14(long long,long long,int,int,bool) __asm__("_Z35EditorTimelineGetTimePercentAtPointxxiib");
 TL_ORIGINAL(void,original15,(long long,long long,int,int,float,bool),"_Z41EditorTimelineSetPropertyPointTimePercentxxiifb")
@@ -86,12 +86,12 @@ bool removeLink(void*p,unsigned i,unsigned j){event(10,p);number(i);number(j);re
 bool removeObject(void*p,unsigned i){event(11,p);number(i);return input->event;}
 void invokeLogic(void*p,unsigned i){event(12,p);number(i);}
 float updateTimeline(void*p,float t){event(13,p);capture->add(&t,4);++updateCalls;return input->response;}
-long long resultID(){++resultCalls;return input->responseID;}
+int resultID(){++resultCalls;return static_cast<int>(input->responseID);}
 void timelineArgs(unsigned code,void*p,long long id,int property){event(code,p);capture->add(&id,8);capture->add(&property,4);}
-long long addPoint(void*p,long long id,int property,bool e){timelineArgs(14,p,id,property);number(e);return resultID();}
-long long pointID(void*p,long long id,int property,int point,bool e){timelineArgs(15,p,id,property);capture->add(&point,4);number(e);return resultID();}
-long long removePoint(void*p,long long id,int property,int point,bool e){timelineArgs(16,p,id,property);capture->add(&point,4);number(e);return resultID();}
-long long removeProperty(void*p,long long id,int property,bool e){timelineArgs(17,p,id,property);number(e);return resultID();}
+int addPoint(void*p,long long id,int property,bool e){timelineArgs(14,p,id,property);number(e);return resultID();}
+int pointID(void*p,long long id,int property,int point,bool e){timelineArgs(15,p,id,property);capture->add(&point,4);number(e);return resultID();}
+bool removePoint(void*p,long long id,int property,int point,bool e){timelineArgs(16,p,id,property);capture->add(&point,4);number(e);return (resultID() & 1) != 0;}
+bool removeProperty(void*p,long long id,int property,bool e){timelineArgs(17,p,id,property);number(e);return (resultID() & 1) != 0;}
 float getPercent(void*p,long long id,int property,int point,bool e){timelineArgs(18,p,id,property);capture->add(&point,4);number(e);return input->amount;}
 void setPercent(void*p,long long id,int property,int point,float value,bool e){timelineArgs(19,p,id,property);capture->add(&point,4);capture->add(&value,4);number(e);}
 void side(Case&c,bool ours,autotest::Capture&out){
@@ -152,8 +152,7 @@ void side(Case&c,bool ours,autotest::Capture&out){
  // Mode zero is an explicit live-path witness, independent of all guards.
  if(c.mode==0){
   if(c.operation==9&&(updateCalls!=1||c.response==c.amount))out.issue=autotest::Capture::InvalidReport;
-  const unsigned long long id=static_cast<unsigned long long>(c.responseID);
-  if(c.operation>=10&&c.operation<=13&&(resultCalls!=1||static_cast<unsigned>(id>>32)==static_cast<unsigned>(id)))
+  if(c.operation>=10&&c.operation<=13&&resultCalls!=1)
    out.issue=autotest::Capture::InvalidReport;
  }
  number(updateCalls);number(resultCalls);
@@ -173,8 +172,8 @@ TL_TEST(editor_mass_logic_timeline_differential){
  const float floats[]={0.0f,-0.0f,0.125f,-3.75f,12345.5f,2147483520.0f,-2147483648.0f,
   std::numeric_limits<float>::infinity(),std::numeric_limits<float>::quiet_NaN()};
  const float responses[]={19.25f,-21.5f,0.75f,-0.125f,1000.5f,-123.75f};
- const long long responseIDs[]={0x1234567887654321LL,0x7654321001234567LL,0x1234567800000000LL,
-  -0x1234567890LL,(-0x7fffffffffffffffLL-1),0x0000000080000000LL};
+ // These collaborators return int point IDs or bool removal results in the original ABI.
+ const int responseIDs[]={-2000000001,-17,0,37,123456789,2147483647};
  for(unsigned operation=0;operation<16;++operation){
   unsigned independentReturnWitnesses=0;
   autotest::Coverage coverage("editor_mass_logic_timeline_differential",addresses[operation]);

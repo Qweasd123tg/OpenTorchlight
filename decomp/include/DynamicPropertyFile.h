@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include "RunicCore.h"
 
@@ -15,6 +16,8 @@ public:
 
     CDynamicPropertyFile(std::wstring directory, std::wstring file, std::wstring section);
     unsigned int GetStringPropertyIndex(const std::wstring& name, std::wstring value, bool flag);
+    unsigned int GetFloatPropertyIndex(const std::wstring& name, float value, bool flag);
+    unsigned int GetIntPropertyIndex(const std::wstring& name, int value, bool flag);
     virtual ~CDynamicPropertyFile();
     virtual bool SaveSettings(const std::wstring& file);
     virtual bool LoadSettings(const std::wstring& file);
@@ -38,7 +41,10 @@ private:
     std::vector<float> m_floatValues; // +0x58
     std::vector<std::wstring> m_stringValues; // +0x70
     std::vector<std::wstring> m_nonLocalVariables; // +0x88
-    unsigned char m_UnrecoveredA0[0x98];
+    std::map<std::wstring, unsigned int> m_intIndices; // +0xa0
+    std::map<std::wstring, unsigned int> m_floatIndices; // +0xd0
+    std::map<std::wstring, unsigned int> m_stringIndices; // +0x100
+    unsigned char m_Unrecovered130[8];
     std::wstring m_missingString; // +0x138
 };
 

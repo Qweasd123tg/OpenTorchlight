@@ -20,7 +20,7 @@ class CFormationNode : public CPositionableObject, public iLevelUpdate
 public:
     virtual ~CFormationNode();
 
-    virtual long long updateLevelObject(
+    virtual bool updateLevelObject(
         float fTime,
         Ogre::Camera* pCamera,
         const Ogre::Vector3& vTargetPosition);

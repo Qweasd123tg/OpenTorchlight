@@ -55,7 +55,7 @@ void CParticleTechWrapper::forceStop()
     CParticleWrapper::stop();
 }
 
-long long CParticleTechWrapper::updateLevelObject(float elapsed, Ogre::Camera* camera, const Ogre::Vector3& viewer)
+bool CParticleTechWrapper::updateLevelObject(float elapsed, Ogre::Camera* camera, const Ogre::Vector3& viewer)
 {
     return this->updateLevelObject(elapsed, camera, viewer);
 }

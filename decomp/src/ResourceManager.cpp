@@ -123,3 +123,84 @@ CBaseUnit* CResourceManager::createUnit(CDataGroup* data, int level, bool flag1,
     }
     return NULL;
 }
+
+#include "ParticlePreloader.h"
+#include "EffectGroupManager.h"
+#include "Affix.h"
+#include "SpawnClassParser.h"
+#include "SpawnClass.h"
+#include "Level.h"
+
+CParticle* CResourceManager::createParticle(const wchar_t* name)
+{
+    if (CMasterResourceManager::getSingleton()->m_pParticlePreloader)
+        return CMasterResourceManager::getSingleton()->m_pParticlePreloader->GetParticle(this, name);
+    return NULL;
+}
+
+int CResourceManager::ISA(const std::wstring& unit, const std::wstring& parent)
+{
+    if (!m_pHierarchy)
+        return false;
+    UNITTYPES::EUNITTYPES parentType = getUnitTypeByName(parent);
+    UNITTYPES::EUNITTYPES unitType = getUnitTypeByName(unit);
+    return m_pHierarchy->ISA(unitType, parentType);
+}
+
+CSpawnClass* CResourceManager::getSpawnClassByName(const std::wstring& name)
+{
+    return CMasterResourceManager::getSingleton()->m_pSpawnClassParser->getSpawnClass(name);
+}
+
+unsigned int CResourceManager::getCurrentLevelSeed()
+{
+    if (m_pLevel)
+        return m_pLevel->getCurrentLevelSeed();
+    return 0;
+}
+
+CAffix* CResourceManager::getNewAffixByName(const std::wstring& name, unsigned int level)
+{
+    CAffix* affix = CMasterResourceManager::getSingleton()->m_effectGroups->getAffix(name);
+    if (affix)
+        return new CAffix(affix, level);
+    return NULL;
+}
+
+ERESOURCE_GROUPS CResourceManager::getResourceGroupFromDataGroup(CDataGroup* data)
+{
+    if (data) {
+        unsigned int group = data->GetDataValue(L"RESOURCEGROUP", static_cast<unsigned int>(-1));
+        if (group != static_cast<unsigned int>(-1))
+            return static_cast<ERESOURCE_GROUPS>(group);
+    }
+    return static_cast<ERESOURCE_GROUPS>(4);
+}
+
+CBaseUnit* CResourceManager::createUnit(const wchar_t* category, const wchar_t* name, int level, bool flag)
+{
+    if (!name || !category || !CUnitResourceList::getSingleton())
+        return NULL;
+    CDataGroup* data = CUnitResourceList::getSingleton()->getDataGroupByObjectName(category, name);
+    if (data)
+        return createUnit(data, level, flag, false);
+    return NULL;
+}
+
+void CResourceManager::createUnitsBySpawnClass(CSpawnClass* spawn, TArrayList<CBaseUnit*>& units,
+    unsigned int count, CCharacter* first, CCharacter* second, int level, int flags)
+{
+    if (!spawn || !count)
+        return;
+    TArrayList<CDataGroup*> groups(10);
+    TArrayList<bool> choices(10);
+    for (unsigned int i = 0; i < count; ++i) {
+        groups.clear();
+        spawn->rollSpawnClass(groups, &choices, first, second, level, static_cast<unsigned int>(-1), 0, -1, 0, flags);
+        for (unsigned int j = 0; j < groups.size(); ++j) {
+            CBaseUnit* unit = createUnit(groups[j], level, false, choices[j]);
+            if (unit)
+                units.add(unit);
+        }
+    }
+}

@@ -8,6 +8,8 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 
+static unsigned char g_DescriptorController[96];
+
 CDamageShapeDescriptor::CDamageShapeDescriptor()
     : CShapeDescriptor(L"Damage Shape", L"Causes damage to units", L"damageshape", true, true, false)
 {

@@ -226,7 +226,7 @@ void EditorSetSnapToGroundBias(float arg1)
     CEditorObjectManager* manager = gEditor->getObjectManager();
     manager->EditorSetSnapToGroundBias(arg1);
 }
-unsigned int EditorGetDescriptorHash()
+long long EditorGetDescriptorHash()
 {
     if (!gEditor->isActive()) return static_cast<unsigned int>(-1);
     return CDescriptorController::getDescriptionVersion();
@@ -712,7 +712,7 @@ bool EditorDeleteLogicObject(long long guid, int index)
     return group ? group->RemoveLogicObjectByIndex(index) : false;
 }
 
-long long EditorTimelineAddPointToProperty(long long timelineGuid, long long objectGuid,
+int EditorTimelineAddPointToProperty(long long timelineGuid, long long objectGuid,
                                    int property, bool event)
 {
     if (!gEditor->isActive()) return 0xffffffffu;
@@ -846,7 +846,7 @@ void EditorInvokeOutputFunction(long long guid, unsigned int objectIndex, unsign
     if (logic) logic->Invoke(event);
 }
 
-long long EditorTimelineGetPointIDInTimelinePropertyByIndex(long long timelineGuid,
+int EditorTimelineGetPointIDInTimelinePropertyByIndex(long long timelineGuid,
         long long objectGuid, int property, int point, bool event)
 {
     if (!gEditor->isActive()) return 0xffffffffu;
@@ -857,7 +857,7 @@ long long EditorTimelineGetPointIDInTimelinePropertyByIndex(long long timelineGu
     return 0xffffffffu;
 }
 
-long long EditorTimelineRemovePointFromProperty(long long timelineGuid, long long objectGuid,
+bool EditorTimelineRemovePointFromProperty(long long timelineGuid, long long objectGuid,
         int property, int point, bool event)
 {
     if (!gEditor->isActive()) return 0;
@@ -868,7 +868,7 @@ long long EditorTimelineRemovePointFromProperty(long long timelineGuid, long lon
     return 0;
 }
 
-long long EditorTimelineRemoveProperty(long long timelineGuid, long long objectGuid,
+bool EditorTimelineRemoveProperty(long long timelineGuid, long long objectGuid,
         int property, bool event)
 {
     if (!gEditor->isActive()) return 0;
@@ -1864,7 +1864,7 @@ void rollRoomPiece(long long guid)
     CRoomPiece* piece = dynamic_cast<CRoomPiece*>(object);
     if (!piece) return;
     long long visualGuid = piece->m_iVisualIndex_140;
-    void* visual = piece->m_pRoomPieceName;
+    void* visual = piece->m_pRoomPieceData;
     if (visualGuid != -1 && visual)
     {
         const char* core = *reinterpret_cast<const char**>(static_cast<char*>(visual) + 0x10);

@@ -11,6 +11,8 @@
 #include "ResourceManager.h"
 #include "iSelected.h"
 
+namespace ParticleUniverse { class ParticleEmitter; }
+
 class CParticleEmitterWrapper : public CPositionableObject, public iSelected
 {
 public:
@@ -20,7 +22,7 @@ public:
     virtual bool getEnabled();
     virtual void positionUpdated(const Ogre::Vector3&);
     virtual void editorSelectionChanged(bool);
-    unsigned int getIsDoneEmitting();
+    bool getIsDoneEmitting();
     void starting();
     void setBoxDepth(float);
     void setBoxHeight(float);
@@ -47,7 +49,16 @@ public:
 
     // fields
     CParticleTechWrapper* m_pParticleTechWrapper;
-    unsigned char m_ParticleDirection[0x18] __attribute__((aligned(8)));
+    union {
+        unsigned char m_ParticleDirection[0x18] __attribute__((aligned(8)));
+        struct {
+            ParticleUniverse::ParticleEmitter* m_pEmitter; // +0x110
+            float m_fRadius; // +0x118
+            float m_fMinLineIncrement; // +0x11c
+            float m_fMaxLineIncrement; // +0x120
+            float m_fMaxLineDeviation; // +0x124
+        };
+    };
     int m_iEmitterType;
     float m_fBoxWidth;
     float m_fBoxHeight;

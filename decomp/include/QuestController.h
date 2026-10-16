@@ -26,7 +26,7 @@ public:
     virtual void menuEventOccured(void* pData,
                                   EMENU_TYPE menuType,
                                   EMENU_EVENT menuEvent);
-    virtual long long updateLevelObject(float fTimeDelta,
+    virtual bool updateLevelObject(float fTimeDelta,
                                         Ogre::Camera* pCamera,
                                         const Ogre::Vector3& vPosition);
 

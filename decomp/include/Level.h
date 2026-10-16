@@ -48,6 +48,7 @@ public:
     void setAutomapVisible(bool visible);
     void setNPCAutomapBillboardVisible(Ogre::Billboard* billboard, bool visible);
     void clearPassabilityData();
+    unsigned int getCurrentLevelSeed();
     bool mapPassable(int x, int y);
     bool positionPassable(int x, int y);
     void restartLevel();

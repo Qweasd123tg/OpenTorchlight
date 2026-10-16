@@ -1,3 +1,4 @@
+#include "DataGroup.h"
 #include "Affix.h"
 #include "BaseUnit.h"
 #include "Effect.h"
@@ -334,4 +335,194 @@ CEffect* CEffectManager::getEffect(const std::wstring& name, unsigned int index)
                 --index;
             }
     return NULL;
+}
+
+void CEffectManager::clearOutDescriptions()
+{
+    m_EffectString2E0 = EMPTY_WSTRING;
+    m_EffectString2E8 = EMPTY_WSTRING;
+    m_EffectString2F0 = EMPTY_WSTRING;
+}
+
+bool CEffectManager::removeEffect(CEffect* effect, bool destroy)
+{
+    for (unsigned int i = 0; i < getActiveEffects(effect->m_activation).size(); ++i)
+    {
+        CEffect* found = getActiveEffects(effect->m_activation)[i];
+        if (found == effect)
+        {
+            if (destroy && getActiveEffects(effect->m_activation)[i] != NULL)
+            {
+                delete getActiveEffects(effect->m_activation)[i];
+                getActiveEffects(found->m_activation)[i] = NULL;
+            }
+            getActiveEffects(found->m_activation).removeAt(i);
+            clearOutDescriptions();
+            return true;
+        }
+    }
+    return false;
+}
+
+void CEffectManager::recalculateEffects()
+{
+    std::wstring* descriptions = &m_EffectString2E0;
+    for (unsigned int i = 0; i < descriptions[0].size(); ++i)
+        descriptions[i] = EMPTY_WSTRING;
+    for (unsigned int group = 0; group < 3; ++group)
+        for (unsigned int i = 0; i < getActiveEffects(group).size(); ++i)
+            getActiveEffects(group)[i]->getMaxCaculatedValue();
+}
+
+void CEffectManager::clearOutAffixEffects()
+{
+    for (unsigned int i = 0; i < getAffixes().size(); ++i)
+        getAffixes()[i]->clearEffectsFromOwner();
+    clearOutDescriptions();
+}
+
+void CEffectManager::addAffixEffectsBackIn()
+{
+    for (unsigned int i = 0; i < getAffixes().size(); ++i)
+    {
+        getAffixes()[i]->clearEffectsFromOwner();
+        getAffixes()[i]->addEffectsToEffectManager(this);
+    }
+    clearOutDescriptions();
+}
+
+void CEffectManager::updateAffixes(float elapsed)
+{
+    bool removed = false;
+    for (unsigned int i = 0; i < getAffixes().size(); ++i)
+        if (!getAffixes()[i]->updateAffixDuration(elapsed))
+        {
+            if (getAffixes()[i] != NULL)
+            {
+                delete getAffixes()[i];
+                getAffixes()[i] = NULL;
+            }
+            getAffixes().removeAt(i);
+            --i;
+            removed = true;
+        }
+    if (removed)
+    {
+        calculateEffectValues();
+        clearOutDescriptions();
+    }
+}
+
+bool CEffectManager::deleteAffix(CAffix* affix)
+{
+    for (unsigned int i = 0; i < getAffixes().size(); ++i)
+        if (getAffixes()[i] == affix)
+        {
+            getAffixes().removeAt(i);
+            affix->clearEffectsFromOwner();
+            delete affix;
+            calculateEffectValues();
+            clearOutDescriptions();
+            return true;
+        }
+    return false;
+}
+
+CAffix* CEffectManager::addAffix(CAffix* affix, unsigned int level, CBaseUnit* source, float scale)
+{
+    if (affix != NULL)
+    {
+        if (scale > 0.0f)
+            affix->m_fDuration = scale;
+        if (level != static_cast<unsigned int>(-1))
+            affix->setLevel(level);
+        getAffixes().add(affix);
+        affix->setOwner(source);
+        affix->addEffectsToEffectManager(this);
+        calculateEffectValues();
+        clearOutDescriptions();
+    }
+    return affix;
+}
+
+bool CEffectManager::deleteAffix(const std::wstring& name)
+{
+    bool removed = false;
+    for (unsigned int i = 0; i < getAffixes().size(); ++i)
+        if (getAffixes()[i]->m_sDisplayName == name)
+        {
+            getAffixes()[i]->clearEffectsFromOwner();
+            if (getAffixes()[i] != NULL)
+            {
+                delete getAffixes()[i];
+                getAffixes()[i] = NULL;
+            }
+            getAffixes().removeAt(i);
+            --i;
+            removed = true;
+        }
+    if (removed)
+    {
+        calculateEffectValues();
+        clearOutDescriptions();
+    }
+    return removed;
+}
+
+CEffect* CEffectManager::cloneEffect(CBaseUnit* source, CEffect* effect)
+{
+    if (effect->m_pAffixOwner != NULL &&
+        effect->m_pAffixOwner->m_pEffectManager == this)
+    {
+        addNewEffect(effect);
+        return effect;
+    }
+    CEffect* copy = new CEffect(effect);
+    copy->setOwner(source, true);
+    addNewEffect(copy);
+    if (getOwnerReference().getObject() != NULL)
+        getOwnerReference().getObject()->activateEffect(copy);
+    clearOutDescriptions();
+    return copy;
+}
+
+void CEffectManager::cloneEffects(CBaseUnit* source, TArrayList<CEffect*>* effects)
+{
+    if (effects != NULL)
+    {
+        for (unsigned int i = 0; i < effects->size(); ++i)
+            cloneEffect(source, (*effects)[i]);
+        clearOutDescriptions();
+    }
+}
+
+void CEffectManager::removeNonSavedEffects()
+{
+    for (unsigned int group = 0; group < 3; ++group)
+        for (unsigned int i = 0; i < getActiveEffects(group).size(); ++i)
+            if (!getActiveEffects(group)[i]->m_flag33)
+            {
+                CEffect* effect = getActiveEffects(group)[i];
+                if (effect->m_fValue24 != -900.0f && effect->m_fValue24 != -1000.0f)
+                    effect->m_fRemainingDuration = effect->m_fValue24;
+                effect->m_bDead = true;
+            }
+    deleteDeadEffects();
+}
+
+unsigned int CEffectManager::createEffects(CDataGroup* data, bool flag)
+{
+    if (data == NULL)
+        return 0;
+    if (data->GetGroupName().compare(L"EFFECT") == 0)
+    {
+        createEffect(data, flag);
+        return 1;
+    }
+    std::vector<CDataGroup*> groups;
+    unsigned int count = data->GetDataGroupsMatchingName(L"EFFECT", &groups);
+    for (unsigned int i = 0; i < count; ++i)
+        createEffect(groups[i], flag);
+    clearOutDescriptions();
+    return count;
 }

@@ -96,6 +96,14 @@ public:
     virtual void saveProperty(CEditorBaseObject* object, CDataGroup* group);
     virtual void loadProperty(CEditorBaseObject* object, CDataGroup* group, unsigned int version);
 
+    void setPropertyInterpreter(CDescriptorPropertyInterpreter* interpreter);
+    void setDataOnObject(CEditorBaseObject* object, const UNIONDATA32BIT* data, unsigned int count);
+    void setData(const UNIONDATA8BIT* data, unsigned int size, CEditorBaseObject* object);
+    void setData(const UNIONDATA16BIT* data, unsigned int size, CEditorBaseObject* object);
+    void setData(const std::wstring& value, CEditorBaseObject* object);
+    void copy(CDescriptorProp& source, CEditorBaseObject* object);
+    void setPropertyValueByString(std::wstring value, CEditorBaseObject* object);
+
     unsigned int getElementSize();
     UNIONDATA32BIT* getDataFromObject(CEditorBaseObject* object, unsigned int& count);
     std::wstring getPropertyValueAsString(CEditorBaseObject* object);

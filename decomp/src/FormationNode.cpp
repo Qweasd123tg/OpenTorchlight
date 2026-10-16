@@ -36,7 +36,7 @@ CFormationNodeSaveAndLoad::CFormationNodeSaveAndLoad(CFormationNode* pFormationN
     }
 }
 
-long long CFormationNode::updateLevelObject(float fTime, Ogre::Camera* pCamera, const Ogre::Vector3& vTargetPosition)
+bool CFormationNode::updateLevelObject(float fTime, Ogre::Camera* pCamera, const Ogre::Vector3& vTargetPosition)
 {
     return reinterpret_cast<CFormationNode*>(
         reinterpret_cast<char*>(this) - 0x100

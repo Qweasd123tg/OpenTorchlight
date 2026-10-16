@@ -23,6 +23,7 @@ public:
     virtual ~CDataGroup();
     void setDirty(bool dirty);
     bool isDirty();
+    unsigned int getStringRepositorySizeInMemory();
     void RemoveDataGroup(CDataGroup* group);
     CDataValue* AddDataValue(const std::wstring& name, int value);
     CDataValue* AddDataValue(const std::wstring& name, double value);

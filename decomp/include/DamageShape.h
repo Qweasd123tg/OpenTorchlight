@@ -19,7 +19,7 @@ class CDamageShape : public CShape, public iLevelUpdate, public iLevelUpdatedCha
 public:
     virtual ~CDamageShape();
     virtual void setEnabled(bool);
-    virtual long long updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&);
+    virtual bool updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&);
     virtual void characterUpdatedInLevel(float, CCharacter*);
     virtual void itemUpdatedInLevel(float, CItem*);
     virtual void getCanDoDamage(CCharacter*, float, const Ogre::Vector3&);

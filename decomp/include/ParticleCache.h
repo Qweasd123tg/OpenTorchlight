@@ -33,7 +33,7 @@ public:
     TArrayList<int> mSoundSampleIDs;
     TArrayList<float> mSoundSampleVolumes;
 
-    Ogre::SceneNode* m_pRootSceneNode;
+    TArrayList<CParticleCache*>* m_pRootSceneNode; // legacy name: actual return-to-cache list, +0x70
 
     TArrayList<std::wstring*> mParticleSystemTemplateNames;
     TArrayList<std::wstring*> mParticleTechniqueTemplateNames;

@@ -46,9 +46,9 @@ public:
     virtual void SetRandomWeight(unsigned int randomWeight);
 
     static void setCacheingParticlesForLevel(bool enable);
-    static CLayout* getLayoutToClone(const std::wstring& layoutName);
+    CLayout* getLayoutToClone(const std::wstring& layoutName);
 
-    void processInputs(unsigned int inputID, CEditorBaseObject* inputObject);
+    bool processInputs(unsigned int inputID, CEditorBaseObject* inputObject);
     void setDurationModification(float durationModification);
 
     CLayout(CResourceManager* resourceManager, ELAYOUT_TYPES layoutType);

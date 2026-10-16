@@ -23,7 +23,7 @@ public:
     std::map<long long, CDataGroup *> *getGroupByName(
         const std::wstring &name);
     void getUnitNames(TArrayList<std::wstring> &unitNames);
-    void getDataGroupsByUnitType(unsigned int unitType,
+    unsigned int getDataGroupsByUnitType(unsigned int unitType,
                                  TArrayList<CDataGroup *> &dataGroups);
 
     void clearDataOut();
@@ -75,5 +75,7 @@ public:
     TArrayList<CDataGroup *> m_loadedDataGroups;
     CDataGroup *m_pMasterDataGroup;
 };
+
+extern CUnitResourceList* m_pGlobalUnitResourceList;
 
 #endif

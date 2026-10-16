@@ -14,18 +14,19 @@
 #include "iLevelUpdate.h"
 class CParticleCache;
 class CParticlePreloader;
+namespace ParticleUniverse { class ParticleEmitter; }
 
 class CParticle : public CPositionableObject, public iLevelUpdate
 {
 public:
     virtual ~CParticle();
-    virtual long long updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&);
+    virtual bool updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&);
     void SetParticleDirection(const Ogre::Vector3&, const Ogre::Vector3&);
     void forceParticleUpdate(float);
-    // unresolved: CParticle::getAllEmitters(TArrayList<ParticleUniverse::ParticleEmitter*>&)
+    void getAllEmitters(TArrayList<ParticleUniverse::ParticleEmitter*>&);
     void Resume();
     void Pause();
-    int looping();
+    bool looping();
     void Stop(bool);
     void Start();
     int getNumberOfParticlesUpdating(bool);
@@ -33,7 +34,7 @@ public:
 
     // fields
     CParticleCache* m_pParticleCache;
-    void* m_pUnknown110;
+    std::wstring m_pUnknown110; // cached particle filename, +0x110
     int m_iUnknown118;
     int m_iUnknown11C;
     float m_fUnknown120;

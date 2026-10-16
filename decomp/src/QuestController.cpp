@@ -85,7 +85,7 @@ void CQuestController::menuEventOccured(void*, EMENU_TYPE menuType,
     }
 }
 
-long long CQuestController::updateLevelObject(float, Ogre::Camera*,
+bool CQuestController::updateLevelObject(float, Ogre::Camera*,
                                              const Ogre::Vector3&)
 {
     if (m_bFirstUpdate && m_bBroadcastEventsOnLoad)

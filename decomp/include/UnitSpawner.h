@@ -10,6 +10,7 @@ class CBaseUnit;
 class CUnitSpawner : public CShape, public iRandomWeight, public iUnitObserver
 {
 public:
+    void reset();
     void stop();
     bool getParticlesStillVisible();
     virtual ~CUnitSpawner();

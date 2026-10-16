@@ -54,14 +54,16 @@ CSkill* CSkillParser::getSkill(CResourceManager* resourceManager, const std::wst
     if (getSingleton() == NULL)
         return NULL;
 
-    std::wstring upperSkillName = STRINGS::StringUpper(skillName);
-    std::map<std::wstring, CDataGroup*>::iterator it =
-        getSingleton()->m_skills.find(upperSkillName);
+    std::map<std::wstring, CDataGroup*>::iterator it;
+    {
+        std::wstring upperSkillName = STRINGS::StringUpper(skillName);
+        it = getSingleton()->m_skills.find(upperSkillName);
+    }
 
     if (it == getSingleton()->m_skills.end())
         return NULL;
 
-    return new CSkill(reinterpret_cast<CResourceManager*>(this), it->second);
+    return new CSkill(resourceManager, it->second);
 }
 
 void CSkillParser::parseSkills()

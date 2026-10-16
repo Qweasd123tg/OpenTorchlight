@@ -7,7 +7,7 @@
 #include <OgreDataStream.h>
 #include "GameEnums.h"
 
-class SoundData;
+class CSoundData;
 class SoundObject;
 
 namespace FMOD
@@ -25,10 +25,13 @@ public:
     std::wstring m_soundName;
     Ogre::DataStreamPtr m_stream;
     SOUND_TYPE m_soundType;
+    bool m_loop; // +0x3c
     FMOD::Sound* m_pSound;
     unsigned int m_referenceCount;
-    unsigned char m_gap4c[12];
-    SoundData* m_pSoundData;
+    float m_volume; // +0x4c
+    float m_volumeVariance; // +0x50
+    unsigned char m_gap54[4];
+    CSoundData* m_pSoundData;
 };
 
 #endif

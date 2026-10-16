@@ -38,7 +38,6 @@ static std::wstring gRESOURCE_GROUP_NAMES[4] = {
 };
 static TArrayList<std::wstring> g_FileList(10);
 static TArrayList<std::wstring> g_SkillNames(5);
-static unsigned char g_DescriptorController[96];
 static unsigned char g_LayoutToCloneOrControl[48];
 static unsigned char g_MeshFilesByIndex[48];
 static long g_MissilePreloader;

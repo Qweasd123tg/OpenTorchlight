@@ -16,7 +16,7 @@ class CPuzzleRandomizer : public CEditorBaseObject, public iLevelUpdate
 {
 public:
     virtual ~CPuzzleRandomizer();
-    virtual long long updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&);
+    virtual bool updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&);
     void addLevelListener();
     void reset();
     void setActiveInputs(unsigned int);

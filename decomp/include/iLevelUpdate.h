@@ -12,7 +12,7 @@ class iLevelUpdate
 {
 public:
     virtual ~iLevelUpdate();
-    virtual long long updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&) = 0;
+    virtual bool updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&) = 0;
 
     // fields
 };
