@@ -113,7 +113,8 @@ CSoundData* CSoundBankDataInformation::getSoundDataObject(const std::wstring& so
         std::map<unsigned int, std::map<std::wstring, CSoundData*> >::iterator category =
             m_soundsByCategoryIndex.find(categoryID);
 
-        if (category != m_soundsByCategoryIndex.end())
+        if (category == m_soundsByCategoryIndex.end())
+            return NULL;
         {
             std::map<std::wstring, CSoundData*>::iterator sound =
                 category->second.find(soundName);
@@ -128,12 +129,7 @@ CSoundData* CSoundBankDataInformation::getSoundDataObject(const std::wstring& so
 
 unsigned int CSoundBankDataInformation::getCategoryID(const std::wstring& categoryName)
 {
-    for (unsigned int i = 0; i < m_categoryNames.size(); ++i) {
-        if (m_categoryNames[i] == categoryName)
-            return i;
-    }
-
-    return static_cast<unsigned int>(-1);
+    return m_categoryNames.find(categoryName);
 }
 
 CSoundData* CSoundBankDataInformation::getSoundDataObject(const std::wstring& categoryName, const std::wstring& soundName)

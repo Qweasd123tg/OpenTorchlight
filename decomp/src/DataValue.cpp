@@ -97,3 +97,65 @@ std::wstring CDataValue::GetValueTypeAsString()
     default: return L"Not Set";
     }
 }
+
+#include "TRepository.h"
+#include "StringTranslate.h"
+
+const std::wstring& CDataValue::GetDataValueName()
+{
+    const std::wstring* name = &EMPTY_WSTRING;
+    if (m_pRepository != NULL && m_iNameID != static_cast<unsigned int>(-1))
+    {
+        name = &m_pRepository->m_DefaultValue;
+        if (!m_pRepository->m_Values.empty())
+        {
+            std::map<unsigned int, std::wstring>::iterator i = m_pRepository->m_Values.find(m_iNameID);
+            if (i != m_pRepository->m_Values.end())
+                name = &i->second;
+        }
+    }
+    return *name;
+}
+
+const std::wstring& CDataValue::GetValueString(bool translate)
+{
+    if ((m_eType == DATAVALUE_TRANSLATE || m_eType == DATAVALUE_STRING) &&
+        m_pRepository != NULL && m_bStringValue)
+    {
+        if (translate && m_eType == DATAVALUE_TRANSLATE && CStringTranslate::getSinglton() != NULL)
+        {
+            const std::wstring* value = &m_pRepository->m_DefaultValue;
+            if (m_Value.unsigned32 != static_cast<unsigned int>(-1) && !m_pRepository->m_Values.empty())
+            {
+                std::map<unsigned int, std::wstring>::iterator i = m_pRepository->m_Values.find(m_Value.unsigned32);
+                if (i != m_pRepository->m_Values.end())
+                    value = &i->second;
+            }
+            return CStringTranslate::getSinglton()->getTranslateString(*value);
+        }
+        if (m_Value.unsigned32 != static_cast<unsigned int>(-1) && !m_pRepository->m_Values.empty())
+        {
+            std::map<unsigned int, std::wstring>::iterator i = m_pRepository->m_Values.find(m_Value.unsigned32);
+            if (i != m_pRepository->m_Values.end())
+                return i->second;
+        }
+        return m_pRepository->m_DefaultValue;
+    }
+    return EMPTY_WSTRING;
+}
+
+std::wstring CDataValue::GetValueAsString()
+{
+    switch (static_cast<unsigned int>(m_eType))
+    {
+    case 1: return STRINGS::GetValueAsWString(m_Value.signed32);
+    case 2: return STRINGS::GetValueAsWString(m_Value.float32);
+    case 3: return STRINGS::GetValueAsWString(m_Value.float64);
+    case 4: return STRINGS::GetValueAsWString(m_Value.unsigned32);
+    case 5: return GetValueString(false);
+    case 6: return STRINGS::GetValueAsWString(m_Value.boolean);
+    case 7: return STRINGS::GetValueAsWString(m_Value.signed64);
+    case 8: return GetValueString(false);
+    default: return L"";
+    }
+}

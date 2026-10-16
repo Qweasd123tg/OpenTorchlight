@@ -1,3 +1,9 @@
+#include "GenericModel.h"
+#include "AnimationSet.h"
+#include "StringUtilities.h"
+#include "PathController.h"
+#include "Monster.h"
+#include "UnitResourceList.h"
 #include "EmptyStrings.h"
 #include "MonsterDescriptor.h"
 #include "GameEnums.h"
@@ -88,40 +94,19 @@ CMonsterDescriptor::~CMonsterDescriptor()
 std::wstring CMonsterDescriptor::getThemeStringByID(CEditorScene* scene, CEditorBaseObject* object, unsigned int index, void* userData)
 {
     CUnitThemes* themes = CUnitThemes::getSingleton();
-    if (index == 0 || themes->getThemes().size() < index) {
+    if (themes->getThemes().size() < index || index == 0) {
         return EMPTY_WSTRING;
     }
     return themes->getThemes()[index - 1]->getName();
 }
 
-unsigned int CMonsterDescriptor::getThemeIDByString(
-    CEditorScene* scene,
-    CEditorBaseObject* object,
-    const std::wstring& value,
-    void* userData)
+unsigned int CMonsterDescriptor::getThemeIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
 {
     CUnitThemes* themes = CUnitThemes::getSingleton();
-    const unsigned char* list =
-        reinterpret_cast<const unsigned char*>(themes) + 0x18;
-    const unsigned char* data =
-        *reinterpret_cast<const unsigned char* const*>(list);
-    const unsigned int count =
-        *reinterpret_cast<const unsigned int*>(list + 8);
-    const unsigned int capacity =
-        *reinterpret_cast<const unsigned int*>(list + 12);
-
-    for (unsigned int i = 0; i < count; ++i)
-    {
-        const unsigned char* item = data;
-        if (i < capacity)
-            item = data + i * 8;
-
-        const std::wstring* name =
-            reinterpret_cast<const std::wstring*>(item + 0x28);
-        if (*name == value)
-            return i + 1;
+    for (unsigned int index = 0; index < themes->getThemes().size(); ++index) {
+        if (themes->getThemes()[index]->getName() == value)
+            return index + 1;
     }
-
     return 0;
 }
 
@@ -131,4 +116,107 @@ bool CMonsterDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject* object)
     if (level != NULL)
         level->removeCharacter(static_cast<CCharacter*>(object), true);
     return true;
+}
+
+std::wstring CMonsterDescriptor::getPathStringByID(CEditorScene* scene, CEditorBaseObject*, unsigned int index, void*)
+{
+    if (index == 0)
+        return EMPTY_WSTRING;
+    --index;
+    TArrayList<CEditorBaseObject*>* paths = scene->GetObjectsCreatedByADescriptor(L"Pathing");
+    if (paths != NULL) {
+        if (index < paths->size())
+            return static_cast<CPathController*>((*paths)[index])->m_pathName;
+        if (paths->size() != 0)
+            return static_cast<CPathController*>((*paths)[0])->m_pathName;
+    }
+    return EMPTY_WSTRING;
+}
+unsigned int CMonsterDescriptor::getPathIDByString(CEditorScene* scene, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    if (value.empty())
+        return 0;
+    TArrayList<CEditorBaseObject*>* paths = scene->GetObjectsCreatedByADescriptor(L"Pathing");
+    if (paths != NULL) {
+        for (unsigned int index = 0; index < paths->size(); ++index) {
+            if (static_cast<CPathController*>((*paths)[index])->m_pathName == value)
+                return index;
+        }
+    }
+    return 0;
+}
+unsigned int CMonsterDescriptor::getMonsterIDByString(CEditorScene*, CEditorBaseObject* object, const std::wstring& value, void*)
+{
+    CMonster* monster = dynamic_cast<CMonster*>(object);
+    if (monster == NULL || monster->getResourceManager() == NULL)
+        return static_cast<unsigned int>(-1);
+    CResourceManager* resources = monster->getResourceManager();
+    unsigned int index = 0;
+    const std::map<long long, CDataGroup*>* group = resources->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[1]);
+    for (std::map<long long, CDataGroup*>::const_iterator it = group->begin(); it != group->end(); ++it, ++index) {
+        if (it->second->GetDataValue(L"NAME", EMPTY_WSTRING) == value)
+            return index;
+    }
+    group = resources->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[2]);
+    for (std::map<long long, CDataGroup*>::const_iterator it = group->begin(); it != group->end(); ++it, ++index) {
+        if (it->second->GetDataValue(L"NAME", EMPTY_WSTRING) == value)
+            return index;
+    }
+    return 0;
+}
+std::wstring CMonsterDescriptor::getMonsterStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    CMonster* monster = dynamic_cast<CMonster*>(object);
+    if (monster == NULL || monster->getResourceManager() == NULL)
+        return EMPTY_WSTRING;
+    CResourceManager* resources = monster->getResourceManager();
+    const std::map<long long, CDataGroup*>* group = resources->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[1]);
+    std::wstring fallback = EMPTY_WSTRING;
+    std::map<long long, CDataGroup*>::const_iterator it = group->begin();
+    if (it != group->end())
+        fallback = it->second->GetDataValue(L"NAME", L"");
+    for (; it != group->end(); ++it) {
+        if (index == 0)
+            return it->second->GetDataValue(L"NAME", L"");
+        --index;
+    }
+    group = resources->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[2]);
+    it = group->begin();
+    if (it != group->end())
+        fallback = it->second->GetDataValue(L"NAME", L"");
+    for (; it != group->end(); ++it) {
+        if (index == 0)
+            return it->second->GetDataValue(L"NAME", L"");
+        --index;
+    }
+    return fallback;
+}
+
+std::wstring CMonsterDescriptor::GetAnimationStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    CMonster* monster = dynamic_cast<CMonster*>(object);
+    if (monster != NULL) {
+        CGenericModel* model = static_cast<CGenericModel*>(monster->getUnitModel());
+        if (model != NULL && model->m_animationSet != NULL && index != static_cast<unsigned int>(-1) && index < model->m_animationSet->m_lUnknown28.size())
+            return STRINGS::StringConvertToWide(model->m_animationSet->m_lUnknown28[index]);
+    }
+    return EMPTY_WSTRING;
+}
+unsigned int CMonsterDescriptor::GetAnimationIDByString(CEditorScene*, CEditorBaseObject* object, const std::wstring& value, void*)
+{
+    std::string name = STRINGS::StringConvertToNarrow(value.c_str());
+    CMonster* monster = dynamic_cast<CMonster*>(object);
+    if (monster != NULL) {
+        CGenericModel* model = static_cast<CGenericModel*>(monster->getUnitModel());
+        if (model != NULL && model->m_animationSet != NULL) {
+            const std::vector<std::string>& names = model->m_animationSet->m_lUnknown28;
+            for (unsigned int index = 0; index < names.size(); ++index) {
+                if (name == names[index])
+                    return index;
+            }
+            return 0;
+        }
+        return 0;
+    }
+    return 0;
 }

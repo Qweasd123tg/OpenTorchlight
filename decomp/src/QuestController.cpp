@@ -111,7 +111,7 @@ CQuestController::CQuestController(CResourceManager* resourceManager)
       m_pResourceManager(resourceManager),
       m_pDataGroup(NULL),
       m_unit(),
-      m_sCategory(*reinterpret_cast<const std::wstring*>(gRESOURCE_GROUP_NAMES + 8)),
+      m_sCategory(gRESOURCE_GROUP_NAMES[1]),
       m_sUnitInteractWith(),
       m_quest(),
       m_sQuestName(EMPTY_WSTRING),

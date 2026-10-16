@@ -27,8 +27,7 @@ CSkillController::CSkillController(CResourceManager* resourceManager)
     : CPositionableObject(resourceManager, NULL),
       m_pResourceManager(resourceManager), m_pUnitInteractDataGroup(NULL),
       m_pRunicCore(NULL), m_iRunicCoreSafePointerId(-1),
-      m_sCategory(*reinterpret_cast<const std::wstring *>(
-          gRESOURCE_GROUP_NAMES + 8)),
+      m_sCategory(gRESOURCE_GROUP_NAMES[1]),
       m_sUnitInteractWith(EMPTY_WSTRING), m_sSkillName(EMPTY_WSTRING),
       m_pSecondaryRunicCore(NULL),
       m_iSecondaryRunicCoreSafePointerId(-1), m_bLearnSkillOnStart(true),

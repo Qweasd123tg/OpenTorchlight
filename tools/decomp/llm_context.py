@@ -39,6 +39,7 @@ class Declaration:
     text: str
     scopes: tuple[tuple[str, str], ...]
     array_width: int = 0
+    int_array_values: tuple[int, ...] | None = None
 
 
 @dataclass(frozen=True)
@@ -85,10 +86,12 @@ def _scan(text):
         if token == "{":
             ns = re.fullmatch(r"namespace\s+(\w+)", head)
             cls = re.fullmatch(r"(?:class|struct)\s+(?:__attribute__\(\(\w+\)\)\s+)?(\w+)\s*(?::[^{};]*)?", head)
-            array = re.fullmatch(r"(?:static\s+)?const\s+std::(?:w?string)\s+(\w+)\s*\[\s*(?:[0-9]+)?\s*\]\s*=", head)
+            array = re.fullmatch(r"(?:static\s+)?(?:const\s+)?std::(?:w?string)\s+(\w+)\s*\[\s*(?:[0-9]+)?\s*\]\s*=", head)
+            integer_array = re.fullmatch(r"static\s+const\s+int\s+(\w+)\s*\[\s*([1-9][0-9]{0,3})\s*\]\s*=", head)
             kind, name = (("namespace", ns[1]) if ns else
                           ("class", cls[1]) if cls else
-                          ("string_array", array[1]) if array else ("body", ""))
+                          ("string_array", array[1]) if array else
+                          ("int_array", integer_array[1]) if integer_array else ("body", ""))
             scopes = tuple((k, n) for k, n, *_ in stack)
             stack.append((kind, name, start, i, scopes))
             start = i + 1
@@ -107,6 +110,23 @@ def _scan(text):
                         declaration = text[beginning + first.start():i + 1 + tail.end()].strip()
                         qualified = "::".join([n for _, n in scopes] + [name])
                         declarations.append(Declaration(qualified, "data", declaration, scopes, 0))
+                if kind == "int_array" and all(k == "namespace" for k, _ in scopes):
+                    # Deliberately only explicit decimal int32 values and extent.
+                    # Keep source/linkage verbatim; ELF evidence is checked at use.
+                    literal = r"-?(?:0|[1-9][0-9]*)"
+                    values = text[opening + 1:i]
+                    tail = re.match(r"\s*;", masked[i + 1:])
+                    extent = int(re.search(r"\[\s*([1-9][0-9]{0,3})\s*\]", masked[beginning:opening])[1])
+                    if (tail and extent <= 4096 and len(values) <= 65536
+                            and re.fullmatch(r"\s*" + literal + r"(?:\s*,\s*" + literal + r")*\s*,?\s*", values)):
+                        tokens = re.findall(literal, values)
+                        if len(tokens) == extent and all(len(t.lstrip("-")) <= 10 for t in tokens):
+                            numbers = tuple(int(t) for t in tokens)
+                            if all(-(1 << 31) <= n < (1 << 31) for n in numbers):
+                                first = re.search(r"\S", masked[beginning:opening])
+                                declaration = text[beginning + first.start():i + 1 + tail.end()].strip()
+                                qualified = "::".join([n for _, n in scopes] + [name])
+                                declarations.append(Declaration(qualified, "data", declaration, scopes, 0, numbers))
                 if kind == "class":
                     end = i + 1
                     semicolon = re.match(r"\s*;", masked[end:])
@@ -127,7 +147,10 @@ def _scan(text):
                 original = text[start + first.start():i + 1].strip() if first else ""
                 original = re.sub(r"^(?:public|protected|private)\s*:\s*", "", original)
                 fn = re.search(r"(?<![\w:])(~?\w+)\s*\(", clean)
-                if fn and "=" not in clean[:fn.start()] and not clean.startswith(("typedef ", "using ")):
+                list_object = re.fullmatch(r"(?:static\s+)?TArrayList\s*<\s*std::(?:w?string)\s*>\s+(\w+)\s*\(\s*[1-9][0-9]*\s*\)", clean)
+                if list_object and all(k == "namespace" for k, _ in scopes):
+                    name, kind, width = list_object[1], "data", 0
+                elif fn and "=" not in clean[:fn.start()] and not clean.startswith(("typedef ", "using ")):
                     name, kind, width = fn[1], "function", 0
                 else:
                     var = re.fullmatch(r"(.+?)\b((?:\w+::)*\w+)\s*((?:\[[^\]]*\]\s*)*)", clean)
@@ -880,15 +903,24 @@ class ContextIndex:
         return {header}
 
     def _pinned_destructor_headers(self, callee, scope):
-        """Seven reviewed existing template bodies, never a generic exemption.
+        """Ten reviewed existing template bodies, never a generic exemption.
 
         Original ASM: wstring delete[] destroys elements using the array cookie,
         then frees and clears data; safe pointers unregister and reset both fields.
-        Quest/BaseUnit/editor pointer arrays free only the array storage and clear its pointer.
+        Quest/BaseUnit/editor/level pointer arrays free only the array storage and clear its pointer.
         Only the reviewed address, size, D1/D2 aliases and unmodified source count.
         """
         wide = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
         reviewed = {
+            "TArrayList<CChunk*>":
+                (0x97cb30, 26, "_ZN10TArrayListIP6CChunkE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<CLevelLayout*>":
+                (0x97cb50, 26, "_ZN10TArrayListIP12CLevelLayoutE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<CChunkType*>":
+                (0x97cb70, 26, "_ZN10TArrayListIP10CChunkTypeE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<CEditorBaseObject*>":
                 (0x740b90, 26, "_ZN10TArrayListIP17CEditorBaseObjectE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
@@ -1151,6 +1183,18 @@ class ContextIndex:
                 if not matches:
                     gaps.append(f"No existing header declaration for referenced data {name} ({address:#x})")
                 for header, declaration in matches:
+                    if declaration.int_array_values is not None:
+                        expected = b"".join(n.to_bytes(4, "little", signed=True)
+                                            for n in declaration.int_array_values)
+                        base = _address(obj["address"])
+                        section, available = self._available(base, [obj])
+                        identity = (base, obj.get("name", ""), obj.get("size"), owner)
+                        if (obj.get("bind") != "local" or identity not in self.local_object_names
+                                or obj.get("size") != len(expected) or section is None
+                                or available < len(expected)
+                                or self._read_bytes(base, len(expected)) != expected):
+                            gaps.append(f"Literal int array {name} lacks exact local ELF identity/size/read-only bytes")
+                            continue
                     if declaration.array_width:
                         widths.add(declaration.array_width)
                     if any(k == "class" for k, _ in declaration.scopes):

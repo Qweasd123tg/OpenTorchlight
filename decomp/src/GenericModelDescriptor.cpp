@@ -1,3 +1,5 @@
+#include "AnimationSet.h"
+#include "StringUtilities.h"
 #include "EmptyStrings.h"
 #include "GenericModelDescriptor.h"
 #include "GameEnums.h"
@@ -67,4 +69,12 @@ void CGenericModelDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject* o
     CGenericModel* model = dynamic_cast<CGenericModel*>(object);
     if (model)
         model->setQueryMask(static_cast<OGRE_UTILITIES::EQUERYMASK>(2));
+}
+
+std::wstring CGenericModelDescriptor::GetAnimationStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    CGenericModel* model = dynamic_cast<CGenericModel*>(object);
+    if (model != NULL && model->m_animationSet != NULL && index != static_cast<unsigned int>(-1) && index < model->m_animationSet->m_lUnknown28.size())
+        return STRINGS::StringConvertToWide(model->m_animationSet->m_lUnknown28[index]);
+    return EMPTY_WSTRING;
 }

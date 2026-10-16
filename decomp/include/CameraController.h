@@ -24,7 +24,7 @@ public:
 
     // fields
     CResourceManager* m_pResourceManager;
-    void* m_pCategory;
+    std::wstring m_pCategory;
     std::wstring m_sUnitInteractWith;
     long long m_iUnknown118;
     CRunicCore* m_pRunicCore;

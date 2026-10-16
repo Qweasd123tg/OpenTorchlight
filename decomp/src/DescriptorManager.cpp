@@ -73,3 +73,20 @@ int CDescriptorManager::loadDescriptorObjects(CDataGroup* group, CDescriptorLoad
         count += getDescriptorVector()[i]->loadObjects(group, configuration);
     return count;
 }
+
+#include "DescriptorController.h"
+
+CDescriptor* CDescriptorManager::GetDescriptor(const wchar_t* name, bool createIfMissing)
+{
+    std::map<std::wstring, unsigned int>::iterator i = m_descriptorIndices.find(name);
+    if (i != m_descriptorIndices.end())
+        return GetDescriptor(i->second);
+    if (createIfMissing)
+    {
+        CDescriptor* descriptor = CDescriptorController::getNewDescriptorByName(name);
+        if (descriptor != NULL)
+            AddDescriptor(descriptor);
+        return descriptor;
+    }
+    return NULL;
+}

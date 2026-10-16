@@ -1,3 +1,5 @@
+#include "SkillParser.h"
+#include "UnitResourceList.h"
 #include "EmptyStrings.h"
 #include "SkillControllerDescriptor.h"
 #include "GameEnums.h"
@@ -89,4 +91,70 @@ void CSkillControllerDescriptor::update(float param_1)
 CEditorBaseObject* CSkillControllerDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CSkillController(scene->getResourceManager());
+}
+
+std::wstring CSkillControllerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    if (index == 0)
+        return gRESOURCE_GROUP_NAMES[1];
+    if (index == 2)
+        return gRESOURCE_GROUP_NAMES[2];
+    return gRESOURCE_GROUP_NAMES[0];
+}
+
+unsigned int CSkillControllerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    if (value == gRESOURCE_GROUP_NAMES[0])
+        return 1;
+    if (value == gRESOURCE_GROUP_NAMES[2])
+        return 2;
+    return 0;
+}
+
+std::wstring CSkillControllerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    if (index == 0)
+        return EMPTY_WSTRING;
+    CSkillController* controller = dynamic_cast<CSkillController*>(object);
+    if (controller == NULL || controller->m_pResourceManager == NULL)
+        return EMPTY_WSTRING;
+    const std::map<long long, CDataGroup*>* group;
+    if (std::wstring(controller->m_sCategory) == gRESOURCE_GROUP_NAMES[1])
+        group = controller->m_pResourceManager->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[1]);
+    else if (std::wstring(controller->m_sCategory) == gRESOURCE_GROUP_NAMES[0])
+        group = controller->m_pResourceManager->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[0]);
+    else if (std::wstring(controller->m_sCategory) == gRESOURCE_GROUP_NAMES[2])
+        group = controller->m_pResourceManager->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[2]);
+    else
+        return EMPTY_WSTRING;
+    for (std::map<long long, CDataGroup*>::const_iterator it = group->begin(); it != group->end(); ++it) {
+        if (--index == 0)
+            return it->second->GetDataValue(L"NAME", EMPTY_WSTRING);
+    }
+    return EMPTY_WSTRING;
+}
+
+std::wstring CSkillControllerDescriptor::getSkillStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    if (g_SkillNames.size() == 0) {
+        CSkillParser::getSingleton();
+        CSkillParser::getSkillNames(g_SkillNames);
+    }
+    if (index < g_SkillNames.size())
+        return g_SkillNames[index];
+    if (g_SkillNames.size() != 0)
+        return g_SkillNames[0];
+    return EMPTY_WSTRING;
+}
+unsigned int CSkillControllerDescriptor::getSkillIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    if (g_SkillNames.size() == 0) {
+        CSkillParser::getSingleton();
+        CSkillParser::getSkillNames(g_SkillNames);
+    }
+    for (unsigned int index = 0; index < g_SkillNames.size(); ++index) {
+        if (g_SkillNames[index] == value)
+            return index;
+    }
+    return 0;
 }

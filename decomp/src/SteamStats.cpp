@@ -36,20 +36,6 @@ float CSteamStats::getPlayerStatFloat(ESTATS stat)
     return -1.0f;
 }
 
-void CSteamStats::statModified(ESTATS stat, UNIONDATA32BIT value)
-{
-    for (unsigned int i = 0; i < m_pendingStatChanges.size(); ++i) {
-        if (m_pendingStatChanges[i].stat == stat) {
-            return;
-        }
-    }
-
-    SStatChange change;
-    change.stat = stat;
-    change.value = value;
-    m_pendingStatChanges.add(change);
-}
-
 void CSteamStats::addStatListener(ESTATS stat, iStatListener* listener)
 {
     TStatListenerMap::iterator i = m_statListeners.find(stat);
@@ -123,4 +109,58 @@ void CSteamStats::checkForLocalUpdates(float elapsedTime)
         if (m_pendingStatChanges.size() != 0)
             updateStatListeners();
     }
+}
+
+struct StatDefinition
+{
+    int serviceID;
+    int type;
+    unsigned char rest[16];
+};
+
+int CSteamStats::getStatInt(ESTATS stat)
+{
+    if (static_cast<unsigned int>(stat) <= 30 &&
+        reinterpret_cast<const StatDefinition*>(g_strStatDefines)[stat].type == 0)
+        return m_statValues[stat];
+    return -1;
+}
+
+float CSteamStats::getStatFloat(ESTATS stat)
+{
+    if (static_cast<unsigned int>(stat) < m_statValues.size() &&
+        reinterpret_cast<const StatDefinition*>(g_strStatDefines)[stat].type == 1)
+    {
+        UNIONDATA32BIT value;
+        value.m_iValue = m_statValues[stat];
+        return value.m_fValue;
+    }
+    return -1.0f;
+}
+
+int CSteamStats::getPlayerStatInt(ESTATS stat)
+{
+    int value = -1;
+    if (m_pPlayer != NULL)
+    {
+        if (stat == static_cast<ESTATS>(28))
+            value = m_pPlayer->m_journalStats[5];
+        else if (stat == static_cast<ESTATS>(29))
+            value = m_pPlayer->getGold();
+    }
+    return value;
+}
+
+void CSteamStats::statModified(ESTATS stat, UNIONDATA32BIT value)
+{
+    for (unsigned int i = 0; i < m_pendingStatChanges.size(); ++i) {
+        if (m_pendingStatChanges[i].stat == stat) {
+            return;
+        }
+    }
+
+    SStatChange change;
+    change.stat = stat;
+    change.value = value;
+    m_pendingStatChanges.add(change);
 }

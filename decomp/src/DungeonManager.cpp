@@ -25,3 +25,15 @@ CDungeonManager::CDungeonManager(std::wstring path)
     g_pDungeonManager = this;
     reload();
 }
+
+#include "StringUtilities.h"
+#include "Dungeon.h"
+
+CDungeon* CDungeonManager::getDungeonByName(std::wstring name)
+{
+    name = STRINGS::StringUpper(name);
+    for (unsigned int i = 0; i < m_lDungeons.size(); ++i)
+        if (m_lDungeons[i]->m_sName == name)
+            return m_lDungeons[i];
+    return NULL;
+}

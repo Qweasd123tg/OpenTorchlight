@@ -31,6 +31,8 @@ public:
     const std::wstring& GetValueString(bool translate);
     EDATAVALUETYPES GetValueType() const { return m_eType; }
 private:
+    friend class CBinaryStyle;
+    friend class COgreResourceFile;
     friend struct SmallmatchDataProbe; // compile-only layout/type assertions
     bool m_bStringValue;
     unsigned char m_Data11[7];

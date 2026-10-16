@@ -179,3 +179,18 @@ CCollisionList::~CCollisionList()
 {
 }
 
+
+
+unsigned int CCollisionList::getMemoryUsage()
+{
+    unsigned int vectors = m_FaceMinBounds.size();
+    vectors += m_FaceMaxBounds.size();
+    vectors += m_Vertices.size();
+    vectors += m_Colors.size();
+    vectors += m_Normals.size();
+    unsigned int indices = m_IndicesA.size();
+    indices += m_IndicesB.size();
+    indices += m_IndicesC.size();
+    indices += m_Materials.size();
+    return vectors * sizeof(Ogre::Vector3) + indices * sizeof(unsigned int) + 24;
+}

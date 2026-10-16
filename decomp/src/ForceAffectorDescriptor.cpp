@@ -23,3 +23,12 @@ std::wstring CForceAffectorDescriptor::GetForceApplicationStringByID(CEditorScen
 
     return reinterpret_cast<const std::wstring*>(gPARTICLE_AFFECTOR_FORCE_APPLICATION_TYPES)[index];
 }
+
+unsigned int CForceAffectorDescriptor::GetForceApplicationIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    for (unsigned int index = 0; index < 2; ++index) {
+        if (value == gPARTICLE_AFFECTOR_FORCE_APPLICATION_TYPES[index])
+            return index;
+    }
+    return 0;
+}

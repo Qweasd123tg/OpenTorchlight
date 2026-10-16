@@ -249,3 +249,12 @@ void CEditorObjectManager::EditorObjectCreated(CEditorBaseObject* object)
         m_CreatedObjects.add(object);
     }
 }
+
+#include "ObjectControl3D.h"
+
+CEditorBaseObject* CEditorObjectManager::getObjectUnderMouse()
+{
+    if (m_pObjectControl != NULL)
+        return m_pObjectControl->getObjectUnderMouse();
+    return NULL;
+}

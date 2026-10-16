@@ -19,6 +19,7 @@ unsigned int LinuxMapVirtual2Scancode(unsigned int key);
 
 namespace LinuxUtils
 {
+    int GetIntLine(const std::string& path, const std::string& key);
     std::wstring GetHomeDir();
     int GetPhysicalRAMSize();
     int GetCPUFrequency();

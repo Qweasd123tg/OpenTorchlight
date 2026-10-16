@@ -707,6 +707,18 @@ class PacketContextTests(TestCase):
         self.assertIn(declaration, result.text)
         self.assertIn("namespace LABELS", result.text)
 
+    def test_mutable_literal_string_array_keeps_initializer_and_owner_checks(self):
+        declaration = 'static std::wstring labels[3] = {L"Fast", L"Box", L""};'
+        self.write_header("Labels.h", declaration)
+        self.db["globals"] = [object_symbol(0x6000, "labels", size=24,
+                                              bind="local", file="Achievement.cpp")]
+        result = self.index().build(self.target, "1000: mov $0x6008,%rax").require_complete()
+        self.assertIn(declaration, result.text)
+        self.assertEqual(self.image.reads, [])
+        self.db["globals"][0]["file"] = "Other.cpp"
+        with self.assertRaises(ContextError):
+            self.index().build(self.target, "1000: mov $0x6008,%rax").require_complete()
+
     def test_initialized_string_array_does_not_infer_nonliteral_expressions(self):
         for initializer in ('makeName()', 'SOME_MACRO', '"one" + suffix',
                             '{"nested"}', '"one", call()', '"adjacent" "literal"', ''):
@@ -735,6 +747,128 @@ class PacketContextTests(TestCase):
         result = self.index().build(self.target, "1000: mov $0x6000,%rax").require_complete()
         self.assertIn("extern int other;", result.text)
         self.assertNotIn('icons[]', result.text)
+
+    def integer_array(self, declaration=None, *, namespace=False):
+        declaration = declaration or "static const int slots[5] = {4, 2, 6, 3, 5};"
+        source = "namespace W { " + declaration + " }" if namespace else declaration
+        self.write_header("Slots.h", source)
+        raw = "_ZN1WL5slotsE" if namespace else "_ZL5slots"
+        obj = dict(object_symbol(0x5000, raw, size=20, bind="local", file="Achievement.cpp"),
+                   demangled="W::slots" if namespace else "slots")
+        self.db["globals"] = [obj]
+        data = b"".join(n.to_bytes(4, "little", signed=True) for n in (4, 2, 6, 3, 5))
+        self.image = FakeImage(section(".rodata", 0x5000, data))
+        self.image.symbols = [SimpleNamespace(name=raw, value=0x5000, size=20,
+                                              bind=0, type=1, defined=True, file="Achievement.cpp")]
+        return declaration
+
+    def test_literal_int_array_preserves_complete_internal_declaration(self):
+        declaration = self.integer_array()
+        result = self.index().build(self.target, "1000: mov $0x5008,%rax").require_complete()
+        self.assertIn(declaration, result.text)
+        self.assertNotIn("extern", result.text)
+        self.assertNotIn("NUL-terminated", result.text)
+
+    def test_literal_int_array_namespace_and_signed_boundaries(self):
+        declaration = self.integer_array("static const int slots[5] = {-2147483648, 2147483647, -1, 0, 5,};", namespace=True)
+        data = b"".join(n.to_bytes(4, "little", signed=True) for n in (-2147483648, 2147483647, -1, 0, 5))
+        self.image.sections[0].contents = data
+        result = self.index().build(self.target, "1000: mov $0x5000,%rax").require_complete()
+        self.assertIn(declaration, result.text)
+        self.assertIn("namespace W", result.text)
+
+    def test_literal_int_array_rejects_unknown_or_malformed_declarations(self):
+        for declaration in (
+                "static const int slots[5] = {4, 2, 6, 3};",
+                "static const int slots[5] = {4, 2, 6, 3, 5, 7};",
+                "static const int slots[5] = {4, 2, UNKNOWN, 3, 5};",
+                "static const int slots[5] = {4, 2, call(), 3, 5};",
+                "static const int slots[5] = {4, 2, 3+3, 3, 5};",
+                "static const int slots[5] = {4, 2, {6}, 3, 5};",
+                "static const int slots[5] = {4, 2, 06, 3, 5};",
+                "static const int slots[5] = {4, 2, 0x6, 3, 5};",
+                "static const int slots[5] = {4, 2, 6u, 3, 5};",
+                'static const int slots[5] = {4, 2, "6", 3, 5};',
+                "static const int slots[5] = {4, 2, 2147483648, 3, 5};",
+                "static const int slots[5] = {4, 2, -2147483649, 3, 5};",
+                "static const int slots[5] = {4, 2, " + "9" * 5000 + ", 3, 5};",
+                "static const int slots[] = {4, 2, 6, 3, 5};",
+                "static const int slots[SIZE] = {4, 2, 6, 3, 5};",
+                "static const int slots[0] = {};",
+                "static const int slots[5000] = {4, 2, 6, 3, 5};",
+                "static const int slots[5] = {4, 2, 6, 3, 5}, other;",
+                "static int slots[5] = {4, 2, 6, 3, 5};",
+                "extern const int slots[5] = {4, 2, 6, 3, 5};",
+                "static const unsigned int slots[5] = {4, 2, 6, 3, 5};",
+                "static const int slots[5] = {4, 2, 6, 3, 5}"):
+            with self.subTest(declaration=declaration[:100]):
+                self.integer_array(declaration)
+                with self.assertRaises(ContextError):
+                    self.index().build(self.target, "1000: mov $0x5000,%rax").require_complete()
+
+    def test_literal_int_array_rejects_wrong_elf_or_db_evidence(self):
+        for change in ("bytes", "db_size", "elf_size", "db_binding", "elf_binding", "elf_type",
+                       "undefined", "missing_symbol", "elf_name", "elf_address", "elf_owner",
+                       "db_owner", "missing_owner", "writable", "executable", "bss", "truncated"):
+            with self.subTest(change=change):
+                self.integer_array()
+                symbol, obj, sec = self.image.symbols[0], self.db["globals"][0], self.image.sections[0]
+                if change == "bytes": sec.contents = b"\0" * 20
+                elif change == "db_size": obj["size"] = 24
+                elif change == "elf_size": symbol.size = 24
+                elif change == "db_binding": obj["bind"] = "global"
+                elif change == "elf_binding": symbol.bind = 1
+                elif change == "elf_type": symbol.type = 2
+                elif change == "undefined": symbol.defined = False
+                elif change == "missing_symbol": self.image.symbols = []
+                elif change == "elf_name": symbol.name = "_other"
+                elif change == "elf_address": symbol.value += 4
+                elif change == "elf_owner": symbol.file = "Other.cpp"
+                elif change == "db_owner": obj["file"] = "Other.cpp"
+                elif change == "missing_owner": obj["file"] = None
+                elif change == "writable": sec.flags = 3
+                elif change == "executable": sec.flags = 6
+                elif change == "bss": sec.type = 8
+                elif change == "truncated": sec.size = 16
+                with self.assertRaises(ContextError):
+                    self.index().build(self.target, "1000: mov $0x5000,%rax").require_complete()
+
+    def test_literal_int_array_rejects_body_class_anonymous_scope(self):
+        for wrapper in ("void hidden() { %s }", "class Hidden { %s };", "namespace { %s }"):
+            with self.subTest(wrapper=wrapper):
+                declaration = self.integer_array()
+                self.write_header("Slots.h", wrapper % declaration)
+                with self.assertRaises(ContextError):
+                    self.index().build(self.target, "1000: mov $0x5000,%rax").require_complete()
+
+    def test_literal_int_array_keeps_following_declaration_and_unrelated_gap(self):
+        declaration = self.integer_array()
+        self.write_header("Slots.h", declaration + " extern int other;")
+        self.db["globals"].extend([object_symbol(0x6000, "other", size=4), object_symbol(0x7000, "missing", size=4)])
+        result = self.index().build(self.target, "1000: mov $0x5000,%rax\n1005: mov $0x6000,%rax\n100a: mov $0x7000,%rax")
+        self.assertIn(declaration, result.text)
+        self.assertIn("extern int other;", result.text)
+        self.assertEqual(len(result.gaps), 1)
+        self.assertIn("missing", result.gaps[0])
+    def test_string_list_literal_growth_is_existing_data_not_function(self):
+        declaration = 'static TArrayList<std::wstring> names(10);'
+        self.write_header("Names.h", declaration)
+        self.db["globals"] = [object_symbol(0x6000, "names", size=24, bind="local", file="Achievement.cpp")]
+        result = self.index().build(self.target, "1000: mov $0x6008,%rax").require_complete()
+        self.assertIn(declaration, result.text)
+        self.assertEqual(self.image.reads, [])
+        self.db["globals"][0]["file"] = "Other.cpp"
+        with self.assertRaises(ContextError):
+            self.index().build(self.target, "1000: mov $0x6008,%rax").require_complete()
+
+    def test_string_list_does_not_promote_function_macro_or_local_storage(self):
+        self.db["globals"] = [object_symbol(0x6000, "names", size=24)]
+        for declaration in ('TArrayList<std::wstring> names(unsigned int growth);',
+                            'static TArrayList<std::wstring> names(GROWTH);',
+                            'void f() { static TArrayList<std::wstring> names(10); }'):
+            self.write_header("Names.h", declaration)
+            with self.subTest(declaration=declaration), self.assertRaises(ContextError):
+                self.index().build(self.target, "1000: mov $0x6008,%rax").require_complete()
 
     def sdk_header(self, name, source):
         directory = self.root / "third_party/cegui-0.6.2/include"
@@ -1190,9 +1324,12 @@ class PacketContextTests(TestCase):
             scope = "TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >"
             address, size = 0x5f8e90, 155
             prefix, method = "_ZN10TArrayListISbIwSt11char_traitsIwESaIwEEE", "~TArrayList"
-        elif variant in ("quest_dialog", "quest_unit_arrays", "base_unit", "editor_object"):
+        elif variant in ("quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             f = self.window_array()
             scope, address, prefix = {
+                "chunk": ("TArrayList<CChunk*>", 0x97cb30, "_ZN10TArrayListIP6CChunkE"),
+                "level_layout": ("TArrayList<CLevelLayout*>", 0x97cb50, "_ZN10TArrayListIP12CLevelLayoutE"),
+                "chunk_type": ("TArrayList<CChunkType*>", 0x97cb70, "_ZN10TArrayListIP10CChunkTypeE"),
                 "editor_object": ("TArrayList<CEditorBaseObject*>", 0x740b90, "_ZN10TArrayListIP17CEditorBaseObjectE"),
                 "base_unit": ("TArrayList<CBaseUnit*>", 0xd49940, "_ZN10TArrayListIP9CBaseUnitE"),
                 "quest_dialog": ("TArrayList<CQuestDialog*>", 0xd1d3f0, "_ZN10TArrayListIP12CQuestDialogE"),
@@ -1213,11 +1350,11 @@ class PacketContextTests(TestCase):
         return f
 
     def test_pinned_destructors_supply_existing_headers(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 result = self.index().build(self.target, "1000: call " + f["address"]).require_complete()
-                expected = ("TArrayList.h",) if variant in ("wstring", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object") else ("Node.h", "SafePointer.h")
+                expected = ("TArrayList.h",) if variant in ("wstring", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type") else ("Node.h", "SafePointer.h")
                 self.assertEqual(result.headers, expected)
                 self.assertIn("No specialization or prototype synthesized", result.text)
 
@@ -1245,6 +1382,20 @@ class PacketContextTests(TestCase):
         self.assertIn(body.decode(), result.text)
         self.assertIn("No specialization or prototype synthesized", result.text)
 
+    def test_level_array_destructors_use_real_pinned_header(self):
+        body = (Path(__file__).resolve().parents[2] / "decomp/include/TArrayList.h").read_bytes()
+        digest = "e45608b683e95c9fb0a5eb0129bb99c3d09826270d14b06cf1f407a35208b4be"
+        self.assertEqual(hashlib.sha256(body).hexdigest(), digest)
+        for variant in ("chunk", "level_layout", "chunk_type"):
+            with self.subTest(variant=variant):
+                f = self.pinned_destructor(variant)
+                (self.include / "TArrayList.h").write_bytes(body)
+                with mock.patch.object(ContextIndex, "WINDOW_ARRAY_HEADER_SHA256", digest):
+                    result = self.index().build(self.target, "1000: call " + f["address"]).require_complete()
+                self.assertEqual(result.headers, ("TArrayList.h",))
+                self.assertIn(body.decode(), result.text)
+                self.assertIn("No specialization or prototype synthesized", result.text)
+
     def test_base_unit_pointer_shape_is_not_generic_template_permission(self):
         for scope, prefix in (("TArrayList<CBaseUnit const*>", "_ZN10TArrayListIPK9CBaseUnitE"),
                               ("TArrayList<CBaseUnit**>", "_ZN10TArrayListIPP9CBaseUnitE"),
@@ -1263,7 +1414,7 @@ class PacketContextTests(TestCase):
         mutations = {"kind": "function", "bind": ["global"], "method": "clear", "params": "int",
                      "cv": "const", "mangled": "_fake", "names": ["_fake"], "qualified": "Other::~Other",
                      "scope": "TArrayList<CNode*>", "size": 99, "address": "0x2222"}
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             for field, value in mutations.items():
                 with self.subTest(variant=variant, field=field):
                     f = self.pinned_destructor(variant); address = f["address"]
@@ -1271,7 +1422,7 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + address).gaps)
 
     def test_pinned_destructors_require_both_weak_elf_aliases(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             for change in ("absent", "name", "size", "address", "binding", "type", "undefined", "D0"):
                 with self.subTest(variant=variant, change=change):
                     f = self.pinned_destructor(variant); symbol = self.image.symbols[1]
@@ -1288,12 +1439,12 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_reject_coherent_unreviewed_instantiations(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 if variant == "wstring":
                     scope, prefix = "TArrayList<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >", "_ZN10TArrayListISsE"
-                elif variant in ("quest_dialog", "quest_unit_arrays", "base_unit", "editor_object"):
+                elif variant in ("quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
                     scope, prefix = "TArrayList<CQuestUnitData*>", "_ZN10TArrayListIP14CQuestUnitDataE"
                 else:
                     scope, prefix = "TSafePointer<CNode>", "_ZN12TSafePointerI5CNodeE"
@@ -1305,10 +1456,10 @@ class PacketContextTests(TestCase):
                 self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_reject_changed_template(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
-                header = "TArrayList.h" if variant in ("wstring", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object") else "SafePointer.h"
+                header = "TArrayList.h" if variant in ("wstring", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type") else "SafePointer.h"
                 with (self.include/header).open("a") as out: out.write("// changed\n")
                 self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
@@ -1325,7 +1476,7 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_do_not_hide_unknown_callee(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object"):
+        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 self.add_function(function(0x3000, "CUnrelated", "missing", tu=2))
@@ -1334,7 +1485,7 @@ class PacketContextTests(TestCase):
                 self.assertIn("CUnrelated::missing", result.gaps[0])
 
     def test_quest_array_destructors_require_exact_header_and_snapshot(self):
-        for variant in ("quest_dialog", "quest_unit_arrays", "base_unit", "editor_object"):
+        for variant in ("quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             for change in ("missing", "renamed", "body", "hash", "snapshot"):
                 with self.subTest(variant=variant, change=change):
                     f = self.pinned_destructor(variant)

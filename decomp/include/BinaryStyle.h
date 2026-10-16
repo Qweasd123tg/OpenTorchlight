@@ -2,6 +2,8 @@
 #define BINARYSTYLE_H
 
 #include <string>
+#include <fstream>
+#include <map>
 
 class CDataGroup;
 class CTimerStatics;
@@ -18,6 +20,11 @@ public:
 class CBinaryStyle : public iDataFileSaveAndLoad
 {
 public:
+    int Get32BitData(std::basic_ifstream<char, std::char_traits<char> >& stream);
+    long long Get64BitData(std::basic_ifstream<char, std::char_traits<char> >& stream);
+    std::wstring GetWChar16ArrayAsString(std::basic_ifstream<char, std::char_traits<char> >& stream, unsigned int length);
+    void getStringIndexs(CDataGroup* group, std::map<unsigned int, bool>& indexes);
+
     CBinaryStyle();
     virtual ~CBinaryStyle();
     virtual void SaveDataGroupToFile(const std::wstring& file, CDataGroup* group);

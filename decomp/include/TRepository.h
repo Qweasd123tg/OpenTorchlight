@@ -23,6 +23,8 @@ public:
     }
 
 private:
+    friend class CDataGroup;
+    friend class CDataValue;
     unsigned int m_iNextID;
     std::map<unsigned int, T> m_Values;
     std::map<T, unsigned int> m_IDs;

@@ -81,6 +81,7 @@ public:
     void updateDungeonTracking(std::wstring name, int depth);
 
 private:
+    friend class CSteamStats;
     unsigned char m_Padding778[0x8];
     long long m_itemLinks[2]; // +0x780
     unsigned char m_Padding790;

@@ -104,3 +104,10 @@ void CMusicObject::setMusicFile(std::wstring musicFile)
 
     m_sPlayingMusicFile = m_sMusicFile;
 }
+
+bool CMusicObject::getIsPlaying()
+{
+    if (m_pSoundManager != NULL)
+        return m_sPlayingMusicFile == m_pSoundManager->getMusicFilePlaying();
+    return false;
+}

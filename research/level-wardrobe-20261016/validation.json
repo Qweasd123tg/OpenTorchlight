@@ -1,0 +1,236 @@
+{
+  "base_commit": "1007609d7cdeea56f01016babb5ffa6f28a596f9",
+  "command": "python3 -B tools/decomp/check.py",
+  "result": "PASS",
+  "exit_code": 0,
+  "tests": 1151,
+  "failed": 0,
+  "elapsed_seconds": 660.207,
+  "selftest_seconds": 549.499,
+  "hybrid_build_seconds": 54.399,
+  "environment": {
+    "OTL_SELFTEST_SHARDS": "60",
+    "OTL_BUILD_JOBS": "4",
+    "OTL_COMPARE_JOBS": "4",
+    "OTL_SELFTEST_TIMEOUT": "1800",
+    "OTL_COMPILER_SLOTS": "4",
+    "OTL_SELFTEST_JOBS": "6",
+    "OTL_JOBS": "4",
+    "OTL_SELFTEST_SLOTS": "6"
+  },
+  "game_functions": 5247,
+  "accepted_before_reported": 3393,
+  "accepted_after": 3402,
+  "net_accepted_change": 9,
+  "matched_game": 2439,
+  "behavioral_game": 963,
+  "accepted_bytes": 1677057,
+  "newly_targeted_accepted": [
+    {
+      "address": "0x975370",
+      "name": "CLevelTemplateData::~CLevelTemplateData()",
+      "accepted_by": "BEHAVIORAL",
+      "original_bytes": 3932,
+      "coverage": {
+        "fixture": "level_template_destructor_lifetime",
+        "completed": 60,
+        "different": 0,
+        "incomplete": 0
+      }
+    },
+    {
+      "address": "0x9762f0",
+      "name": "CLevelTemplateData::load(wchar_t const*)",
+      "accepted_by": "BEHAVIORAL",
+      "original_bytes": 23722,
+      "coverage": {
+        "fixture": "level_template_load",
+        "completed": 92,
+        "different": 0,
+        "incomplete": 0
+      }
+    },
+    {
+      "address": "0x972980",
+      "name": "CLevelTemplateData::intersectsChunks(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)",
+      "accepted_by": "BEHAVIORAL",
+      "original_bytes": 507,
+      "coverage": {
+        "fixture": "level_template_intersections",
+        "completed": 1120,
+        "different": 0,
+        "incomplete": 0
+      }
+    },
+    {
+      "address": "0x9725d0",
+      "name": "CLevelTemplateData::exitsMatch(CChunkInstance*, std::vector<CChunkInstance*, std::allocator<CChunkInstance*> >&)",
+      "accepted_by": "BEHAVIORAL",
+      "original_bytes": 939,
+      "coverage": {
+        "fixture": "level_template_exit_matches",
+        "completed": 1120,
+        "different": 0,
+        "incomplete": 0
+      }
+    },
+    {
+      "address": "0x9762d0",
+      "name": "CLevelTemplateData::~CLevelTemplateData()",
+      "accepted_by": "MATCH",
+      "original_bytes": 18,
+      "coverage": {
+        "fixture": "level_template_deleting_destructor_lifetime",
+        "completed": 30,
+        "different": 0,
+        "incomplete": 0
+      }
+    },
+    {
+      "address": "0x915190",
+      "name": "CWardrobe::~CWardrobe()",
+      "accepted_by": "MATCH",
+      "original_bytes": 1329,
+      "coverage": null
+    },
+    {
+      "address": "0x9156d0",
+      "name": "CWardrobe::~CWardrobe()",
+      "accepted_by": "MATCH",
+      "original_bytes": 18,
+      "coverage": null
+    },
+    {
+      "address": "0x9156f0",
+      "name": "CWardrobe::setBaseTexture(EWardrobeSlot, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "accepted_by": "MATCH",
+      "original_bytes": 597,
+      "coverage": {
+        "fixture": "wardrobe_set_base_texture_bounded",
+        "completed": 160,
+        "different": 0,
+        "incomplete": 0
+      }
+    },
+    {
+      "address": "0x919810",
+      "name": "CWardrobe::CWardrobe(CCharacter*, Ogre::SceneManager*, Ogre::SceneManager*, CGenericModel*, CGenericModel*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "accepted_by": "BEHAVIORAL",
+      "original_bytes": 3678,
+      "coverage": {
+        "fixture": "wardrobe_constructor_bounded",
+        "completed": 128,
+        "different": 0,
+        "incomplete": 0
+      }
+    }
+  ],
+  "lost_accepted": null,
+  "lost_accepted_limitation": "Exact baseline 3393-address set is unavailable; no empty lost-set is inferred from counts.",
+  "prior_published_completed_game_comparisons": 1061,
+  "prior_published_completed_game_comparisons_not_accepted_now": [],
+  "prior_comparison_source": "https://github.com/Qweasd123tg/OpenTorchlight/blob/1007609d7cdeea56f01016babb5ffa6f28a596f9/research/bulk-scale-20261015/selftest-summary.txt",
+  "not_accepted": [
+    {
+      "address": "0x97bfa0",
+      "name": "CLevelTemplateData constructor C1/C2",
+      "reason": "16 completed comparisons are below autotest.MIN_COMPLETED=20; DIFF remains unaccepted.",
+      "completed": 16,
+      "minimum_completed": 20,
+      "different": 0,
+      "incomplete": 0
+    }
+  ],
+  "input_manifest_unchanged": true,
+  "frozen_input_count": 1719,
+  "inputs_digest": "e0409abd0057c83d50c7902b96cbd7b9317471897e4d8209cdb97e4a2cca2d10",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "full_log_sha256": "c61a3786be4a63ba6d38a82a9e004130b5776b668d06a386bba67f42654fdef3",
+  "progress_sha256": "1a7ee8eff11d58b35b888ab7e79b78d14798b82848acc84ac31436f77d82b3f4",
+  "tool_tests": {
+    "command": "python3 -B -m unittest discover -s tools/decomp -p 'test_llm*.py'",
+    "tests": 298,
+    "result": "PASS"
+  },
+  "resources": {
+    "sampled_peak_process_tree_rss_kib": 968664,
+    "minimum_free_bytes": 1435869184
+  },
+  "changed_source_tool_files": [
+    {
+      "path": "decomp/hybrid/tests/LevelTemplateGeometryTest.cpp",
+      "sha256": "ac965ef0c34c90c92b62da0ac95cd27a1170eb57e0a788e976c1ae775b095ae6"
+    },
+    {
+      "path": "decomp/hybrid/tests/LevelTemplateLifetimeTest.cpp",
+      "sha256": "7483fc51f4f4037987b46f4fd4b9118fab6697d9534b05ba90c2a7b8bb3a3376"
+    },
+    {
+      "path": "decomp/hybrid/tests/LevelTemplateLoadTest.cpp",
+      "sha256": "2cf57de7c898326f9c91651f342e3bc98e5d3a5cf7c8c590d9726675130b6a9f"
+    },
+    {
+      "path": "decomp/hybrid/tests/WardrobeConstructorTest.cpp",
+      "sha256": "d2127abf8ac904595569428056d0109216c14f5e0e0b1283d2366d1a60c972fe"
+    },
+    {
+      "path": "decomp/include/FileUtilities.h",
+      "sha256": "71ffe432a9ae30d9a6c9cdfab2f94d00b136b54d6c9eba623aa4c7be22457e64"
+    },
+    {
+      "path": "decomp/include/LevelTemplateData.h",
+      "sha256": "4270cb6644d15483191d7a792076674bfa4c83c4ab407ee1bd9ef9b7ef40c44d"
+    },
+    {
+      "path": "decomp/include/Wardrobe.h",
+      "sha256": "59be578b706582e612131062c0eb21b6416fc24aa8a55ba5dd28ca09e3026e80"
+    },
+    {
+      "path": "decomp/src/leveltemplatedata.cpp",
+      "sha256": "f916725626d744f23fa3e1a8a66c4ae185552efcec0e8b49f17daab76792750f"
+    },
+    {
+      "path": "decomp/src/wardrobe.cpp",
+      "sha256": "8c2dd371ae00442b06232ca94f07176018fb068c93c8b2b1cc5cc36c9502b94b"
+    },
+    {
+      "path": "tools/decomp/llm_context.py",
+      "sha256": "9ea34c4421d5fe28524c61ac200b8a17b5d3a6109e24acbdab5bfa5d0b1389a0"
+    },
+    {
+      "path": "tools/decomp/llm_loop.py",
+      "sha256": "383c52dad447ec29823b1d2490631042dc04e33229247b809417281c6d64e4e6"
+    },
+    {
+      "path": "tools/decomp/test_llm_context.py",
+      "sha256": "f9e6886ed27b4faea9901c914a83b329110c262688079b6f1479046ef0b56f1b"
+    },
+    {
+      "path": "tools/decomp/test_llm_diff_feedback.py",
+      "sha256": "82f3759b96cafddb763c288902702f9aa88d294b3173bf218a73d1bea9da434c"
+    }
+  ],
+  "limitations": [
+    "Headless tests do not establish windowed gameplay or standalone reconstructed-game linking.",
+    "Wardrobe update remains unrestored; constructor comparison substitutes update as a collaborator.",
+    "Expected dependency-boundary constructor exceptions do not count as completed-call acceptance."
+  ],
+  "revision": 2,
+  "all_accepted_behavioral_receipts_current": true,
+  "fixture_revision": {
+    "path": "decomp/hybrid/tests/LevelTemplateLoadTest.cpp",
+    "sha256": "2cf57de7c898326f9c91651f342e3bc98e5d3a5cf7c8c590d9726675130b6a9f",
+    "change": "Capture six potentially indeterminate scalar representations by address without lvalue-to-rvalue float reads.",
+    "focused_completed": 92,
+    "focused_different": 0,
+    "focused_incomplete": 0,
+    "negative_control_completed": 4,
+    "negative_control_different": 1,
+    "negative_control_incomplete": 0,
+    "workflow_document": "decomp/README.md:229-249",
+    "workflow_note": "Documented focused hybrid route for an existing implementation; normal prepare produced no new prompt. No candidate-cycle admission was bypassed."
+  },
+  "supersedes_initial_gate": "A post-gate oracle audit identified six potentially indeterminate float reads. Only their fixture byte capture was corrected; this report is from the subsequent complete fresh gate.",
+  "revision1_to_revision2_accepted_lost": [],
+  "revision1_to_revision2_accepted_gained": []
+}

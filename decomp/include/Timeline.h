@@ -81,7 +81,7 @@ public:
                                    CDescriptorLoadConfiguration* configuration);
 
     std::map<long long,
-             std::map<std::pair<int, bool>, CTimelineProperty*> >
+             std::map<std::pair<int, bool>, CTimelineProperty*>* >
         m_timelineProperties;
 
     bool m_bTimelineLoaded;

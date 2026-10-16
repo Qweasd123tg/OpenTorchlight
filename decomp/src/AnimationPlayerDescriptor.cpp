@@ -1,3 +1,6 @@
+#include "MasterResourceManager.h"
+#include "Hierarchy.h"
+#include "UnitResourceList.h"
 #include "EmptyStrings.h"
 #include "AnimationPlayerDescriptor.h"
 #include "GameVariables.h"
@@ -93,4 +96,48 @@ void CAnimationPlayerDescriptor::update(float timeSlice)
 CEditorBaseObject* CAnimationPlayerDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CAnimationPlayer(scene->getResourceManager());
+}
+
+unsigned int CAnimationPlayerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    for (unsigned int index = 0; index < 4; ++index) {
+        if (value == gANIMATIONPLAYER_TYPE_NAMES[index])
+            return index;
+    }
+    return 0;
+}
+
+std::wstring CAnimationPlayerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    CAnimationPlayer* player = dynamic_cast<CAnimationPlayer*>(object);
+    if (player == NULL)
+        return EMPTY_WSTRING;
+    const std::wstring& category = player->m_sCategory;
+    CResourceManager* resources = player->m_pResourceManager;
+    if (category == gANIMATIONPLAYER_TYPE_NAMES[0])
+        return L"PLAYER";
+    const std::map<long long, CDataGroup*>* group;
+    if (category == gANIMATIONPLAYER_TYPE_NAMES[1])
+        group = resources->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[1]);
+    else if (category == gANIMATIONPLAYER_TYPE_NAMES[3]) {
+        if (category == gANIMATIONPLAYER_TYPE_NAMES[1])
+            group = resources->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[1]);
+        else
+            group = resources->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[3]);
+    }
+    else if (category == gANIMATIONPLAYER_TYPE_NAMES[2]) {
+        CHierarchy* hierarchy = CMasterResourceManager::getSingleton()->m_pHierarchy;
+        unsigned int type = static_cast<unsigned int>(-1);
+        if (index < hierarchy->m_types.size())
+            type = hierarchy->m_types[index];
+        return CMasterResourceManager::getSingleton()->m_pHierarchy->getTypeName(type);
+    }
+    else
+        return EMPTY_WSTRING;
+    for (std::map<long long, CDataGroup*>::const_iterator it = group->begin(); it != group->end(); ++it) {
+        if (index == 0)
+            return it->second->GetDataValue(L"NAME", EMPTY_WSTRING);
+        --index;
+    }
+    return EMPTY_WSTRING;
 }

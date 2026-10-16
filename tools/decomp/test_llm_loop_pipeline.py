@@ -745,6 +745,39 @@ class RepairWorkflow(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
 
+    def test_repair_accepts_equivalent_outer_const_spelling(self):
+        cp = self.prepared_checkpoint()
+        f = self.loop.funcs[0]
+        f.update(params='Ogre::Vector3 const&', demangled='CProbe::work(Ogre::Vector3 const&)')
+        text = self.original_source.replace('work()', 'work(const Ogre::Vector3& value)')
+        for path in (self.root / 'decomp/src/Probe.cpp', self.loop.source):
+            path.write_text(text)
+        cp['settings']['selected'] = [f]
+        cp['existing'] = text
+        cp['repair'] = self.snapshot()
+        self.stage.baseline['decomp/src/Probe.cpp'] = cp['repair']['source_sha256']
+        self.loop.source.write_text(text.replace('return 1', 'return 3'))
+        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_accepts_only_exact_standard_wstring_alias(self):
+        cp = self.prepared_checkpoint()
+        f = self.loop.funcs[0]
+        params = 'std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&'
+        f.update(params=params, demangled='CProbe::work(' + params + ')')
+        text = self.original_source.replace('work()', 'work(const std::wstring& value)')
+        for path in (self.root / 'decomp/src/Probe.cpp', self.loop.source):
+            path.write_text(text)
+        cp['settings']['selected'] = [f]
+        cp['existing'] = text
+        cp['repair'] = self.snapshot()
+        self.stage.baseline['decomp/src/Probe.cpp'] = cp['repair']['source_sha256']
+        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        for custom in ('OtherAllocator<wchar_t>', 'vendor::std::allocator<wchar_t>'):
+            f.update(params=params.replace('std::allocator<wchar_t>', custom))
+            cp['repair'] = self.snapshot()
+            with self.subTest(custom=custom), self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
     def test_protected_target_or_alias_in_accepted_or_stale_receipt(self):
         import copy
         original = copy.deepcopy(self.progress)

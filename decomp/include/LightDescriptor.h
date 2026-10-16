@@ -14,7 +14,7 @@ public:
     virtual CEditorBaseObject* CreateObject(CEditorScene* scene);
     virtual void descriptorSceneActivated(CEditorScene*);
     static std::wstring GetLightStringByID(CEditorScene*, CEditorBaseObject*, unsigned int, void*);
-    int GetLightIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring&, void*);
+    static int GetLightIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring&, void*);
     CLightDescriptor();
 
 

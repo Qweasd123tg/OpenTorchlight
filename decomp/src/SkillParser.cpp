@@ -36,15 +36,16 @@ CSkillParser::~CSkillParser()
 
 CDataGroup *CSkillParser::getSkillData(const std::wstring &skillName)
 {
-    CSkillParser *parser = getSingleton();
-    if (parser == NULL)
+    if (getSingleton() == NULL)
         return NULL;
 
-    std::wstring name = STRINGS::StringUpper(skillName);
-    std::map<std::wstring, CDataGroup *>::iterator it = parser->m_skills.find(name);
-    if (it != parser->m_skills.end())
-        return it->second;
-
+    std::map<std::wstring, CDataGroup*>::iterator i;
+    {
+        std::wstring name = STRINGS::StringUpper(skillName);
+        i = getSingleton()->m_skills.find(name);
+    }
+    if (i != getSingleton()->m_skills.end())
+        return i->second;
     return NULL;
 }
 
@@ -95,4 +96,11 @@ CSkillParser::CSkillParser(CResourceSettings* resourceSettings)
     g_SkillParser = (long)this;
 
     parseSkills();
+}
+
+void CSkillParser::getSkillNames(TArrayList<std::wstring>& skillNames)
+{
+    for (std::map<std::wstring, CDataGroup*>::iterator i = getSingleton()->m_skills.begin();
+         i != getSingleton()->m_skills.end(); ++i)
+        skillNames.add(i->first);
 }

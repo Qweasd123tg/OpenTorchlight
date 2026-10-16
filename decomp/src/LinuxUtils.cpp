@@ -1,3 +1,5 @@
+#include <fstream>
+#include <cstdlib>
 #include "LinuxUtils.h"
 #include <sys/time.h>
 #include <cstring>
@@ -86,4 +88,25 @@ short GetKeyState(unsigned int key)
 void ClearKeyState()
 {
     std::memset(keyStates,0,sizeof(keyStates));
+}
+
+int LinuxUtils::GetIntLine(const std::string& path, const std::string& key)
+{
+    std::ifstream file(path.c_str());
+    std::string line;
+    while (std::getline(file, line).good()) {
+        if (line.compare(0, key.length(), key) == 0) {
+            std::string::size_type first = line.find_first_of("0123456789");
+            if (first != std::string::npos) {
+                std::string::size_type end = line.find_first_not_of("0123456789", first);
+                return std::atoi(line.substr(first, end - first).c_str());
+            }
+        }
+    }
+    return 0;
+}
+
+int LinuxUtils::GetPhysicalRAMSize()
+{
+    return GetIntLine("/proc/meminfo", "MemTotal") * 1024;
 }

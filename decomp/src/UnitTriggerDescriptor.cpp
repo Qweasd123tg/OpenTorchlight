@@ -1,3 +1,6 @@
+#include "TriggerUnit.h"
+#include "GameVariables.h"
+#include "UnitResourceList.h"
 #include "UnitTriggerDescriptor.h"
 #include "UnitTriggerDescriptorNames.h"
 #include "EmptyStrings.h"
@@ -89,4 +92,70 @@ CUnitTriggerDescriptor::CUnitTriggerDescriptor(const wchar_t* name, const wchar_
     AddOutputLogic(OUTPUT_EVENT_ENABLED);
     AddOutputLogic(OUTPUT_EVENT_DISABLED);
     AddInputsAndOutputs(this);
+}
+
+unsigned int CUnitTriggerDescriptor::getItemIDByString(CEditorScene*, CEditorBaseObject* object, const std::wstring& value, void*)
+{
+    CTriggerUnit* equipment = dynamic_cast<CTriggerUnit*>(object);
+    if (equipment == NULL || equipment->getResourceManager() == NULL)
+        return static_cast<unsigned int>(-1);
+    const std::map<long long, CDataGroup*>* group = equipment->getResourceManager()->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[0]);
+    unsigned int index = 0;
+    for (std::map<long long, CDataGroup*>::const_iterator it = group->begin(); it != group->end(); ++it, ++index) {
+        if (it->second->GetDataValue(L"NAME", EMPTY_WSTRING) == value)
+            return index;
+    }
+    return 0;
+}
+std::wstring CUnitTriggerDescriptor::getItemStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    CTriggerUnit* equipment = dynamic_cast<CTriggerUnit*>(object);
+    if (equipment == NULL || equipment->getResourceManager() == NULL)
+        return EMPTY_WSTRING;
+    const std::map<long long, CDataGroup*>* group = equipment->getResourceManager()->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[0]);
+    std::wstring fallback = EMPTY_WSTRING;
+    std::map<long long, CDataGroup*>::const_iterator it = group->begin();
+    if (it != group->end())
+        fallback = it->second->GetDataValue(L"NAME", L"");
+    for (; it != group->end(); ++it) {
+        if (index == 0)
+            return it->second->GetDataValue(L"NAME", L"");
+        --index;
+    }
+    return fallback;
+}
+
+unsigned int CUnitTriggerDescriptor::GetTriggerModelIDByString(CEditorScene*, CEditorBaseObject* object, const std::wstring& value, void*)
+{
+    CTriggerUnit* trigger = dynamic_cast<CTriggerUnit*>(object);
+    if (trigger == NULL || trigger->getResourceManager() == NULL)
+        return static_cast<unsigned int>(-1);
+    const std::map<long long, CDataGroup*>* group = trigger->getResourceManager()->getMasterResourceList()->getGroupByName(L"PROPS");
+    unsigned int index = 1;
+    for (std::map<long long, CDataGroup*>::const_iterator it = group->begin(); it != group->end(); ++it) {
+        if (it->second->GetDataValue(L"CREATEAS", L"") != L"TRIGGER")
+            continue;
+        if (it->second->GetDataValue(L"NAME", L"") == value)
+            return index;
+        ++index;
+    }
+    return 0;
+}
+std::wstring CUnitTriggerDescriptor::GetTriggerModelStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    if (index == 0)
+        return L"";
+    CTriggerUnit* trigger = dynamic_cast<CTriggerUnit*>(object);
+    if (trigger == NULL || trigger->getResourceManager() == NULL)
+        return EMPTY_WSTRING;
+    const std::map<long long, CDataGroup*>* group = trigger->getResourceManager()->getMasterResourceList()->getGroupByName(L"PROPS");
+    --index;
+    for (std::map<long long, CDataGroup*>::const_iterator it = group->begin(); it != group->end(); ++it) {
+        if (it->second->GetDataValue(L"CREATEAS", L"") != L"TRIGGER")
+            continue;
+        if (index == 0)
+            return it->second->GetDataValue(L"NAME", L"");
+        --index;
+    }
+    return L"";
 }

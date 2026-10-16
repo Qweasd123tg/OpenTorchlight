@@ -16,6 +16,7 @@ enum EEFFECT_VALUES {};
 class CEffect : public CRunicCore
 {
 public:
+    std::wstring getDisplayStats(unsigned int level, bool value);
     void getMaxCaculatedValue();
     void getMinCaculatedValue();
     void playFX(CResourceManager* manager, const Ogre::Vector3& position);
@@ -29,6 +30,7 @@ public:
     float value(EEFFECT_VALUES value);
     void calculateBaseValue(ECALCULATETYPES type);
 private:
+    friend class CEffectManager;
     unsigned int m_iLevel;
     EDAMAGE_TYPES m_eDamageType;
     unsigned char m_EffectData18[4];
@@ -40,7 +42,9 @@ private:
     unsigned char m_EffectData34[0x48-0x34];
     TSafePointer<CBaseUnit> m_Owner;
     CCharacter* m_sourceCharacter; // +0x58
-    unsigned char m_EffectData60[0x80-0x60];
+    unsigned char m_EffectData60[8];
+    CSkill* m_pSkillOwner; // +0x68, hasEffectFromSkill
+    unsigned char m_EffectData70[0x80-0x70];
     std::wstring m_sName;
     unsigned char m_EffectData88[0xa8-0x88];
     CParticle* m_particle;
@@ -52,6 +56,7 @@ private:
     float m_reflectionMinimum; // +0xcc
     float m_reflectionMaximum; // +0xd0
     unsigned char m_EffectDataD4[0x138-0xd4];
+    friend class CAffix;
     friend class CBaseUnit;
     friend class CCharacter;
     friend class CPlayer;

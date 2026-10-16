@@ -1,0 +1,166 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "base_commit": "7d4298e88b32975ac6cb9f58dd378395ed1d2d20",
+  "scope": "LevelTemplateData generator and matchExits restoration, constructor coverage extension, Wardrobe fixture service ownership isolation; no Mesh ABI changes",
+  "validation_revision": 2,
+  "full_gate": {
+    "command": "python3 -B tools/decomp/check.py",
+    "exit_code": 0,
+    "tests": 1153,
+    "failed": 0,
+    "started_utc": "2026-10-16T07:03:22.809429+00:00",
+    "finished_utc": "2026-10-16T07:13:53.007845+00:00",
+    "elapsed_seconds": 630.1984484129935,
+    "compiler_slots": 4,
+    "selftest_slots": 6,
+    "selftest_shards": 60,
+    "log_sha256": "03086df43964e2c223fcce926cd54d17d8a168c123036bba65ee7b84f13de952",
+    "frozen_inputs": 1721,
+    "changed_inputs": [],
+    "frozen_manifest_digest": "4afdea13ce875731f7165aa1338a4b08c7806bfaa1225c66c617630710c7c563"
+  },
+  "acceptance": {
+    "game_functions": 5247,
+    "accepted": 3405,
+    "accepted_bytes": 1688427,
+    "matched": 2440,
+    "behavioral": 965,
+    "base_accepted": 3402,
+    "net_change": 3,
+    "gained_accepted": [
+      "0x972e90",
+      "0x973370",
+      "0x97bfa0"
+    ],
+    "lost_accepted": [],
+    "baseline_set_source": "complete local progress registry from the validated PR127 inputs",
+    "behavioral_to_match": [
+      "0x9713c0"
+    ],
+    "all_comparison_receipts_current": 1070,
+    "stale_comparison_receipts": 0,
+    "inputs_digest": "e06ac48962ff9ecf9d7a6155516b410b8c28479f0d188da73f55494e14e6ae2f"
+  },
+  "target_coverage": {
+    "wardrobe_constructor_bounded": {
+      "address": "0x919810",
+      "completed": 128,
+      "different": 0,
+      "incomplete": 0
+    },
+    "wardrobe_set_base_texture_bounded": {
+      "address": "0x9156f0",
+      "completed": 160,
+      "different": 0,
+      "incomplete": 0
+    },
+    "level_template_create_random_layout": {
+      "address": "0x973370",
+      "completed": 1074,
+      "different": 0,
+      "incomplete": 0
+    },
+    "level_template_intersections": {
+      "address": "0x972980",
+      "completed": 1120,
+      "different": 0,
+      "incomplete": 0
+    },
+    "level_template_exit_matches": {
+      "address": "0x9725d0",
+      "completed": 1120,
+      "different": 0,
+      "incomplete": 0
+    },
+    "level_template_constructor_lifetime": {
+      "address": "0x97bfa0",
+      "completed": 24,
+      "different": 0,
+      "incomplete": 0
+    },
+    "level_template_destructor_lifetime": {
+      "address": "0x975370",
+      "completed": 60,
+      "different": 0,
+      "incomplete": 0
+    },
+    "level_template_deleting_destructor_lifetime": {
+      "address": "0x9762d0",
+      "completed": 30,
+      "different": 0,
+      "incomplete": 0
+    },
+    "level_template_load": {
+      "address": "0x9762f0",
+      "completed": 92,
+      "different": 0,
+      "incomplete": 0
+    },
+    "level_template_match_exits": {
+      "address": "0x972e90",
+      "completed": 1280,
+      "different": 0,
+      "incomplete": 0
+    },
+    "level_template_random_layout": {
+      "address": "0x9713c0",
+      "completed": 640,
+      "different": 0,
+      "incomplete": 0
+    },
+    "level_template_reset_odds": {
+      "address": "0x971410",
+      "completed": 640,
+      "different": 0,
+      "incomplete": 0
+    },
+    "level_template_unit_count": {
+      "address": "0x971530",
+      "completed": 2200,
+      "different": 0,
+      "incomplete": 0
+    }
+  },
+  "focused_evidence": {
+    "generator_completed": 1074,
+    "match_exits_completed": 1280,
+    "constructor_completed": 24,
+    "constructor_expected_unwinds_excluded": 16,
+    "generator_bundle_scoped_tests": 11,
+    "generator_bundle_negative_controls_caught": 4,
+    "wardrobe_service_fix_standalone_tests": 2,
+    "wardrobe_service_fix_after_filesystem_tests": 3,
+    "wardrobe_service_fix_completed_each_mode": 288,
+    "wardrobe_poststate_mutant_each_mode": {
+      "completed": 1,
+      "different": 1,
+      "incomplete": 0
+    }
+  },
+  "tool_tests": {
+    "tests": 298,
+    "failed": 0
+  },
+  "prior_failed_gate": {
+    "tests": 1153,
+    "failed": 1,
+    "reason": "FileSystem fixture left genuine OGRE LogManager and ResourceGroupManager alive; Wardrobe fixture incorrectly required them absent",
+    "diagnosis": "Standalone Wardrobe passed; unchanged exact original 20-test shard and minimal FileSystem-to-Wardrobe sequence reproduced failure; guard-tag diagnostics confirmed existing Log/Groups and absent TextureManager",
+    "fix": "Borrow existing genuine Log/Groups, own only newly created services, verify identities and creation/destruction counts; keep TextureManager absence guard",
+    "diagnostic_setup_limit": "An intermediate direct hybrid.build omitted generated AutoTestRuntime and could not execute the intended repaired full shard. The final canonical gate supplied that runtime and passed all 60 shards with unchanged test inventory/order."
+  },
+  "source_sha256": {
+    "decomp/include/LevelTemplateData.h": "5dc74d38ec98a3f7b6cd3e86e89dd5b5efcdf629077d22fdb259c6ba5d1c8be4",
+    "decomp/src/leveltemplatedata.cpp": "9c47151b1682f57528e75ff4f2bb824ffddd3eeb572d2bfda017441872be4850",
+    "decomp/hybrid/tests/LevelTemplateGeneratorTest.cpp": "42d797349b1d5048e3bc2869b1fb75e1db2e273606af105ac422a72c776373b1",
+    "decomp/hybrid/tests/LevelTemplateMatchExitsTest.cpp": "c65b8f91939f1407b5bbf2f0904725395495df7475e076441dc332786e4ab5cf",
+    "decomp/hybrid/tests/LevelTemplateLifetimeTest.cpp": "73e207c28e704e44a8a05b4871623eecdd726718a1e2419e27b27bd7599cec9a",
+    "decomp/hybrid/tests/WardrobeConstructorTest.cpp": "b907439e211dc11e81ada7ce6b4bc7dc9c3a0af317ee8c9cf44f53e386f23de7"
+  },
+  "progress_sha256": "21855c9bb7dddba28eaeda9cc3a4527e2e6a4621f38acb897890224e7372a1a8",
+  "limitations": [
+    "Headless comparison only; no interactive gameplay or GUI validation.",
+    "Original createRandomLayout return spelling is inferred from ABI: int preserves observed input-seed return bits."
+  ]
+}

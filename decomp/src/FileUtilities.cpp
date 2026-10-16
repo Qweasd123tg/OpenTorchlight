@@ -144,3 +144,56 @@ std::wstring FILESYSTEM::ReadWString(FILE* file, unsigned int length)
     }
     return result;
 }
+
+std::wstring FILESYSTEM::GetSaveDataPath()
+{
+    std::wstring result = EMPTY_WSTRING;
+    result = GetAppDataPath() + L"Save/";
+    return result;
+}
+
+std::wstring FILESYSTEM::GetFileName(const std::wstring& path)
+{
+    std::wstring result(path);
+    std::wstring::size_type pos = path.rfind(L"/");
+    if (pos != std::wstring::npos)
+        result = path.substr(pos + 1, path.length() - pos);
+    pos = path.rfind(L"\\");
+    if (pos != std::wstring::npos)
+        result = path.substr(pos + 1, path.length() - pos);
+    return result;
+}
+
+std::string FILESYSTEM::GetFileName(const std::string& path)
+{
+    std::string result(path);
+    std::string::size_type pos = path.rfind("/");
+    if (pos != std::string::npos)
+        result = path.substr(pos + 1, path.length() - pos);
+    if (result.length() == path.length())
+    {
+        pos = path.rfind("\\");
+        if (pos != std::string::npos)
+            result = path.substr(pos + 1, path.length() - pos);
+    }
+    return result;
+}
+
+bool FILESYSTEM::FileExists(const std::string& path)
+{
+    return FileExists(STRINGS::StringConvertToWide(path).c_str());
+}
+
+std::wstring FILESYSTEM::GetDirectory(const std::wstring& path)
+{
+    std::wstring result(path);
+    result = STRINGS::replaceWString(result, GetFileName(result), L"");
+    return result;
+}
+
+long long FILESYSTEM::GetFileCreationTime(const wchar_t* path)
+{
+    std::string narrow = STRINGS::StringConvertToUTF8(std::wstring(path));
+    struct stat info;
+    return stat(narrow.c_str(), &info) == 0 ? info.st_ctime : -1;
+}

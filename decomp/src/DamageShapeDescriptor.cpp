@@ -1,3 +1,5 @@
+#include "MasterResourceManager.h"
+#include "Hierarchy.h"
 #include "EmptyStrings.h"
 #include "DamageShapeDescriptor.h"
 #include "GameEnums.h"
@@ -117,4 +119,25 @@ void CDamageShapeDescriptor::descriptorSceneActivated(CEditorScene* scene)
             shape->setEnabled(true);
         }
     }
+}
+
+std::wstring CDamageShapeDescriptor::getUnitTypeStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    CHierarchy* hierarchy = CMasterResourceManager::getSingleton()->m_pHierarchy;
+    if (index < hierarchy->m_types.size()) {
+        unsigned int type = hierarchy->m_types[index];
+        if (type != static_cast<unsigned int>(-1))
+            return CMasterResourceManager::getSingleton()->m_pHierarchy->getTypeName(type);
+    }
+    return CMasterResourceManager::getSingleton()->m_pHierarchy->getTypeName(0);
+}
+unsigned int CDamageShapeDescriptor::getUnitTypeIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    CHierarchy* hierarchy = CMasterResourceManager::getSingleton()->m_pHierarchy;
+    unsigned int type = hierarchy->getTypeIDByName(value);
+    for (unsigned int index = 0; index < hierarchy->m_types.size(); ++index) {
+        if (hierarchy->m_types[index] == type)
+            return index;
+    }
+    return 0;
 }

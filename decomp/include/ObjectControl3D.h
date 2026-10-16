@@ -19,6 +19,7 @@ namespace Ogre { class SceneManager; class SceneNode; }
 class CObjectControl3D : public CRunicCore
 {
 public:
+    CEditorBaseObject* getObjectUnderMouse();
     Ogre::Vector3 getMousePlaneInstersect(POINT point, Ogre::Plane plane);
     Ogre::Vector3 getCameraPlaneIntersect(Ogre::Plane plane);
     void UpdateChunkTemplate();

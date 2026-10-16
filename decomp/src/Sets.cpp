@@ -37,3 +37,10 @@ CSets::CSets(const wchar_t* path, CEffectGroupManager* effectGroupManager)
     if (g_pSets == 0)
         g_pSets = this;
 }
+
+void CSets::getSetNames(TArrayList<std::wstring>& setNames)
+{
+    for (std::map<std::wstring, unsigned int>::iterator i = m_setIndices.begin();
+         i != m_setIndices.end(); ++i)
+        setNames.add(i->first);
+}

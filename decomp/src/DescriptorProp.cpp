@@ -56,3 +56,32 @@ std::wstring CDescriptorProp::getListValueByIndex(CEditorScene* scene,
         return EMPTY_WSTRING;
     return m_pInterpreter->GetValue(scene, object, index);
 }
+
+unsigned int CDescriptorProp::getElementSize()
+{
+    unsigned int count = m_DefaultValue.size();
+    if (m_pInterpreter)
+        count = 1;
+    else {
+        switch (m_eType) {
+        case VARIABLE_TYPE_STRING: count = 1; break;
+        case VARIABLE_TYPE_VECTOR2: count /= 2; break;
+        case VARIABLE_TYPE_VECTOR3: count /= 3; break;
+        case VARIABLE_TYPE_VECTOR4: count /= 4; break;
+        default: break;
+        }
+    }
+    return count;
+}
+
+UNIONDATA32BIT* CDescriptorProp::getData(unsigned int& count, CEditorBaseObject* object)
+{
+    count = 0;
+    if (object != NULL && m_pGetFunction != NULL)
+        return getDataFromObject(object, count);
+    if (m_DefaultValue.size() != 0) {
+        count = m_DefaultValue.size();
+        return &m_DefaultValue[0];
+    }
+    return NULL;
+}

@@ -1,3 +1,6 @@
+#include "UnitResourceList.h"
+#include "Quest.h"
+#include "StringUtilities.h"
 #include "EmptyStrings.h"
 #include "QuestControllerDescriptor.h"
 #include "GameEnums.h"
@@ -81,4 +84,70 @@ void CQuestControllerDescriptor::descriptorSceneActivated(CEditorScene* scene)
 CEditorBaseObject* CQuestControllerDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CQuestController(scene->getResourceManager());
+}
+
+std::wstring CQuestControllerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    if (index == 0)
+        return gRESOURCE_GROUP_NAMES[1];
+    if (index == 1)
+        return gRESOURCE_GROUP_NAMES[0];
+    return gRESOURCE_GROUP_NAMES[3];
+}
+
+unsigned int CQuestControllerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    if (value == gRESOURCE_GROUP_NAMES[0])
+        return 1;
+    if (value == gRESOURCE_GROUP_NAMES[3])
+        return 2;
+    return 0;
+}
+
+std::wstring CQuestControllerDescriptor::getQuestStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    std::map<std::wstring, CQuest*>& quests = CQuestManager::getSingleton()->m_Unknown40;
+    std::map<std::wstring, CQuest*>::iterator it = quests.begin();
+    for (; it != quests.end(); ++it) {
+        if (index == 0)
+            return it->second->m_sUnknown50;
+        --index;
+    }
+    if (!quests.empty())
+        return quests.begin()->second->m_sUnknown50;
+    return EMPTY_WSTRING;
+}
+
+unsigned int CQuestControllerDescriptor::getQuestIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    std::wstring name = STRINGS::StringUpper(value);
+    std::map<std::wstring, CQuest*>& quests = CQuestManager::getSingleton()->m_Unknown40;
+    unsigned int index = 0;
+    for (std::map<std::wstring, CQuest*>::iterator it = quests.begin(); it != quests.end(); ++index, ++it)
+        if (it->second->m_sUnknown50 == name)
+            return index;
+    return 0;
+}
+
+std::wstring CQuestControllerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    if (index == 0)
+        return EMPTY_WSTRING;
+    CQuestController* controller = dynamic_cast<CQuestController*>(object);
+    if (controller == NULL || controller->m_pResourceManager == NULL)
+        return EMPTY_WSTRING;
+    const std::map<long long, CDataGroup*>* group;
+    if (std::wstring(controller->m_sCategory) == gRESOURCE_GROUP_NAMES[1])
+        group = controller->m_pResourceManager->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[1]);
+    else if (std::wstring(controller->m_sCategory) == gRESOURCE_GROUP_NAMES[0])
+        group = controller->m_pResourceManager->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[0]);
+    else if (std::wstring(controller->m_sCategory) == gRESOURCE_GROUP_NAMES[3])
+        group = controller->m_pResourceManager->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[3]);
+    else
+        return EMPTY_WSTRING;
+    for (std::map<long long, CDataGroup*>::const_iterator it = group->begin(); it != group->end(); ++it) {
+        if (--index == 0)
+            return it->second->GetDataValue(L"NAME", EMPTY_WSTRING);
+    }
+    return EMPTY_WSTRING;
 }
