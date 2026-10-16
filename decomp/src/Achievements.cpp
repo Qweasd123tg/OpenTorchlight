@@ -27,3 +27,11 @@ void CAchievements::update(float)
 }
 
 template TArrayList<CAchievement*>::~TArrayList();
+
+CAchievement* CAchievements::getAchievement(std::string name)
+{
+    for (unsigned int i = 0; i < m_achievements.size(); ++i)
+        if (std::string(m_achievements[i]->m_strName) == name)
+            return m_achievements[i];
+    return NULL;
+}

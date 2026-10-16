@@ -42,16 +42,16 @@ public:
     void SetPropertyPointInterpolationType(long long objectID, int propertyID,
                                            ETIMELINE_INTERP_TYPES interpolationType);
 
-    long long RemovePointFromProperty(long long objectID, int propertyID,
+    bool RemovePointFromProperty(long long objectID, int propertyID,
                                       int pointID, bool isEvent);
-    long long AddPointToProperty(long long objectID, int propertyID, bool isEvent);
-    long long RemoveProperty(long long objectID, int propertyID, bool isEvent);
-    long long RemoveObjectByID(long long objectID);
+    int AddPointToProperty(long long objectID, int propertyID, bool isEvent);
+    bool RemoveProperty(long long objectID, int propertyID, bool isEvent);
+    bool RemoveObjectByID(long long objectID);
 
     std::pair<int, bool> GetPropertyIDForObjectInTimelineByIndex(long long objectID, int index);
     long long GetObjectIDInTimelineByIndex(int index);
     void resetPropertiesToPercent(float timePercent);
-    long long GetPointIDInTimelinePropertyByIndex(long long objectID, int propertyID,
+    int GetPointIDInTimelinePropertyByIndex(long long objectID, int propertyID,
                                                    int pointIndex, bool isEvent);
 
     void AddProperty(CEditorScene* scene, long long objectID, int propertyID,

@@ -30,8 +30,8 @@ void CPathController::setVisible(bool visible)
 
 float CPathController::getClosestPctOfPath(const Ogre::Vector3& point)
 {
-    TArrayList<float>& vectors = reinterpret_cast<TArrayList<float>&>(m_Unknown150);
-    TArrayList<float>& pathLengths = reinterpret_cast<TArrayList<float>&>(m_Unknown168);
+    TArrayList<float>& vectors = m_pathCoordinates;
+    TArrayList<float>& pathLengths = m_pathDistances;
 
     if (m_bWalkToPlayer || vectors.size() == 1 || m_fUnknown180 == 0.0f)
     {
@@ -44,7 +44,7 @@ float CPathController::getClosestPctOfPath(const Ogre::Vector3& point)
             (vectors[i] - point.x) * (vectors[i] - point.x) +
             (vectors[i + 1] - point.y) * (vectors[i + 1] - point.y) +
             (vectors[i + 2] - point.z) * (vectors[i + 2] - point.z);
-        sqrtf(distance);
+        if (0.0f > distance) sqrtf(distance);
     }
 
     return pathLengths[0] / m_fUnknown180;
@@ -114,9 +114,9 @@ long long CPathController::getNextPointAtPercent(float percent, CBaseUnit* unit,
     else
     {
         TArrayList<float>& vectors =
-            *reinterpret_cast<TArrayList<float>*>(&m_Unknown150[0]);
+            m_pathCoordinates;
         TArrayList<float>& percentages =
-            *reinterpret_cast<TArrayList<float>*>(&m_Unknown168[0]);
+            m_pathDistances;
         unsigned int index;
         float value;
 
@@ -276,9 +276,9 @@ void CPathController::caculateSpline()
         return;
 
     TArrayList<float>& vectors =
-        *reinterpret_cast<TArrayList<float>*>(&m_Unknown150);
+        m_pathCoordinates;
     TArrayList<float>& spline =
-        *reinterpret_cast<TArrayList<float>*>(&m_Unknown168);
+        m_pathDistances;
 
     spline.clear();
 

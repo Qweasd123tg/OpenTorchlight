@@ -1,5 +1,6 @@
 #include "DescriptorController.h"
 #include "DescriptorRegistry.h"
+#include "DescriptorControllerState.h"
 #include "AlignDescriptor.h"
 #include "AnimationPlayerDescriptor.h"
 #include "BoxColliderDescriptor.h"
@@ -606,4 +607,45 @@ CDescriptorController::CDescriptorController()
     addDescriptorFunction(L"Money Taker", Set_CMoneyTakerDescriptorParam1);
     addDescriptorFunction(L"Dungeon Object", Set_CDungeonObjectDescriptorParam1);
     addDescriptorFunction(L"Waypoint Activator", Set_CWaypointActivatorDescriptorParam1);
+}
+
+#include "DescriptorProp.h"
+
+CDescriptor* CDescriptorController::getNewDescriptorByName(const std::wstring& name)
+{
+    DescriptorFactoryMap::iterator factory = g_Descriptors.find(name);
+    if (factory == g_Descriptors.end())
+        return NULL;
+    CDescriptor* descriptor = static_cast<CDescriptor*>(factory->second());
+    for (unsigned int i = 0; i < g_DescriptorNameOrder.size(); ++i) {
+        if (g_DescriptorNameOrder[i] == name) {
+            descriptor->m_iID = i;
+            break;
+        }
+    }
+    return descriptor;
+}
+
+CDescriptor* CDescriptorController::getNewDescriptorByCreatedIndex(unsigned int index)
+{
+    if (index < g_DescriptorNameOrder.size())
+        return getNewDescriptorByName(g_DescriptorNameOrder[index]);
+    return NULL;
+}
+
+CDescriptorProp* CDescriptorController::getDescriptorPropertyByName(
+    CDescriptor* descriptor, const std::wstring& name, bool defaults)
+{
+    if (!descriptor)
+        return NULL;
+    std::map<std::wstring, TArrayList<CDescriptorProp*>*>& properties = defaults
+        ? g_DescriptorController.m_DefaultProperties : g_DescriptorController.m_Properties;
+    std::map<std::wstring, TArrayList<CDescriptorProp*>*>::iterator found = properties.find(descriptor->m_sName);
+    if (found == properties.end() || !found->second)
+        return NULL;
+    TArrayList<CDescriptorProp*>* list = found->second;
+    for (unsigned int i = 0; i < list->size(); ++i)
+        if ((*list)[i]->m_sName == name)
+            return (*list)[i];
+    return NULL;
 }

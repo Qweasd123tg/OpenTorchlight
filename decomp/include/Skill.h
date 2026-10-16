@@ -3,6 +3,8 @@
 
 #include <string>
 #include <OgreVector3.h>
+#include <OgreQuaternion.h>
+#include "SafePointer.h"
 #include "RunicCore.h"
 #include "SkillDefines.h"
 #include "iUnitObserver.h"
@@ -61,7 +63,13 @@ public:
     const std::wstring& getSkillRequiredForInvestment();
     const std::wstring& getDisplayName();
     unsigned int getLevelRequiredForInvestment();
-    void calculateEffectiveSkillLevel();
+    bool calculateEffectiveSkillLevel();
+    bool hasEvent(ESKILL_EVENT_TYPE event);
+    bool triggerEvent(ESKILL_EVENT_TYPE event, const Ogre::Vector3& position,
+                      const Ogre::Quaternion& orientation, CBaseUnit* target,
+                      const Ogre::Vector3* targetPosition);
+    void updateSkill(float elapsed);
+    void stopSkill();
     CSkill(CResourceManager* resourceManager, CDataGroup* dataGroup);
     virtual ~CSkill();
     void assignSkillAnimations(CBaseUnit* unit);
@@ -85,14 +93,18 @@ private:
     bool enabledWithoutProperty() const { return m_bEnabled & !m_bExecutedByProperty; }
 
     friend class CSkillManager;
+    friend class CAffix;
     friend class CSkillProperty;
     friend class CCharacter;
     friend class CMonster;
     CResourceManager* m_resources;
     CSkillManager* m_pSkillManager;
-    char m_SkillData28[0x30 - 0x28];
+    CDataGroup* m_pDataGroup; // +0x28
     CBaseUnit* m_pOwner;
-    char m_SkillData38[0x5c - 0x38];
+    unsigned int m_iOwnerSafePointerId; // +0x38
+    unsigned char m_Padding3C[4];
+    TSafePointer<CBaseUnit> m_Target; // +0x40
+    Ogre::Vector3 m_targetPosition; // +0x50
     int m_skillType; // +0x5c, indexes gSKILL_TYPE_NAMES
     ESKILL_ACTIVATION_TYPE m_eActivationType; // 0x60
     bool m_interruptible; // +0x64

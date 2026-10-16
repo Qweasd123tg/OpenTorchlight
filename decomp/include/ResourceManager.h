@@ -6,9 +6,11 @@ class CGameUI;
 #include <map>
 #include "RunicCore.h"
 #include "UnitTypes.h"
+#include "GameEnums.h"
 #include "TArrayList.h"
 
 class CGraph;
+class CAffix;
 class CMissile;
 class CEquipment;
 class CSpawnClass;
@@ -44,6 +46,10 @@ public:
     TArrayList<CGameClient*>* getGameClients() { return &m_GameClients; }
 
     CGraph* getGraph(const std::wstring&);
+    CGraph* getGraphDamage();
+    unsigned int getCurrentLevelSeed();
+    CAffix* getNewAffixByName(const std::wstring& name, unsigned int level);
+    ERESOURCE_GROUPS getResourceGroupFromDataGroup(CDataGroup* data);
     CGameUI* getGameUI();
     void createUnitsBySpawnClass(CSpawnClass* spawn, TArrayList<CBaseUnit*>& units, unsigned int count, CCharacter* first, CCharacter* second, int level, int flags);
     CEquipment* createEquipment(const wchar_t*,bool,bool);

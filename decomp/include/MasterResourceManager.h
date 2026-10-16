@@ -16,6 +16,7 @@ class CRoomPieceDataInformation;
 struct CEditorParticlePreviewState { unsigned char unknown[0x540]; bool paused; };
 
 namespace Ogre { class SceneManager; }
+namespace ParticleUniverse { class ParticleSystemManager; }
 class CHierarchy;
 class CEffectGroupManager;
 class CCollisionModel;
@@ -23,6 +24,7 @@ class CParticlePreloader;
 class CSettings;
 class CEffectGroupManager;
 class CGraphManager;
+class CSpawnClassParser;
 class CSoundManager;
 class CSoundBankDataInformation;
 
@@ -63,7 +65,10 @@ public:
 private:
     unsigned char m_Unrecovered60[8];
     CResourceSettings* m_resourceSettings;
-    unsigned char m_Unrecovered70[0x10];
+    unsigned char m_Unrecovered70[8];
+public:
+    CSpawnClassParser* m_pSpawnClassParser; // +0x78
+private:
 
 public:
     CHierarchy* m_pHierarchy;
@@ -82,7 +87,10 @@ private:
     unsigned char m_UnrecoveredD8[0xe8-0xd8];
 public:
     CRoomPieceDataInformation* m_pRoomPieceInformation; // +0xe8
-    CEditorParticlePreviewState* m_pParticlePreview; // +0xf0
+    union {
+        CEditorParticlePreviewState* m_pParticlePreview; // existing legacy pause view; not the real class
+        ParticleUniverse::ParticleSystemManager* m_pParticleSystemManager; // actual pointer, +0xf0
+    };
 public:
     CParticlePreloader* m_pParticlePreloader;
 public:

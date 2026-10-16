@@ -7,6 +7,7 @@
 namespace Ogre
 {
     class Entity;
+    class SceneManager;
     class SceneNode;
 }
 
@@ -23,6 +24,8 @@ namespace OGRE_UTILITIES
         L"ARROW",
     };
 
+    Ogre::Entity* createEntity(Ogre::SceneManager* sceneManager, EPRIMITIVES primitive,
+                               EQUERYMASK queryMask, const char* name);
     void attachEntityToSceneNode(Ogre::Entity* entity, Ogre::SceneNode* node);
     void detachEntityFromParent(Ogre::Entity* entity);
     void removeChildFromParentNode(Ogre::SceneNode* node);

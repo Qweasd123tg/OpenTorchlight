@@ -49,8 +49,8 @@ public:
     bool m_bUnknown136;
     bool m_bUnknown137;
     unsigned char m_Unknown138[0x18] __attribute__((aligned(8)));
-    unsigned char m_Unknown150[0x18] __attribute__((aligned(8)));
-    unsigned char m_Unknown168[0x18] __attribute__((aligned(8)));
+    TArrayList<float> m_pathCoordinates; // +0x150
+    TArrayList<float> m_pathDistances; // +0x168
     float m_fUnknown180;
     unsigned char m_gap184[0x4] __attribute__((aligned(4)));
     std::wstring m_pathName; // +0x188

@@ -15,7 +15,7 @@ class CSkillController : public CPositionableObject
 public:
     virtual ~CSkillController();
 
-    CPlayer* getSkillTarget();
+    CCharacter* getSkillTarget();
     CSkillController(CResourceManager* resourceManager);
 
     void setUnitInteractWith(std::wstring unitInteractWith);

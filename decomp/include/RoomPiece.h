@@ -12,6 +12,7 @@
 #include "MasterResourceManager.h"
 #include "PositionableObject.h"
 #include "ResourceManager.h"
+#include "RoomPieceData.h"
 #include "iCollision.h"
 #include "iHighlight.h"
 #include "iSnap.h"
@@ -47,7 +48,7 @@ public:
     int m_iVisualIndex;
     unsigned char m_gap13C[0x4] __attribute__((aligned(4)));
     long long m_iVisualIndex_140;
-    void* m_pRoomPieceName;
+    CRoomPieceData* m_pRoomPieceData; // +0x148
     bool m_bCollisionEnabled;
     bool m_bUnknown151;
     bool m_bUnknown152;

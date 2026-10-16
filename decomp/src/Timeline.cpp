@@ -10,6 +10,7 @@
 #include "EditorScene.h"
 #include "OgreReader.h"
 #include "TimelineProperty.h"
+#include "ResourceManager.h"
 #include "StringUtilities.h"
 
 void CTimeline::setDurationModificationTime(float duration)
@@ -126,7 +127,7 @@ void CTimeline::SetPropertyPointInterpolationType(long long objectID, int proper
         property->SetInterpolationType(interpolationType);
 }
 
-long long CTimeline::RemovePointFromProperty(long long objectID, int propertyID,
+bool CTimeline::RemovePointFromProperty(long long objectID, int propertyID,
                                               int pointID, bool isEvent)
 {
     CTimelineProperty* property = GetProperty(objectID, propertyID, isEvent);
@@ -135,7 +136,7 @@ long long CTimeline::RemovePointFromProperty(long long objectID, int propertyID,
     return 1;
 }
 
-long long CTimeline::AddPointToProperty(long long objectID, int propertyID, bool isEvent)
+int CTimeline::AddPointToProperty(long long objectID, int propertyID, bool isEvent)
 {
     CTimelineProperty* property = GetProperty(objectID, propertyID, isEvent);
     if (property != NULL)
@@ -143,7 +144,7 @@ long long CTimeline::AddPointToProperty(long long objectID, int propertyID, bool
     return 0xffffffff;
 }
 
-long long CTimeline::RemoveProperty(long long objectID, int propertyID, bool isEvent)
+bool CTimeline::RemoveProperty(long long objectID, int propertyID, bool isEvent)
 {
     std::map<long long,
              std::map<std::pair<int, bool>, CTimelineProperty*>* >::iterator
@@ -156,8 +157,10 @@ long long CTimeline::RemoveProperty(long long objectID, int propertyID, bool isE
 
         if (propertyIt != objectIt->second->end())
         {
-            if (propertyIt->second != NULL)
+            if (propertyIt->second != NULL) {
                 delete propertyIt->second;
+                propertyIt->second = NULL;
+            }
 
             objectIt->second->erase(propertyIt);
             return 1;
@@ -167,7 +170,7 @@ long long CTimeline::RemoveProperty(long long objectID, int propertyID, bool isE
     return 0;
 }
 
-long long CTimeline::RemoveObjectByID(long long objectID)
+bool CTimeline::RemoveObjectByID(long long objectID)
 {
     if (objectID == -1)
     {
@@ -216,7 +219,7 @@ long long CTimeline::GetObjectIDInTimelineByIndex(int index)
     return -1;
 }
 
-long long CTimeline::GetPointIDInTimelinePropertyByIndex(long long objectID, int propertyID,
+int CTimeline::GetPointIDInTimelinePropertyByIndex(long long objectID, int propertyID,
                                                           int pointIndex, bool isEvent)
 {
     if (propertyID < 0 || objectID == -1 || pointIndex < 0)
@@ -623,4 +626,56 @@ std::pair<int, bool> CTimeline::GetPropertyIDForObjectInTimelineByIndex(
         --index;
     }
     return std::make_pair(-1, false);
+}
+
+void CTimeline::resetPropertiesToPercent(float timePercent)
+{
+    typedef std::map<std::pair<int, bool>, CTimelineProperty*> Properties;
+    for (std::map<long long, Properties*>::iterator object = m_timelineProperties.begin();
+         object != m_timelineProperties.end(); ++object)
+        for (Properties::iterator property = object->second->begin();
+             property != object->second->end(); ++property) {
+            property->second->m_lastTimePercent = timePercent;
+            property->second->m_updating = false;
+        }
+}
+
+float CTimeline::SetTimelinePercentDone(float percentDone)
+{
+    if (!(percentDone < 1.0f)) percentDone = 1.0f;
+    m_fTimelinePosition = m_fSetTimelineDuration * percentDone;
+    m_fSetTimelineStep = 0.0f;
+    if (m_fGetTimelineStep > 0.0f) {
+        float steps = m_fTimelinePosition / m_fGetTimelineStep;
+        int wholeSteps = static_cast<int>(steps);
+        m_fTimelinePosition = wholeSteps * m_fGetTimelineStep;
+        m_fSetTimelineStep = steps - wholeSteps;
+    }
+    if (m_bEnabled || getSceneOwner()->getResourceManager()->getEditorIsRunning()) {
+        typedef std::map<std::pair<int, bool>, CTimelineProperty*> Properties;
+        for (std::map<long long, Properties*>::iterator object = m_timelineProperties.begin();
+             object != m_timelineProperties.end(); ++object)
+            for (Properties::iterator property = object->second->begin();
+                 property != object->second->end(); ++property)
+                property->second->Update(percentDone, m_bIsPlayingBackwards);
+    }
+    return percentDone;
+}
+
+CTimeline::~CTimeline()
+{
+    typedef std::map<std::pair<int, bool>, CTimelineProperty*> Properties;
+    for (std::map<long long, Properties*>::iterator object = m_timelineProperties.begin();
+         object != m_timelineProperties.end(); ++object) {
+        for (Properties::iterator property = object->second->begin();
+             property != object->second->end(); ++property) {
+            if (property->second != NULL) {
+                delete property->second;
+                property->second = NULL;
+            }
+        }
+        if (object->second != NULL)
+            delete object->second;
+    }
+    m_timelineProperties.clear();
 }

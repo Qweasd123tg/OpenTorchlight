@@ -8,6 +8,7 @@ class CEditorBaseObject;
 
 class CDescriptorPropertyInterpreter : public CRunicCore
 {
+    friend class CDescriptorProp;
 public:
     typedef unsigned int (*ValueFunction)(CEditorScene*, CEditorBaseObject*, const std::wstring&, void*);
     typedef std::wstring (*NameFunction)(CEditorScene*, CEditorBaseObject*, unsigned int, void*);

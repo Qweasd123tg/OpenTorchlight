@@ -19,7 +19,7 @@ void CPuzzleRandomizer::reset()
     addLevelListener();
     m_iUnknown8C = 3;
 }
-long long CPuzzleRandomizer::updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&)
+bool CPuzzleRandomizer::updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&)
 {
     switch (m_iUnknown8C)
     {

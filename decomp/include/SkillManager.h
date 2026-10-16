@@ -11,6 +11,7 @@ extern bool m_gDisableSkillFromBeingCasted;
 class CSkill;
 class CBaseUnit;
 class CResourceManager;
+class CCharacter;
 // Partial, with the complete 0x98 layout and original destructor slots.
 class CSkillManager : public CRunicCore
 {
@@ -21,6 +22,13 @@ friend class CCharacter;
 friend class CMonster;
 public:
     void deleteSpecificSkill(CSkill* skill);
+    bool knowsSkill(const std::wstring& name);
+    bool getSkillIsUpdatingByName(const std::wstring& name);
+    void clearAllUnitReferences();
+    void attemptDeleteOfSkill(CSkill* skill);
+    void fireSkillsOnCreate(CBaseUnit* caster, ESKILL_ACTIVATION_TYPE activation,
+                           const Ogre::Vector3& position, const Ogre::Quaternion& orientation,
+                           const Ogre::Vector3& targetPosition, CCharacter* target);
     bool getSkillIsCooling(CSkill* skill);
     void stopSkillsByName(std::wstring name, bool flag);
     CSkill* getSkillByIndex(int index)

@@ -25,6 +25,8 @@ class COgreReader;
 class CDescriptor : public CEditorBaseObject
 {
     friend class CEditorScene;
+    friend class CDescriptorController;
+    friend class CDescriptorManager;
 public:
     // m_iFlags bits; names are ours (the serialized ones from SerializeDescriptor).
     enum

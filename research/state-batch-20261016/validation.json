@@ -1,0 +1,2107 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "baseline_commit": "a34a558378d15813cc33c946852ec4ffd930f45a",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "command": "python3 tools/decomp/check.py",
+  "environment": {
+    "LANG": "C.UTF-8",
+    "LC_ALL": "",
+    "TZ": "",
+    "OTL_JOBS": "4",
+    "OTL_COMPARE_JOBS": "4",
+    "OTL_BUILD_JOBS": "4",
+    "OTL_SELFTEST_JOBS": "6",
+    "OTL_SELFTEST_SHARDS": "60",
+    "OTL_SELFTEST_TIMEOUT": "1800",
+    "PYTHONUNBUFFERED": "1"
+  },
+  "accepted_before": 3565,
+  "accepted_after": 3728,
+  "net_accepted_change": 163,
+  "game_functions": 5247,
+  "matched_before": 2515,
+  "matched_after": 2579,
+  "behavioral_after": 1149,
+  "accepted_bytes": 1772794,
+  "game_bytes": 3702188,
+  "lost_accepted": [],
+  "prior_MATCH_code_lost": [],
+  "stale_behavioral_receipts": [],
+  "unknown_references": [],
+  "compiler_kind_hooks": [],
+  "changed_prior_compiler_helpers_outside_game_count": [],
+  "full_gate": {
+    "tests": 1357,
+    "failed": 0,
+    "elapsed_seconds": 1148.6300060749054,
+    "selftest_seconds": 1065.7844734930004,
+    "build_seconds": 51.57086450299903,
+    "input_manifest_unchanged": true,
+    "inputs_digest": "eac914d61ac386225408c7664b17d2e5004a76a927f946bc11133c653ea091bb",
+    "input_count": 4962,
+    "log_sha256": "922ece0cc86f240e89b6f6c4983207e3d1658b57fcb3881c8b54b4e9e7bdab0a",
+    "progress_sha256": "dbb808d57cc560ac7b966641a0f68afc557803fb52f3bf9579c8fc703e31b2c6"
+  },
+  "early_full_build_retry": {
+    "returncode": 1,
+    "started_unix": 1792148521.9050236,
+    "ended_unix": 1792148652.3308759,
+    "elapsed_seconds": 130.42585277557373,
+    "error": null
+  },
+  "focused_gate": {
+    "tests": 118,
+    "failed": 0,
+    "elapsed_seconds": 90.57922053337097,
+    "build_seconds": 34.8039137199994,
+    "selftest_seconds": 33.65115292200062,
+    "tree_unchanged": true,
+    "inputs_unchanged": true,
+    "log_sha256": "25d74390311862b205f0a461bcd1cc3626786b0ae6ee562b8be03111c9b916bd"
+  },
+  "cohorts": {
+    "particle_audio_commands": {
+      "candidate_count": 80,
+      "accepted": [
+        "0xa07f10",
+        "0xa08090",
+        "0xa08140",
+        "0xa08300",
+        "0xa0a420",
+        "0xa17f30",
+        "0xa18020",
+        "0xa29d80",
+        "0xa29e40",
+        "0xa2a060",
+        "0xa2a0d0",
+        "0xa34e80",
+        "0xa36100",
+        "0xa37b80",
+        "0xa37d70",
+        "0xa37f50",
+        "0xa383a0",
+        "0xa687d0",
+        "0xa68830",
+        "0xa688a0",
+        "0xa68a20",
+        "0xa68a80",
+        "0xa68ae0",
+        "0xa68b80",
+        "0xa68be0",
+        "0xa68fd0",
+        "0xa69070",
+        "0xa69710",
+        "0xa69880",
+        "0xa6ae70",
+        "0xa6b030",
+        "0xa6bf80",
+        "0xa6c650"
+      ],
+      "gained": [
+        "0xa07f10",
+        "0xa08090",
+        "0xa08140",
+        "0xa08300",
+        "0xa0a420",
+        "0xa17f30",
+        "0xa18020",
+        "0xa29d80",
+        "0xa29e40",
+        "0xa2a060",
+        "0xa2a0d0",
+        "0xa34e80",
+        "0xa36100",
+        "0xa37b80",
+        "0xa37d70",
+        "0xa37f50",
+        "0xa383a0",
+        "0xa687d0",
+        "0xa68830",
+        "0xa688a0",
+        "0xa68a20",
+        "0xa68a80",
+        "0xa68ae0",
+        "0xa68b80",
+        "0xa68be0",
+        "0xa68fd0",
+        "0xa69070",
+        "0xa69710",
+        "0xa69880",
+        "0xa6ae70",
+        "0xa6b030",
+        "0xa6bf80",
+        "0xa6c650"
+      ],
+      "unaccepted": [
+        "0xa081d0",
+        "0xa08240",
+        "0xa17e00",
+        "0xa180a0",
+        "0xa2a140",
+        "0xa2ab30",
+        "0xa2ac50",
+        "0xa30be0",
+        "0xa30da0",
+        "0xa32880",
+        "0xa32a20",
+        "0xa32a50",
+        "0xa32b90",
+        "0xa32f90",
+        "0xa344d0",
+        "0xa38680",
+        "0xa38770",
+        "0xa38790",
+        "0xa3b1f0",
+        "0xa3c620",
+        "0xa3c650",
+        "0xa3c7b0",
+        "0xa3c8d0",
+        "0xa3cab0",
+        "0xa3cbd0",
+        "0xa3ce30",
+        "0xa3cfb0",
+        "0xa3cfe0",
+        "0xa3d110",
+        "0xa3d240",
+        "0xa3d370",
+        "0xa460e0",
+        "0xa46790",
+        "0xa46900",
+        "0xa46910",
+        "0xa46990",
+        "0xa469f0",
+        "0xa490b0",
+        "0xa497f0",
+        "0xa499f0",
+        "0xa49cf0",
+        "0xa69570",
+        "0xa698a0",
+        "0xa6bb90",
+        "0xa6be70",
+        "0xa6c880",
+        "0xa6d270"
+      ]
+    },
+    "effects_skill_state": {
+      "candidate_count": 136,
+      "accepted": [
+        "0x5c6b30",
+        "0x5c6c90",
+        "0x5c6eb0",
+        "0x7025d0",
+        "0x705a80",
+        "0x705f80",
+        "0x7cd2b0",
+        "0x7cd430",
+        "0x7cd570",
+        "0x7cd810",
+        "0x7d36e0",
+        "0x7d3780",
+        "0x7d3840",
+        "0x7d3970",
+        "0x7eba30",
+        "0x7eba70",
+        "0x7ebbc0",
+        "0x7ebc60",
+        "0x7ebcc0",
+        "0x7ec320",
+        "0x7ec450",
+        "0x7ec4f0",
+        "0x7f2da0",
+        "0x7f31a0",
+        "0x7f3270",
+        "0x7f3b50",
+        "0x7f5bd0",
+        "0xa60ea0",
+        "0xc700a0",
+        "0xc70450",
+        "0xc70620",
+        "0xcab650",
+        "0xcabb30",
+        "0xcabf10",
+        "0xcb37a0",
+        "0xcca8c0",
+        "0xcca9d0",
+        "0xccacb0",
+        "0xcd0d90",
+        "0xcd1060",
+        "0xcd2b80",
+        "0xcd2ea0",
+        "0xcd5140",
+        "0xcd5460",
+        "0xcdbeb0",
+        "0xcdd160",
+        "0xd6f560",
+        "0xd6f6c0",
+        "0xd6f770",
+        "0xd6fa50",
+        "0xd76a20",
+        "0xd78750",
+        "0xd78d50",
+        "0xd78ee0",
+        "0xe17910",
+        "0xe206f0",
+        "0xe7a4a0",
+        "0xe7af30",
+        "0xebf7c0",
+        "0xec7090"
+      ],
+      "gained": [
+        "0x5c6b30",
+        "0x5c6c90",
+        "0x5c6eb0",
+        "0x7025d0",
+        "0x705a80",
+        "0x705f80",
+        "0x7cd2b0",
+        "0x7cd430",
+        "0x7cd570",
+        "0x7cd810",
+        "0x7d36e0",
+        "0x7d3780",
+        "0x7d3840",
+        "0x7d3970",
+        "0x7eba30",
+        "0x7eba70",
+        "0x7ebbc0",
+        "0x7ebc60",
+        "0x7ebcc0",
+        "0x7ec320",
+        "0x7ec450",
+        "0x7ec4f0",
+        "0x7f2da0",
+        "0x7f31a0",
+        "0x7f3270",
+        "0x7f3b50",
+        "0x7f5bd0",
+        "0xa60ea0",
+        "0xc700a0",
+        "0xc70450",
+        "0xc70620",
+        "0xcab650",
+        "0xcabb30",
+        "0xcabf10",
+        "0xcb37a0",
+        "0xcca8c0",
+        "0xcca9d0",
+        "0xccacb0",
+        "0xcd0d90",
+        "0xcd1060",
+        "0xcd2b80",
+        "0xcd2ea0",
+        "0xcd5140",
+        "0xcd5460",
+        "0xcdbeb0",
+        "0xcdd160",
+        "0xd6f560",
+        "0xd6f6c0",
+        "0xd6f770",
+        "0xd6fa50",
+        "0xd76a20",
+        "0xd78750",
+        "0xd78d50",
+        "0xd78ee0",
+        "0xe17910",
+        "0xe206f0",
+        "0xe7a4a0",
+        "0xe7af30",
+        "0xebf7c0",
+        "0xec7090"
+      ],
+      "unaccepted": [
+        "0x5c6cc0",
+        "0x5c6d90",
+        "0x7027c0",
+        "0x705930",
+        "0x705a60",
+        "0x705b60",
+        "0x7cd0f0",
+        "0x7cd300",
+        "0x7cd600",
+        "0x7d5dd0",
+        "0x7d5df0",
+        "0x7ebd40",
+        "0x7ec7a0",
+        "0x7f2f10",
+        "0x7f4550",
+        "0x7f4760",
+        "0x7f58f0",
+        "0x7f5d50",
+        "0xa62320",
+        "0xa62560",
+        "0xc5ed90",
+        "0xc5efa0",
+        "0xc5efe0",
+        "0xc5f5e0",
+        "0xc5fa00",
+        "0xc61ab0",
+        "0xc61e00",
+        "0xc6f780",
+        "0xc6fa80",
+        "0xcab750",
+        "0xcab990",
+        "0xcac960",
+        "0xcacb60",
+        "0xcb3f10",
+        "0xcb47d0",
+        "0xcca700",
+        "0xccadc0",
+        "0xcd11b0",
+        "0xcd13a0",
+        "0xcd2a70",
+        "0xcd3040",
+        "0xcd3270",
+        "0xcd3ad0",
+        "0xcd4930",
+        "0xcd4b00",
+        "0xcd5260",
+        "0xcdc590",
+        "0xcdce70",
+        "0xcdcf70",
+        "0xcdd060",
+        "0xcdd240",
+        "0xce5f70",
+        "0xd6f790",
+        "0xd6f880",
+        "0xd76940",
+        "0xd77c80",
+        "0xd77e40",
+        "0xd78100",
+        "0xd78290",
+        "0xd784a0",
+        "0xd78570",
+        "0xd786f0",
+        "0xd78820",
+        "0xd78a80",
+        "0xe17970",
+        "0xe20450",
+        "0xe20cc0",
+        "0xe20f40",
+        "0xe7a520",
+        "0xe7b3d0",
+        "0xe7b570",
+        "0xebf6a0",
+        "0xebfac0",
+        "0xec65a0",
+        "0xec66c0",
+        "0xec7850"
+      ]
+    },
+    "editor_timeline_logic": {
+      "candidate_count": 136,
+      "accepted": [
+        "0x5939d0",
+        "0x652810",
+        "0x706630",
+        "0x7067f0",
+        "0x709a10",
+        "0x709bc0",
+        "0x709ca0",
+        "0x709e10",
+        "0x70a170",
+        "0x70a390",
+        "0x70a3e0",
+        "0x70a400",
+        "0x70a500",
+        "0x78baa0",
+        "0x78bca0",
+        "0x78be20",
+        "0x7953d0",
+        "0x795550",
+        "0x7957d0",
+        "0x795970",
+        "0x795a30",
+        "0x795ae0",
+        "0x7a7f00",
+        "0x7a7f70",
+        "0x7a7fa0",
+        "0x7a80a0",
+        "0x7a8230",
+        "0x7a8300",
+        "0x7a83c0",
+        "0x7a8500",
+        "0x7a8620",
+        "0x7b6930",
+        "0x7b6960",
+        "0x7b6990",
+        "0x7b6a90",
+        "0x7b6cd0",
+        "0x7b6d50",
+        "0x7b7110",
+        "0x7b77a0",
+        "0x7b78c0",
+        "0x7baef0",
+        "0x7c83a0",
+        "0x7c85f0",
+        "0x7c8730",
+        "0x7c88d0",
+        "0x7c8a10",
+        "0x7c9170",
+        "0x7c95b0",
+        "0x7ccf70",
+        "0x933fe0",
+        "0x9c1dc0",
+        "0x9ca1e0",
+        "0x9d3ba0",
+        "0x9d3d10",
+        "0x9d3dc0",
+        "0x9d3ea0",
+        "0x9d3f40",
+        "0x9ddb00",
+        "0x9de2d0",
+        "0x9de390",
+        "0x9dfa60",
+        "0x9fa2c0",
+        "0x9fa300",
+        "0x9fa350",
+        "0xc74150",
+        "0xc75a20",
+        "0xc75c70",
+        "0xc75ec0",
+        "0xc76190"
+      ],
+      "gained": [
+        "0x5939d0",
+        "0x652810",
+        "0x706630",
+        "0x7067f0",
+        "0x709a10",
+        "0x709bc0",
+        "0x709ca0",
+        "0x709e10",
+        "0x70a170",
+        "0x70a390",
+        "0x70a3e0",
+        "0x70a400",
+        "0x70a500",
+        "0x78baa0",
+        "0x78bca0",
+        "0x78be20",
+        "0x7953d0",
+        "0x795550",
+        "0x7957d0",
+        "0x795970",
+        "0x795a30",
+        "0x795ae0",
+        "0x7a7f00",
+        "0x7a7f70",
+        "0x7a7fa0",
+        "0x7a80a0",
+        "0x7a8230",
+        "0x7a8300",
+        "0x7a83c0",
+        "0x7a8500",
+        "0x7a8620",
+        "0x7b6930",
+        "0x7b6960",
+        "0x7b6990",
+        "0x7b6a90",
+        "0x7b6cd0",
+        "0x7b6d50",
+        "0x7b7110",
+        "0x7b77a0",
+        "0x7b78c0",
+        "0x7baef0",
+        "0x7c83a0",
+        "0x7c85f0",
+        "0x7c8730",
+        "0x7c88d0",
+        "0x7c8a10",
+        "0x7c9170",
+        "0x7c95b0",
+        "0x7ccf70",
+        "0x933fe0",
+        "0x9c1dc0",
+        "0x9ca1e0",
+        "0x9d3ba0",
+        "0x9d3d10",
+        "0x9d3dc0",
+        "0x9d3ea0",
+        "0x9d3f40",
+        "0x9ddb00",
+        "0x9de2d0",
+        "0x9de390",
+        "0x9dfa60",
+        "0x9fa2c0",
+        "0x9fa300",
+        "0x9fa350",
+        "0xc74150",
+        "0xc75a20",
+        "0xc75c70",
+        "0xc75ec0",
+        "0xc76190"
+      ],
+      "unaccepted": [
+        "0x593970",
+        "0x593b10",
+        "0x593c80",
+        "0x593f50",
+        "0x593fc0",
+        "0x5941f0",
+        "0x59d750",
+        "0x59da50",
+        "0x59ec70",
+        "0x652790",
+        "0x652850",
+        "0x6528f0",
+        "0x65bb80",
+        "0x706700",
+        "0x70a450",
+        "0x70a5c0",
+        "0x78b9f0",
+        "0x78ba50",
+        "0x795600",
+        "0x795890",
+        "0x7c97c0",
+        "0x7c9960",
+        "0x7ccae0",
+        "0x7ccb90",
+        "0x92c0c0",
+        "0x9340a0",
+        "0x934700",
+        "0x9c1930",
+        "0x9c1e30",
+        "0x9c1f10",
+        "0x9c2020",
+        "0x9c28d0",
+        "0x9c2a80",
+        "0x9c2bf0",
+        "0x9ca2c0",
+        "0x9ca630",
+        "0x9ca6c0",
+        "0x9d3e00",
+        "0x9dd9a0",
+        "0x9df820",
+        "0x9dfb50",
+        "0x9e1090",
+        "0x9e10e0",
+        "0x9e1130",
+        "0x9e6300",
+        "0x9e6d30",
+        "0x9e6e10",
+        "0x9fa3d0",
+        "0x9fa480",
+        "0x9fa5a0",
+        "0x9fa6f0",
+        "0xa00460",
+        "0xa00ff0",
+        "0xa011a0",
+        "0xa01590",
+        "0xa01890",
+        "0xa01940",
+        "0xc738b0",
+        "0xc73f70",
+        "0xc74060",
+        "0xc75430",
+        "0xf61c70",
+        "0xf61da0",
+        "0xf61e30",
+        "0xf61eb0",
+        "0xf620d0",
+        "0xf632a0"
+      ]
+    }
+  },
+  "other_newly_accepted": [
+    "0x9fa2f0"
+  ],
+  "newly_accepted": [
+    {
+      "address": "0x5939d0",
+      "names": [
+        "_ZN15CPathController19getClosestPctOfPathERKN4Ogre7Vector3E"
+      ],
+      "demangled": "CPathController::getClosestPctOfPath(Ogre::Vector3 const&)",
+      "original_size": 310,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x5c6b30",
+      "names": [
+        "_ZN21CDescriptorController22getNewDescriptorByNameERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CDescriptorController::getNewDescriptorByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 351,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x5c6c90",
+      "names": [
+        "_ZN21CDescriptorController30getNewDescriptorByCreatedIndexEj"
+      ],
+      "demangled": "CDescriptorController::getNewDescriptorByCreatedIndex(unsigned int)",
+      "original_size": 41,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x5c6eb0",
+      "names": [
+        "_ZN21CDescriptorController27getDescriptorPropertyByNameEP11CDescriptorRKSbIwSt11char_traitsIwESaIwEEb"
+      ],
+      "demangled": "CDescriptorController::getDescriptorPropertyByName(CDescriptor*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",
+      "original_size": 422,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x652810",
+      "names": [
+        "_ZN22CUnitSpawnerDescriptor29DescriptorObjectHasBeenInitedEP17CEditorBaseObject"
+      ],
+      "demangled": "CUnitSpawnerDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject*)",
+      "original_size": 53,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7025d0",
+      "names": [
+        "_ZN18CDescriptorManager19activateDescriptorsEP12CEditorScene"
+      ],
+      "demangled": "CDescriptorManager::activateDescriptors(CEditorScene*)",
+      "original_size": 247,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x705a80",
+      "names": [
+        "_ZN18CDescriptorManager20SerializeDescriptorsEP10CDataGroup"
+      ],
+      "demangled": "CDescriptorManager::SerializeDescriptors(CDataGroup*)",
+      "original_size": 213,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x705f80",
+      "names": [
+        "_ZN18CDescriptorManager22GetDescriptorByCreatedEjb"
+      ],
+      "demangled": "CDescriptorManager::GetDescriptorByCreated(unsigned int, bool)",
+      "original_size": 111,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x706630",
+      "names": [
+        "_ZN15CDescriptorProp18convertDataTo32bitEPK13UNIONDATA8BITjRj"
+      ],
+      "demangled": "CDescriptorProp::convertDataTo32bit(UNIONDATA8BIT const*, unsigned int, unsigned int&)",
+      "original_size": 197,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7067f0",
+      "names": [
+        "_ZN15CDescriptorProp22setPropertyInterpreterEP30CDescriptorPropertyInterpreter"
+      ],
+      "demangled": "CDescriptorProp::setPropertyInterpreter(CDescriptorPropertyInterpreter*)",
+      "original_size": 41,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x709a10",
+      "names": [
+        "_ZN15CDescriptorPropD1Ev",
+        "_ZN15CDescriptorPropD2Ev"
+      ],
+      "demangled": "CDescriptorProp::~CDescriptorProp()",
+      "original_size": 385,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x709bc0",
+      "names": [
+        "_ZN15CDescriptorProp15setDataOnObjectEP17CEditorBaseObjectPK14UNIONDATA32BITj"
+      ],
+      "demangled": "CDescriptorProp::setDataOnObject(CEditorBaseObject*, UNIONDATA32BIT const*, unsigned int)",
+      "original_size": 223,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x709ca0",
+      "names": [
+        "_ZN15CDescriptorProp17getDataFromObjectEP17CEditorBaseObjectRj"
+      ],
+      "demangled": "CDescriptorProp::getDataFromObject(CEditorBaseObject*, unsigned int&)",
+      "original_size": 297,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x709e10",
+      "names": [
+        "_ZN15CDescriptorProp24getPropertyValueAsStringEP17CEditorBaseObject"
+      ],
+      "demangled": "CDescriptorProp::getPropertyValueAsString(CEditorBaseObject*)",
+      "original_size": 853,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x70a170",
+      "names": [
+        "_ZN15CDescriptorProp7setDataEPK14UNIONDATA32BITjP17CEditorBaseObject"
+      ],
+      "demangled": "CDescriptorProp::setData(UNIONDATA32BIT const*, unsigned int, CEditorBaseObject*)",
+      "original_size": 543,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x70a390",
+      "names": [
+        "_ZN15CDescriptorProp7setDataEPK13UNIONDATA8BITjP17CEditorBaseObject"
+      ],
+      "demangled": "CDescriptorProp::setData(UNIONDATA8BIT const*, unsigned int, CEditorBaseObject*)",
+      "original_size": 69,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x70a3e0",
+      "names": [
+        "_ZN15CDescriptorProp7setDataERKSbIwSt11char_traitsIwESaIwEEP17CEditorBaseObject"
+      ],
+      "demangled": "CDescriptorProp::setData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CEditorBaseObject*)",
+      "original_size": 18,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x70a400",
+      "names": [
+        "_ZN15CDescriptorProp7setDataEPK14UNIONDATA16BITjP17CEditorBaseObject"
+      ],
+      "demangled": "CDescriptorProp::setData(UNIONDATA16BIT const*, unsigned int, CEditorBaseObject*)",
+      "original_size": 73,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x70a500",
+      "names": [
+        "_ZN15CDescriptorProp4copyERS_P17CEditorBaseObject"
+      ],
+      "demangled": "CDescriptorProp::copy(CDescriptorProp&, CEditorBaseObject*)",
+      "original_size": 186,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x78baa0",
+      "names": [
+        "_ZN5CUndo15AddUndoPropertyEP17CEditorBaseObjectj"
+      ],
+      "demangled": "CUndo::AddUndoProperty(CEditorBaseObject*, unsigned int)",
+      "original_size": 510,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x78bca0",
+      "names": [
+        "_ZN5CUndoD2Ev",
+        "_ZN5CUndoD1Ev"
+      ],
+      "demangled": "CUndo::~CUndo()",
+      "original_size": 193,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x78be20",
+      "names": [
+        "_ZN5CUndo16DoUndoOnPropertyEPNS_9CUndoDataEPS_"
+      ],
+      "demangled": "CUndo::DoUndoOnProperty(CUndo::CUndoData*, CUndo*)",
+      "original_size": 163,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7953d0",
+      "names": [
+        "_ZN5CUndo12AddNewObjectEP17CEditorBaseObject"
+      ],
+      "demangled": "CUndo::AddNewObject(CEditorBaseObject*)",
+      "original_size": 370,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x795550",
+      "names": [
+        "_ZN5CUndo14DoUndoUndeleteEPNS_9CUndoDataEPS_"
+      ],
+      "demangled": "CUndo::DoUndoUndelete(CUndo::CUndoData*, CUndo*)",
+      "original_size": 161,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7957d0",
+      "names": [
+        "_ZN5CUndo12DoUndoCreateEPNS_9CUndoDataEPS_"
+      ],
+      "demangled": "CUndo::DoUndoCreate(CUndo::CUndoData*, CUndo*)",
+      "original_size": 184,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x795970",
+      "names": [
+        "_ZN5CUndo8DoAsRedoEv"
+      ],
+      "demangled": "CUndo::DoAsRedo()",
+      "original_size": 178,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x795a30",
+      "names": [
+        "_ZN5CUndo8DoAsUndoEv"
+      ],
+      "demangled": "CUndo::DoAsUndo()",
+      "original_size": 176,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x795ae0",
+      "names": [
+        "_ZN5CUndo15AddUndoPropertyEP17CEditorBaseObjectPKw"
+      ],
+      "demangled": "CUndo::AddUndoProperty(CEditorBaseObject*, wchar_t const*)",
+      "original_size": 202,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7a7f00",
+      "names": [
+        "_ZN12CLogicObject11SetPositionEii"
+      ],
+      "demangled": "CLogicObject::SetPosition(int, int)",
+      "original_size": 99,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7a7f70",
+      "names": [
+        "_ZN12CLogicObject7SetSizeEii"
+      ],
+      "demangled": "CLogicObject::SetSize(int, int)",
+      "original_size": 46,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7a7fa0",
+      "names": [
+        "_ZN12CLogicObject32saveLogicObjectLinksToBinaryFileEPSt14basic_ofstreamIcSt11char_traitsIcEE"
+      ],
+      "demangled": "CLogicObject::saveLogicObjectLinksToBinaryFile(std::basic_ofstream<char, std::char_traits<char> >*)",
+      "original_size": 249,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7a80a0",
+      "names": [
+        "_ZN12CLogicObject12AddLogicLinkEP13CLogicWrapperPS_S1_"
+      ],
+      "demangled": "CLogicObject::AddLogicLink(CLogicWrapper*, CLogicObject*, CLogicWrapper*)",
+      "original_size": 396,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7a8230",
+      "names": [
+        "_ZN12CLogicObject12AddLogicLinkEjPS_j"
+      ],
+      "demangled": "CLogicObject::AddLogicLink(unsigned int, CLogicObject*, unsigned int)",
+      "original_size": 162,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7a8300",
+      "names": [
+        "_ZN12CLogicObject27saveLogicObjectToBinaryFileEPSt14basic_ofstreamIcSt11char_traitsIcEE"
+      ],
+      "demangled": "CLogicObject::saveLogicObjectToBinaryFile(std::basic_ofstream<char, std::char_traits<char> >*)",
+      "original_size": 127,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7a83c0",
+      "names": [
+        "_ZN12CLogicObject27loadLogicObjectByBinaryFileEP11CLogicGroupP11COgreReaderP28CDescriptorLoadConfigurationRSt3mapIiiSt4lessIiESaISt4pairIKiiEEE"
+      ],
+      "demangled": "CLogicObject::loadLogicObjectByBinaryFile(CLogicGroup*, COgreReader*, CDescriptorLoadConfiguration*, std::map<int, int, std::less<int>, std::allocator<std::pair<int const, int> > >&)",
+      "original_size": 307,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7a8500",
+      "names": [
+        "_ZN12CLogicObjectD1Ev",
+        "_ZN12CLogicObjectD2Ev"
+      ],
+      "demangled": "CLogicObject::~CLogicObject()",
+      "original_size": 278,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7a8620",
+      "names": [
+        "_ZN12CLogicObjectD0Ev"
+      ],
+      "demangled": "CLogicObject::~CLogicObject()",
+      "original_size": 18,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7b6930",
+      "names": [
+        "_ZN9CTimeline23RemovePointFromPropertyExiib"
+      ],
+      "demangled": "CTimeline::RemovePointFromProperty(long long, int, int, bool)",
+      "original_size": 39,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7b6960",
+      "names": [
+        "_ZN9CTimeline18AddPointToPropertyExib"
+      ],
+      "demangled": "CTimeline::AddPointToProperty(long long, int, bool)",
+      "original_size": 42,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7b6990",
+      "names": [
+        "_ZN9CTimeline14RemovePropertyExib"
+      ],
+      "demangled": "CTimeline::RemoveProperty(long long, int, bool)",
+      "original_size": 249,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7b6a90",
+      "names": [
+        "_ZN9CTimeline16RemoveObjectByIDEx"
+      ],
+      "demangled": "CTimeline::RemoveObjectByID(long long)",
+      "original_size": 300,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7b6cd0",
+      "names": [
+        "_ZN9CTimeline24resetPropertiesToPercentEf"
+      ],
+      "demangled": "CTimeline::resetPropertiesToPercent(float)",
+      "original_size": 119,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7b6d50",
+      "names": [
+        "_ZN9CTimeline35GetPointIDInTimelinePropertyByIndexExiib"
+      ],
+      "demangled": "CTimeline::GetPointIDInTimelinePropertyByIndex(long long, int, int, bool)",
+      "original_size": 51,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7b7110",
+      "names": [
+        "_ZN9CTimeline26loadTimelineFromBinaryFileEP12CEditorSceneP11COgreReaderP28CDescriptorLoadConfiguration"
+      ],
+      "demangled": "CTimeline::loadTimelineFromBinaryFile(CEditorScene*, COgreReader*, CDescriptorLoadConfiguration*)",
+      "original_size": 776,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7b77a0",
+      "names": [
+        "_ZN9CTimelineD2Ev",
+        "_ZN9CTimelineD1Ev"
+      ],
+      "demangled": "CTimeline::~CTimeline()",
+      "original_size": 283,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7b78c0",
+      "names": [
+        "_ZN9CTimelineD0Ev"
+      ],
+      "demangled": "CTimeline::~CTimeline()",
+      "original_size": 18,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7baef0",
+      "names": [
+        "_ZN9CTimeline22SetTimelinePercentDoneEf"
+      ],
+      "demangled": "CTimeline::SetTimelinePercentDone(float)",
+      "original_size": 269,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7c83a0",
+      "names": [
+        "_ZN17CTimelineProperty21SetTimePercentAtPointEif"
+      ],
+      "demangled": "CTimelineProperty::SetTimePercentAtPoint(int, float)",
+      "original_size": 561,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7c85f0",
+      "names": [
+        "_ZN17CTimelineProperty12triggerEventEP9CTimeline"
+      ],
+      "demangled": "CTimelineProperty::triggerEvent(CTimeline*)",
+      "original_size": 225,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7c8730",
+      "names": [
+        "_ZN17CTimelineProperty33getValueOfLinearPropertyByPercentEjdPNS_14CTimelinePointES1_j"
+      ],
+      "demangled": "CTimelineProperty::getValueOfLinearPropertyByPercent(unsigned int, double, CTimelineProperty::CTimelinePoint*, CTimelineProperty::CTimelinePoint*, unsigned int)",
+      "original_size": 336,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7c88d0",
+      "names": [
+        "_ZN17CTimelineProperty18fillSplineWithDataEv"
+      ],
+      "demangled": "CTimelineProperty::fillSplineWithData()",
+      "original_size": 314,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7c8a10",
+      "names": [
+        "_ZN17CTimelineProperty20SetInterpolationTypeE22ETIMELINE_INTERP_TYPES"
+      ],
+      "demangled": "CTimelineProperty::SetInterpolationType(ETIMELINE_INTERP_TYPES)",
+      "original_size": 197,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7c9170",
+      "names": [
+        "_ZN17CTimelineProperty21DoSplineInterpolationEP9CTimelinef"
+      ],
+      "demangled": "CTimelineProperty::DoSplineInterpolation(CTimeline*, float)",
+      "original_size": 243,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7c95b0",
+      "names": [
+        "_ZN17CTimelineProperty23GetValueAtPointAsStringEi"
+      ],
+      "demangled": "CTimelineProperty::GetValueAtPointAsString(int)",
+      "original_size": 82,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7ccf70",
+      "names": [
+        "_ZN17CTimelineProperty23SetValueAtPointByStringEiRSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CTimelineProperty::SetValueAtPointByString(int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",
+      "original_size": 157,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7cd2b0",
+      "names": [
+        "_ZN6CAffix8setSavesEb"
+      ],
+      "demangled": "CAffix::setSaves(bool)",
+      "original_size": 66,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7cd430",
+      "names": [
+        "_ZN6CAffix19updateAffixDurationEf"
+      ],
+      "demangled": "CAffix::updateAffixDuration(float)",
+      "original_size": 54,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7cd570",
+      "names": [
+        "_ZN6CAffix22canBeAppliedToUnitTypeEj"
+      ],
+      "demangled": "CAffix::canBeAppliedToUnitType(unsigned int)",
+      "original_size": 144,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7cd810",
+      "names": [
+        "_ZN6CAffix8setLevelEj"
+      ],
+      "demangled": "CAffix::setLevel(unsigned int)",
+      "original_size": 118,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7d36e0",
+      "names": [
+        "_ZN6CAffix8setOwnerEP9CBaseUnit"
+      ],
+      "demangled": "CAffix::setOwner(CBaseUnit*)",
+      "original_size": 157,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7d3780",
+      "names": [
+        "_ZN6CAffix13setSkillOwnerEP6CSkill"
+      ],
+      "demangled": "CAffix::setSkillOwner(CSkill*)",
+      "original_size": 181,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7d3840",
+      "names": [
+        "_ZN6CAffix21clearEffectsFromOwnerEv"
+      ],
+      "demangled": "CAffix::clearEffectsFromOwner()",
+      "original_size": 292,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7d3970",
+      "names": [
+        "_ZN6CAffix25addEffectsToEffectManagerEP14CEffectManager"
+      ],
+      "demangled": "CAffix::addEffectsToEffectManager(CEffectManager*)",
+      "original_size": 568,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7eba30",
+      "names": [
+        "_ZN14CEffectManager20clearOutDescriptionsEv"
+      ],
+      "demangled": "CEffectManager::clearOutDescriptions()",
+      "original_size": 56,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x7eba70",
+      "names": [
+        "_ZN14CEffectManager12removeEffectEP7CEffectb"
+      ],
+      "demangled": "CEffectManager::removeEffect(CEffect*, bool)",
+      "original_size": 321,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7ebbc0",
+      "names": [
+        "_ZN14CEffectManager18recalculateEffectsEv"
+      ],
+      "demangled": "CEffectManager::recalculateEffects()",
+      "original_size": 151,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7ebc60",
+      "names": [
+        "_ZN14CEffectManager20clearOutAffixEffectsEv"
+      ],
+      "demangled": "CEffectManager::clearOutAffixEffects()",
+      "original_size": 89,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7ebcc0",
+      "names": [
+        "_ZN14CEffectManager21addAffixEffectsBackInEv"
+      ],
+      "demangled": "CEffectManager::addAffixEffectsBackIn()",
+      "original_size": 126,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7ec320",
+      "names": [
+        "_ZN14CEffectManager13updateAffixesEf"
+      ],
+      "demangled": "CEffectManager::updateAffixes(float)",
+      "original_size": 296,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7ec450",
+      "names": [
+        "_ZN14CEffectManager11deleteAffixEP6CAffix"
+      ],
+      "demangled": "CEffectManager::deleteAffix(CAffix*)",
+      "original_size": 159,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7ec4f0",
+      "names": [
+        "_ZN14CEffectManager8addAffixEP6CAffixjP9CBaseUnitf"
+      ],
+      "demangled": "CEffectManager::addAffix(CAffix*, unsigned int, CBaseUnit*, float)",
+      "original_size": 309,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7f2da0",
+      "names": [
+        "_ZN14CEffectManager11deleteAffixERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CEffectManager::deleteAffix(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 364,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7f31a0",
+      "names": [
+        "_ZN14CEffectManager11cloneEffectEP9CBaseUnitP7CEffect"
+      ],
+      "demangled": "CEffectManager::cloneEffect(CBaseUnit*, CEffect*)",
+      "original_size": 208,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7f3270",
+      "names": [
+        "_ZN14CEffectManager12cloneEffectsEP9CBaseUnitP10TArrayListIP7CEffectE"
+      ],
+      "demangled": "CEffectManager::cloneEffects(CBaseUnit*, TArrayList<CEffect*>*)",
+      "original_size": 123,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7f3b50",
+      "names": [
+        "_ZN14CEffectManager21removeNonSavedEffectsEv"
+      ],
+      "demangled": "CEffectManager::removeNonSavedEffects()",
+      "original_size": 147,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x7f5bd0",
+      "names": [
+        "_ZN14CEffectManager13createEffectsEP10CDataGroupb"
+      ],
+      "demangled": "CEffectManager::createEffects(CDataGroup*, bool)",
+      "original_size": 383,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x933fe0",
+      "names": [
+        "_ZN8CDungeon26getRandomLevelTemplateDataEv"
+      ],
+      "demangled": "CDungeon::getRandomLevelTemplateData()",
+      "original_size": 43,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x9c1dc0",
+      "names": [
+        "_ZN12CDamageShape40setDamageOnlyUnitTypeByUnitTypeLoadIndexEj"
+      ],
+      "demangled": "CDamageShape::setDamageOnlyUnitTypeByUnitTypeLoadIndex(unsigned int)",
+      "original_size": 86,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x9ca1e0",
+      "names": [
+        "_ZN12CDamageShape30getDamageOnlyUnitTypeLoadIndexEv"
+      ],
+      "demangled": "CDamageShape::getDamageOnlyUnitTypeLoadIndex()",
+      "original_size": 223,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x9d3ba0",
+      "names": [
+        "_ZN7CLayout13processInputsEjP17CEditorBaseObject"
+      ],
+      "demangled": "CLayout::processInputs(unsigned int, CEditorBaseObject*)",
+      "original_size": 303,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x9d3d10",
+      "names": [
+        "_ZN7CLayout23setDurationModificationEf"
+      ],
+      "demangled": "CLayout::setDurationModification(float)",
+      "original_size": 168,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x9d3dc0",
+      "names": [
+        "_ZN7CLayout22eventFiredByDescriptorEjP11CDescriptorP17CEditorBaseObject"
+      ],
+      "demangled": "CLayout::eventFiredByDescriptor(unsigned int, CDescriptor*, CEditorBaseObject*)",
+      "original_size": 34,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x9d3ea0",
+      "names": [
+        "_ZN7CLayout10setVisibleEb"
+      ],
+      "demangled": "CLayout::setVisible(bool)",
+      "original_size": 145,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x9d3f40",
+      "names": [
+        "_ZN7CLayoutC2EP16CResourceManager13ELAYOUT_TYPES",
+        "_ZN7CLayoutC1EP16CResourceManager13ELAYOUT_TYPES"
+      ],
+      "demangled": "CLayout::CLayout(CResourceManager*, ELAYOUT_TYPES)",
+      "original_size": 308,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x9ddb00",
+      "names": [
+        "_ZN7CLayout16getLayoutToCloneERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CLayout::getLayoutToClone(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 249,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x9de2d0",
+      "names": [
+        "_ZN7CLayout14setStartOnLoadEb"
+      ],
+      "demangled": "CLayout::setStartOnLoad(bool)",
+      "original_size": 190,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x9de390",
+      "names": [
+        "_ZN7CLayout33addLayoutForCloningAndControllingESbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CLayout::addLayoutForCloningAndControlling(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "original_size": 375,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x9dfa60",
+      "names": [
+        "_ZN7CLayout10initOnLoadEv"
+      ],
+      "demangled": "CLayout::initOnLoad()",
+      "original_size": 231,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x9fa2c0",
+      "names": [
+        "_ZN10CRoomPiece22getRoomPieceIsScalableEv"
+      ],
+      "demangled": "CRoomPiece::getRoomPieceIsScalable()",
+      "original_size": 35,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x9fa2f0",
+      "names": [
+        "_ZThn256_N10CRoomPiece13getSnapValuesE11ESNAP_TYPES"
+      ],
+      "demangled": "non-virtual thunk to CRoomPiece::getSnapValues(ESNAP_TYPES)",
+      "original_size": 9,
+      "status": "MATCH"
+    },
+    {
+      "address": "0x9fa300",
+      "names": [
+        "_ZN10CRoomPiece13getSnapValuesE11ESNAP_TYPES"
+      ],
+      "demangled": "CRoomPiece::getSnapValues(ESNAP_TYPES)",
+      "original_size": 69,
+      "status": "behavioral"
+    },
+    {
+      "address": "0x9fa350",
+      "names": [
+        "_ZN10CRoomPiece29getVisualMeshCountInRoomPieceEv"
+      ],
+      "demangled": "CRoomPiece::getVisualMeshCountInRoomPiece()",
+      "original_size": 54,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa07f10",
+      "names": [
+        "_ZN12CSoundObject4playEv"
+      ],
+      "demangled": "CSoundObject::play()",
+      "original_size": 279,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa08090",
+      "names": [
+        "_ZN12CSoundObject12updateSoundsEf"
+      ],
+      "demangled": "CSoundObject::updateSounds(float)",
+      "original_size": 174,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa08140",
+      "names": [
+        "_ZN12CSoundObject16setSoundBankGuidEx"
+      ],
+      "demangled": "CSoundObject::setSoundBankGuid(long long)",
+      "original_size": 126,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa08300",
+      "names": [
+        "_ZN12CSoundObjectC1EP16CResourceManager",
+        "_ZN12CSoundObjectC2EP16CResourceManager"
+      ],
+      "demangled": "CSoundObject::CSoundObject(CResourceManager*)",
+      "original_size": 281,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa0a420",
+      "names": [
+        "_ZN12CSoundObject21setSoundBankNameIndexEj"
+      ],
+      "demangled": "CSoundObject::setSoundBankNameIndex(unsigned int)",
+      "original_size": 383,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa17f30",
+      "names": [
+        "_ZN16CAffectorWrapper13setParentGuidEx"
+      ],
+      "demangled": "CAffectorWrapper::setParentGuid(long long)",
+      "original_size": 234,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa18020",
+      "names": [
+        "_ZN16CAffectorWrapper15destroyAffectorEv"
+      ],
+      "demangled": "CAffectorWrapper::destroyAffector()",
+      "original_size": 121,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa29d80",
+      "names": [
+        "_ZN9CParticle19forceParticleUpdateEf"
+      ],
+      "demangled": "CParticle::forceParticleUpdate(float)",
+      "original_size": 186,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa29e40",
+      "names": [
+        "_ZN9CParticle14getAllEmittersER10TArrayListIPN16ParticleUniverse15ParticleEmitterEE"
+      ],
+      "demangled": "CParticle::getAllEmitters(TArrayList<ParticleUniverse::ParticleEmitter*>&)",
+      "original_size": 539,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa2a060",
+      "names": [
+        "_ZN9CParticle6ResumeEv"
+      ],
+      "demangled": "CParticle::Resume()",
+      "original_size": 103,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa2a0d0",
+      "names": [
+        "_ZN9CParticle5PauseEv"
+      ],
+      "demangled": "CParticle::Pause()",
+      "original_size": 103,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa34e80",
+      "names": [
+        "_ZN18CParticlePreloader21getParticleCacheCountEv"
+      ],
+      "demangled": "CParticlePreloader::getParticleCacheCount()",
+      "original_size": 63,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa36100",
+      "names": [
+        "_ZN18CParticlePreloader19returnParticleCacheEP14CParticleCache"
+      ],
+      "demangled": "CParticlePreloader::returnParticleCache(CParticleCache*)",
+      "original_size": 276,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa37b80",
+      "names": [
+        "_ZN18CParticlePreloader12getFileNamesERSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CParticlePreloader::getFileNames(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",
+      "original_size": 491,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa37d70",
+      "names": [
+        "_ZN18CParticlePreloader25getParticleNameByFileNameERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CParticlePreloader::getParticleNameByFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 477,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa37f50",
+      "names": [
+        "_ZN18CParticlePreloader11GetParticleEP16CResourceManagerPKw"
+      ],
+      "demangled": "CParticlePreloader::GetParticle(CResourceManager*, wchar_t const*)",
+      "original_size": 234,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa383a0",
+      "names": [
+        "_ZN18CParticlePreloader5cleanEv"
+      ],
+      "demangled": "CParticlePreloader::clean()",
+      "original_size": 724,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa60ea0",
+      "names": [
+        "_ZN25CRoomPieceDataInformation27_GetRoomPieceCoreDataByGuidEx"
+      ],
+      "demangled": "CRoomPieceDataInformation::_GetRoomPieceCoreDataByGuid(long long)",
+      "original_size": 85,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa687d0",
+      "names": [
+        "_ZN10CSoundBank9setRadiusEf"
+      ],
+      "demangled": "CSoundBank::setRadius(float)",
+      "original_size": 84,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa68830",
+      "names": [
+        "_ZN10CSoundBank11bankPlayingEi"
+      ],
+      "demangled": "CSoundBank::bankPlaying(int)",
+      "original_size": 107,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa688a0",
+      "names": [
+        "_ZN10CSoundBank17queueGlobalSampleEiff"
+      ],
+      "demangled": "CSoundBank::queueGlobalSample(int, float, float)",
+      "original_size": 373,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa68a20",
+      "names": [
+        "_ZN10CSoundBank5pauseEv"
+      ],
+      "demangled": "CSoundBank::pause()",
+      "original_size": 86,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa68a80",
+      "names": [
+        "_ZN10CSoundBank6resumeEv"
+      ],
+      "demangled": "CSoundBank::resume()",
+      "original_size": 86,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa68ae0",
+      "names": [
+        "_ZN10CSoundBank4stopEi"
+      ],
+      "demangled": "CSoundBank::stop(int)",
+      "original_size": 158,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa68b80",
+      "names": [
+        "_ZN10CSoundBank20configureVolumeScaleEfRKN4Ogre7Vector3E"
+      ],
+      "demangled": "CSoundBank::configureVolumeScale(float, Ogre::Vector3 const&)",
+      "original_size": 91,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa68be0",
+      "names": [
+        "_ZN10CSoundBankC2ER13CSoundManagerb",
+        "_ZN10CSoundBankC1ER13CSoundManagerb"
+      ],
+      "demangled": "CSoundBank::CSoundBank(CSoundManager&, bool)",
+      "original_size": 283,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa68fd0",
+      "names": [
+        "_ZN10CSoundBank4stopEv"
+      ],
+      "demangled": "CSoundBank::stop()",
+      "original_size": 150,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xa69070",
+      "names": [
+        "_ZN10CSoundBank5clearEv"
+      ],
+      "demangled": "CSoundBank::clear()",
+      "original_size": 269,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa69710",
+      "names": [
+        "_ZN10CSoundBankD1Ev",
+        "_ZN10CSoundBankD2Ev"
+      ],
+      "demangled": "CSoundBank::~CSoundBank()",
+      "original_size": 358,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa69880",
+      "names": [
+        "_ZN10CSoundBankD0Ev"
+      ],
+      "demangled": "CSoundBank::~CSoundBank()",
+      "original_size": 18,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa6ae70",
+      "names": [
+        "_ZN16CChannelInstance5clearEv"
+      ],
+      "demangled": "CChannelInstance::clear()",
+      "original_size": 9,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa6b030",
+      "names": [
+        "_ZN13CSoundManager9findSoundERSbIwSt11char_traitsIwESaIwEE10SOUND_TYPEbff"
+      ],
+      "demangled": "CSoundManager::findSound(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&, SOUND_TYPE, bool, float, float)",
+      "original_size": 399,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa6bf80",
+      "names": [
+        "_ZN13CSoundManager10queueSoundEiP14CSoundInstanceff"
+      ],
+      "demangled": "CSoundManager::queueSound(int, CSoundInstance*, float, float)",
+      "original_size": 381,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xa6c650",
+      "names": [
+        "_ZN13CSoundManager19releaseUnusedSoundsEv"
+      ],
+      "demangled": "CSoundManager::releaseUnusedSounds()",
+      "original_size": 553,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xc700a0",
+      "names": [
+        "_ZN20CDynamicPropertyFile22GetStringPropertyIndexERKSbIwSt11char_traitsIwESaIwEES3_b"
+      ],
+      "demangled": "CDynamicPropertyFile::GetStringPropertyIndex(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",
+      "original_size": 509,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xc70450",
+      "names": [
+        "_ZN20CDynamicPropertyFile21GetFloatPropertyIndexERKSbIwSt11char_traitsIwESaIwEEfb"
+      ],
+      "demangled": "CDynamicPropertyFile::GetFloatPropertyIndex(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, float, bool)",
+      "original_size": 463,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xc70620",
+      "names": [
+        "_ZN20CDynamicPropertyFile19GetIntPropertyIndexERKSbIwSt11char_traitsIwESaIwEEib"
+      ],
+      "demangled": "CDynamicPropertyFile::GetIntPropertyIndex(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, int, bool)",
+      "original_size": 478,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xc74150",
+      "names": [
+        "_ZN10FILESYSTEM11GetFileDataERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "FILESYSTEM::GetFileData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 144,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xc75a20",
+      "names": [
+        "_ZN10FILESYSTEM16GetDirectoryListERKSbIwSt11char_traitsIwESaIwEERSt6vectorIS3_SaIS3_EE"
+      ],
+      "demangled": "FILESYSTEM::GetDirectoryList(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::vector<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::allocator<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > > >&)",
+      "original_size": 592,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xc75c70",
+      "names": [
+        "_ZN10FILESYSTEM21FindFullDirectoryNameERKSbIwSt11char_traitsIwESaIwEES5_"
+      ],
+      "demangled": "FILESYSTEM::FindFullDirectoryName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 588,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xc75ec0",
+      "names": [
+        "_ZN10FILESYSTEM20GetFileListRecursiveERKSbIwSt11char_traitsIwESaIwEER10TArrayListIS3_ES5_"
+      ],
+      "demangled": "FILESYSTEM::GetFileListRecursive(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 707,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xc76190",
+      "names": [
+        "_ZN10FILESYSTEM16FindFullFileNameERKSbIwSt11char_traitsIwESaIwEES5_S5_"
+      ],
+      "demangled": "FILESYSTEM::FindFullFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 778,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xcab650",
+      "names": [
+        "_ZN22CSkillEffectAndAffixes19setDurationOverrideEf"
+      ],
+      "demangled": "CSkillEffectAndAffixes::setDurationOverride(float)",
+      "original_size": 254,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xcabb30",
+      "names": [
+        "_ZN22CSkillEffectAndAffixes18effectsTargetEnemyEP9CBaseUnit"
+      ],
+      "demangled": "CSkillEffectAndAffixes::effectsTargetEnemy(CBaseUnit*)",
+      "original_size": 140,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xcabf10",
+      "names": [
+        "_ZN22CSkillEffectAndAffixes18getPortalSkillNameEv"
+      ],
+      "demangled": "CSkillEffectAndAffixes::getPortalSkillName()",
+      "original_size": 292,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xcb37a0",
+      "names": [
+        "_ZN22CSkillEffectAndAffixes10appendNameERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CSkillEffectAndAffixes::appendName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 322,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xcca8c0",
+      "names": [
+        "_ZN13CSkillManager17getSkillIsCoolingEP6CSkill"
+      ],
+      "demangled": "CSkillManager::getSkillIsCooling(CSkill*)",
+      "original_size": 259,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xcca9d0",
+      "names": [
+        "_ZN13CSkillManager19getSkillCoolingTimeEP6CSkill"
+      ],
+      "demangled": "CSkillManager::getSkillCoolingTime(CSkill*)",
+      "original_size": 380,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xccacb0",
+      "names": [
+        "_ZN13CSkillManager17triggerSkillEventE17ESKILL_EVENT_TYPERKN4Ogre7Vector3ERKNS1_10QuaternionEP9CBaseUnit"
+      ],
+      "demangled": "CSkillManager::triggerSkillEvent(ESKILL_EVENT_TYPE, Ogre::Vector3 const&, Ogre::Quaternion const&, CBaseUnit*)",
+      "original_size": 263,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xcd0d90",
+      "names": [
+        "_ZN13CSkillManager24getSkillIsUpdatingByNameERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CSkillManager::getSkillIsUpdatingByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 119,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xcd1060",
+      "names": [
+        "_ZN13CSkillManager22clearAllUnitReferencesEv"
+      ],
+      "demangled": "CSkillManager::clearAllUnitReferences()",
+      "original_size": 331,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xcd2b80",
+      "names": [
+        "_ZN13CSkillManager10knowsSkillERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CSkillManager::knowsSkill(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 348,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xcd2ea0",
+      "names": [
+        "_ZN13CSkillManager20attemptDeleteOfSkillEP6CSkill"
+      ],
+      "demangled": "CSkillManager::attemptDeleteOfSkill(CSkill*)",
+      "original_size": 403,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xcd5140",
+      "names": [
+        "_ZN13CSkillManager6updateEf"
+      ],
+      "demangled": "CSkillManager::update(float)",
+      "original_size": 217,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xcd5460",
+      "names": [
+        "_ZN13CSkillManager18fireSkillsOnCreateEP9CBaseUnit22ESKILL_ACTIVATION_TYPERKN4Ogre7Vector3ERKNS3_10QuaternionES6_P10CCharacter"
+      ],
+      "demangled": "CSkillManager::fireSkillsOnCreate(CBaseUnit*, ESKILL_ACTIVATION_TYPE, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&, CCharacter*)",
+      "original_size": 204,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xcdbeb0",
+      "names": [
+        "_ZN12CSkillParser8getSkillEP16CResourceManagerRKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CSkillParser::getSkill(CResourceManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 443,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xcdd160",
+      "names": [
+        "_ZN14CSkillProperty28applyAffixesAndEffectsToUnitEP10CCharacterPKN4Ogre7Vector3E"
+      ],
+      "demangled": "CSkillProperty::applyAffixesAndEffectsToUnit(CCharacter*, Ogre::Vector3 const*)",
+      "original_size": 141,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xd6f560",
+      "names": [
+        "_ZN16CResourceManager14createParticleEPKw"
+      ],
+      "demangled": "CResourceManager::createParticle(wchar_t const*)",
+      "original_size": 97,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xd6f6c0",
+      "names": [
+        "_ZN16CResourceManager3ISAERKSbIwSt11char_traitsIwESaIwEES5_"
+      ],
+      "demangled": "CResourceManager::ISA(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 117,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xd6f770",
+      "names": [
+        "_ZN16CResourceManager19getSpawnClassByNameERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "demangled": "CResourceManager::getSpawnClassByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "original_size": 22,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xd6fa50",
+      "names": [
+        "_ZN16CResourceManager19getCurrentLevelSeedEv"
+      ],
+      "demangled": "CResourceManager::getCurrentLevelSeed()",
+      "original_size": 19,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xd76a20",
+      "names": [
+        "_ZN16CResourceManager17getNewAffixByNameERKSbIwSt11char_traitsIwESaIwEEj"
+      ],
+      "demangled": "CResourceManager::getNewAffixByName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, unsigned int)",
+      "original_size": 151,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xd78750",
+      "names": [
+        "_ZN16CResourceManager29getResourceGroupFromDataGroupEP10CDataGroup"
+      ],
+      "demangled": "CResourceManager::getResourceGroupFromDataGroup(CDataGroup*)",
+      "original_size": 201,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xd78d50",
+      "names": [
+        "_ZN16CResourceManager10createUnitEPKwS1_ib"
+      ],
+      "demangled": "CResourceManager::createUnit(wchar_t const*, wchar_t const*, int, bool)",
+      "original_size": 391,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xd78ee0",
+      "names": [
+        "_ZN16CResourceManager23createUnitsBySpawnClassEP11CSpawnClassR10TArrayListIP9CBaseUnitEjP10CCharacterS8_ii"
+      ],
+      "demangled": "CResourceManager::createUnitsBySpawnClass(CSpawnClass*, TArrayList<CBaseUnit*>&, unsigned int, CCharacter*, CCharacter*, int, int)",
+      "original_size": 688,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xe17910",
+      "names": [
+        "_ZN16CSkillController14getSkillTargetEv"
+      ],
+      "demangled": "CSkillController::getSkillTarget()",
+      "original_size": 83,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xe206f0",
+      "names": [
+        "_ZN16CSkillController10learnSkillEv"
+      ],
+      "demangled": "CSkillController::learnSkill()",
+      "original_size": 191,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xe7a4a0",
+      "names": [
+        "_ZN17CUnitResourceList12getSingletonEv"
+      ],
+      "demangled": "CUnitResourceList::getSingleton()",
+      "original_size": 8,
+      "status": "MATCH"
+    },
+    {
+      "address": "0xe7af30",
+      "names": [
+        "_ZN17CUnitResourceList23getDataGroupsByUnitTypeEjR10TArrayListIP10CDataGroupE"
+      ],
+      "demangled": "CUnitResourceList::getDataGroupsByUnitType(unsigned int, TArrayList<CDataGroup*>&)",
+      "original_size": 669,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xebf7c0",
+      "names": [
+        "_ZN12CAchievement21getStatCompleteStringEv"
+      ],
+      "demangled": "CAchievement::getStatCompleteString()",
+      "original_size": 533,
+      "status": "behavioral"
+    },
+    {
+      "address": "0xec7090",
+      "names": [
+        "_ZN13CAchievements14getAchievementESs"
+      ],
+      "demangled": "CAchievements::getAchievement(std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",
+      "original_size": 305,
+      "status": "behavioral"
+    }
+  ],
+  "review_sha256": "07f4f1bfd27cc038bfcf7cd893a4c6fde32bad574fabdea09a3f5d6736d1ff15",
+  "artifact_hashes": {
+    "candidates/editor/ready.json": "6daed43a0d2276330ad3101f8e16d4f1fe3c488bf970758821b0d50f04415d14",
+    "candidates/particles/manifest.json": "f6e5843f8d2d8ecf909e6eb799ae587afa0ee087610090533e4cb498318b46e1",
+    "candidates/effects/READY.json": "8a83595ef40d7b50c01dda93668c023aa57d3ed50de2c79e26a2c5740d1735e6",
+    "candidates/rootcompat/manifest.json": "6279b8eff8ce9efc7477512370e902ad0b09bf4294394b91aa3aeb4782da9d3b",
+    "candidates/rootcompat/editor-review-fixes.json": "ea9386f1ace4785401a35027fa49e9c4636e8dde81d213463c126994c1ae7466",
+    "candidates/rootcompat/audio-review-fixes.json": "fe62bfa07ac3fcf1f942fae1a4952e81813ea06154f230431837cedfae0dea16",
+    "candidates/rootcompat/affix-review-fixes.json": "66c235fc22dbe299fbb34e84640abf81a9d5dc49b691c1f04c8a20570f935081",
+    "runtime-fixes/editor/manifest.json": "7944f59afbd04836b61f6d122d36f87fbed7d2c69b0f0df04d2e5fe1cad7e386",
+    "runtime-fixes/effects/manifest.json": "edd33b971404b77813ac9376dbcda4dfa7e919dada3dc5045baadadb0c1a91ac",
+    "complete-delete-fix.json": "7209e20b7995fb9e0b5dc0da0198bd9365fc7ee54843ff54559351625799a2f6",
+    "review.json": "07f4f1bfd27cc038bfcf7cd893a4c6fde32bad574fabdea09a3f5d6736d1ff15"
+  },
+  "limits": [
+    "Headless in-process comparison only; windowed gameplay remains unverified.",
+    "DescriptorProp D1 executes the real allocator for scratch/lists; the explicit regression observes virtual interpreter destruction/deallocation, weak references and surviving string ownership, without separately counting each scratch/list allocator call.",
+    "The original zero-count aligned-integer getter returns a dangling local buffer. The setData fixture uses an owned STRING conversion for that empty path; the separate getDataFromObject fixture captures converter arguments synchronously.",
+    "Duration fixtures initialize allocated spare pointer slots without changing list counts, preserving the original outer-index lookup behavior.",
+    "Compiler-generated helpers remain outside game-function totals and are not installed as hybrid hooks."
+  ]
+}

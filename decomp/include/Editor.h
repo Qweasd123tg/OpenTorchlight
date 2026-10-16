@@ -26,6 +26,7 @@ class iEditorResourceManager;
 // declared as recovered TUs need them; unnamed members are not identified yet.
 class CEditor : public CRunicCore
 {
+    friend class CUndo;
 public:
     friend wchar_t* EditorGetDebugOutput();
     friend unsigned int EditorUpdate(int);

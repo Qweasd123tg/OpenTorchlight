@@ -1,3 +1,4 @@
+#include "GameClient.h"
 #include "EmptyStrings.h"
 #include "GameEnums.h"
 #include "GameVariables.h"
@@ -9,17 +10,15 @@
 #include "SafePointer.h"
 #include "SkillManager.h"
 
-CPlayer* CSkillController::getSkillTarget()
+CCharacter* CSkillController::getSkillTarget()
 {
     if (m_bUsePlayerAsTarget)
-        return *reinterpret_cast<CPlayer **>(
-            reinterpret_cast<char *>(m_pResourceManager->getGameClient()) + 0x58);
-
-    if (m_bUseUnitTarget && m_pRunicCore != NULL &&
-        *reinterpret_cast<int *>(reinterpret_cast<char *>(m_pRunicCore) + 0xBC) == 0)
-        return *reinterpret_cast<CPlayer **>(
-            reinterpret_cast<char *>(m_pRunicCore) + 0x340);
-
+        return m_pResourceManager->getGameClient()->getPlayer();
+    if (m_bUseUnitTarget && m_pRunicCore) {
+        CCharacter* character = static_cast<CCharacter*>(m_pRunicCore);
+        if (character->m_eBaseUnitType == static_cast<EBASEUNIT_TYPE>(0))
+            return character->m_targetCharacter.getObject();
+    }
     return NULL;
 }
 
@@ -82,5 +81,19 @@ void CSkillController::unlearnSkill()
         if (skills)
             skills->deleteSkill(m_sSkillName);
         BroadcastEvent(106);
+    }
+}
+
+void CSkillController::learnSkill()
+{
+    if (!configureUnit() || m_sSkillName.empty() || !m_pRunicCore)
+        return;
+    CSkillManager* skills = static_cast<CBaseUnit*>(m_pRunicCore)->getSkillManager();
+    if (skills && skills->knowsSkill(m_sSkillName))
+        return;
+    CSkill* skill = static_cast<CBaseUnit*>(m_pRunicCore)->addSkillByName(m_sSkillName, false);
+    if (skill) {
+        static_cast<CBaseUnit*>(m_pRunicCore)->getSkillManager()->setSkillLevel(skill, 1);
+        BroadcastEvent(105);
     }
 }

@@ -20,7 +20,7 @@ public:
     void clearSkills();
     static void getSkillNames(TArrayList<std::wstring>& skillNames);
     CDataGroup* getSkillData(const std::wstring& skillName);
-    CSkill* getSkill(CResourceManager* resourceManager, const std::wstring& skillName);
+    static CSkill* getSkill(CResourceManager* resourceManager, const std::wstring& skillName);
     void parseSkill(const std::wstring& fileName);
     void parseSkills();
     void reloadSkills();

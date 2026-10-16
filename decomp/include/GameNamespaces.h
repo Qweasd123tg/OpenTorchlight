@@ -36,7 +36,7 @@ namespace STRINGS
     void GetFloat64(const std::wstring&);
     long GetInt64(const std::string&);
     long long GetInt64(const std::wstring&);
-    void* StringConvertUTF8ToWide(const std::string&);
+    std::wstring StringConvertUTF8ToWide(const std::string&);
     long long StringCopyWCharArray(wchar_t*, unsigned int, const char*);
     long long StringCopyWCharArray(wchar_t*, unsigned int, std::string);
     unsigned int StringCopyWCharArray(wchar_t*, unsigned int, const wchar_t*);

@@ -9,7 +9,7 @@
 #include "iSelected.h"
 
 class CParticleTechWrapper;
-class ParticleAffector;
+namespace ParticleUniverse { class ParticleAffector; }
 
 #pragma pack(push, 1)
 
@@ -31,7 +31,7 @@ public:
     CAffectorWrapper(CResourceManager* resourceManager, std::string name);
 
     CParticleTechWrapper* m_pParticleTechWrapper;
-    ParticleAffector* m_pAffector;
+    ParticleUniverse::ParticleAffector* m_pAffector;
     bool m_bPositioningEnabled;
     bool m_bEnabled;
 };

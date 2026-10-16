@@ -248,6 +248,18 @@ CDataValue* CDataGroup::AddDataValue(const std::wstring& name, long long value)
     return data;
 }
 
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, const std::wstring& value, bool translate)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueString(value.c_str());
+    m_DataValues.add(data);
+    if (translate)
+        data->SetValueIsTranslate();
+    return data;
+}
+
+
 CDataValue* CDataGroup::AddDataValue(const std::wstring& name, int value)
 {
     m_b58 = true;
@@ -267,16 +279,6 @@ CDataGroup* CDataGroup::GetDataGroupByName(const std::wstring& name, bool create
     return NULL;
 }
 
-CDataValue* CDataGroup::AddDataValue(const std::wstring& name, const std::wstring& value, bool translate)
-{
-    m_b58 = true;
-    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
-    data->SetValueString(value.c_str());
-    m_DataValues.add(data);
-    if (translate)
-        data->SetValueIsTranslate();
-    return data;
-}
 
 CDataValue* CDataGroup::AddDataValue(const std::wstring& name, bool value)
 {
@@ -348,3 +350,5 @@ unsigned int CDataGroup::GetDataValuesMatchingName(const std::wstring& name, std
             values->push_back(m_DataValues[i]);
     return values->size();
 }
+
+#include "DataGroupRepository.h"

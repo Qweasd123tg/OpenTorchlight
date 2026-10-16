@@ -5,10 +5,16 @@
 #include <cstdio>
 #include <vector>
 #include "TArrayList.h"
+#include "LinuxFileCompat.h"
 
 // Partial: declarations from FileUtilities.cpp used by recovered TUs.
 namespace FILESYSTEM
 {
+    _WIN32_FIND_DATA GetFileData(const std::wstring& path);
+    unsigned char ReadByte(FILE* file);
+    std::string ReadString(FILE* file, unsigned int length);
+    std::string ReadString(FILE* file);
+    std::wstring ReadWString(FILE* file);
     std::wstring GetFileName(const std::wstring& path);
     std::string GetFileName(const std::string& path);
     std::wstring GetDirectory(const std::wstring& path);

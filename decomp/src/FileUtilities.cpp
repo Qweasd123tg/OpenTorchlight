@@ -197,3 +197,69 @@ long long FILESYSTEM::GetFileCreationTime(const wchar_t* path)
     struct stat info;
     return stat(narrow.c_str(), &info) == 0 ? info.st_ctime : -1;
 }
+
+_WIN32_FIND_DATA FILESYSTEM::GetFileData(const std::wstring& path)
+{
+    _WIN32_FIND_DATA data;
+    std::string name = STRINGS::StringConvertToUTF8(path);
+    void* handle = FindFirstFile(name.c_str(), &data);
+    FindClose(handle);
+    return data;
+}
+void FILESYSTEM::GetDirectoryList(const std::wstring& path, std::vector<std::wstring>& directories)
+{
+    std::string pattern = STRINGS::StringConvertToUTF8(path);
+    pattern += "/*.*";
+    _WIN32_FIND_DATA data;
+    void* handle = FindFirstFile(pattern.c_str(), &data);
+    if (handle) {
+        do {
+            std::wstring name = STRINGS::StringConvertUTF8ToWide(std::string(data.fileName));
+            if ((data.attributes & 0x10) && !name.empty()) directories.push_back(name);
+        } while (FindNextFile(handle, &data));
+    }
+    FindClose(handle);
+}
+std::wstring FILESYSTEM::FindFullDirectoryName(const std::wstring& path, const std::wstring& name)
+{
+    std::wstring result(L"");
+    std::vector<std::wstring> directories;
+    GetDirectoryList(path, directories);
+    for (std::vector<std::wstring>::iterator i = directories.begin(); i < directories.end(); ++i) {
+        std::wstring current = *i;
+        if (current.substr(0, name.length()) == name) {
+            result = current;
+            break;
+        }
+    }
+    return result;
+}
+void FILESYSTEM::GetFileListRecursive(const std::wstring& path, TArrayList<std::wstring>& files,
+                                    const std::wstring& pattern)
+{
+    GetFileList(path, files, pattern);
+    std::vector<std::wstring> directories;
+    GetDirectoryList(path, directories);
+    for (unsigned int i = 0; i < directories.size(); ++i) {
+        std::wstring name = directories[i];
+        if (name[0] != L'.') GetFileListRecursive(path + name + L"/", files, pattern);
+    }
+}
+std::wstring FILESYSTEM::FindFullFileName(const std::wstring& path, const std::wstring& name,
+                                       const std::wstring& extension)
+{
+    std::wstring result(L"");
+    TArrayList<std::wstring> files(25);
+    GetFileList(path, files, L"*.*");
+    for (unsigned int i = 0; i < files.size(); ++i) {
+        std::wstring current = files[i];
+        if (current.substr(0, name.length()) == name) {
+            unsigned int length = extension.length();
+            if (length == 0 || (length < current.length() && current.substr(current.length() - length) == extension)) {
+                result = current;
+                break;
+            }
+        }
+    }
+    return result;
+}

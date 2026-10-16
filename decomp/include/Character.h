@@ -56,6 +56,7 @@ enum EAIState
 class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
+    friend class CSkillController;
     friend class CDieMenu;
     friend class CQuestUnitData;
 friend class CPlayer;

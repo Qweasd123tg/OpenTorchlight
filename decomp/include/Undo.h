@@ -5,11 +5,26 @@
 #include "TArrayList.h"
 
 class CEditorBaseObject;
+union UNIONDATA32BIT;
 
 class CUndo : public CRunicCore
 {
 public:
-	class CUndoData;
+    class CUndoData : public CRunicCore
+    {
+    public:
+        virtual ~CUndoData();
+        CEditorBaseObject* m_object;              // 0x10
+        int m_action;                            // 0x18
+        unsigned int m_property;                 // 0x1c
+        unsigned int m_sceneID;                  // 0x20
+        unsigned char m_padding24[4];
+        long long m_parentGuid;                  // 0x28
+        long long m_objectGuid;                  // 0x30
+        UNIONDATA32BIT* m_data;                  // 0x38
+        unsigned int m_count;                    // 0x40
+        unsigned char m_padding44[4];
+    };
 
 	CUndo();
 	CUndo(CEditorBaseObject* pObject, unsigned int uiProperty);

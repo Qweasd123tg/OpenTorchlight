@@ -111,3 +111,9 @@ unsigned int CUnitSpawnerDescriptor::GetResourceIDByString(CEditorScene*, CEdito
         return 0;
     return 0xffffffff;
 }
+
+void CUnitSpawnerDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject* object)
+{
+    CUnitSpawner* spawner = dynamic_cast<CUnitSpawner*>(object);
+    if (spawner) spawner->reset();
+}

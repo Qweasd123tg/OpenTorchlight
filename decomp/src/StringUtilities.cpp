@@ -105,11 +105,11 @@ namespace STRINGS
     }
 }
 
-void* STRINGS::StringConvertUTF8ToWide(const std::string& text)
+extern std::wstring UTF8ToUTF32(const std::string&);
+
+std::wstring STRINGS::StringConvertUTF8ToWide(const std::string& text)
 {
-    extern void UTF8ToUTF32(const std::string&);
-    UTF8ToUTF32(text);
-    return const_cast<std::string*>(&text);
+    return ::UTF8ToUTF32(text);
 }
 
 extern std::string UTF32ToUTF8(const std::wstring&);

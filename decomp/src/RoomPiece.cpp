@@ -33,3 +33,29 @@ void CRoomPiece::setParentGuid(long long guid)
         }
     }
 }
+
+char CRoomPiece::getRoomPieceIsScalable()
+{
+    if (m_pRoomPieceData && m_pRoomPieceData->m_coreData)
+        return m_pRoomPieceData->m_coreData->m_scalable;
+    return 0;
+}
+TArrayList<float>* CRoomPiece::getSnapValues(ESNAP_TYPES type)
+{
+    if (m_pRoomPieceData && m_pRoomPieceData->m_coreData) {
+        CRoomPieceDataInformation::CRoomPieceCoreData* data = m_pRoomPieceData->m_coreData;
+        switch (type) {
+        case 0: return &data->m_snapPosition;
+        case 1: return &data->m_snapRotation;
+        case 2: return &data->m_snapScale;
+        default: break;
+        }
+    }
+    return NULL;
+}
+int CRoomPiece::getVisualMeshCountInRoomPiece()
+{
+    if (m_iVisualIndex_140 != -1 && m_pRoomPieceData && m_pRoomPieceData->m_coreData)
+        return m_pRoomPieceData->m_coreData->m_visualMeshFiles.size();
+    return 1;
+}

@@ -163,3 +163,14 @@ CAchievement::CAchievement(std::string name, ESTATS statType,
         currentValue < requiredValue ? requiredValue : currentValue;
     CSteamStats::getSingleton()->addStatListener(statType, this);
 }
+
+#include "StringUtilities.h"
+
+std::wstring CAchievement::getStatCompleteString()
+{
+    if (m_eStatType == static_cast<ESTATS>(30))
+        return m_bAchieved ? L"1/1" : L"0/1";
+    std::wstring current = STRINGS::GetValueAsWString(CSteamStats::getSingleton()->getStatInt(m_eStatType));
+    std::wstring required = STRINGS::GetValueAsWString(*reinterpret_cast<const int*>(&m_fRequiredValue));
+    return current + L"/" + required;
+}

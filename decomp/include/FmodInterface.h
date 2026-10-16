@@ -3,7 +3,7 @@
 // Partial FMOD Ex 4.36.21 interface. Methods are resolved from the original library.
 enum FMOD_RESULT { FMOD_OK = 0 };
 namespace FMOD {
-class Sound { public: FMOD_RESULT getMode(unsigned int*); FMOD_RESULT release(); };
+class Sound { public: FMOD_RESULT getMode(unsigned int*); FMOD_RESULT getLength(unsigned int*, unsigned int); FMOD_RESULT release(); };
 class SoundGroup { public: FMOD_RESULT setVolume(float); };
 class ChannelGroup { public: FMOD_RESULT setVolume(float); FMOD_RESULT setMute(bool); };
 class Channel { public:
@@ -15,6 +15,7 @@ class Channel { public:
     FMOD_RESULT setPaused(bool);
 };
 class System { public:
+    FMOD_RESULT update();
     FMOD_RESULT createSoundGroup(const char*,SoundGroup**);
     FMOD_RESULT getMasterSoundGroup(SoundGroup**);
     FMOD_RESULT getMasterChannelGroup(ChannelGroup**);

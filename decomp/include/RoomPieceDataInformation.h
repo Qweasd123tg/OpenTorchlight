@@ -12,8 +12,18 @@
 class CRoomPieceDataInformation : public CRunicCore
 {
 public:
-    struct CRoomPieceCoreData
+    struct CRoomPieceCoreData : public CRunicCore
     {
+        virtual ~CRoomPieceCoreData();
+        std::wstring m_name;                      // 0x10
+        unsigned char m_unknown18[0x18];
+        bool m_scalable;                         // 0x30
+        unsigned char m_padding31[7];
+        TArrayList<float> m_snapRotation;         // 0x38
+        TArrayList<float> m_snapPosition;         // 0x50
+        TArrayList<float> m_snapScale;            // 0x68
+        TArrayList<std::wstring> m_visualMeshFiles; // 0x80
+        TArrayList<std::wstring> m_collisionMeshFiles; // 0x98
     };
 
     virtual ~CRoomPieceDataInformation();

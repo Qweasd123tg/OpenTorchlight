@@ -1,3 +1,4 @@
+#include "DungeonManager.h"
 #include "EmptyStrings.h"
 #include "GameEnums.h"
 #include "GameVariables.h"
@@ -27,7 +28,7 @@ CDungeon::CDungeon()
 CLevelTemplateData* CDungeon::getRandomLevelTemplateData()
 {
     unsigned int depth = m_randomizer.getRandom();
-    if (depth >= static_cast<unsigned int>(m_iDungeonIndex))
+    if (depth >= m_levelTemplateData.size())
         depth = 0;
     return getStrataTemplate(depth);
 }

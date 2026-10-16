@@ -2,6 +2,7 @@
 #define TIMELINEPROPERTY_H
 
 #include <string>
+#include <OgreSimpleSpline.h>
 
 #include "Descriptor.h"
 #include "DescriptorProp.h"
@@ -88,7 +89,7 @@ public:
     TLinkedListNode<CTimelinePoint *> *m_timelinePoints; // 0x40
     int m_interpolationType;                         // 0x48
     unsigned char m_padding4C[4];                     // 0x4C
-    void *m_spline;                                  // 0x50
+    Ogre::SimpleSpline *m_spline;                                  // 0x50
     CTimeline *m_timeline;                           // 0x58
     bool m_updating;                                  // 0x60
 };

@@ -14,7 +14,7 @@
 #include "iLevelUpdate.h"
 #include "iMenuListener.h"
 
-long long CCinematicObject::updateLevelObject(float fTime, Ogre::Camera* pCamera,
+bool CCinematicObject::updateLevelObject(float fTime, Ogre::Camera* pCamera,
                                                const Ogre::Vector3& vPosition)
 {
 }

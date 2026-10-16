@@ -203,7 +203,7 @@ void CSoundManager::set3DMinMaxDistance(int index, float minimum, float maximum)
     }
 }
 
-long long CSoundManager::isChannelPlaying(int index)
+bool CSoundManager::isChannelPlaying(int index)
 {
     if (index == -1) return 0;
     if (index > 63) return 0;
@@ -240,4 +240,56 @@ void CSoundManager::setPauseSound(int index, bool paused)
         if (m_iUnknown18->getChannel(index, &channel) == FMOD_OK)
             channel->setPaused(paused);
     }
+}
+
+#include "SoundInstance.h"
+#include <OgreLogManager.h>
+#include <OgreStringConverter.h>
+
+CSoundInstance* CSoundManager::findSound(std::wstring& name, SOUND_TYPE type, bool loop, float volume, float)
+{
+    for (unsigned int i = 0; i < m_pendingSounds.size(); ++i)
+        if (m_pendingSounds[i]->m_soundType == type &&
+            name == m_pendingSounds[i]->m_soundName &&
+            m_pendingSounds[i]->m_loop == loop &&
+            volume == m_pendingSounds[i]->m_volume)
+            return m_pendingSounds[i];
+    return 0;
+}
+
+void CSoundManager::queueSound(int bank, CSoundInstance* sound, float volume, float delay)
+{
+    if (m_fileField2C == bank && isChannelPlaying(m_iUnknown6F0))
+        return;
+    for (unsigned int i = 0; i < m_soundList0.size(); ++i)
+        if (m_soundList0[i] == bank)
+            return;
+    ++sound->m_referenceCount;
+    m_soundList1.push_back(sound);
+    m_soundList2.push_back(volume);
+    m_soundList3.push_back(delay);
+    m_soundList0.push_back(bank);
+}
+
+void CSoundManager::releaseUnusedSounds()
+{
+    stopSound(m_iUnknown6F0);
+    m_iUnknown6F0 = -1;
+    for (unsigned int i = 0; i < m_soundList1.size(); ++i)
+        --m_soundList1[i]->m_referenceCount;
+    m_soundList1.clear();
+    m_soundList0.clear();
+    m_soundList2.clear();
+    m_soundList3.clear();
+    int released = 0;
+    for (unsigned int i = 0; i < m_pendingSounds.size(); ++i) {
+        CSoundInstance* sound = m_pendingSounds[i];
+        if (static_cast<int>(sound->m_referenceCount) <= 0) {
+            m_pendingSounds.remove(sound);
+            delete sound;
+            ++released;
+            i = 0;
+        }
+    }
+    Ogre::LogManager::getSingleton().logMessage("Released sounds : " + Ogre::StringConverter::toString(released));
 }

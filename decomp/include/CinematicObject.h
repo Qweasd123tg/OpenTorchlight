@@ -22,7 +22,7 @@ public:
                                   EMENU_TYPE eMenuType,
                                   EMENU_EVENT eMenuEvent);
 
-    virtual long long updateLevelObject(float fTime,
+    virtual bool updateLevelObject(float fTime,
                                          Ogre::Camera* pCamera,
                                          const Ogre::Vector3& vPosition);
 

@@ -66,3 +66,46 @@ void CAffectorWrapper::setParentTechniqueWrapper(CParticleTechWrapper* parent)
 CAffectorWrapper::~CAffectorWrapper()
 {
 }
+
+#include "EditorScene.h"
+#include "MasterResourceManager.h"
+namespace ParticleUniverse {
+class ParticleSystemManager { public: void destroyAffector(ParticleAffector*); };
+}
+
+void CAffectorWrapper::setParentGuid(long long guid)
+{
+    if (m_pParticleTechWrapper)
+        m_pParticleTechWrapper->removeAffector(this);
+    setParentTechniqueWrapper(0);
+    CEditorBaseObject::setParentGuid(guid);
+    if (!getSceneOwner())
+        return;
+    while (guid != -1) {
+        CEditorBaseObject* object = getSceneOwner()->GetObjectInScene(guid);
+        if (!object)
+            break;
+        CParticleTechWrapper* parent = dynamic_cast<CParticleTechWrapper*>(object);
+        if (parent) {
+            setParentTechniqueWrapper(parent);
+            break;
+        }
+        guid = object->getParentGuid();
+    }
+    if (m_pResourceManager->getEditorIsRunning() && getSceneOwner() && getSceneOwner()->getSceneOwner())
+        sceneNodeDetachEntity();
+}
+
+void CAffectorWrapper::destroyAffector()
+{
+    if (m_pSceneNode) {
+        sceneNodeDetachEntity();
+        sceneNodeDestroy();
+    }
+    if (m_pAffector) {
+        setParentTechniqueWrapper(0);
+        CMasterResourceManager::getSingleton()->m_pParticleSystemManager->destroyAffector(m_pAffector);
+    }
+    m_pParticleTechWrapper = 0;
+    m_pAffector = 0;
+}

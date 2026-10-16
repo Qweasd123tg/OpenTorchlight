@@ -34,3 +34,14 @@ float CSkillProperty::getCoolDown()
         return m_fMonsterCoolDown;
     return m_fCoolDown;
 }
+
+#include "SkillEffectAndAffixes.h"
+#include "Character.h"
+
+bool CSkillProperty::applyAffixesAndEffectsToUnit(CCharacter* character, const Ogre::Vector3* position)
+{
+    if (character && !m_pSkillEffectAndAffixes)
+        return false;
+    CCharacter* owner = dynamic_cast<CCharacter*>(m_pSkill->getMasterOwner());
+    return m_pSkillEffectAndAffixes->applyAffixesAndEffects(character, owner, position, false);
+}

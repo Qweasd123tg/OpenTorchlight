@@ -42,7 +42,7 @@ void side(void*raw,autotest::Capture&out,bool ours){
     CSoundManager*manager=reinterpret_cast<CSoundManager*>(memory);expectedSystem=system;expectedChannel=channel;
     manager->m_iUnknown18=reinterpret_cast<FMOD::System*>(system);
     static const int counts[]={0,1,7,-7,static_cast<int>(0x80000000u)};manager->m_iUnknown14=counts[c.value];
-    for(unsigned i=0;i<64;++i)manager->m_channels[i].m_iUnknown10=0x1122334400000000LL+i;
+    for(unsigned i=0;i<64;++i)manager->m_channels[i].m_iUnknown10=reinterpret_cast<CSoundInstance*>(static_cast<uintptr_t>(0x1122334400000000ULL+i));
     unsigned char expected[sizeof(memory)];std::memcpy(expected,memory,sizeof(memory));
     detour::Set d;
     d.redirect(getChannelImport,getChannelImport,&getChannel);

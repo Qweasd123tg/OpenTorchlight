@@ -90,3 +90,40 @@ CDescriptor* CDescriptorManager::GetDescriptor(const wchar_t* name, bool createI
     }
     return NULL;
 }
+
+CDescriptor* CDescriptorManager::GetDescriptorByCreated(unsigned int index, bool createIfMissing)
+{
+    for (unsigned int i = 0; i < getDescriptorVector().size(); ++i)
+        if (getDescriptorVector()[i]->m_iID == index)
+            return getDescriptorVector()[i];
+    if (createIfMissing) {
+        CDescriptor* descriptor = CDescriptorController::getNewDescriptorByCreatedIndex(index);
+        if (descriptor)
+            AddDescriptor(descriptor);
+        return descriptor;
+    }
+    return NULL;
+}
+
+void CDescriptorManager::activateDescriptors(CEditorScene* scene)
+{
+    if (!scene)
+        return;
+    for (unsigned int i = 0; i < getDescriptorVector().size(); ++i) {
+        CDescriptor* descriptor = getDescriptorVector()[i];
+        if (descriptor->m_iFlags & 0x4000)
+            for (unsigned int j = 0; j < descriptor->m_Objects.size(); ++j)
+                descriptor->m_Objects[j]->calculateParentHierarchyHashCode();
+    }
+    for (unsigned int i = 0; i < getDescriptorVector().size(); ++i)
+        getDescriptorVector()[i]->descriptorSceneActivated(scene);
+}
+
+void CDescriptorManager::SerializeDescriptors(CDataGroup* data)
+{
+    if (!data)
+        return;
+    CDataGroup* group = data->AddDataGroup(L"OBJECT GROUP");
+    for (unsigned int i = 0; i < getDescriptorVector().size(); ++i)
+        getDescriptorVector()[i]->SerializeDescriptor(group, i);
+}
