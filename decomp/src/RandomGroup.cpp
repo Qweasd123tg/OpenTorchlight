@@ -79,3 +79,14 @@ CRandomGroup::CRandomGroup(CResourceManager* resourceManager)
 CRandomGroup::~CRandomGroup()
 {
 }
+
+#include "EditorScene.h"
+
+void CRandomGroup::setVisible(bool visible)
+{
+    if (getVisible() != visible) {
+        CSceneNodeObject::setVisible(visible);
+        if (getSceneOwner() && getSceneOwner()->getEnabled() && m_bIsDynamicGroup)
+            static_cast<CEditorScene*>(getSceneOwner())->setChildrenVisible(getGuid(), visible);
+    }
+}

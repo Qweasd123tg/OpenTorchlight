@@ -166,7 +166,12 @@ python3 tools/decomp/llm_loop.py QuestRequirements.cpp --prepare-only --repair-a
 способом. Repair требует сильную DIFF-definition своего TU в свежем сравнении и
 полный совместимый canonical progress с тем же digest всего объекта TU, что и
 свежее сравнение; устаревший объект progress блокирует подготовку. MATCH, accepted и прежние behavioral
-receipts (даже устаревшие), включая alias closure, запрещают такой repair.
+receipts (даже устаревшие), включая body/ctor/dtor aliases, запрещают такой repair.
+Единственное исключение внутри closure — отдельно выпущенный non-virtual
+adjustment thunk: он должен оставаться сильным MATCH с тем же нормализованным
+кодом в canonical progress, свежем baseline и окончательном сравнении cycle.
+Тело при этом остаётся непринятым до собственного MATCH или парного теста;
+пропуск или изменение защищённого thunk отклоняет кандидата.
 Отсутствующий/повреждённый progress не означает отсутствие защиты.
 
 Исходный TU не удаляется и не переписывается ради подготовки. В handoff target

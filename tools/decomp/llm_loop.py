@@ -208,6 +208,41 @@ def _repair_progress(root, db):
     return data, hashlib.sha256(raw).hexdigest(), protected
 
 
+def _repair_thunk(row_address, owner, db, canonical_rows, compare_rows):
+    """Pin only an independently emitted non-virtual adjustment thunk."""
+    thunk = db['functions'].get(row_address, {})
+    names = thunk.get('names', [])
+    mangled = [re.fullmatch(r'_ZThn?[0-9]+_(.+)', n) for n in names]
+    if (row_address == owner['address'] or thunk.get('tu') != owner.get('tu')
+            or thunk.get('kind') != 'function'
+            or not thunk.get('demangled', '').startswith('non-virtual thunk to ')
+            or not names or not all(mangled)
+            or any('_Z' + match.group(1) not in owner.get('names', []) for match in mangled if match)
+            or definitions.identity(thunk) != definitions.identity(owner)):
+        raise ValueError('repair target/alias is accepted or protected: ' + row_address)
+    saved = []
+    for rows in (canonical_rows, compare_rows):
+        found = [r for r in rows if r.get('address') == row_address]
+        if (len(found) != 1 or found[0].get('status') != 'MATCH'
+                or found[0].get('weak') is not False or found[0].get('name') not in names
+                or not re.fullmatch(r'[0-9a-f]{16}', str(found[0].get('code', '')))):
+            raise ValueError('repair requires a strong unchanged MATCH adjustment thunk: ' + row_address)
+        saved.append(found[0])
+    if saved[0]['name'] != saved[1]['name'] or saved[0]['code'] != saved[1]['code']:
+        raise ValueError('repair adjustment thunk changed in fresh baseline: ' + row_address)
+    return {'address': row_address, 'name': saved[0]['name'], 'code': saved[0]['code']}
+
+
+def validate_repair_thunks(snapshot, final_rows):
+    """A body repair never grants permission to replace its accepted thunk."""
+    for pinned in snapshot.get('protected_thunks', []):
+        found = [r for r in final_rows if r.get('address') == pinned['address']]
+        if (len(found) != 1 or found[0].get('status') != 'MATCH'
+                or found[0].get('weak') is not False or found[0].get('name') != pinned['name']
+                or found[0].get('code') != pinned['code']):
+            raise RuntimeError('repair changed or omitted protected MATCH adjustment thunk: ' + pinned['address'])
+
+
 def repair_snapshot(root, tu, functions, db, compare_rows):
     """Bind explicit unaccepted-body repair to existing source/protection inputs."""
     root = Path(root)
@@ -228,6 +263,7 @@ def repair_snapshot(root, tu, functions, db, compare_rows):
            for row in units[0]["functions"] + compare_rows):
         raise ValueError("repair progress object differs from fresh baseline")
     targets = []
+    protected_thunks = {}
     for f in functions:
         address = f["address"]
         if (f != db["functions"].get(address) or f.get("kind") not in WRITTEN
@@ -235,8 +271,11 @@ def repair_snapshot(root, tu, functions, db, compare_rows):
                 or f.get("tu") != next(
                 (t["id"] for t in db["tus"] if t.get("name") == tu and t.get("kind") == "game"), None)):
             raise ValueError("repair target is not an owning-TU definition")
-        if definitions.closure(f, db) & protected:
+        if address in protected:
             raise ValueError("repair target/alias is accepted or protected: " + address)
+        for sibling in sorted(definitions.closure(f, db) & protected):
+            protected_thunks[sibling] = _repair_thunk(
+                sibling, f, db, units[0]['functions'], compare_rows)
         for rows in (units[0]["functions"], compare_rows):
             found = [r for r in rows if r.get("address") == address]
             if (len(found) != 1 or found[0].get("status") != "DIFF" or found[0].get("weak") is not False
@@ -249,7 +288,8 @@ def repair_snapshot(root, tu, functions, db, compare_rows):
         raise ValueError("redirected repair source")
     return {"schema": 1, "tu": tu, "addresses": sorted(targets),
             "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
-            "progress_sha256": digest, "protected": sorted(protected), "compare_rows": compare_rows}
+            "progress_sha256": digest, "protected": sorted(protected), "compare_rows": compare_rows,
+            "protected_thunks": [protected_thunks[a] for a in sorted(protected_thunks)]}
 
 
 def validate_repair_snapshot(stage, checkpoint, targets, db):
@@ -565,45 +605,21 @@ class Loop:
         name = self.headers.get(f["scope"].split("::")[0])
         if not name:
             return "No known owning header for selected method."
-        text = (ROOT / "decomp/include" / name).read_text()
-        from smallmatch import _declared_types, _map_defaults
-        canonical = definitions.mutate.canonical_parameter
+        from llm_context import DeclarationIdentity, _scan
         sources = {path.name: path.read_text() for path in (ROOT / "decomp/include").glob("*.h")}
-        known_types = _declared_types(sources)
-        def identity(p, lexical=False):
-            p = _standard_string_aliases(p)
-            if lexical:
-                scope = f["scope"].split("::")
-                for token in re.findall(r"(?<![\w:])[A-Za-z_]\w*(?![\w:])", p):
-                    for depth in range(len(scope), 0, -1):
-                        qualified = "::".join(scope[:depth] + [token])
-                        if qualified in known_types:
-                            p = re.sub(r"(?<![\w:])" + re.escape(token) + r"(?![\w:])", qualified, p)
-                            break
-            return canonical(ghidra_cpp.cxx_type(_map_defaults(p)))
-        params = tuple(identity(p)
-                       for p in ghidra_cpp.split_args(f.get("params") or "") if p != "void")
-        cv = ghidra_cpp.cv_suffix(f).strip()
-        # A namespace can be reopened in several hand headers. Its free
-        # functions have no class receiver, but still need an exact declaration.
-        namespace_bodies = [body for header in (ROOT / "decomp/include").glob("*.h")
-                            for body in headers.namespace_bodies(header.read_text(), f["scope"])]
-        if namespace_bodies:
-            if any((tuple(identity(p, True) for p in declared), suffix) == (params, cv)
-                   for body in namespace_bodies
-                   for declared, suffix, _ in headers.declared_signatures(body, f["method"])):
-                return None
-            return "Selected namespace function signature is absent from known headers; declaration unavailable."
-        match = re.search(rf"\b(?:class|struct)\s+(?:__attribute__\(\(\w+\)\)\s+)?{re.escape(f['scope'])}\b[^;{{]*{{", text)
-        if not match:
-            return "Owning class declaration cannot be located safely."
-        end = text.find("\n};", match.end())
-        if end < 0:
-            return "Owning class declaration cannot be located safely."
-        if not any((tuple(identity(t, True) for t in p), c) == (params, cv) for p, c, _ in
-                   headers.declared_signatures(text[match.end():end], f["method"])):
-            return "Selected method signature is absent from the known header; declaration unavailable."
-        return None
+        identity = DeclarationIdentity(sources)
+        qualified = f["scope"] + "::" + f["method"]
+        # The scanner keeps the complete balanced lexical class/namespace path,
+        # including nested owners. It never searches a short class-name suffix.
+        namespace = any(headers.namespace_bodies(source, f["scope"]) for source in sources.values())
+        choices = sources.items() if namespace else [(name, sources[name])]
+        matches = [(header, declaration) for header, source in choices
+                   for declaration in _scan(source)[0]
+                   if declaration.kind == "function" and declaration.qualified == qualified]
+        if any(identity.matches(declaration, dict(f, qualified=qualified), header)
+               for header, declaration in matches):
+            return None
+        return "Selected method signature is absent from the known header; declaration unavailable."
 
     def complete_hand_header(self, cls, name):
         """Declares in a hand-written header the non-virtual methods of this TU it lacks (partial

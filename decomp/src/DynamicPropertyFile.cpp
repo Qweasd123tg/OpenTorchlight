@@ -125,3 +125,72 @@ unsigned int CDynamicPropertyFile::GetIntPropertyIndex(const std::wstring& name,
         m_nonLocalVariables.push_back(name);
     return index;
 }
+
+#include "StringUtilities.h"
+
+CDynamicPropertyFile::~CDynamicPropertyFile()
+{
+}
+
+unsigned int CDynamicPropertyFile::SetFloat(const std::wstring& name, float value)
+{
+    if (m_floatIndices.find(name) == m_floatIndices.end())
+    {
+        m_floatValues.push_back(value);
+        unsigned int index = m_floatValues.size() - 1;
+        m_floatIndices[name] = index;
+        return index;
+    }
+    unsigned int index = m_floatIndices[name];
+    m_floatValues[index] = value;
+    return index;
+}
+
+unsigned int CDynamicPropertyFile::SetInt(const std::wstring& name, int value)
+{
+    if (m_intIndices.find(name) == m_intIndices.end())
+    {
+        m_intValues.push_back(value);
+        unsigned int index = m_intValues.size() - 1;
+        m_intIndices[name] = index;
+        return index;
+    }
+    unsigned int index = m_intIndices[name];
+    m_intValues[index] = value;
+    return index;
+}
+
+unsigned int CDynamicPropertyFile::SetString(const std::wstring& name, const std::wstring& value)
+{
+    unsigned int index;
+    if (m_stringIndices.find(name) == m_stringIndices.end())
+    {
+        m_stringValues.push_back(value);
+        index = m_stringValues.size() - 1;
+        m_stringIndices[name] = index;
+    }
+    else
+    {
+        index = m_stringIndices[name];
+        m_stringValues[index] = value;
+    }
+    return index;
+}
+
+void CDynamicPropertyFile::SetSetting(const std::wstring& name, const std::wstring& value)
+{
+    if (m_intIndices.find(name) != m_intIndices.end())
+        m_intValues[m_intIndices[name]] = STRINGS::GetInt(value);
+    else if (m_floatIndices.find(name) != m_floatIndices.end())
+        SetFloat(m_floatIndices[name], STRINGS::GetFloat(value));
+    else if (m_stringIndices.find(name) != m_stringIndices.end())
+        m_stringValues[m_stringIndices[name]] = value;
+}
+
+CDynamicPropertyFile::CDynamicPropertyFile(std::wstring directory, std::wstring file, std::wstring section)
+    : m_directory(directory), m_file(file), m_secondaryFile(section), m_missingString(L"-1")
+{
+    m_Unrecovered130[0] = 0;
+    for (unsigned int i = 4; i < 8; ++i)
+        m_Unrecovered130[i] = 0;
+}

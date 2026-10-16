@@ -13,12 +13,14 @@
 
 void CPath::Clear()
 {
-    m_fPathLength = 0.0f;
-    m_vOrigin = Ogre::Vector3::ZERO;
     m_lPoints.clear();
+    m_fPathLength = 0.0f;
+    m_vOrigin.x = 0.0f;
+    m_vOrigin.y = 0.0f;
+    m_vOrigin.z = 0.0f;
+    m_lSegmentAngle.clear();
     m_lRadiusLeft.clear();
     m_lRadiusRight.clear();
-    m_lSegmentAngle.clear();
     m_lPointDistance.clear();
 }
 
@@ -481,60 +483,27 @@ CPath::~CPath()
 
 void CPath::CalculatePathWidth(CPath& leftPath, CPath& rightPath)
 {
-    struct Vector3Buffer
-    {
-        Ogre::Vector3* data;
-        Ogre::Vector3* end;
-        Ogre::Vector3* capacity;
-    };
-    struct FloatBuffer
-    {
-        float* data;
-        float* end;
-        float* capacity;
-    };
-
-    Vector3Buffer& points =
-        reinterpret_cast<Vector3Buffer&>(m_lPoints);
-    FloatBuffer& radiusLeft =
-        reinterpret_cast<FloatBuffer&>(m_lRadiusLeft);
-    FloatBuffer& radiusRight =
-        reinterpret_cast<FloatBuffer&>(m_lRadiusRight);
-
     Ogre::Vector3 nearestPoint;
     Ogre::Vector3 offset;
     unsigned int pointIndex = 0;
     float distance = 0.0f;
-
-    for (unsigned int i = 0;
-         i < static_cast<unsigned int>(points.end - points.data);
-         ++i)
-    {
-        if (leftPath.FindNearestPoint(points.data[i], nearestPoint, offset,
-                                      pointIndex, distance, 0.0f))
-        {
+    for (unsigned int i = 0; i < m_lPoints.size(); ++i) {
+        if (leftPath.FindNearestPoint(m_lPoints[i], nearestPoint, offset, pointIndex, distance, 0.0f)) {
+            offset.normalise();
+            nearestPoint -= m_lPoints[i];
+            nearestPoint.y = 0.0f;
+            m_lRadiusLeft[i] = offset.dotProduct(nearestPoint);
+            if (m_lRadiusLeft[i] > 0.0f)
+                m_lRadiusLeft[i] = 0.0f;
+        }
+        if (rightPath.FindNearestPoint(m_lPoints[i], nearestPoint, offset, pointIndex, distance, 0.0f)) {
             offset.normalise();
             offset = -offset;
-
-            Ogre::Vector3 pointOffset = points.data[i] - nearestPoint;
-            pointOffset.y = 0.0f;
-
-            radiusLeft.data[i] = offset.dotProduct(pointOffset);
-            if (radiusLeft.data[i] < 0.0f)
-                radiusLeft.data[i] = 0.0f;
-        }
-
-        if (rightPath.FindNearestPoint(points.data[i], nearestPoint, offset,
-                                       pointIndex, distance, 0.0f))
-        {
-            offset.normalise();
-
-            Ogre::Vector3 pointOffset = points.data[i] - nearestPoint;
-            pointOffset.y = 0.0f;
-
-            radiusRight.data[i] = offset.dotProduct(pointOffset);
-            if (radiusRight.data[i] > 0.0f)
-                radiusRight.data[i] = 0.0f;
+            nearestPoint -= m_lPoints[i];
+            nearestPoint.y = 0.0f;
+            m_lRadiusRight[i] = offset.dotProduct(nearestPoint);
+            if (m_lRadiusRight[i] < 0.0f)
+                m_lRadiusRight[i] = 0.0f;
         }
     }
 }
@@ -609,52 +578,16 @@ void CPath::AddPoint(const Ogre::Vector3& point, float radiusLeft, float radiusR
 
 void CPath::Reverse()
 {
-    typedef Ogre::Vector3* PointPointer;
-
-    PointPointer* pointStorage =
-        reinterpret_cast<PointPointer*>(&m_lPoints);
-    PointPointer pointBegin = pointStorage[0];
-    PointPointer pointEnd = pointStorage[1];
-
-    unsigned int pointCount =
-        static_cast<unsigned int>((pointEnd - pointBegin) /
-                                  sizeof(Ogre::Vector3));
-    Ogre::Vector3* points = 0;
-
-    if (pointCount != 0)
-        points = new Ogre::Vector3[pointCount];
-
-    for (unsigned int i = 0; i < pointCount; ++i)
-        points[i] = pointBegin[i];
-
-    m_fPathLength = 0.0f;
-    m_vOrigin = Ogre::Vector3(0.0f, 0.0f, 0.0f);
-
-    pointStorage = reinterpret_cast<PointPointer*>(&m_lPoints);
-    pointStorage[1] = pointStorage[0];
-
-    pointStorage = reinterpret_cast<PointPointer*>(&m_lRadiusLeft);
-    pointStorage[1] = pointStorage[0];
-
-    pointStorage = reinterpret_cast<PointPointer*>(&m_lRadiusRight);
-    pointStorage[1] = pointStorage[0];
-
-    pointStorage = reinterpret_cast<PointPointer*>(&m_lSegmentAngle);
-    pointStorage[1] = pointStorage[0];
-
-    pointStorage = reinterpret_cast<PointPointer*>(&m_lPointDistance);
-    pointStorage[1] = pointStorage[0];
-
-    for (unsigned int i = pointCount; i != 0; --i)
-        AddPoint(points[i - 1], -60.0f, 60.0f);
-
+    std::vector<Ogre::Vector3> points(m_lPoints);
+    unsigned int count = m_lPoints.size();
+    Clear();
+    for (unsigned int i = 0; i < count; ++i)
+        AddPoint(points[count - i - 1], -60.0f, 60.0f);
     if (m_bClosedPath)
         ClosePath();
-
-    delete[] points;
 }
 
-CPath::CPath(std::wstring name, bool closed, const Ogre::Vector3& origin)
+CPath::CPath(std::string name, bool closed, const Ogre::Vector3& origin)
     : CRunicCore(),
       m_sObjectName(),
       m_fPathLength(0.0f),
@@ -677,58 +610,21 @@ void CPath::SetRadiusLeft(unsigned int index, float radius)
 
 void CPath::SetRadiusRight(unsigned int index, float radius)
 {
-    float *data = *reinterpret_cast<float **>(&m_lRadiusRight);
-    long end = *reinterpret_cast<long *>(
-        reinterpret_cast<char *>(&m_lRadiusRight) + 8);
-    long size = (end - reinterpret_cast<long>(data)) / 4;
-
-    if (static_cast<unsigned long>(index) <
-        static_cast<unsigned long>(size))
-    {
-        data[index] = radius;
-    }
+    if (index < m_lRadiusRight.size())
+        m_lRadiusRight[index] = radius;
 }
 
 void CPath::Resize(unsigned int pointCount)
 {
-    Ogre::Vector3** points =
-        reinterpret_cast<Ogre::Vector3**>(&m_lPoints);
-    Ogre::Vector3* firstPoint = points[0];
-    Ogre::Vector3* lastPoint = points[1];
-
-    if (pointCount < (unsigned int)(lastPoint - firstPoint))
+    if (pointCount >= m_lPoints.size())
         return;
-
-    std::vector<Ogre::Vector3> oldPoints(firstPoint, lastPoint);
-
-    m_fPathLength = 0.0f;
-    m_vOrigin.x = 0.0f;
-    m_vOrigin.y = 0.0f;
-    m_vOrigin.z = 0.0f;
-
-    points[1] = points[0];
-
-    float** radiusLeft = reinterpret_cast<float**>(&m_lRadiusLeft);
-    radiusLeft[1] = radiusLeft[0];
-
-    float** radiusRight = reinterpret_cast<float**>(&m_lRadiusRight);
-    radiusRight[1] = radiusRight[0];
-
-    float** segmentAngles = reinterpret_cast<float**>(&m_lSegmentAngle);
-    segmentAngles[1] = segmentAngles[0];
-
-    float** pointDistances = reinterpret_cast<float**>(&m_lPointDistance);
-    pointDistances[1] = pointDistances[0];
-
-    for (unsigned int i = 0; i < pointCount; ++i)
-    {
-        unsigned int index =
-            (unsigned int)floorf((float)i *
-                                 ((float)(lastPoint - firstPoint) /
-                                  (float)pointCount) + 0.5f);
-        AddPoint(oldPoints[index], -60.0f, 60.0f);
+    std::vector<Ogre::Vector3> points(m_lPoints);
+    float step = static_cast<float>(m_lPoints.size()) / static_cast<float>(pointCount);
+    Clear();
+    for (unsigned int i = 0; i < pointCount; ++i) {
+        unsigned int index = static_cast<unsigned int>(floorf(static_cast<float>(i) * step + 0.5f));
+        AddPoint(points[index], -60.0f, 60.0f);
     }
-
     if (m_bClosedPath)
         ClosePath();
 }
@@ -912,4 +808,141 @@ Ogre::Vector3 CPath::GetSegmentPerpendicularY(unsigned int index)
                                -(m_lPoints[next].x - m_lPoints[index].x));
     perpendicular.normalise();
     return perpendicular;
+}
+
+Ogre::Vector3 CPath::GetSplinePositionAtDistance(float distance)
+{
+    if (m_fPathLength == 0.0f)
+        return m_vOrigin;
+    if (m_bClosedPath) {
+        if (distance > m_fPathLength) distance = m_fPathLength;
+        if (distance < 0.0f) distance = 0.0f;
+    } else {
+        while (distance < 0.0f) distance += m_fPathLength;
+        while (distance > m_fPathLength) distance -= m_fPathLength;
+    }
+    int count = m_lPoints.size();
+    int current = count - 1;
+    for (; current >= 0; --current)
+        if (distance > m_lPointDistance[current])
+            break;
+    int previous = current - 1;
+    int next = current + 1;
+    int afterNext = current + 2;
+    if (current == -1) {
+        previous = -1;
+        current = 0;
+        next = 1;
+        afterNext = 2;
+    }
+    if (distance == m_fPathLength)
+        return m_lPoints[count - 1] + m_vOrigin;
+    if (distance == 0.0f)
+        return m_lPoints[0] + m_vOrigin;
+    if (previous == -1)
+        previous = m_bClosedPath ? count - 1 : 0;
+    if (next >= count)
+        next = m_bClosedPath ? next - count : count - 1;
+    if (afterNext >= count)
+        afterNext = m_bClosedPath ? afterNext - count : count - 1;
+    float segmentLength = m_lPointDistance[next] - m_lPointDistance[current];
+    if (segmentLength < 0.0f)
+        segmentLength += m_fPathLength;
+    float t = distance - m_lPointDistance[current];
+    if (m_lPointDistance[current] > distance)
+        t += m_fPathLength;
+    t /= segmentLength;
+    float t2 = t * t;
+    float t3 = t2 * t;
+    const Ogre::Vector3 p0 = m_lPoints[previous];
+    const Ogre::Vector3 p1 = m_lPoints[current];
+    const Ogre::Vector3 p2 = m_lPoints[next];
+    const Ogre::Vector3 p3 = m_lPoints[afterNext];
+    return Ogre::Vector3(
+        (2.0f*p1.x + (p2.x-p0.x)*t + (2.0f*p0.x + -5.0f*p1.x + 4.0f*p2.x-p3.x)*t2 + (3.0f*p1.x-p0.x + -3.0f*p2.x+p3.x)*t3)*0.5f + m_vOrigin.x,
+        (2.0f*p1.y + (p2.y-p0.y)*t + (2.0f*p0.y + -5.0f*p1.y + 4.0f*p2.y-p3.y)*t2 + (3.0f*p1.y-p0.y + -3.0f*p2.y+p3.y)*t3)*0.5f + m_vOrigin.y,
+        (2.0f*p1.z + (p2.z-p0.z)*t + (2.0f*p0.z + -5.0f*p1.z + 4.0f*p2.z-p3.z)*t2 + (3.0f*p1.z-p0.z + -3.0f*p2.z+p3.z)*t3)*0.5f + m_vOrigin.z);
+}
+
+bool CPath::FindNearestPoint(const Ogre::Vector3& target,
+    Ogre::Vector3& nearestPoint, Ogre::Vector3& offset,
+    unsigned int& pointIndex, float& distance, float minimumDistance)
+{
+    unsigned int segmentCount = m_lPoints.size();
+    if (segmentCount <= 1)
+        return false;
+    if (!m_bClosedPath) {
+        --segmentCount;
+        if (minimumDistance > m_fPathLength)
+            minimumDistance = m_fPathLength;
+    }
+    Ogre::Vector3 relativeTarget = target - m_vOrigin;
+    nearestPoint = m_lPoints[0];
+    offset = relativeTarget - nearestPoint;
+    pointIndex = 0;
+    distance = 0.0f;
+    float closestDistance = 99999.0f;
+    for (unsigned int i = 0; i < segmentCount; ++i) {
+        if (closestDistance == 99999.0f && m_lPointDistance[i] >= minimumDistance) {
+            Ogre::Vector3 candidateOffset = relativeTarget - m_lPoints[i];
+            float separation = candidateOffset.length();
+            if (separation < closestDistance) {
+                nearestPoint = m_lPoints[i];
+                offset = candidateOffset;
+                pointIndex = i;
+                distance = m_lPointDistance[i];
+                closestDistance = separation;
+            }
+        }
+        unsigned int next = i + 1;
+        if (next >= m_lPoints.size())
+            next -= m_lPoints.size();
+        Ogre::Vector3 start = m_lPoints[i];
+        Ogre::Vector3 segment = m_lPoints[next] - start;
+        float length = segment.length();
+        Ogre::Vector3 fromStart = relativeTarget - start;
+        float parameter = (fromStart.x*segment.x + fromStart.z*segment.z + fromStart.y*segment.y) / (length*length);
+        if (parameter < 0.0f || parameter > 1.0f) {
+            float pathDistance = next == 0 ? m_fPathLength : m_lPointDistance[next];
+            if (minimumDistance > pathDistance) {
+                parameter += (1.0f / length) * (1.0f + (minimumDistance-pathDistance));
+                if (parameter > 1.0f) parameter = 1.0f;
+                pathDistance = m_lPointDistance[i] + parameter * length;
+            }
+            if (pathDistance >= minimumDistance) {
+                Ogre::Vector3 candidateOffset = relativeTarget - m_lPoints[next];
+                float separation = candidateOffset.length();
+                if (separation < closestDistance) {
+                    nearestPoint = m_lPoints[next];
+                    offset = candidateOffset;
+                    pointIndex = i;
+                    distance = pathDistance;
+                    closestDistance = separation;
+                }
+            }
+        } else {
+            float pathDistance = m_lPointDistance[i] + parameter * length;
+            if (minimumDistance > pathDistance) {
+                parameter += (1.0f / length) * (1.0f + (minimumDistance-pathDistance));
+                if (parameter > 1.0f) parameter = 1.0f;
+                pathDistance = m_lPointDistance[i] + parameter * length;
+            }
+            if (pathDistance >= minimumDistance) {
+                Ogre::Vector3 candidatePoint = start + segment * parameter;
+                Ogre::Vector3 candidateOffset = relativeTarget - candidatePoint;
+                float separation = candidateOffset.length();
+                if (separation < closestDistance) {
+                    nearestPoint = candidatePoint;
+                    offset = candidateOffset;
+                    pointIndex = i;
+                    distance = pathDistance;
+                    closestDistance = separation;
+                }
+            }
+        }
+    }
+    if (closestDistance == 99999.0f)
+        return false;
+    nearestPoint += m_vOrigin;
+    return true;
 }

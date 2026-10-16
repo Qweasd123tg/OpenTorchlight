@@ -50,6 +50,8 @@ public:
     void setAnimationTime(float time);
 
     CGenericModel(CResourceManager* resources, Ogre::SceneManager* manager, OGRE_UTILITIES::EPRIMITIVES primitive);
+    CGenericModel(CResourceManager* resources, Ogre::SceneManager* manager,
+                  std::wstring modelPath, std::wstring resourceGroup, bool flag);
     void setQueryMask(OGRE_UTILITIES::EQUERYMASK mask);
     void setWireframe(bool wireframe);
 

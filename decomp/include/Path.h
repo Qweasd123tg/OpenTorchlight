@@ -44,6 +44,12 @@ public:
                           Ogre::Vector3& offset,
                           unsigned int& pointIndex,
                           float& distance,
+                          float maximumDistance);
+    bool FindNearestPoint(const Ogre::Vector3& target,
+                          Ogre::Vector3& nearestPoint,
+                          Ogre::Vector3& offset,
+                          unsigned int& pointIndex,
+                          float& distance,
                           float maximumDistance) const;
     void CalculatePathWidth(CPath& leftPath, CPath& rightPath);
     Ogre::Vector3 GetSegmentPerpendicularY(unsigned int index);
@@ -53,14 +59,11 @@ public:
                   float radiusRight);
     void Reverse();
 
-    // Original narrow overload; its implementation still comes from the ELF.
-    // The wide draft belongs to path.cpp and is tracked separately.
     CPath(std::string name, bool closed, const Ogre::Vector3& origin);
-    CPath(std::wstring name, bool closed, const Ogre::Vector3& origin);
     void Resize(unsigned int pointCount);
     CPath(CPath& path);
 
-    std::wstring m_sObjectName;
+    std::string m_sObjectName;
     float m_fPathLength;
     Ogre::Vector3 m_vOrigin;
     std::vector<Ogre::Vector3> m_lPoints;
@@ -69,7 +72,7 @@ public:
     std::vector<float> m_lSegmentAngle;
     std::vector<float> m_lPointDistance;
     bool m_bClosedPath;
-    std::wstring m_sName;
+    std::string m_sName;
     Ogre::Vector3 m_vMinimum;
     Ogre::Vector3 m_vMaximum;
 };

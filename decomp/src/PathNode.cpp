@@ -32,7 +32,7 @@ void CPathNode::setVisible(bool bVisible)
 {
     if (bVisible)
     {
-        if (!m_sText.empty())
+        if (m_sText != EMPTY_WSTRING)
             setText(m_sText);
     }
     else
@@ -44,3 +44,16 @@ void CPathNode::setVisible(bool bVisible)
 
     CSceneNodeObject::setVisible(bVisible);
 }
+
+#include "TextEvent.h"
+#include "StringUtilities.h"
+
+void CPathNode::setText(const std::wstring& text)
+{
+    m_sText = text;
+    if (m_pTextEvent)
+        m_pTextEvent->setText(getPosition(false) + Ogre::Vector3(0.0f, 1.7f, 0.0f),
+            STRINGS::StringConvertToUTF8(m_sText), 1.0f, 255.0f,
+            CEGUI::colour(1.0f,1.0f,1.0f,1.0f), CEGUI::colour(1.0f,1.0f,1.0f,1.0f));
+}
+

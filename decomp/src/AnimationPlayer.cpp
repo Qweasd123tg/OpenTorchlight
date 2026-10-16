@@ -41,3 +41,27 @@ void CAnimationPlayer::update(float deltaTime)
         playAnimation();
     }
 }
+
+#include "BaseUnit.h"
+#include "GenericModel.h"
+
+void CAnimationPlayer::setAnimationDuration(float duration)
+{
+    m_fRemainingDuration = duration;
+    if (!m_bLoop)
+        for (unsigned int i = 0; i < m_lAnimationTargets.size(); ++i)
+            if (m_lAnimationTargets[i]->getObject() && m_lAnimationTargets[i]->getObject()->getUnitModel())
+                static_cast<CGenericModel*>(m_lAnimationTargets[i]->getObject()->getUnitModel())->updateAnimation(m_fRemainingDuration, true);
+}
+
+CAnimationPlayer::~CAnimationPlayer()
+{
+    m_bAnimationPlaying = false;
+    for (unsigned int i = 0; i < m_lAnimationTargets.size(); ++i) {
+        if (m_lAnimationTargets[i]) {
+            OGRE_DELETE_T(m_lAnimationTargets[i], TSafePointer<CBaseUnit>, Ogre::MEMCATEGORY_GENERAL);
+            m_lAnimationTargets[i] = NULL;
+        }
+    }
+    m_lAnimationTargets.clear();
+}

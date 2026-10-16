@@ -32,13 +32,13 @@ namespace STRINGS
 {
     bool GetBool(const std::string&);
     int GetBool(const std::wstring&);
-    void GetFloat64(const std::string&);
-    void GetFloat64(const std::wstring&);
+    double GetFloat64(const std::string&);
+    double GetFloat64(const std::wstring&);
     long GetInt64(const std::string&);
     long long GetInt64(const std::wstring&);
     std::wstring StringConvertUTF8ToWide(const std::string&);
-    long long StringCopyWCharArray(wchar_t*, unsigned int, const char*);
-    long long StringCopyWCharArray(wchar_t*, unsigned int, std::string);
+    unsigned int StringCopyWCharArray(wchar_t*, unsigned int, const char*);
+    unsigned int StringCopyWCharArray(wchar_t*, unsigned int, std::string);
     unsigned int StringCopyWCharArray(wchar_t*, unsigned int, const wchar_t*);
     long long StringIsLower(const std::string&);
     long long StringIsLower(const std::wstring&);

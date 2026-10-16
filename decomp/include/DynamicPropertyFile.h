@@ -13,6 +13,10 @@ class CDynamicPropertyFile : public CRunicCore
 {
 public:
     bool SetFloat(unsigned int,float);
+    unsigned int SetFloat(const std::wstring& name, float value);
+    unsigned int SetInt(const std::wstring& name, int value);
+    unsigned int SetString(const std::wstring& name, const std::wstring& value);
+    void SetSetting(const std::wstring& name, const std::wstring& value);
 
     CDynamicPropertyFile(std::wstring directory, std::wstring file, std::wstring section);
     unsigned int GetStringPropertyIndex(const std::wstring& name, std::wstring value, bool flag);
@@ -34,7 +38,8 @@ public:
 
 private:
     typedef void (*StatChangeCallback)(unsigned int);
-    unsigned char m_Unrecovered10[0x10];
+    std::wstring m_directory; // +0x10
+    std::wstring m_file; // +0x18
     std::wstring m_secondaryFile; // +0x20
     std::vector<std::vector<StatChangeCallback> > m_callbacks; // +0x28
     std::vector<int> m_intValues; // +0x40

@@ -54,7 +54,14 @@ public:
     int GetDataValue(const std::wstring& name,int defaultValue);
     float GetDataValue(const std::wstring& name, float defaultValue);
     bool GetDataValue(const std::wstring& name, bool defaultValue);
-    void SaveToFile(const std::wstring& file);
+    int SaveToFile(const std::wstring& file);
+    int SaveToFile(const std::wstring& file, iDataFileSaveAndLoad* style);
+    static TRepository<std::wstring>* stringRepository();
+    CDataValue* CopyDataValue(CDataValue* value, TArrayList<CDataValue*>* values);
+    void SetGroupNameID(unsigned int name);
+    CDataValue* AddDataValue(unsigned int name, UNIONDATA64BIT value, CDataValue::EDATAVALUETYPES type);
+    CDataValue* AddDataValue(const std::wstring& name, std::wstring value, std::wstring type);
+    void CopyDataGroup(CDataGroup* source, bool copyName);
     const std::wstring& GetDataValue(const std::wstring& name, const std::wstring& defaultValue);
 
     unsigned int GetNumberOfDataValues() { return m_DataValues.size(); }

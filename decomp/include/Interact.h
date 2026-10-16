@@ -12,6 +12,9 @@
 #include "ResourceManager.h"
 #include "RunicCore.h"
 #include "iMenuListener.h"
+#include "BaseUnit.h"
+#include "Graph.h"
+#include "SafePointer.h"
 
 class CDataGroup;
 
@@ -33,9 +36,7 @@ public:
     std::wstring m_pUnknown70;
     std::wstring m_sUnknown78;
     CDataGroup* m_pUnitDataGroup;
-    CRunicCore* m_pRunicCore;
-    int m_iUnknown90;
-    unsigned char m_gap94[0x4] __attribute__((aligned(4)));
+    TSafePointer<CBaseUnit> m_unit;
     float m_fUnknown98;
     float m_fUnknown9C;
     float m_fUnknownA0;
@@ -48,8 +49,7 @@ public:
     float m_fUnknownBC;
     int m_UnknownC0;
     unsigned char m_gapC4[0x4] __attribute__((aligned(4)));
-    long long m_UnknownC8;
-    unsigned char m_gapD0[0x50] __attribute__((aligned(8)));
+    CGraph m_cameraGraph;
     int m_iUnknown120;
 };
 

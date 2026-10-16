@@ -2,10 +2,22 @@
 #define STRINGUTILITIES_H
 
 #include <string>
+#include <queue>
 
 // Partial: declarations from StringUtilities.cpp used by recovered TUs.
 namespace STRINGS
 {
+    unsigned int StringSizeOfWCharArray(const wchar_t* text, unsigned int maximum);
+    unsigned int StringSizeOfCharArray(const char* text, unsigned int maximum);
+    int StringConvertToWide(const std::string& text, wchar_t* output, int capacity);
+    std::string StringLower(const std::string& text);
+    std::wstring StringLower(const std::wstring& text);
+    unsigned int StringCopyWCharArray(wchar_t* output, unsigned int capacity, const char* text);
+    double GetFloat64(const std::string& text);
+    double GetFloat64(const std::wstring& text);
+    long long GetInt64(const std::wstring& text);
+    void TokenizeString(std::queue<std::wstring, std::deque<std::wstring, std::allocator<std::wstring> > >* tokens, const std::wstring& text, const wchar_t* separators);
+    void TokenizeString(std::queue<std::string, std::deque<std::string, std::allocator<std::string> > >* tokens, const std::string& text, const char* separators);
     std::wstring GetApplicationPath();
     std::string GetValueAsString(double value);
     std::string GetValueAsString(long long value);

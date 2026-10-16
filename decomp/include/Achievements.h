@@ -21,7 +21,7 @@ public:
     void update(float);
     void cheat();
     CAchievement* getAchievement(std::string);
-    CAchievements* getAchievementStatus();
+    std::wstring getAchievementStatus();
     void setAchievementComplete(CAchievement*);
     CAchievements();
 

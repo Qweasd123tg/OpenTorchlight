@@ -159,3 +159,109 @@ std::wstring CDataValue::GetValueAsString()
     default: return L"";
     }
 }
+
+
+
+#include "GameNamespaces.h"
+
+CDataValue::CDataValue(const wchar_t* name, TRepository<std::wstring>* repository)
+    : m_bStringValue(false), m_iNameID(static_cast<unsigned int>(-1)),
+      m_pRepository(repository), m_eType(static_cast<EDATAVALUETYPES>(0))
+{
+    m_Value.signed64 = 0;
+    std::wstring text(name);
+    SetDataValueName(text);
+}
+
+CDataValue::CDataValue(CDataValue* source, TRepository<std::wstring>* repository)
+    : m_bStringValue(false), m_iNameID(static_cast<unsigned int>(-1)),
+      m_pRepository(repository), m_eType(static_cast<EDATAVALUETYPES>(0))
+{
+    m_Value.signed64 = 0;
+    Copy(source, repository);
+}
+
+void CDataValue::Copy(CDataValue* source, TRepository<std::wstring>* repository)
+{
+    if (source)
+    {
+        m_pRepository = repository;
+        SetDataValueName(const_cast<std::wstring&>(source->GetDataValueName()));
+        m_eType = source->m_eType;
+        if (source->m_bStringValue)
+        {
+            m_Value.unsigned32 = static_cast<unsigned int>(-1);
+            SetValueString(source->GetValueString(true).c_str());
+        }
+        else
+            m_Value.signed64 = source->m_Value.signed64;
+    }
+}
+
+void CDataValue::SetValueByString(const std::wstring& type, std::wstring& value)
+{
+    if (type == L"INTEGER")
+        SetValueInt32(STRINGS::GetInt(value));
+    else if (type == L"INTEGER64")
+        SetValueInt64(STRINGS::GetInt64(value));
+    else if (type == L"FLOAT")
+        SetValueFloat32(STRINGS::GetFloat(value));
+    else if (type == L"DOUBLE")
+        SetValueFloat64(STRINGS::GetFloat64(value));
+    else if (type == L"UNSIGNED INT")
+        SetValueUInt32(STRINGS::GetInt(value));
+    else if (type == L"BOOL")
+        SetValueBool(STRINGS::GetBool(value));
+    else
+    {
+        m_Value.unsigned32 = static_cast<unsigned int>(-1);
+        SetValueString(value.c_str());
+        if (type == L"TRANSLATE" || type == L"DIALOG")
+            m_eType = DATAVALUE_TRANSLATE;
+    }
+}
+
+CDataValue::CDataValue(unsigned int name, UNIONDATA64BIT value, EDATAVALUETYPES type,
+                     TRepository<std::wstring>* repository)
+    : m_bStringValue(type == DATAVALUE_STRING || type == DATAVALUE_TRANSLATE),
+      m_iNameID(name), m_pRepository(repository), m_eType(type)
+{
+    m_Value.signed64 = value.signed64;
+    if (name != static_cast<unsigned int>(-1))
+    {
+        std::wstring text = m_pRepository->m_DefaultValue;
+        if (!m_pRepository->m_Values.empty())
+        {
+            std::map<unsigned int, std::wstring>::iterator i = m_pRepository->m_Values.find(name);
+            if (i != m_pRepository->m_Values.end())
+                text = i->second;
+        }
+        if (text != m_pRepository->m_DefaultValue)
+        {
+            std::map<unsigned int, unsigned short>::iterator i = m_pRepository->m_RefCounts.find(name);
+            if (i != m_pRepository->m_RefCounts.end())
+                ++i->second;
+            else
+                m_pRepository->m_RefCounts[name] = 1;
+        }
+    }
+    if (m_pRepository && m_bStringValue && m_Value.unsigned32 != static_cast<unsigned int>(-1))
+    {
+        unsigned int id = m_Value.unsigned32;
+        std::wstring text = m_pRepository->m_DefaultValue;
+        if (!m_pRepository->m_Values.empty())
+        {
+            std::map<unsigned int, std::wstring>::iterator i = m_pRepository->m_Values.find(id);
+            if (i != m_pRepository->m_Values.end())
+                text = i->second;
+        }
+        if (text != m_pRepository->m_DefaultValue)
+        {
+            std::map<unsigned int, unsigned short>::iterator i = m_pRepository->m_RefCounts.find(id);
+            if (i != m_pRepository->m_RefCounts.end())
+                ++i->second;
+            else
+                m_pRepository->m_RefCounts[id] = 1;
+        }
+    }
+}

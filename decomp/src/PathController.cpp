@@ -2,6 +2,8 @@
 #include "GameEnums.h"
 #include "GameVariables.h"
 #include "PathController.h"
+#include "PathNode.h"
+#include "Character.h"
 #include "BaseUnit.h"
 #include "GameClient.h"
 #include "Player.h"
@@ -11,6 +13,7 @@
 #include "CollisionModel.h"
 #include "OgreUtilities.h"
 #include "ResourceManager.h"
+#include "EditorScene.h"
 #include "SceneNodeObject.h"
 #include "SoundBank.h"
 #include "UtilitiesMath.h"
@@ -21,8 +24,7 @@ void CPathController::setVisible(bool visible)
 {
     m_bVisible = visible;
 
-    TArrayList<CPositionableObject*>& objects =
-        *reinterpret_cast<TArrayList<CPositionableObject*>*>(m_Unknown138);
+    TArrayList<CPathNode*>& objects = m_pathNodes;
 
     for (unsigned int i = 0; i < objects.size(); ++i)
         objects[i]->setVisible(visible);
@@ -50,169 +52,23 @@ float CPathController::getClosestPctOfPath(const Ogre::Vector3& point)
     return pathLengths[0] / m_fUnknown180;
 }
 
-float CPathController::caculatePointInFrontOfPlayer(CBaseUnit* unit)
-{
-    Ogre::Vector3 position = getPosition(true);
-    float resultX = position.x;
-    volatile float resultY = position.y;
-
-    if (getResourceManager()->getGameClientCount() != 0)
-    {
-        CGameClient* gameClient = getResourceManager()->getGameClient(0);
-        if (gameClient != NULL)
-        {
-            CPlayer* player = *reinterpret_cast<CPlayer**>(
-                reinterpret_cast<unsigned char*>(gameClient) + 0x58);
-
-            if (player != NULL)
-            {
-                Ogre::Vector3 playerPosition = player->getPosition(true);
-                float dx = position.x - playerPosition.x;
-                float dy = position.y - playerPosition.y;
-                volatile float squaredX = dx * dx;
-                volatile float distance = squaredX + 1.0f;
-                distance = distance + dy * dy;
-                float actualDistance = distance;
-
-                if (actualDistance > 1e-8)
-                {
-                    float inverseDistance = 1.0f / actualDistance;
-                    dx *= inverseDistance;
-                    dy *= inverseDistance;
-                }
-
-                if (getResourceManager()->getGameClientCount() != 0)
-                {
-                    CGameClient* currentGameClient = getResourceManager()->getGameClient(0);
-                    CPlayer* currentPlayer = *reinterpret_cast<CPlayer**>(
-                        reinterpret_cast<unsigned char*>(currentGameClient) + 0x58);
-
-                    float playerRadius = *reinterpret_cast<const float*>(
-                        reinterpret_cast<const unsigned char*>(currentPlayer) + 0x194);
-                    float unitRadius = *reinterpret_cast<const float*>(
-                        reinterpret_cast<const unsigned char*>(unit) + 0x194);
-                    float offset = (playerRadius + unitRadius) * 2.0f;
-
-                    resultX = playerPosition.x + dx * offset;
-                    resultY = playerPosition.y + dy * offset;
-                }
-            }
-        }
-    }
-
-    return resultX;
-}
-
-long long CPathController::getNextPointAtPercent(float percent, CBaseUnit* unit, bool flag)
-{
-    Ogre::Vector3 point;
-
-    if (m_bWalkToPlayer)
-    {
-        point = caculatePointInFrontOfPlayer(unit);
-    }
-    else
-    {
-        TArrayList<float>& vectors =
-            m_pathCoordinates;
-        TArrayList<float>& percentages =
-            m_pathDistances;
-        unsigned int index;
-        float value;
-
-        percent = percent > 0.0f ? std::min(percent, 1.0f) : 0.0f;
-        point = getPosition(true);
-
-        if (flag)
-        {
-            index = 0;
-            while (index < percentages.size())
-            {
-                value = percentages[index];
-                if (m_fUnknown180 != 0.0f)
-                    value /= m_fUnknown180;
-
-                if (percent <= value)
-                    break;
-
-                ++index;
-            }
-
-            if (index == percentages.size())
-            {
-                if (vectors.size() > 2)
-                {
-                    point.x += vectors[0];
-                    point.y += vectors[1];
-                    point.z += vectors[2];
-                }
-                else
-                {
-                    point.z += vectors[0];
-                    if (vectors.size() == 2)
-                        point.z += vectors[1];
-                    point.x += vectors[0];
-                    point.y += vectors[0];
-                }
-            }
-            else
-            {
-                point.x += vectors[index * 3];
-                point.y += vectors[index * 3 + 1];
-                point.z += vectors[index * 3 + 2];
-            }
-        }
-        else
-        {
-            index = percentages.size() - 1;
-
-            for (;;)
-            {
-                value = percentages[index];
-                if (m_fUnknown180 != 0.0f)
-                    value /= m_fUnknown180;
-
-                if (percent >= value)
-                    break;
-
-                --index;
-            }
-
-            point.x += vectors[index * 3];
-            point.y += vectors[index * 3 + 1];
-            point.z += vectors[index * 3 + 2];
-        }
-    }
-
-    long long result;
-    std::memcpy(&result, &point, sizeof(result));
-    return result;
-}
-
 void CPathController::childNodeMoved()
 {
-    TArrayList<CPositionableObject*>& nodes =
-        *reinterpret_cast<TArrayList<CPositionableObject*>*>(&m_Unknown138);
+    TArrayList<CPathNode*>& nodes = m_pathNodes;
 
     if (nodes.size() != 0 && nodes[0] != 0)
-        setPosition(nodes[0]->getPosition(true));
+        CPositionableObject::setPosition(nodes[0]->getPosition(true));
 }
 
 void CPathController::positionUpdated(const Ogre::Vector3& position)
 {
-    if (*reinterpret_cast<int*>(m_Unknown138 + 8) != 0)
+    if (m_pathNodes.size() != 0)
     {
-        CPositionableObject* object =
-            *reinterpret_cast<CPositionableObject**>(&m_Unknown138);
-
-        if (object->getPosition(false) != position)
+        if (m_pathNodes[0]->getPosition(false) != position)
         {
-            CPathController** controller = reinterpret_cast<CPathController**>(
-                reinterpret_cast<unsigned char*>(object) + 0x100);
-
-            *controller = 0;
-            object->setPosition(position);
-            *controller = this;
+            m_pathNodes[0]->m_pPathController = 0;
+            m_pathNodes[0]->CPositionableObject::setPosition(position);
+            m_pathNodes[0]->m_pPathController = this;
         }
     }
 }
@@ -235,36 +91,11 @@ void CPathController::setUnitInteractWith(std::wstring unitInteractWith)
         m_bUnknown137 = false;
     }
 
-    typedef TArrayList<CPathController *> TSafePointerList;
-    TSafePointerList &safePointers =
-        reinterpret_cast<TSafePointerList &>(m_Unknown108);
-
-    struct SafePointerLayout
-    {
-        CPathController *pObject;
-        unsigned int index;
-    };
-
-    for (unsigned int i = 0; i < safePointers.size(); ++i)
-    {
-        TSafePointer<void *> *pointer =
-            reinterpret_cast<TSafePointer<void *> *>(safePointers[i]);
-
-        if (pointer != NULL)
-        {
-            SafePointerLayout *layout =
-                reinterpret_cast<SafePointerLayout *>(pointer);
-
-            if (layout->pObject != NULL)
-                layout->pObject->removeSafePointer(pointer, layout->index);
-
-            layout->pObject = NULL;
-            layout->index = 0xFFFFFFFF;
-            Ogre::NedAllocImpl::deallocBytes(pointer);
-        }
+    for (unsigned int i = 0; i < m_units.size(); ++i) {
+        OGRE_DELETE_T(m_units[i], TSafePointer<CCharacter>, Ogre::MEMCATEGORY_GENERAL);
+        m_units[i] = NULL;
     }
-
-    safePointers.clear();
+    m_units.clear();
 }
 
 void CPathController::caculateSpline()
@@ -296,11 +127,12 @@ void CPathController::caculateSpline()
         {
             m_fUnknown180 += sqrtf(
                 (x - previousX) * (x - previousX) +
-                (z - previousZ) * (z - previousZ) +
-                (y - previousY) * (y - previousY));
+                (y - previousY) * (y - previousY) +
+                (z - previousZ) * (z - previousZ));
+            spline.add(m_fUnknown180);
         }
-
-        spline.add(m_fUnknown180);
+        else
+            spline.add(0.0f);
 
         previousX = x;
         previousY = y;
@@ -335,4 +167,82 @@ void CPathController::initObjectInEditor()
 
     setArrayOfVectors(points, 3);
     m_bUnknown132 = true;
+}
+
+Ogre::Vector3 CPathController::caculatePointInFrontOfPlayer(CBaseUnit* unit)
+{
+    Ogre::Vector3 position = getPosition(true);
+    CGameClient* client = m_pResourceManager->getGameClient();
+    if (client && client->getPlayer()) {
+        Ogre::Vector3 playerPosition = client->getPlayer()->getPosition(true);
+        Ogre::Vector3 direction(position.x - playerPosition.x, 0.0f, position.z - playerPosition.z);
+        direction.normalise();
+        float distance = (m_pResourceManager->getGameClient()->getPlayer()->m_fBaseUnitValue194 + unit->m_fBaseUnitValue194) * 2.0f;
+        position.x = playerPosition.x + direction.x * distance;
+        position.z = playerPosition.z + direction.z * distance;
+    }
+    return Ogre::Vector3(position.x, 0.0f, position.z);
+}
+
+Ogre::Vector3 CPathController::getNextPointAtPercent(float percent, CBaseUnit* unit, bool forward)
+{
+    if (m_bWalkToPlayer)
+        return caculatePointInFrontOfPlayer(unit);
+    if (percent > 0.0f) {
+        if (!(percent < 1.0f)) percent = 1.0f;
+    } else percent = 0.0f;
+    Ogre::Vector3 parentPosition = getSceneOwner()->getPosition(true);
+    unsigned int point = 0;
+    if (forward) {
+        for (unsigned int i = 0; i < m_pathDistances.size(); ++i) {
+            float distance = m_pathDistances[i];
+            if (m_fUnknown180 != 0.0f) distance /= m_fUnknown180;
+            if (distance >= percent) { point = i; break; }
+        }
+    } else {
+        unsigned int i = m_pathDistances.size() - 1;
+        for (;;) {
+            float distance = m_pathDistances[i];
+            if (m_fUnknown180 != 0.0f) distance /= m_fUnknown180;
+            if (percent >= distance) { point = i; break; }
+            --i;
+        }
+    }
+    return Ogre::Vector3(m_pathCoordinates[point*3] + parentPosition.x,
+                         m_pathCoordinates[point*3+1] + parentPosition.y,
+                         m_pathCoordinates[point*3+2] + parentPosition.z);
+}
+
+float* CPathController::getArrayOfVectors(unsigned int& count)
+{
+    if (m_pResourceManager->getEditorIsRunning()) {
+        m_pathCoordinates.clear();
+        for (unsigned int i = 0; i < m_pathNodes.size(); ++i) {
+            m_pathCoordinates.add(m_pathNodes[i]->getPosition(false).x);
+            m_pathCoordinates.add(m_pathNodes[i]->getPosition(false).y);
+            m_pathCoordinates.add(m_pathNodes[i]->getPosition(false).z);
+        }
+    }
+    count = m_pathCoordinates.size();
+    return &m_pathCoordinates[0];
+}
+
+void CPathController::setArrayOfVectors(const float* values, unsigned int count)
+{
+    m_pathCoordinates.clear();
+    if (values)
+        for (unsigned int i = 0; i < count; ++i)
+            m_pathCoordinates.add(values[i]);
+    setNumberOfPathPoints(count / 3);
+    if (m_pResourceManager->getEditorIsRunning() && getSceneOwner()) {
+        for (unsigned int i = 0; i < count; i += 3) {
+            if (i + 2 < count) {
+                unsigned int point = i / 3;
+                m_pathNodes[point]->m_pPathController = 0;
+                m_pathNodes[point]->setPosition(m_pathCoordinates[i], m_pathCoordinates[i+1], m_pathCoordinates[i+2]);
+                m_pathNodes[point]->m_pPathController = this;
+            }
+        }
+        setVisible(m_bVisible);
+    }
 }

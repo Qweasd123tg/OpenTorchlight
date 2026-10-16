@@ -132,6 +132,7 @@ public:
     CSkillManager* getSkillManager() { return m_pSkillManager; }
 
 protected:
+    friend class CPathController;
     friend class CGameUI;
     friend class CDieMenu;
     friend class CCharacter;

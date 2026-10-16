@@ -189,7 +189,7 @@ def _unnamed_callback(text):
     return all(part.strip() != "void" and _callback_type(part) for part in parts)
 
 
-def declared_signatures(text, name):
+def declared_signatures(text, name, parameter_transform=None):
     """Parameter/cv/static identities of simple declarations at this scope.
 
     Nested class, namespace and inline-function bodies are excluded. Unknown
@@ -228,10 +228,16 @@ def declared_signatures(text, name):
         params = []
         valid = True
         for p in ghidra_cpp.split_args(raw):
+            if parameter_transform is not None:
+                p = parameter_transform(p)
             if has_callback and not p.strip():
                 valid = False
                 break
             if "(" in p or ")" in p:
+                array = re.fullmatch(r"([^()\[\]]+)\(\s*&\s*(?:[A-Za-z_]\w*)?\s*\)\s*\[\s*([1-9][0-9]*)\s*\]", p.strip())
+                if array and _callback_type(array[1]):
+                    params.append(ghidra_cpp.parameter_key(array[1].strip() + " (&)[" + array[2] + "]"))
+                    continue
                 if not _unnamed_callback(p):
                     valid = False
                     break

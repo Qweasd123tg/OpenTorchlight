@@ -62,3 +62,50 @@ void CBinaryStyle::getStringIndexs(CDataGroup* group,
     for (unsigned int i = 0; i < group->m_DataGroups.size(); ++i)
         getStringIndexs(group->m_DataGroups[i], indexes);
 }
+
+
+void CBinaryStyle::Save64BitDataValue(std::ofstream& stream, const UNIONDATA64BIT& value)
+{
+    stream.write(reinterpret_cast<const char*>(&value), 8);
+}
+
+void CBinaryStyle::SaveUInt32BitDataValue(std::ofstream& stream, unsigned int value)
+{
+    stream.write(reinterpret_cast<const char*>(&value), 4);
+}
+
+void CBinaryStyle::SaveDataValues(std::ofstream& stream, CDataGroup* group)
+{
+    SaveUInt32BitDataValue(stream, group->m_DataValues.size());
+    for (unsigned int i = 0; i < group->m_DataValues.size(); ++i)
+    {
+        CDataValue* value = group->m_DataValues[i];
+        SaveUInt32BitDataValue(stream, value->m_iNameID);
+        unsigned int type = value->m_eType;
+        SaveUInt32BitDataValue(stream, type);
+        if (type == 7 || type == 3)
+        {
+            UNIONDATA64BIT data;
+            data.signed64 = group->m_DataValues[i]->m_Value.signed64;
+            Save64BitDataValue(stream, data);
+        }
+        else
+            SaveUInt32BitDataValue(stream, group->m_DataValues[i]->m_Value.unsigned32);
+    }
+}
+
+void CBinaryStyle::Save(std::ofstream& stream, CDataGroup* group)
+{
+    SaveUInt32BitDataValue(stream, group->m_iNameID);
+    SaveDataValues(stream, group);
+    SaveUInt32BitDataValue(stream, group->m_DataGroups.size());
+    for (unsigned int i = 0; i < group->m_DataGroups.size(); ++i)
+        Save(stream, group->m_DataGroups[i]);
+}
+
+void CBinaryStyle::SaveStringData(std::ofstream& stream, const std::wstring& value)
+{
+    SaveUInt32BitDataValue(stream, value.size());
+    utf16string text = UTF32ToUTF16(value);
+    stream.write(reinterpret_cast<const char*>(text.c_str()), text.size() * 2);
+}

@@ -1,0 +1,1787 @@
+{
+  "baseline_commit": "adfbea37173ac29d37bf02dda031f955702f7fab",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "accepted_before": 3728,
+  "accepted_after": 3844,
+  "net_accepted_change": 116,
+  "game_functions": 5247,
+  "matched_before": 2579,
+  "matched_after": 2644,
+  "behavioral_after": 1200,
+  "accepted_bytes": 1804731,
+  "game_bytes": 3702188,
+  "lost_accepted": [],
+  "prior_strong_MATCH_rows": 3368,
+  "prior_MATCH_code_lost": [],
+  "stale_behavioral": [],
+  "unknown_references": [],
+  "compiler_kind_hooks": [],
+  "new_behavioral_missing_completed_pairs": [],
+  "input_digest": "c42b2db71d7ce3d079de1e76940cfbedb0e52271f54e5e0b16c4c7396268174e",
+  "tree_unchanged": true,
+  "newly_accepted": [
+    {
+      "address": "0x593970",
+      "tu": "PathController.cpp",
+      "names": [
+        "_ZN15CPathController10setVisibleEb"
+      ],
+      "original_size": 93,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x593b10",
+      "tu": "PathController.cpp",
+      "names": [
+        "_ZN15CPathController28caculatePointInFrontOfPlayerEP9CBaseUnit"
+      ],
+      "original_size": 361,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_front_point",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x593c80",
+      "tu": "PathController.cpp",
+      "names": [
+        "_ZN15CPathController21getNextPointAtPercentEfP9CBaseUnitb"
+      ],
+      "original_size": 711,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_next_point",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x593f50",
+      "tu": "PathController.cpp",
+      "names": [
+        "_ZN15CPathController14childNodeMovedEv"
+      ],
+      "original_size": 97,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_child_moved",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x593fc0",
+      "tu": "PathController.cpp",
+      "names": [
+        "_ZN15CPathController15positionUpdatedERKN4Ogre7Vector3E"
+      ],
+      "original_size": 215,
+      "status": "MATCH",
+      "coverage": [
+        {
+          "fixture": "world_path_position_updated",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x5940a0",
+      "tu": "PathController.cpp",
+      "names": [
+        "_ZN15CPathController19setUnitInteractWithESbIwSt11char_traitsIwESaIwEE"
+      ],
+      "original_size": 332,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_unit",
+          "completed": 112,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x59be90",
+      "tu": "PathController.cpp",
+      "names": [
+        "_ZN15CPathController14caculateSplineEv"
+      ],
+      "original_size": 1102,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_spline",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x59c890",
+      "tu": "PathController.cpp",
+      "names": [
+        "_ZN15CPathController17getArrayOfVectorsERj"
+      ],
+      "original_size": 1113,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_get_array",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x59ec70",
+      "tu": "PathController.cpp",
+      "names": [
+        "_ZN15CPathController17setArrayOfVectorsEPKfj"
+      ],
+      "original_size": 754,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_set_array",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x5a5db0",
+      "tu": "PathNode.cpp",
+      "names": [
+        "_ZN9CPathNode7setTextERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "original_size": 417,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x5a6860",
+      "tu": "PathNode.cpp",
+      "names": [
+        "_ZN9CPathNode10setVisibleEb"
+      ],
+      "original_size": 386,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_node_visibility",
+          "completed": 80,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x5c6cc0",
+      "tu": "DescriptorController.cpp",
+      "names": [
+        "_ZN21CDescriptorController21getDescriptionVersionEv"
+      ],
+      "original_size": 207,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x5c6d90",
+      "tu": "DescriptorController.cpp",
+      "names": [
+        "_ZN21CDescriptorController15getCachedObjectERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "original_size": 277,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "parent_descriptor_cache",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x706700",
+      "tu": "DescriptorProp.cpp",
+      "names": [
+        "_ZN15CDescriptorProp31setPropertyInterpreterFunctionsEPFjP12CEditorSceneP17CEditorBaseObjectRKSbIwSt11char_traitsIwESaIwEEPvEPFS7_S1_S3_jSA_ESA_"
+      ],
+      "original_size": 230,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "parent_descriptor_interpreter_functions",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x70a5c0",
+      "tu": "DescriptorProp.cpp",
+      "names": [
+        "_ZN15CDescriptorPropC2EPS_P17CEditorBaseObject",
+        "_ZN15CDescriptorPropC1EPS_P17CEditorBaseObject"
+      ],
+      "original_size": 354,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "parent_descriptor_copy_ctor",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x78b9f0",
+      "tu": "Undo.cpp",
+      "names": [
+        "_ZN5CUndo9CUndoDataD2Ev",
+        "_ZN5CUndo9CUndoDataD1Ev"
+      ],
+      "original_size": 84,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x78ba50",
+      "tu": "Undo.cpp",
+      "names": [
+        "_ZN5CUndo9CUndoDataD0Ev"
+      ],
+      "original_size": 18,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x795890",
+      "tu": "Undo.cpp",
+      "names": [
+        "_ZN5CUndo23resetPropertiesOnObjectEPS_"
+      ],
+      "original_size": 223,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "parent_undo_dispatch",
+          "completed": 112,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7cd300",
+      "tu": "affix.cpp",
+      "names": [
+        "_ZN6CAffix12setDirectionEPKN4Ogre7Vector3E"
+      ],
+      "original_size": 199,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "parent_affix_direction",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x869b60",
+      "tu": "collisionmodel.cpp",
+      "names": [
+        "_ZN15CCollisionModel11unloadModelEv"
+      ],
+      "original_size": 32,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_collision_unload",
+          "completed": 80,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x86a2e0",
+      "tu": "collisionmodel.cpp",
+      "names": [
+        "_ZN15CCollisionModelD1Ev",
+        "_ZN15CCollisionModelD2Ev"
+      ],
+      "original_size": 225,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x86a3d0",
+      "tu": "collisionmodel.cpp",
+      "names": [
+        "_ZN15CCollisionModelD0Ev"
+      ],
+      "original_size": 18,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x86af90",
+      "tu": "collisionmodel.cpp",
+      "names": [
+        "_ZN15CCollisionModelC1EPN4Ogre12SceneManagerESbIwSt11char_traitsIwESaIwEE",
+        "_ZN15CCollisionModelC2EPN4Ogre12SceneManagerESbIwSt11char_traitsIwESaIwEE"
+      ],
+      "original_size": 354,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_collision_constructor",
+          "completed": 80,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x91a670",
+      "tu": "keymanager.cpp",
+      "names": [
+        "_ZN11CKeyManager10keyPressedEj"
+      ],
+      "original_size": 11,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x91a680",
+      "tu": "keymanager.cpp",
+      "names": [
+        "_ZN11CKeyManager7keyHeldEj"
+      ],
+      "original_size": 27,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x91a6a0",
+      "tu": "keymanager.cpp",
+      "names": [
+        "_ZN11CKeyManager11keyReleasedEj"
+      ],
+      "original_size": 14,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x91a980",
+      "tu": "keymanager.cpp",
+      "names": [
+        "_ZN11CKeyManager7captureEv"
+      ],
+      "original_size": 281,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x91aaa0",
+      "tu": "keymanager.cpp",
+      "names": [
+        "_ZN11CKeyManager8flushAllEv"
+      ],
+      "original_size": 132,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x91ab30",
+      "tu": "keymanager.cpp",
+      "names": [
+        "_ZN11CKeyManager5flushEv"
+      ],
+      "original_size": 91,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x91ac40",
+      "tu": "keymanager.cpp",
+      "names": [
+        "_ZN11CKeyManagerC1Ev",
+        "_ZN11CKeyManagerC2Ev"
+      ],
+      "original_size": 79,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x97f6d0",
+      "tu": "Interact.cpp",
+      "names": [
+        "_ZN9CInteract6updateEf"
+      ],
+      "original_size": 199,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_interact_update",
+          "completed": 112,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x97f7a0",
+      "tu": "Interact.cpp",
+      "names": [
+        "_ZN9CInteract26setUnitInteractWithByIndexEjSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "original_size": 146,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_interact_unit",
+          "completed": 112,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x986f30",
+      "tu": "Interact.cpp",
+      "names": [
+        "_ZN9CInteract26configureSpecificUnitIndexE19EINTERACTABLE_UNITS"
+      ],
+      "original_size": 180,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_interact_configure",
+          "completed": 80,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x986ff0",
+      "tu": "Interact.cpp",
+      "names": [
+        "_ZN9CInteract16interactWithUnitE19EINTERACTABLE_UNITS"
+      ],
+      "original_size": 523,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_interact_start",
+          "completed": 80,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x993900",
+      "tu": "PuzzleRandomizer.cpp",
+      "names": [
+        "_ZN17CPuzzleRandomizer15setActiveInputsEj"
+      ],
+      "original_size": 173,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_puzzle_active_inputs",
+          "completed": 80,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x9939b0",
+      "tu": "PuzzleRandomizer.cpp",
+      "names": [
+        "_ZN17CPuzzleRandomizerD2Ev",
+        "_ZN17CPuzzleRandomizerD1Ev"
+      ],
+      "original_size": 20,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_puzzle_destructor",
+          "completed": 80,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x9939d0",
+      "tu": "PuzzleRandomizer.cpp",
+      "names": [
+        "_ZThn88_N17CPuzzleRandomizerD1Ev"
+      ],
+      "original_size": 6,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x9939e0",
+      "tu": "PuzzleRandomizer.cpp",
+      "names": [
+        "_ZThn88_N17CPuzzleRandomizerD0Ev"
+      ],
+      "original_size": 6,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x9939f0",
+      "tu": "PuzzleRandomizer.cpp",
+      "names": [
+        "_ZN17CPuzzleRandomizerD0Ev"
+      ],
+      "original_size": 18,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x993a10",
+      "tu": "PuzzleRandomizer.cpp",
+      "names": [
+        "_ZN17CPuzzleRandomizerC2EP16CResourceManager",
+        "_ZN17CPuzzleRandomizerC1EP16CResourceManager"
+      ],
+      "original_size": 151,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_puzzle_constructor",
+          "completed": 80,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x99a200",
+      "tu": "PuzzleRandomizer.cpp",
+      "names": [
+        "_ZN17CPuzzleRandomizer7triggerE14EPUZZLE_INPUTS"
+      ],
+      "original_size": 302,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_puzzle_trigger",
+          "completed": 80,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x9b92c0",
+      "tu": "CollisionShape.cpp",
+      "names": [
+        "_ZN15CCollisionShapeD1Ev",
+        "_ZN15CCollisionShapeD2Ev"
+      ],
+      "original_size": 61,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x9b9300",
+      "tu": "CollisionShape.cpp",
+      "names": [
+        "_ZN15CCollisionShapeD0Ev"
+      ],
+      "original_size": 18,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x9b9320",
+      "tu": "CollisionShape.cpp",
+      "names": [
+        "_ZN15CCollisionShapeC1EP16CResourceManager",
+        "_ZN15CCollisionShapeC2EP16CResourceManager"
+      ],
+      "original_size": 65,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x9d3e00",
+      "tu": "Layout.cpp",
+      "names": [
+        "_ZN7CLayout14setHighlightedEb"
+      ],
+      "original_size": 101,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x9dd9a0",
+      "tu": "Layout.cpp",
+      "names": [
+        "_ZN7CLayout13SetSceneOwnerEP12CEditorScene"
+      ],
+      "original_size": 349,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "parent_layout_scene_owner",
+          "completed": 144,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x9e1090",
+      "tu": "Light.cpp",
+      "names": [
+        "_ZN6CLight11getRotationEv"
+      ],
+      "original_size": 78,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x9e10e0",
+      "tu": "Light.cpp",
+      "names": [
+        "_ZN6CLight11setRotationEf"
+      ],
+      "original_size": 79,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0x9f1dd0",
+      "tu": "RandomGroup.cpp",
+      "names": [
+        "_ZN12CRandomGroup10setVisibleEb"
+      ],
+      "original_size": 111,
+      "status": "MATCH",
+      "coverage": [
+        {
+          "fixture": "world_random_group_visibility",
+          "completed": 80,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xa081d0",
+      "tu": "SoundObject.cpp",
+      "names": [
+        "_ZN12CSoundObject22editorSelectionChangedEb"
+      ],
+      "original_size": 106,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xa6f830",
+      "tu": "SpawnClass.cpp",
+      "names": [
+        "_ZN11CSpawnClass24calculateNumberOfChoicesEP10CCharacteriiii"
+      ],
+      "original_size": 146,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_spawn_class_count",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xa6f8d0",
+      "tu": "SpawnClass.cpp",
+      "names": [
+        "_ZN11CSpawnClassC2EPKw",
+        "_ZN11CSpawnClassC1EPKw"
+      ],
+      "original_size": 141,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xa75f40",
+      "tu": "SpawnClass.cpp",
+      "names": [
+        "_ZN11CSpawnClassD1Ev",
+        "_ZN11CSpawnClassD2Ev"
+      ],
+      "original_size": 416,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_spawn_class_lifetime",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xa760e0",
+      "tu": "SpawnClass.cpp",
+      "names": [
+        "_ZN11CSpawnClassD0Ev"
+      ],
+      "original_size": 18,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xa7c700",
+      "tu": "SpawnClassData.cpp",
+      "names": [
+        "_ZN15CSpawnClassData18addUnitDataObjectsER10TArrayListIP10CDataGroupE"
+      ],
+      "original_size": 354,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_spawn_data_add_many",
+          "completed": 144,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xa7dc30",
+      "tu": "SpawnClassData.cpp",
+      "names": [
+        "_ZN15CSpawnClassData16calculateChoicesEP10CCharacteriiii"
+      ],
+      "original_size": 301,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_spawn_data_calculate",
+          "completed": 144,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc5ed90",
+      "tu": "DataGroup.cpp",
+      "names": [
+        "_ZN10CDataGroup16stringRepositoryEv"
+      ],
+      "original_size": 6,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc5eef0",
+      "tu": "DataGroup.cpp",
+      "names": [
+        "_ZN10CDataGroup10SaveToFileERKSbIwSt11char_traitsIwESaIwEEP20iDataFileSaveAndLoad"
+      ],
+      "original_size": 58,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc5efa0",
+      "tu": "DataGroup.cpp",
+      "names": [
+        "_ZN10CDataGroup31getStringRepositorySizeInMemoryEv"
+      ],
+      "original_size": 55,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc5f5e0",
+      "tu": "DataGroup.cpp",
+      "names": [
+        "_ZN10CDataGroup14SetGroupNameIDEj"
+      ],
+      "original_size": 570,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_data_group_name_id",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc60860",
+      "tu": "DataGroup.cpp",
+      "names": [
+        "_ZN10CDataGroup10SaveToFileERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "original_size": 590,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_data_group_save_path",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        },
+        {
+          "fixture": "bulk_data_group_save_exceptions",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc61ad0",
+      "tu": "DataGroup.cpp",
+      "names": [
+        "_ZN10CDataGroupC2ERKSbIwSt11char_traitsIwESaIwEEPS_jjP11TRepositoryIS3_E",
+        "_ZN10CDataGroupC1ERKSbIwSt11char_traitsIwESaIwEEPS_jjP11TRepositoryIS3_E"
+      ],
+      "original_size": 297,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc63380",
+      "tu": "DataValue.cpp",
+      "names": [
+        "_ZN10CDataValueC1Ej14UNIONDATA64BITNS_15EDATAVALUETYPESEP11TRepositoryISbIwSt11char_traitsIwESaIwEEE",
+        "_ZN10CDataValueC2Ej14UNIONDATA64BITNS_15EDATAVALUETYPESEP11TRepositoryISbIwSt11char_traitsIwESaIwEEE"
+      ],
+      "original_size": 1184,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_data_value_union_ctor",
+          "completed": 160,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc643a0",
+      "tu": "DataValue.cpp",
+      "names": [
+        "_ZN10CDataValueC1EPKwP11TRepositoryISbIwSt11char_traitsIwESaIwEEE",
+        "_ZN10CDataValueC2EPKwP11TRepositoryISbIwSt11char_traitsIwESaIwEEE"
+      ],
+      "original_size": 211,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_data_value_name_ctor",
+          "completed": 160,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc64910",
+      "tu": "DataValue.cpp",
+      "names": [
+        "_ZN10CDataValue16SetValueByStringERKSbIwSt11char_traitsIwESaIwEERS3_"
+      ],
+      "original_size": 447,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_data_value_from_string",
+          "completed": 160,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc64ae0",
+      "tu": "DataValue.cpp",
+      "names": [
+        "_ZN10CDataValue4CopyEPS_P11TRepositoryISbIwSt11char_traitsIwESaIwEEE"
+      ],
+      "original_size": 133,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc64b70",
+      "tu": "DataValue.cpp",
+      "names": [
+        "_ZN10CDataValueC1EPS_P11TRepositoryISbIwSt11char_traitsIwESaIwEEE",
+        "_ZN10CDataValueC2EPS_P11TRepositoryISbIwSt11char_traitsIwESaIwEEE"
+      ],
+      "original_size": 122,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_data_value_copy_ctor",
+          "completed": 160,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc65210",
+      "tu": "BinaryStyle.cpp",
+      "names": [
+        "_ZN12CBinaryStyle18Save64BitDataValueERSt14basic_ofstreamIcSt11char_traitsIcEERK14UNIONDATA64BIT"
+      ],
+      "original_size": 16,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc65220",
+      "tu": "BinaryStyle.cpp",
+      "names": [
+        "_ZN12CBinaryStyle22SaveUInt32BitDataValueERSt14basic_ofstreamIcSt11char_traitsIcEEj"
+      ],
+      "original_size": 31,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc65240",
+      "tu": "BinaryStyle.cpp",
+      "names": [
+        "_ZN12CBinaryStyle14SaveDataValuesERSt14basic_ofstreamIcSt11char_traitsIcEEP10CDataGroup"
+      ],
+      "original_size": 300,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_binary_values",
+          "completed": 130,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc65370",
+      "tu": "BinaryStyle.cpp",
+      "names": [
+        "_ZN12CBinaryStyle4SaveERSt14basic_ofstreamIcSt11char_traitsIcEEP10CDataGroup"
+      ],
+      "original_size": 155,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc656d0",
+      "tu": "BinaryStyle.cpp",
+      "names": [
+        "_ZN12CBinaryStyle14SaveStringDataERSt14basic_ofstreamIcSt11char_traitsIcEERKSbIwS1_IwESaIwEE"
+      ],
+      "original_size": 180,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc6e7f0",
+      "tu": "DynamicPropertyFile.cpp",
+      "names": [
+        "_ZN20CDynamicPropertyFileC2ESbIwSt11char_traitsIwESaIwEES3_S3_",
+        "_ZN20CDynamicPropertyFileC1ESbIwSt11char_traitsIwESaIwEES3_S3_"
+      ],
+      "original_size": 615,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_dynamic_ctor",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc6f780",
+      "tu": "DynamicPropertyFile.cpp",
+      "names": [
+        "_ZN20CDynamicPropertyFileD1Ev",
+        "_ZN20CDynamicPropertyFileD2Ev"
+      ],
+      "original_size": 762,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_dynamic_dtor",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc6fa80",
+      "tu": "DynamicPropertyFile.cpp",
+      "names": [
+        "_ZN20CDynamicPropertyFileD0Ev"
+      ],
+      "original_size": 18,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc6fb00",
+      "tu": "DynamicPropertyFile.cpp",
+      "names": [
+        "_ZN20CDynamicPropertyFile8SetFloatERKSbIwSt11char_traitsIwESaIwEEf"
+      ],
+      "original_size": 401,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_dynamic_float_name",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc6fca0",
+      "tu": "DynamicPropertyFile.cpp",
+      "names": [
+        "_ZN20CDynamicPropertyFile6SetIntERKSbIwSt11char_traitsIwESaIwEEi"
+      ],
+      "original_size": 377,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_dynamic_int_name",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc6fe20",
+      "tu": "DynamicPropertyFile.cpp",
+      "names": [
+        "_ZN20CDynamicPropertyFile10SetSettingERKSbIwSt11char_traitsIwESaIwEES5_"
+      ],
+      "original_size": 639,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_dynamic_setting",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc702a0",
+      "tu": "DynamicPropertyFile.cpp",
+      "names": [
+        "_ZN20CDynamicPropertyFile9SetStringERKSbIwSt11char_traitsIwESaIwEES5_"
+      ],
+      "original_size": 421,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_dynamic_string_name",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc738b0",
+      "tu": "FileUtilities.cpp",
+      "names": [
+        "_ZN10FILESYSTEM8ReadByteEP8_IO_FILE"
+      ],
+      "original_size": 48,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_files_byte",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc73e50",
+      "tu": "FileUtilities.cpp",
+      "names": [
+        "_ZN10FILESYSTEM14RemoveFileNameERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "original_size": 282,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_files_remove_name",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc73f70",
+      "tu": "FileUtilities.cpp",
+      "names": [
+        "_ZN10FILESYSTEM10ReadStringEP8_IO_FILEj"
+      ],
+      "original_size": 228,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc74060",
+      "tu": "FileUtilities.cpp",
+      "names": [
+        "_ZN10FILESYSTEM10ReadStringEP8_IO_FILE"
+      ],
+      "original_size": 232,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_files_read_string",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc74330",
+      "tu": "FileUtilities.cpp",
+      "names": [
+        "_ZN10FILESYSTEM11FileIsOlderERKSbIwSt11char_traitsIwESaIwEES5_"
+      ],
+      "original_size": 338,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_files_older",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc74db0",
+      "tu": "FileUtilities.cpp",
+      "names": [
+        "_ZN10FILESYSTEM20AssembleAbsolutePathERKSsS1_"
+      ],
+      "original_size": 256,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc75430",
+      "tu": "FileUtilities.cpp",
+      "names": [
+        "_ZN10FILESYSTEM11ReadWStringEP8_IO_FILE"
+      ],
+      "original_size": 229,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_files_read_wide",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc75520",
+      "tu": "FileUtilities.cpp",
+      "names": [
+        "_ZN10FILESYSTEM11GetFileListERKSbIwSt11char_traitsIwESaIwEER10TArrayListIS3_ES3_"
+      ],
+      "original_size": 1276,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_files_list",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc77650",
+      "tu": "FileUtilities.cpp",
+      "names": [
+        "_ZN10FILESYSTEM17GetFileListSortedERKSbIwSt11char_traitsIwESaIwEER10TArrayListIS3_ES3_"
+      ],
+      "original_size": 1351,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "bulk_files_sorted",
+          "completed": 120,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc77ea0",
+      "tu": "GameSpeed.cpp",
+      "names": [
+        "_ZN10CGameSpeed16addSpeedModifierE15EGAMESPEED_TYPEff"
+      ],
+      "original_size": 394,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc782c0",
+      "tu": "GameSpeed.cpp",
+      "names": [
+        "_ZN10CGameSpeedD0Ev"
+      ],
+      "original_size": 18,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc875c0",
+      "tu": "path.cpp",
+      "names": [
+        "_ZN5CPath5ClearEv"
+      ],
+      "original_size": 61,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_clear",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc877a0",
+      "tu": "path.cpp",
+      "names": [
+        "_ZN5CPath14SetRadiusRightEjf"
+      ],
+      "original_size": 29,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc879e0",
+      "tu": "path.cpp",
+      "names": [
+        "_ZN5CPath27GetSplinePositionAtDistanceEf"
+      ],
+      "original_size": 1101,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_spline_position",
+          "completed": 280,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc88300",
+      "tu": "path.cpp",
+      "names": [
+        "_ZN5CPath16FindNearestPointERKN4Ogre7Vector3ERS1_S4_RjRff"
+      ],
+      "original_size": 1407,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_nearest_point",
+          "completed": 280,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc88880",
+      "tu": "path.cpp",
+      "names": [
+        "_ZN5CPathD2Ev",
+        "_ZN5CPathD1Ev"
+      ],
+      "original_size": 233,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc88990",
+      "tu": "path.cpp",
+      "names": [
+        "_ZN5CPath18CalculatePathWidthERS_S0_"
+      ],
+      "original_size": 767,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_width",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc893b0",
+      "tu": "path.cpp",
+      "names": [
+        "_ZN5CPath7ReverseEv"
+      ],
+      "original_size": 414,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_reverse",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc89550",
+      "tu": "path.cpp",
+      "names": [
+        "_ZN5CPathC2ESsbRKN4Ogre7Vector3E",
+        "_ZN5CPathC1ESsbRKN4Ogre7Vector3E"
+      ],
+      "original_size": 338,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc896b0",
+      "tu": "path.cpp",
+      "names": [
+        "_ZN5CPath6ResizeEj"
+      ],
+      "original_size": 463,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_path_resize",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc8d980",
+      "tu": "StringUtilities.cpp",
+      "names": [
+        "_ZN7STRINGS19StringConvertToWideERKSsPwi"
+      ],
+      "original_size": 142,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc8e030",
+      "tu": "StringUtilities.cpp",
+      "names": [
+        "_ZN7STRINGS11StringLowerERKSs"
+      ],
+      "original_size": 162,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc8e230",
+      "tu": "StringUtilities.cpp",
+      "names": [
+        "_ZN7STRINGS11StringLowerERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "original_size": 161,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xc8ef50",
+      "tu": "StringUtilities.cpp",
+      "names": [
+        "_ZN7STRINGS20StringCopyWCharArrayEPwjPKc"
+      ],
+      "original_size": 225,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xcd2a70",
+      "tu": "SkillManager.cpp",
+      "names": [
+        "_ZN13CSkillManagerC2EP16CResourceManagerP9CBaseUnit",
+        "_ZN13CSkillManagerC1EP16CResourceManagerP9CBaseUnit"
+      ],
+      "original_size": 265,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "parent_skill_manager_ctor",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xce9ef0",
+      "tu": "CameraControl.cpp",
+      "names": [
+        "_ZN14CCameraControl14setAspectRatioE8ECAMERASff"
+      ],
+      "original_size": 220,
+      "status": "MATCH",
+      "coverage": [
+        {
+          "fixture": "ServicesCameraAspect",
+          "completed": 140,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcf1db0",
+      "tu": "CameraControl.cpp",
+      "names": [
+        "_ZN14CCameraControlD1Ev",
+        "_ZN14CCameraControlD2Ev"
+      ],
+      "original_size": 169,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xcf1e60",
+      "tu": "CameraControl.cpp",
+      "names": [
+        "_ZN14CCameraControlD0Ev"
+      ],
+      "original_size": 18,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xcf8850",
+      "tu": "CameraShake.cpp",
+      "names": [
+        "_ZN12CCameraShake18setCameraShakeNameERKSbIwSt11char_traitsIwESaIwEE"
+      ],
+      "original_size": 231,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xcf8940",
+      "tu": "CameraShake.cpp",
+      "names": [
+        "_ZN12CCameraShake5cloneEPS_"
+      ],
+      "original_size": 171,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xd8ebe0",
+      "tu": "CameraController.cpp",
+      "names": [
+        "_ZN17CCameraController19setUnitInteractWithESbIwSt11char_traitsIwESaIwEE"
+      ],
+      "original_size": 121,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xd96560",
+      "tu": "CameraController.cpp",
+      "names": [
+        "_ZN17CCameraController13configureUnitEv"
+      ],
+      "original_size": 145,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xd968f0",
+      "tu": "CameraController.cpp",
+      "names": [
+        "_ZN17CCameraController21configureUnitsInLevelEv"
+      ],
+      "original_size": 34,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xd977b0",
+      "tu": "CameraController.cpp",
+      "names": [
+        "_ZN17CCameraControllerD0Ev"
+      ],
+      "original_size": 18,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xdc9c70",
+      "tu": "AnimationPlayer.cpp",
+      "names": [
+        "_ZN16CAnimationPlayer20setAnimationDurationEf"
+      ],
+      "original_size": 215,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xdd2cb0",
+      "tu": "AnimationPlayer.cpp",
+      "names": [
+        "_ZN16CAnimationPlayerD0Ev"
+      ],
+      "original_size": 18,
+      "status": "MATCH",
+      "coverage": []
+    },
+    {
+      "address": "0xe81250",
+      "tu": "CinematicObject.cpp",
+      "names": [
+        "_ZN16CCinematicObject17updateLevelObjectEfPN4Ogre6CameraERKNS0_7Vector3E"
+      ],
+      "original_size": 64,
+      "status": "behavioral",
+      "coverage": [
+        {
+          "fixture": "world_cinematic_update",
+          "completed": 80,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    }
+  ],
+  "PASS": true,
+  "schema": 1,
+  "status": "PASS",
+  "command": "python3 tools/decomp/check.py",
+  "environment": {
+    "LANG": "C.UTF-8",
+    "LC_ALL": "",
+    "TZ": "",
+    "OTL_JOBS": "4",
+    "OTL_COMPARE_JOBS": "4",
+    "OTL_BUILD_JOBS": "4",
+    "OTL_SELFTEST_JOBS": "6",
+    "OTL_SELFTEST_SHARDS": "60",
+    "OTL_SELFTEST_TIMEOUT": "1800",
+    "PYTHONUNBUFFERED": "1"
+  },
+  "full_gate": {
+    "tests": 1437,
+    "failed": 0,
+    "elapsed_seconds": 1312.3623614311218,
+    "selftest_seconds": 1141.121717949005,
+    "build_seconds": 139.87569123800495,
+    "log_sha256": "3d266fe25df880d897d5d0d80cfa2e4103b5dcd3135a5634efa3e485a2b6520f",
+    "progress_sha256": "67edc831aecfe59a5850d08dee4419c36f57fca2c8591ce368674051b6e6fd0d",
+    "inputs_unchanged": true,
+    "inputs_digest": "c42b2db71d7ce3d079de1e76940cfbedb0e52271f54e5e0b16c4c7396268174e",
+    "input_count": 4992
+  },
+  "focused_gate": {
+    "tests": 80,
+    "failed": 0,
+    "elapsed_seconds": 63.50609350204468,
+    "tree_unchanged": true,
+    "inputs_unchanged": true,
+    "log_sha256": "a05f1b42b8fe2f8343a373f2c93490f2bf49b588a884fb45216999b5168d8261"
+  },
+  "tool_tests": {
+    "tests": 399,
+    "failed": 0,
+    "log_sha256": "84bf9b15998d5d71dc4b9c0d19621df332339d667274cbe7efe1c065369f015e"
+  },
+  "integrated_files": {
+    "decomp/src/SpawnClassData.cpp": "c326c4b33111d056ddd8594ef92d931be495fde786af6f7ffc6e1fbfbadbe806",
+    "decomp/src/CameraShake.cpp": "702be21e5dfa146f3cbe68fe25da1afa3b627e0c0dba4020fa3c00a332833f53",
+    "decomp/src/Interact.cpp": "ac6f48d31331d6389a5487f815db0dc923c77b238dd49a9b74dc390245719d9c",
+    "decomp/src/CameraController.cpp": "72adb207261df8aa729b2cdfe69257cb6ac590930ed60cfa5587e6c3b127dc63",
+    "decomp/src/ModFileFilter.cpp": "5b5cde65df3621c4ecd5e97e3fd94650d001b77844444e240ea2586184671cec",
+    "decomp/src/DataGroup.cpp": "270a15ad17104ea75a92b660331efd6f3c3af0b9b41ea60ca2790343d5edbcf6",
+    "decomp/src/DescriptorProp.cpp": "8367a368211836587d60f9342f21f32522c7b297d1f9d96f6f27ac72ba325ff7",
+    "decomp/src/DynamicPropertyFile.cpp": "c9bd8ea2d0a05846fcbdf69d05d4987a40bc3c32a43d11054269e563c85bbb0a",
+    "decomp/src/CameraControl.cpp": "1a5824245627e6ed0960ffd13a7c8b226461204f897e0c451f209864a7592a49",
+    "decomp/src/path.cpp": "10a6707de2325fc122c6649c47dda0571febf07e4e17a01e2b1758ae4b113ae9",
+    "decomp/src/DescriptorController.cpp": "16bf6b6b63dc876d2dfd1f73ea89696429317e5a68776a3db74875dc0e40e88b",
+    "decomp/src/Layout.cpp": "4e61d63abbe3c3e79333278dc9dd413f563bf490f4c4fb5b8db0ebe80bfbfef7",
+    "decomp/src/PathController.cpp": "c0fc43c7ffac688659ab87c9f2b217af00057375f18f42629a10c7ebb774f7de",
+    "decomp/src/SpawnClass.cpp": "b69e3bbadd28dd95bb735e156f1bee75f53df974a8ef382dbffd57dd680372cf",
+    "decomp/src/Undo.cpp": "3eab9f73d3721e11328d50ae4fff285eb3571631d6d0982f6a6698b217e225c6",
+    "decomp/src/collisionmodel.cpp": "cdbf5a623b963e653867f8aa774cb3c109da7d3d73b53efb4ad8251b0732edaf",
+    "decomp/src/PathNode.cpp": "b3c915521b702cb850a79bbf1047901b45679ee3b7439f4ed5f0e5a49faa6b96",
+    "decomp/src/DataValue.cpp": "53a15ad98be549ba82938d8b252f8007197d6850dbc14b1c00ff7b3c89e78761",
+    "decomp/src/FileUtilities.cpp": "d8138ff97acf825f55248946db2c3d9d7574cb9de484f85d53fe4111c1328399",
+    "decomp/src/BinaryStyle.cpp": "5e48cb8b59a02f5a4ab92fab749ecc69d4efc12b36e96d9b8234e7e875fa3578",
+    "decomp/src/AnimationPlayer.cpp": "38944e35efd0c973ac4d55959c24753c6ba699dc9603939212630557f1f7df7d",
+    "decomp/src/affix.cpp": "ff592611f895009006c0af127a5dc23958321214ae6e0ff1151d22fdaf392312",
+    "decomp/src/SoundObject.cpp": "72bff7612ce7ff09f775dcb40a88358996aaf799a9f6ff05ebb10aadcd8cdb45",
+    "decomp/src/PuzzleRandomizer.cpp": "cc2911243a9267561a6b24fa72959d6849b80c25efa54e4d9bd447bbae18cdc3",
+    "decomp/src/RandomGroup.cpp": "198efc12c562ad9732fa932063cc1cba2b08880bdb8c11e5c50401d9f60c5521",
+    "decomp/src/SkillManager.cpp": "2a9f2322ac1c06a3de4c1f3641b3a84ac26b828fae2fb2eebc35dab542a102d9",
+    "decomp/src/StringUtilities.cpp": "61e712980f735bf322ff6a81069a8d9e70183e98cc997c06368fa0791ad48195",
+    "decomp/src/CollisionShape.cpp": "da9826a0b5fc3d65f3d7154c3e29e9527769b84cf632aba617f99e4d9d46e875",
+    "decomp/src/keymanager.cpp": "4cabf5dbbdcc47d64367273a087f480ffd7c51952f645784b999383d88f59a62",
+    "decomp/src/Light.cpp": "f6eec713107f01cc8cabbd81ee7ebdf4bdcfb1f36d0714018198f781718eb225",
+    "decomp/src/Achievements.cpp": "0803670f8decee2b4b24887809c6083f74f7d37578795ae98d197f2e49571ec2",
+    "decomp/src/CinematicObject.cpp": "de8a8f17a5133ce6e8bb9004c856686bdf46fb4777d9501b517a2bc47fa08a7f",
+    "decomp/src/GameSpeed.cpp": "8b922848c32d4e3038bb0766f8530288716150978c6ada469362bc18be4eac5b",
+    "decomp/hybrid/tests/BulkBinaryStyleTest.cpp": "7f4ba52a1a03b7b16ba7cbbcfd9d44a90b7c3c4f0144368b227e3dd84023ee60",
+    "decomp/hybrid/tests/BulkDataGroupTest.cpp": "c029dcfc6b47fc1d9ffbd7582de4d46452353a05ce568bce0126021fb76502e7",
+    "decomp/hybrid/tests/BulkDataValueTest.cpp": "5c17c531943e94c3e06a78e2b8fa795ad2b466581c2de9a133151570e91d7011",
+    "decomp/hybrid/tests/BulkDynamicPropertyTest.cpp": "cf0bc1f8d44d9547520c099677e7aa857554457617adfdc766909cb7447db421",
+    "decomp/hybrid/tests/BulkFileUtilitiesTest.cpp": "39c559a7e225f380c505b72c3a2eb7bff8666b24c70b3643ea21906016777fbb",
+    "decomp/hybrid/tests/BulkSpawnClassTest.cpp": "9ea71646f0ea14647355aba483306a9118dd09726dd1ed68cb8a36e4989396fe",
+    "decomp/hybrid/tests/BulkSpawnDataTest.cpp": "01df9ecf6015ec1e3c88fee60962bdc9e23a46db465b951767dcd08ed6102af1",
+    "decomp/hybrid/tests/ServicesCameraTest.cpp": "0df919dcd0ef3ade9a1187cf4f49e25f555b74e7067b63e2e61864aafd033d6c",
+    "decomp/hybrid/tests/ServicesListsTest.cpp": "9f702040b54ccfdb140aca60e7dd09578463197ae77ebe3ba46f9d794ce6a8c7",
+    "decomp/hybrid/tests/ServicesOwnershipTest.cpp": "022ac484eb76744881efdbb6bf486b8ef9625be2498771e3e164b851b8f4f079",
+    "decomp/hybrid/tests/ServicesStringKeyTest.cpp": "433f1067887f3b16e2d9d97e27bca9c050c9c41624bb225ff6f02ff947fa9ca2",
+    "decomp/hybrid/tests/ParentAffixDirectionTest.cpp": "51824da19d8a69c95e828be64985ada41172002558ddada7b05b18b19e66a77c",
+    "decomp/hybrid/tests/ParentDescriptorCacheTest.cpp": "87de1393cca279f5a3ff7d15f39a9a79e8ca405f46681416517c5be81d8eabf3",
+    "decomp/hybrid/tests/ParentDescriptorCtorTest.cpp": "c59d00d8c858f5a99ac0de1698066584a4fbce4b848b3b35e0e5e77d2f024674",
+    "decomp/hybrid/tests/ParentLayoutOwnerTest.cpp": "fb42a4286c3d2e6ad663b3df6fd71de2262e302760894b34005f6df51867b3c9",
+    "decomp/hybrid/tests/ParentSkillManagerCtorTest.cpp": "9392d75660e648be1b730b3b765520d26ce150cb863f35ee6fb05e3b72152aef",
+    "decomp/hybrid/tests/ParentUndoDispatchTest.cpp": "4b767197304d8ef640a4f76135953c8ec6bbda0ce9fd0b22fe11fc602eb66f09",
+    "decomp/hybrid/tests/WorldInteractCompare.cpp": "7be1b31887a7a4c4d5fbe5914fcfa9923885358b7b7af7ef376a4ec8c5d97c5f",
+    "decomp/hybrid/tests/WorldInteractionStartCompare.cpp": "2039137d8e9d79b324eb14572cf3749bb219fdbe3ea2a4f69fe5647d90dba8b9",
+    "decomp/hybrid/tests/WorldPathArrayCompare.cpp": "3d50c5499e90f7811792d52109472102e2f1064299e47fa23e75c078d177e3a7",
+    "decomp/hybrid/tests/WorldPathStorageCompare.cpp": "842fce313f28354e16ec2d8685a93e310c124e2bb3e473abae846664f6df2dcf",
+    "decomp/hybrid/tests/WorldPuzzleCollisionCompare.cpp": "9232e6d136c8575fe1716d4c10b7d7c79534c734d1e33a10572ead0e50355275",
+    "decomp/hybrid/tests/WorldSceneStateCompare.cpp": "f5b53bcfe343cc1043d8175dc422dea6dfbc251f94b2caf5e0be5bb604146670",
+    "decomp/hybrid/tests/WorldPathMathCompare.cpp": "b17d8ef6dfea497b78cea3f14c44c971903a59f2ddeb531672fa9a31275d26eb",
+    "decomp/hybrid/tests/WorldPathUnitCompare.cpp": "08cb9cad1183279c8db9f63c109ed06f566ed46031acf5cada14b08e45e8b3fa"
+  },
+  "context": {
+    "layout_classes_checked": 19,
+    "layout_proof_sha256": "78684426c32f207d99c8f8287d744c10e1a3e87cc86156d1d61444df3d8a1cc6",
+    "old_strong_MATCH_before": 3368,
+    "copy_data_value_return": "CDataValue*; fresh unblocked packet; body deferred"
+  },
+  "corrections": [
+    "CGameSpeed::addSpeedModifier static ABI; Achievements status returns wstring; DataGroup save returns full32-bit int; StringCopyWCharArray returns uint32; GetFloat64 returns double.",
+    "CPathController returns Vector3 rather than float; CPath path names use narrow string; SceneOwner+0x48 is distinct from ParentPositionableObject+0x50.",
+    "CameraControl/AnimationPlayer weak-reference objects use the original OGRE allocator; real lifetime comparisons include invalidation and virtual deletion.",
+    "RunicCore global count is cumulative constructions; fixtures verify unchanged count during destruction and actual weak-reference invalidation."
+  ],
+  "tooling": [
+    "Selected-method/callee declaration identity resolves exact nested types, enums, callback typedefs, arrays, FILE and standard templates, with dependency headers; ambiguity remains blocked.",
+    "Repair can preserve an independently emitted nonvirtual adjustment thunk only with unique same-TU strong MATCH and exact normalized code; ctor/dtor aliases and compiler helpers remain blocked."
+  ],
+  "limits": [
+    "Headless in-process comparison only; native windowed gameplay was not launched.",
+    "Unresolved repository/template destructor contexts, CTimerStatics layout and pinned ParticleUniverse call declarations were deferred; no guessed vendor layouts or raw-offset replacements were added.",
+    "Exception cases inject through original out-of-line collaborators and observe cleanup/lifetimes; they do not simulate every possible global allocation failure."
+  ],
+  "independent_consistency_review": {
+    "schema": 1,
+    "status": "PASS_WITH_MINOR_DOCUMENTATION_FINDINGS",
+    "baseline_commit": "adfbea37173ac29d37bf02dda031f955702f7fab",
+    "scope": "Read-only current diff consistency review; no game, build or tests executed; canonical source/header/tools/tests unchanged by reviewer.",
+    "blocking_findings": [],
+    "minor_findings": [
+      {
+        "path": "decomp/include/DataValue.h",
+        "line": 25,
+        "kind": "parameter-name-only",
+        "description": "SetValueByString declares value,type, while implementation uses type,value. Parameter types and ABI agree.",
+        "implementation": "decomp/src/DataValue.cpp:201",
+        "recommendation": "Rename declaration parameters in a later normal edit tranche; do not invalidate the frozen final gate."
+      },
+      {
+        "path": "decomp/include/Path.h",
+        "line": 47,
+        "kind": "parameter-name-only",
+        "description": "New nonconst FindNearestPoint overload calls final argument maximumDistance; implementation uses minimumDistance and rejects candidates below that distance. ABI agrees.",
+        "implementation": "decomp/src/path.cpp:869",
+        "recommendation": "Align the argument name with lower-bound semantics in a later normal edit tranche."
+      }
+    ],
+    "checked_consistency": [
+      "Changed production paths stay within decomp source/header track and tools/decomp; frozen remake/code-first/p-code paths are untouched.",
+      "Added source definitions have concrete operations or compiler-generated member cleanup; no introduced placeholder implementation found.",
+      "Inspected ABI declaration changes preserve C++98 forms; layout manifest covers 19 classes/types, while this review does not independently execute layout checks.",
+      "GameSpeed static call, wstring/Vector3 return declarations and callback/string by-value declarations agree with corresponding current definitions.",
+      "README thunk exception matches same-TU independently emitted nonvirtual thunk admission, strong MATCH normalized-code pin and final candidate comparison rejection.",
+      "Draft report separates MATCH/behavioral acceptance from headless versus windowed gameplay and defers incomplete context/vendor declarations.",
+      "Draft report waits for final-audit PASS and unchanged tree/input proofs before writing accepted results; final gates remain main-agent responsibility."
+    ],
+    "reviewed_files": 98,
+    "tracked_diff_sha256": "cd50159d19cde638236d951f6291b7fbd5ef9ffd6b84409579f64ba33f8d3a5e",
+    "limits": [
+      "Static diff review only; does not replace original-machine-code proof or final canonical gates.",
+      "Parameter-name-only observations are nonblocking and intentionally left outside the frozen snapshot."
+    ]
+  },
+  "tested_tree_sha256": "9897d43a2f1eab457c1cd3be4097714862e293a459e5aa215358f3f43fe056b9"
+}

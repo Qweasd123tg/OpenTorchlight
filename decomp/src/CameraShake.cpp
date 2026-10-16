@@ -16,13 +16,13 @@
 bool CCameraShake::update(float fDeltaTime, Ogre::Vector3& cameraPosition,
                           Ogre::Vector3& shakeOffset, bool applyShake)
 {
-    if (!m_pRunicCore)
+    if (!m_graph.getObject())
         return false;
 
     m_fElapsedTime = std::min(m_fElapsedTime + fDeltaTime, m_fDuration);
 
     float fElapsedTimeRatio = m_fElapsedTime / m_fDuration;
-    float fMagnitude = reinterpret_cast<CGraph*>(m_pRunicCore)->getValue(
+    float fMagnitude = m_graph.getObject()->getValue(
         fElapsedTimeRatio, 0);
     fMagnitude *= m_fMagnitudeMultiplier;
 
@@ -77,8 +77,7 @@ bool CCameraShake::update(float fDeltaTime, Ogre::Vector3& cameraPosition,
 CCameraShake::CCameraShake()
     : CEditorBaseObject(), m_fDuration(0.5f), m_fElapsedTime(0.0f),
       m_fMagnitudeMultiplier(1.0f), m_fDirectionX(0.0f), m_fDirectionY(1.0f),
-      m_fDirectionZ(0.0f), m_pRunicCore(NULL),
-      m_nRunicCoreSafePointerIndex(-1), m_strCameraShakeName(EMPTY_WSTRING),
+      m_fDirectionZ(0.0f), m_graph(), m_strCameraShakeName(EMPTY_WSTRING),
       m_nDirectionOrientation(0), m_fCameraPositionX(0.0f),
       m_fCameraPositionY(0.0f), m_fCameraPositionZ(0.0f),
       m_bCameraShakeActive(false), m_bCameraFallsOffWithDistance(true)
@@ -95,9 +94,19 @@ void CCameraShake::clone(CCameraShake* pCameraShake)
         m_fDirectionY = pCameraShake->m_fDirectionY;
         m_fDirectionZ = pCameraShake->m_fDirectionZ;
         m_strCameraShakeName = pCameraShake->m_strCameraShakeName;
-        m_bCameraShakeActive = pCameraShake->m_bCameraShakeActive;
         m_bCameraFallsOffWithDistance = pCameraShake->m_bCameraFallsOffWithDistance;
+        m_bCameraShakeActive = pCameraShake->m_bCameraShakeActive;
         m_fDuration = pCameraShake->m_fDuration;
         setCameraShakeName(m_strCameraShakeName);
     }
+}
+
+#include "GraphManager.h"
+#include "StringUtilities.h"
+#include "CameraControl.h"
+
+void CCameraShake::setCameraShakeName(const std::wstring& name)
+{
+    m_strCameraShakeName = STRINGS::StringUpper(name);
+    m_graph.setObject(CGraphManager::getSingleton()->getGraph(m_strCameraShakeName));
 }

@@ -4,6 +4,7 @@
 #include <string>
 #include <OgreRenderTargetListener.h>
 #include <OgreRenderQueue.h>
+#include <OgreVector3.h>
 #include <string>
 
 #include "RunicCore.h"
@@ -33,6 +34,9 @@ friend class CDropdownMenu;
     friend class CCinematicMenu;
     friend class CQuestDialogMenu;
 friend class CDifficultyMenu;
+    friend class CInteract;
+    friend class CCameraController;
+    friend class CRandomGroup;
 public:
     void resetGameSeed(int);
     void destroyGameUI();
@@ -113,13 +117,16 @@ private:
     CMasterResourceManager* m_masterResources;
     unsigned char m_gap1048[0x10];
     Ogre::Root* m_root;
-    unsigned char m_gap1060[0x5c];
+    unsigned char m_gap1060[0x5b];
+    bool m_interactionState;
     bool m_bStateControl10BC;
     unsigned char m_gap10BD[0x38d0-0x10bd];
     EGameState m_gameState;
     bool m_pendingPassClear;
-    unsigned char m_gap38D5[0x17];
+    unsigned char m_gap38D5[0xb];
+    Ogre::Vector3 m_cameraPosition;
     int m_startDifficulty; // +0x38ec
-    unsigned char m_gap38F0[0x20];
+    unsigned char m_gap38F0[0x1c];
+    int m_cameraState;
 };
 #endif

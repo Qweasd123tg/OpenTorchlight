@@ -17,3 +17,13 @@ void CCollisionShape::setEnabled(bool enabled)
         BroadcastEvent(7);
     updateCollision();
 }
+
+CCollisionShape::CCollisionShape(CResourceManager* resources) : CShape(resources)
+{
+    setEnabled(true);
+}
+
+CCollisionShape::~CCollisionShape()
+{
+    setEnabled(false);
+}

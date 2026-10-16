@@ -1,4 +1,9 @@
 
+
+#include "PairStyle.h"
+#include "FileSystem.h"
+
+
 #include "DataGroup.h"
 #include "DataValue.h"
 #include "EmptyStrings.h"
@@ -352,3 +357,72 @@ unsigned int CDataGroup::GetDataValuesMatchingName(const std::wstring& name, std
 }
 
 #include "DataGroupRepository.h"
+
+
+TRepository<std::wstring>* CDataGroup::stringRepository()
+{
+    return &g_GlobalRepository;
+}
+
+unsigned int CDataGroup::getStringRepositorySizeInMemory()
+{
+    unsigned int size = 0;
+    for (std::map<std::wstring, unsigned int>::iterator i = g_GlobalRepository.m_IDs.begin();
+         i != g_GlobalRepository.m_IDs.end(); ++i)
+        size += i->first.size() * sizeof(wchar_t);
+    return size;
+}
+
+int CDataGroup::SaveToFile(const std::wstring& file, iDataFileSaveAndLoad* style)
+{
+    int result = style->SaveDataGroupToFile(file, this);
+    setDirty(false);
+    return result;
+}
+
+int CDataGroup::SaveToFile(const std::wstring& file)
+{
+    CPairStyle style;
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(file, info, false, false, false);
+    if (info.m_bExists)
+        return SaveToFile(info.m_sPath, &style);
+    return SaveToFile(file, &style);
+}
+
+void CDataGroup::SetGroupNameID(unsigned int name)
+{
+    if (m_pRepository)
+    {
+        m_iNameID = name;
+        std::wstring text = m_pRepository->m_DefaultValue;
+        if (name != static_cast<unsigned int>(-1) && !m_pRepository->m_Values.empty())
+        {
+            std::map<unsigned int, std::wstring>::iterator i = m_pRepository->m_Values.find(name);
+            if (i != m_pRepository->m_Values.end())
+                text = i->second;
+        }
+        if (text != m_pRepository->m_DefaultValue)
+        {
+            std::map<unsigned int, unsigned short>::iterator i = m_pRepository->m_RefCounts.find(name);
+            if (i != m_pRepository->m_RefCounts.end())
+                ++i->second;
+            else
+                m_pRepository->m_RefCounts[name] = 1;
+        }
+    }
+}
+
+CDataGroup::CDataGroup(const std::wstring& name, CDataGroup* parent, unsigned int valuesGrowBy,
+                     unsigned int groupsGrowBy, TRepository<std::wstring>* repository)
+    : m_iNameID(-1), m_pRepository(NULL), m_DataValues(valuesGrowBy),
+      m_DataGroups(groupsGrowBy), m_pParent(parent), m_b58(false), m_b59(false)
+{
+    if (repository)
+        m_pRepository = repository;
+    else if (parent)
+        m_pRepository = parent->m_pRepository;
+    else
+        m_pRepository = &g_GlobalRepository;
+    SetGroupName(name);
+}

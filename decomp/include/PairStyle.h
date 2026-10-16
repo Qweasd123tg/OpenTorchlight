@@ -13,7 +13,7 @@ class CPairStyle : public iDataFileSaveAndLoad
 {
 public:
     virtual ~CPairStyle();
-    virtual void SaveDataGroupToFile(const std::wstring& fileName, CDataGroup* dataGroup);
+    virtual int SaveDataGroupToFile(const std::wstring& fileName, CDataGroup* dataGroup);
     virtual void LoadDataGroupToFile(const std::wstring& fileName, CDataGroup* dataGroup, CTimerStatics* timerStatics);
 
     CPairStyle();

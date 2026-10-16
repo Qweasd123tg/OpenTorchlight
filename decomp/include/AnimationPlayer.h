@@ -9,6 +9,8 @@
 #include "SafePointer.h"
 #include "TArrayList.h"
 
+class CBaseUnit;
+
 class CAnimationPlayer : public CEditorBaseObject
 {
 public:
@@ -24,7 +26,7 @@ public:
 
     CResourceManager* m_pResourceManager;
     std::wstring m_sAnimationName;
-    TArrayList<TSafePointer<CRunicCore>*> m_lAnimationTargets;
+    TArrayList<TSafePointer<CBaseUnit>*> m_lAnimationTargets;
     std::wstring m_sCategory;
     std::wstring m_sUnitType;
     bool m_bStartOnLoad;

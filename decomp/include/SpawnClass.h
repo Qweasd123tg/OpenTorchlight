@@ -10,6 +10,20 @@
 #include "RunicCore.h"
 #include "TArrayList.h"
 class CSpawnClassData;
+class CSpawningData : public CRunicCore
+{
+public:
+    virtual ~CSpawningData();
+private:
+    unsigned char m_unrecovered10[0x20];
+};
+
+// Source name for the original unnamed 16-byte pair in addSpawnClassData.
+struct SpawnClassEntry
+{
+    CSpawningData* data;
+    CSpawnClassData* spawnClassData;
+};
 
 class CSpawnClass : public CRunicCore
 {
@@ -21,8 +35,8 @@ public:
     void addSpawnClassData(CDataGroup*, CSpawnClassData*);
 
     // fields
-    unsigned char m_Unknown10[0x18] __attribute__((aligned(8)));
-    void* m_pUnknown28;
+    TArrayList<SpawnClassEntry*> m_entries;
+    std::wstring m_name;
     int m_iUnknown30;
 };
 

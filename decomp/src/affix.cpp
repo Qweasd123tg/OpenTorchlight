@@ -167,3 +167,12 @@ void CAffix::addEffectsToEffectManager(CEffectManager* manager)
         }
     }
 }
+
+void CAffix::setDirection(const Ogre::Vector3* direction)
+{
+    for (unsigned int i = 0; i < m_Effects.size(); ++i)
+        if (direction)
+            m_Effects[i]->m_direction = *direction;
+        else
+            m_Effects[i]->m_direction = Ogre::Vector3::UNIT_Z;
+}

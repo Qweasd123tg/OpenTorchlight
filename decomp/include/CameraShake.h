@@ -4,8 +4,8 @@
 #include <string>
 
 #include "EditorBaseObject.h"
-
-class CRunicCore;
+#include "Graph.h"
+#include "SafePointer.h"
 
 class CCameraShake : public CEditorBaseObject
 {
@@ -28,9 +28,7 @@ public:
     float m_fDirectionX;
     float m_fDirectionY;
     float m_fDirectionZ;
-    CRunicCore* m_pRunicCore;
-    int m_nRunicCoreSafePointerIndex;
-    unsigned char m_gap7C[4] __attribute__((aligned(4)));
+    TSafePointer<CGraph> m_graph;
     std::wstring m_strCameraShakeName;
     int m_nDirectionOrientation;
     float m_fCameraPositionX;

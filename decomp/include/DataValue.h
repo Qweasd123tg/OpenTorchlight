@@ -3,12 +3,27 @@
 #include <string>
 #include "RunicCore.h"
 template <class T> class TRepository;
+union UNIONDATA64BIT
+{
+    bool boolean;
+    long long signed64;
+    int signed32;
+    unsigned int unsigned32;
+    float float32;
+    double float64;
+};
 // Partial: allocation size 0x38; scalar union verified from original typed uses.
 class CDataValue : public CRunicCore
 {
 public:
     enum EDATAVALUETYPES { DATAVALUE_STRING=5,DATAVALUE_TRANSLATE=8 };
     CDataValue(const wchar_t* name, TRepository<std::wstring>* repository);
+    CDataValue(unsigned int name, UNIONDATA64BIT value, EDATAVALUETYPES type,
+               TRepository<std::wstring>* repository);
+    CDataValue(CDataValue* source, TRepository<std::wstring>* repository);
+    void SetDataValueName(std::wstring& name);
+    void SetValueByString(const std::wstring& value, std::wstring& type);
+    void Copy(CDataValue* source, TRepository<std::wstring>* repository);
     virtual ~CDataValue();
     void SetValueString(const wchar_t* value);
     void SetValueTranslate(const wchar_t* value);
