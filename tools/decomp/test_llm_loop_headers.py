@@ -146,6 +146,20 @@ class DeclarationReadiness(unittest.TestCase):
         self.assertIsNotNone(self.check(files, "CUnit", "work", "std::vector<unsigned int, CustomAllocator<unsigned int> > const&"))
         self.assertIsNotNone(self.check(files, "CUnit", "work", "std::vector<unsigned int>&"))
 
+    def test_map_defaults_keep_custom_comparator_and_pointer_key_const_distinct(self):
+        files = {"Unit.h": "class CUnit\n{\npublic:\n void work(std::map<int*, bool>& values);\n};\n"}
+        exact = "std::map<int*, bool, std::less<int*>, std::allocator<std::pair<int* const, bool> > >&"
+        self.assertIsNone(self.check(files, "CUnit", "work", exact))
+        self.assertIsNotNone(self.check(files, "CUnit", "work", exact.replace("std::less<int*>", "OtherLess<int*>")))
+        self.assertIsNotNone(self.check(files, "CUnit", "work", exact.replace("int* const", "const int*")))
+        self.assertIsNotNone(self.check(files, "CUnit", "work", exact, "const"))
+
+    def test_nested_parameter_uses_its_declared_lexical_type(self):
+        files = {"Unit.h": "struct Point;\nclass CUnit\n{\npublic:\n struct Point;\n void work(Point* value);\n};\n"}
+        self.assertIsNone(self.check(files, "CUnit", "work", "CUnit::Point*"))
+        self.assertIsNotNone(self.check(files, "CUnit", "work", "Point*"))
+        self.assertIsNotNone(self.check(files, "CUnit", "work", "COther::Point*"))
+
 
 class AsmLabels(unittest.TestCase):
     def test_labels_bound_to_mangled_names_are_refused(self):

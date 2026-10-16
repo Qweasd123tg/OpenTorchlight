@@ -1,9 +1,9 @@
+#include "LinuxUtils.h"
 #include <cstdlib>
 #include <cwchar>
 #include <cstring>
 #include "StringUtilities.h"
 #include "EmptyStrings.h"
-#include "GameVariables.h"
 #include "GameNamespaces.h"
 #include "StringUtilities.h"
 #include <cwctype>
@@ -341,6 +341,41 @@ std::string STRINGS::StringConvertToNarrow(const wchar_t* text)
     return std::string(wide.begin(), wide.end());
 }
 
+
+std::wstring STRINGS::GetValueAsWString(unsigned int value)
+{
+    std::wstringstream stream;
+    stream << value;
+    return stream.str();
+}
+
+std::wstring STRINGS::GetValueAsWString(int value)
+{
+    std::wstringstream stream;
+    stream << value;
+    return stream.str();
+}
+
+std::wstring STRINGS::GetValueAsWString(long long value)
+{
+    std::wstringstream stream;
+    stream << value;
+    return stream.str();
+}
+
+std::wstring STRINGS::GetValueAsWString(double value)
+{
+    std::wstringstream stream;
+    stream << value;
+    return stream.str();
+}
+
+std::wstring STRINGS::GetValueAsWString(float value)
+{
+    std::wstringstream stream;
+    stream << value;
+    return stream.str();
+}
 std::string STRINGS::GetValueAsString(int value)
 {
     std::stringstream stream;
@@ -372,4 +407,31 @@ long long STRINGS::firstXCharactersMatch(const std::wstring& text,
         if (text[i] != other[i])
             return 0;
     return 1;
+}
+
+std::string STRINGS::GetValueAsString(double value)
+{
+    std::stringstream stream;
+    stream << value;
+    return stream.str();
+}
+
+std::string STRINGS::GetValueAsString(long long value)
+{
+    std::stringstream stream;
+    stream << value;
+    return stream.str();
+}
+
+std::string STRINGS::GetValueAsString(unsigned int value)
+{
+    std::stringstream stream;
+    stream << value;
+    return stream.str();
+}
+
+std::wstring STRINGS::GetApplicationPath()
+{
+    std::wstring path;
+    return LinuxUtils::GetAppDir();
 }

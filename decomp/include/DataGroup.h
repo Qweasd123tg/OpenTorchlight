@@ -48,7 +48,7 @@ public:
     void LoadFile(const std::wstring& file, iDataFileSaveAndLoad* style, CTimerStatics* timers);
     CDataGroup* GetDataGroupByName(const std::wstring& name, bool createIfMissing);
     unsigned int GetDataGroupsMatchingName(const std::wstring& name, std::vector<CDataGroup*>* groups);
-    void GetDataValuesMatchingName(const std::wstring& name, std::vector<CDataValue*>* values);
+    unsigned int GetDataValuesMatchingName(const std::wstring& name, std::vector<CDataValue*>* values);
     const std::wstring& GetDataValue(const std::wstring& name, const wchar_t* defaultValue);
     int GetDataValue(const std::wstring& name,int defaultValue);
     float GetDataValue(const std::wstring& name, float defaultValue);

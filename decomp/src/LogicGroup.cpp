@@ -69,3 +69,8 @@ bool CLogicGroup::RemoveLogicObjectByIndex(unsigned int index)
     }
     return false;
 }
+
+CLogicGroup::~CLogicGroup()
+{
+    m_logicObjects.deleteAll();
+}

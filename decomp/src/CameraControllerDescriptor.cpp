@@ -1,3 +1,4 @@
+#include "UnitResourceList.h"
 #include "EmptyStrings.h"
 #include "CameraControllerDescriptor.h"
 #include "GameVariables.h"
@@ -101,4 +102,25 @@ std::wstring CCameraControllerDescriptor::getTypeStringByID(
     if (index > 1)
         return gCAMERA_TYPE_NAMES[0];
     return gCAMERA_TYPE_NAMES[index];
+}
+
+std::wstring CCameraControllerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    if (index == 0)
+        return EMPTY_WSTRING;
+    CCameraController* controller = dynamic_cast<CCameraController*>(object);
+    if (controller == NULL || controller->m_pResourceManager == NULL)
+        return EMPTY_WSTRING;
+    const std::map<long long, CDataGroup*>* group;
+    if (std::wstring(controller->m_pCategory) == L"MONSTERS")
+        group = controller->m_pResourceManager->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[1]);
+    else if (std::wstring(controller->m_pCategory) == L"ITEMS")
+        group = controller->m_pResourceManager->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[0]);
+    else
+        return EMPTY_WSTRING;
+    for (std::map<long long, CDataGroup*>::const_iterator it = group->begin(); it != group->end(); ++it) {
+        if (--index == 0)
+            return it->second->GetDataValue(L"NAME", EMPTY_WSTRING);
+    }
+    return EMPTY_WSTRING;
 }

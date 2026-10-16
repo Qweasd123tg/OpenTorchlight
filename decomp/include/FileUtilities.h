@@ -3,10 +3,22 @@
 
 #include <string>
 #include <cstdio>
+#include <vector>
+#include "TArrayList.h"
 
 // Partial: declarations from FileUtilities.cpp used by recovered TUs.
 namespace FILESYSTEM
 {
+    std::wstring GetFileName(const std::wstring& path);
+    std::string GetFileName(const std::string& path);
+    std::wstring GetDirectory(const std::wstring& path);
+    bool FileExists(const std::string& path);
+    long long GetFileCreationTime(const wchar_t* path);
+    void GetDirectoryList(const std::wstring& path, std::vector<std::wstring>& directories);
+    std::wstring FindFullDirectoryName(const std::wstring& path, const std::wstring& name);
+    void GetFileList(const std::wstring& path, TArrayList<std::wstring>& files, std::wstring pattern);
+    void GetFileListRecursive(const std::wstring& path, TArrayList<std::wstring>& files, const std::wstring& pattern);
+    std::wstring FindFullFileName(const std::wstring& path, const std::wstring& name, const std::wstring& extension);
     std::wstring ReadWString(_IO_FILE*, unsigned int);
     bool FileExists(const wchar_t*);
     std::wstring GetLocalPath();
@@ -15,7 +27,9 @@ namespace FILESYSTEM
     std::wstring GetSaveDataPath();
     std::wstring AssembleAbsolutePath(const std::wstring& base, const std::wstring& path);
     std::wstring CleanPath(const std::wstring& path);
+    std::wstring GetFileName(const std::wstring& path);
     std::string RemoveFileName(const std::string& path);
+    std::wstring RemoveFileName(const std::wstring& path);
     bool FileExists(const std::wstring& path);
     bool CreateAppDataDirectory(const std::wstring& path);
     long long GetFileTime(const wchar_t* path);

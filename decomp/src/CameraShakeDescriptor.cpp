@@ -1,3 +1,4 @@
+#include "GraphManager.h"
 #include "EmptyStrings.h"
 #include "CameraShakeDescriptor.h"
 #include "GameVariables.h"
@@ -54,4 +55,20 @@ std::wstring CCameraShakeDescriptor::getCameraShakeOrientationStringByID(
     if (index > 1)
         return gCAMERASHAKE_ORIENTATION[0];
     return gCAMERASHAKE_ORIENTATION[index];
+}
+
+std::wstring CCameraShakeDescriptor::getCameraShakeNameStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    CGraphManager* manager = CGraphManager::getSingleton();
+    std::wstring firstName = L"";
+    for (std::map<std::wstring, CGraph*>::iterator it = manager->m_GraphsByFilename.begin(); it != manager->m_GraphsByFilename.end(); ++it) {
+        if (it->first.find(L"CAMERASHAKES") == std::wstring::npos)
+            continue;
+        if (firstName == L"")
+            firstName = it->second->getName();
+        if (index == 0)
+            return it->second->getName();
+        --index;
+    }
+    return firstName;
 }

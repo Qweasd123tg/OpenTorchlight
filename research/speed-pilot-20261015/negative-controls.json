@@ -1,0 +1,376 @@
+{
+  "status": "PASS",
+  "faulty_implementations": 17,
+  "rejected_by_normal_behavioral_difference": 17,
+  "equivalent_controls": 2,
+  "equivalent_controls_completed_pairs_each": 1364,
+  "target_identity": "invoke(actual linked candidate entry), redirected only in replacement child to the faulty implementation; original child and original target unchanged",
+  "capture_and_fail_closed_policy": "same canonical fixture run loop; failed/incomplete/crash pairs never accepted",
+  "cases": [
+    {
+      "name": "matrix_mutant_stale_player_after_equip",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 1154,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 681,
+        "location_index": 1,
+        "mutation": 1,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_include_location_nineteen",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 793,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 523,
+        "location_index": 3,
+        "mutation": 0,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_wrong_position_flag",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 193,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 7,
+        "location_index": 0,
+        "mutation": 0,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_control_equivalent_used",
+      "fixture": "combinemenu_equipment_used",
+      "address": "0xad4b90",
+      "completed": 1364,
+      "different": 0,
+      "incomplete": 0,
+      "result": "PASS",
+      "code": 0
+    },
+    {
+      "name": "matrix_mutant_reload_inventory_after_has",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 196,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 7,
+        "location_index": 0,
+        "mutation": 3,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_occupied_slot_equips",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 865,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 539,
+        "location_index": 1,
+        "mutation": 0,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_suppress_has",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 193,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 7,
+        "location_index": 0,
+        "mutation": 0,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_cache_player_across_position",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 534,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 263,
+        "location_index": 0,
+        "mutation": 5,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_skip_pickup_fallback",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 769,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 523,
+        "location_index": 0,
+        "mutation": 0,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_suppress_pickup",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 193,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 7,
+        "location_index": 0,
+        "mutation": 0,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_cache_level_across_position",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 534,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 263,
+        "location_index": 0,
+        "mutation": 5,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_skip_map_erase",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 337,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 11,
+        "location_index": 0,
+        "mutation": 0,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_omit_layout",
+      "fixture": "combinemenu_equipment_used",
+      "address": "0xad4b90",
+      "completed": 1,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 0,
+        "location_index": 0,
+        "mutation": 0,
+        "mode": 1,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_exclude_location_zero",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 777,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 523,
+        "location_index": 1,
+        "mutation": 0,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_omit_drop",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 193,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 7,
+        "location_index": 0,
+        "mutation": 0,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_early_layout",
+      "fixture": "combinemenu_equipment_used",
+      "address": "0xad4b90",
+      "completed": 193,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 7,
+        "location_index": 0,
+        "mutation": 0,
+        "mode": 1,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_exclude_location_eighteen",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 785,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 523,
+        "location_index": 2,
+        "mutation": 0,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_mutant_extra_drop",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 193,
+      "different": 1,
+      "incomplete": 0,
+      "result": "FAIL",
+      "code": 1,
+      "first_rejected_case": {
+        "mask": 7,
+        "location_index": 0,
+        "mutation": 0,
+        "mode": 0,
+        "child_exits": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "name": "matrix_control_equivalent_return",
+      "fixture": "combinemenu_return_items",
+      "address": "0xad48f0",
+      "completed": 1364,
+      "different": 0,
+      "incomplete": 0,
+      "result": "PASS",
+      "code": 0
+    }
+  ],
+  "source_sha256": "d6c80ca8ee80c053ed970c16dad7f41637e3827ecf5397a355038ffeeced64f8",
+  "blob_sha256": "8d99403e65037885cd17534ac93f5d364b6f382b8d3fee0fa62c471318f74301",
+  "summary_sha256": "0e3383d8fc34e92d97972880c2c8b5f91f4d77f468695dfc9256d52f4b338db3",
+  "elapsed_seconds": 9.72754002399597,
+  "not_counted": "First direct-wrapper harness attempt failed target-identity guard; preserved invalid-wrapper-identity-summary.txt and excluded from17 real differences."
+}

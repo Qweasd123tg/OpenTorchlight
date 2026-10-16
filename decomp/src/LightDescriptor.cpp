@@ -1,3 +1,4 @@
+#include "FileSystem.h"
 #include "EmptyStrings.h"
 #include "LightDescriptor.h"
 #include "GameEnums.h"
@@ -50,4 +51,22 @@ std::wstring CLightDescriptor::GetLightStringByID(
     if (index > 2)
         return gLIGHT_RENDER_NAMES[0];
     return gLIGHT_RENDER_NAMES[index];
+}
+
+int CLightDescriptor::GetLightIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    for (int index = 0; index < 3; ++index) {
+        if (value == gLIGHT_RENDER_NAMES[index])
+            return index;
+    }
+    return 0;
+}
+
+std::wstring CLightDescriptor::GetFileStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    if (g_FileList.size() == 0)
+        CFileSystem::getSingleton()->getFileList(L"media/lights/", g_FileList, L"*.mesh", true, true, false, false);
+    if (index < g_FileList.size())
+        return g_FileList[index];
+    return EMPTY_WSTRING;
 }

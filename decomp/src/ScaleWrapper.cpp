@@ -72,3 +72,41 @@ void CScaleWrapper::setDynamicPropXScale(const float* values, unsigned int count
 {
     reinterpret_cast<ParticleUniverse::ScaleAffector*>(m_pAffector)->setDynScaleX(getDynPropFromArray(values, count));
 }
+
+void CScaleWrapper::getDynamicPropZScale(unsigned int& prop)
+{
+    extern void getArrayFromDynProp(
+        ParticleUniverse::DynamicAttribute*,
+        unsigned int&
+    );
+
+    getArrayFromDynProp(
+        *reinterpret_cast<ParticleUniverse::DynamicAttribute **>(
+            reinterpret_cast<char *>(
+                *reinterpret_cast<void **>(
+                    reinterpret_cast<char *>(this) + 0x110
+                )
+            ) + 0x168
+        ),
+        prop
+    );
+}
+
+void CScaleWrapper::getDynamicPropXScale(unsigned int& prop)
+{
+    extern void getArrayFromDynProp(
+        ParticleUniverse::DynamicAttribute*,
+        unsigned int&
+    );
+
+    getArrayFromDynProp(
+        *reinterpret_cast<ParticleUniverse::DynamicAttribute **>(
+            reinterpret_cast<char *>(
+                *reinterpret_cast<void **>(
+                    reinterpret_cast<char *>(this) + 0x110
+                )
+            ) + 0x158
+        ),
+        prop
+    );
+}

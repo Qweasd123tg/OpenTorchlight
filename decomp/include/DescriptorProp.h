@@ -96,6 +96,10 @@ public:
     virtual void saveProperty(CEditorBaseObject* object, CDataGroup* group);
     virtual void loadProperty(CEditorBaseObject* object, CDataGroup* group, unsigned int version);
 
+    unsigned int getElementSize();
+    UNIONDATA32BIT* getDataFromObject(CEditorBaseObject* object, unsigned int& count);
+    std::wstring getPropertyValueAsString(CEditorBaseObject* object);
+    UNIONDATA32BIT* convertDataTo32bit(const UNIONDATA8BIT* data, unsigned int size, unsigned int& count);
     EVARIABLE_TYPES getVariableType();
     UNIONDATA32BIT* getData(unsigned int& count, CEditorBaseObject* object);
     void setData(const UNIONDATA32BIT* data, unsigned int count, CEditorBaseObject* object);

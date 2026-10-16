@@ -63,3 +63,12 @@ std::wstring CColliderDescriptor::GetParticleCollisionTypeStringByID(
         return gPARTICLE_COLLISION_TYPE[0];
     return gPARTICLE_COLLISION_TYPE[index];
 }
+
+unsigned int CColliderDescriptor::GetParticleIntersectionTypeIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    for (unsigned int index = 0; index < 2; ++index) {
+        if (value == gPARTICLE_INTERSECTION_TYPE[index])
+            return index;
+    }
+    return 0;
+}

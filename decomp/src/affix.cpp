@@ -24,3 +24,37 @@ void CAffix::setLevel(unsigned int uiLevel)
 
     setPercent(m_cLevelPercent);
 }
+
+bool CAffix::effectHasDuration(EEFFECT_TYPE type)
+{
+    for (unsigned int i = 0; i < m_Effects.size(); ++i) {
+        if (m_Effects[i]->m_fValue24 > 0.0f) {
+            if (type != m_Effects[i]->m_eType)
+                continue;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool CAffix::effectExists(EEFFECT_TYPE type)
+{
+    for (unsigned int i = 0; i < m_Effects.size(); ++i) {
+        if (type != m_Effects[i]->m_eType)
+            continue;
+        return true;
+    }
+    return false;
+}
+
+std::wstring CAffix::getDisplayStats(unsigned int level)
+{
+    std::wstring result(L"");
+    for (unsigned int i = 0; i < m_Effects.size(); ++i) {
+        std::wstring text = m_Effects[i]->getDisplayStats(level, false);
+        if (result != EMPTY_WSTRING && text != EMPTY_WSTRING)
+            result += L"\n";
+        result += text;
+    }
+    return result;
+}

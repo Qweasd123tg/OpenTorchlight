@@ -19,6 +19,7 @@ public:
     void reload();
 
 private:
+    friend class CCameraShakeDescriptor;
     friend wchar_t* EditorGetGraphNames();
     std::wstring m_sDirectory;
     std::map<std::wstring, CGraph*> m_GraphsByName;

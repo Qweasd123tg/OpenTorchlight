@@ -44,6 +44,86 @@ def primitive(text):
         "float", "double"}
 
 
+def _declared_types(sources):
+    """Named header types with lexical scope, including forward declarations."""
+    names = set()
+    for source in sources.values():
+        code, stack, start = llm_context._mask(source), [], 0
+        for delimiter in re.finditer(r"[{};]", code):
+            head = re.sub(r"^(?:public|protected|private)\s*:\s*", "", code[start:delimiter.start()].strip())
+            cls = re.fullmatch(r"(?:class|struct|enum)\s+(?:__attribute__\(\(\w+\)\)\s+)?(\w+)\s*(?::[^{};]*)?", head)
+            namespace = re.fullmatch(r"namespace\s+(\w+)", head)
+            if cls and all(stack):
+                names.add("::".join([*stack, cls[1]]))
+            if delimiter[0] == "{":
+                stack.append(cls[1] if cls else namespace[1] if namespace else "")
+            elif delimiter[0] == "}" and stack:
+                stack.pop()
+            start = delimiter.end()
+    return names
+
+
+def _map_defaults(text):
+    """Erase only the exact std::map comparator/allocator defaults."""
+    start = 0
+    while match := re.search(r"(?<![\w:])std::map\s*<", text[start:]):
+        begin, opening = start + match.start(), start + match.end() - 1
+        end = mutate.matching(text, opening, "<", ">")
+        if end < 0:
+            raise Unsupported("unbalanced map parameter")
+        args = [_map_defaults(a) for a in ghidra_cpp.split_args(text[opening + 1:end])]
+        tokens = lambda value: tuple(re.findall(r"\w+|::|[^\s]", value))
+        if len(args) in (3, 4) and tokens(args[2]) == tokens("std::less<" + args[0] + ">"):
+            # pair<const Key, Value> qualifies the key object, not its pointee.
+            # A pointer within a template argument is not a pointer key itself.
+            depth, pointer_key = 0, False
+            for token in tokens(args[0]):
+                if token == "<":
+                    depth += 1
+                elif token == ">":
+                    depth -= 1
+                elif token in ("*", "&") and depth == 0:
+                    pointer_key = True
+            keys = [args[0] + " const"]
+            if not pointer_key:
+                keys.append("const " + args[0])
+            allocators = ["std::allocator<std::pair<" + key + "," + args[1] + "> >"
+                          for key in keys]
+            if len(args) == 3 or tokens(args[3]) in list(map(tokens, allocators)):
+                args = args[:2]
+        replacement = "std::map<" + ", ".join(args) + ">"
+        text = text[:begin] + replacement + text[end + 1:]
+        start = begin + len(replacement)
+    return text
+
+
+def _parameter_type(parameter, named=False):
+    """Strip only ordinary names or a fixed one-dimensional array reference."""
+    parameter = parameter.split("=", 1)[0].strip()
+    array = re.fullmatch(r"([^()\[\]]+)\(\s*&\s*([A-Za-z_]\w*)?\s*\)\s*\[\s*([1-9][0-9]*)\s*\]", parameter)
+    if array:
+        if (not named and array[2]) or not llm_context.declaration_headers._callback_type(array[1]):
+            raise Unsupported("unsupported array reference")
+        return array[1].strip() + " (&)[" + array[3] + "]"
+    if "(" in parameter or ")" in parameter:
+        if not llm_context.declaration_headers._unnamed_callback(parameter):
+            raise Unsupported("unsupported complex parameter")
+        return parameter
+    if "[" in parameter or "]" in parameter:
+        raise Unsupported("unsupported array parameter")
+    if named:
+        name = re.search(r"(?:[*&]\s*|\s+)([A-Za-z_]\w*)$", parameter)
+        if name and name[1] not in {"int", "long", "short", "char", "double", "float", "bool", "void", "wchar_t", "const", "volatile", "unsigned", "signed"}:
+            parameter = parameter[:name.start(1)].strip()
+    return parameter
+
+
+def _named_parameter(typ, name):
+    if re.search(r"\(\s*[*&]\s*\)", typ):
+        return re.sub(r"\(\s*([*&])\s*\)", lambda m: "(" + m[1] + name + ")", typ, count=1)
+    return typ + " " + name
+
+
 class Generator:
     def __init__(self, kit, root):
         self.kit, self.root = Path(kit).resolve(), Path(root).resolve()
@@ -53,10 +133,18 @@ class Generator:
         self.definition_index = llm_definitions.DefinitionIndex(self.db)
         self.declarations, self.data = defaultdict(list), defaultdict(list)
         self._source_masks = {}
-        for path in sorted((self.root / "decomp/include").glob("*.h")):
-            for decl in llm_context._scan(path.read_text())[0]:
+        sources = {path.name: path.read_text() for path in sorted((self.root / "decomp/include").glob("*.h"))}
+        self.callback_aliases = llm_context._callback_aliases(sources)
+        self.declared_types = _declared_types(sources)
+        self.file_alias_headers = {name for name, text in sources.items()
+                                   if re.search(r"(?m)^[ \t]*#[ \t]*include\s*<(?:stdio.h|cstdio)>",
+                                                ghidra_cpp.protect_lexical(text)[0])}
+        if any(re.search(r"\b(?:typedef\b[^;]*\bFILE|(?:class|struct|enum)\s+FILE)\b", llm_context._mask(text)) for text in sources.values()):
+            self.file_alias_headers.clear()
+        for filename, text in sources.items():
+            for decl in llm_context._scan(text)[0]:
                 (self.declarations if decl.kind == "function" else self.data)[decl.qualified].append(
-                    (path.name, decl.text))
+                    (filename, decl.text))
         self.by_address = self.db["functions"]
         self.globals = {int(g["address"], 16) if isinstance(g["address"], str) else g["address"]: g
                         for g in self.db["globals"]}
@@ -77,6 +165,7 @@ class Generator:
         method = f.get("method") or ""
         found = []
         for header, text in self.declarations.get(f.get("qualified"), []):
+            text = llm_context._mask(text)
             pattern = re.search(r"\b" + re.escape(method) + r"\s*\(", text)
             if not pattern:
                 continue
@@ -87,8 +176,39 @@ class Generator:
             params = [p for p in params if p not in ("", "void")]
             wanted = ghidra_cpp.split_args(f.get("params") or "")
             wanted = [p for p in wanted if p not in ("", "void")]
-            if [mutate.canonical_parameter(spelling(p), named=True) for p in params] != [
-                    type_key(p) for p in wanted]:
+            def identity(param, named):
+                param = llm_context._standard_string_aliases(param)
+                param = _parameter_type(param, named=named)
+                if named:
+                    # Header names are lexical; demangled names already have
+                    # their global identity. Qualify before expanding global
+                    # typedefs, whose argument types keep their defining scope.
+                    scope = f.get("scope", "").split("::")
+                    for name in re.findall(r"(?<![\w:])[A-Za-z_]\w*(?![\w:])", param):
+                        for count in range(len(scope), 0, -1):
+                            qualified = "::".join([*scope[:count], name])
+                            if qualified in self.declared_types:
+                                param = re.sub(r"(?<![\w:])" + re.escape(name) + r"(?![\w:])", qualified, param)
+                                break
+                    param = llm_context._expand_callback_aliases(param, self.callback_aliases)
+                    if header in self.file_alias_headers:
+                        param = re.sub(r"(?<![\w:])FILE\b", "_IO_FILE", param)
+                param = llm_context._standard_string_aliases(param)
+                if (llm_context.declaration_headers._unnamed_callback(param)
+                        and re.search(r"\*\s*(?:const|volatile)\b", param)):
+                    # The shared callback cv normalizer handles pointee const,
+                    # but cannot preserve pointer-object cv on compound types.
+                    raise Unsupported("callback pointer-object cv is deferred")
+                param = llm_context._callback_cv_spelling(param)
+                param = llm_context._standard_vector_defaults(param).replace("|", " ")
+                param = _map_defaults(param)
+                param = spelling(param)
+                return tuple(re.findall(r"\w+|::|[^\s]", param))
+            try:
+                matches = [identity(p, True) for p in params] == [identity(p, False) for p in wanted]
+            except (Unsupported, ValueError):
+                matches = False
+            if not matches:
                 continue
             suffix = text[end + 1:].strip().rstrip(";").strip()
             if suffix != f.get("cv", ""):
@@ -145,7 +265,7 @@ class Generator:
         return field
 
     def source(self, f, decl, family, body):
-        parameters = ", ".join(t + " " + name for t, name in decl["params"])
+        parameters = ", ".join(_named_parameter(t, name) for t, name in decl["params"])
         cv = (" " + f["cv"]) if f.get("cv") else ""
         code = (decl["ret"] + " " + f["qualified"] + "(" + parameters + ")" + cv + "\n{\n"
                 + "".join("    " + line + "\n" for line in body) + "}\n")

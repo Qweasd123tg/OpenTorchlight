@@ -71,17 +71,17 @@ CMissilePreloader::~CMissilePreloader()
 
 CMissile* CMissilePreloader::getMissileRef(const std::wstring& missileName)
 {
-    if (g_MissilePreloader == 0)
-        return 0;
+    if (getSinglelton() == NULL)
+        return NULL;
 
-    std::wstring upperMissileName = STRINGS::StringUpper(missileName);
-    std::map<std::wstring, CMissile*>::iterator it =
-        this->m_missilesToLoad.lower_bound(upperMissileName);
-
-    if (it != this->m_missilesToLoad.end())
-        return it->second;
-
-    return 0;
+    std::map<std::wstring, CMissile*>::iterator i;
+    {
+        std::wstring name = STRINGS::StringUpper(missileName);
+        i = getSinglelton()->m_missilesToLoad.find(name);
+    }
+    if (i != getSinglelton()->m_missilesToLoad.end())
+        return i->second;
+    return NULL;
 }
 
 void CMissilePreloader::updateMissiles(float deltaTime)
@@ -94,4 +94,11 @@ void CMissilePreloader::updateMissiles(float deltaTime)
             --i;
         }
     }
+}
+
+void CMissilePreloader::getMissileNames(TArrayList<std::wstring>& missileNames)
+{
+    for (std::map<std::wstring, CMissile*>::iterator i = m_missilesToLoad.begin();
+         i != m_missilesToLoad.end(); ++i)
+        missileNames.add(i->first);
 }

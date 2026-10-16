@@ -37,13 +37,25 @@ CEffectGroupManager::~CEffectGroupManager()
 
 CAffix* CEffectGroupManager::getAffix(const std::wstring& name)
 {
-    std::map<std::wstring, CAffix*>::iterator i =
-        m_mapAffixes.lower_bound(STRINGS::StringUpper(name));
-    return i != m_mapAffixes.end() ? i->second : NULL;
+    std::map<std::wstring, CAffix*>::iterator i;
+    {
+        std::wstring upperName = STRINGS::StringUpper(name);
+        i = m_mapAffixes.find(upperName);
+    }
+    if (i != m_mapAffixes.end())
+        return i->second;
+    return NULL;
 }
 
 CEffectGroupManager::CEffectGroupManager(const wchar_t* path)
     : CRunicCore(), m_sPath(path)
 {
     reload();
+}
+
+void CEffectGroupManager::getAffixNames(TArrayList<std::wstring>& affixNames)
+{
+    for (std::map<std::wstring, CAffix*>::iterator i = m_mapAffixes.begin();
+         i != m_mapAffixes.end(); ++i)
+        affixNames.add(i->first);
 }

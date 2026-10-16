@@ -20,6 +20,7 @@ public:
     virtual ~CModFileFilter();
 
     unsigned int getNumberOfActiveMods();
+    unsigned int getNumberOfEnabledMods();
     void refreshAllMods();
     std::wstring getFilePath(const std::wstring& path, std::string& resourceGroup, CFileInfo& info);
     void getEnabledModNames(TArrayList<std::wstring>* names);
@@ -36,5 +37,7 @@ private:
 public:
     bool m_bNeedsToRecompressEverything;
 };
+
+extern CModFileFilter* g_pModFileFilter;
 
 #endif

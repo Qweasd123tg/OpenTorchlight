@@ -52,3 +52,30 @@ CDataGroup* CUnitResourceList::getDataGroupByObjectName(const std::wstring& obje
     }
     return NULL;
 }
+
+#include "FileUtilities.h"
+
+CDataGroup* CUnitResourceList::getDataGroupByFileName(const std::wstring& fileName, const std::wstring& objectName)
+{
+    typedef std::map<std::wstring, std::map<std::wstring, CDataGroup*> > Groups;
+    Groups::iterator group = m_dataGroupsByFileItemAndName.find(STRINGS::StringUpper(fileName));
+    if (group == m_dataGroupsByFileItemAndName.end())
+        return NULL;
+    std::map<std::wstring, CDataGroup*>::iterator data =
+        group->second.find(STRINGS::StringUpper(FILESYSTEM::CleanPath(objectName)));
+    if (data != group->second.end())
+        return data->second;
+    return NULL;
+}
+
+CDataGroup* CUnitResourceList::getDataGroupByObjectName(const std::wstring& resourceGroup, const std::wstring& objectName)
+{
+    typedef std::map<std::wstring, std::map<std::wstring, CDataGroup*> > Groups;
+    Groups::iterator group = m_dataGroupsByResourceGroupAndName.find(STRINGS::StringUpper(resourceGroup));
+    if (group == m_dataGroupsByResourceGroupAndName.end())
+        return NULL;
+    std::map<std::wstring, CDataGroup*>::iterator data = group->second.find(STRINGS::StringUpper(objectName));
+    if (data != group->second.end())
+        return data->second;
+    return NULL;
+}

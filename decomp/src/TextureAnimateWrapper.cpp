@@ -11,6 +11,7 @@ class DynamicAttribute;
 class TextureAnimator {
 public:
     void setAnimationSpeed(DynamicAttribute *dynamicPropertyAnimationSpeed);
+    DynamicAttribute* getAnimationSpeed() const;
 };
 }
 
@@ -36,4 +37,13 @@ CTextureAnimateWrapper::~CTextureAnimateWrapper()
 CTextureAnimateWrapper::CTextureAnimateWrapper(CResourceManager* resourceManager)
     : CAffectorWrapper(resourceManager, "TextureAnimator")
 {
+}
+
+#include "ParticlePropertyConversions.h"
+
+void CTextureAnimateWrapper::getDynamicPropAnimationSpeed(unsigned int& count)
+{
+    getArrayFromDynProp(
+        reinterpret_cast<ParticleUniverse::TextureAnimator*>(m_pAffector)->getAnimationSpeed(),
+        count);
 }

@@ -1,3 +1,4 @@
+#include "Particle.h"
 #include "EmptyStrings.h"
 #include "GameEnums.h"
 #include "GameVariables.h"
@@ -118,4 +119,11 @@ void CLayout::removeAllCloneableObjects()
 
 CLayout::~CLayout()
 {
+}
+
+unsigned int CLayout::getNumberOfParticlesUpdating()
+{
+    if (m_pParticle == NULL)
+        return CEditorScene::getNumberOfParticlesUpdating();
+    return m_pParticle->getNumberOfParticlesUpdating(false);
 }

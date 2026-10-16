@@ -72,3 +72,12 @@ CSpawnClassData::~CSpawnClassData()
     m_lUnitDataObjects.clear();
     m_pSpawnClass = NULL;
 }
+
+int CSpawnClassData::getUnitObjectCount()
+{
+    if (m_pRandomizer != NULL)
+        return m_pRandomizer->getChoiceCount() +
+               m_pType1Randomizer->getChoiceCount() +
+               m_pType2Randomizer->getChoiceCount();
+    return m_lUnitDataObjects.size();
+}

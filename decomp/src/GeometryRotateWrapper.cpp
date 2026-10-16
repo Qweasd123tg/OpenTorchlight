@@ -14,3 +14,21 @@ CGeometryRotateWrapper::CGeometryRotateWrapper(CResourceManager* resourceManager
     : CAffectorWrapper(resourceManager, "GeometryRotator")
 {
 }
+
+#include "ParticlePropertyConversions.h"
+
+namespace ParticleUniverse
+{
+class GeometryRotator
+{
+public:
+    DynamicAttribute* getRotationSpeed() const;
+};
+}
+
+void CGeometryRotateWrapper::getDynamicPropRotationSpeed(unsigned int& count)
+{
+    getArrayFromDynProp(
+        reinterpret_cast<ParticleUniverse::GeometryRotator*>(m_pAffector)->getRotationSpeed(),
+        count);
+}

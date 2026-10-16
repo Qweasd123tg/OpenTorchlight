@@ -64,6 +64,7 @@ CInteract::~CInteract()
 CInteract::CInteract(CResourceManager* resourceManager)
     : CEditorBaseObject(),
       m_pResourceManager(resourceManager),
+      m_pUnknown70(gRESOURCE_GROUP_NAMES[1]),
       m_pRunicCore(NULL),
       m_iUnknown90(-1),
       m_fUnknownB0(1.5f),
@@ -72,9 +73,6 @@ CInteract::CInteract(CResourceManager* resourceManager)
       m_fUnknownBC(0.9f),
       m_UnknownC0(0)
 {
-    new (static_cast<void*>(&m_pUnknown70)) std::wstring(
-        *reinterpret_cast<const std::wstring*>(gRESOURCE_GROUP_NAMES + 8));
-
     new (static_cast<void*>(&m_UnknownC8)) CGraph(
         static_cast<EGRAPH_TYPES>(1),
         std::wstring(L"Interact"),

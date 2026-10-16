@@ -53,7 +53,7 @@ float CPath::GetSegmentAngle(unsigned int index) const
 
 float CPath::GetRadiusLeft(unsigned int index) const
 {
-    TArrayList<float>& radii = const_cast<TArrayList<float>&>(m_lRadiusLeft);
+    const std::vector<float>& radii = m_lRadiusLeft;
 
     if (m_bClosedPath && index >= radii.size())
         index -= radii.size();
@@ -569,9 +569,9 @@ void CPath::AddPoint(const Ogre::Vector3& point, float radiusLeft, float radiusR
         MATH::expandBounds(m_vMinimum, m_vMaximum, point);
     }
 
-    m_lPoints.add(point);
-    m_lRadiusLeft.add(radiusLeft);
-    m_lRadiusRight.add(radiusRight);
+    m_lPoints.push_back(point);
+    m_lRadiusLeft.push_back(radiusLeft);
+    m_lRadiusRight.push_back(radiusRight);
 
     if (m_lPoints.size() > 1)
     {
@@ -580,9 +580,9 @@ void CPath::AddPoint(const Ogre::Vector3& point, float radiusLeft, float radiusR
         float segmentLength = sqrtf(segment.squaredLength());
 
         m_fPathLength += segmentLength;
-        m_lPointDistance.add(m_lPointDistance[m_lPointDistance.size() - 1] +
+        m_lPointDistance.push_back(m_lPointDistance[m_lPointDistance.size() - 1] +
                              segmentLength);
-        m_lSegmentAngle.add(0.0f);
+        m_lSegmentAngle.push_back(0.0f);
 
         if (m_lPoints.size() > 2)
         {
@@ -601,8 +601,8 @@ void CPath::AddPoint(const Ogre::Vector3& point, float radiusLeft, float radiusR
     }
     else
     {
-        m_lPointDistance.add(0.0f);
-        m_lSegmentAngle.add(0.0f);
+        m_lPointDistance.push_back(0.0f);
+        m_lSegmentAngle.push_back(0.0f);
         m_fPathLength = 0.0f;
     }
 }
@@ -753,4 +753,163 @@ CPath::CPath(CPath& path)
         m_lPointDistance[i] = path.GetPointDistance(i);
         m_lSegmentAngle[i] = path.GetSegmentAngle(i);
     }
+}
+
+Ogre::Vector3 CPath::GetPoint(unsigned int index)
+{
+    if (index < m_lPoints.size())
+        return m_lPoints[index] + m_vOrigin;
+    return m_vOrigin;
+}
+
+float CPath::GetPointDistance(unsigned int index)
+{
+    if (index < m_lPointDistance.size())
+        return m_lPointDistance[index];
+    return 0.0f;
+}
+
+float CPath::GetSegmentAngle(unsigned int index)
+{
+    if (index < m_lSegmentAngle.size())
+        return m_lSegmentAngle[index];
+    return 0.0f;
+}
+
+float CPath::GetRadiusLeft(unsigned int index)
+{
+    if (m_bClosedPath && index >= m_lRadiusLeft.size())
+        index -= m_lRadiusLeft.size();
+    unsigned int count = m_lRadiusLeft.size();
+    if (index < count)
+        return m_lRadiusLeft[index];
+    return 0.0f;
+}
+
+float CPath::GetRadiusRight(unsigned int index)
+{
+    if (m_bClosedPath && index >= m_lRadiusRight.size())
+        index -= m_lRadiusRight.size();
+    unsigned int count = m_lRadiusRight.size();
+    if (index < count)
+        return m_lRadiusRight[index];
+    return 0.0f;
+}
+
+float CPath::GetTweenedRadiusRight(float distance)
+{
+    while (distance < 0.0f)
+        distance += m_fPathLength;
+    while (distance > m_fPathLength)
+        distance -= m_fPathLength;
+    for (unsigned int i = 0; i < m_lPoints.size(); ++i) {
+        unsigned int next = i + 1;
+        if (next >= static_cast<unsigned int>(m_lPoints.size()))
+            next -= m_lPoints.size();
+        if (distance < m_lPointDistance[next] || next == 0) {
+            float segment = m_lPointDistance[next] - m_lPointDistance[i];
+            if (next == 0 && m_bClosedPath)
+                segment = m_fPathLength - m_lPointDistance[i];
+            return m_lRadiusRight[i] + (m_lRadiusRight[next] - m_lRadiusRight[i]) *
+                ((distance - m_lPointDistance[i]) / segment);
+        }
+    }
+    return 0.0f;
+}
+
+float CPath::GetTweenedRadiusLeft(float distance)
+{
+    while (distance < 0.0f)
+        distance += m_fPathLength;
+    while (distance > m_fPathLength)
+        distance -= m_fPathLength;
+    for (unsigned int i = 0; i < m_lPoints.size(); ++i) {
+        unsigned int next = i + 1;
+        if (next >= static_cast<unsigned int>(m_lPoints.size()))
+            next -= m_lPoints.size();
+        if (distance < m_lPointDistance[next] || next == 0) {
+            float segment = m_lPointDistance[next] - m_lPointDistance[i];
+            if (next == 0 && m_bClosedPath)
+                segment = m_fPathLength - m_lPointDistance[i];
+            return m_lRadiusLeft[i] + (m_lRadiusLeft[next] - m_lRadiusLeft[i]) *
+                ((distance - m_lPointDistance[i]) / segment);
+        }
+    }
+    return 0.0f;
+}
+
+float CPath::GetAngleOverDistance(float fromDistance, float toDistance)
+{
+    if (fromDistance >= toDistance)
+        return 0.0f;
+    fromDistance = std::max(fromDistance, 0.0f);
+    toDistance = std::min(toDistance, m_fPathLength);
+    int first = -1, last = -1;
+    for (unsigned int i = 0; i < m_lPoints.size(); ++i) {
+        if (i == 0)
+            continue;
+        if (first == -1 && fromDistance < m_lPointDistance[i])
+            first = i;
+        if (last == -1 && toDistance < m_lPointDistance[i])
+            last = i;
+        if (first != -1 && last != -1)
+            break;
+    }
+    float angle = 0.0f;
+    for (int i = first + 1; i <= last; ++i) {
+        if (i == last)
+            angle += (toDistance - m_lPointDistance[i - 1]) /
+                (m_lPointDistance[i] - m_lPointDistance[i - 1]) * m_lSegmentAngle[i];
+        else
+            angle += m_lSegmentAngle[i];
+    }
+    return angle;
+}
+
+Ogre::Vector3 CPath::GetPathSegment(unsigned int index)
+{
+    if (m_lPoints.size() <= 1 || index > m_lPoints.size() - 2)
+        return Ogre::Vector3::ZERO;
+    return m_lPoints[index + 1] - m_lPoints[index];
+}
+
+Ogre::Vector3 CPath::GetPositionAtDistance(float distance)
+{
+    while (distance < 0.0f)
+        distance += m_fPathLength;
+    while (distance > m_fPathLength)
+        distance -= m_fPathLength;
+    Ogre::Vector3 position = Ogre::Vector3::ZERO;
+    if (distance == m_fPathLength)
+        position = m_lPoints[m_lPoints.size() - 1];
+    else if (distance == 0.0f)
+        position = m_lPoints[0];
+    else {
+        for (unsigned int i = 0; i < m_lPoints.size(); ++i) {
+            unsigned int next = i + 1;
+            if (next >= static_cast<unsigned int>(m_lPoints.size()))
+                next -= m_lPoints.size();
+            if (distance < m_lPointDistance[next] || next == 0) {
+                Ogre::Vector3 direction = m_lPoints[next] - m_lPoints[i];
+                direction.normalise();
+                position = direction * (distance - m_lPointDistance[i]) + m_lPoints[i];
+                break;
+            }
+        }
+    }
+    return position + m_vOrigin;
+}
+
+Ogre::Vector3 CPath::GetSegmentPerpendicularY(unsigned int index)
+{
+    if (m_lPoints.size() <= 1 || index > m_lPoints.size() - 1)
+        return Ogre::Vector3::ZERO;
+    unsigned int next = index + 1;
+    if (next == static_cast<unsigned int>(m_lPoints.size()) && m_bClosedPath)
+        next = 0;
+    Ogre::Vector3 perpendicular(m_lPoints[next].z - m_lPoints[index].z,
+                               0.0f,
+                               -(m_lPoints[next].x - m_lPoints[index].x));
+    perpendicular.normalise();
+    return perpendicular;
 }

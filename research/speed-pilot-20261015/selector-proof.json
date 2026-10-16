@@ -1,0 +1,42 @@
+{
+  "original_per_mode": 44544,
+  "selected_per_mode": 1364,
+  "read_mask_mismatches": [],
+  "bad_representatives": [],
+  "matches_proposal_cases": true,
+  "location_counts": {
+    "-1": 184,
+    "0": 314,
+    "18": 314,
+    "19": 184,
+    "2147483647": 184,
+    "-2147483648": 184
+  },
+  "mutation_counts": {
+    "0": 170,
+    "1": 172,
+    "2": 172,
+    "3": 170,
+    "4": 170,
+    "5": 170,
+    "6": 170,
+    "7": 170
+  },
+  "full_asm_sha256": "8dd43494a9764d20807a1aae8a1d3d59d752af216daf166e2bf117d79ed475a5",
+  "before_sha256": "d141bc1a0e48f93d729a1aac7b30d36ac3c68d58e469fcd6f87885e7d3bb12f0",
+  "after_sha256": "9a460be651347bd13527110eaa0ca97eb7792e5567068f5943e035f669517f27",
+  "selected_reached_callback_counts": {
+    "3": 328,
+    "4": 692,
+    "5": 608,
+    "6": 608,
+    "7": 608,
+    "1": 372,
+    "2": 260
+  },
+  "all_seven_callback_mutation_points_reached": true,
+  "side_capture_and_call_isolation_unchanged": true,
+  "existing_run_loop_and_fail_closed_policy_unchanged_except_selector": true,
+  "suppressed_24_cases_unchanged": true,
+  "initial_valid_domain_prefilter_unchanged": true
+}

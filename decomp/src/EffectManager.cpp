@@ -273,3 +273,65 @@ CAffix* CEffectManager::cloneAffix(CAffix* affix, unsigned int level, CBaseUnit*
     }
     return result;
 }
+
+CEffect* CEffectManager::getEffect(EEFFECT_TYPE type)
+{
+    for (unsigned int group = 0; group < 2; ++group)
+        for (unsigned int i = 0; i < getActiveEffects(group).size(); ++i)
+            if (getActiveEffects(group)[i]->m_eType == type)
+                return getActiveEffects(group)[i];
+    return NULL;
+}
+
+bool CEffectManager::hasEffectFromSkill(const CSkill* skill)
+{
+    for (unsigned int group = 0; group < 2; ++group)
+        for (unsigned int i = 0; i < getActiveEffects(group).size(); ++i)
+            if (getActiveEffects(group)[i]->m_pSkillOwner == skill)
+                return true;
+    return false;
+}
+
+void CEffectManager::getEffects(TArrayList<CEffect*>* effects)
+{
+    if (effects != NULL)
+        for (unsigned int group = 0; group < 3; ++group)
+        {
+            unsigned int count = getActiveEffects(group).size();
+            CEffect** data = &getActiveEffects(group)[0];
+            if (data != NULL)
+                for (unsigned int i = 0; i < count; ++i)
+                    effects->add(data[i]);
+        }
+}
+
+CAffix* CEffectManager::getAffix(const std::wstring& name)
+{
+    for (unsigned int i = 0; i < getAffixes().size(); ++i)
+        if (getAffixes()[i]->m_sDisplayName == name)
+            return getAffixes()[i];
+    return NULL;
+}
+
+bool CEffectManager::hasEffect(EEFFECT_TYPE type, const std::wstring& name)
+{
+    for (unsigned int group = 0; group < 2; ++group)
+        for (unsigned int i = 0; i < getActiveEffects(group).size(); ++i)
+            if (getActiveEffects(group)[i]->m_eType == type &&
+                getActiveEffects(group)[i]->m_sName == name)
+                return true;
+    return false;
+}
+
+CEffect* CEffectManager::getEffect(const std::wstring& name, unsigned int index)
+{
+    for (unsigned int group = 0; group < 2; ++group)
+        for (unsigned int i = 0; i < getActiveEffects(group).size(); ++i)
+            if (getActiveEffects(group)[i]->m_sName == name)
+            {
+                if (index == 0)
+                    return getActiveEffects(group)[i];
+                --index;
+            }
+    return NULL;
+}

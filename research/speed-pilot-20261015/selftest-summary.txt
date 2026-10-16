@@ -1,0 +1,10 @@
+    coverage combinemenu_return_items 0xad48f0 completed 1364 different 0 incomplete 0
+tlhybrid: combinemenu_return_items                         PASS (0)
+    coverage combinemenu_equipment_used 0xad4b90 completed 1364 different 0 incomplete 0
+tlhybrid: combinemenu_equipment_used                       PASS (0)
+    coverage combinemenu_equipment_used_suppressed 0xad4b90 completed 24 different 0 incomplete 0
+tlhybrid: combinemenu_equipment_used_suppressed            PASS (0)
+tlhybrid: 1143 tests, 0 failed
+hybrid self-test: PASS
+handwritten fixtures: 1135 declared originals; 1086 with executed per-function comparison evidence (declarations alone do not accept DIFF)
+accepted: 3401 of 5247 game functions (1642407 bytes); 958 by self-test, 0 by generated tests

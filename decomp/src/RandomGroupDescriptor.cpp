@@ -1,3 +1,7 @@
+#include "Quest.h"
+#include "Dungeon.h"
+#include "DungeonManager.h"
+#include "StringUtilities.h"
 #include "EmptyStrings.h"
 #include "RandomGroupDescriptor.h"
 #include "GameEnums.h"
@@ -178,5 +182,38 @@ unsigned int CRandomGroupDescriptor::getPlayerClassIDByString(CEditorScene*, CEd
     for (unsigned int i = 0; i < count; ++i)
         if ((*names)[i] == upper)
             return i + 1;
+    return 0;
+}
+
+std::wstring CRandomGroupDescriptor::getQuestStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    if (index == 0)
+        return EMPTY_WSTRING;
+    std::map<std::wstring, CQuest*>& quests = CQuestManager::getSingleton()->m_Unknown40;
+    for (std::map<std::wstring, CQuest*>::iterator it = quests.begin(); it != quests.end(); ++it) {
+        if (--index == 0)
+            return it->second->m_sUnknown50;
+    }
+    if (!quests.empty())
+        return quests.begin()->second->m_sUnknown50;
+    return EMPTY_WSTRING;
+}
+std::wstring CRandomGroupDescriptor::getDungeonStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
+{
+    CDungeonManager* manager = CDungeonManager::getSingleton();
+    if (index == static_cast<unsigned int>(-1) || index >= manager->m_lDungeons.size())
+        return EMPTY_WSTRING;
+    return manager->m_lDungeons[index]->m_sName;
+}
+unsigned int CRandomGroupDescriptor::getQuestIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    if (value.empty())
+        return 0;
+    std::wstring name = STRINGS::StringUpper(value);
+    std::map<std::wstring, CQuest*>& quests = CQuestManager::getSingleton()->m_Unknown40;
+    unsigned int index = 0;
+    for (std::map<std::wstring, CQuest*>::iterator it = quests.begin(); it != quests.end(); ++index, ++it)
+        if (it->second->m_sUnknown50 == name)
+            return index;
     return 0;
 }

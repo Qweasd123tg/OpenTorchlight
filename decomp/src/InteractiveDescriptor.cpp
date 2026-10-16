@@ -1,3 +1,4 @@
+#include "UnitResourceList.h"
 #include "EmptyStrings.h"
 #include "InteractiveDescriptor.h"
 #include "GameEnums.h"
@@ -85,4 +86,25 @@ std::wstring CInteractiveDescriptor::getTypeStringByID(
 unsigned int CInteractiveDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
 {
     return value == L"ITEMS";
+}
+
+std::wstring CInteractiveDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    if (index == 0)
+        return EMPTY_WSTRING;
+    CInteract* controller = dynamic_cast<CInteract*>(object);
+    if (controller == NULL || controller->m_pResourceManager == NULL)
+        return EMPTY_WSTRING;
+    const std::map<long long, CDataGroup*>* group;
+    if (std::wstring(controller->m_pUnknown70) == L"MONSTERS")
+        group = controller->m_pResourceManager->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[1]);
+    else if (std::wstring(controller->m_pUnknown70) == L"ITEMS")
+        group = controller->m_pResourceManager->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[0]);
+    else
+        return EMPTY_WSTRING;
+    for (std::map<long long, CDataGroup*>::const_iterator it = group->begin(); it != group->end(); ++it) {
+        if (--index == 0)
+            return it->second->GetDataValue(L"NAME", EMPTY_WSTRING);
+    }
+    return EMPTY_WSTRING;
 }

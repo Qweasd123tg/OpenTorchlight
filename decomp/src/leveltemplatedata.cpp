@@ -1,3 +1,8 @@
+#include "EmptyStrings.h"
+#include "DataGroup.h"
+#include "FileSystem.h"
+#include "FileUtilities.h"
+#include "StringUtilities.h"
 #include <algorithm>
 #include <cmath>
 #include "LevelTemplateData.h"
@@ -43,4 +48,795 @@ unsigned int CLevelTemplateData::getNumberOfUnitsToCreate(ELEVELLAYOUT_CREATION 
         return static_cast<unsigned int>(::ceilf(UTILITIES::randomBetween(low * scale, high * scale)));
     }
     return 0;
+}
+
+CLevelTemplateData::~CLevelTemplateData()
+{
+    if (m_layoutRandomizer) {
+        delete m_layoutRandomizer;
+        m_layoutRandomizer = NULL;
+    }
+    m_chunkRandomizers.deleteAll();
+    m_requiredChunkTypes.clear();
+    m_baseLayouts.clear();
+    m_layouts.deleteAll();
+    m_chunkTypes.deleteAll();
+    m_chunks.deleteAll();
+}
+
+CLevelTemplateData::CLevelTemplateData(wchar_t const* filename)
+    : m_chunkTypes(10),
+      m_chunks(10),
+      m_requiredChunkTypes(10),
+      m_randomized(true),
+      m_requiresExit(true),
+      m_dontStore(false),
+      m_string60(EMPTY_WSTRING),
+      m_name(EMPTY_WSTRING),
+      m_hasPathing(true),
+      m_hasAutomap(true),
+      m_populate(true),
+      m_minChunks(2),
+      m_maxChunks(3),
+      m_monsterLevelMin(-1),
+      m_monsterLevelMax(-1),
+      m_permitsPortal(true),
+      m_permitsPetDeparture(true),
+      m_isTown(false),
+      m_questSelectionExcluded(false),
+      m_tileBasis(4.0f),
+      m_chunkWidthBasis(25.0f),
+      m_chunkHeightBasis(25.0f),
+      m_cameraMultiplier(1.0f),
+      m_sightRangeModifier(0.0f),
+      m_automap(EMPTY_WSTRING),
+      m_automapWidth(1.0f),
+      m_automapHeight(1.0f),
+      m_automapAngle(0.0f),
+      m_layouts(10),
+      m_baseLayouts(10),
+      m_layoutRandomizer(NULL),
+      m_chunkRandomizers(2),
+      m_generalChunkRandomizer(RANDOMIZER_NORMAL),
+      m_entranceChunkRandomizer(RANDOMIZER_NORMAL),
+      m_randomizer1D8(RANDOMIZER_NORMAL),
+      m_randomizer240(RANDOMIZER_NORMAL),
+      m_randomizer2A8(RANDOMIZER_NORMAL),
+      m_randomizer310(RANDOMIZER_NORMAL),
+      m_randomizer378(RANDOMIZER_NORMAL),
+      m_randomizer3E0(RANDOMIZER_NORMAL),
+      m_randomizer448(RANDOMIZER_NORMAL),
+      m_randomizer4B0(RANDOMIZER_NORMAL),
+      m_music(L"media/music/Crypt.ogg"),
+      m_regionBoundsX(50.0f),
+      m_regionBoundsY(50.0f),
+      m_regionBoundsZ(50.0f),
+      m_cinematic(L""),
+      m_skybox(L""),
+      m_levelParticle(L""),
+      m_water(EMPTY_WSTRING),
+      m_postWater(EMPTY_WSTRING),
+      m_midWater(EMPTY_WSTRING),
+      m_torchlightTexture(L"media/sharedtextures/lantern.dds"),
+      m_sRimlightTexture(L"media/sharedtextures/rimlight.dds"),
+      m_shadowFadeTexture(L"media/sharedtextures/shadowfade.dds"),
+      m_lightMaskTexture(L"media/sharedtextures/lightmask.dds"),
+      m_mainMenuRules(L"media/layouts/mainmenus/mainmenu_cryptrules.dat"),
+      m_lightmapColorR(1.0f),
+      m_lightmapColorG(1.0f),
+      m_lightmapColorB(1.0f),
+      m_lightmapColorA(1.0f),
+      m_fogColorR(1.0f),
+      m_fogColorG(1.0f),
+      m_fogColorB(1.0f),
+      m_fogColorA(1.0f),
+      m_ambientColorR(1.0f),
+      m_ambientColorG(1.0f),
+      m_ambientColorB(1.0f),
+      m_ambientColorA(1.0f),
+      m_materialAmbientColorR(1.0f),
+      m_materialAmbientColorG(1.0f),
+      m_materialAmbientColorB(1.0f),
+      m_materialAmbientColorA(1.0f),
+      m_directionalColorR(1.0f),
+      m_directionalColorG(1.0f),
+      m_directionalColorB(1.0f),
+      m_directionalColorA(1.0f),
+      m_orthographicShadows(false),
+      m_state761(false),
+      m_randomLayoutGenerated(false),
+      m_bUnitLightFade(true),
+      m_unitFadeDistance(14.5f),
+      m_unitFadeStart(7.0f),
+      m_showFloorNumber(true),
+      m_levelName(L"Dungeon")
+{
+    for (unsigned int i = 0; i < 11; ++i)
+        m_useSpawnClass[i] = false;
+
+    m_unitSpawnerNames[0] = L"MONSTERSET";
+    m_unitSpawnerNames[1] = L"MONSTERSETCHAMPION";
+    m_unitSpawnerNames[2] = L"PROPS";
+    m_unitSpawnerNames[5] = EMPTY_WSTRING;
+    m_unitSpawnerNames[7] = EMPTY_WSTRING;
+    m_unitSpawnerNames[3] = L"NPCS";
+    m_unitSpawnerNames[4] = L"CREEPS";
+    m_unitSpawnerNames[6] = L"FISH_SPAWN";
+    m_unitSpawnerNames[8] = L"MONSTERSET";
+    m_unitSpawnerNames[9] = EMPTY_WSTRING;
+    m_unitSpawnerNames[10] = L"MONSTERSETCHAMPION";
+
+    m_densityRanges[0].minimum = 0.01f;
+    m_densityRanges[0].maximum = 0.0125f;
+    m_densityRanges[1].minimum = 0.00025f;
+    m_densityRanges[1].maximum = 0.0004f;
+    m_densityRanges[2].minimum = 0.005f;
+    m_densityRanges[2].maximum = 0.0075f;
+    m_densityRanges[5].minimum = 0.0012f;
+    m_densityRanges[5].maximum = 0.0017f;
+    m_densityRanges[7].minimum = 0.001f;
+    m_densityRanges[7].maximum = 0.002f;
+    m_densityRanges[3].minimum = 0.0f;
+    m_densityRanges[3].maximum = 0.0f;
+    m_densityRanges[4].minimum = 0.0f;
+    m_densityRanges[4].maximum = 0.0f;
+    m_densityRanges[6].minimum = 0.0f;
+    m_densityRanges[6].maximum = 0.0f;
+    m_densityRanges[8].minimum = 0.0f;
+    m_densityRanges[8].maximum = 0.0f;
+    m_densityRanges[9].minimum = 0.0f;
+    m_densityRanges[9].maximum = 0.0f;
+    m_densityRanges[10].minimum = 0.0f;
+    m_densityRanges[10].maximum = 0.0f;
+
+    m_countRanges[0].minimum = 0.0f;
+    m_countRanges[0].maximum = 0.0f;
+    m_countRanges[1].minimum = 0.0f;
+    m_countRanges[1].maximum = 0.0f;
+    m_countRanges[2].minimum = 0.0f;
+    m_countRanges[2].maximum = 0.0f;
+    m_countRanges[5].minimum = 0.0f;
+    m_countRanges[5].maximum = 0.0f;
+    m_countRanges[7].minimum = 0.0f;
+    m_countRanges[7].maximum = 0.0f;
+    m_countRanges[3].minimum = 0.0f;
+    m_countRanges[3].maximum = 0.0f;
+    m_countRanges[4].minimum = 0.0f;
+    m_countRanges[4].maximum = 0.0f;
+    m_countRanges[6].minimum = 0.0f;
+    m_countRanges[6].maximum = 0.0f;
+    m_countRanges[8].minimum = 0.0f;
+    m_countRanges[8].maximum = 0.0f;
+    m_countRanges[9].minimum = 0.0f;
+    m_countRanges[9].maximum = 0.0f;
+    m_countRanges[10].minimum = 0.0f;
+    m_countRanges[10].maximum = 0.0f;
+
+    load(filename);
+}
+
+void CLevelTemplateData::load(wchar_t const* filename)
+{
+    if (!filename || !*filename) return;
+    m_filename = filename;
+    CFileInfo fileInfo;
+    CFileSystem::getSingleton()->getFileInfo(m_filename, fileInfo, false, true, false);
+    if (!fileInfo.m_bExists) return;
+
+    std::wstring directory = m_filename;
+    directory = directory.substr(0, directory.length() - FILESYSTEM::GetFileName(directory).length());
+    CDataGroup data(L"LEVELLAYOUT", NULL, 20, 10, NULL);
+    data.LoadFile(filename, NULL);
+    m_monsterLevelMin = data.GetDataValue(L"MONSTER_LVL_MIN", m_monsterLevelMin);
+    m_monsterLevelMax = data.GetDataValue(L"MONSTER_LVL_MAX", m_monsterLevelMax);
+    m_questSelectionExcluded = data.GetDataValue(L"NO_RANDOM_QUESTS", false);
+    m_tileBasis = data.GetDataValue(L"TILEBASIS", m_tileBasis);
+    m_chunkWidthBasis = data.GetDataValue(L"CHUNKWIDTHBASIS", m_chunkWidthBasis);
+    m_chunkHeightBasis = data.GetDataValue(L"CHUNKHEIGHTBASIS", m_chunkHeightBasis);
+    m_requiresExit = data.GetDataValue(L"REQUIRESEXIT", m_requiresExit);
+    m_dontStore = data.GetDataValue(L"DONTSTORE", m_dontStore);
+    m_randomized = data.GetDataValue(L"RANDOMIZED", m_randomized);
+    m_hasPathing = data.GetDataValue(L"HASPATHING", m_hasPathing);
+    m_hasAutomap = data.GetDataValue(L"HASAUTOMAP", m_hasAutomap);
+    m_minChunks = data.GetDataValue(L"MINCHUNKS", m_minChunks);
+    m_maxChunks = data.GetDataValue(L"MAXCHUNKS", m_maxChunks);
+    m_populate = data.GetDataValue(L"POPULATE", m_populate);
+    m_orthographicShadows = data.GetDataValue(L"ORTHOGRAPHICSHADOWS", m_orthographicShadows);
+    m_bUnitLightFade = data.GetDataValue(L"UNIT_LIGHT_FADE", m_bUnitLightFade);
+    m_unitFadeDistance = data.GetDataValue(L"UNIT_FADE_DISTANCE", m_unitFadeDistance);
+    m_unitFadeStart = data.GetDataValue(L"UNIT_FADE_START", m_unitFadeStart);
+    m_cameraMultiplier = data.GetDataValue(L"CAMERAMULT", 1.0f);
+    m_music = data.GetDataValue(L"MUSIC", m_music);
+    m_showFloorNumber = data.GetDataValue(L"SHOWFLOORNUMBER", m_showFloorNumber);
+    m_levelName = data.GetDataValue(L"LEVELNAME", m_levelName);
+    m_name = STRINGS::StringUpper(data.GetDataValue(L"NAME", EMPTY_WSTRING));
+    m_sRimlightTexture = data.GetDataValue(L"RIMLIGHT", m_sRimlightTexture);
+    m_torchlightTexture = data.GetDataValue(L"TORCHLIGHT", m_torchlightTexture);
+    m_shadowFadeTexture = data.GetDataValue(L"SHADOWFADE", m_shadowFadeTexture);
+    m_lightMaskTexture = data.GetDataValue(L"LIGHTMASK", m_lightMaskTexture);
+    int lightmapR = data.GetDataValue(L"LIGHTMAP RED", 24);
+    int lightmapG = data.GetDataValue(L"LIGHTMAP GREEN", 24);
+    int lightmapB = data.GetDataValue(L"LIGHTMAP BLUE", 24);
+    m_lightmapColorA = 1.0f;
+    m_lightmapColorB = static_cast<float>(lightmapB) / 255.0f;
+    m_lightmapColorG = static_cast<float>(lightmapG) / 255.0f;
+    m_lightmapColorR = static_cast<float>(lightmapR) / 255.0f;
+    m_cinematic = data.GetDataValue(L"CINEMATIC", m_cinematic);
+    m_skybox = data.GetDataValue(L"SKYBOX", m_skybox);
+    m_levelParticle = data.GetDataValue(L"LEVELPARTICLE", m_levelParticle);
+    m_water = data.GetDataValue(L"WATER", m_water);
+    m_postWater = data.GetDataValue(L"POSTWATER", m_postWater);
+    m_midWater = data.GetDataValue(L"MIDWATER", m_midWater);
+    m_mainMenuRules = data.GetDataValue(L"MAINMENURULES", m_mainMenuRules);
+    m_automap = data.GetDataValue(L"AUTOMAP", EMPTY_WSTRING);
+    m_automapWidth = data.GetDataValue(L"AUTOMAP_WIDTH", m_automapWidth);
+    m_automapHeight = data.GetDataValue(L"AUTOMAP_HEIGHT", m_automapHeight);
+    m_automapAngle = data.GetDataValue(L"AUTOMAP_ANGLE", m_automapAngle);
+
+    CFileSystem::getSingleton()->getFileInfo(m_sRimlightTexture, fileInfo, false, true, false);
+    m_sRimlightTexture = fileInfo.m_sPath;
+    CFileSystem::getSingleton()->getFileInfo(m_torchlightTexture, fileInfo, false, true, false);
+    m_torchlightTexture = fileInfo.m_sPath;
+    CFileSystem::getSingleton()->getFileInfo(m_shadowFadeTexture, fileInfo, false, true, false);
+    m_shadowFadeTexture = fileInfo.m_sPath;
+    CFileSystem::getSingleton()->getFileInfo(m_lightMaskTexture, fileInfo, false, true, false);
+    m_lightMaskTexture = fileInfo.m_sPath;
+    CFileSystem::getSingleton()->getFileInfo(m_skybox, fileInfo, false, true, false);
+    m_skybox = fileInfo.m_sPath;
+    CFileSystem::getSingleton()->getFileInfo(m_water, fileInfo, false, true, false);
+    m_water = fileInfo.m_sPath;
+    CFileSystem::getSingleton()->getFileInfo(m_postWater, fileInfo, false, true, false);
+    m_postWater = fileInfo.m_sPath;
+    CFileSystem::getSingleton()->getFileInfo(m_midWater, fileInfo, false, true, false);
+    m_midWater = fileInfo.m_sPath;
+    m_sightRangeModifier = data.GetDataValue(L"ACTIVERANGEMOD", 0.0f);
+    int ambientR = data.GetDataValue(L"AMBIENT RED", 74);
+    int ambientG = data.GetDataValue(L"AMBIENT GREEN", 74);
+    int ambientB = data.GetDataValue(L"AMBIENT BLUE", 74);
+    m_ambientColorA = 1.0f;
+    m_ambientColorB = static_cast<float>(ambientB) / 255.0f;
+    m_ambientColorG = static_cast<float>(ambientG) / 255.0f;
+    m_ambientColorR = static_cast<float>(ambientR) / 255.0f;
+    int materialR = data.GetDataValue(L"MATERIAL AMBIENT RED", 92);
+    int materialG = data.GetDataValue(L"MATERIAL AMBIENT GREEN", 92);
+    int materialB = data.GetDataValue(L"MATERIAL AMBIENT BLUE", 92);
+    m_materialAmbientColorA = 1.0f;
+    m_materialAmbientColorB = static_cast<float>(materialB) / 255.0f;
+    m_materialAmbientColorG = static_cast<float>(materialG) / 255.0f;
+    m_materialAmbientColorR = static_cast<float>(materialR) / 255.0f;
+    int directionalR = data.GetDataValue(L"DIRECTIONAL RED", 238);
+    int directionalG = data.GetDataValue(L"DIRECTIONAL GREEN", 219);
+    int directionalB = data.GetDataValue(L"DIRECTIONAL BLUE", 155);
+    float regionX = data.GetDataValue(L"REGIONBOUNDS X", 50.0f);
+    float regionY = data.GetDataValue(L"REGIONBOUNDS Y", 50.0f);
+    float regionZ = data.GetDataValue(L"REGIONBOUNDS Z", 50.0f);
+    m_regionBoundsX = regionX;
+    m_regionBoundsY = regionY;
+    m_regionBoundsZ = regionZ;
+    float directionalX = data.GetDataValue(L"DIRECTIONAL X", 1.0f);
+    float directionalY = data.GetDataValue(L"DIRECTIONAL Y", 0.0f);
+    float directionalZ = data.GetDataValue(L"DIRECTIONAL Z", 0.0f);
+    m_directionalX = directionalX;
+    m_directionalY = directionalY;
+    m_directionalZ = directionalZ;
+    m_directionalIntensity = data.GetDataValue(L"DIRECTIONAL INTENSITY", 1.0f);
+    m_directionalColorA = 1.0f;
+    m_directionalColorB = (static_cast<float>(directionalB) / 255.0f) * m_directionalIntensity;
+    m_directionalColorG = (static_cast<float>(directionalG) / 255.0f) * m_directionalIntensity;
+    m_directionalColorR = (static_cast<float>(directionalR) / 255.0f) * m_directionalIntensity;
+    float fogR = static_cast<float>(data.GetDataValue(L"FOG RED", 30));
+    float fogG = static_cast<float>(data.GetDataValue(L"FOG GREEN", 42));
+    float fogB = static_cast<float>(data.GetDataValue(L"FOG BLUE", 58));
+    m_fogColorA = 1.0f;
+    m_fogColorB = fogB / 255.0f;
+    m_fogColorG = fogG / 255.0f;
+    m_fogColorR = fogR / 255.0f;
+    m_fogStart = static_cast<float>(data.GetDataValue(L"FOG START", 24));
+    m_fogEnd = static_cast<float>(data.GetDataValue(L"FOG END", 50));
+
+    std::vector<CDataGroup*> groups;
+    unsigned int typeCount = data.GetDataGroupsMatchingName(L"CHUNKTYPE", &groups);
+    for (unsigned int i = 0; i < typeCount; ++i) {
+        CDataGroup* group = groups[i];
+        std::wstring name = EMPTY_WSTRING;
+        name = group->GetDataValue(L"NAME", name);
+        CChunkType* type = new CChunkType;
+        type->m_entranceChunk = false;
+        type->m_exitChunk = false;
+        type->m_registeredWithRandomizers = false;
+        type->m_mustPlace = false;
+        type->m_folder = name;
+        type->m_name = name;
+        type->m_exits.setGrowBy(10);
+        type->m_mustPlace = group->GetDataValue(L"MUST_PLACE", false);
+        type->m_entranceChunk = group->GetDataValue(L"ENTRANCE_CHUNK", false);
+        type->m_exitChunk = group->GetDataValue(L"EXIT_CHUNK", false);
+        type->m_maxAppearance = group->GetDataValue(L"MAX_APPEARANCE", 10);
+        type->m_folder = directory + group->GetDataValue(L"FOLDER", name);
+        // The original uses OR here and appends even after an existing separator.
+        if (type->m_folder[type->m_folder.length() - 1] != L'/' ||
+            type->m_folder[type->m_folder.length() - 1] != L'\\')
+            type->m_folder = type->m_folder + L"/";
+        type->m_width = group->GetDataValue(L"WIDTH", 1);
+        type->m_height = group->GetDataValue(L"HEIGHT", 1);
+        if (type->m_mustPlace) m_requiredChunkTypes.add(type);
+        std::vector<CDataGroup*> exitGroups;
+        unsigned int exitCount = group->GetDataGroupsMatchingName(L"EXIT", &exitGroups);
+        for (unsigned int j = 0; j < exitCount; ++j) {
+            float x = exitGroups[j]->GetDataValue(L"X", 0.0f);
+            float y = exitGroups[j]->GetDataValue(L"Y", 0.0f);
+            float z = exitGroups[j]->GetDataValue(L"Z", 0.0f);
+            type->m_exits.add(Ogre::Vector3(x, y, z));
+        }
+        m_chunkTypes.add(type);
+        CDataGroup* inclusive = group->GetDataGroupByName(L"INCLUSIVE_FILES", false);
+        if (inclusive) {
+            CFileInfo chunkInfo;
+            for (unsigned int j = 0; j < inclusive->GetNumberOfDataValues(); ++j) {
+                CDataValue* value = inclusive->GetDataValue(j);
+                if (value->GetValueType() == CDataValue::DATAVALUE_TRANSLATE ||
+                    value->GetValueType() == CDataValue::DATAVALUE_STRING) {
+                    std::wstring path = STRINGS::StringUpper(type->m_folder + value->GetValueString(true) + L".LAYOUT");
+                    CFileSystem::getSingleton()->getFileInfo(path, chunkInfo, true, true, false);
+                    if (chunkInfo.m_bExists) type->m_inclusiveFiles.add(path);
+                }
+            }
+        }
+        exitGroups.clear();
+    }
+    for (unsigned int i = 0; i < typeCount; ++i)
+        m_chunkRandomizers.add(new CRandomizer(RANDOMIZER_NORMAL));
+    groups.clear();
+
+    TArrayList<std::wstring> files(25);
+    for (unsigned int i = 0; i < m_chunkTypes.size(); ++i) {
+        CChunkType* type = m_chunkTypes[i];
+        files.clear();
+        if (type->m_inclusiveFiles.size()) {
+            for (unsigned int j = 0; j < type->m_inclusiveFiles.size(); ++j)
+                files.add(type->m_inclusiveFiles[j]);
+        } else {
+            CFileSystem::getSingleton()->getFileList(type->m_folder, files, L"*.layout", false, true, false, false);
+        }
+        std::vector<std::wstring> sortedFiles;
+        for (unsigned int j = 0; j < files.size(); ++j)
+            if (files[j].find(L"/MERGE/") == std::wstring::npos)
+                sortedFiles.push_back(files[j]);
+        std::sort(sortedFiles.begin(), sortedFiles.end());
+        for (unsigned int j = 0; j < sortedFiles.size(); ++j) {
+            CChunk* chunk = new CChunk;
+            chunk->m_chunkValue10 = i;
+            chunk->m_odds = 1;
+            chunk->m_maxAppearance = type->m_maxAppearance;
+            chunk->m_filename = sortedFiles[j];
+            m_chunkRandomizers[i]->addChoice(m_chunks.size(), 1);
+            m_chunks.add(chunk);
+            if (!type->m_registeredWithRandomizers) {
+                type->m_registeredWithRandomizers = true;
+                if (type->m_entranceChunk) {
+                    m_entranceChunkRandomizer.addChoice(i, 1);
+                } else if (!type->m_exitChunk) {
+                    m_generalChunkRandomizer.addChoice(i, 1);
+                    if (type->m_exits.size() == 1) {
+                        float z = static_cast<float>(type->m_height) * m_tileBasis * m_chunkHeightBasis * -0.5f + type->m_exits[0].z;
+                        float x = type->m_exits[0].x;
+                        if (z > 0.0f && z > ::fabsf(x)) m_randomizer378.addChoice(i, 1);
+                        else if (z < 0.0f && ::fabsf(z) > ::fabsf(x)) m_randomizer3E0.addChoice(i, 1);
+                        else if (x > 0.0f && x > ::fabsf(z)) m_randomizer4B0.addChoice(i, 1);
+                        else if (x < 0.0f && ::fabsf(x) > ::fabsf(z)) m_randomizer448.addChoice(i, 1);
+                    }
+                } else if (type->m_exits.size() == 1) {
+                    float z = static_cast<float>(type->m_height) * m_tileBasis * m_chunkHeightBasis * -0.5f + type->m_exits[0].z;
+                    float x = type->m_exits[0].x;
+                    if (z > 0.0f && z > ::fabsf(x)) m_randomizer1D8.addChoice(i, 1);
+                    else if (z < 0.0f && ::fabsf(z) > ::fabsf(x)) m_randomizer240.addChoice(i, 1);
+                    else if (x > 0.0f && x > ::fabsf(z)) m_randomizer310.addChoice(i, 1);
+                    else if (x < 0.0f && ::fabsf(x) > ::fabsf(z)) m_randomizer2A8.addChoice(i, 1);
+                }
+            }
+        }
+    }
+    groups.clear();
+    m_layoutRandomizer = new CRandomizer(RANDOMIZER_NORMAL);
+    if (m_chunks.size() == 0) return;
+    unsigned int layoutCount = data.GetDataGroupsMatchingName(L"LAYOUT", &groups);
+    for (unsigned int i = 0; i < layoutCount; ++i) {
+        m_layoutRandomizer->addChoice(i, 1);
+        CLevelLayout* layout = new CLevelLayout;
+        layout->m_chunks.setGrowBy(10);
+        layout->m_chunkInstances.setGrowBy(10);
+        layout->m_seed = 0;
+        m_layouts.add(layout);
+        m_baseLayouts.add(layout);
+        std::vector<unsigned int> appearances;
+        for (unsigned int j = 0; j < m_chunks.size(); ++j) appearances.push_back(0);
+        std::vector<CDataGroup*> randomGroups;
+        unsigned int count = groups[i]->GetDataGroupsMatchingName(L"CHUNK_RANDOM", &randomGroups);
+        for (unsigned int j = 0; j < count; ++j) {
+            CDataGroup* group = randomGroups[j];
+            std::wstring typeName = group->GetDataValue(L"TYPE", EMPTY_WSTRING);
+            int typeIndex = -1;
+            for (unsigned int k = 0; k < m_chunkTypes.size(); ++k) {
+                if (m_chunkTypes[k]->m_name == typeName) {
+                    typeIndex = k;
+                    break;
+                }
+            }
+            float x = group->GetDataValue(L"X", 0.0f);
+            float y = group->GetDataValue(L"Y", 0.0f);
+            float z = group->GetDataValue(L"Z", 0.0f);
+            CChunkInstance* instance = new CChunkInstance;
+            instance->m_chunkTypeIndex = typeIndex;
+            instance->m_name = EMPTY_WSTRING;
+            instance->m_z = z;
+            instance->m_y = y;
+            instance->m_x = x;
+            int choice = m_chunkRandomizers[instance->m_chunkTypeIndex]->getRandom();
+            ++appearances[choice];
+            CChunk* chunk = m_chunks[choice];
+            if (appearances[choice] >= static_cast<unsigned int>(chunk->m_maxAppearance))
+                m_chunkRandomizers[instance->m_chunkTypeIndex]->setChoiceOdds(choice, 0);
+            layout->m_chunkInstances.add(instance);
+            layout->m_chunks.add(chunk);
+        }
+        resetOdds();
+        randomGroups.clear();
+    }
+    groups.clear();
+}
+
+
+bool CLevelTemplateData::intersectsChunks(CChunkInstance* chunk, std::vector<CChunkInstance*>& chunks)
+{
+    CChunkType* type = m_chunkTypes[chunk->m_chunkTypeIndex];
+    float width = static_cast<float>(type->m_width);
+    float pitch = m_chunkWidthBasis * m_tileBasis - 0.1f;
+    float minX = -0.5f * pitch + chunk->m_x;
+    float maxX = (width - 1.0f) * pitch + 0.5f * pitch + chunk->m_x;
+    float minY = chunk->m_y + -1000.0f;
+    float maxY = chunk->m_y + 1000.0f;
+    float minZ = chunk->m_z + 0.0f;
+    // The original uses width for the Z extent as well.
+    float maxZ = m_chunkHeightBasis * width * m_tileBasis - 0.1f + chunk->m_z;
+    for (int i = 0; i < static_cast<int>(chunks.size()); ++i) {
+        CChunkInstance* other = chunks[i];
+        CChunkType* otherType = m_chunkTypes[other->m_chunkTypeIndex];
+        if (-0.5f * pitch + other->m_x > maxX) continue;
+        if (other->m_y + -1000.0f > maxY) continue;
+        if (other->m_z + 0.0f > maxZ) continue;
+        float otherWidth = static_cast<float>(otherType->m_width);
+        if (minX > (otherWidth - 1.0f) * pitch + 0.5f * pitch + other->m_x) continue;
+        if (minY > other->m_y + 1000.0f) continue;
+        if (minZ > otherWidth * m_chunkHeightBasis * m_tileBasis - 0.1f + other->m_z) continue;
+        return true;
+    }
+    return false;
+}
+
+bool CLevelTemplateData::exitsMatch(CChunkInstance* chunk, std::vector<CChunkInstance*>& chunks)
+{
+    CChunkType* type = m_chunkTypes[chunk->m_chunkTypeIndex];
+    if (static_cast<int>(type->m_exits.size()) <= 0) return true;
+    float centerZ = static_cast<float>(type->m_height) * m_tileBasis * m_chunkHeightBasis * 0.5f + chunk->m_z;
+    for (int i = 0; i < static_cast<int>(type->m_exits.size()); ++i) {
+        const Ogre::Vector3& exit = type->m_exits[i];
+        float x = exit.x + chunk->m_x;
+        float y = exit.y + chunk->m_y;
+        float z = chunk->m_z + exit.z;
+        float dx = x - chunk->m_x;
+        float dz = z - centerZ;
+        if (dz > 0.0f && dz > ::fabsf(dx))
+            z += 1.5f * m_tileBasis;
+        else if (dz < 0.0f && ::fabsf(dz) > ::fabsf(dx))
+            z += -1.5f * m_tileBasis;
+        else if (dx > 0.0f && dx > ::fabsf(dz))
+            x += 1.5f * m_tileBasis;
+        else if (dx < 0.0f && ::fabsf(dx) > ::fabsf(dz))
+            x += -1.5f * m_tileBasis;
+
+        bool matched = true;
+        for (int j = 0; j < static_cast<int>(chunks.size()); ++j) {
+            CChunkInstance* other = chunks[j];
+            CChunkType* otherType = m_chunkTypes[other->m_chunkTypeIndex];
+            float pitch = m_chunkWidthBasis * m_tileBasis - 0.1f;
+            bool inside = false;
+            if (x >= -0.5f * pitch + other->m_x) {
+                float width = static_cast<float>(otherType->m_width);
+                inside = 0.5f * pitch + (width - 1.0f) * pitch + other->m_x >= x &&
+                y >= -1000.0f + other->m_y &&
+                1000.0f + other->m_y >= y &&
+                z >= other->m_z + 0.0f &&
+                width * m_chunkHeightBasis * m_tileBasis - 0.1f + other->m_z >= z;
+            }
+            if (inside) {
+                matched = false;
+                for (int k = 0; k < static_cast<int>(otherType->m_exits.size()); ++k) {
+                    const Ogre::Vector3& otherExit = otherType->m_exits[k];
+                    float distanceX = otherExit.x + other->m_x - x;
+                    float distanceY = otherExit.y + other->m_y - y;
+                    float distanceZ = otherExit.z + other->m_z - z;
+                    float distance = ::sqrtf((distanceX * distanceX + distanceY * distanceY) + distanceZ * distanceZ);
+                    if (m_tileBasis + m_tileBasis > distance) {
+                        matched = true;
+                        break;
+                    }
+                }
+            }
+            // An outside first peer accepts the exit; later outside peers do not.
+            if (matched) break;
+            matched = false;
+        }
+        if (!matched) return false;
+    }
+    return true;
+}
+
+void CLevelTemplateData::matchExits(CChunkInstance* chunk, std::vector<CChunkInstance*>& chunks)
+{
+    CChunkType* type = m_chunkTypes[chunk->m_chunkTypeIndex];
+    for (int i = 0; i < static_cast<int>(type->m_exits.size()); ++i) {
+        const Ogre::Vector3& exit = type->m_exits[i];
+        float x = exit.x + chunk->m_x;
+        float y = exit.y + chunk->m_y;
+        float z = exit.z + chunk->m_z;
+        float centerZ = static_cast<float>(type->m_height) * m_tileBasis * m_chunkHeightBasis * 0.5f + chunk->m_z;
+        float dx = x - chunk->m_x;
+        float dz = z - centerZ;
+        if (dz > 0.0f && dz > ::fabsf(dx))
+            z += 1.5f * m_tileBasis;
+        else if (dz < 0.0f && ::fabsf(dz) > ::fabsf(dx))
+            z += -1.5f * m_tileBasis;
+        else if (dx > 0.0f && dx > ::fabsf(dz))
+            x += 1.5f * m_tileBasis;
+        else if (dx < 0.0f && ::fabsf(dx) > ::fabsf(dz))
+            x += -1.5f * m_tileBasis;
+
+        for (int j = 0; j < static_cast<int>(chunks.size()); ++j) {
+            CChunkInstance* other = chunks[j];
+            CChunkType* otherType = m_chunkTypes[other->m_chunkTypeIndex];
+            float pitch = m_chunkWidthBasis * m_tileBasis - 0.1f;
+            bool inside = false;
+            if (x >= -0.5f * pitch + other->m_x) {
+                float width = static_cast<float>(otherType->m_width);
+                inside = 0.5f * pitch + (width - 1.0f) * pitch + other->m_x >= x &&
+                    y >= -1000.0f + other->m_y &&
+                    1000.0f + other->m_y >= y &&
+                    z >= 0.0f + other->m_z &&
+                    m_chunkHeightBasis * width * m_tileBasis - 0.1f + other->m_z >= z;
+            }
+            if (!inside) continue;
+            for (int k = 0; k < static_cast<int>(otherType->m_exits.size()); ++k) {
+                const Ogre::Vector3& otherExit = otherType->m_exits[k];
+                float distanceX = other->m_x + otherExit.x - x;
+                float distanceY = other->m_y + otherExit.y - y;
+                float distanceZ = other->m_z + otherExit.z - z;
+                float distance = ::sqrtf((distanceX * distanceX + distanceY * distanceY) + distanceZ * distanceZ);
+                if (m_tileBasis + m_tileBasis > distance) {
+                    other->m_usedExits.push_back(k);
+                    chunk->m_usedExits.push_back(i);
+                }
+            }
+        }
+    }
+}
+
+int CLevelTemplateData::createRandomLayout(int seed)
+{
+    if (!m_entranceChunkRandomizer.hasChoices()) return 0;
+    if (seed != 0) UTILITIES::setSeed(seed);
+    m_randomLayoutGenerated = true;
+    std::vector<CChunkInstance*> instances;
+    std::vector<CChunk*> chunks;
+    for (int generation = 0; generation < 1000; ++generation) {
+        int entranceType = m_entranceChunkRandomizer.getRandom();
+        CChunkInstance* entrance = new CChunkInstance;
+        entrance->m_chunkTypeIndex = entranceType;
+        entrance->m_name = EMPTY_WSTRING;
+        entrance->m_z = 0.0f;
+        entrance->m_y = 0.0f;
+        entrance->m_x = 0.0f;
+        instances.push_back(entrance);
+        std::vector<unsigned int> appearances;
+        for (unsigned int i = 0; i < m_chunks.size(); ++i) appearances.push_back(0);
+        int target = UTILITIES::randomIntegerBetween(m_minChunks, m_maxChunks);
+        int placed = 0;
+        int attempts = 0;
+        while (attempts <= 999 && placed < target) {
+            int typeIndex = m_generalChunkRandomizer.getRandom();
+            CChunkType* type = m_chunkTypes[typeIndex];
+            int exitCount = static_cast<int>(type->m_exits.size());
+            if (placed == 0 && exitCount == 1) continue;
+            if (!m_chunkRandomizers[typeIndex]->hasChoices()) continue;
+            int existingCount = static_cast<int>(instances.size());
+            bool accepted = false;
+            for (int i = 0; i < exitCount && !accepted; ++i) {
+                const Ogre::Vector3& exit = type->m_exits[i];
+                float normalizedX = (exit.x - (static_cast<float>(type->m_width) - 1.0f) * m_tileBasis * m_chunkWidthBasis) / m_tileBasis;
+                float normalizedZ = (static_cast<float>(type->m_height) * -0.5f * m_tileBasis * m_chunkHeightBasis + (0.5f * m_tileBasis + exit.z)) / m_tileBasis;
+                int start = UTILITIES::randomIntegerBetween(0, static_cast<int>(instances.size()) - 1);
+                for (int j = 0; j < existingCount && !accepted; ++j) {
+                    int index = start + j;
+                    if (index >= existingCount) index -= existingCount;
+                    CChunkInstance* other = instances[index];
+                    CChunkType* otherType = m_chunkTypes[other->m_chunkTypeIndex];
+                    for (int k = 0; k < static_cast<int>(otherType->m_exits.size()); ++k) {
+                        if (std::find(other->m_usedExits.begin(), other->m_usedExits.end(), k) != other->m_usedExits.end()) continue;
+                        const Ogre::Vector3& otherExit = otherType->m_exits[k];
+                        float otherX = (otherExit.x - (static_cast<float>(otherType->m_width) - 1.0f) * m_tileBasis * m_chunkWidthBasis) / m_tileBasis;
+                        float x = other->m_x;
+                        float y = other->m_y;
+                        float z = other->m_z;
+                        if (otherX != 0.0f && -normalizedX == otherX) {
+                            if (otherX > 0.0f) x += m_tileBasis * m_chunkWidthBasis;
+                            else x -= m_tileBasis * m_chunkWidthBasis;
+                        } else {
+                            float otherZ = ((0.5f * m_tileBasis + otherExit.z) + static_cast<float>(otherType->m_height) * -0.5f * m_tileBasis * m_chunkHeightBasis) / m_tileBasis;
+                            if (!(otherZ != 0.0f && -normalizedZ == otherZ)) continue;
+                            if (otherZ > 0.0f) z += m_chunkHeightBasis * m_tileBasis;
+                            else z -= m_tileBasis * m_chunkHeightBasis;
+                        }
+                        CChunkInstance* candidate = new CChunkInstance;
+                        candidate->m_chunkTypeIndex = typeIndex;
+                        candidate->m_name = EMPTY_WSTRING;
+                        candidate->m_z = z;
+                        candidate->m_y = y;
+                        candidate->m_x = x;
+                        if (!intersectsChunks(candidate, instances) && exitsMatch(candidate, instances)) {
+                            matchExits(candidate, instances);
+                            instances.push_back(candidate);
+                            ++placed;
+                            accepted = true;
+                        } else delete candidate;
+                        // A rejected proposal moves to the next peer, not its next exit.
+                        break;
+                    }
+                }
+            }
+            ++attempts;
+        }
+        // The attempt-limit path deliberately does not reset concrete-chunk odds.
+        if (attempts > 999) {
+            for (int i = 0; i < static_cast<int>(instances.size()); ++i) {
+                if (instances[i]) { delete instances[i]; instances[i] = NULL; }
+            }
+            instances.clear();
+            continue;
+        }
+        bool failed = false;
+        if (m_requiresExit) {
+            bool exitPlaced = false;
+            for (int i = 0; i < static_cast<int>(instances.size()) && !exitPlaced; ++i) {
+                CChunkInstance* parent = instances[i];
+                CChunkType* parentType = m_chunkTypes[parent->m_chunkTypeIndex];
+                for (int j = 0; j < static_cast<int>(parentType->m_exits.size()); ++j) {
+                    if (std::find(parent->m_usedExits.begin(), parent->m_usedExits.end(), j) != parent->m_usedExits.end()) continue;
+                    const Ogre::Vector3& exit = parentType->m_exits[j];
+                    float centerZ = static_cast<float>(parentType->m_height) * m_tileBasis * m_chunkHeightBasis * 0.5f + parent->m_z;
+                    float dz = (exit.z + parent->m_z) - centerZ;
+                    float dx = (exit.x + parent->m_x) - parent->m_x;
+                    int direction;
+                    CRandomizer* pool;
+                    if (dz > 0.0f && dz > ::fabsf(dx)) { direction = 0; pool = &m_randomizer240; }
+                    else if (dz < 0.0f && ::fabsf(dz) > ::fabsf(dx)) { direction = 1; pool = &m_randomizer1D8; }
+                    else if (dx > 0.0f && dx > ::fabsf(dz)) { direction = 2; pool = &m_randomizer2A8; }
+                    else if (dx < 0.0f && ::fabsf(dx) > ::fabsf(dz)) { direction = 3; pool = &m_randomizer310; }
+                    else continue;
+                    if (!pool->hasChoices()) { continue; }
+                    int typeIndex = pool->getRandom();
+                    CChunkType* sizeType = m_chunkTypes[(direction == 0 || direction == 2) ? typeIndex : entrance->m_chunkTypeIndex];
+                    float x = parent->m_x;
+                    float y = parent->m_y;
+                    float z = parent->m_z;
+                    // Negative directions use the entrance type's dimensions in the original.
+                    if (direction == 0) z = static_cast<float>(sizeType->m_height) * m_tileBasis * m_chunkHeightBasis + parent->m_z;
+                    else if (direction == 1) z -= static_cast<float>(sizeType->m_height) * m_tileBasis * m_chunkHeightBasis;
+                    else if (direction == 2) x = static_cast<float>(sizeType->m_width) * m_tileBasis * m_chunkWidthBasis + parent->m_x;
+                    else x -= static_cast<float>(sizeType->m_width) * m_tileBasis * m_chunkWidthBasis;
+                    CChunkInstance* candidate = new CChunkInstance;
+                    candidate->m_chunkTypeIndex = typeIndex;
+                    candidate->m_name = EMPTY_WSTRING;
+                    candidate->m_z = z;
+                    candidate->m_y = y;
+                    candidate->m_x = x;
+                    if (intersectsChunks(candidate, instances) || !exitsMatch(candidate, instances)) {
+                        delete candidate;
+                        continue;
+                    }
+                    matchExits(candidate, instances);
+                    instances.push_back(candidate);
+                    exitPlaced = true;
+                    break;
+                }
+            }
+            if (!exitPlaced) {
+                for (int i = 0; i < static_cast<int>(instances.size()); ++i) {
+                    if (instances[i]) { delete instances[i]; instances[i] = NULL; }
+                }
+                instances.clear();
+                chunks.clear();
+                continue;
+            }
+        }
+        for (int i = 0; i < static_cast<int>(instances.size()); ++i) {
+            CChunkInstance* parent = instances[i];
+            CChunkType* parentType = m_chunkTypes[parent->m_chunkTypeIndex];
+            for (int j = 0; j < static_cast<int>(parentType->m_exits.size()); ++j) {
+                if (std::find(parent->m_usedExits.begin(), parent->m_usedExits.end(), j) != parent->m_usedExits.end()) continue;
+                const Ogre::Vector3& exit = parentType->m_exits[j];
+                float centerZ = static_cast<float>(parentType->m_height) * m_tileBasis * m_chunkHeightBasis * 0.5f + parent->m_z;
+                float dz = (exit.z + parent->m_z) - centerZ;
+                float dx = (exit.x + parent->m_x) - parent->m_x;
+                int direction;
+                CRandomizer* pool;
+                if (dz > 0.0f && dz > ::fabsf(dx)) { direction = 0; pool = &m_randomizer3E0; }
+                else if (dz < 0.0f && ::fabsf(dz) > ::fabsf(dx)) { direction = 1; pool = &m_randomizer378; }
+                else if (dx > 0.0f && dx > ::fabsf(dz)) { direction = 2; pool = &m_randomizer448; }
+                else if (dx < 0.0f && ::fabsf(dx) > ::fabsf(dz)) { direction = 3; pool = &m_randomizer4B0; }
+                else continue;
+                if (!pool->hasChoices()) { failed = true; break; }
+                int typeIndex = pool->getRandom();
+                CChunkType* sizeType = m_chunkTypes[(direction == 0 || direction == 2) ? typeIndex : entrance->m_chunkTypeIndex];
+                float x = parent->m_x;
+                float y = parent->m_y;
+                float z = parent->m_z;
+                // Negative directions use the entrance type's dimensions in the original.
+                if (direction == 0) z = static_cast<float>(sizeType->m_height) * m_tileBasis * m_chunkHeightBasis + parent->m_z;
+                else if (direction == 1) z -= static_cast<float>(sizeType->m_height) * m_tileBasis * m_chunkHeightBasis;
+                else if (direction == 2) x = static_cast<float>(sizeType->m_width) * m_tileBasis * m_chunkWidthBasis + parent->m_x;
+                else x -= static_cast<float>(sizeType->m_width) * m_tileBasis * m_chunkWidthBasis;
+                CChunkInstance* candidate = new CChunkInstance;
+                candidate->m_chunkTypeIndex = typeIndex;
+                candidate->m_name = EMPTY_WSTRING;
+                candidate->m_z = z;
+                candidate->m_y = y;
+                candidate->m_x = x;
+                if (intersectsChunks(candidate, instances) || !exitsMatch(candidate, instances)) {
+                    delete candidate;
+                    failed = true; break;
+                }
+                matchExits(candidate, instances);
+                instances.push_back(candidate);
+                // The live outer bound includes the appended cap.
+            }
+        }
+        for (unsigned int i = 0; i < m_requiredChunkTypes.size(); ++i) {
+            bool found = false;
+            for (int j = 0; j < static_cast<int>(instances.size()); ++j) {
+                if (m_chunkTypes[instances[j]->m_chunkTypeIndex] == m_requiredChunkTypes[i]) { found = true; break; }
+            }
+            if (!found) { failed = true; break; }
+        }
+        for (int i = 0; i < static_cast<int>(instances.size()); ++i) {
+            CChunkInstance* instance = instances[i];
+            if (!m_chunkRandomizers[instance->m_chunkTypeIndex]->hasValidChoices()) { failed = true; break; }
+            int choice = m_chunkRandomizers[instance->m_chunkTypeIndex]->getRandom();
+            ++appearances[choice];
+            CChunk* chunk = m_chunks[choice];
+            if (appearances[choice] >= static_cast<unsigned int>(chunk->m_maxAppearance))
+                m_chunkRandomizers[instance->m_chunkTypeIndex]->setChoiceOdds(choice, 0);
+            chunks.push_back(chunk);
+        }
+        resetOdds();
+        if (!failed) {
+            m_layoutRandomizer->addChoice(m_layouts.size(), 1);
+            CLevelLayout* layout = new CLevelLayout;
+            layout->m_chunks.setGrowBy(10);
+            layout->m_chunkInstances.setGrowBy(10);
+            layout->m_seed = seed;
+            m_layouts.add(layout);
+            for (int i = 0; i < static_cast<int>(chunks.size()); ++i) {
+                layout->m_chunkInstances.add(instances[i]);
+                layout->m_chunks.add(chunks[i]);
+            }
+            chunks.clear();
+            instances.clear();
+            return seed;
+        }
+        for (int i = 0; i < static_cast<int>(instances.size()); ++i) {
+            if (instances[i]) { delete instances[i]; instances[i] = NULL; }
+        }
+        instances.clear();
+        chunks.clear();
+    }
+    return seed;
 }

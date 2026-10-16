@@ -10,6 +10,7 @@ class CCharacter;
 class CAffix;
 class CCharacter;
 class CEffect;
+class CSkill;
 class CResourceManager;
 class CDataGroup;
 class CUnitTheme;
@@ -21,6 +22,9 @@ public:
     void clearAllUnitReferences();
     CAffix* cloneAffix(CAffix* affix, unsigned int level, CBaseUnit* source, float scale);
     CEffect* getEffect(EEFFECT_TYPE type);
+    CEffect* getEffect(const std::wstring& name, unsigned int index);
+    bool hasEffectFromSkill(const CSkill* skill);
+    void getEffects(TArrayList<CEffect*>* effects);
 
     void transferEffects(CCharacter*, EEFFECT_ACTIVATION, EEFFECT_TYPE);
 

@@ -30,7 +30,7 @@ public:
     // fields
     std::wstring m_sUnknown60;
     CResourceManager* m_pResourceManager;
-    void* m_pUnknown70;
+    std::wstring m_pUnknown70;
     std::wstring m_sUnknown78;
     CDataGroup* m_pUnitDataGroup;
     CRunicCore* m_pRunicCore;

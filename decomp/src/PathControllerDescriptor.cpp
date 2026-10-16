@@ -1,3 +1,4 @@
+#include "UnitResourceList.h"
 #include "EmptyStrings.h"
 #include "PathControllerDescriptor.h"
 #include "GameEnums.h"
@@ -38,13 +39,11 @@ unsigned int CPathControllerDescriptor::GetResourceIDByString(CEditorScene* scen
 
 std::wstring CPathControllerDescriptor::GetGroupStringByID(CEditorScene*, CEditorBaseObject*, unsigned int index, void*)
 {
-    const std::wstring *names = reinterpret_cast<const std::wstring*>(gRESOURCE_GROUP_NAMES);
-
     if (index == 0)
-        return names[1];
+        return gRESOURCE_GROUP_NAMES[1];
     if (index == 2)
         return L"PLAYER";
-    return names[0];
+    return gRESOURCE_GROUP_NAMES[0];
 }
 
 void CPathControllerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
@@ -86,4 +85,36 @@ void CPathControllerDescriptor::DescriptorObjectCreatedInEditor(CEditorBaseObjec
 CEditorBaseObject* CPathControllerDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CPathController(scene->getResourceManager());
+}
+
+unsigned int CPathControllerDescriptor::GetGroupIDByString(CEditorScene*, CEditorBaseObject*, const std::wstring& value, void*)
+{
+    if (value == gRESOURCE_GROUP_NAMES[0])
+        return 1;
+    if (value == L"PLAYER")
+        return 2;
+    return 0;
+}
+
+std::wstring CPathControllerDescriptor::GetResourceStringByID(CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    if (index == 0)
+        return EMPTY_WSTRING;
+    CPathController* controller = dynamic_cast<CPathController*>(object);
+    if (controller == NULL || controller->getResourceManager() == NULL)
+        return EMPTY_WSTRING;
+    const std::map<long long, CDataGroup*>* group;
+    if (std::wstring(controller->m_pCategory) == L"PLAYER")
+        return L"PLAYER";
+    if (std::wstring(controller->m_pCategory) == gRESOURCE_GROUP_NAMES[1])
+        group = controller->getResourceManager()->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[1]);
+    else if (std::wstring(controller->m_pCategory) == gRESOURCE_GROUP_NAMES[0])
+        group = controller->getResourceManager()->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[0]);
+    else
+        return EMPTY_WSTRING;
+    for (std::map<long long, CDataGroup*>::const_iterator it = group->begin(); it != group->end(); ++it) {
+        if (--index == 0)
+            return it->second->GetDataValue(L"NAME", EMPTY_WSTRING);
+    }
+    return EMPTY_WSTRING;
 }

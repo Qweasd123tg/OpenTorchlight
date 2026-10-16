@@ -2,17 +2,22 @@
 #define CMDLINEPARSER_H
 
 #include <string>
+#include <map>
+#include <vector>
 
 #include "RunicCore.h"
 
-// Partial: declarations from CmdLineParser.cpp used by recovered TUs; the
-// fields are not recovered yet.
+// Command parameters, stored as a list of values for each name.
 class CCmdLineParser : public CRunicCore
 {
 public:
     virtual ~CCmdLineParser();
 
+    bool HasCommand(const std::wstring& name);
+    std::wstring GetStringParam(const std::wstring& name, std::wstring defaultValue);
+    float GetFloatParam(const std::wstring& name, float defaultValue);
     int GetIntParam(const std::wstring& name, int defaultValue);
+    std::map<std::wstring, std::vector<std::wstring> > m_params;
 };
 
 #endif

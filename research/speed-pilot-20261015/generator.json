@@ -1,0 +1,739 @@
+{
+ "baseline": "1007609d7cdeea56f01016babb5ffa6f28a596f9",
+ "owner": "opencode",
+ "groups": 27,
+ "game_addresses": 54,
+ "definition_trials": 27,
+ "matching_definitions": 1,
+ "matching_game_addresses": [
+  "0x5ea600",
+  "0x5ea610"
+ ],
+ "different_definitions": 26,
+ "compiler_trial_seconds": 10.619489484000951,
+ "timing_limitations": [
+  "Excludes initialization and preparation.",
+  "Overlaps unrelated build work; not a controlled throughput benchmark."
+ ],
+ "skipped_owners": [
+  {
+   "tu": "Skill.cpp",
+   "owner": "pc2"
+  },
+  {
+   "tu": "QuestDialog.cpp",
+   "owner": "dot"
+  },
+  {
+   "tu": "QuestRewards.cpp",
+   "owner": "dot"
+  },
+  {
+   "tu": "QuestUnitData.cpp",
+   "owner": "dot"
+  }
+ ],
+ "candidates": [
+  {
+   "address": "0x5ea600",
+   "name": "CLayoutDescriptor::~CLayoutDescriptor()",
+   "tu": "LayoutDescriptor.cpp",
+   "family": "implicit_member_destruction",
+   "header": "LayoutDescriptor.h",
+   "original_size": 12,
+   "status": "MATCH",
+   "closure": [
+    "0x5ea600",
+    "0x5ea610"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "1178dd59a08283f8b7a8d745f2bc74812994cf7e5e80727157d04cd2a0522a07",
+   "reason": "",
+   "attempts": [
+    {
+     "variant": 0,
+     "status": "MATCH",
+     "reason": "",
+     "source_sha256": "eed05e7d8b4d2efe19f44eaaa74f642518f60ea013adfadb8255f8420141686c"
+    }
+   ]
+  }
+ ],
+ "trial_verdicts": [
+  {
+   "address": "0x59d750",
+   "name": "CPathController::~CPathController()",
+   "tu": "PathController.cpp",
+   "family": "implicit_member_destruction",
+   "header": "PathController.h",
+   "original_size": 756,
+   "status": "DIFF",
+   "closure": [
+    "0x59d750",
+    "0x59da50"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "6207175f58e70372f3fde95a8075d75a1335c1407375632a92bd5b5ee7fb38af",
+   "reason": "Emitted ABI variants differ: 0x59d750, 0x59d750"
+  },
+  {
+   "address": "0x5ea600",
+   "name": "CLayoutDescriptor::~CLayoutDescriptor()",
+   "tu": "LayoutDescriptor.cpp",
+   "family": "implicit_member_destruction",
+   "header": "LayoutDescriptor.h",
+   "original_size": 12,
+   "status": "MATCH",
+   "closure": [
+    "0x5ea600",
+    "0x5ea610"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "1178dd59a08283f8b7a8d745f2bc74812994cf7e5e80727157d04cd2a0522a07",
+   "reason": ""
+  },
+  {
+   "address": "0x795fe0",
+   "name": "CLogicGroup::~CLogicGroup()",
+   "tu": "LogicGroup.cpp",
+   "family": "implicit_member_destruction",
+   "header": "LogicGroup.h",
+   "original_size": 193,
+   "status": "DIFF",
+   "closure": [
+    "0x795fe0",
+    "0x7960b0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "320a73188668ab88c8a75ec39ff6e0e4ba2a48dddf5f36653f6b2b0ad120f468",
+   "reason": "Emitted ABI variants differ: 0x795fe0, 0x795fe0"
+  },
+  {
+   "address": "0x705930",
+   "name": "CDescriptorManager::~CDescriptorManager()",
+   "tu": "DescriptorManager.cpp",
+   "family": "implicit_member_destruction",
+   "header": "DescriptorManager.h",
+   "original_size": 296,
+   "status": "DIFF",
+   "closure": [
+    "0x705930",
+    "0x705a60"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "e051eb7aeb4638d1aac95abb408d93698f1759d2fff2e644c357cd04003065ef",
+   "reason": "Emitted ABI variants differ: 0x705930, 0x705930"
+  },
+  {
+   "address": "0x7ccae0",
+   "name": "CTimelineProperty::~CTimelineProperty()",
+   "tu": "TimelineProperty.cpp",
+   "family": "implicit_member_destruction",
+   "header": "TimelineProperty.h",
+   "original_size": 169,
+   "status": "DIFF",
+   "closure": [
+    "0x7ccae0",
+    "0x7ccb90"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "f3dfb3b829199ab9a14ad323d9d5005ff73f93795b633b1d22d39d426d00b933",
+   "reason": "Emitted ABI variants differ: 0x7ccae0, 0x7ccae0"
+  },
+  {
+   "address": "0x7d5a80",
+   "name": "CAffix::~CAffix()",
+   "tu": "affix.cpp",
+   "family": "cleanup_then_member_destruction",
+   "header": "Affix.h",
+   "original_size": 834,
+   "status": "DIFF",
+   "closure": [
+    "0x7d5a80",
+    "0x7d5dd0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "ca0b91afda3c72db5647d374e3d3f2899df62cfdc5882efc54f3e6c1f38ee7b7",
+   "reason": "Emitted ABI variants differ: 0x7d5a80, 0x7d5a80"
+  },
+  {
+   "address": "0x86a2e0",
+   "name": "CCollisionModel::~CCollisionModel()",
+   "tu": "collisionmodel.cpp",
+   "family": "cleanup_then_member_destruction",
+   "header": "CollisionModel.h",
+   "original_size": 225,
+   "status": "DIFF",
+   "closure": [
+    "0x86a2e0",
+    "0x86a3d0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "23915af5cc04ae28be211ec1806a2409a795c71009da5c4ce0aa39f8eb54c11e",
+   "reason": "Emitted ABI variants differ: 0x86a2e0, 0x86a2e0"
+  },
+  {
+   "address": "0x8d3d50",
+   "name": "CKeyframe::~CKeyframe()",
+   "tu": "keyframe.cpp",
+   "family": "implicit_member_destruction",
+   "header": "Keyframe.h",
+   "original_size": 313,
+   "status": "DIFF",
+   "closure": [
+    "0x8d3d50",
+    "0x8d3e90"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "b216d8c8865c39594df46460676868d9710632415574e1fdb3317428f6718d8d",
+   "reason": "Emitted ABI variants differ: 0x8d3d50, 0x8d3d50"
+  },
+  {
+   "address": "0x86cdd0",
+   "name": "CDynamicRenderable::~CDynamicRenderable()",
+   "tu": "dynamicrenderable.cpp",
+   "family": "implicit_member_destruction",
+   "header": "DynamicRenderable.h",
+   "original_size": 146,
+   "status": "DIFF",
+   "closure": [
+    "0x86cdd0",
+    "0x86ce70",
+    "0x86ce80",
+    "0x86ce90",
+    "0x86cea0",
+    "0x86ceb0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "19b65c750afee7cd71db535e6be6523eedcb97d36d0479000ce782fc1845edc4",
+   "reason": "Emitted ABI variants differ: 0x86cdd0, 0x86cdd0"
+  },
+  {
+   "address": "0x9939b0",
+   "name": "CPuzzleRandomizer::~CPuzzleRandomizer()",
+   "tu": "PuzzleRandomizer.cpp",
+   "family": "implicit_member_destruction",
+   "header": "PuzzleRandomizer.h",
+   "original_size": 20,
+   "status": "DIFF",
+   "closure": [
+    "0x9939b0",
+    "0x9939d0",
+    "0x9939e0",
+    "0x9939f0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "ee639986a6ef5799178dd23f2cf1ab797086b941af889d57bf9bf9275eba6306",
+   "reason": "Emitted ABI variants differ: 0x9939b0, 0x9939b0"
+  },
+  {
+   "address": "0xa4dd50",
+   "name": "CAnimationSet::~CAnimationSet()",
+   "tu": "AnimationSet.cpp",
+   "family": "implicit_member_destruction",
+   "header": "AnimationSet.h",
+   "original_size": 995,
+   "status": "DIFF",
+   "closure": [
+    "0xa4dd50",
+    "0xa4e140"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "da67a228ddb4a58e0e07e88d2bed527871ce8c19a505d3b6730fbaaef5ee9a0d",
+   "reason": "Emitted ABI variants differ: 0xa4dd50, 0xa4dd50"
+  },
+  {
+   "address": "0x970dd0",
+   "name": "CLevelState::~CLevelState()",
+   "tu": "levelstate.cpp",
+   "family": "implicit_member_destruction",
+   "header": "LevelState.h",
+   "original_size": 982,
+   "status": "DIFF",
+   "closure": [
+    "0x970dd0",
+    "0x9711b0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "0bb29332f34753041178ec50b2298516d4334e12fe1129408330a70e78a28928",
+   "reason": "Emitted ABI variants differ: 0x970dd0, 0x970dd0"
+  },
+  {
+   "address": "0xa64820",
+   "name": "CSoundBankDataInformation::~CSoundBankDataInformation()",
+   "tu": "SoundBankDataInformation.cpp",
+   "family": "implicit_member_destruction",
+   "header": "SoundBankDataInformation.h",
+   "original_size": 450,
+   "status": "DIFF",
+   "closure": [
+    "0xa64820",
+    "0xa649f0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "a394dd26569218ceba6f73e7173ea93f995a53804d6c1a3eca1f8e1cf4a1769c",
+   "reason": "Emitted ABI variants differ: 0xa64820, 0xa64820"
+  },
+  {
+   "address": "0xc68710",
+   "name": "COgreResourceFile::~COgreResourceFile()",
+   "tu": "OgreResourceFile.cpp",
+   "family": "implicit_member_destruction",
+   "header": "OgreResourceFile.h",
+   "original_size": 8,
+   "status": "DIFF",
+   "closure": [
+    "0xc68710",
+    "0xc68890"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "c383672bd460a9bd33864ebcc8764b42d4d20fc9a36310a8519b79d43d1703ff",
+   "reason": "Emitted ABI variants differ: 0xc68890, 0xc68710, 0xc68710"
+  },
+  {
+   "address": "0xc6f780",
+   "name": "CDynamicPropertyFile::~CDynamicPropertyFile()",
+   "tu": "DynamicPropertyFile.cpp",
+   "family": "implicit_member_destruction",
+   "header": "DynamicPropertyFile.h",
+   "original_size": 762,
+   "status": "DIFF",
+   "closure": [
+    "0xc6f780",
+    "0xc6fa80"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "aa5150383651f0fe4f9753e56fd941af9b442c22c202d1d12c7268927728588b",
+   "reason": "Emitted ABI variants differ: 0xc6f780, 0xc6f780"
+  },
+  {
+   "address": "0xa75f40",
+   "name": "CSpawnClass::~CSpawnClass()",
+   "tu": "SpawnClass.cpp",
+   "family": "implicit_member_destruction",
+   "header": "SpawnClass.h",
+   "original_size": 416,
+   "status": "DIFF",
+   "closure": [
+    "0xa75f40",
+    "0xa760e0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "3dc018a86b03a334b0ada5ee85adbc6f2a19b3c268c873d569ab894307ba0f3c",
+   "reason": "Emitted ABI variants differ: 0xa75f40, 0xa75f40"
+  },
+  {
+   "address": "0xc781d0",
+   "name": "CGameSpeed::~CGameSpeed()",
+   "tu": "GameSpeed.cpp",
+   "family": "implicit_member_destruction",
+   "header": "GameSpeed.h",
+   "original_size": 238,
+   "status": "DIFF",
+   "closure": [
+    "0xc781d0",
+    "0xc782c0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "b3354655405682a36fca9d10c5c52371ce495cb2658cde7092a14c459b2f3b9c",
+   "reason": "Emitted ABI variants differ: 0xc781d0, 0xc781d0"
+  },
+  {
+   "address": "0xd97660",
+   "name": "CCameraController::~CCameraController()",
+   "tu": "CameraController.cpp",
+   "family": "implicit_member_destruction",
+   "header": "CameraController.h",
+   "original_size": 333,
+   "status": "DIFF",
+   "closure": [
+    "0xd97660",
+    "0xd977b0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "00969200c7e0c2c1cace2f0eedd8e682b5839f527316c2fdc7dc788cbb6a1d3f",
+   "reason": "Emitted ABI variants differ: 0xd97660, 0xd97660"
+  },
+  {
+   "address": "0xcf1db0",
+   "name": "CCameraControl::~CCameraControl()",
+   "tu": "CameraControl.cpp",
+   "family": "cleanup_then_member_destruction",
+   "header": "CameraControl.h",
+   "original_size": 169,
+   "status": "DIFF",
+   "closure": [
+    "0xcf1db0",
+    "0xcf1e60"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "f8d4f8f2b500946da92f2c08172a7387670fbe87f14be3e0bd87d1eb846c0827",
+   "reason": "Emitted ABI variants differ: 0xcf1db0, 0xcf1db0"
+  },
+  {
+   "address": "0xdd2aa0",
+   "name": "CAnimationPlayer::~CAnimationPlayer()",
+   "tu": "AnimationPlayer.cpp",
+   "family": "implicit_member_destruction",
+   "header": "AnimationPlayer.h",
+   "original_size": 523,
+   "status": "DIFF",
+   "closure": [
+    "0xdd2aa0",
+    "0xdd2cb0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "eb7617b6450c0e1ac518263aff7c08bf0237391f82c9aaa312c40722497947fe",
+   "reason": "Emitted ABI variants differ: 0xdd2aa0, 0xdd2aa0"
+  },
+  {
+   "address": "0xdfe3e0",
+   "name": "CQuestRequirements::~CQuestRequirements()",
+   "tu": "QuestRequirements.cpp",
+   "family": "implicit_member_destruction",
+   "header": "QuestRequirements.h",
+   "original_size": 457,
+   "status": "DIFF",
+   "closure": [
+    "0xdfe3e0",
+    "0xdfe5b0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "68d53eb5bffe1cf8d82afb482d3c47a07600672debcaf7cbb6a68a5c0cd583f6",
+   "reason": "Emitted ABI variants differ: 0xdfe3e0, 0xdfe3e0"
+  },
+  {
+   "address": "0xe075c0",
+   "name": "CRecipes::~CRecipes()",
+   "tu": "Recipes.cpp",
+   "family": "implicit_member_destruction",
+   "header": "Recipes.h",
+   "original_size": 990,
+   "status": "DIFF",
+   "closure": [
+    "0xe075c0",
+    "0xe079a0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "13a65ea05589adf52a1ab3e1777400adfef07834ccb41a3c96de4e7158757b82",
+   "reason": "Emitted ABI variants differ: 0xe075c0, 0xe075c0"
+  },
+  {
+   "address": "0xe0ef30",
+   "name": "CSets::~CSets()",
+   "tu": "Sets.cpp",
+   "family": "implicit_member_destruction",
+   "header": "Sets.h",
+   "original_size": 970,
+   "status": "DIFF",
+   "closure": [
+    "0xe0ef30",
+    "0xe0f300"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "f34562e1d125ea0af1a29873ccc5aeef89e9224dfd6d2a30508353d562574dcb",
+   "reason": "Emitted ABI variants differ: 0xe0ef30, 0xe0ef30"
+  },
+  {
+   "address": "0xe20cc0",
+   "name": "CSkillController::~CSkillController()",
+   "tu": "SkillController.cpp",
+   "family": "implicit_member_destruction",
+   "header": "SkillController.h",
+   "original_size": 634,
+   "status": "DIFF",
+   "closure": [
+    "0xe20cc0",
+    "0xe20f40"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "67022b6608af0b9af4fd72f71d2acce6ebe9728c57e7b9687bb12f902c2865b0",
+   "reason": "Emitted ABI variants differ: 0xe20cc0, 0xe20cc0"
+  },
+  {
+   "address": "0xe79960",
+   "name": "CCinematics::~CCinematics()",
+   "tu": "Cinematics.cpp",
+   "family": "implicit_member_destruction",
+   "header": "Cinematics.h",
+   "original_size": 772,
+   "status": "DIFF",
+   "closure": [
+    "0xe79960",
+    "0xe79c70"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "166ffbbc0de2ad08fc76a631abdfb678e7fccbd4ec2fee20854868e9d213c469",
+   "reason": "Emitted ABI variants differ: 0xe79960, 0xe79960"
+  },
+  {
+   "address": "0xe7b3d0",
+   "name": "CUnitResourceList::~CUnitResourceList()",
+   "tu": "UnitResourceList.cpp",
+   "family": "cleanup_then_member_destruction",
+   "header": "UnitResourceList.h",
+   "original_size": 409,
+   "status": "DIFF",
+   "closure": [
+    "0xe7b3d0",
+    "0xe7b570"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "948169e236815aa9e7d41337d8b1919992f3ce65c5cfc9b925f3fc694df6528e",
+   "reason": "Emitted ABI variants differ: 0xe7b3d0, 0xe7b3d0"
+  },
+  {
+   "address": "0xec65a0",
+   "name": "CAchievements::~CAchievements()",
+   "tu": "Achievements.cpp",
+   "family": "implicit_member_destruction",
+   "header": "Achievements.h",
+   "original_size": 277,
+   "status": "DIFF",
+   "closure": [
+    "0xec65a0",
+    "0xec66c0"
+   ],
+   "extra_headers": [],
+   "assembly_sha256": "fc7a1410ab8306fb33baf2970ca17f297f2cd5d73d04d0b15c53c02023a5a771",
+   "reason": "Emitted ABI variants differ: 0xec65a0, 0xec65a0"
+  }
+ ],
+ "canonical_static_audit": {
+  "prior_strong": 3292,
+  "current_strong": 3306,
+  "lost": [],
+  "changed": [],
+  "new_strong": [
+   {
+    "address": "0x5ea600",
+    "tu": "LayoutDescriptor.cpp",
+    "demangled": "CLayoutDescriptor::~CLayoutDescriptor()",
+    "previously_accepted": false,
+    "new_source": true,
+    "accepted_by": "MATCH",
+    "object_digest": "bcf7938bfd6b9a47334951b2b654ae069290c60c701acb52f38991e4e23d1cb4",
+    "code": "107da572d73ac4ee"
+   },
+   {
+    "address": "0x5ea610",
+    "tu": "LayoutDescriptor.cpp",
+    "demangled": "CLayoutDescriptor::~CLayoutDescriptor()",
+    "previously_accepted": false,
+    "new_source": true,
+    "accepted_by": "MATCH",
+    "object_digest": "bcf7938bfd6b9a47334951b2b654ae069290c60c701acb52f38991e4e23d1cb4",
+    "code": "0d24b69959c530ad"
+   },
+   {
+    "address": "0x5f3690",
+    "tu": "LayoutDescriptor.cpp",
+    "demangled": "__tcf_5",
+    "previously_accepted": false,
+    "new_source": true,
+    "accepted_by": "MATCH",
+    "object_digest": "bcf7938bfd6b9a47334951b2b654ae069290c60c701acb52f38991e4e23d1cb4",
+    "code": "da50f273b0c45fd9"
+   },
+   {
+    "address": "0x5f3700",
+    "tu": "LayoutDescriptor.cpp",
+    "demangled": "__tcf_4",
+    "previously_accepted": false,
+    "new_source": true,
+    "accepted_by": "MATCH",
+    "object_digest": "bcf7938bfd6b9a47334951b2b654ae069290c60c701acb52f38991e4e23d1cb4",
+    "code": "15c4c5599a029b8d"
+   },
+   {
+    "address": "0x5f3770",
+    "tu": "LayoutDescriptor.cpp",
+    "demangled": "__tcf_3",
+    "previously_accepted": false,
+    "new_source": true,
+    "accepted_by": "MATCH",
+    "object_digest": "bcf7938bfd6b9a47334951b2b654ae069290c60c701acb52f38991e4e23d1cb4",
+    "code": "4aef6adfd954ec9f"
+   },
+   {
+    "address": "0x5f37e0",
+    "tu": "LayoutDescriptor.cpp",
+    "demangled": "__tcf_2",
+    "previously_accepted": false,
+    "new_source": true,
+    "accepted_by": "MATCH",
+    "object_digest": "bcf7938bfd6b9a47334951b2b654ae069290c60c701acb52f38991e4e23d1cb4",
+    "code": "faaa53f1d10ee2c9"
+   },
+   {
+    "address": "0x5f3870",
+    "tu": "LayoutDescriptor.cpp",
+    "demangled": "__tcf_1",
+    "previously_accepted": false,
+    "new_source": true,
+    "accepted_by": "MATCH",
+    "object_digest": "bcf7938bfd6b9a47334951b2b654ae069290c60c701acb52f38991e4e23d1cb4",
+    "code": "1c46331c0b2049e9"
+   },
+   {
+    "address": "0x5f38e0",
+    "tu": "LayoutDescriptor.cpp",
+    "demangled": "__tcf_0",
+    "previously_accepted": false,
+    "new_source": true,
+    "accepted_by": "MATCH",
+    "object_digest": "bcf7938bfd6b9a47334951b2b654ae069290c60c701acb52f38991e4e23d1cb4",
+    "code": "545cc3508b0f4ba8"
+   },
+   {
+    "address": "0xc65190",
+    "tu": "BinaryStyle.cpp",
+    "demangled": "CBinaryStyle::~CBinaryStyle()",
+    "previously_accepted": false,
+    "new_source": false,
+    "accepted_by": "MATCH",
+    "object_digest": "d29d9bcd6bad5e595ef40889a90dd172086fd433a311bf47f4df2ac43e614e39",
+    "code": "b523398fbb515526"
+   },
+   {
+    "address": "0xc65410",
+    "tu": "BinaryStyle.cpp",
+    "demangled": "CBinaryStyle::~CBinaryStyle()",
+    "previously_accepted": false,
+    "new_source": false,
+    "accepted_by": "MATCH",
+    "object_digest": "d29d9bcd6bad5e595ef40889a90dd172086fd433a311bf47f4df2ac43e614e39",
+    "code": "c6c98b89fd70dad1"
+   },
+   {
+    "address": "0xc68710",
+    "tu": "OgreResourceFile.cpp",
+    "demangled": "COgreResourceFile::~COgreResourceFile()",
+    "previously_accepted": false,
+    "new_source": true,
+    "accepted_by": "MATCH",
+    "object_digest": "9da745b20094a0d3925d738cdc86bb353cca37f910522f901a05255386d2fc25",
+    "code": "b523398fbb515526"
+   },
+   {
+    "address": "0xc68890",
+    "tu": "OgreResourceFile.cpp",
+    "demangled": "COgreResourceFile::~COgreResourceFile()",
+    "previously_accepted": false,
+    "new_source": true,
+    "accepted_by": "MATCH",
+    "object_digest": "9da745b20094a0d3925d738cdc86bb353cca37f910522f901a05255386d2fc25",
+    "code": "c6c98b89fd70dad1"
+   },
+   {
+    "address": "0xc6adb0",
+    "tu": "PairStyle.cpp",
+    "demangled": "CPairStyle::~CPairStyle()",
+    "previously_accepted": false,
+    "new_source": false,
+    "accepted_by": "MATCH",
+    "object_digest": "a90b08af4e54de335846b84236b15b4e78a441bf6c34df1a55949c98c2d5519e",
+    "code": "b523398fbb515526"
+   },
+   {
+    "address": "0xc6ae30",
+    "tu": "PairStyle.cpp",
+    "demangled": "CPairStyle::~CPairStyle()",
+    "previously_accepted": false,
+    "new_source": false,
+    "accepted_by": "MATCH",
+    "object_digest": "a90b08af4e54de335846b84236b15b4e78a441bf6c34df1a55949c98c2d5519e",
+    "code": "c6c98b89fd70dad1"
+   }
+  ]
+ },
+ "base_destructor": {
+  "symbol": "iDataFileSaveAndLoad::~iDataFileSaveAndLoad()",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "D1_D2": {
+   "address": "0xc67fb0",
+   "bind": [
+    "weak",
+    "weak"
+   ],
+   "clone": false,
+   "cv": "",
+   "demangled": "iDataFileSaveAndLoad::~iDataFileSaveAndLoad()",
+   "file": null,
+   "kind": "inline_or_template",
+   "mangled": "_ZN20iDataFileSaveAndLoadD1Ev",
+   "method": "~iDataFileSaveAndLoad",
+   "names": [
+    "_ZN20iDataFileSaveAndLoadD1Ev",
+    "_ZN20iDataFileSaveAndLoadD2Ev"
+   ],
+   "params": "",
+   "qualified": "iDataFileSaveAndLoad::~iDataFileSaveAndLoad",
+   "scope": "iDataFileSaveAndLoad",
+   "size": 8,
+   "tu": 213,
+   "tu_confidence": "position-guess",
+   "vslots": [
+    {
+     "class": "iDataFileSaveAndLoad",
+     "group": 0,
+     "slot": 0
+    }
+   ]
+  },
+  "D0": {
+   "address": "0xc68040",
+   "bind": [
+    "weak"
+   ],
+   "clone": false,
+   "cv": "",
+   "demangled": "iDataFileSaveAndLoad::~iDataFileSaveAndLoad()",
+   "file": null,
+   "kind": "inline_or_template",
+   "mangled": "_ZN20iDataFileSaveAndLoadD0Ev",
+   "method": "~iDataFileSaveAndLoad",
+   "names": [
+    "_ZN20iDataFileSaveAndLoadD0Ev"
+   ],
+   "params": "",
+   "qualified": "iDataFileSaveAndLoad::~iDataFileSaveAndLoad",
+   "scope": "iDataFileSaveAndLoad",
+   "size": 12,
+   "tu": 213,
+   "tu_confidence": "position-guess",
+   "vslots": [
+    {
+     "class": "iDataFileSaveAndLoad",
+     "group": 0,
+     "slot": 1
+    }
+   ]
+  },
+  "vtable": {
+   "address": 16726016,
+   "groups": [
+    {
+     "offset_to_top": 0,
+     "slots": [
+      "0xc67fb0",
+      "0xc68040",
+      "__cxa_pure_virtual",
+      "__cxa_pure_virtual"
+     ]
+    }
+   ],
+   "size": 48
+  },
+  "vptr": "0xff3810",
+  "change": "Restored the original inline virtual destructor; strict compiler comparison passes for BinaryStyle, PairStyle and OgreResourceFile derived destructors.",
+  "expected_game_targets": [
+   "0xc65190",
+   "0xc65410",
+   "0xc68710",
+   "0xc68890",
+   "0xc6adb0",
+   "0xc6ae30"
+  ]
+ }
+}

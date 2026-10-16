@@ -38,7 +38,7 @@ public:
     // fields
     CDataGroup* m_pUnitInteractDataGroup;
     unsigned char m_Unknown108[0x18] __attribute__((aligned(8)));
-    void* m_pCategory;
+    std::wstring m_pCategory;
     std::wstring m_sUnitInteractWith;
     bool m_bVisible;
     bool m_bUnknown131;

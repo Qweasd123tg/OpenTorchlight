@@ -40,15 +40,17 @@ CTimelineProperty* CTimeline::GetProperty(long long objectID, int propertyID,
         return NULL;
 
     std::map<long long,
-             std::map<std::pair<int, bool>, CTimelineProperty*> >::iterator
+             std::map<std::pair<int, bool>, CTimelineProperty*>* >::iterator
         objectIterator = m_timelineProperties.find(objectID);
     if (objectIterator == m_timelineProperties.end())
         return NULL;
 
+    std::pair<int, bool> key;
+    key.first = propertyID;
+    key.second = isEvent;
     std::map<std::pair<int, bool>, CTimelineProperty*>::iterator
-        propertyIterator =
-            objectIterator->second.find(std::make_pair(propertyID, isEvent));
-    if (propertyIterator == objectIterator->second.end())
+        propertyIterator = objectIterator->second->find(key);
+    if (propertyIterator == objectIterator->second->end())
         return NULL;
 
     return propertyIterator->second;
@@ -59,13 +61,13 @@ int CTimeline::GetNumberOfPropertiesForObjectInTimeline(long long objectID)
     if (objectID == -1)
         return 0;
 
-    std::map<long long, std::map<std::pair<int, bool>, CTimelineProperty*> >::iterator
+    std::map<long long, std::map<std::pair<int, bool>, CTimelineProperty*>* >::iterator
         property = m_timelineProperties.find(objectID);
 
     if (property == m_timelineProperties.end())
         return 0;
 
-    return property->second.size();
+    return property->second->size();
 }
 
 void CTimeline::SetEnabled(bool enabled)
@@ -144,20 +146,20 @@ long long CTimeline::AddPointToProperty(long long objectID, int propertyID, bool
 long long CTimeline::RemoveProperty(long long objectID, int propertyID, bool isEvent)
 {
     std::map<long long,
-             std::map<std::pair<int, bool>, CTimelineProperty*> >::iterator
+             std::map<std::pair<int, bool>, CTimelineProperty*>* >::iterator
         objectIt = m_timelineProperties.find(objectID);
 
     if (objectIt != m_timelineProperties.end())
     {
         std::map<std::pair<int, bool>, CTimelineProperty*>::iterator propertyIt =
-            objectIt->second.find(std::make_pair(propertyID, isEvent));
+            objectIt->second->find(std::make_pair(propertyID, isEvent));
 
-        if (propertyIt != objectIt->second.end())
+        if (propertyIt != objectIt->second->end())
         {
             if (propertyIt->second != NULL)
                 delete propertyIt->second;
 
-            objectIt->second.erase(propertyIt);
+            objectIt->second->erase(propertyIt);
             return 1;
         }
     }
@@ -172,7 +174,7 @@ long long CTimeline::RemoveObjectByID(long long objectID)
         return 0;
     }
 
-    std::map<long long, std::map<std::pair<int, bool>, CTimelineProperty*> >::iterator
+    std::map<long long, std::map<std::pair<int, bool>, CTimelineProperty*>* >::iterator
         object = m_timelineProperties.find(objectID);
     if (object == m_timelineProperties.end())
     {
@@ -180,8 +182,8 @@ long long CTimeline::RemoveObjectByID(long long objectID)
     }
 
     std::map<std::pair<int, bool>, CTimelineProperty*>::iterator property =
-        object->second.begin();
-    while (property != object->second.end())
+        object->second->begin();
+    while (property != object->second->end())
     {
         if (property->second != NULL)
         {
@@ -191,8 +193,10 @@ long long CTimeline::RemoveObjectByID(long long objectID)
         ++property;
     }
 
-    object->second.clear();
+    std::map<std::pair<int, bool>, CTimelineProperty*>* properties = object->second;
+    properties->clear();
     m_timelineProperties.erase(object);
+    delete properties;
     return 1;
 }
 
@@ -201,7 +205,7 @@ long long CTimeline::GetObjectIDInTimelineByIndex(int index)
     if (index < 0 || static_cast<unsigned int>(index) >= m_timelineProperties.size())
         return -1;
 
-    std::map<long long, std::map<std::pair<int, bool>, CTimelineProperty*> >::iterator it =
+    std::map<long long, std::map<std::pair<int, bool>, CTimelineProperty*>* >::iterator it =
         m_timelineProperties.begin();
     while (it != m_timelineProperties.end()) {
         if (index == 0)
@@ -261,10 +265,12 @@ void CTimeline::AddProperty(CEditorScene* scene, long long objectID, int propert
         (ETIMELINE_INTERP_TYPES)m_iDefaultInterpolationType);
 
     std::pair<int, bool> key(propertyID, isEvent);
-    if (m_timelineProperties.find(objectID) == m_timelineProperties.end() ||
-        m_timelineProperties[objectID].find(key) ==
-            m_timelineProperties[objectID].end()) {
-        m_timelineProperties[objectID][key] = property;
+    if (m_timelineProperties.find(objectID) == m_timelineProperties.end())
+        m_timelineProperties[objectID] =
+            new std::map<std::pair<int, bool>, CTimelineProperty*>;
+    if (m_timelineProperties[objectID]->find(key) ==
+        m_timelineProperties[objectID]->end()) {
+        (*m_timelineProperties[objectID])[key] = property;
     } else {
         delete property;
     }
@@ -572,4 +578,49 @@ void CTimeline::loadTimelineFromDataGroup(CEditorScene* scene, CDataGroup* dataG
     }
 
     Reset_To_Beginning();
+}
+
+#include "TimelineDescriptorNames.h"
+
+int CTimeline::GetNumberOfPointsForAProperty(long long objectID, int propertyID,
+                                           bool isEvent)
+{
+    if (propertyID < 0 || objectID == -1)
+        return 0;
+    CTimelineProperty* property = GetProperty(objectID, propertyID, isEvent);
+    if (property == NULL)
+        return 0;
+    int count = 0;
+    for (TLinkedListNode<CTimelineProperty::CTimelinePoint*>* point = property->m_timelinePoints;
+         point != NULL; point = point->m_pNext)
+        ++count;
+    return count;
+}
+
+std::wstring CTimeline::GetPropertyPointInterpolationType(long long objectID,
+                                                         int propertyID)
+{
+    CTimelineProperty* property = GetProperty(objectID, propertyID, false);
+    if (property != NULL)
+        return gTIMELINE_INTERP_TYPES[property->m_interpolationType];
+    return gTIMELINE_INTERP_TYPES[0];
+}
+
+std::pair<int, bool> CTimeline::GetPropertyIDForObjectInTimelineByIndex(
+    long long objectID, int index)
+{
+    if (index < 0 || objectID == -1)
+        return std::make_pair(-1, false);
+    std::map<long long, std::map<std::pair<int, bool>, CTimelineProperty*>* >::iterator object =
+        m_timelineProperties.find(objectID);
+    if (object == m_timelineProperties.end() ||
+        static_cast<unsigned int>(index) >= object->second->size())
+        return std::make_pair(-1, false);
+    std::map<std::pair<int, bool>, CTimelineProperty*>::iterator property = object->second->begin();
+    for (; property != object->second->end(); ++property) {
+        if (index == 0)
+            return property->first;
+        --index;
+    }
+    return std::make_pair(-1, false);
 }

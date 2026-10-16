@@ -87,6 +87,8 @@ public:
     bool animationQueued(const std::string&) const;
     const std::vector<CKeyframe*>& getAnimationEvents() const { return m_AnimationEvents; }
 private:
+    friend class CMonsterDescriptor;
+    friend class CGenericModelDescriptor;
     std::wstring m_sModelPath; // +0x110, copied by Equipment::reskinByClass
     unsigned char m_ModelData118[8];
     std::string m_name;

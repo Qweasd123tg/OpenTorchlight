@@ -321,3 +321,30 @@ CDataGroup* CDataGroup::AddDataGroup(const std::wstring& name)
     m_DataGroups.add(group);
     return group;
 }
+
+#include "TRepository.h"
+
+const std::wstring& CDataGroup::GetGroupName()
+{
+    if (m_pRepository != NULL)
+    {
+        if (m_iNameID != -1 && !m_pRepository->m_Values.empty())
+        {
+            std::map<unsigned int, std::wstring>::iterator i = m_pRepository->m_Values.find(m_iNameID);
+            if (i != m_pRepository->m_Values.end())
+                return i->second;
+        }
+        return m_pRepository->m_DefaultValue;
+    }
+    return EMPTY_WSTRING;
+}
+
+unsigned int CDataGroup::GetDataValuesMatchingName(const std::wstring& name, std::vector<CDataValue*>* values)
+{
+    if (values == NULL)
+        return 0;
+    for (unsigned int i = 0; i < m_DataValues.size(); ++i)
+        if (m_DataValues[i]->GetDataValueName() == name)
+            values->push_back(m_DataValues[i]);
+    return values->size();
+}
