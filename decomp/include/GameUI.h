@@ -64,6 +64,7 @@ class iMenuListener;
 
 class CGameUI : public CRunicCore
 {
+    friend class CGameClient;
 public:
     CGameUI(CSettings&, CGameClient&, void*, Ogre::RenderWindow*, Ogre::Camera*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CResourceManager*);
     bool processInput(CGameClient*,void*,float,bool);

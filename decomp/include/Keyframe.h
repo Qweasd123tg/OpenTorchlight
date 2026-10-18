@@ -2,9 +2,11 @@
 #define KEYFRAME_H
 #include "RunicCore.h"
 // Partial: original 0x60-byte keyframe, only the animation-event code is named.
+class CDataGroup;
 class CKeyframe : public CRunicCore
 {
 public:
+    CKeyframe(int animation, CDataGroup* group);
     virtual ~CKeyframe();
     unsigned int getAnimationIndex() const { return m_animationIndex; }
     int getEventCode() const { return m_iEventCode; }

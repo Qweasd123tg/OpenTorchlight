@@ -94,7 +94,9 @@ private:
     int m_portalDepth; // +0x7b4
     std::wstring m_portalDungeon; // +0x7b8
     Ogre::Vector3 m_portalPosition; // +0x7c0
-    unsigned char m_Padding7CC[0x10];
+    int m_returnDepth; // +0x7cc
+    std::wstring m_returnDungeon; // +0x7d0
+    unsigned char m_Padding7D8[4];
     union {
         int m_journalStats[43];
         // This overlay begins at +0x7dc; packing preserves the original

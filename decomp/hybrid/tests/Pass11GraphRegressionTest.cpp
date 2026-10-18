@@ -40,6 +40,8 @@ extern "C" void p11AddFloat(CDataGroup*, const std::wstring&, float)
     __asm__("_ZN10CDataGroup12AddDataValueERKSbIwSt11char_traitsIwESaIwEEf");
 TL_FUNCTION(p11CoreCtor, "_ZN10CRunicCoreC2Ev")
 TL_FUNCTION(p11CoreDtor, "_ZN10CRunicCoreD2Ev")
+TL_FUNCTION(p11LoadFile, "_ZN10CDataGroup8LoadFileERKSbIwSt11char_traitsIwESaIwEEP13CTimerStatics")
+TL_FUNCTION(p11Process, "_ZN6CGraph13processPointsEv")
 
 namespace {
 struct FileSystemView {
@@ -103,6 +105,41 @@ void coreDtor(CRunicCore* p) {
     std::memcpy(reinterpret_cast<char*>(p),&nullPointer,sizeof(nullPointer));
 }
 
+detour::Set* loadObserverSet;
+detour::Set* processObserverSet;
+detour::Set* destroyObserverSet;
+void* filenameRep;
+unsigned processingPhase, filenameDestroyPhase;
+bool candidateSide;
+// Original ELF PLT entry for the real wide-string representation destructor.
+const uintptr_t wideRepDestroy = 0x553548;
+void observeDestroy(void*, const std::allocator<wchar_t>&);
+void armDestroy() {
+    destroyObserverSet->redirect(reinterpret_cast<char*>(wideRepDestroy),
+        reinterpret_cast<char*>(wideRepDestroy), &observeDestroy);
+}
+void observeDestroy(void* rep, const std::allocator<wchar_t>& alloc) {
+    if (rep == filenameRep) filenameDestroyPhase = processingPhase;
+    destroyObserverSet->restore();
+    typedef void (*Destroy)(void*, const std::allocator<wchar_t>&);
+    reinterpret_cast<Destroy>(wideRepDestroy)(rep, alloc);
+    armDestroy();
+}
+void observeLoad(CDataGroup* data, const std::wstring& file, CTimerStatics* timers) {
+    // GCC 4.4's COW string stores its 24-byte _Rep immediately before data.
+    if (!filenameRep) filenameRep = const_cast<char*>(reinterpret_cast<const char*>(file.data())) - 24;
+    loadObserverSet->restore();
+    typedef void (*Load)(CDataGroup*, const std::wstring&, CTimerStatics*);
+    reinterpret_cast<Load>(p11LoadFile_original)(data, file, timers);
+    TL_REDIRECT(*loadObserverSet, p11LoadFile, &observeLoad);
+}
+void observeProcess(CGraph* graph) {
+    processObserverSet->restore();
+    typedef void (*Process)(CGraph*);
+    (candidateSide ? &p11NewProcess : reinterpret_cast<Process>(p11Process_original))(graph);
+    processingPhase = 1;
+    TL_REDIRECT(*processObserverSet, p11Process, &observeProcess);
+}
 void captureCurve(ParticleUniverse::DynamicAttributeCurved* p) {
     const unsigned present=p!=NULL; number(present);
     if(!p) return;
@@ -194,10 +231,23 @@ void captureDead(const unsigned char* bytes) {
 
 void side(void* context,autotest::Capture& out,bool ours) {
     const Case c=*static_cast<Case*>(context);
-    active=&out; recordingDestruction=false;
+    active=&out; recordingDestruction=false; candidateSide=ours;
     baseConstructed=baseDestroyed=curveDestroyed=0;
     unsigned long long storage[(sizeof(CGraph)+7)/8];
     std::memset(storage,0xa5,sizeof(storage)); target=reinterpret_cast<CGraph*>(storage);
+    filenameRep=NULL; processingPhase=0; filenameDestroyPhase=2;
+    detour::Set loadSet, processSet, destroySet;
+    const bool observeFilename=c.mode==5 || c.mode==6 || c.mode==7;
+    if (observeFilename) {
+        loadObserverSet=&loadSet; processObserverSet=&processSet; destroyObserverSet=&destroySet;
+        TL_REDIRECT(loadSet,p11LoadFile,&observeLoad);
+        TL_REDIRECT(processSet,p11Process,&observeProcess);
+        armDestroy();
+        if(loadSet.failed() || processSet.failed() || destroySet.failed()) {
+            out.issue=autotest::Capture::InvalidReport;
+            return;
+        }
+    }
     detour::Set detours;
     TL_REDIRECT(detours,p11CoreCtor,&coreCtor);
     TL_REDIRECT(detours,p11CoreDtor,&coreDtor);
@@ -301,7 +351,9 @@ void side(void* context,autotest::Capture& out,bool ours) {
         number(baseConstructed); number(baseDestroyed);
         g_pFileSystem=saved;
     }
-    out.addHeapInUse(); target=NULL;
+    out.addHeapInUse();
+    if(observeFilename) number(filenameDestroyPhase);
+    target=NULL;
 }
 void original(void* p,autotest::Capture& out) { side(p,out,false); }
 void recovered(void* p,autotest::Capture& out) { side(p,out,true); }

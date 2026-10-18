@@ -16,6 +16,7 @@ class CTimerStatics : public CRunicCore
 public:
     virtual ~CTimerStatics();
     void popTime(const wchar_t* name);
+    std::wstring getStatics(bool);
 
     std::map<std::wstring, std::pair<unsigned int, unsigned int> > m_statistics; // 0x10
     Ogre::Timer m_timer;                                                   // 0x40

@@ -2,6 +2,7 @@
 #define LINUXUTILS_H
 
 #include <string>
+#include <cstdio>
 
 // Partial: declarations from LinuxUtils.cpp used by recovered TUs.
 struct POINT
@@ -11,6 +12,7 @@ struct POINT
 };
 
 unsigned int GetTickCount();
+int _wfopen_s(FILE**, const wchar_t*, const wchar_t*);
 int GetCursorPos(POINT* point);
 short GetAsyncKeyState(unsigned int key);
 // Original 0xf632a0 returns 32 bits consumed by CEGUI as an unsigned scan code.

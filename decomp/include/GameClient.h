@@ -8,12 +8,18 @@
 #include <string>
 
 #include "RunicCore.h"
+#include "MouseManager.h"
 #include "SafePointer.h"
 class CItem;
 class CQuestManager;
 class CMasterResourceManager;
 class CSoundManager;
-namespace Ogre { class Light; class SceneNode; class Root; }
+namespace Ogre { class Light; class SceneNode; class Root; class RenderWindow; class SceneManager; }
+class CCameraControl;
+class CSettings;
+class CResourceManager;
+class CLevel;
+class CDungeon;
 #include "KeyManager.h"
 #include "QuestEventTypes.h"
 #include "GameEnums.h"
@@ -39,6 +45,15 @@ friend class CDifficultyMenu;
     friend class CCameraController;
     friend class CRandomGroup;
 public:
+    void setSpeedMult(float multiplier);
+    void findCameraTargetLocation(Ogre::Vector3& result, float plane);
+    void autoPickupGold();
+    bool getIsPaused();
+    void killPets();
+    void createGameUI(Ogre::RenderWindow*, void* window);
+    bool processInput(void* window, float elapsed, bool enabled);
+    bool storedUnitExists(long long guid);
+    void setCurrentDungeon(std::wstring name);
     void resetGameSeed(int);
     void destroyGameUI();
     void updateScreenInfo(void* window, int width, int height);
@@ -84,13 +99,17 @@ public:
     CGameUI* getGameUI() { return m_pGameUI; }
 
 private:
-    unsigned char m_gap20[0x28];
+    CCameraControl* m_cameraControl; // +0x20
+    Ogre::SceneManager* m_sceneManager28;
+    Ogre::SceneManager* m_sceneManager30;
+    Ogre::SceneManager* m_sceneManager38;
+    CResourceManager* m_resources; // +0x40
     CSoundManager* m_soundManager;
-    unsigned char m_gap50[0x8];
+    CSettings* m_settings; // +0x50
     CPlayer* m_pPlayer;
     unsigned char m_gap60[0x8];
     CQuestManager* m_questManager;
-    unsigned char m_gap70[0x8];
+    CLevel* m_level; // +0x70
     CGameUI* m_pGameUI;
     unsigned char m_gap80[0x8];
     void* m_window;
@@ -114,17 +133,28 @@ private:
     Ogre::Light* m_playerLight;
     unsigned char m_gap238[0x2d0-0x238];
     CKeyManager m_keyManager;
-    unsigned char m_gapAfterKeys[0x1040-0x2d0-sizeof(CKeyManager)];
+    CMouseManager m_mouseManager; // +0xfe8
+    unsigned char m_gap1038[8];
     CMasterResourceManager* m_masterResources;
     unsigned char m_gap1048[0x10];
     Ogre::Root* m_root;
-    unsigned char m_gap1060[0x5b];
-    bool m_interactionState;
+    unsigned char m_gap1060[0x40];
+    int m_warpDelta; // +0x10a0
+    int m_warpDepth;
+    std::wstring m_warpDungeon;
+    std::wstring m_warpName;
+    bool m_warpPending; // +0x10b8
+    bool m_warpWaypoint;
+    bool m_warpFlag;
+    bool m_interactionState; // +0x10bb, pause/control predicate
     bool m_bStateControl10BC;
-    unsigned char m_gap10BD[0x38d0-0x10bd];
+    unsigned char m_gap10BD[0x38c0-0x10bd];
+    float m_speedMult; // +0x38c0
+    unsigned char m_gap38c4[0x38d0-0x38c4];
     EGameState m_gameState;
     bool m_pendingPassClear;
-    unsigned char m_gap38D5[0xb];
+    unsigned char m_gap38D5[3];
+    CDungeon* m_currentDungeon; // +0x38d8
     Ogre::Vector3 m_cameraPosition;
     int m_startDifficulty; // +0x38ec
     unsigned char m_gap38F0[0x1c];

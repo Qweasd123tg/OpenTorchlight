@@ -25,7 +25,7 @@ public:
     bool initSkillController();
     void unlearnSkill();
     void learnSkill();
-    float update(float deltaTime);
+    void update(float deltaTime);
 
     CResourceManager* m_pResourceManager;             // 0x100
     CDataGroup* m_pUnitInteractDataGroup;              // 0x108

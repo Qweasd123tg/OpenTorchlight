@@ -7,17 +7,21 @@
 #include <vector>
 #include <deque>
 #include "TArrayList.h"
+#include <OgreTexture.h>
+#include "ActiveAnimation.h"
+#include "RenderableStates.h"
 class CAnimationSet;
 class CActiveAnimation;
-namespace Ogre { class Material; class ColourValue; }
-struct CRenderableStates { char prefix[3]; bool highlighted; bool renderBehind; char gap5[11]; Ogre::Material* material; char tail[40]; };
+namespace Ogre { class Material; class ColourValue; class Frustum; class AnimationState; }
 #include <string>
+class CDataGroup;
 class CKeyframe;
 class CAnimationSet;
 namespace Ogre {class SkeletonInstance;}
 // Partial: size and all vtable groups preserved; expose only Item collaborators.
 class CGenericModel : public CPositionableObject, public iRandomWeight, public iHighlight
 {
+    friend class CLevel;
 friend class CEquipment;
 friend class CCharacter;
 friend class CMonster;
@@ -28,6 +32,28 @@ friend class CInventoryMenu;
 friend class CSkillMenu;
 friend class CJournalMenu;
 public:
+    std::string getTexureName();
+    void releaseUniqueMaterials();
+    void addValueIndex(int animation, CKeyframe* key, int value);
+    void clearProjectorPass();
+    void setRenderToLightMap(bool enabled);
+    void unloadModel();
+    void loadPrefabType(OGRE_UTILITIES::EPRIMITIVES primitive);
+    void AddKey(unsigned int animation, CDataGroup* group);
+    long getAnimationLength(const std::string& name) const;
+    void setTextureOverride(Ogre::TexturePtr texture, std::string include, std::string exclude);
+    void setTextureOverrideSingle(std::string name, Ogre::TexturePtr texture);
+    void setProjectorPass(Ogre::Frustum*, Ogre::Frustum*, const std::string&, const std::string&);
+    bool animationExistsSubstring(const std::string&) const;
+    bool animationQueuedSubstring(const std::string&) const;
+    void clearQueuedAnimations();
+    bool loopingAnimationPlaying();
+    void setAnimationSpeed(const std::string&, float speed);
+    int currentAnimation() const;
+    void setHighlightTexture(const std::wstring&);
+    void setRenderBehindTexture(const std::wstring&);
+    void loadAnimations(Ogre::Entity*, std::wstring path, std::wstring group, bool flag);
+    void reInitialize(Ogre::Entity*, bool flag);
     int findRandomAnimation(const std::string& name);
     int findKey(int animation, CKeyframe* key);
     TArrayList<int>* getValueIndexes(int animation, CKeyframe* key);
@@ -94,19 +120,30 @@ private:
     friend class CMonsterDescriptor;
     friend class CGenericModelDescriptor;
     std::wstring m_sModelPath; // +0x110, copied by Equipment::reskinByClass
-    unsigned char m_ModelData118[8];
+    std::wstring m_modelGroup; // +0x118
     std::string m_name;
-    unsigned char m_ModelData128[8];
+    std::string m_string128; // +0x128
     Ogre::SkeletonInstance* m_pSkeleton;
-    unsigned char m_ModelData138[0x160-0x138];
+    unsigned char m_gap138[8];
+    Ogre::SceneManager* m_modelSceneManager; // +0x140
+    TArrayList<Ogre::AnimationState*> m_animationStates; // +0x148
     std::deque<CActiveAnimation*> m_activeAnimations;
     std::vector<CKeyframe*> m_AnimationEvents;
     std::vector<std::vector<TArrayList<int> > > m_valueIndexes;
     CAnimationSet* m_animationSet;
     bool m_animationPaused;
-    unsigned char m_gap1e9[0x208-0x1e9];
+    bool m_flag1e9;
+    unsigned char m_gap1ea[0x204-0x1ea];
+    OGRE_UTILITIES::EQUERYMASK m_queryMask; // +0x204
     std::vector<CRenderableStates> m_renderableStates;
-    unsigned char m_gap220[0x23a-0x220];
+    unsigned int m_randomWeight; // +0x220
+    bool m_uniqueMaterials; // +0x224
+    unsigned char m_gap225[3];
+    float m_opacity; // +0x228
+    unsigned char m_gap22c[4];
+    Ogre::Entity* m_entity230;
+    bool m_flag238;
+    bool m_renderToLightMap; // +0x239
     bool m_renderFlag23A;
     unsigned char m_gap23B;
     bool m_animationLoop;

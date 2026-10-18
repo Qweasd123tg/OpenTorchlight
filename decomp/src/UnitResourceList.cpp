@@ -192,3 +192,39 @@ void CUnitResourceList::parseMasterDirectory(ERESOURCE_GROUPS resourceGroup,
     for (unsigned int i = 0; i < files.size(); ++i)
         loadFile(resourceGroup, resourceGroupName, files[i], false, parentGroup);
 }
+
+static std::wstring gRESOURCE_GROUP_NAMES[4] = {
+    L"ITEMS", L"MONSTERS", L"PLAYERS", L"PROPS"
+};
+
+void CUnitResourceList::loadFile(ERESOURCE_GROUPS resourceGroup,
+                                std::wstring resourceGroupName,
+                                std::wstring fileName, bool overwrite,
+                                CDataGroup* parentGroup)
+{
+    std::wstring path(fileName);
+    std::wstring fileItem = FILESYSTEM::GetFileName(path);
+    CDataGroup* data = parseChildFile(path, true);
+    if (!data)
+        return;
+    if (data->GetDataValue(L"DONTCREATE", false)) {
+        delete data;
+        return;
+    }
+    data->AddDataValue(L"FILEITEM", STRINGS::StringUpper(fileItem), false);
+    data->AddDataValue(L"DATFILE", path, false);
+    data->AddDataValue(L"RESOURCEGROUP", static_cast<unsigned int>(resourceGroup));
+    data->AddDataValue(L"BASEFILE", EMPTY_WSTRING, false);
+    std::wstring name = STRINGS::StringUpper(data->GetDataValue(L"NAME", L""));
+    if (name.empty()) {
+        delete data;
+        return;
+    }
+    addNewItem(resourceGroupName, data, overwrite);
+    m_loadedDataGroups.add(data);
+    if (parentGroup) {
+        CDataGroup* copy = parentGroup->AddDataGroup(gRESOURCE_GROUP_NAMES[resourceGroup]);
+        copy->CopyDataGroup(data, false);
+        copy->SetGroupName(gRESOURCE_GROUP_NAMES[resourceGroup]);
+    }
+}

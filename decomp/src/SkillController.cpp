@@ -121,3 +121,113 @@ bool CSkillController::configureUnit()
     }
     return m_pRunicCore != NULL;
 }
+
+
+#include "Skill.h"
+#include "Utilities.h"
+#include "StringUtilities.h"
+
+void CSkillController::update(float)
+{
+    if (m_sSkillName.empty())
+        return;
+    if (m_bSkillStopRequested)
+    {
+        if (!m_pRunicCore)
+            return;
+        if (configureUnit() && static_cast<CBaseUnit*>(m_pRunicCore)->getSkillManager())
+        {
+            CCharacter* unit = static_cast<CCharacter*>(m_pRunicCore);
+            if (unit->m_eBaseUnitType != static_cast<EBASEUNIT_TYPE>(1) && unit->m_activeSkill &&
+                unit->m_activeSkill->getName() == m_sSkillName)
+            {
+                if (m_bForceStop)
+                    unit->getSkillManager()->stopSkillsByName(m_sSkillName, true);
+                unit->attemptStopOfActiveSkill();
+            }
+            else
+                unit->getSkillManager()->stopSkillsByName(m_sSkillName, m_bForceStop);
+            m_bSkillStopRequested = unit->getSkillManager()->getSkillIsUpdatingByName(m_sSkillName);
+            if (!m_bSkillStopRequested)
+            {
+                BroadcastEvent(104);
+                if (m_bUnlearnSkillOnStop)
+                    unlearnSkill();
+            }
+        }
+        else
+        {
+            m_bSkillStopRequested = false;
+            BroadcastEvent(104);
+        }
+        return;
+    }
+    if (!m_bSkillStartRequested)
+        return;
+    if (configureUnit())
+    {
+        CCharacter* unit = static_cast<CCharacter*>(m_pRunicCore);
+        if (!unit)
+            return;
+        CSkillManager* skills = unit->getSkillManager();
+        if (skills && skills->getSkillIsUpdatingByName(m_sSkillName))
+        {
+            m_bSkillStartRequested = false;
+            BroadcastEvent(103);
+            return;
+        }
+        if (m_bLearnSkillOnStart)
+            learnSkill();
+        unit = static_cast<CCharacter*>(m_pRunicCore);
+        skills = unit->getSkillManager();
+        if (skills)
+        {
+            CCharacter* target = getSkillTarget();
+            if (m_bUseUnitTarget && !target)
+                return;
+            if (unit->m_eBaseUnitType == static_cast<EBASEUNIT_TYPE>(1))
+            {
+                int level = m_iSkillLevel ? m_iSkillLevel : 1;
+                skills->getSkill(m_sSkillName, level);
+                level = m_iSkillLevel ? m_iSkillLevel : 1;
+                Ogre::Vector3 targetPosition = target ? target->getPosition(false) : getPosition(false);
+                Ogre::Quaternion orientation = unit->getOrientationQuaternion();
+                Ogre::Vector3 position = unit->getPosition(false);
+                unit->getSkillManager()->executeSkill(m_sSkillName, unit, static_cast<ESKILL_ACTIVATION_TYPE>(0),
+                                                      position, orientation, targetPosition, target, level);
+            }
+            else
+            {
+                if (m_bUsePlayerAsTarget)
+                    unit->setTarget(target);
+                CSkill* skill = skills->getSkill(STRINGS::StringUpper(m_sSkillName));
+                if (skill)
+                {
+                    long long index = skills->m_OtherSkills.find(skill);
+                    if (m_iSkillLevel > 0)
+                        unit->getSkillManager()->setSkillLevel(skill, m_iSkillLevel);
+                    unit->castSkill(index);
+                }
+            }
+        }
+    }
+    m_bSkillStartRequested = false;
+}
+
+CSkillController::~CSkillController()
+{
+    m_bSkillStartRequested = false;
+    if (m_pRunicCore)
+    {
+        m_pRunicCore->removeSafePointer(reinterpret_cast<TSafePointer<void*>*>(&m_pRunicCore), m_iRunicCoreSafePointerId);
+        m_pRunicCore = NULL;
+    }
+    if (m_pSecondaryRunicCore)
+    {
+        m_pSecondaryRunicCore->removeSafePointer(reinterpret_cast<TSafePointer<void*>*>(&m_pSecondaryRunicCore), m_iSecondaryRunicCoreSafePointerId);
+        m_pSecondaryRunicCore = NULL;
+    }
+    m_pUnitInteractDataGroup = NULL;
+    m_iSecondaryRunicCoreSafePointerId = -1;
+    m_iRunicCoreSafePointerId = -1;
+}

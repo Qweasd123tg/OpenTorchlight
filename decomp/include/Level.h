@@ -3,9 +3,14 @@
 
 #include <string>
 #include <map>
+#include <vector>
+#include <stdio.h>
+#include <OgreTimer.h>
+#include "GameEnums.h"
+#include "RenderableStates.h"
 class CAutomap;
 class CPlayer;
-namespace Ogre { class Billboard; }
+namespace Ogre { class Billboard; class Camera; class Frustum; class SceneManager; class StaticGeometry; }
 #include <OgreVector3.h>
 #include <OgreAxisAlignedBox.h>
 #include <OgreMatrix4.h>
@@ -32,11 +37,97 @@ class CPropertyNode;
 class CRoomPiece;
 class iLevelUpdatedCharacter;
 
+class CSettings;
+class CResourceManager;
+class CSoundManager;
+class CGenericModel;
+class CRandomizer;
+class CLayout;
+class CChunk;
+class CFormationNode;
+class CTimerStatics;
+class CCollisionList;
+template<class T> class CQuadtree;
+
+// Named in native signatures; enumerator names remain unknown.
+enum ELevelEntryType { ELevelEntryType_GEN_LAST = 0x7fffffff };
+
 // Partial: members used by recovered TUs; unnamed regions are padding until
 // level.cpp is recovered. Size 0x2f0 follows CGameClient::loadMenuLevel allocation.
 class CLevel : public CRunicCore
 {
+    friend class CGameClient;
 public:
+    void setNonLightStaticGeometryVisible(bool); // 0x935e60
+    void setLightStaticGeometryVisible(bool); // 0x935ee0
+    bool removeUpdateObject(iLevelUpdate*); // 0x9360e0
+    float topLeftX(); // 0x9361e0
+    float topLeftY(); // 0x936200
+    CItem* getItemByGuid(long long, long long); // 0x9362b0
+    void updateLevelUpdateObjects(Ogre::Camera*, Ogre::Vector3 const&, float); // 0x9363b0
+    void makeQuestUnitsUncool(long long, bool); // 0x9365c0
+    void populateNewMerchantsInventory(); // 0x936630
+    std::wstring getLevelChampionSpawnClass(); // 0x9366f0
+    std::wstring getLevelMonsterSpawnClass(); // 0x936740
+    void flushCharacterUpdateListeners(); // 0x936a80
+    void updateDroppingItems(float); // 0x936c80
+    void reactToAreaDamage(CCharacter*, CCharacter*); // 0x936cf0
+    void notifyOfDeletion(CCharacter*); // 0x936f20
+    void decrementMapPassability(Ogre::Vector3 const&); // 0x937860
+    void incrementMapPassability(Ogre::Vector3 const&); // 0x937950
+    void incrementObjectPassability(Ogre::AxisAlignedBox const&, float); // 0x937a40
+    void decrementObjectPassability(Ogre::Vector3 const&); // 0x9381b0
+    void incrementObjectPassability(Ogre::Vector3 const&); // 0x9382a0
+    bool mapPassable(Ogre::Vector3 const&); // 0x938390
+    bool positionPassable(Ogre::Vector3 const&); // 0x938480
+    CCharacter* getCharacterByOriginalGuid(long long, long long, int); // 0x944ed0
+    CItem* getItemByOriginalGuid(long long, long long, int, long long); // 0x944fe0
+    void updateNearUnitList(Ogre::Vector3 const&); // 0x9451d0
+    void decrementObjectPassability(Ogre::AxisAlignedBox const&, float); // 0x945ff0
+    bool objectRayCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, CBaseUnit**, bool); // 0x946300
+    bool objectSphereCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, float, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, CBaseUnit**, bool); // 0x9465b0
+    void updateVisibleParticles(Ogre::Camera*, Ogre::Vector3 const&, bool); // 0x9474f0
+    void getActiveUnitsAtPosition(Ogre::Vector3 const&, float, TArrayList<CCharacter*>&, TArrayList<CItem*>&); // 0x948430
+    bool preSortedSphereCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, float, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, Ogre::Vector3&, bool); // 0x948720
+    bool preSortedSphereCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, float, Ogre::Vector3&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, Ogre::Vector3&, CBaseUnit**, bool); // 0x948b40
+    bool preSortedRayCollision(Ogre::Vector3 const&, Ogre::Vector3 const&, Ogre::Vector3&, Ogre::Vector3&, unsigned int&, Ogre::Vector3&, bool); // 0x948f60
+    void deleteCharacter(CCharacter*); // 0x949a10
+    void updateCharacters(Ogre::Camera*, Ogre::Vector3 const&, float, float); // 0x949c90
+    void updateItems(Ogre::Camera*, Ogre::Vector3 const&, float); // 0x94a1a0
+    void pushTime(); // 0x94a570
+    CLevel(std::wstring, CSettings*, CGameClient*, CResourceManager*, Ogre::SceneManager*, CSoundManager*, int, int); // 0x94ab00
+    CCharacter* findCharacterAtScreenCoordinates(Ogre::Matrix4 const&, Ogre::Matrix4 const&, float, float, CCharacter*); // 0x94b440
+    CItem* findItemAtScreenCoordinates(Ogre::Matrix4 const&, Ogre::Matrix4 const&, float, float); // 0x94c730
+    void sortForCollisionByPoints(Ogre::Vector3 const&, Ogre::Vector3 const&, float); // 0x94da90
+    void sortForCollision(Ogre::Vector3 const&, Ogre::Vector3 const&); // 0x94dec0
+    CItem* findItemWithinView(Ogre::Matrix4 const&, float, float); // 0x94ea30
+    void findItemsOnscreen(Ogre::Camera*); // 0x94f730
+    void findParticles(); // 0x950660
+    void updateMaterialAmbient(); // 0x950a40
+    void deleteTemporaryDungeonPortals(std::wstring); // 0x952af0
+    int placePlayerAtWarpToDungeonFloor(std::wstring, int, bool, std::wstring); // 0x953000
+    void calculatePassability(std::wstring const&, Ogre::Vector3 const&, Ogre::Vector3 const&); // 0x954580
+    void bakeCollision(bool); // 0x955210
+    void bake(bool); // 0x957f00
+    void clearOutRoomPieces(); // 0x95a0f0
+    void activate(); // 0x95a5d0
+    std::wstring getName(); // 0x95a790
+    Ogre::Vector3 findTemporaryDungeonPortal(std::wstring); // 0x95abb0
+    void clearProjectorPass(CGenericModel*, CGenericModel*); // 0x95b100
+    void setProjectorPass(Ogre::Frustum*, Ogre::Frustum*, CGenericModel*, CGenericModel*, std::string const&, std::string const&); // 0x95b420
+    void update(Ogre::Camera*, Ogre::Vector3 const&, float, float, CPlayer*); // 0x95c7f0
+    void rollMoney(CCharacter*, CCharacter*, Ogre::Vector3 const&, bool); // 0x95ce70
+    void rollTreasure(CCharacter*, CCharacter*, Ogre::Vector3 const&); // 0x95d0b0
+    void populateSectionOfLevel(Ogre::Vector3 const&, Ogre::Vector3 const&, std::wstring const&, bool, bool); // 0x95d220
+    unsigned int populateFormations(CRandomizer&, TArrayList<Ogre::AxisAlignedBox>&); // 0x95dc40
+    void setInited(bool); // 0x95e8b0
+    void mergeLayoutsForRoomPiece(std::wstring const&, CLayout*); // 0x95e980
+    void popTime(wchar_t const*); // 0x95ee30
+    void loadRoomLayout(CLevelTemplateData*, bool, ELevelEntryType, std::vector<std::wstring>*, std::wstring); // 0x95f150
+    void loadRoomLayout(std::wstring, bool, ELevelEntryType, std::vector<std::wstring>*, std::wstring); // 0x9622f0
+    void populate(bool); // 0x962630
+    void saveRoomLayoutForQuickLoad(std::wstring const&); // 0x965f00
+
     CBaseUnit* addUnit(CBaseUnit* unit, const Ogre::Vector3& position);
     CCharacter* addCharacter(CCharacter* character, const Ogre::Vector3& position, bool activate);
     void addUpdateObject(iLevelUpdate* object);
@@ -78,7 +169,7 @@ public:
 
     int getDungeonDepth() const { return m_dungeonDepth; }
     void notifyOfDeletion(CItem* item);
-    void addItem(CItem*,const Ogre::Vector3&,bool);
+    CItem* addItem(CItem*,const Ogre::Vector3&,bool);
     void deleteItem(CItem*);
     // Original removal symbols; used by typed descriptor notifications.
     bool removeItem(CItem* item, bool deactivate);
@@ -134,43 +225,74 @@ private:
     friend class CPropertyNode;
     friend class CLayoutDescriptor;
     friend class CMonsterDescriptor;
-    TArrayList<CEditorScene*> m_RoomScenes;
+    TArrayList<CEditorScene*> m_RoomScenes; // +0x10: native CLayout*, compatible first-base API retained
     TArrayList<Ogre::AxisAlignedBox> m_roomBounds;
     short** m_mapPassability;
     short** m_objectPassability;
     unsigned int m_passWidth;
     unsigned int m_passHeight;
-    char m_LevelData58[0x88-0x58];
+    char m_LevelData58[0x60-0x58];
+    CQuadtree<unsigned int>* m_collisionTree; // +0x60; class API deferred
+    CCollisionList* m_collisionList; // +0x68
+    std::vector<unsigned int> m_collisionIndices; // +0x70
     TLinkedList<CCharacter*>* m_activeCharacters;
     TLinkedList<CItem*>* m_activeItems;
     TLinkedList<CCharacter*>* m_pCharacters;
     TLinkedList<CItem*>* m_items;
-    char m_LevelDataA8[0xf0-0xa8];
+    TArrayList<iLevelUpdate*> m_updateObjects; // +0xa8
+    TLinkedList<CItem*>* m_pendingItems; // +0xc0
+    TLinkedList<CCharacter*>* m_pendingCharacters; // +0xc8
+    TLinkedList<iLevelUpdatedCharacter*>* m_characterUpdateListeners; // +0xd0
+    std::vector<CPropertyNode*> m_noSpawnRegions; // +0xd8
     TArrayList<CPropertyNode*> m_propertyNodesF0; // +0xf0, createUnit mode 0
     TArrayList<CPropertyNode*> m_propertyNodes108; // +0x108, createUnit mode 1
-    char m_LevelData120[0x140-0x120];
+    std::vector<Ogre::AxisAlignedBox> m_collisionBounds; // +0x120
+    CResourceManager* m_resourceManager; // +0x138
     Ogre::Vector3 m_playerStart; // +0x140
     Ogre::Vector3 m_returnPortalPosition; // +0x14c
     Ogre::Vector3 m_waypointPosition; // +0x158
     Ogre::Vector3 m_startDirection; // +0x164
-    char m_LevelData170[0x1a0-0x170];
+    Ogre::Vector3 m_secondaryStart; // +0x170
+    Ogre::Vector3 m_secondaryStartDirection; // +0x17c
+    char m_LevelData188[0x1a0-0x188];
     bool m_automapRoomPieces;
     bool m_flag1A1;
-    char m_LevelData1A2[2];
+    bool m_npcIconsDirty; // +0x1a2
+    char m_LevelData1A3[1];
     int m_iLevelDepth;
     int m_dungeonDepth; // +0x1a8
-    char m_LevelData1AC[0x1d8 - 0x1ac];
+    char m_LevelData1AC[4];
+    Ogre::SceneManager* m_sceneManager; // +0x1b0
+    Ogre::StaticGeometry* m_nonLightStaticGeometry; // +0x1b8
+    Ogre::StaticGeometry* m_nonLightStaticGeometry2; // +0x1c0
+    Ogre::StaticGeometry* m_nonLightStaticGeometry3; // +0x1c8
+    Ogre::StaticGeometry* m_lightStaticGeometry; // +0x1d0
     CLevelTemplateData* m_pLevelTemplateData;
     CAutomap* m_automap;
-    char m_LevelData1E8[0x220-0x1e8];
+    std::vector<CChunk*> m_chunks; // +0x1e8
+    TArrayList<CFormationNode*> m_formations; // +0x200
+    char m_LevelData218[8]; // +0x218: loader state, type deferred
     CGameClient* m_pGameClient;
-    char m_LevelData228[0x258 - 0x228];
+    unsigned int m_levelSeed; // +0x228
+    char m_LevelData22C[4];
+    float m_topLeftX; // +0x230
+    float m_topLeftY; // +0x234
+    char m_LevelData238[8];
+    Ogre::Timer m_timer; // +0x240, size 0x18 in pinned Linux SDK
     bool m_flag258;
-    char m_LevelData259[0x280 - 0x259];
+    char m_LevelData259[7];
+    TArrayList<CLayout*> m_auxiliaryLayouts; // +0x260
+    float m_updateRange; // +0x278
+    char m_LevelData27C[4];
     std::wstring m_sDungeonName;
-    char m_LevelData288[0x2a8-0x288];
+    CTimerStatics* m_timerStatics; // +0x288
+    std::vector<CRenderableStates> m_renderableStates; // +0x290, shared renderable-state type
     std::map<long long,TArrayList<iUnitObserver*>*> m_unitObservers;
-    char m_LevelData2D8[0x2f0-0x2d8];
+    TArrayList<TLinkedListNode<iLevelUpdatedCharacter*>*> m_pendingCharacterUpdateRemovals; // +0x2d8
 };
+
+// Free functions in the original level.cpp TU.
+void parseDataGroupForRoomPiece(CDataGroup*, FILE*);
+const std::wstring& getStringFromDataGroup(CDataGroup*, std::wstring&, const std::wstring&);
 
 #endif

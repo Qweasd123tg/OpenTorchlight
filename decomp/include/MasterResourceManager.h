@@ -34,6 +34,7 @@ class CSoundBankDataInformation;
 // hierarchy, settings, audio and paperdoll-scene pointers are placed (the original object is 400 bytes).
 class CMasterResourceManager : public CRunicCore
 {
+    friend class CGameClient;
 public:
     void loadParticles();
     void reloadResources();
@@ -100,7 +101,8 @@ private:
 public:
     Ogre::SceneManager* m_pSceneManager;
 private:
-    unsigned char m_UnrecoveredD8[0xe8-0xd8];
+    CResourceManager* m_clientResources; // +0xd8
+    unsigned char m_UnrecoveredE0[8];
 public:
     CRoomPieceDataInformation* m_pRoomPieceInformation; // +0xe8
     union {

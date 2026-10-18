@@ -610,3 +610,67 @@ void CQuest::getAllNPCUnitDataInvolvedInQuest(TArrayList<CDataGroup*>& groups)
             groups.add(m_UnknownA8[i]->m_pNPCDataGroup);
     }
 }
+
+void CQuest::save(_IO_FILE* file)
+{
+    long long unitGuid = -1;
+    if (m_iUnknown1E8)
+        unitGuid = m_pResourceManager->getUnitGuidByDataGroup(
+            reinterpret_cast<CDataGroup*>(m_iUnknown1E8), L"UNIT_GUID");
+    fwrite(&unitGuid, 8, 1, file);
+    fwrite(&m_iUnknown1C, 4, 1, file);
+    fwrite(&m_iUnknown20, 4, 1, file);
+    fwrite(&m_iUnknown20C, 4, 1, file);
+
+    unsigned int count = m_acceptDialogs.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < m_acceptDialogs.size(); ++i)
+        m_acceptDialogs[i]->save(file);
+
+    count = m_Unknown78.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < m_Unknown78.size(); ++i)
+        m_Unknown78[i]->save(file);
+
+    count = m_Unknown90.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < m_Unknown90.size(); ++i)
+        m_Unknown90[i]->save(file);
+
+    count = m_UnknownA8.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < m_UnknownA8.size(); ++i)
+        m_UnknownA8[i]->save(file);
+
+    count = m_Unknown130.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+    {
+        count = m_Unknown130[i]->size();
+        fwrite(&count, 4, 1, file);
+        for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+            (*m_Unknown130[i])[j]->save(file);
+    }
+
+    count = m_Unknown148.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+    {
+        unsigned int innerCount = 0;
+        if (m_Unknown148[i])
+            innerCount = m_Unknown148[i]->size();
+        fwrite(&innerCount, 4, 1, file);
+        for (unsigned int j = 0; j < innerCount; ++j)
+            (*m_Unknown148[i])[j]->save(file);
+    }
+
+    count = m_Unknown160.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < m_Unknown160.size(); ++i)
+    {
+        count = m_Unknown160[i]->size();
+        fwrite(&count, 4, 1, file);
+        for (unsigned int j = 0; j < m_Unknown160[i]->size(); ++j)
+            (*m_Unknown160[i])[j]->save(file);
+    }
+}
