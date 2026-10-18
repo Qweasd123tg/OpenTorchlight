@@ -30,6 +30,7 @@ public:
     void clear();
 private:
     friend class CSoundObject;
+    friend class CSkillEvent;
     CSoundManager* m_soundManager; // +0x10
     TArrayList<int> m_channels; // +0x18
     TArrayList<int> m_sampleIDs; // +0x30

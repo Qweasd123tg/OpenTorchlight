@@ -888,3 +888,73 @@ CBaseUnit* CQuestUnitData::spawnUnit(CResourceManager* resourceManager,
     }
     return unit;
 }
+
+int CQuestUnitData::getDungeonFloorActiveOn()
+{
+    if (m_relativeFloor != 0)
+    {
+        int floor = static_cast<unsigned int>(m_pQuest->m_iUnknown20) + static_cast<unsigned int>(m_relativeFloor);
+        if (floor < 0) floor = -1;
+        return floor != -1 ? floor : m_pQuest->m_iUnknown20;
+    }
+    if (m_specificFloor != -1) return m_specificFloor;
+    return m_pQuest->m_iUnknown20;
+}
+
+int CQuestUnitData::getDeepestFloor()
+{
+    int floor = 0;
+    if (m_relativeFloor != 0)
+    {
+        floor = static_cast<unsigned int>(m_pQuest->m_iUnknown20) + static_cast<unsigned int>(m_relativeFloor);
+        if (floor < 0) floor = 1;
+    }
+    else if (m_specificFloor != -1) floor = m_specificFloor;
+    for (unsigned int i = 0; i < m_children.size(); ++i)
+    {
+        int child = m_children[i]->getDeepestFloor();
+        if (floor < child) floor = child;
+    }
+    return floor;
+}
+
+CQuestUnitData::~CQuestUnitData()
+{
+    m_children.deleteAll();
+    m_pQuestDataGroup = NULL;
+    m_pBaseUnitDataGroup = NULL;
+}
+
+void CQuestUnitData::cleanUpForQuestRemoveall(bool removeAll)
+{
+    for (unsigned int i = 0; i < m_children.size(); ++i)
+        m_children[i]->cleanUpForQuestRemoveall(removeAll);
+    if (m_pQuest == NULL || m_pBaseUnitDataGroup == NULL
+        || m_unitSearchMode != 1 || !m_removeFromInventory)
+        return;
+    long long guid = m_pQuest->m_pResourceManager->getUnitGuidByDataGroup(m_pBaseUnitDataGroup,L"UNIT_GUID");
+    if (guid == -1) return;
+    CPlayer* player = m_pQuest->getPlayer();
+    if (player == NULL) return;
+    UNITTYPES::EUNITTYPES type = static_cast<UNITTYPES::EUNITTYPES>(removeAll ? 0 : 0x67);
+    if (m_removeOnlyQuestItems)
+        player->removeQuestItemFromInventoryOrPetsInventoryByGuid(m_pQuest->m_iUnknown1C8,guid,true,true,type);
+    else
+        player->removeItemFromInventoryOrPetsInventoryByGuid(guid,true,true,type);
+}
+
+bool CQuestUnitData::unitDropped(CBaseUnit* unit)
+{
+    if (!m_trackUnitEvents) return false;
+    for (unsigned int i = 0; i < m_children.size(); ++i)
+        if (m_children[i]->unitDropped(unit)) return true;
+    if (m_pBaseUnitDataGroup == NULL) m_pBaseUnitDataGroup = getBaseUnitDataGroup();
+    if (unit == NULL) return false;
+    bool matches = m_unitType != 22 && unit->ISA(static_cast<UNITTYPES::EUNITTYPES>(m_unitType));
+    if (!matches && (unit->m_iQuestGuid != m_pQuest->m_iUnknown1C8 || unit->m_iQuestState != m_questUnitDataId))
+        return false;
+    if (m_currentUnitCount != 0)
+        m_currentUnitCount = static_cast<unsigned int>(m_currentUnitCount) - 1u;
+    m_completed = false;
+    return true;
+}

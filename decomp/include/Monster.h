@@ -6,6 +6,7 @@
 class CMonster : public CCharacter
 {
 public:
+    void idleAI(float, CLevel&, bool);
     CMonster(CResourceManager* resources,int level);
     virtual ~CMonster();
     virtual void unitInit(CDataGroup*,bool);

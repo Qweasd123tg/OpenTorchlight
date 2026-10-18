@@ -60,14 +60,17 @@ void CSteamStats::reloadPlayerData(CPlayer* player)
                 if (m_pPlayer != NULL)
                 {
                     if (i == 28)
-                        m_statValues[i] = static_cast<int>(
-                            reinterpret_cast<unsigned long>(m_pPlayer->getLevel()));
+                        m_statValues[i] = m_pPlayer->m_journalStats[5];
                     else if (i == 29)
                         m_statValues[i] = m_pPlayer->getGold();
                 }
             }
             else if (*reinterpret_cast<const int*>(definition + 4) == 1)
-                m_statValues[i] = -1.0f;
+            {
+                UNIONDATA32BIT empty;
+                empty.m_fValue = -1.0f;
+                m_statValues[i] = empty.m_iValue;
+            }
         }
     }
 }
@@ -163,4 +166,55 @@ void CSteamStats::statModified(ESTATS stat, UNIONDATA32BIT value)
     change.stat = stat;
     change.value = value;
     m_pendingStatChanges.add(change);
+}
+
+
+void CSteamStats::updateStatListeners()
+{
+    for (unsigned int i = 0; i < m_pendingStatChanges.size(); ++i)
+    {
+        TStatListenerMap::iterator listener = m_statListeners.find(m_pendingStatChanges[i].stat);
+        if (listener != m_statListeners.end())
+        {
+            for (unsigned int j = 0; j < listener->second->size(); ++j)
+            {
+                UNIONDATA32BIT current;
+                current.m_iValue = m_statValues[listener->first];
+                (*listener->second)[j]->statChanged(listener->first,
+                    m_pendingStatChanges[i].value, current);
+            }
+        }
+    }
+    m_pendingStatChanges.clear();
+}
+
+CSteamStats::~CSteamStats()
+{
+    for (TStatListenerMap::iterator i = m_statListeners.begin(); i != m_statListeners.end(); ++i)
+    {
+        if (i->second != NULL)
+        {
+            delete i->second;
+            i->second = NULL;
+        }
+    }
+    m_statListeners.clear();
+    m_statValues.clear();
+    m_gStatsObject = NULL;
+    m_game = NULL;
+    m_pPlayer = NULL;
+}
+
+CSteamStats::CSteamStats()
+    : m_bStatsEnabled(false), m_bStatsInitialized(false),
+      m_fStatsUpdateInterval(1.0f), m_fLocalUpdateTimer(1.0f), m_bStatsDirty(false),
+      m_pStatsFile(NULL), m_bLocalUpdatesEnabled(false), m_statValues(31),
+      m_pendingStatChanges(10), m_game(NULL), m_pPlayer(NULL)
+{
+    m_gStatsObject = reinterpret_cast<long>(this);
+    for (unsigned int i = 0; i < 31; ++i)
+    {
+        m_statValues.add(0);
+        m_statListeners[static_cast<ESTATS>(i)] = new TArrayList<iStatListener*>(2);
+    }
 }

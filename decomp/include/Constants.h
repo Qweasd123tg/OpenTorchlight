@@ -291,4 +291,6 @@ static const std::wstring KCharacterNames[] =
     L"NA", L"NA",
 };
 
+static const float KAIThinkTime[4] = {0.1f, 0.2f, 0.4f, 0.8f};
+
 #endif

@@ -24,6 +24,7 @@ friend class CEquipment;
 friend class CCharacter;
 friend class CMonster;
 public:
+    bool showWeaponTrailsOnCurrentSkill(CEquipment*, CEquipment*);
     void deleteSpecificSkill(CSkill* skill);
     bool knowsSkill(const std::wstring& name);
     bool getSkillIsUpdatingByName(const std::wstring& name);

@@ -3,6 +3,7 @@
 #include "RunicCore.h"
 #include <string>
 // Partial: the manager owns these 0x38-byte objects.
+class CUnitThemeParticle;
 class CUnitTheme : public CRunicCore
 {
 public:
@@ -10,7 +11,8 @@ public:
     const std::wstring& getName() const { return m_sName; }
     long long getGuid() const { return m_iGuid; }
 private:
-    unsigned char m_ThemeData10[0x28-0x10];
+    friend class CCharacter;
+    TArrayList<CUnitThemeParticle*> m_particles; // +0x10
     std::wstring m_sName;
     long long m_iGuid;
 };

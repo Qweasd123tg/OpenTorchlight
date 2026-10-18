@@ -701,3 +701,183 @@ bool CSkill::startSkill(CBaseUnit* caster, ESKILL_ACTIVATION_TYPE,
     triggerEvent(static_cast<ESKILL_EVENT_TYPE>(0), position, orientation, target, &targetPosition);
     return true;
 }
+
+#include "SkillEvent.h"
+
+void CSkill::attemptToStopSkill()
+{
+    for(unsigned i=0;i<m_activeEvents.size();++i)
+        if(!m_activeEvents[i]->canStop())return;
+    m_animationTimeRemaining=0.001f;
+}
+
+void CSkill::stopSkill()
+{
+    if((m_eActivationType==SKILL_ACTIVATION_PASSIVE || m_animationIndexLoopInto!=static_cast<unsigned>(-1)) && m_pOwner && !m_pendingStop) {
+        Ogre::Quaternion orientation=m_pOwner->getOrientationQuaternion();
+        Ogre::Vector3 position=m_pOwner->getPosition(true);
+        triggerEvent(static_cast<ESKILL_EVENT_TYPE>(1),position,orientation,NULL,NULL);
+        m_pendingStop=true;
+    }
+    if(m_property) {
+        for(unsigned group=0;group<11;++group) {
+            TArrayList<CSkillEvent*>* events=m_property->m_eventLists[group];
+            for(unsigned i=0;i<events->size();++i)(*events)[i]->resetEvent();
+        }
+    }
+    m_Target.setObject(NULL);
+    m_activeEvents.clear();
+    m_interruptible=false;
+    m_elapsedSkillTime=0;
+    m_animationSpeed=1;
+    m_targetPosition=Ogre::Vector3::ZERO;
+}
+
+void CSkill::updateSkill(float elapsed)
+{
+    if(!m_pOwner)stopSkill();
+    m_coolingTime-=elapsed;
+    if(!m_interruptible)return;
+    const float scaled=elapsed*m_animationSpeed;
+    m_elapsedSkillTime+=scaled;
+    if(!m_property || !m_property->m_bContinuousLooping)m_animationTimeRemaining-=scaled;
+    unsigned i=0;
+    while(i<m_activeEvents.size()) {
+        if(!m_activeEvents[i]->updateEvent(m_animationSpeed*elapsed)) {
+            m_activeEvents[i]->stopEvent();
+            m_activeEvents.removeAt(i);
+        } else ++i;
+    }
+    if(m_activeEvents.size() && !(m_property->m_fDurationOverride>0.0f) && m_animationIndexLoopInto==static_cast<unsigned>(-1))return;
+    if(m_animationTimeRemaining<=0.0f && m_eActivationType!=SKILL_ACTIVATION_PASSIVE && m_elapsedSkillTime>=m_property->m_fDurationOverride) {
+        if(m_pOwner && !m_pendingStop) {
+            Ogre::Quaternion orientation=m_pOwner->getOrientationQuaternion();
+            Ogre::Vector3 position=m_pOwner->getPosition(true);
+            bool triggered=triggerEvent(static_cast<ESKILL_EVENT_TYPE>(1),position,orientation,NULL,NULL);
+            m_pendingStop=true;
+            if(triggered)return;
+        }
+        stopSkill();
+    }
+}
+
+bool CSkill::triggerEvent(ESKILL_EVENT_TYPE type,const Ogre::Vector3& position,const Ogre::Quaternion& orientation,CBaseUnit* target,const Ogre::Vector3* targetPosition)
+{
+    if(!m_property || (!m_interruptible && static_cast<int>(type)!=8))return false;
+    bool result=false;
+    if(static_cast<int>(type)==8)result=triggerEvent(static_cast<ESKILL_EVENT_TYPE>(5),position,orientation,target,targetPosition);
+    if(static_cast<unsigned>(type)>=11)return result;
+    TArrayList<CSkillEvent*>* events=m_property->m_eventLists[static_cast<unsigned>(type)];
+    if(!events || !events->size())return result;
+    TArrayList<CSkillEvent*> clones(5);
+    for(unsigned i=0;i<events->size();++i) {
+        CSkillEvent* event=(*events)[i];
+        if(event->m_cloneSource)continue;
+        if(!event->m_started) {
+            clones.remove(NULL);
+            event->startEvent(m_pOwner,m_property,position,orientation,target,targetPosition);
+            m_activeEvents.add(event);
+            result=true;
+        } else if(event->m_canClone)clones.add(event);
+    }
+    for(unsigned i=0;i<clones.size();++i) {
+        CSkillEvent* event=m_property->cloneEventForSkill(clones[i]);
+        if(event) {
+            m_activeEvents.add(event);
+            event->startEvent(m_pOwner,m_property,position,orientation,target,targetPosition);
+        }
+    }
+    return result;
+}
+
+#include "GenericModel.h"
+#include "Inventory.h"
+#include "AttackDescription.h"
+
+void CSkill::assignSkillAnimations(CBaseUnit* unit)
+{
+    if(!unit || !m_property)
+        return;
+    CGenericModel* model=static_cast<CGenericModel*>(unit->getUnitModel());
+    if(!model) {
+        m_animationIndex=static_cast<unsigned int>(-1);
+        m_animationIndexDW=static_cast<unsigned int>(-1);
+        m_animationIndexLoopInto=static_cast<unsigned int>(-1);
+        m_animationIndexDWLoopInto=static_cast<unsigned int>(-1);
+        m_animationLength=1.0f;
+        return;
+    }
+    CCharacter* character=dynamic_cast<CCharacter*>(unit);
+    if(character && m_property->m_bUseWeaponAnimation && character->getInventory()) {
+        CEquipment* right=character->getInventory()->getEquipmentEquippedAt(static_cast<EEQUIP_LOCATIONS>(0));
+        CEquipment* left=character->getInventory()->getEquipmentEquippedAt(static_cast<EEQUIP_LOCATIONS>(1));
+        if(right && right->ISA(static_cast<UNITTYPES::EUNITTYPES>(m_property->m_iRequirementRight)))
+            m_animationIndex=m_animationIndexDW=model->findRandomAnimation(right->m_pAttackDescription->m_sAnimationName);
+        else if(left)
+            m_animationIndex=m_animationIndexDW=model->findRandomAnimation(left->m_pAttackDescriptionOverride->m_sAnimationName);
+        if(m_animationIndex==static_cast<unsigned int>(-1)) {
+            m_animationIndex=m_animationIndexDW=model->findRandomAnimation("ATTACK");
+            if(m_animationIndex==static_cast<unsigned int>(-1)) {
+                m_animationIndex=m_animationIndexDW=model->findRandomAnimation("RSLASH");
+                if(m_animationIndex==static_cast<unsigned int>(-1))
+                    return;
+            }
+        }
+        m_animationLength=model->getAnimationLengthSeconds(m_animationIndex);
+        return;
+    }
+    if(m_property->m_sAnimation!=EMPTY_STRING) {
+        std::string animation=m_sAnimationOverride.empty()?m_property->m_sAnimation:STRINGS::StringConvertToNarrow(m_sAnimationOverride.c_str());
+        m_animationIndex=m_animationIndexDW=model->getAnimationIndex(animation);
+        if(m_animationIndex==static_cast<unsigned int>(-1)) {
+            m_animationIndex=m_animationIndexDW=model->findRandomAnimation(animation);
+            if(m_animationIndex==static_cast<unsigned int>(-1)) {
+                m_animationIndex=m_animationIndexDW=model->findRandomAnimation("ATTACK");
+                if(m_animationIndex==static_cast<unsigned int>(-1))
+                    m_animationIndex=m_animationIndexDW=model->findRandomAnimation("RSLASH");
+            }
+        }
+        if(m_animationIndex!=static_cast<unsigned int>(-1))
+            m_animationLength=model->getAnimationLengthSeconds(m_animationIndex);
+    }
+    if(m_property->m_sAnimationLoop!=EMPTY_STRING) {
+        std::string animation=m_sLoopAnimationOverride.empty()?m_property->m_sAnimationLoop:STRINGS::StringConvertToNarrow(m_sLoopAnimationOverride.c_str());
+        m_animationIndexLoopInto=m_animationIndexDWLoopInto=model->getAnimationIndex(animation);
+        if(m_animationIndexLoopInto==static_cast<unsigned int>(-1))
+            m_animationIndexLoopInto=m_animationIndexDWLoopInto=model->findRandomAnimation(animation);
+    }
+    if(m_property->m_sAnimationLoopEnd!=EMPTY_STRING) {
+        std::string animation=m_sAnimationOverrideLoopEnd.empty()?m_property->m_sAnimationLoopEnd:STRINGS::StringConvertToNarrow(m_sAnimationOverrideLoopEnd.c_str());
+        m_animationIndexLoopEnd=model->getAnimationIndex(animation);
+        if(m_animationIndexLoopEnd==static_cast<unsigned int>(-1))
+            m_animationIndexLoopEnd=model->findRandomAnimation(animation);
+    }
+    character=dynamic_cast<CCharacter*>(unit);
+    if(!character)
+        return;
+    CEquipment* left=character->getWeaponInLeftHand();
+    if(!left || !left->ISA(static_cast<UNITTYPES::EUNITTYPES>(m_property->m_iRequirementLeft)))
+        return;
+    if(m_property->m_sAnimationDualWield!=EMPTY_STRING) {
+        std::string animation=m_sLoopAnimationOverride.empty()?m_property->m_sAnimationDualWield:STRINGS::StringConvertToNarrow(m_sAnimationOverrideDW.c_str());
+        m_animationIndexDW=model->getAnimationIndex(animation);
+        if(m_animationIndexDW==static_cast<unsigned int>(-1)) {
+            m_animationIndexDW=model->findRandomAnimation(animation);
+            if(m_animationIndexDW==static_cast<unsigned int>(-1)) {
+                m_animationIndexDW=model->findRandomAnimation("ATTACK");
+                if(m_animationIndexDW==static_cast<unsigned int>(-1))
+                    m_animationIndexDW=model->findRandomAnimation("RSLASH");
+            }
+        }
+        if(m_animationIndexDW!=static_cast<unsigned int>(-1)) {
+            float length=model->getAnimationLengthSeconds(m_animationIndexDW);
+            m_animationLength=length>m_animationLength?length:m_animationLength;
+        }
+    }
+    if(m_property->m_sAnimationDualWieldLoop!=EMPTY_STRING) {
+        std::string animation=m_sLoopAnimationOverrideDW.empty()?m_property->m_sAnimationDualWieldLoop:STRINGS::StringConvertToNarrow(m_sLoopAnimationOverrideDW.c_str());
+        m_animationIndexDWLoopInto=model->getAnimationIndex(animation);
+        if(m_animationIndexDWLoopInto==static_cast<unsigned int>(-1))
+            m_animationIndexDWLoopInto=model->findRandomAnimation(animation);
+    }
+}

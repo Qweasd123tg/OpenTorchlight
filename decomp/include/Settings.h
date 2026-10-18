@@ -82,6 +82,8 @@ struct CSettingsResolution
 class CSettings : public CDynamicPropertyFile
 {
 public:
+    CSettings(std::wstring, std::wstring, std::wstring, std::wstring);
+    void assignDefault(int, int, std::string);
     void addResolutionCombo(int width, int height, bool flag8, bool flagA, bool flag9);
 
     void findClosestResolution(int width,int height,int& resultWidth,int& resultHeight);

@@ -283,7 +283,7 @@ bool CEffectManager::hasEffectFromSkill(const CSkill* skill)
 {
     for (unsigned int group = 0; group < 2; ++group)
         for (unsigned int i = 0; i < getActiveEffects(group).size(); ++i)
-            if (getActiveEffects(group)[i]->m_pSkillOwner == skill)
+            if (getActiveEffects(group)[i]->m_pSkillOwner.getObject() == skill)
                 return true;
     return false;
 }
@@ -656,4 +656,84 @@ CEffect* CEffectManager::addNewEffect(CEffect* effect)
     m_Effects[effect->m_activation].add(effect);
     clearOutDescriptions();
     return effect;
+}
+
+#include "StringUtilities.h"
+
+void CEffectManager::createEffect(CDataGroup* data,bool unique)
+{
+    if(!data || data->GetGroupName()!=L"EFFECT")return;
+    if(unique) {
+        std::wstring name=STRINGS::StringUpper(data->GetDataValue(L"NAME",EMPTY_WSTRING));
+        if(!name.empty()) {
+            for(unsigned group=0;group<3;++group)
+                for(unsigned i=0;i<m_Effects[group].size();++i)
+                    if(m_Effects[group][i]->m_sName==name)return;
+        }
+    }
+    CEffect* effect=new CEffect(data,m_Owner.getObject());
+    addNewEffect(effect);
+    if(m_Owner.getObject())m_Owner.getObject()->activateEffect(effect);
+    clearOutDescriptions();
+}
+
+#include "EffectDisplayValues.h"
+#include "Affix.h"
+#include "StringTranslate.h"
+
+const std::wstring& CEffectManager::getVisualDescription(EEFFECT_ACTIVATION activation,unsigned int level,bool scaled,bool groupByEquipment)
+{
+    std::wstring& cache=(&m_EffectString2E0)[activation];
+    if(cache!=EMPTY_WSTRING || m_Effects[activation].size()==0)
+        return cache;
+    TArrayList<CEffectDisplayValues> values(10);
+    for(unsigned int i=0;i<m_Effects[activation].size();++i) {
+        CEffectDisplayValues value=m_Effects[activation][i]->getVisualCalculatedValues(level,scaled);
+        bool found=false;
+        for(unsigned int j=0;j<values.size();++j) {
+            CEffectDisplayValues& current=values[j];
+            if(current.m_scaled!=value.m_scaled || current.m_effectType!=value.m_effectType)
+                continue;
+            if(current.m_effect && value.m_effect) {
+                if(current.m_effect->m_eDamageType!=value.m_effect->m_eDamageType)
+                    continue;
+                if(current.m_effectType==0x52 && current.m_effect->m_sName!=value.m_effect->m_sName)
+                    continue;
+            }
+            current.m_duration=value.m_duration>current.m_duration?value.m_duration:current.m_duration;
+            current.m_minimum+=value.m_minimum;
+            current.m_maximum+=value.m_maximum;
+            current.m_secondaryMinimum+=value.m_secondaryMinimum;
+            current.m_secondaryMaximum+=value.m_secondaryMaximum;
+            current.m_value24+=value.m_value24;
+            found=true;
+            break;
+        }
+        if(!found)
+            values.add(value);
+    }
+    for(unsigned int i=0;i<values.size();++i) {
+        CEffectDisplayValues& value=values[i];
+        CEffect* effect=value.m_effect;
+        std::wstring description=EMPTY_WSTRING;
+        if(activation==2) {
+            std::wstring stats=effect->getDisplayStats(value);
+            description=CStringTranslate::getSinglton()->getTranslateString(L"Conveys")+L" "+stats;
+        } else
+            description=effect->getDisplayStats(value);
+        if(description!=EMPTY_WSTRING) {
+            if(groupByEquipment && effect->m_pAffixOwner &&
+               (!effect->m_pAffixOwner->canBeAppliedToUnitType(8) ||
+                !effect->m_pAffixOwner->canBeAppliedToUnitType(13)) &&
+               effect->m_pAffixOwner) {
+                bool weapon=effect->m_pAffixOwner->canBeAppliedToUnitType(8);
+                description=CStringTranslate::getSinglton()->getTranslateString(weapon?L"Weapon":L"Armor/Trinkets")+L":\n     "+description;
+            }
+            if(cache==EMPTY_WSTRING)
+                cache=description;
+            else
+                cache=cache+L"\n"+description;
+        }
+    }
+    return cache;
 }

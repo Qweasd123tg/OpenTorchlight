@@ -174,6 +174,20 @@ class DeclarationReadiness(unittest.TestCase):
             with self.subTest(wrong=wrong):
                 self.assertIsNotNone(self.check(files, "CAffix", "fill", wrong))
 
+    def test_named_array_pointer_matches_exact_extent_indirection_and_element_type(self):
+        files = {"Character.h": "class CCharacter { public: void work(CCharacter* target, float amount, int (*damages)[2], unsigned int flags, bool value); };"}
+        exact = "CCharacter*, float, int (*) [2], unsigned int, bool"
+        self.assertIsNone(self.check(files, "CCharacter", "work", exact))
+        for wrong in ("int (&) [2]", "int (*) [3]", "const int (*) [2]", "int*", "int**"):
+            with self.subTest(wrong=wrong):
+                self.assertIsNotNone(self.check(files, "CCharacter", "work", "CCharacter*, float, " + wrong + ", unsigned int, bool"))
+
+    def test_array_pointer_unsupported_declarators_stay_unresolved(self):
+        for array in ("[]", "[COUNT]", "[2][2]", "[0]", "[-2]", "[1+1]"):
+            with self.subTest(array=array):
+                files = {"Character.h": "class CCharacter { public: void work(int (*damages)" + array + "); };"}
+                self.assertIsNotNone(self.check(files, "CCharacter", "work", "int (*) [2]"))
+
     def test_global_callback_typedef_is_exact_and_shadowing_stays_blocked(self):
         files = {"Prop.h": "typedef unsigned int (*Callback)(CScene*, const std::wstring&, void*); class CProp { public: void work(Callback callback); };"}
         exact = "unsigned int (*)(CScene*, std::wstring const&, void*)"

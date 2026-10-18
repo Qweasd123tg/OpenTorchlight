@@ -21,6 +21,7 @@ namespace Ogre {class SkeletonInstance;}
 // Partial: size and all vtable groups preserved; expose only Item collaborators.
 class CGenericModel : public CPositionableObject, public iRandomWeight, public iHighlight
 {
+    friend class CSkillEvent;
     friend class CLevel;
 friend class CEquipment;
 friend class CCharacter;

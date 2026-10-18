@@ -1,0 +1,3848 @@
+{
+  "schema": 1,
+  "date": "2026-10-19",
+  "base_commit": "22dae15fc79a2446544e1b250988be3372f18b48",
+  "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+  "game_functions": 5247,
+  "before": {
+    "accepted": 4357,
+    "match": 2821,
+    "accepted_bytes": 2071892
+  },
+  "after": {
+    "accepted": 4538,
+    "match": 2907,
+    "behavior": 1631,
+    "remaining": 709,
+    "accepted_bytes": 2216248
+  },
+  "new_accepted": 181,
+  "new_match": 87,
+  "new_behavior": 94,
+  "old_accepted_lost": [],
+  "matched_compiler_helpers_excluded": 834,
+  "full_gate": {
+    "hybrid_selftest": 0,
+    "tests": 1924,
+    "failed": 0,
+    "selftest_seconds": 1695.3129547080025,
+    "workers": 6,
+    "shards": 60,
+    "per_shard_timeout_seconds": 1800,
+    "build_jobs": 2,
+    "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+    "inputs_unchanged": true,
+    "tree_unchanged_during_gate": true,
+    "command": "OTL_JOBS=2 OTL_BUILD_JOBS=2 OTL_SELFTEST_JOBS=6 OTL_SELFTEST_SHARDS=60 OTL_SELFTEST_TIMEOUT=1800 python3 tools/decomp/check.py --json build-decomp/all-functions-20261018/progress.json"
+  },
+  "focused_fixture_gate": {
+    "tests": 7,
+    "failed": 0,
+    "sdl_completed_pairs": 486
+  },
+  "limits": [
+    "Headless self-tests finish before the original main; this does not establish playability.",
+    "Queued candidates and caught exceptions have no acceptance credit in this report.",
+    "The 5247-address game scope is unchanged."
+  ],
+  "new_functions": [
+    {
+      "address": "0x5566a0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::requestingRestart()",
+      "acceptance": "MATCH",
+      "original_size": 8,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x5566b0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::setupResources()",
+      "acceptance": "MATCH",
+      "original_size": 2,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x5566c0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::createResourceListener()",
+      "acceptance": "MATCH",
+      "original_size": 2,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x5566d0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::loadResources()",
+      "acceptance": "MATCH",
+      "original_size": 2,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x5566e0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::destroyMasterResourceManager()",
+      "acceptance": "MATCH",
+      "original_size": 35,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x556710",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::destroyGameClient()",
+      "acceptance": "MATCH",
+      "original_size": 35,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x556740",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::windowResized(Ogre::RenderWindow*)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x556750",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::windowResized(Ogre::RenderWindow*)",
+      "acceptance": "MATCH",
+      "original_size": 2,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x556760",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::getGameCamera()",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x556770",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::getGameCamera()",
+      "acceptance": "MATCH",
+      "original_size": 17,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x556790",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::setupForEditor(void*, void*)",
+      "acceptance": "MATCH",
+      "original_size": 269,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x5568a0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::editorUpdateSceneOnce(int)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x5568b0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::editorUpdateSceneOnce(int)",
+      "acceptance": "MATCH",
+      "original_size": 18,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x5568d0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::postViewportUpdate(Ogre::RenderTargetViewportEvent const&)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x5568e0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::postViewportUpdate(Ogre::RenderTargetViewportEvent const&)",
+      "acceptance": "MATCH",
+      "original_size": 149,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x556bc0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::frameEnded(Ogre::FrameEvent const&)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x556bd0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::frameEnded(Ogre::FrameEvent const&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 2225,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_game_frame_ended"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_game_frame_ended",
+          "address": "0x556bd0",
+          "completed": 22,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x557490",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::update(float, float, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1009,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_game_update"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_game_update",
+          "address": "0x557490",
+          "completed": 64,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x557890",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::frameRenderingQueued(Ogre::FrameEvent const&)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x5578f0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::frameStarted(Ogre::FrameEvent const&)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x557900",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::frameStarted(Ogre::FrameEvent const&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 511,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_game_frame_started"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_game_frame_started",
+          "address": "0x557900",
+          "completed": 116,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x557b00",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::windowFocusChange(Ogre::RenderWindow*)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x557b10",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::windowFocusChange(Ogre::RenderWindow*)",
+      "acceptance": "MATCH",
+      "original_size": 73,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x557b60",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::windowClosed(Ogre::RenderWindow*)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x557b70",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::windowClosed(Ogre::RenderWindow*)",
+      "acceptance": "MATCH",
+      "original_size": 128,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x557bf0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::createFrameListener()",
+      "acceptance": "MATCH",
+      "original_size": 13,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x557c00",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "PopulateSDLResolutions(CSettings*)",
+      "acceptance": "MATCH",
+      "original_size": 745,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x557ef0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::WndProc(void*, unsigned int, unsigned int, long)",
+      "acceptance": "executed-call-pair",
+      "original_size": 486,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_game_window_dispatch"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_game_window_dispatch",
+          "address": "0x557ef0",
+          "completed": 230,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x5580e0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::cleanUpGameObjects()",
+      "acceptance": "MATCH",
+      "original_size": 162,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x558190",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::shutdownForEditor()",
+      "acceptance": "MATCH",
+      "original_size": 26,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x55f660",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::createGameClient()",
+      "acceptance": "MATCH",
+      "original_size": 196,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x5602d0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::checkCapabilities(Ogre::RenderSystem*)",
+      "acceptance": "MATCH",
+      "original_size": 338,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560760",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::~CGame()",
+      "acceptance": "executed-call-pair",
+      "original_size": 1260,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_game_destructor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_game_destructor",
+          "address": "0x560760",
+          "completed": 24,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x560c50",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::~CGame()",
+      "acceptance": "MATCH",
+      "original_size": 9,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560c60",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::~CGame()",
+      "acceptance": "MATCH",
+      "original_size": 9,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560c70",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::~CGame()",
+      "acceptance": "MATCH",
+      "original_size": 9,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560c80",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::~CGame()",
+      "acceptance": "MATCH",
+      "original_size": 9,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560c90",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::~CGame()",
+      "acceptance": "MATCH",
+      "original_size": 9,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560ca0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::~CGame()",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560cb0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::~CGame()",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560cc0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::~CGame()",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560cd0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::~CGame()",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560ce0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::~CGame()",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560cf0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::~CGame()",
+      "acceptance": "MATCH",
+      "original_size": 18,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x560d10",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "non-virtual thunk to CGame::updateAspectRatio(float, float)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x561890",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::chooseSceneManager()",
+      "acceptance": "MATCH",
+      "original_size": 888,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e"
+    },
+    {
+      "address": "0x562ef0",
+      "source": "decomp/src/Game.cpp",
+      "demangled": "CGame::begin(void*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1287,
+      "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "534adbaa4fdc25ea04a47b8f7b1fda82ecf83c1ae53bba6780979cc80473f99e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_game_begin"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_game_begin",
+          "address": "0x562ef0",
+          "completed": 21,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7d6500",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::value(EEFFECT_VALUES)",
+      "acceptance": "MATCH",
+      "original_size": 112,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234"
+    },
+    {
+      "address": "0x7dc7f0",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::initValues()",
+      "acceptance": "MATCH",
+      "original_size": 511,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234"
+    },
+    {
+      "address": "0x7dc9f0",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::calculateBaseValue(CEffect::ECALCULATETYPES)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1574,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_effect_calculate"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_effect_calculate",
+          "address": "0x7dc9f0",
+          "completed": 512,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7dd040",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::setOwner(CBaseUnit*, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 363,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_effect_owner"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_effect_owner",
+          "address": "0x7dd040",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7dd1b0",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::setSkillOwner(CSkill*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 151,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_effect_skill_owner"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_effect_skill_owner",
+          "address": "0x7dd1b0",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7dd250",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::clone(CEffect const*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1169,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_effect_clone"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_effect_clone",
+          "address": "0x7dd250",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7dd6f0",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::CEffect(EEFFECT_TYPE, bool, EEFFECT_ACTIVATION, float, float, float, bool)",
+      "acceptance": "MATCH",
+      "original_size": 527,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234"
+    },
+    {
+      "address": "0x7dd900",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::CEffect(CEffect const*)",
+      "acceptance": "MATCH",
+      "original_size": 439,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234"
+    },
+    {
+      "address": "0x7ddac0",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::getVisualCalculatedValues(unsigned int, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 437,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_effect_visual"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_effect_visual",
+          "address": "0x7ddac0",
+          "completed": 512,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7ddc80",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::setAffixOwner(CAffix*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 83,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_effect_affix_owner"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_effect_affix_owner",
+          "address": "0x7ddc80",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7de7f0",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::setGraphs(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "acceptance": "executed-call-pair",
+      "original_size": 357,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_effect_graphs"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_effect_graphs",
+          "address": "0x7de7f0",
+          "completed": 64,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7de960",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::~CEffect()",
+      "acceptance": "MATCH",
+      "original_size": 806,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234"
+    },
+    {
+      "address": "0x7dec90",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::~CEffect()",
+      "acceptance": "MATCH",
+      "original_size": 18,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234"
+    },
+    {
+      "address": "0x7dedb0",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::getDisplayStats(CEffectDisplayValues&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 9164,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_effect_display"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_effect_display",
+          "address": "0x7dedb0",
+          "completed": 2320,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7e1180",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::getDisplayStats(unsigned int, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 127,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_effect_level_display"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_effect_level_display",
+          "address": "0x7e1180",
+          "completed": 580,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7e1200",
+      "source": "decomp/src/effect.cpp",
+      "demangled": "CEffect::CEffect(CDataGroup*, CBaseUnit*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 13069,
+      "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "050880bba34374dd6ac9ce5bb07f3d287a78b3de998228085c4f3dfaefc11234",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_effect_data_ctor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_effect_data_ctor",
+          "address": "0x7e1200",
+          "completed": 1160,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7f4810",
+      "source": "decomp/src/EffectManager.cpp",
+      "demangled": "CEffectManager::getVisualDescription(EEFFECT_ACTIVATION, unsigned int, bool, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 4316,
+      "object_digest": "f453cd9e9b68921eca4ad0f8ff7117d7bacee1ee289e10144b2c726b7b326414",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "f453cd9e9b68921eca4ad0f8ff7117d7bacee1ee289e10144b2c726b7b326414",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_effect_visual"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_effect_visual",
+          "address": "0x7f4810",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x7f58f0",
+      "source": "decomp/src/EffectManager.cpp",
+      "demangled": "CEffectManager::createEffect(CDataGroup*, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 725,
+      "object_digest": "f453cd9e9b68921eca4ad0f8ff7117d7bacee1ee289e10144b2c726b7b326414",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "f453cd9e9b68921eca4ad0f8ff7117d7bacee1ee289e10144b2c726b7b326414",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_effect_create"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_effect_create",
+          "address": "0x7f58f0",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x8051b0",
+      "source": "decomp/src/Breakable.cpp",
+      "demangled": "CBreakable::update(Ogre::Camera*, Ogre::Vector3 const&, float)",
+      "acceptance": "executed-call-pair",
+      "original_size": 67,
+      "object_digest": "1cbcd0e334cc612f1fb11779ca98fcb210a0bee7987fbe3fad5509b875c43d60",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "1cbcd0e334cc612f1fb11779ca98fcb210a0bee7987fbe3fad5509b875c43d60",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_breakable_update"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_breakable_update",
+          "address": "0x8051b0",
+          "completed": 32,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x805200",
+      "source": "decomp/src/Breakable.cpp",
+      "demangled": "CBreakable::setActiveInLevel(bool)",
+      "acceptance": "MATCH",
+      "original_size": 151,
+      "object_digest": "1cbcd0e334cc612f1fb11779ca98fcb210a0bee7987fbe3fad5509b875c43d60"
+    },
+    {
+      "address": "0x8052a0",
+      "source": "decomp/src/Breakable.cpp",
+      "demangled": "CBreakable::interact(CCharacter*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 973,
+      "object_digest": "1cbcd0e334cc612f1fb11779ca98fcb210a0bee7987fbe3fad5509b875c43d60",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "1cbcd0e334cc612f1fb11779ca98fcb210a0bee7987fbe3fad5509b875c43d60",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_breakable_interact"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_breakable_interact",
+          "address": "0x8052a0",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x805670",
+      "source": "decomp/src/Breakable.cpp",
+      "demangled": "CBreakable::~CBreakable()",
+      "acceptance": "MATCH",
+      "original_size": 159,
+      "object_digest": "1cbcd0e334cc612f1fb11779ca98fcb210a0bee7987fbe3fad5509b875c43d60"
+    },
+    {
+      "address": "0x805710",
+      "source": "decomp/src/Breakable.cpp",
+      "demangled": "CBreakable::~CBreakable()",
+      "acceptance": "MATCH",
+      "original_size": 18,
+      "object_digest": "1cbcd0e334cc612f1fb11779ca98fcb210a0bee7987fbe3fad5509b875c43d60"
+    },
+    {
+      "address": "0x805730",
+      "source": "decomp/src/Breakable.cpp",
+      "demangled": "CBreakable::CBreakable(CResourceManager*)",
+      "acceptance": "MATCH",
+      "original_size": 207,
+      "object_digest": "1cbcd0e334cc612f1fb11779ca98fcb210a0bee7987fbe3fad5509b875c43d60"
+    },
+    {
+      "address": "0x80d8d0",
+      "source": "decomp/src/Breakable.cpp",
+      "demangled": "CBreakable::setRimlight(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "acceptance": "MATCH",
+      "original_size": 146,
+      "object_digest": "1cbcd0e334cc612f1fb11779ca98fcb210a0bee7987fbe3fad5509b875c43d60"
+    },
+    {
+      "address": "0x80d970",
+      "source": "decomp/src/Breakable.cpp",
+      "demangled": "CBreakable::unitInit(CDataGroup*, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 3707,
+      "object_digest": "1cbcd0e334cc612f1fb11779ca98fcb210a0bee7987fbe3fad5509b875c43d60",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "1cbcd0e334cc612f1fb11779ca98fcb210a0bee7987fbe3fad5509b875c43d60",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_breakable_unit_init"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_breakable_unit_init",
+          "address": "0x80d970",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x822fb0",
+      "source": "decomp/src/character.cpp",
+      "demangled": "CCharacter::updateBonePositions()",
+      "acceptance": "executed-call-pair",
+      "original_size": 2738,
+      "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_character_bone_positions"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_character_bone_positions",
+          "address": "0x822fb0",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x824080",
+      "source": "decomp/src/character.cpp",
+      "demangled": "CCharacter::calculateActiveRange(Ogre::Vector3 const&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1053,
+      "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_character_active_range"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_character_active_range",
+          "address": "0x824080",
+          "completed": 8192,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x82a940",
+      "source": "decomp/src/character.cpp",
+      "demangled": "CCharacter::displayPath()",
+      "acceptance": "MATCH",
+      "original_size": 737,
+      "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed"
+    },
+    {
+      "address": "0x82e210",
+      "source": "decomp/src/character.cpp",
+      "demangled": "CCharacter::configureParticleTrigger(CCharacter::CParticleAnimationTrigger*, unsigned int)",
+      "acceptance": "executed-call-pair",
+      "original_size": 670,
+      "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_character_particle_configure"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_character_particle_configure",
+          "address": "0x82e210",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x8300f0",
+      "source": "decomp/src/character.cpp",
+      "demangled": "CCharacter::createSpecificUnitThemeParticles(CUnitTheme*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1800,
+      "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_character_theme_particles"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_character_theme_particles",
+          "address": "0x8300f0",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x830800",
+      "source": "decomp/src/character.cpp",
+      "demangled": "CCharacter::unitThemeUpdated(CUnitTheme*, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1849,
+      "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_character_unit_theme_update"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_character_unit_theme_update",
+          "address": "0x830800",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x832260",
+      "source": "decomp/src/character.cpp",
+      "demangled": "CCharacter::createPathfinder(CLevel&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 885,
+      "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_character_create_pathfinder"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_character_create_pathfinder",
+          "address": "0x832260",
+          "completed": 1024,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x834c40",
+      "source": "decomp/src/character.cpp",
+      "demangled": "CCharacter::createAdditionalUnitThemeParticles()",
+      "acceptance": "executed-call-pair",
+      "original_size": 2272,
+      "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_character_additional_particles"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_character_additional_particles",
+          "address": "0x834c40",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x84ee90",
+      "source": "decomp/src/character.cpp",
+      "demangled": "CCharacter::getBones()",
+      "acceptance": "executed-call-pair",
+      "original_size": 4261,
+      "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "747db00facf0ac2b8484fa66ce460ca79b83c507aeca388a3b19f509e5a81bed",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_character_get_bones"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_character_get_bones",
+          "address": "0x84ee90",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x8d5470",
+      "source": "decomp/src/monster.cpp",
+      "demangled": "CMonster::reactToDamage(CCharacter*, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1321,
+      "object_digest": "b161beb5672e0c144f6f766f11e3030ad4324100a239697862eccce32d4805a6",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "b161beb5672e0c144f6f766f11e3030ad4324100a239697862eccce32d4805a6",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_monster_react_damage"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_monster_react_damage",
+          "address": "0x8d5470",
+          "completed": 4096,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x8df370",
+      "source": "decomp/src/monster.cpp",
+      "demangled": "CMonster::huntAI(float, CLevel&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 2570,
+      "object_digest": "b161beb5672e0c144f6f766f11e3030ad4324100a239697862eccce32d4805a6",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "b161beb5672e0c144f6f766f11e3030ad4324100a239697862eccce32d4805a6",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_monster_hunt_ai"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_monster_hunt_ai",
+          "address": "0x8df370",
+          "completed": 4096,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x8dfd80",
+      "source": "decomp/src/monster.cpp",
+      "demangled": "CMonster::attackAI(float, CLevel&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1320,
+      "object_digest": "b161beb5672e0c144f6f766f11e3030ad4324100a239697862eccce32d4805a6",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "b161beb5672e0c144f6f766f11e3030ad4324100a239697862eccce32d4805a6",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_monster_attack_ai"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_monster_attack_ai",
+          "address": "0x8dfd80",
+          "completed": 4096,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x8e2d30",
+      "source": "decomp/src/monster.cpp",
+      "demangled": "CMonster::idleAI(float, CLevel&, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 3330,
+      "object_digest": "b161beb5672e0c144f6f766f11e3030ad4324100a239697862eccce32d4805a6",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "b161beb5672e0c144f6f766f11e3030ad4324100a239697862eccce32d4805a6",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_monster_idle_ai"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_monster_idle_ai",
+          "address": "0x8e2d30",
+          "completed": 4096,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x8e3a40",
+      "source": "decomp/src/monster.cpp",
+      "demangled": "CMonster::updateAI(float, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1062,
+      "object_digest": "b161beb5672e0c144f6f766f11e3030ad4324100a239697862eccce32d4805a6",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "b161beb5672e0c144f6f766f11e3030ad4324100a239697862eccce32d4805a6",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_monster_update_ai"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_monster_update_ai",
+          "address": "0x8e3a40",
+          "completed": 4096,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x8f0f60",
+      "source": "decomp/src/player.cpp",
+      "demangled": "CPlayer::fishingAI(float, CLevel&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1043,
+      "object_digest": "93eaea412b73d5d5e2638d94114860f1a19036f70be98edb019036c42a8b2dc7",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93eaea412b73d5d5e2638d94114860f1a19036f70be98edb019036c42a8b2dc7",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_player_fishing_ai"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_player_fishing_ai",
+          "address": "0x8f0f60",
+          "completed": 4096,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x8f8680",
+      "source": "decomp/src/player.cpp",
+      "demangled": "CPlayer::applySaveState(CCharacterSaveState&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 969,
+      "object_digest": "93eaea412b73d5d5e2638d94114860f1a19036f70be98edb019036c42a8b2dc7",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93eaea412b73d5d5e2638d94114860f1a19036f70be98edb019036c42a8b2dc7",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_player_apply_save"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_player_apply_save",
+          "address": "0x8f8680",
+          "completed": 1024,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0x8fbf60",
+      "source": "decomp/src/player.cpp",
+      "demangled": "CPlayer::fillSaveState(CCharacterSaveState&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 926,
+      "object_digest": "93eaea412b73d5d5e2638d94114860f1a19036f70be98edb019036c42a8b2dc7",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93eaea412b73d5d5e2638d94114860f1a19036f70be98edb019036c42a8b2dc7",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_player_fill_save"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_player_fill_save",
+          "address": "0x8fbf60",
+          "completed": 1024,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xa6bb90",
+      "source": "decomp/src/SoundManager.cpp",
+      "demangled": "CSoundManager::~CSoundManager()",
+      "acceptance": "executed-call-pair",
+      "original_size": 733,
+      "object_digest": "d6d53d4f6d18186adcc6d2148aad6e2044951b2fa60263c9a190ede3a2270b5f",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "d6d53d4f6d18186adcc6d2148aad6e2044951b2fa60263c9a190ede3a2270b5f",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_sound_destructor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_sound_destructor",
+          "address": "0xa6bb90",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xa6be70",
+      "source": "decomp/src/SoundManager.cpp",
+      "demangled": "CSoundManager::~CSoundManager()",
+      "acceptance": "MATCH",
+      "original_size": 18,
+      "object_digest": "d6d53d4f6d18186adcc6d2148aad6e2044951b2fa60263c9a190ede3a2270b5f"
+    },
+    {
+      "address": "0xa6d270",
+      "source": "decomp/src/SoundManager.cpp",
+      "demangled": "CSoundManager::update(Ogre::SceneNode*, Ogre::Vector3 const&, float)",
+      "acceptance": "executed-call-pair",
+      "original_size": 575,
+      "object_digest": "d6d53d4f6d18186adcc6d2148aad6e2044951b2fa60263c9a190ede3a2270b5f",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "d6d53d4f6d18186adcc6d2148aad6e2044951b2fa60263c9a190ede3a2270b5f",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_sound_update"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_sound_update",
+          "address": "0xa6d270",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xa6dc50",
+      "source": "decomp/src/SoundManager.cpp",
+      "demangled": "CSoundManager::playMusic(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1324,
+      "object_digest": "d6d53d4f6d18186adcc6d2148aad6e2044951b2fa60263c9a190ede3a2270b5f",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "d6d53d4f6d18186adcc6d2148aad6e2044951b2fa60263c9a190ede3a2270b5f",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_sound_music"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_sound_music",
+          "address": "0xa6dc50",
+          "completed": 60,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xa6e180",
+      "source": "decomp/src/SoundManager.cpp",
+      "demangled": "CSoundManager::dumpSounds()",
+      "acceptance": "executed-call-pair",
+      "original_size": 1696,
+      "object_digest": "d6d53d4f6d18186adcc6d2148aad6e2044951b2fa60263c9a190ede3a2270b5f",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "d6d53d4f6d18186adcc6d2148aad6e2044951b2fa60263c9a190ede3a2270b5f",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_sound_dump"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_sound_dump",
+          "address": "0xa6e180",
+          "completed": 20,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xa768c0",
+      "source": "decomp/src/SpawnClassData.cpp",
+      "demangled": "CSpawnClassData::addUnitDataObject(CDataGroup*)",
+      "acceptance": "MATCH",
+      "original_size": 53,
+      "object_digest": "5ce4b542606af14c50802864bb1e8d26af26f035fe85ed62b540704f72668f0e"
+    },
+    {
+      "address": "0xa7cf40",
+      "source": "decomp/src/SpawnClassData.cpp",
+      "demangled": "CSpawnClassData::fillRandomizer(CCharacter*, int, int, int, int)",
+      "acceptance": "executed-call-pair",
+      "original_size": 3310,
+      "object_digest": "5ce4b542606af14c50802864bb1e8d26af26f035fe85ed62b540704f72668f0e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "5ce4b542606af14c50802864bb1e8d26af26f035fe85ed62b540704f72668f0e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_spawn_data_fill"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_spawn_data_fill",
+          "address": "0xa7cf40",
+          "completed": 1024,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xa7e170",
+      "source": "decomp/src/SpawnClassData.cpp",
+      "demangled": "CSpawnClassData::rollSpawnClassData(TArrayList<CDataGroup*>&, TArrayList<bool>*, CCharacter*, CCharacter*, int, int, int, int, int)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1125,
+      "object_digest": "5ce4b542606af14c50802864bb1e8d26af26f035fe85ed62b540704f72668f0e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "5ce4b542606af14c50802864bb1e8d26af26f035fe85ed62b540704f72668f0e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_spawn_data_roll"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_spawn_data_roll",
+          "address": "0xa7e170",
+          "completed": 512,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xc9d610",
+      "source": "decomp/src/Skill.cpp",
+      "demangled": "CSkill::attemptToStopSkill()",
+      "acceptance": "executed-call-pair",
+      "original_size": 129,
+      "object_digest": "872ecd6bed0b1c7849a9408794fdfd3d8741304a96800efcbfb8fbfd843aacef",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "872ecd6bed0b1c7849a9408794fdfd3d8741304a96800efcbfb8fbfd843aacef",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_attempt_stop"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_skill_attempt_stop",
+          "address": "0xc9d610",
+          "completed": 512,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xca4a00",
+      "source": "decomp/src/Skill.cpp",
+      "demangled": "CSkill::assignSkillAnimations(CBaseUnit*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 2213,
+      "object_digest": "872ecd6bed0b1c7849a9408794fdfd3d8741304a96800efcbfb8fbfd843aacef",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "872ecd6bed0b1c7849a9408794fdfd3d8741304a96800efcbfb8fbfd843aacef",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_animations"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_skill_animations",
+          "address": "0xca4a00",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xca5950",
+      "source": "decomp/src/Skill.cpp",
+      "demangled": "CSkill::triggerEvent(ESKILL_EVENT_TYPE, Ogre::Vector3 const&, Ogre::Quaternion const&, CBaseUnit*, Ogre::Vector3 const*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1261,
+      "object_digest": "872ecd6bed0b1c7849a9408794fdfd3d8741304a96800efcbfb8fbfd843aacef",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "872ecd6bed0b1c7849a9408794fdfd3d8741304a96800efcbfb8fbfd843aacef",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_trigger"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_skill_trigger",
+          "address": "0xca5950",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xca5f80",
+      "source": "decomp/src/Skill.cpp",
+      "demangled": "CSkill::stopSkill()",
+      "acceptance": "executed-call-pair",
+      "original_size": 477,
+      "object_digest": "872ecd6bed0b1c7849a9408794fdfd3d8741304a96800efcbfb8fbfd843aacef",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "872ecd6bed0b1c7849a9408794fdfd3d8741304a96800efcbfb8fbfd843aacef",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_stop"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_skill_stop",
+          "address": "0xca5f80",
+          "completed": 512,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xca6160",
+      "source": "decomp/src/Skill.cpp",
+      "demangled": "CSkill::updateSkill(float)",
+      "acceptance": "executed-call-pair",
+      "original_size": 658,
+      "object_digest": "872ecd6bed0b1c7849a9408794fdfd3d8741304a96800efcbfb8fbfd843aacef",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "872ecd6bed0b1c7849a9408794fdfd3d8741304a96800efcbfb8fbfd843aacef",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_update"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_skill_update",
+          "address": "0xca6160",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb6fa0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::canAffixesAndEffectsBeAppliedToUnit(CBaseUnit*, CCharacter*)",
+      "acceptance": "MATCH",
+      "original_size": 30,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcb6fc0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::addMinAndMaxValuesOfAnEffect(CResourceManager*, unsigned int, float&, float&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 542,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_min_max"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_min_max",
+          "address": "0xcb6fc0",
+          "completed": 512,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb71e0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::getDisplayStats(CSkillProperty*)",
+      "acceptance": "MATCH",
+      "original_size": 90,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcb7240",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::canEffectPosObject(Ogre::Vector3 const&, CPositionableObject*)",
+      "acceptance": "MATCH",
+      "original_size": 76,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcb7290",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::invokeHitSkills(CCharacter*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 287,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_invoke_hit"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_invoke_hit",
+          "address": "0xcb7290",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb73b0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::getCharacterCanBeHarmedByMissile(CMissile*, CCharacter*)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcb73c0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::getCharacterCanBeHarmedByMissile(CMissile*, CCharacter*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 664,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_missile_target"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_missile_target",
+          "address": "0xcb73c0",
+          "completed": 4096,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb7660",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::missileDieing(CMissile*)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcb7670",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::missileDieing(CMissile*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 428,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_missile_dieing"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_missile_dieing",
+          "address": "0xcb7670",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb7820",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::effectsTargetEnemy(CBaseUnit*)",
+      "acceptance": "MATCH",
+      "original_size": 44,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcb7850",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::applyEffects(CBaseUnit*, Ogre::Vector3 const*, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 785,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_apply_effects"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_apply_effects",
+          "address": "0xcb7850",
+          "completed": 1024,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb7b70",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::applyWeaponDamage(CCharacter*, CItem*, float, float, bool, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 2004,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_weapon"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_weapon",
+          "address": "0xcb7b70",
+          "completed": 1280,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb8350",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::missileApplyingEffects(CMissile*, CCharacter*, Ogre::Vector3 const*, float, float)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcb8360",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::missileApplyingEffects(CMissile*, CCharacter*, Ogre::Vector3 const*, float, float)",
+      "acceptance": "executed-call-pair",
+      "original_size": 370,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_missile_effects"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_missile_effects",
+          "address": "0xcb8360",
+          "completed": 2048,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb84e0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::itemEffectedByDamageShape(CDamageShape*, CItem*)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcb84f0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::itemEffectedByDamageShape(CDamageShape*, CItem*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 210,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_item_effects"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_item_effects",
+          "address": "0xcb84f0",
+          "completed": 512,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb85d0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::shouldStop()",
+      "acceptance": "executed-call-pair",
+      "original_size": 226,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_should_stop"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_should_stop",
+          "address": "0xcb85d0",
+          "completed": 1536,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb86c0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::canStop()",
+      "acceptance": "executed-call-pair",
+      "original_size": 217,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_can_stop"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_can_stop",
+          "address": "0xcb86c0",
+          "completed": 1536,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb87a0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::getBonePosition(CBaseUnit*, ESKILL_BONE_ATTACHMENT, bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 867,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_bone"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_bone",
+          "address": "0xcb87a0",
+          "completed": 4096,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcb8b10",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::missileValidateTargetBeforeLaunch(CMissile*, CPositionableObject*, Ogre::Vector3&)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcb8b20",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::missileValidateTargetBeforeLaunch(CMissile*, CPositionableObject*, Ogre::Vector3&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 373,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_validate_target"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_validate_target",
+          "address": "0xcb8b20",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcc0cd0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::missileBeingFired(CMissile*)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc0ce0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::missileBeingFired(CMissile*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 316,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_missile_fired"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_missile_fired",
+          "address": "0xcc0ce0",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcc1100",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::reset()",
+      "acceptance": "executed-call-pair",
+      "original_size": 458,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_full_reset"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_full_reset",
+          "address": "0xcc1100",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcc12d0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::unitSpawnedFromUnitSpawner(CUnitSpawner*, CPositionableObject*)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc12e0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::unitSpawnedFromUnitSpawner(CUnitSpawner*, CPositionableObject*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 965,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_spawned"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_spawned",
+          "address": "0xcc12e0",
+          "completed": 512,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcc16b0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::~CSkillEvent()",
+      "acceptance": "executed-call-pair",
+      "original_size": 1280,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_destructor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_destructor",
+          "address": "0xcc16b0",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcc1bb0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::~CSkillEvent()",
+      "acceptance": "MATCH",
+      "original_size": 9,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc1bc0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::~CSkillEvent()",
+      "acceptance": "MATCH",
+      "original_size": 9,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc1bd0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::~CSkillEvent()",
+      "acceptance": "MATCH",
+      "original_size": 9,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc1be0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::~CSkillEvent()",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc1bf0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::~CSkillEvent()",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc1c00",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::~CSkillEvent()",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc1c10",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::~CSkillEvent()",
+      "acceptance": "MATCH",
+      "original_size": 18,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc1c30",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::characterEffectedByDamageShape(CDamageShape*, CCharacter*, Ogre::Vector3*)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc1c40",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::characterEffectedByDamageShape(CDamageShape*, CCharacter*, Ogre::Vector3*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 493,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_shape_effects"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_shape_effects",
+          "address": "0xcc1c40",
+          "completed": 1024,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcc1e30",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "non-virtual thunk to CSkillEvent::getCharacterCanBeAffectedByDamageShape(CDamageShape*, CCharacter*)",
+      "acceptance": "MATCH",
+      "original_size": 6,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc1e40",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::getCharacterCanBeAffectedByDamageShape(CDamageShape*, CCharacter*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 614,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_shape_target"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_shape_target",
+          "address": "0xcc1e40",
+          "completed": 4096,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcc3980",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::disableAllDamageShapes()",
+      "acceptance": "executed-call-pair",
+      "original_size": 288,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_disable_shapes"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_disable_shapes",
+          "address": "0xcc3980",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcc3aa0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::addListeners()",
+      "acceptance": "executed-call-pair",
+      "original_size": 1390,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_listeners"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_listeners",
+          "address": "0xcc3aa0",
+          "completed": 512,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcc4010",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::stopAllParticles(bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 642,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_stop_particles"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_stop_particles",
+          "address": "0xcc4010",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcc42a0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::stopEvent()",
+      "acceptance": "MATCH",
+      "original_size": 61,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc42e0",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::resetEvent()",
+      "acceptance": "MATCH",
+      "original_size": 18,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0"
+    },
+    {
+      "address": "0xcc5c20",
+      "source": "decomp/src/SkillEvent.cpp",
+      "demangled": "CSkillEvent::updateEvent(float)",
+      "acceptance": "executed-call-pair",
+      "original_size": 5552,
+      "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6493aa24e8bd4303822203146e4c386d88c0fef2f37b211c9d61a8f7d359e6a0",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_event_update"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_event_update",
+          "address": "0xcc5c20",
+          "completed": 8192,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcca700",
+      "source": "decomp/src/SkillManager.cpp",
+      "demangled": "CSkillManager::showWeaponTrailsOnCurrentSkill(CEquipment*, CEquipment*)",
+      "acceptance": "MATCH",
+      "original_size": 3,
+      "object_digest": "d5b9d6c84796b3522e69cb072739e84fea8ac50a92f558fec5aea774cb4c9841"
+    },
+    {
+      "address": "0xcd1570",
+      "source": "decomp/src/SkillManager.cpp",
+      "demangled": "CSkillManager::getPositionForSkill(CSkill*, CBaseUnit*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 2824,
+      "object_digest": "d5b9d6c84796b3522e69cb072739e84fea8ac50a92f558fec5aea774cb4c9841",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "d5b9d6c84796b3522e69cb072739e84fea8ac50a92f558fec5aea774cb4c9841",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_manager_position"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_skill_manager_position",
+          "address": "0xcd1570",
+          "completed": 4096,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcdc070",
+      "source": "decomp/src/SkillParser.cpp",
+      "demangled": "CSkillParser::parseSkill(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1300,
+      "object_digest": "fa261077be1557ec87554f7728889c98de7be549daa81d170fcf6dd8d4b5988e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "fa261077be1557ec87554f7728889c98de7be549daa81d170fcf6dd8d4b5988e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_parser_one"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_skill_parser_one",
+          "address": "0xcdc070",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcdc590",
+      "source": "decomp/src/SkillParser.cpp",
+      "demangled": "CSkillParser::parseSkills()",
+      "acceptance": "executed-call-pair",
+      "original_size": 685,
+      "object_digest": "fa261077be1557ec87554f7728889c98de7be549daa81d170fcf6dd8d4b5988e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "fa261077be1557ec87554f7728889c98de7be549daa81d170fcf6dd8d4b5988e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_parser_all"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_skill_parser_all",
+          "address": "0xcdc590",
+          "completed": 64,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcdce70",
+      "source": "decomp/src/SkillProperty.cpp",
+      "demangled": "CSkillProperty::fillOutStatBonuses(float (&) [6], bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 252,
+      "object_digest": "41bfb329bcb688baba5b448d0364f0556619b08183c8da7e04854c40f898698e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "41bfb329bcb688baba5b448d0364f0556619b08183c8da7e04854c40f898698e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_property_stat_bonuses"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_property_stat_bonuses",
+          "address": "0xcdce70",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcdcf70",
+      "source": "decomp/src/SkillProperty.cpp",
+      "demangled": "CSkillProperty::canAffixesAndEffectsBeAppliedToUnit(CBaseUnit*, CCharacter*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 225,
+      "object_digest": "41bfb329bcb688baba5b448d0364f0556619b08183c8da7e04854c40f898698e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "41bfb329bcb688baba5b448d0364f0556619b08183c8da7e04854c40f898698e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_property_can_apply"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_property_can_apply",
+          "address": "0xcdcf70",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcdd060",
+      "source": "decomp/src/SkillProperty.cpp",
+      "demangled": "CSkillProperty::addMinAndMaxValuesOfAnEffect(CResourceManager*, unsigned int, float&, float&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 217,
+      "object_digest": "41bfb329bcb688baba5b448d0364f0556619b08183c8da7e04854c40f898698e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "41bfb329bcb688baba5b448d0364f0556619b08183c8da7e04854c40f898698e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_property_min_max"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_property_min_max",
+          "address": "0xcdd060",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xcdd240",
+      "source": "decomp/src/SkillProperty.cpp",
+      "demangled": "CSkillProperty::cloneEventForSkill(CSkillEvent*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 374,
+      "object_digest": "41bfb329bcb688baba5b448d0364f0556619b08183c8da7e04854c40f898698e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "41bfb329bcb688baba5b448d0364f0556619b08183c8da7e04854c40f898698e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_property_clone_event"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_property_clone_event",
+          "address": "0xcdd240",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xce5940",
+      "source": "decomp/src/SkillProperty.cpp",
+      "demangled": "CSkillProperty::~CSkillProperty()",
+      "acceptance": "executed-call-pair",
+      "original_size": 1583,
+      "object_digest": "41bfb329bcb688baba5b448d0364f0556619b08183c8da7e04854c40f898698e",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "41bfb329bcb688baba5b448d0364f0556619b08183c8da7e04854c40f898698e",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_property_destructor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_property_destructor",
+          "address": "0xce5940",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xce5f70",
+      "source": "decomp/src/SkillProperty.cpp",
+      "demangled": "CSkillProperty::~CSkillProperty()",
+      "acceptance": "MATCH",
+      "original_size": 18,
+      "object_digest": "41bfb329bcb688baba5b448d0364f0556619b08183c8da7e04854c40f898698e"
+    },
+    {
+      "address": "0xd1de30",
+      "source": "decomp/src/QuestDialog.cpp",
+      "demangled": "CQuestDialog::dialogIsForNPC(CBaseUnit*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 71,
+      "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_quest_dialog_npc"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_quest_dialog_npc",
+          "address": "0xd1de30",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd1df70",
+      "source": "decomp/src/QuestDialog.cpp",
+      "demangled": "CQuestDialog::getDialog(bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 216,
+      "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_quest_dialog_text"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_quest_dialog_text",
+          "address": "0xd1df70",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd1e050",
+      "source": "decomp/src/QuestDialog.cpp",
+      "demangled": "CQuestDialog::giveOrRemoveItems(CBaseUnit*)",
+      "acceptance": "MATCH",
+      "original_size": 281,
+      "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76"
+    },
+    {
+      "address": "0xd1e170",
+      "source": "decomp/src/QuestDialog.cpp",
+      "demangled": "CQuestDialog::cleanUp()",
+      "acceptance": "executed-call-pair",
+      "original_size": 293,
+      "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_quest_dialog_pet_cleanup"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_quest_dialog_pet_cleanup",
+          "address": "0xd1e170",
+          "completed": 128,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd1e300",
+      "source": "decomp/src/QuestDialog.cpp",
+      "demangled": "CQuestDialog::playDialogSound()",
+      "acceptance": "executed-call-pair",
+      "original_size": 288,
+      "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_quest_dialog_sound"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_quest_dialog_sound",
+          "address": "0xd1e300",
+          "completed": 32,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd24940",
+      "source": "decomp/src/QuestDialog.cpp",
+      "demangled": "CQuestDialog::CQuestDialog(CQuest*)",
+      "acceptance": "MATCH",
+      "original_size": 301,
+      "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76"
+    },
+    {
+      "address": "0xd26120",
+      "source": "decomp/src/QuestDialog.cpp",
+      "demangled": "CQuestDialog::~CQuestDialog()",
+      "acceptance": "executed-call-pair",
+      "original_size": 826,
+      "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_quest_dialog_dtor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_quest_dialog_dtor",
+          "address": "0xd26120",
+          "completed": 64,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd26460",
+      "source": "decomp/src/QuestDialog.cpp",
+      "demangled": "CQuestDialog::~CQuestDialog()",
+      "acceptance": "MATCH",
+      "original_size": 18,
+      "object_digest": "8affa053b20a2e226431aadf9dc450ddd25f44da5dff6bee21e2dc969bc81f76"
+    },
+    {
+      "address": "0xd3dc60",
+      "source": "decomp/src/QuestUnitData.cpp",
+      "demangled": "CQuestUnitData::getDungeonFloorActiveOn()",
+      "acceptance": "executed-call-pair",
+      "original_size": 64,
+      "object_digest": "14925b846dd194278d763073d4c94d811196b311ac691c0dd39269b4ab16af5d",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "14925b846dd194278d763073d4c94d811196b311ac691c0dd39269b4ab16af5d",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_quest_unit_floor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_quest_unit_floor",
+          "address": "0xd3dc60",
+          "completed": 512,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd3dca0",
+      "source": "decomp/src/QuestUnitData.cpp",
+      "demangled": "CQuestUnitData::getDeepestFloor()",
+      "acceptance": "executed-call-pair",
+      "original_size": 126,
+      "object_digest": "14925b846dd194278d763073d4c94d811196b311ac691c0dd39269b4ab16af5d",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "14925b846dd194278d763073d4c94d811196b311ac691c0dd39269b4ab16af5d",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_quest_unit_deepest"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_quest_unit_deepest",
+          "address": "0xd3dca0",
+          "completed": 512,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd467d0",
+      "source": "decomp/src/QuestUnitData.cpp",
+      "demangled": "CQuestUnitData::~CQuestUnitData()",
+      "acceptance": "executed-call-pair",
+      "original_size": 891,
+      "object_digest": "14925b846dd194278d763073d4c94d811196b311ac691c0dd39269b4ab16af5d",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "14925b846dd194278d763073d4c94d811196b311ac691c0dd39269b4ab16af5d",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_quest_unit_destructor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_quest_unit_destructor",
+          "address": "0xd467d0",
+          "completed": 64,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd46b50",
+      "source": "decomp/src/QuestUnitData.cpp",
+      "demangled": "CQuestUnitData::~CQuestUnitData()",
+      "acceptance": "MATCH",
+      "original_size": 18,
+      "object_digest": "14925b846dd194278d763073d4c94d811196b311ac691c0dd39269b4ab16af5d"
+    },
+    {
+      "address": "0xd47530",
+      "source": "decomp/src/QuestUnitData.cpp",
+      "demangled": "CQuestUnitData::cleanUpForQuestRemoveall(bool)",
+      "acceptance": "executed-call-pair",
+      "original_size": 383,
+      "object_digest": "14925b846dd194278d763073d4c94d811196b311ac691c0dd39269b4ab16af5d",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "14925b846dd194278d763073d4c94d811196b311ac691c0dd39269b4ab16af5d",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_quest_unit_remove"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_quest_unit_remove",
+          "address": "0xd47530",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd48800",
+      "source": "decomp/src/QuestUnitData.cpp",
+      "demangled": "CQuestUnitData::unitDropped(CBaseUnit*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 225,
+      "object_digest": "14925b846dd194278d763073d4c94d811196b311ac691c0dd39269b4ab16af5d",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "14925b846dd194278d763073d4c94d811196b311ac691c0dd39269b4ab16af5d",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "all_quest_unit_dropped"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "all_quest_unit_dropped",
+          "address": "0xd48800",
+          "completed": 256,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd61a40",
+      "source": "decomp/src/EffectsHeader.cpp",
+      "demangled": "createSettings(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 466,
+      "object_digest": "42a1bd82f1b642738844f1e016d601a6fd9f308002c0e79f57ee2fd1e6cf68c1",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "42a1bd82f1b642738844f1e016d601a6fd9f308002c0e79f57ee2fd1e6cf68c1",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_settings_create"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_settings_create",
+          "address": "0xd61a40",
+          "completed": 64,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd68930",
+      "source": "decomp/src/main.cpp",
+      "demangled": "CheckForRestartProcessStart(int, char**)",
+      "acceptance": "MATCH",
+      "original_size": 293,
+      "object_digest": "d6fab7574b3350adba9d4ede8b190212ec30415d97f2648aab0a7282594939df"
+    },
+    {
+      "address": "0xd68a60",
+      "source": "decomp/src/main.cpp",
+      "demangled": "uncompressFileInMemory(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, unsigned int, unsigned int, unsigned int, char*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 1732,
+      "object_digest": "d6fab7574b3350adba9d4ede8b190212ec30415d97f2648aab0a7282594939df",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "d6fab7574b3350adba9d4ede8b190212ec30415d97f2648aab0a7282594939df",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_main_uncompress_memory"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_main_uncompress_memory",
+          "address": "0xd68a60",
+          "completed": 40,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xd6bfa0",
+      "source": "decomp/src/main.cpp",
+      "demangled": "compressFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, unsigned int&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 2893,
+      "object_digest": "d6fab7574b3350adba9d4ede8b190212ec30415d97f2648aab0a7282594939df",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "d6fab7574b3350adba9d4ede8b190212ec30415d97f2648aab0a7282594939df",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_main_compress_file"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_main_compress_file",
+          "address": "0xd6bfa0",
+          "completed": 24,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xece240",
+      "source": "decomp/src/SteamStats.cpp",
+      "demangled": "CSteamStats::reloadPlayerData(CPlayer*)",
+      "acceptance": "executed-call-pair",
+      "original_size": 201,
+      "object_digest": "29b8cc457f34f29a4acc013c600a498a5ff8f125041700c67fb8ad9427ad3a4c",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "29b8cc457f34f29a4acc013c600a498a5ff8f125041700c67fb8ad9427ad3a4c",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_stats_reload_player"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_stats_reload_player",
+          "address": "0xece240",
+          "completed": 21,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xece5d0",
+      "source": "decomp/src/SteamStats.cpp",
+      "demangled": "CSteamStats::updateStatListeners()",
+      "acceptance": "executed-call-pair",
+      "original_size": 418,
+      "object_digest": "29b8cc457f34f29a4acc013c600a498a5ff8f125041700c67fb8ad9427ad3a4c",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "29b8cc457f34f29a4acc013c600a498a5ff8f125041700c67fb8ad9427ad3a4c",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_stats_listeners"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_stats_listeners",
+          "address": "0xece5d0",
+          "completed": 96,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xecea70",
+      "source": "decomp/src/SteamStats.cpp",
+      "demangled": "CSteamStats::~CSteamStats()",
+      "acceptance": "MATCH",
+      "original_size": 386,
+      "object_digest": "29b8cc457f34f29a4acc013c600a498a5ff8f125041700c67fb8ad9427ad3a4c"
+    },
+    {
+      "address": "0xecec00",
+      "source": "decomp/src/SteamStats.cpp",
+      "demangled": "CSteamStats::~CSteamStats()",
+      "acceptance": "MATCH",
+      "original_size": 18,
+      "object_digest": "29b8cc457f34f29a4acc013c600a498a5ff8f125041700c67fb8ad9427ad3a4c"
+    },
+    {
+      "address": "0xed6700",
+      "source": "decomp/src/SDLEventHandler.cpp",
+      "demangled": "SDLEventHandler::ProcessEvent(SDL_Event const&)",
+      "acceptance": "executed-call-pair",
+      "original_size": 631,
+      "object_digest": "f197f69eb420bd059048efcb1fe6e5b1cc8343c9afa758d0e7e8c77cf72d2c00",
+      "receipt": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "f197f69eb420bd059048efcb1fe6e5b1cc8343c9afa758d0e7e8c77cf72d2c00",
+          "inputs_digest": "f0fcf2635c73b82ae8e8b4c4c4dc54d43eb30ffcaed4b0b78fef284f0c6c4233",
+          "parameters": {
+            "fixtures": [
+              "complete_sdl_event_forwarding"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      },
+      "executed_comparisons": [
+        {
+          "fixture": "complete_sdl_event_forwarding",
+          "address": "0xed6700",
+          "completed": 486,
+          "different": 0,
+          "incomplete": 0
+        }
+      ]
+    },
+    {
+      "address": "0xedcfe0",
+      "source": "decomp/src/SDLEventHandler.cpp",
+      "demangled": "SDLEventHandler::SDLEventHandler()",
+      "acceptance": "MATCH",
+      "original_size": 14636,
+      "object_digest": "f197f69eb420bd059048efcb1fe6e5b1cc8343c9afa758d0e7e8c77cf72d2c00"
+    }
+  ]
+}

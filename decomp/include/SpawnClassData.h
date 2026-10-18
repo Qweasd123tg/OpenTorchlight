@@ -31,7 +31,7 @@ public:
                             CCharacter* character,
                             CCharacter* rollingCharacter,
                             int minimumLevel, int levelOffset,
-                            int bonusPercentage, int rarityOverride,
+                            int rarityOverride, int bonusPercentage,
                             int flags);
 
     std::wstring m_sName;

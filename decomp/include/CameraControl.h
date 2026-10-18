@@ -18,6 +18,7 @@ class CCameraShake;
 class CCameraControl : public CRunicCore
 {
 public:
+    void addCameraShake(CCameraShake*, bool);
     virtual ~CCameraControl();
     float getMaxDistanceToDolly();
     float getDefaultDistanceToDolly();

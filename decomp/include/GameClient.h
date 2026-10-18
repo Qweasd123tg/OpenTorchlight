@@ -35,6 +35,8 @@ class CGameClient : public CRunicCore, public Ogre::RenderTargetListener,
                     public Ogre::RenderQueue::RenderableListener
 {
 friend class CLevel;
+    friend class CGame;
+    friend class CMonster;
 friend class CDropdownMenu;
     friend class CWaypointMenu;
     friend class CCinematicMenu;
@@ -45,6 +47,10 @@ friend class CDifficultyMenu;
     friend class CCameraController;
     friend class CRandomGroup;
 public:
+    bool findWorldLocation(Ogre::Vector3&, bool);
+    CGameClient(CSettings&, CMasterResourceManager*, Ogre::RenderWindow*, Ogre::Root*, CCameraControl*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CSoundManager&);
+    void create();
+    void update(float, Ogre::RenderWindow*, float, bool);
     void setSpeedMult(float multiplier);
     void findCameraTargetLocation(Ogre::Vector3& result, float plane);
     void autoPickupGold();
@@ -131,10 +137,15 @@ private:
     Ogre::SceneNode* m_playerLightNode;
     unsigned char m_gap228[0x8];
     Ogre::Light* m_playerLight;
-    unsigned char m_gap238[0x2d0-0x238];
+    unsigned char m_gap238[0x2c0-0x238];
+    Ogre::Vector3 m_audioListenerPosition; // +0x2c0
+    unsigned char m_gap2CC[4];
     CKeyManager m_keyManager;
     CMouseManager m_mouseManager; // +0xfe8
-    unsigned char m_gap1038[8];
+    unsigned char m_gap1038[4];
+    bool m_quitRequested; // +0x103c, CGame::update
+    bool m_restartRequested; // +0x103d, CGame::update
+    unsigned char m_gap103E[2];
     CMasterResourceManager* m_masterResources;
     unsigned char m_gap1048[0x10];
     Ogre::Root* m_root;

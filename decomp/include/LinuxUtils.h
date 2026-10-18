@@ -3,6 +3,11 @@
 
 #include <string>
 #include <cstdio>
+struct SDL_Window;
+int MessageBoxA(void*, const char*, const char*, int);
+int MessageBox(void*, const wchar_t*, const wchar_t*, int);
+// FLTK fl_ask.H: shared label pointer used by MessageBoxA.
+extern const char* fl_ok;
 
 // Partial: declarations from LinuxUtils.cpp used by recovered TUs.
 struct POINT
@@ -21,6 +26,12 @@ unsigned int LinuxMapVirtual2Scancode(unsigned int key);
 
 namespace LinuxUtils
 {
+    void* GetSDLWindowHandle(SDL_Window*);
+    void crash_handler(int);
+    void Init();
+    extern std::wstring gameDataPath __asm__("_ZN10LinuxUtilsL12gameDataPathE");
+    extern std::wstring gameHomePath __asm__("_ZN10LinuxUtilsL12gameHomePathE");
+    extern std::wstring gameTempPath __asm__("_ZN10LinuxUtilsL12gameTempPathE");
     int GetIntLine(const std::string& path, const std::string& key);
     std::wstring GetHomeDir();
     int GetPhysicalRAMSize();

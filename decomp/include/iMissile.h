@@ -19,7 +19,7 @@ public:
     virtual bool missileApplyingEffects(CMissile* missile, CCharacter* target, const Ogre::Vector3* position,
                                         float damageScale, float effectScale) = 0;
     virtual bool getCharacterCanBeHarmedByMissile(CMissile* missile, CCharacter* target) = 0;
-    virtual bool missileValidateTargetBeforeLaunch(CMissile* missile, CPositionableObject* target,
+    virtual CPositionableObject* missileValidateTargetBeforeLaunch(CMissile* missile, CPositionableObject* target,
                                                    Ogre::Vector3& position) = 0;
 };
 
