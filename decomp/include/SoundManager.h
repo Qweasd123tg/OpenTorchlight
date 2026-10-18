@@ -43,7 +43,7 @@ public:
     int getMemoryInUse();
     void updateAudioLevels(float, float, bool, bool);
     void queueSound(int, CSoundInstance*, float, float);
-    long long fmodFileOpenCallback(const char*, int, unsigned int*, void**, void**);
+    static FMOD_RESULT fmodFileOpenCallback(const char*, int, unsigned int*, void**, void**);
     void releaseUnusedSounds();
     float getSoundLength(CSoundInstance*);
     int playSound(CSoundInstance*, Ogre::SceneNode*, int, float);
@@ -69,17 +69,17 @@ public:
     bool m_bUnknown6A9;
     unsigned char m_gap6AA[0x6];
     CDynamicPropertyFile* m_pDynamicPropertyFile;
-    long long m_iUnknown6B8;
-    long long m_iUnknown6C0;
+    FMOD::DSP* m_iUnknown6B8;
+    FMOD::ChannelGroup* m_iUnknown6C0;
     bool m_bUnknown6C8;
     unsigned char m_gap6C9[0x7];
     CSoundInstance* m_iUnknown6D0;
     int m_iUnknown6D8;
     unsigned char m_gap6DC[0x4] __attribute__((aligned(4)));
     FMOD::SoundGroup* m_iUnknown6E0;
-    long long m_iUnknown6E8;
+    FMOD::ChannelGroup* m_iUnknown6E8;
     int m_iUnknown6F0;
-    int m_iUnknown6F4;
+    union { int m_iUnknown6F4; float m_queueTimer; };
     std::wstring m_sUnknown6F8;
 };
 

@@ -58,6 +58,7 @@ static unsigned char g_strStatDefines[744];
 static int m_gQuestUnitDataID;
 extern long m_gRoomPieceInformation;
 extern long m_gStatsObject;
-extern long m_pMasterResourceManager;
+class CMasterResourceManager;
+extern CMasterResourceManager* m_pMasterResourceManager;
 
 #endif

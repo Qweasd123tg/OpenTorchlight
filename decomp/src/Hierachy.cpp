@@ -40,3 +40,43 @@ UNITTYPES::EUNITTYPES CHierarchy::getTypeIDByName(const std::wstring& name)
         return static_cast<UNITTYPES::EUNITTYPES>(i->second);
     return static_cast<UNITTYPES::EUNITTYPES>(-1);
 }
+
+#include "DataGroup.h"
+#include "DataValue.h"
+
+CHierarchy::~CHierarchy()
+{
+}
+
+void CHierarchy::parseHierachy(CDataGroup* group)
+{
+    if (!group) return;
+    CDataGroup* types = group->GetDataGroupByName(L"UNITTYPES", false);
+    if (!types) return;
+    const std::wstring key(L"ID");
+    m_types.setGrowBy(types->GetNumberOfDataGroups() + 1);
+    for (unsigned int i = 0; i < types->GetNumberOfDataGroups(); ++i) {
+        CDataGroup* type = types->GetDataGroup(i);
+        unsigned int id = type->GetDataValue(key, static_cast<unsigned int>(-1));
+        if (id == static_cast<unsigned int>(-1)) continue;
+        m_typeIDs[STRINGS::StringUpper(type->GetGroupName())] = id;
+        m_types.add(id);
+        if (type->GetNumberOfDataValues() <= 1)
+            m_parentTypes[id].push_back(id);
+        else {
+            for (unsigned int j = 0; j < type->GetNumberOfDataValues(); ++j) {
+                CDataValue* value = type->GetDataValue(j);
+                if (value->GetDataValueName() != key)
+                    m_parentTypes[id].push_back(value->GetValueUInt32());
+            }
+        }
+    }
+}
+
+CHierarchy::CHierarchy(const wchar_t* filename)
+    : m_types(10)
+{
+    CDataGroup group(L"", NULL, 20, 10, NULL);
+    group.LoadFile(filename, static_cast<CTimerStatics*>(NULL));
+    parseHierachy(&group);
+}

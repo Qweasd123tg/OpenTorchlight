@@ -4,6 +4,7 @@
 #include <vector>
 class CDynamicLine : public CDynamicRenderable {
 public:
+    CDynamicLine(Ogre::RenderOperation::OperationType operationType);
     virtual ~CDynamicLine();
     virtual void fillHardwareBuffers();
     void setOperationType(Ogre::RenderOperation::OperationType operationType);

@@ -16,7 +16,8 @@ class CRoomPieceDataInformation;
 // Partial state reached through +0xf0 by the editor particle controls.
 struct CEditorParticlePreviewState { unsigned char unknown[0x540]; bool paused; };
 
-namespace Ogre { class SceneManager; }
+namespace Ogre { class SceneManager; class RenderTarget; }
+class CMissilePreloader;
 namespace ParticleUniverse { class ParticleSystemManager; }
 class CHierarchy;
 class CEffectGroupManager;
@@ -34,6 +35,9 @@ class CSoundBankDataInformation;
 class CMasterResourceManager : public CRunicCore
 {
 public:
+    void loadParticles();
+    void reloadResources();
+    void addResourceLocation(const std::wstring& path, const std::string& type, bool recursive);
     void removeUnused();
     void removeAll();
     void destroyStash();
@@ -67,8 +71,8 @@ private:
     unsigned char m_Unrecovered50[8];
 public:
     CEffectGroupManager* m_effectGroups;
+    CMissilePreloader* m_missilePreloader; // +0x60
 private:
-    unsigned char m_Unrecovered60[8];
     CResourceSettings* m_resourceSettings;
     unsigned char m_Unrecovered70[8];
 public:
@@ -85,7 +89,11 @@ public:
     CSettings* m_pSettings;
     CSoundManager* m_pSoundManager;
 private:
-    unsigned char m_UnrecoveredA0[0xc8-0xa0];
+    unsigned char m_UnrecoveredA0[0x10];
+public:
+    Ogre::RenderTarget* m_renderTarget; // +0xb0; add/removeViewport calls
+private:
+    unsigned char m_UnrecoveredB8[0x10];
 public:
     Ogre::SceneManager* m_pDefaultSceneManager; // +0xc8, ResourceManager constructor fallback
 private:
@@ -104,7 +112,7 @@ public:
 public:
     CSoundBankDataInformation* m_pSoundBankDataInformation;
 private:
-    unsigned char m_gap108[0x18];
+    std::vector<std::string> m_resourceLocations; // +0x108
     std::vector<CollisionModelRef*> m_collisionModels;
     std::vector<BatchModelRef*> m_batchModels;
     std::vector<CAnimationSet*> m_animationSets;

@@ -30,6 +30,12 @@ public:
                                     CDescriptorLoadConfiguration* configuration,
                                     std::map<int, int>& remappedIDs);
     unsigned int AddLogicLink(unsigned int output, CLogicObject* input, unsigned int function);
+    void loadAndRelinkObjectInFromBinaryFile(CLogicGroup* group, COgreReader* reader,
+                                            CDescriptorLoadConfiguration* configuration,
+                                            std::map<int, int>& remappedIDs);
+    void loadLogicObjectByDataGroup(CLogicGroup* group, CDataGroup* data,
+                                    CDescriptorLoadConfiguration* configuration,
+                                    std::map<int, int>* remappedIDs);
 
     void SetXPosition(int position);
     void SetYPosition(int position);

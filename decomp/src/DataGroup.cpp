@@ -426,3 +426,129 @@ CDataGroup::CDataGroup(const std::wstring& name, CDataGroup* parent, unsigned in
         m_pRepository = &g_GlobalRepository;
     SetGroupName(name);
 }
+
+void CDataGroup::SetGroupName(const std::wstring& name)
+{
+    if (m_pRepository) {
+        std::wstring normalized = name;
+        while (normalized[0] == L'/')
+            normalized = normalized.c_str() + 1;
+        unsigned int previousID = m_iNameID;
+        m_iNameID = m_pRepository->addItem(normalized);
+        unsigned int id = previousID;
+        std::wstring text = m_pRepository->m_DefaultValue;
+        if (id != static_cast<unsigned int>(-1) && !m_pRepository->m_Values.empty()) {
+            std::map<unsigned int, std::wstring>::iterator value = m_pRepository->m_Values.find(id);
+            if (value != m_pRepository->m_Values.end())
+                text = value->second;
+        }
+        if (text != m_pRepository->m_DefaultValue) {
+            std::map<unsigned int, unsigned short>::iterator count = m_pRepository->m_RefCounts.find(id);
+            if (count != m_pRepository->m_RefCounts.end()) {
+                --count->second;
+                if (count->second == 0) {
+                    m_pRepository->m_RefCounts.erase(count);
+                    std::map<std::wstring, unsigned int>::iterator name = m_pRepository->m_IDs.find(text);
+                    std::map<unsigned int, std::wstring>::iterator value = m_pRepository->m_Values.find(id);
+                    if (name != m_pRepository->m_IDs.end() && value != m_pRepository->m_Values.end()) {
+                        m_pRepository->m_IDs.erase(name);
+                        m_pRepository->m_Values.erase(value);
+                    }
+                }
+            }
+        }
+        m_b58 |= previousID != static_cast<unsigned int>(m_iNameID);
+    }
+}
+
+CDataValue* CDataGroup::CopyDataValue(CDataValue* value, TArrayList<CDataValue*>* values)
+{
+    if (!values || !value) return NULL;
+    m_b58 = true;
+    CDataValue* copied = NULL;
+    for (unsigned int i = 0; i < values->size(); ++i) {
+        if ((*values)[i]->GetDataValueName() == value->GetDataValueName()) {
+            copied = (*values)[i];
+            values->removeAt(i);
+            break;
+        }
+    }
+    if (copied)
+        copied->Copy(value, m_pRepository);
+    else {
+        copied = new CDataValue(value, m_pRepository);
+        m_DataValues.add(copied);
+    }
+    return copied;
+}
+
+CDataValue* CDataGroup::AddDataValue(unsigned int name, UNIONDATA64BIT value, CDataValue::EDATAVALUETYPES type)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name, value, type, m_pRepository);
+    m_DataValues.add(data);
+    return data;
+}
+
+CDataValue* CDataGroup::AddDataValue(const std::wstring& name, std::wstring type, std::wstring value)
+{
+    m_b58 = true;
+    CDataValue* data = new CDataValue(name.c_str(), m_pRepository);
+    data->SetValueByString(type, value);
+    m_DataValues.add(data);
+    return data;
+}
+
+void CDataGroup::CopyDataGroup(CDataGroup* source, bool copyName)
+{
+    if (!source) return;
+    m_b58 = true;
+    TArrayList<CDataValue*> values(m_DataValues.size() + 1);
+    for (unsigned int i = 0; i < m_DataValues.size(); ++i)
+        values.add(m_DataValues[i]);
+    if (m_DataValues.m_nGrowBy < source->m_DataValues.size())
+        m_DataValues.setGrowBy(source->m_DataValues.size() + 1);
+    for (unsigned int i = 0; i < source->m_DataValues.size(); ++i)
+        CopyDataValue(source->m_DataValues[i], &values);
+    if (m_DataGroups.m_nGrowBy < source->m_DataGroups.size())
+        m_DataGroups.setGrowBy(source->m_DataGroups.size() + 1);
+    for (unsigned int i = 0; i < source->m_DataGroups.size(); ++i) {
+        CDataGroup* child = AddDataGroup(source->m_DataGroups[i]->GetGroupName());
+        child->CopyDataGroup(source->m_DataGroups[i], copyName);
+    }
+}
+
+#include "OgreResourceFile.h"
+#include <OgreLogManager.h>
+
+void CDataGroup::LoadFile(const std::wstring& file, CTimerStatics* timers)
+{
+    CFileInfo info;
+    CDataGroup* cached = CFileSystem::getSingleton()->getDataGroup(file);
+    if (cached) {
+        m_b59 = true;
+        m_DataGroups.setGrowBy(cached->m_DataGroups.size());
+        for (unsigned int i = 0; i < cached->m_DataGroups.size(); ++i)
+            m_DataGroups.add(cached->m_DataGroups[i]);
+        m_DataValues.setGrowBy(cached->m_DataValues.size());
+        for (unsigned int i = 0; i < cached->m_DataValues.size(); ++i)
+            m_DataValues.add(cached->m_DataValues[i]);
+        m_iNameID = cached->m_iNameID;
+    } else {
+        if (!info.m_bExists)
+            CFileSystem::getSingleton()->getFileInfo(file, info, false, true, false);
+        if (info.m_eFormat == FILE_FORMAT_COMPILED)
+            Ogre::LogManager::getSingleton().logMessage("Error in attempting to load file. Trying to load compressed file. DataGroups can't load compressed files.", Ogre::LML_CRITICAL, false);
+        if (info.m_eFormat == FILE_FORMAT_BINARY && info.m_eLocation == FILE_LOCATION_DISK) {
+            CBinaryStyle style;
+            LoadFile(file, &style, timers);
+        } else if (info.m_eFormat == FILE_FORMAT_BINARY &&
+                   (info.m_eLocation == FILE_LOCATION_PAK || info.m_eLocation == FILE_LOCATION_RESOURCE_GROUP)) {
+            COgreResourceFile style;
+            LoadFile(file, &style, timers);
+        } else {
+            CPairStyle style;
+            LoadFile(file, &style, timers);
+        }
+    }
+}

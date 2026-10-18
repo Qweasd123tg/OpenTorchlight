@@ -113,6 +113,8 @@ CRoomPieceDataInformation::CRoomPieceDataInformation(CResourceSettings* resource
       m_pResourceSettings(resourceSettings),
       m_RoomPieceCoreDataByGuid()
 {
+    extern CRoomPieceDataInformation* m_gRoomPieceInformation;
+    m_gRoomPieceInformation = this;
     LoadRoomData();
 }
 
@@ -141,4 +143,31 @@ CRoomPieceDataInformation::_GetRoomPieceCoreDataByGuidByClosestGuid(long long gu
         }
     }
     return closest;
+}
+
+#include "FileSystem.h"
+
+void CRoomPieceDataInformation::LoadRoomData()
+{
+    DestroyRoomData();
+    if (!m_pResourceSettings) return;
+    std::wstring folder = m_pResourceSettings->GetString(KRESOURCESETTING_S_ROOM_DATA_FOLDER);
+    TArrayList<std::wstring> files(25);
+    CFileSystem::getSingleton()->getFileList(folder, files, L"*.dat", false, true, false, false);
+    for (unsigned int i = 0; i < files.size(); ++i)
+        LoadSpecificLevelTileSet(files[i]);
+}
+
+void CRoomPieceDataInformation::LoadSpecificLevelTileSet(std::wstring& fileName)
+{
+    CDataGroup group(L"ROOMDATA", NULL, 20, 10, NULL);
+    group.LoadFile(fileName, static_cast<CTimerStatics*>(NULL));
+    std::wstring name = STRINGS::StringUpper(group.GetDataValue(L"NAME", EMPTY_WSTRING));
+    if (name == EMPTY_WSTRING) return;
+    int flags = group.GetDataValue(L"COLLISIONTYPE", L"ROOM").compare(L"ROOM") == 0 ? 16 : 32;
+    bool changed = false;
+    for (unsigned int i = 0; i < group.GetNumberOfDataGroups(); ++i)
+        changed |= ParseRoomPieceData(name, group.GetDataGroup(i), flags);
+    if (changed)
+        group.SaveToFile(fileName);
 }

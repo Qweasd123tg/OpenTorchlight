@@ -73,3 +73,48 @@ int COgreResourceFile::SaveDataGroupToFile(const std::wstring&, CDataGroup*)
     Ogre::LogManager::getSingleton().logMessage("Unable to save into a OgreResourceFile.", Ogre::LML_CRITICAL, false);
     return 0;
 }
+
+#include "TimerStatics.h"
+
+void COgreResourceFile::LoadDataValues(COgreReader* reader, CDataGroup* group,
+    std::map<unsigned int, unsigned int>& indexes, unsigned int,
+    CTimerStatics* timers)
+{
+    if (timers)
+        timers->m_times.add(timers->m_timer.getMicroseconds());
+    unsigned int count = Get32BitData(reader);
+    group->m_DataValues.setGrowBy(count);
+    for (unsigned int i = 0; i < count; ++i) {
+        unsigned int name = indexes[Get32BitData(reader)];
+        CDataValue::EDATAVALUETYPES type = static_cast<CDataValue::EDATAVALUETYPES>(Get32BitData(reader));
+        UNIONDATA64BIT value;
+        if (type == 7 || type == 3)
+            value.signed64 = Get64BitData(reader);
+        else {
+            value.signed64 = static_cast<unsigned int>(Get32BitData(reader));
+            if (type == CDataValue::DATAVALUE_TRANSLATE || type == CDataValue::DATAVALUE_STRING)
+                value.unsigned32 = indexes[value.unsigned32];
+        }
+        group->AddDataValue(name, value, type);
+    }
+    if (timers)
+        timers->popTime(L"CHILD DATAVALUES");
+}
+
+void COgreResourceFile::Load(COgreReader* reader, CDataGroup* group,
+    std::map<unsigned int, unsigned int>& indexes, unsigned int reserved,
+    CTimerStatics* timers)
+{
+    group->SetGroupNameID(indexes[Get32BitData(reader)]);
+    if (timers)
+        timers->popTime(L"DATA GROUPS");
+    LoadDataValues(reader, group, indexes, reserved, timers);
+    unsigned int count = Get32BitData(reader);
+    group->m_DataGroups.setGrowBy(count);
+    for (unsigned int i = 0; i < count; ++i) {
+        if (timers)
+            timers->m_times.add(timers->m_timer.getMicroseconds());
+        CDataGroup* child = group->AddDataGroup(EMPTY_WSTRING);
+        Load(reader, child, indexes, reserved, timers);
+    }
+}

@@ -169,3 +169,48 @@ CLogicObject::~CLogicObject()
     m_iObjectID = -1;
     m_iID = ~0u;
 }
+
+#include "DataGroup.h"
+#include "LogicGroup.h"
+#include "EmptyStrings.h"
+
+void CLogicObject::saveLogicObjectToDataGroup(CDataGroup* group)
+{
+    if (!group) return;
+    CDataGroup* object = group->AddDataGroup(L"LOGICOBJECT");
+    object->AddDataValue(L"ID", m_iID);
+    long long guid = -1;
+    if (GetObject()) guid = GetObject()->getOriginalGuid();
+    object->AddDataValue(L"OBJECTID", guid);
+    object->AddDataValue(L"X", m_fLeft);
+    object->AddDataValue(L"Y", m_fTop);
+    for (unsigned int i = 0; i < m_Links.size(); ++i)
+        if (m_Links[i]) m_Links[i]->saveLogicLinksToDataGroup(object);
+}
+
+void CLogicObject::loadLogicObjectByDataGroup(CLogicGroup* group, CDataGroup* data,
+    CDescriptorLoadConfiguration* configuration, std::map<int, int>* remappedIDs)
+{
+    if (!data || !group || data->GetGroupName() != L"LOGICOBJECT") return;
+    m_fLeft = data->GetDataValue(L"X", 100.0f);
+    m_fTop = data->GetDataValue(L"Y", 100.0f);
+    std::vector<CDataGroup*> links;
+    data->GetDataGroupsMatchingName(L"LOGICLINK", &links);
+    for (unsigned int i = 0; i < links.size(); ++i) {
+        CDataGroup* link = links[i];
+        if (!link) continue;
+        unsigned int oldID = link->GetDataValue(L"LINKINGTO", ~0u);
+        std::map<int, int>::iterator found = remappedIDs->find(oldID);
+        if (found == remappedIDs->end()) continue;
+        CLogicObject* input = group->GetLogicObjectByIndex(found->second);
+        if (!input || !input->m_pLinkedDescriptor) continue;
+        std::wstring outputName = link->GetDataValue(L"OUTPUTNAME", EMPTY_WSTRING);
+        std::wstring inputName = link->GetDataValue(L"INPUTNAME", EMPTY_WSTRING);
+        if (outputName == EMPTY_WSTRING || inputName == EMPTY_WSTRING) continue;
+        unsigned int outputIndex = m_pLinkedDescriptor->GetOutputLogicWrapperIndex(outputName);
+        unsigned int inputIndex = input->m_pLinkedDescriptor->GetInputLogicWrapperIndex(inputName);
+        CLogicWrapper* output = m_pLinkedDescriptor->GetOutputLogicWrapper(outputIndex);
+        CLogicWrapper* function = input->m_pLinkedDescriptor->GetInputLogicWrapper(inputIndex);
+        if (function && output) AddLogicLink(output, input, function);
+    }
+}

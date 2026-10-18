@@ -565,7 +565,7 @@ void CPath::AddPoint(const Ogre::Vector3& point, float radiusLeft, float radiusR
                 previousSegment /= previousSegmentLength;
 
             m_lSegmentAngle[m_lPoints.size() - 2] =
-                MATH::angleBetween(segment, previousSegment) * 57.295826;
+                MATH::angleBetween(segment, previousSegment) * 57.295827;
         }
     }
     else
@@ -639,7 +639,11 @@ CPath::CPath(CPath& path)
     m_vMinimum = path.m_vMinimum;
     m_vMaximum = path.m_vMaximum;
 
-    Resize(path.m_lPoints.size());
+    m_lPoints.resize(path.m_lPoints.size());
+    m_lRadiusLeft.resize(path.m_lPoints.size());
+    m_lRadiusRight.resize(path.m_lPoints.size());
+    m_lPointDistance.resize(path.m_lPoints.size());
+    m_lSegmentAngle.resize(path.m_lPoints.size());
 
     for (unsigned int i = 0; i < path.m_lPoints.size(); ++i)
     {

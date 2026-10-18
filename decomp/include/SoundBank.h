@@ -3,6 +3,7 @@
 #include "RunicCore.h"
 #include "TArrayList.h"
 #include <vector>
+#include <string>
 #include <OgreVector3.h>
 class CSoundInstance;
 namespace Ogre { class SceneNode; }
@@ -13,6 +14,8 @@ class CSoundBank : public CRunicCore
 public:
     CSoundBank(CSoundManager&,bool);
     virtual ~CSoundBank();
+    CSoundInstance* addSample(int sound, const std::wstring& name, bool flag1, bool flag2,
+                   float value1, float value2, float value3, float value4, int value5);
     void addSample(int sound,long long guid);
     int playSample(int sound,Ogre::SceneNode*,float,float,bool);
     void queueGlobalSample(int,float,float);

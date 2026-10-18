@@ -68,3 +68,30 @@ CCinematics::~CCinematics()
     m_lCinematics.clear();
     g_pCinematics = NULL;
 }
+
+#include "FileSystem.h"
+#include <new>
+
+void CCinematics::reload()
+{
+    for (unsigned int i = 0; i < m_lCinematics.size(); ++i) {
+        if (m_lCinematics[i]) {
+            m_lCinematics[i]->~CCinematic();
+            Ogre::NedAllocImpl::deallocBytes(m_lCinematics[i]);
+            m_lCinematics[i] = NULL;
+        }
+        m_lCinematics[i] = NULL;
+    }
+    m_lCinematics.clear();
+    TArrayList<std::wstring> files(10);
+    CFileSystem::getSingleton()->getFileList(m_sPath, files, L"*.dat", true, true, false, false);
+    m_lCinematics.setGrowBy(files.size() + 1);
+    for (unsigned int i = 0; i < files.size(); ++i) {
+        CDataGroup group(EMPTY_WSTRING, NULL, 20, 10, NULL);
+        group.LoadFile(files[i], static_cast<CTimerStatics*>(NULL));
+        CCinematic* cinematic = new (Ogre::NedAllocImpl::allocBytes(sizeof(CCinematic), NULL, 0, NULL)) CCinematic;
+        cinematic->load(&group);
+        m_mapCinematics[cinematic->m_sName] = m_lCinematics.size();
+        m_lCinematics.add(cinematic);
+    }
+}

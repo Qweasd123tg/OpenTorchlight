@@ -688,3 +688,12 @@ void CDescriptorController::addDescriptorProperty(CDescriptor* descriptor,
         properties[descriptor->m_sName] = new TArrayList<CDescriptorProp*>(20);
     properties[descriptor->m_sName]->add(property);
 }
+
+void CDescriptorController::returnCarchedObject(const std::wstring& name, CEditorBaseObject* object)
+{
+    if (!object) return;
+    if (g_CachedObjects.find(name) == g_CachedObjects.end())
+        g_CachedObjects[name] = new TArrayList<CEditorBaseObject*>(1000);
+    g_CachedObjects[name]->add(object);
+    object->removedFromSceneAndAddedToCache();
+}

@@ -11,6 +11,14 @@
 #include "SceneNodeObject.h"
 #include "UtilitiesMath.h"
 
+void CParticleCache::playSounds(Ogre::SceneNode* sceneNode)
+{
+    if (m_pSoundBank)
+        for (unsigned int i = 0; i < mSoundSampleIDs.size(); ++i)
+            m_pSoundBank->playSample(mSoundSampleIDs[i], sceneNode, mSoundSampleVolumes[i], 0.0f, false);
+}
+
+
 void CParticleCache::playCameraShakes(const Ogre::Vector3& shakeDirection)
 {
     for (unsigned int i = 0; i < mCameraShakeSystems.size(); ++i)

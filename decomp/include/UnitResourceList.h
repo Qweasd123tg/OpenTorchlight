@@ -14,6 +14,7 @@
 class CUnitResourceList : public CRunicCore
 {
 public:
+    CUnitResourceList();
     virtual ~CUnitResourceList();
 
     static CUnitResourceList *getSingleton();

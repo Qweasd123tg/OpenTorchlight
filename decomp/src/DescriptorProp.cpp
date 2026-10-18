@@ -353,3 +353,55 @@ bool CDescriptorProp::loadProperty(CEditorBaseObject* object, CDataGroup* group,
     }
     return true;
 }
+
+#include "GameNamespaces.h"
+
+void CDescriptorProp::serializeProperty(CDataGroup* group, unsigned int index)
+{
+    if (m_iFlags & 0x80) return;
+    CDataGroup* property = group->AddDataGroup(L"PROPERTY");
+    property->AddDataValue(L"NAME", m_sName, false);
+    property->AddDataValue(L"DESCRIPTION", m_sDescription, false);
+    property->AddDataValue(L"TYPEOFDATA", KEditorObjectPropertyTypeNames[m_pInterpreter ? VARIABLE_TYPE_STRING : m_eType], false);
+    property->AddDataValue(L"ID", index);
+    property->AddDataValue(L"CATEGORY", m_sCategory, false);
+    if (m_iFlags & 2) property->AddDataValue(L"EDITORTYPE", L"file", false);
+    if (m_iFlags & 0x200) property->AddDataValue(L"EDITORTYPE", L"file_particlesystem", false);
+    if (m_iFlags & 0x400) property->AddDataValue(L"EDITORTYPE", L"file_particlesystemimages", false);
+    if (m_iFlags & 0x800) property->AddDataValue(L"EDITORTYPE", L"file_layout", false);
+    if (m_iFlags & 0x1000) property->AddDataValue(L"EDITORTYPE", L"file_mesh", false);
+    if (m_iFlags & 0x2000) property->AddDataValue(L"EDITORTYPE", L"file_images", false);
+    else if (m_iFlags & 4) property->AddDataValue(L"EDITORTYPE", L"list", false);
+    else if (m_iFlags & 8) property->AddDataValue(L"EDITORTYPE", L"color", false);
+    else if (m_iFlags & 0x8000) property->AddDataValue(L"EDITORTYPE", L"line", false);
+    else if (m_iFlags & 0x10) property->AddDataValue(L"EDITORTYPE", L"dynamicproperty", false);
+    else if (m_iFlags & 0x20) property->AddDataValue(L"EDITORTYPE", L"dynamiccolor", false);
+    if (m_iFlags & 0x40) property->AddDataValue(L"REFRESHAFTERCHANGE", true);
+    if (m_iFlags & 1) property->AddDataValue(L"READONLY", true);
+}
+
+void CDescriptorProp::setPropertyValueByString(std::wstring value, CEditorBaseObject* object)
+{
+    if (m_eType == VARIABLE_TYPE_NOT_SET) return;
+    if (m_pInterpreter || m_eType == VARIABLE_TYPE_STRING) { setData(value, object); return; }
+    TArrayList<UNIONDATA32BIT> data(4);
+    std::queue<std::wstring> tokens;
+    STRINGS::TokenizeString(&tokens, value, L",");
+    if (tokens.empty()) tokens.push(value);
+    while (!tokens.empty()) {
+        if (!m_pInterpreter) {
+            UNIONDATA32BIT item;
+            switch (m_eType) {
+            case VARIABLE_TYPE_INTEGER: case VARIABLE_TYPE_UNSIGNED_INTEGER:
+                item.m_iValue = STRINGS::GetInt(tokens.front()); break;
+            case VARIABLE_TYPE_FLOAT: case VARIABLE_TYPE_VECTOR2: case VARIABLE_TYPE_VECTOR3: case VARIABLE_TYPE_VECTOR4:
+                item.m_fValue = STRINGS::GetFloat(tokens.front()); break;
+            case VARIABLE_TYPE_BOOL: item.m_uValue = static_cast<unsigned char>(STRINGS::GetBool(tokens.front())); break;
+            default: tokens.pop(); continue;
+            }
+            data.add(item);
+        }
+        tokens.pop();
+    }
+    setData(data.size() ? &data[0] : NULL, data.size(), object);
+}

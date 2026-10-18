@@ -256,3 +256,45 @@ CCollisionModel* CMasterResourceManager::addCollisionModel(std::wstring name)
     reference->m_sUnknown20 = name;
     return reference->m_pCollisionModel;
 }
+
+#include "ParticlePreloader.h"
+#include "MissilePreloader.h"
+#include "EffectGroupManager.h"
+#include "GraphManager.h"
+#include "SkillParser.h"
+#include "SpawnClassParser.h"
+#include "StringUtilities.h"
+#include <OgreResourceGroupManager.h>
+
+void CMasterResourceManager::loadParticles()
+{
+    if (m_pParticleSystemManager && m_pSettings && m_pSoundManager && m_pDefaultSceneManager) {
+        createParticleReloader();
+        m_pParticlePreloader->ReloadParticles();
+    }
+}
+
+void CMasterResourceManager::reloadResources()
+{
+    m_pMasterResourceManager->m_pGraphManager->reload();
+    m_pMasterResourceManager->m_effectGroups->reload();
+    m_pMasterResourceManager->m_pParticlePreloader->ReloadParticles();
+    m_pMasterResourceManager->m_missilePreloader->reloadMissiles();
+    CSkillParser::reloadSkills();
+    m_pMasterResourceManager->m_pSpawnClassParser->reloadFromDirectory(L"media/SpawnClasses/");
+    m_pMasterResourceManager->reloadSoundBankData();
+    m_experienceGraph = m_pGraphManager->getGraph(L"EXPERIENCEGATE");
+    m_fameGraph = m_pGraphManager->getGraph(L"FAMEGATE");
+}
+
+void CMasterResourceManager::addResourceLocation(const std::wstring& path, const std::string& group, bool reload)
+{
+    std::string location = STRINGS::StringConvertToUTF8(std::wstring(STRINGS::StringUpper(path).c_str()));
+    bool found = false;
+    for (int i = 0; i < static_cast<int>(m_resourceLocations.size()); ++i)
+        if (m_resourceLocations[i] == location) { found = true; break; }
+    if (found && !reload) return;
+    if (!found) m_resourceLocations.push_back(location);
+    Ogre::ResourceGroupManager::getSingleton().addResourceLocation(location, "FileSystem", group.empty() ? Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME : group, true);
+    Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup(group.empty() ? Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME : group);
+}

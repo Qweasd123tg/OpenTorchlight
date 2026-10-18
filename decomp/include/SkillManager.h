@@ -13,6 +13,7 @@ class CBaseUnit;
 class CResourceManager;
 class CCharacter;
 class CItem;
+class CEquipment;
 // Partial, with the complete 0x98 layout and original destructor slots.
 class CSkillManager : public CRunicCore
 {
@@ -59,6 +60,12 @@ public:
     unsigned int getSkillLevel(const std::wstring& name);
     int getNumOfSkillsExecutableByActivationType(ESKILL_ACTIVATION_TYPE activation);
     void hideWeaponTrailsOnCurrentSkill();
+    Ogre::Vector3* getPositionForSkill(CSkill* skill, CBaseUnit* target);
+    void startPassiveSkills(CBaseUnit* caster, const Ogre::Vector3& position,
+                            const Ogre::Quaternion& orientation, const Ogre::Vector3& targetPosition);
+    void fireSkillsOnDeath(CBaseUnit* caster, ESKILL_ACTIVATION_TYPE activation,
+                          const Ogre::Vector3& position, const Ogre::Quaternion& orientation,
+                          const Ogre::Vector3& targetPosition, CCharacter* target);
     void deleteSkill(CSkill* skill);
     void deleteSkill(const std::wstring& name);
     CSkill* getSkill(const std::wstring& name,int level);
@@ -85,7 +92,8 @@ private:
     std::map<std::wstring,TArrayList<CSkill*>*> m_SkillsByName;
     TArrayList<CSkill*> m_UpdatingSkills;
     TArrayList<CSkill*> m_OtherSkills;
-    unsigned char m_SkillData78[0x10];
+    Ogre::Vector3 m_skillPosition; // +0x78, scratch position returned by getPositionForSkill
+    unsigned char m_SkillData84[4];
     TSafePointer<CBaseUnit> m_Owner;
 };
 #endif

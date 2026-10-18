@@ -136,6 +136,10 @@ public:
 
 protected:
     friend class CPathController;
+    friend class CDamageShape;
+    friend class CSkillManager;
+    friend class CSkillEffectAndAffixes;
+    friend class CQuestDialogItem;
     friend class CGameUI;
     friend class CDieMenu;
     friend class CCharacter;

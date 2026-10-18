@@ -26,6 +26,8 @@ namespace OGRE_UTILITIES
 
     Ogre::Entity* createEntity(Ogre::SceneManager* sceneManager, EPRIMITIVES primitive,
                                EQUERYMASK queryMask, const char* name);
+    Ogre::Entity* createEntity(Ogre::SceneManager* sceneManager, const std::wstring& meshName,
+                               EQUERYMASK queryMask, const char* name);
     void attachEntityToSceneNode(Ogre::Entity* entity, Ogre::SceneNode* node);
     void detachEntityFromParent(Ogre::Entity* entity);
     void removeChildFromParentNode(Ogre::SceneNode* node);

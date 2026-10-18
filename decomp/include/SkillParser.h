@@ -23,7 +23,7 @@ public:
     static CSkill* getSkill(CResourceManager* resourceManager, const std::wstring& skillName);
     void parseSkill(const std::wstring& fileName);
     void parseSkills();
-    void reloadSkills();
+    static void reloadSkills();
 
     CSkillParser(CResourceSettings* resourceSettings);
 

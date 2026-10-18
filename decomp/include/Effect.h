@@ -36,6 +36,8 @@ public:
     float calculateBaseValue(ECALCULATETYPES type);
 private:
     friend class CEffectManager;
+    friend class CDamageShape;
+    friend class CUnitSpawner;
     unsigned int m_iLevel;
     EDAMAGE_TYPES m_eDamageType;
     float m_fRemainingDuration; // +0x18

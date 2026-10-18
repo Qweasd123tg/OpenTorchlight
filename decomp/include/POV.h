@@ -33,14 +33,17 @@ public:
     void SetViewOrientation(const Ogre::Matrix4&);
 
     // fields
-    long long m_Unknown10;
+    union { long long m_Unknown10; CSettings* m_settings; }; // +0x10
     Ogre::Matrix4 m_orientation; // +0x18
     Ogre::Matrix4 m_viewOrientation; // +0x58
     unsigned char m_gap98[0x40] __attribute__((aligned(8)));
     float m_fUnknownD8;
     float m_fUnknownDC;
     float m_fUnknownE0;
-    unsigned char m_gapE4[0xc] __attribute__((aligned(4)));
+    union {
+        unsigned char m_gapE4[0xc] __attribute__((aligned(4)));
+        struct { float m_previousX; float m_previousY; float m_previousZ; };
+    };
     float m_fUnknownF0;
     float m_fUnknownF4;
     float m_fUnknownF8;
@@ -50,15 +53,15 @@ public:
     float m_fUnknown108;
     float m_fUnknown10C;
     float m_fUnknown110;
-    int m_iUnknown114;
-    int m_iUnknown118;
-    int m_iUnknown11C;
-    int m_iUnknown120;
+    union { int m_iUnknown114; float m_viewAxis114; };
+    union { int m_iUnknown118; float m_viewAxis118; };
+    union { int m_iUnknown11C; float m_viewAxis11C; };
+    union { int m_iUnknown120; float m_viewAxis120; };
     float m_fUnknown124;
-    int m_iUnknown128;
-    int m_iUnknown12C;
-    int m_iUnknown130;
-    int m_iUnknown134;
+    union { int m_iUnknown128; float m_viewAxis128; };
+    union { int m_iUnknown12C; float m_viewAxis12C; };
+    union { int m_iUnknown130; float m_viewAxis130; };
+    union { int m_iUnknown134; float m_viewAxis134; };
     float m_fUnknown138;
     float m_fUnknown13C;
     float m_fUnknown140;

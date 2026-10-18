@@ -20,6 +20,7 @@ class CSkillProperty;
 class CSkill : public CRunicCore, public iUnitObserver
 {
 public:
+    bool weaponRequirementsMet(CCharacter* character);
     bool requirementsMet(CBaseUnit*, ESKILL_ACTIVATION_TYPE, const Ogre::Vector3*, CBaseUnit*, bool);
     bool getCanStop();
     void attemptToStopSkill();
@@ -71,6 +72,9 @@ public:
                       const Ogre::Vector3* targetPosition);
     void updateSkill(float elapsed);
     void stopSkill();
+    bool startSkill(CBaseUnit* caster, ESKILL_ACTIVATION_TYPE activation,
+                    const Ogre::Vector3& position, const Ogre::Quaternion& orientation,
+                    const Ogre::Vector3& targetPosition, CBaseUnit* target);
     CSkill(CResourceManager* resourceManager, CDataGroup* dataGroup);
     virtual ~CSkill();
     void assignSkillAnimations(CBaseUnit* unit);
@@ -94,6 +98,7 @@ private:
     bool enabledWithoutProperty() const { return m_bEnabled & !m_bExecutedByProperty; }
 
     friend class CSkillManager;
+    friend class CSkillEffectAndAffixes;
     friend class CAffix;
     friend class CSkillProperty;
     friend class CCharacter;
@@ -111,7 +116,7 @@ private:
     bool m_interruptible; // +0x64
     unsigned char m_Padding65[0x1];
     bool m_allowsTurning; // +0x66
-    unsigned char m_Padding67;
+    unsigned char m_suppressNormalStop; // +0x67, checked alongside the death event
     bool m_stopsPathingOnCompletion; // +0x68
     unsigned char m_Padding69;
     bool m_requiresPathable;

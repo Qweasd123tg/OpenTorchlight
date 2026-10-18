@@ -135,3 +135,128 @@ void CDamageShape::setEnabled(bool enabled)
         updateVisual(true, 1.0f);
     setEnabled(false);
 }
+
+#include "GameUI.h"
+#include "Console.h"
+#include "Settings.h"
+#include "GameVariables.h"
+#include "Graph.h"
+#include "Effect.h"
+#include "Utilities.h"
+#include <cmath>
+
+bool CDamageShape::updateLevelObject(float elapsed, Ogre::Camera*, const Ogre::Vector3&)
+{
+    Ogre::Vector3 position = getPosition(true);
+    if (position.x != m_fUnknown1BC || position.y != m_fUnknown1C0 || position.z != m_fUnknown1C4) {
+        if (!m_pResourceManager->getEditorIsRunning() && m_pResourceManager->getLevel()) {
+            if (m_pResourceManager->getLevel()->snapToValidGround(position, 0.01f))
+                setPosition(m_vPosition + (position - getPosition(true)));
+        }
+    }
+    if (m_bUnknown1A6 && m_fDelayTimer <= 0.0f && m_bUnknown180 && !m_bLoopsForEver) {
+        setEnabled(false);
+        m_bUnknown1A6 = false;
+    }
+    m_bUnknown180 = true;
+    if (getEnabled() && (!m_pResourceManager->getEditorIsRunning() || m_bUpdateInEditor)) {
+        if (m_bLoopsForEver && m_fTimer < 0.0f) {
+            m_fUnknown190 = 1.0f;
+            m_bUnknown1A6 = true;
+        } else {
+            m_fDelayTimer -= elapsed;
+            if (m_fDelayTimer < 0.0f && (m_bLoopsForEver || m_iUpdateInEditor > 0)) {
+                m_fUpdateInEditor -= elapsed;
+                if (m_fUpdateInEditor <= 0.0f) {
+                    m_fUpdateInEditor += m_fTimer;
+                    if (!m_bLoopsForEver && m_iUpdateInEditor > 0) {
+                        m_fDelayTimer = m_initialDelay;
+                        --m_iUpdateInEditor;
+                        if (m_iNumLoops < 0)
+                            m_iUpdateInEditor = 1;
+                        else if (!m_iUpdateInEditor) {
+                            m_fUpdateInEditor = 0.0f;
+                            m_bUnknown1A6 = true;
+                        }
+                    }
+                }
+                m_fUnknown190 = 1.0f - m_fUpdateInEditor / (m_fTimer == 0.0f ? 1.0f : m_fTimer);
+            }
+        }
+        if ((m_bUpdateInEditor && m_pResourceManager->getEditorIsRunning()) ||
+            (!m_pResourceManager->getEditorIsRunning() && CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_SHOW_DAMAGE_SHAPES)))
+            updateVisual(true, m_fUnknown190);
+        position = getPosition(true);
+        m_fUnknown1BC = position.x;
+        m_fUnknown1C0 = position.y;
+        m_fUnknown1C4 = position.z;
+        return getEnabled();
+    }
+    return getEnabled();
+}
+
+void CDamageShape::doDamageToItem(float, CItem* item, float)
+{
+    if (!getEnabled() || !item->ISA(static_cast<UNITTYPES::EUNITTYPES>(m_iUnknown188)) ||
+        !item->ISA(static_cast<UNITTYPES::EUNITTYPES>(29)))
+        return;
+    if (!getPositionIsInShapeAtPercent(m_fUnknown190, item->getPosition(true), item->m_fBaseUnitValue194).first)
+        return;
+    if (!m_bDamageOverTime) {
+        if (m_targets.find(item) != -1)
+            return;
+        m_targets.add(item);
+    }
+    bool allowed = true;
+    for (unsigned int i = 0; i < m_damageListeners.size(); ++i)
+        if (!m_damageListeners[i]->itemEffectedByDamageShape(this, item)) allowed = false;
+    if (allowed)
+        item->interact(NULL);
+    else if (CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_COMBAT_LOG))
+        CGameUI::getSingleton()->m_console->addTextNoHistory(L"Damage shape hit unit");
+}
+
+void CDamageShape::doDamageToCharacter(float elapsed, CCharacter* character, float)
+{
+    if (!character->ISA(static_cast<UNITTYPES::EUNITTYPES>(m_iUnknown188))) return;
+    if (m_iAlignmentTypAllowedToDamage != 3 && character->alignment() != m_iAlignmentTypAllowedToDamage) return;
+    if (character->alive() == m_bTargetOnlyDead) return;
+    if (!m_bDamageOverTime) {
+        if (m_iTotalNumberOfTargets > 0 && m_iTotalNumberOfTargets <= static_cast<int>(m_targets.size())) return;
+        if (m_targets.find(character) != -1) return;
+    }
+    const Ogre::Vector3 source = getPosition(true);
+    Ogre::Vector3 contact = (source - character->getPosition(true)) * (0.75f * character->m_fBaseUnitValue194);
+    contact += character->getPosition(true);
+    Ogre::Vector3 direction = character->getPosition(true) - source;
+    direction.y = 0.0f;
+    direction.normalise();
+    bool affected = false;
+    bool allowed = true;
+    for (unsigned int i = 0; i < m_damageListeners.size(); ++i) {
+        if (!m_damageListeners[i]->getCharacterCanBeAffectedByDamageShape(this, character))
+            allowed = false;
+        else {
+            affected = true;
+            if (m_damageListeners[i]->characterEffectedByDamageShape(this, character, &direction)) allowed = false;
+        }
+    }
+    if (affected && !m_bDamageOverTime) m_targets.add(character);
+    if (!allowed || !m_graph || !m_pResourceManager->getLevel()) return;
+    float damage = m_graph->getValue(float(m_pResourceManager->getLevel()->getDungeonDepth()), 0) * (m_fMaxDamage / 100.0f);
+    if (m_fMaxDamage != m_fMinDamage) {
+        float minimum = m_fMinDamage / 100.0f;
+        damage = minimum + UTILITIES::randomBetweenVolatile(0.0f, damage - minimum);
+    }
+    if (m_bDamageOverTime) damage *= elapsed;
+    if (!getCanDoDamage(character, damage, contact)) return;
+    if (!m_bDamageOverTime) {
+        CEffect* effect = new CEffect(static_cast<EEFFECT_TYPE>(52), false, static_cast<EEFFECT_ACTIVATION>(1), -900.0f, damage, 0.0f, false);
+        effect->m_eDamageType = static_cast<EDAMAGE_TYPES>(m_iDamageType);
+        effect->m_direction = direction;
+        character->applyEffectOnUnit(NULL, NULL, effect);
+        delete effect;
+    } else
+        character->applyDamage(*m_pResourceManager->getLevel(), getPosition(true), damage, direction, 1.0f, NULL, false, false, false, false, 0);
+    if (!affected && !m_bDamageOverTime) m_targets.add(character);
+}
