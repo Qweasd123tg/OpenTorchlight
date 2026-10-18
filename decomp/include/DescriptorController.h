@@ -14,6 +14,8 @@ class CDescriptorController
 {
 public:
     CDescriptorController();
+    ~CDescriptorController();
+    static void returnCarchedObject(const std::wstring& name, CEditorBaseObject* object);
     static void addDescriptorFunction(const wchar_t* name, void* (*)());
     static CDescriptor* getNewDescriptorByName(const std::wstring& name);
 

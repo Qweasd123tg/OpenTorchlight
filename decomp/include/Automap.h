@@ -2,6 +2,7 @@
 #define AUTOMAP_H
 
 #include <OgreBillboard.h>
+#include <OgreMaterial.h>
 #include <OgreSceneManager.h>
 #include <OgreVector3.h>
 
@@ -48,7 +49,7 @@ public:
                     float alpha);
 
     CResourceManager* m_pResourceManager;
-    Ogre::SceneNode* m_pSceneRoot;
+    Ogre::SceneManager* m_pSceneManager; // +0x18, original constructor argument
     Ogre::BillboardSet* m_pTileBillboardSet;
     Ogre::BillboardSet* m_pStaticTileBillboardSet;
     Ogre::SceneNode* m_pTileSceneNode;
@@ -56,7 +57,16 @@ public:
     Ogre::Camera* m_pCamera;
     void* m_pReserved;
 
-    unsigned char m_ViewportState[0x18] __attribute__((aligned(8)));
+    union {
+        unsigned char m_ViewportState[0x18] __attribute__((aligned(8)));
+        struct {
+            Ogre::Viewport* m_viewport; // +0x50
+            float m_zoom; // +0x58
+            float m_panelSize; // +0x5c
+            float m_fullMapWidth; // +0x60
+            float m_fullMapHeight; // +0x64
+        };
+    };
     bool m_bVisible;
     unsigned char m_gap69[7];
     Ogre::Billboard* m_pPlayerBillboard;
@@ -83,19 +93,12 @@ public:
     Ogre::SceneNode* m_pCullQuad;
     Ogre::Rectangle2D* m_pCullQuadBounds;
 
-    void* m_pCullMaterialControl;
-    Ogre::Material* m_pCullMaterial;
-    void* m_pCullMaterialRefCount;
-    int m_iCullMaterialState;
-    unsigned char m_gap14C[4];
+    Ogre::MaterialPtr m_cullMaterial; // +0x130, original shared owner
 
     Ogre::SceneNode* m_pOverlayQuad;
     Ogre::Rectangle2D* m_pOverlayQuadBounds;
 
-    void* m_pOverlayMaterialControl;
-    Ogre::Material* m_pOverlayMaterial;
-    void* m_pOverlayMaterialRefCount;
-    int m_iOverlayMaterialState;
+    Ogre::MaterialPtr m_overlayMaterial; // +0x160, original shared owner
 };
 
 #endif

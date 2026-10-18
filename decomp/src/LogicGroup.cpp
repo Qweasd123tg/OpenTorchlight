@@ -125,3 +125,48 @@ void CLogicGroup::saveLogicGroupToDataGroup(CDataGroup* dataGroup,
             if (saved[i]) m_logicObjects[i]->saveLogicObjectLinksToBinaryFile(stream);
     }
 }
+
+#include "StringUtilities.h"
+#include <OgreLogManager.h>
+
+void CLogicGroup::loadLogicGroupToDataGroup(CDataGroup* data, COgreReader* reader,
+    CDescriptorLoadConfiguration* configuration)
+{
+    std::map<int, int> remapped;
+    if (data) {
+        CDataGroup* group = data->GetDataGroupByName(L"LOGICGROUP", false);
+        if (!group || group->GetGroupName() != L"LOGICGROUP")
+            return;
+        std::vector<CDataGroup*> objects;
+        group->GetDataGroupsMatchingName(L"LOGICOBJECT", &objects);
+        for (unsigned int i = 0; i < objects.size(); ++i) {
+            CDataGroup* object = objects[i];
+            if (object->GetGroupName() != L"LOGICOBJECT")
+                Ogre::LogManager::getSingleton().logMessage("ERROR LEVEL WILL NOT WORK LOGICOBJECT NOT FOUND ", Ogre::LML_CRITICAL, false);
+            unsigned int id = object->GetDataValue(L"ID", static_cast<unsigned int>(-1));
+            long long originalID = object->GetDataValue(L"OBJECTID", -1LL);
+            long long objectID = configuration->getRemappedID(originalID);
+            if (objectID == -1 || id == static_cast<unsigned int>(-1))
+                Ogre::LogManager::getSingleton().logMessage("ERROR IN GETTING ORIGINAL OBJECT!!" + STRINGS::GetValueAsString(originalID), Ogre::LML_CRITICAL, false);
+            remapped[id] = AddLogicObject(objectID);
+        }
+        for (unsigned int i = 0; i < objects.size(); ++i) {
+            CDataGroup* object = objects[i];
+            if (object->GetGroupName() == L"LOGICOBJECT") {
+                unsigned int id = remapped[object->GetDataValue(L"ID", static_cast<unsigned int>(-1))];
+                if (id < m_logicObjects.size() && m_logicObjects[id])
+                    m_logicObjects[id]->loadLogicObjectByDataGroup(this, object, configuration, &remapped);
+            }
+        }
+    } else if (reader) {
+        unsigned int count = 0;
+        reader->read(&count, 4);
+        for (unsigned int i = 0; i < count; ++i) {
+            CLogicObject* object = new CLogicObject(getSceneOwner(), -1, static_cast<unsigned int>(-1));
+            AddLogicObject(object);
+            object->loadLogicObjectByBinaryFile(this, reader, configuration, remapped);
+        }
+        for (unsigned int i = 0; i < m_logicObjects.size(); ++i)
+            m_logicObjects[i]->loadAndRelinkObjectInFromBinaryFile(this, reader, configuration, remapped);
+    }
+}

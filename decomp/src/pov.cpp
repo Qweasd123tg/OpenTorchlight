@@ -232,3 +232,58 @@ void CPOV::SetViewOrientation(const Ogre::Matrix4& orientation)
     if (forward.y > 0.0f)
         m_fUnknown150 = -m_fUnknown150;
 }
+
+#include <cstdlib>
+extern short GetAsyncKeyState(unsigned int);
+extern bool SetCursorPos(int,int);
+void CPOV::Update(float elapsed, float scale)
+{
+    if (UpdateFlyingTo(elapsed) || !m_bUnknown178) return;
+    UpdateInputs(elapsed);
+    m_fUnknownD8 += m_fUnknown138 * elapsed * scale;
+    m_fUnknownDC += m_fUnknown13C * elapsed * scale;
+    m_fUnknownE0 += m_fUnknown140 * elapsed * scale;
+    ExtractOrientationVectors();
+    float damping = static_cast<float>(pow(static_cast<double>(0.0001f), static_cast<double>(elapsed)));
+    m_fUnknown138 *= damping; m_fUnknown13C *= damping; m_fUnknown140 *= damping;
+    CapContactVelocity(scale * 750.0f);
+    m_previousX=m_fUnknownD8; m_previousY=m_fUnknownDC; m_previousZ=m_fUnknownE0;
+}
+void CPOV::UpdateMouseInput(void*, float)
+{
+    POINT point; GetCursorPos(&point);
+    long long x=point.x, y=point.y;
+    bool outside=x<=0 || x>=m_settings->GetInt(KSETTINGS_WIN_WIDTH) || y<=0 || y>=m_settings->GetInt(KSETTINGS_WIN_HEIGHT);
+    if (GetAsyncKeyState(2)<0 && !outside && GetAsyncKeyState(16)>=0) {
+        m_fUnknown160=(float(point.x)-float(m_iUnknown168))*0.5f;
+        m_fUnknown158=(float(point.y)-float(m_iUnknown170))*0.5f;
+        if(m_fUnknown160 < -10.0f)m_fUnknown160=-10.0f; else if(m_fUnknown160>10.0f)m_fUnknown160=10.0f;
+        if(m_fUnknown158 < -10.0f)m_fUnknown158=-10.0f; else if(m_fUnknown158>10.0f)m_fUnknown158=10.0f;
+        int height=m_settings->GetInt(KSETTINGS_RES_HEIGHT), width=m_settings->GetInt(KSETTINGS_RES_WIDTH);
+        SetCursorPos(width/2+int(x-point.x),height/2+int(y-point.y));
+        if(!m_bUnknown14E){m_fUnknown160=0; m_fUnknown158=0;}
+        m_bUnknown14E=true;
+    } else {
+        m_bUnknown14E=false;
+        m_fUnknown160*=0.8f; if(float(std::abs(int(m_fUnknown160)))<0.01f)m_fUnknown160=0;
+        m_fUnknown158*=0.8f; if(float(std::abs(int(m_fUnknown158)))<0.01f)m_fUnknown158=0;
+    }
+    m_iUnknown168=point.x; m_iUnknown170=point.y;
+}
+void CPOV::ResetPOV(bool resetPosition,float roll,float pitch)
+{
+    m_fUnknown158=m_fUnknown15C=m_fUnknown160=m_fUnknown164=0;
+    m_bUnknown148=m_bUnknown149=m_bUnknown14A=m_bUnknown14B=m_bUnknown14C=m_bUnknown14D=false;
+    m_fUnknown138=Ogre::Vector3::ZERO.x;m_fUnknown13C=Ogre::Vector3::ZERO.y;m_fUnknown140=Ogre::Vector3::ZERO.z;
+    if(resetPosition){m_fUnknownD8=m_fUnknownDC=m_fUnknownE0=0;m_orientation=Ogre::Matrix4::IDENTITY;m_viewOrientation=Ogre::Matrix4::IDENTITY;}
+    Ogre::Matrix3 matrix;m_orientation.extract3x3Matrix(matrix);Ogre::Quaternion q(matrix);
+    Ogre::Vector3 axis=Ogre::Quaternion::IDENTITY.xAxis();m_fUnknown108=axis.x;m_fUnknown10C=axis.y;m_fUnknown110=axis.z;
+    axis=Ogre::Quaternion::IDENTITY.yAxis();m_fUnknownF0=axis.x;m_fUnknownF4=axis.y;m_fUnknownF8=axis.z;
+    axis=Ogre::Quaternion::IDENTITY.zAxis();m_fUnknownFC=axis.x;m_fUnknown100=axis.y;m_fUnknown104=axis.z;
+    axis=q.xAxis();m_viewAxis12C=axis.x;m_viewAxis130=axis.y;m_viewAxis134=axis.z;
+    axis=q.yAxis();m_viewAxis114=axis.x;m_viewAxis118=axis.y;m_viewAxis11C=axis.z;
+    axis=q.zAxis();m_viewAxis120=axis.x;m_fUnknown124=axis.y;m_viewAxis128=axis.z;
+    m_fUnknown150=pitch;if(pitch==0)m_fUnknown150=q.getPitch(true).valueAngleUnits();if(m_fUnknown124>0)m_fUnknown150=-m_fUnknown150;
+    m_fUnknown154=roll;if(roll==0)m_fUnknown154=q.getRoll(true).valueAngleUnits();
+    Update(1.0f,1.0f);
+}

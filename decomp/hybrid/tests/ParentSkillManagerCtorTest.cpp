@@ -49,7 +49,7 @@ void side(void* raw,autotest::Capture& out,bool ours)
         number(manager->m_pResourceManager==resource);number(manager->m_SkillsByName.size());
         observeList(manager->m_UpdatingSkills);observeList(manager->m_OtherSkills);
         number(manager->m_Owner.m_pObject==owner);number(manager->m_Owner.m_nIndex);
-        out.add(manager->m_SkillData78,sizeof(manager->m_SkillData78));
+        out.add(&manager->m_skillPosition,sizeof(manager->m_skillPosition)+sizeof(manager->m_SkillData84));
         // Make the initially empty map and lists usable across grow-by-10 boundaries.
         for(unsigned i=0;i<seed%23;++i){CSkill* token=reinterpret_cast<CSkill*>(autotest::allocate(16));manager->m_UpdatingSkills.add(token);manager->m_OtherSkills.add(token);}
         manager->m_SkillsByName[L"probe"]=&manager->m_OtherSkills;

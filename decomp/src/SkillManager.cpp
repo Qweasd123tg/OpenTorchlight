@@ -384,3 +384,115 @@ void CSkillManager::fireSkillsOnCreate(CBaseUnit* caster, ESKILL_ACTIVATION_TYPE
             executeSkill(m_OtherSkills[i], caster, activation, position, orientation, targetPosition, target);
     triggerSkillEvent(static_cast<ESKILL_EVENT_TYPE>(10), position, orientation, target);
 }
+
+void CSkillManager::stopAllSkills(bool force, bool keepDeathSkills, bool includePassive)
+{
+    for (unsigned int i = 0; i < m_UpdatingSkills.size(); ++i)
+        if (includePassive || m_UpdatingSkills[i]->m_eActivationType != static_cast<ESKILL_ACTIVATION_TYPE>(4))
+        {
+            if (force)
+            {
+                if (!keepDeathSkills || (!m_UpdatingSkills[i]->hasEvent(static_cast<ESKILL_EVENT_TYPE>(9)) &&
+                                         !m_UpdatingSkills[i]->m_suppressNormalStop))
+                    m_UpdatingSkills[i]->stopSkill();
+            }
+            else if (!keepDeathSkills || (!m_UpdatingSkills[i]->hasEvent(static_cast<ESKILL_EVENT_TYPE>(9)) &&
+                                          !m_UpdatingSkills[i]->m_suppressNormalStop))
+                m_UpdatingSkills[i]->attemptToStopSkill();
+        }
+}
+
+void CSkillManager::startPassiveSkills(CBaseUnit* caster, const Ogre::Vector3& position,
+    const Ogre::Quaternion& orientation, const Ogre::Vector3& targetPosition)
+{
+    for (unsigned int i = 0; i < m_UpdatingSkills.size(); ++i)
+        if (m_UpdatingSkills[i]->m_eActivationType == static_cast<ESKILL_ACTIVATION_TYPE>(4))
+            m_UpdatingSkills[i]->stopSkill();
+    update(0.0f);
+    CCharacter* character = dynamic_cast<CCharacter*>(caster);
+    if (character)
+        for (unsigned int i = 0; i < m_OtherSkills.size(); ++i)
+            if (m_OtherSkills[i]->m_eActivationType == static_cast<ESKILL_ACTIVATION_TYPE>(4))
+            {
+                CSkill* skill = m_OtherSkills[i];
+                skill->calculateEffectiveSkillLevel();
+                if (skill->m_iEffectiveSkillLevel && m_OtherSkills[i]->weaponRequirementsMet(character))
+                    executeSkill(m_OtherSkills[i], caster, static_cast<ESKILL_ACTIVATION_TYPE>(4),
+                                 position, orientation, targetPosition, caster);
+            }
+}
+
+void CSkillManager::fireSkillsOnDeath(CBaseUnit* caster, ESKILL_ACTIVATION_TYPE activation,
+    const Ogre::Vector3& position, const Ogre::Quaternion& orientation,
+    const Ogre::Vector3& targetPosition, CCharacter* target)
+{
+    for (unsigned int i = 0; i < m_OtherSkills.size(); ++i)
+        if (m_OtherSkills[i]->hasEvent(static_cast<ESKILL_EVENT_TYPE>(9)))
+        {
+            if (m_OtherSkills[i]->getTargetType() == 1 || m_OtherSkills[i]->getTargetType() == 5 ||
+                m_OtherSkills[i]->getTargetType() == 6)
+            {
+                Ogre::Vector3* skillPosition = getPositionForSkill(m_OtherSkills[i], NULL);
+                target = NULL;
+                executeSkill(m_OtherSkills[i], caster, activation, position, orientation,
+                             skillPosition ? *skillPosition : targetPosition, target);
+            }
+            else
+                executeSkill(m_OtherSkills[i], caster, activation, position, orientation, targetPosition, target);
+        }
+    triggerSkillEvent(static_cast<ESKILL_EVENT_TYPE>(9), position, orientation, target);
+}
+
+void CSkillManager::deleteSpecificSkill(CSkill* skill)
+{
+    m_OtherSkills.remove(skill);
+    bool hasSameLevel = false;
+    for (unsigned int i = 0; i < m_OtherSkills.size(); ++i)
+        if (m_OtherSkills[i]->getName() == skill->getName() && m_OtherSkills[i]->m_skillLevel == skill->m_skillLevel)
+            hasSameLevel = true;
+    for (int i = 0; i < static_cast<int>(m_UpdatingSkills.size()); ++i)
+        if (m_UpdatingSkills[i] == skill)
+        {
+            skill->stopSkill();
+            m_UpdatingSkills.removeAt(i);
+            --i;
+        }
+    std::map<std::wstring,TArrayList<CSkill*>*>::iterator found = m_SkillsByName.find(STRINGS::StringUpper(skill->getName()));
+    if (found != m_SkillsByName.end())
+    {
+        for (int i = 0; i < static_cast<int>(found->second->size()); ++i)
+        {
+            CSkill* entry = (*found->second)[i];
+            if ((entry == skill || !hasSameLevel) && m_UpdatingSkills.find(entry) == -1)
+            {
+                found->second->removeAt(i);
+                delete entry;
+                --i;
+            }
+        }
+        if (!hasSameLevel || m_SkillsByName.empty())
+        {
+            delete found->second;
+            found->second = NULL;
+            m_SkillsByName.erase(found);
+        }
+    }
+}
+
+void CSkillManager::setSkillLevel(CSkill* skill, unsigned int level)
+{
+    if (skill->m_eActivationType == static_cast<ESKILL_ACTIVATION_TYPE>(4) && level)
+        for (unsigned int i = 0; i < m_UpdatingSkills.size(); ++i)
+            if (m_UpdatingSkills[i]->m_eActivationType == static_cast<ESKILL_ACTIVATION_TYPE>(4))
+                m_UpdatingSkills[i]->stopSkill();
+    for (unsigned int i = 0; i < m_OtherSkills.size(); ++i)
+        if (skill->getName() == m_OtherSkills[i]->getName())
+            skill->_setLevelOfSkillFromSkillManager(level);
+    std::map<std::wstring,TArrayList<CSkill*>*>::iterator found = m_SkillsByName.find(STRINGS::StringUpper(skill->getName()));
+    if (found != m_SkillsByName.end())
+        for (unsigned int i = 0; i < found->second->size(); ++i)
+            (*found->second)[i]->_setLevelOfSkillFromSkillManager(level);
+    if (skill->m_eActivationType == static_cast<ESKILL_ACTIVATION_TYPE>(4) && level)
+        startPassiveSkills(m_Owner.getObject(), m_Owner.getObject()->getPosition(true),
+                           m_Owner.getObject()->getOrientationQuaternion(), m_Owner.getObject()->getPosition(true));
+}

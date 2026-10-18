@@ -1,9 +1,148 @@
+#include "UnitSpawnerDescriptorNames.h"
+#include "Layout.h"
+#include "Level.h"
+#include "Character.h"
+#include "iUnitSpawner.h"
+#include "GameEnums.h"
 #include "EditorScene.h"
 #include "EmptyStrings.h"
 #include "GameVariables.h"
 #include "Particle.h"
 #include "UnitSpawner.h"
 #include "iMissile.h"
+
+#include "GenericModel.h"
+#include "UnitResourceList.h"
+#include <algorithm>
+
+template<class T> static void destroySpawnerReference(TSafePointer<T>* reference)
+{
+    if (!reference) return;
+    reference->~TSafePointer<T>();
+    Ogre::NedAllocImpl::deallocBytes(reference);
+}
+
+void CUnitSpawner::createParticleSystemAt(const std::wstring& name, const Ogre::Vector3& position, const Ogre::Quaternion& orientation, unsigned int index)
+{
+    Ogre::Vector3 snapped = position;
+    if (!m_pResourceManager->getLevel()->snapToValidGround(snapped, 0.01f)) return;
+    CLayout* layout;
+    if (index < m_spawnLayouts.size()) {
+        layout = static_cast<CLayout*>(m_spawnLayouts[index]);
+        layout->setVisible(true);
+    } else {
+        layout = new CLayout(m_pResourceManager, static_cast<ELAYOUT_TYPES>(1));
+        layout->loadLayoutFile(name, false, NULL, false, false, 0);
+        m_spawnLayouts.add(layout);
+    }
+    layout->setPosition(snapped);
+    layout->setOrientation(orientation);
+    layout->setVisible(true);
+    layout->getSceneNode()->_update(true, true);
+    layout->start();
+    for (unsigned int i = 0; i < m_spawnListeners.size(); ++i)
+        m_spawnListeners[i]->unitSpawnedFromUnitSpawner(this, layout);
+}
+
+void CUnitSpawner::setResourceSpawn(std::wstring name)
+{
+    m_resourceSpawn = name;
+    if (m_category == gSPAWN_TYPE_NAMES[2] || m_category == gSPAWN_TYPE_NAMES[4] ||
+        m_category == gSPAWN_TYPE_NAMES[3] || m_category == gSPAWN_TYPE_NAMES[5]) return;
+    CDataGroup* data = m_pResourceManager->getMasterResourceList()->getDataGroupByObjectName(m_category, m_resourceSpawn);
+    std::wstring animation = EMPTY_WSTRING;
+    if (data) {
+        animation = data->GetDataValue(L"SPAWNER", EMPTY_WSTRING);
+        m_hasSpawnAnimation = animation != EMPTY_WSTRING;
+    }
+    if (m_pResourceManager->getEditorIsRunning()) {
+        if (m_editorPreview) { delete m_editorPreview; m_editorPreview = NULL; }
+        if (data && animation != EMPTY_WSTRING) {
+            m_editorPreview = new CGenericModel(m_pResourceManager, NULL, EMPTY_WSTRING, EMPTY_WSTRING, false);
+            m_editorPreview->loadModel(animation, EMPTY_WSTRING, false, false, false);
+            m_editorPreview->sceneNodeSetParent(m_pSceneNode, false);
+        }
+    }
+}
+
+void CUnitSpawner::spawn()
+{
+    setVisible(true);
+    reset();
+    m_editorSpawning = m_pResourceManager->getEditorIsRunning();
+    m_spawning = true;
+    m_unitsToCreateInMemory = m_numberOfUnitsToCreate;
+    if (m_pulseNumber >= 1 && m_pulseNumber <= ~1u)
+        m_unitsToCreateInMemory *= m_pulseNumber;
+    if (!(m_spawnDuration > 0.0f)) {
+        for (unsigned int i = 0; i < m_unitsToCreateInMemory; ++i)
+            if (spawnUnitByIndex(i)) ++m_reset18c;
+        if (static_cast<unsigned int>(m_reset18c) != m_unitsToCreateInMemory)
+            m_spawning = true;
+    }
+}
+
+void CUnitSpawner::update(float elapsed)
+{
+    for (unsigned int i = 0; i < m_spawnLayouts.size(); ++i)
+        m_spawnLayouts[i]->update(elapsed);
+    if (m_spawning) {
+        m_time184 -= elapsed;
+        m_time1a0 -= elapsed;
+        m_time188 += elapsed;
+        if (m_time188 >= m_spawnDuration) {
+            for (unsigned int i = m_reset18c; i < m_unitsToCreateInMemory; ++i)
+                if (spawnUnitByIndex(i)) ++m_reset18c;
+            if (static_cast<unsigned int>(m_reset18c) == m_unitsToCreateInMemory) m_spawning = false;
+        } else if (m_time184 <= 0.0f && m_time1a0 <= 0.0f) {
+            if (m_pulseNumber >= 1 && m_pulseNumber <= ~1u) {
+                while (m_time1a0 < 0.0f) {
+                    for (unsigned int i = 0; i < m_numberOfUnitsToCreate; ++i)
+                        if (spawnUnitByIndex(m_reset18c + 1)) ++m_reset18c;
+                    ++m_counter198;
+                    m_time1a0 += m_spawnDuration / float(m_pulseNumber);
+                }
+            } else {
+                while (m_time184 < 0.0f) {
+                    if (!spawnUnitByIndex(m_reset18c)) { m_time184 = 0.0f; break; }
+                    ++m_reset18c;
+                    m_time184 += m_spawnDuration / std::max(1.0f, float(m_unitsToCreateInMemory));
+                }
+                if (static_cast<unsigned int>(m_reset18c) == m_unitsToCreateInMemory) m_spawning = false;
+            }
+        }
+    }
+    if (m_pResourceManager->getEditorIsRunning()) return;
+    if (m_spawning && !m_maxMonstersAtATime) return;
+    if (!m_spawnedCharacters.size()) return;
+    m_time1cc -= elapsed;
+    if (m_time1cc > 0.0f) return;
+    for (unsigned int i = 0; i < m_spawnedCharacters.size(); ++i) {
+        TSafePointer<CCharacter>* ref = m_spawnedCharacters[i];
+        if (!ref->getObject() || !ref->getObject()->alive()) {
+            if (ref->getObject()) BroadcastEvent(24);
+            ref = m_spawnedCharacters[i];
+            if (ref) { destroySpawnerReference(ref); m_spawnedCharacters[i] = NULL; }
+            m_spawnedCharacters.removeAt(i--);
+        }
+    }
+    if (!m_spawnedCharacters.size() && m_time1cc < 0.0f) BroadcastEvent(25);
+}
+
+CUnitSpawner::~CUnitSpawner()
+{
+    if (m_editorPreview) { delete m_editorPreview; m_editorPreview = NULL; }
+    if (m_pResourceManager->getLevel())
+        m_pResourceManager->getLevel()->removeListenerFromUnits(this);
+    for (unsigned i=0;i<m_spawnedUnits.size();++i) destroySpawnerReference(m_spawnedUnits[i]);
+    m_spawnedUnits.clear();
+    for (unsigned i=0;i<m_spawnedCharacters.size();++i) destroySpawnerReference(m_spawnedCharacters[i]);
+    m_spawnedCharacters.clear();
+    clear();
+    m_spawnListeners.clear();
+    m_spawnLayouts.deleteAll();
+}
+
 
 
 // Imported source candidates; historical status is not fresh acceptance.

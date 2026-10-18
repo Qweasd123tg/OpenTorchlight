@@ -48,8 +48,14 @@ CSpawnClassData::CSpawnClassData(const std::wstring& name)
       m_pMinimumLevelGraph(NULL),
       m_pMaximumLevelGraph(NULL)
 {
-    m_pMinimumLevelGraph = CGraphManager::getSingleton()->getGraph(L"ITEM_SPAWN_RANGE_MINIMUM");
-    m_pMaximumLevelGraph = CGraphManager::getSingleton()->getGraph(L"ITEM_SPAWN_RANGE_MAXIMUM");
+    {
+        std::wstring graphName(L"ITEM_SPAWN_RANGE_MINIMUM");
+        m_pMinimumLevelGraph = CGraphManager::getSingleton()->getGraph(graphName);
+    }
+    {
+        std::wstring graphName(L"ITEM_SPAWN_RANGE_MAXIMUM");
+        m_pMaximumLevelGraph = CGraphManager::getSingleton()->getGraph(graphName);
+    }
 }
 
 CSpawnClassData::~CSpawnClassData()

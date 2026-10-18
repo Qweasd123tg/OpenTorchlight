@@ -16,6 +16,8 @@ class CUnitSpawner : public CShape, public iRandomWeight, public iUnitObserver
 {
     friend class CUnitSpawnerDescriptor;
 public:
+    void setResourceSpawn(std::wstring name);
+    bool spawnUnitByIndex(unsigned int index);
     void spawn();
     void update(float elapsed);
     CUnitSpawner(CResourceManager* resources);

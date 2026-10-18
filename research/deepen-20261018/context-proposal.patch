@@ -1,0 +1,21 @@
+--- a/tools/decomp/llm_context.py
++++ b/tools/decomp/llm_context.py
+@@ -1152 +1152 @@
+-        """Three reviewed weak insertions already declared by generic headers.
++        """Seven reviewed weak insertions already declared by generic headers.
+@@ -1165,0 +1166,12 @@
++            "TArrayList<CSkill*>":
++                (0xcd56e0, 180, "_ZN10TArrayListIP6CSkillE3addES1_", "add", "CSkill*",
++                 "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CSkill"),
++            "TArrayList<CDataGroup*>":
++                (0xa7e5e0, 180, "_ZN10TArrayListIP10CDataGroupE3addES1_", "add", "CDataGroup*",
++                 "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CDataGroup"),
++            "TArrayList<int>":
++                (0xa69ec0, 180, "_ZN10TArrayListIiE3addEi", "add", "int",
++                 "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
++            "TArrayList<bool>":
++                (0x90da90, 176, "_ZN10TArrayListIbE3addEb", "add", "bool",
++                 "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+@@ -1199 +1211 @@
+-        elif not self._string_template_headers():
++        elif scope not in ("TArrayList<int>", "TArrayList<bool>") and not self._string_template_headers():

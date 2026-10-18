@@ -209,6 +209,7 @@ public:
     void setCinematicOpen(std::wstring cinematic);
 private:
     friend class CPlayer;
+    friend class CDamageShape;
     friend class CDropdownMenu;
     friend class CDieMenu;
     friend class COptionsMenu;

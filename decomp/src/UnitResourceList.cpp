@@ -104,3 +104,91 @@ unsigned int CUnitResourceList::getDataGroupsByUnitType(unsigned int type, TArra
     }
     return groups.size();
 }
+
+#include "FileSystem.h"
+#include "Utilities.h"
+#include <OgreLogManager.h>
+
+CUnitResourceList::CUnitResourceList()
+    : m_pResourceSettings(NULL), m_playerClassNames(5), m_pHierarchy(NULL),
+      m_loadedDataGroups(1000), m_pMasterDataGroup(NULL)
+{
+    if (!m_pGlobalUnitResourceList)
+        m_pGlobalUnitResourceList = this;
+}
+
+CUnitResourceList::~CUnitResourceList()
+{
+    if (m_pMasterDataGroup) {
+        delete m_pMasterDataGroup;
+        m_pMasterDataGroup = NULL;
+    }
+    clearDataOut();
+    m_pGlobalUnitResourceList = NULL;
+}
+
+CDataGroup* CUnitResourceList::getDataGroupByFileName(const wchar_t* fileName,
+                                                    const wchar_t* objectName)
+{
+    typedef std::map<std::wstring, std::map<std::wstring, CDataGroup*> > Groups;
+    Groups::iterator group = m_dataGroupsByFileItemAndName.find(STRINGS::StringUpper(fileName));
+    if (group == m_dataGroupsByFileItemAndName.end())
+        return NULL;
+    std::map<std::wstring, CDataGroup*>::iterator data =
+        group->second.find(STRINGS::StringUpper(FILESYSTEM::CleanPath(objectName)));
+    return data == group->second.end() ? NULL : data->second;
+}
+
+CDataGroup* CUnitResourceList::parseChildFile(const std::wstring& fileName, bool createNew)
+{
+    CDataGroup* data = new CDataGroup(L"", NULL, 20, 10, NULL);
+    data->LoadFile(fileName, NULL);
+    bool dontCreate = data->GetDataValue(L"DONTCREATE", false);
+    std::wstring baseFile = data->GetDataValue(L"BASEFILE", EMPTY_WSTRING);
+    std::wstring guid = data->GetDataValue(L"UNIT_GUID", EMPTY_WSTRING);
+    std::wstring displayName = data->GetDataValue(L"DISPLAYNAME", EMPTY_WSTRING);
+    if ((guid.empty() || displayName.empty()) && createNew &&
+        (guid.empty() || !dontCreate)) {
+        if (guid.empty()) {
+            guid = STRINGS::GetValueAsWString(UTILITIES::createUniqueGuid());
+            data->SetDataValue(L"UNIT_GUID", guid, false);
+        }
+        if (displayName.empty()) {
+            std::wstring name = data->GetDataValue(L"NAME", EMPTY_WSTRING);
+            if (name != EMPTY_WSTRING)
+                data->SetDataValue(L"DISPLAYNAME", name, true);
+        }
+        data->SaveToFile(fileName);
+    }
+    CDataGroup* result = data;
+    if (baseFile != EMPTY_WSTRING) {
+        result = parseChildFile(baseFile, false);
+        if (!result) {
+            std::string error = "Unable to find base file : \n" +
+                STRINGS::StringConvertToNarrow(baseFile.c_str()) + "\n for child file:\n" +
+                STRINGS::StringConvertToNarrow(fileName.c_str());
+            Ogre::LogManager::getSingleton().logMessage(error.c_str(), Ogre::LML_CRITICAL, false);
+            delete data;
+            return NULL;
+        }
+        result->CopyDataGroup(data, false);
+        delete data;
+        result->SetDataValue(L"UNIT_GUID", guid, false);
+    }
+    if (result)
+        result->SetDataValue(L"DONTCREATE", dontCreate);
+    return result;
+}
+
+void CUnitResourceList::parseMasterDirectory(ERESOURCE_GROUPS resourceGroup,
+                                            std::wstring directory,
+                                            std::wstring resourceGroupName,
+                                            CDataGroup* parentGroup, bool overwrite)
+{
+    if (directory == L"" || resourceGroupName == L"")
+        return;
+    TArrayList<std::wstring> files(5000);
+    CFileSystem::getSingleton()->getFileList(directory, files, L"*.dat", true, true, false, false);
+    for (unsigned int i = 0; i < files.size(); ++i)
+        loadFile(resourceGroup, resourceGroupName, files[i], false, parentGroup);
+}

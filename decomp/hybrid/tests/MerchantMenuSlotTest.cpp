@@ -54,6 +54,10 @@ bool magical(CEquipment* p){number(13);number(p==mainItem);return input->mode==2
 void visible(CEGUI::Window* p,bool b){number(15);number(id(p));number(b);}
 void setText(CEGUI::Window* p,const CEGUI::String& s){number(16);number(id(p));text(s);}
 void create(CEquipment* p,CGameUI&,bool b){number(14);number(b);if(input->create==3)currentMenu->m_pSlotWindows[currentSlot]=windows[8];if(input->create==2){p->m_pIconWindow=0;return;}p->m_pIconWindow=windows[p==mainItem?0:p==children[0]?6:9];}
+void installCollaborators(detour::Set& p){
+ TL_REDIRECT(p,mpIsa,&isa);TL_REDIRECT(p,mpCreate,&create);
+ p.redirect(mpPosition,mpPosition,&getPosition);p.redirect(mpSize,mpSize,&getSize);p.redirect(mpSetPosition,mpSetPosition,&setPosition);p.redirect(mpSetSize,mpSetSize,&setSize);p.redirect(mpRemove,mpRemove,&remove);p.redirect(mpAdd,mpAdd,&add);p.redirect(mpFront,mpFront,&front);p.redirect(mpProperty,mpProperty,&property);p.redirect(mpImage,mpImage,&getImage);p.redirect(mpImageString,mpImageString,&imageString);p.redirect(mpVisible,mpVisible,&visible);p.redirect(mpText,mpText,&setText);
+}
 void side(const Case& c,bool ours,autotest::Capture& out){
  input=&c;cap=&out;
  unsigned long long menuMem[(0x3478+7)/8]={0},itemMem[(sizeof(CEquipment)+7)/8]={0},childMem[2][(sizeof(CEquipment)+7)/8]={0},uiMem[0x1a08/8+1]={0},wmem[10][(sizeof(CEGUI::Window)+7)/8]={0},imem[(sizeof(CEGUI::Image)+7)/8]={0};
@@ -65,15 +69,16 @@ void side(const Case& c,bool ours,autotest::Capture& out){
  item->m_SocketedEquipment.m_pData=children;item->m_SocketedEquipment.m_nCount=c.count;item->m_SocketedEquipment.m_nCapacity=c.capacity;
  for(int k=0;k<2;++k){children[k]->m_pIconWindow=c.create?0:windows[k?9:6];windows[k?9:6]->d_parent=windows[5];}
  windows[0]->d_parent=windows[5];pos=CEGUI::UVector2(CEGUI::UDim(0,c.coordinate?-11.75f:11),CEGUI::UDim(0,c.coordinate?-17.25f:17));
- detour::Set p;TL_REDIRECT(p,mpIsa,&isa);TL_REDIRECT(p,mpCreate,&create);
- p.redirect(mpPosition,mpPosition,&getPosition);p.redirect(mpSize,mpSize,&getSize);p.redirect(mpSetPosition,mpSetPosition,&setPosition);p.redirect(mpSetSize,mpSetSize,&setSize);p.redirect(mpRemove,mpRemove,&remove);p.redirect(mpAdd,mpAdd,&add);p.redirect(mpFront,mpFront,&front);p.redirect(mpProperty,mpProperty,&property);p.redirect(mpImage,mpImage,&getImage);p.redirect(mpImageString,mpImageString,&imageString);p.redirect(mpVisible,mpVisible,&visible);p.redirect(mpText,mpText,&setText);
- if(p.failed())_exit(42);
  if(ours)autotest::invoke(out,&restoredMerchant,m,item,slot,data);else autotest::invoke(out,&originalMerchant,m,item,slot,data);
  number(100);number(windows[0]->d_mousePassThroughEnabled);number(windows[0]->d_riseOnClick);number(windows[0]->d_muted);number(windows[0]->d_userData==&m->m_aiSlotData[data]);for(int k=0;k<2;++k){number(windows[k?9:6]->d_mousePassThroughEnabled);number(windows[k?9:6]->d_riseOnClick);number(windows[k?9:6]->d_muted);}
 }
 void a(void* p,autotest::Capture& out){side(*(Case*)p,false,out);}void b(void* p,autotest::Capture& out){side(*(Case*)p,true,out);}
 }
 TL_TEST(merchant_pet_slot_differential){
+ // Collaborator targets are invariant across cases. Each fresh child inherits
+ // these jumps; the parent restores them on every return from this test.
+ detour::Set p;installCollaborators(p);
+ if(p.failed()){host->log("    merchant_pet_slot_differential: collaborator detour setup failed (%d)\n",int(p.failure()));return 1;}
  int failures=0;unsigned total=0;autotest::Coverage coverage("merchant_pet_slot_differential",(uint64_t)(uintptr_t)&originalMerchant);for(unsigned s=0;s<3;++s)for(unsigned ident=0;ident<2;++ident)for(unsigned cr=0;cr<4;++cr)for(unsigned cnt=0;cnt<3;++cnt)for(unsigned capacity=0;capacity<3;++capacity)for(unsigned mode=0;mode<6;++mode)for(unsigned sm=0;sm<5;++sm)for(unsigned xy=0;xy<2;++xy){Case c={s,bool(ident),cr,cnt,capacity,mode,sm,xy};autotest::Outcome x,y;autotest::runChild(a,&c,x);autotest::runChild(b,&c,y);
  int pair=coverage.observe(host,x,y);++total;
  bool ok=pair==0&&!autotest::incomplete(x)&&!autotest::incomplete(y)&&x.reportValid&&y.reportValid&&x.childStatus==0&&y.childStatus==0&&x.capture.length==y.capture.length&&std::memcmp(x.capture.data,y.capture.data,x.capture.length)==0;

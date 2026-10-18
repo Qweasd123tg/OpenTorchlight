@@ -56,6 +56,7 @@ enum EAIState
 class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
+    friend class CUnitSpawner;
     friend class CDamageShape;
     friend class CMonsterDescriptor;
     friend class CSkillController;
@@ -591,7 +592,10 @@ private:
     unsigned char m_Padding6D0[0x31];
     bool m_experienceDisabled; // +0x701
     bool m_champion; // +0x702
-    unsigned char m_Padding703[2];
+    union {
+        unsigned char m_Padding703[2];
+        struct { bool m_spawnFlag703; bool m_spawnFlag704; };
+    };
     bool m_weaponsHidden; // +0x705
     unsigned char m_Padding706[0x6];
     bool m_targetLocked; // +0x70c

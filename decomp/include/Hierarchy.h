@@ -10,10 +10,14 @@
 #include "TArrayList.h"
 
 // Unit type hierarchy (media/unittypes.hie), with layouts from the constructor.
+class CDataGroup;
+
 class CHierarchy : public CRunicCore
 {
 public:
     virtual ~CHierarchy();
+    CHierarchy(const wchar_t* filename);
+    void parseHierachy(CDataGroup* group);
     // Typed parameters from the original symbol; Boolean tail contract from CResourceManager::ISA.
     bool ISA(unsigned int type, unsigned int parent);
     UNITTYPES::EUNITTYPES getTypeIDByName(const std::wstring& name);

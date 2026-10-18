@@ -6,6 +6,9 @@
 // and return types are placeholders until the class's own TU is recovered.
 
 #include "RunicCore.h"
+#include "TArrayList.h"
+#include "FmodInterface.h"
+#include <string>
 
 class CSoundData : public CRunicCore
 {
@@ -13,13 +16,18 @@ public:
     virtual ~CSoundData();
 
     // fields
-    void* m_pUnknown10;
-    void* m_pUnknown18;
+    std::wstring m_name; // +0x10
+    std::wstring m_category; // +0x18
     long long m_iGuid;
-    unsigned char m_gap28[0x18] __attribute__((aligned(8)));
-    void* m_pUnknown40;
-    unsigned char m_gap48[0x10] __attribute__((aligned(8)));
-    long long m_iUnknown58;
+    float m_float28;
+    bool m_flag2c;
+    unsigned char m_gap2d[3];
+    float m_float30;
+    float m_float34;
+    float m_float38;
+    int m_probability; // +0x3c, passed to the named addSample overload
+    TArrayList<std::wstring> m_files; // +0x40
+    FMOD::SoundGroup* m_group; // +0x58
 };
 
 #endif

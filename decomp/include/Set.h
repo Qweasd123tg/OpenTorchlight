@@ -3,6 +3,8 @@
 #include <string>
 #include "TArrayList.h"
 class CAffix;
+class CDataGroup;
+class CEffectGroupManager;
 // The 0x18-byte unnamed set-bonus record allocated by CSet::load at 0xe0ea1b.
 struct CSetAffix
 {
@@ -15,6 +17,7 @@ struct CSetAffix
 class CSet
 {
 public:
+    void load(CDataGroup* group, CEffectGroupManager* effectGroupManager);
     unsigned char m_SetData00[8];
     TArrayList<CSetAffix*> m_Affixes;
     std::wstring m_sName;

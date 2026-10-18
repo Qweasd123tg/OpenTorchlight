@@ -25,7 +25,7 @@ public:
     virtual bool updateLevelObject(float, Ogre::Camera*, const Ogre::Vector3&);
     virtual void characterUpdatedInLevel(float, CCharacter*);
     virtual void itemUpdatedInLevel(float, CItem*);
-    virtual void getCanDoDamage(CCharacter*, float, const Ogre::Vector3&);
+    virtual bool getCanDoDamage(CCharacter*, float, const Ogre::Vector3&);
     virtual void doDamageToCharacter(float, CCharacter*, float);
     virtual void doDamageToItem(float, CItem*, float);
     void doInstantDamage();
@@ -44,7 +44,7 @@ public:
     float m_fUpdateInEditor;
     float m_fDelayTimer;
     float m_fTimer;
-    int m_iDelayTimer;
+    union { int m_iDelayTimer; float m_initialDelay; }; // +0x1a0; legacy bit view retained
     bool m_bLoopsForEver;
     bool m_bUpdateInEditor;
     bool m_bUnknown1A6;

@@ -96,3 +96,26 @@ void CModFileFilter::refreshAllMods()
         m_Mods[i]->reloadModFiles();
     saveModFile(true);
 }
+
+#include "FileUtilities.h"
+
+void CModFileFilter::getFiles(const std::wstring& directory, TArrayList<std::wstring>& files,
+    std::wstring pattern, bool recursive)
+{
+    TArrayList<std::wstring> found(10);
+    for (unsigned int i = 0; i < m_Mods.size(); ++i) {
+        CMod* mod = m_Mods[i];
+        if (mod->m_iUnknown74 >= 0 && mod->m_bUnknown70) {
+            unsigned int start = found.size();
+            if (recursive)
+                FILESYSTEM::GetFileListRecursive(mod->m_wUnknown68 + directory, found, pattern);
+            else
+                FILESYSTEM::GetFileList(mod->m_wUnknown68 + directory, found, pattern);
+            for (unsigned int j = start; j < found.size(); ++j)
+                found[j] = found[j].substr(mod->m_wUnknown68.size());
+        }
+    }
+    for (unsigned int i = 0; i < found.size(); ++i)
+        if (files.find(found[i]) == -1)
+            files.add(found[i]);
+}

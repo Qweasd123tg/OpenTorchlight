@@ -28,6 +28,7 @@ class CDescriptor : public CEditorBaseObject
     friend class CDescriptorController;
     friend class CDescriptorManager;
     friend class CDescriptorProp;
+    friend class CLogicObject;
 public:
     // m_iFlags bits; names are ours (the serialized ones from SerializeDescriptor).
     enum

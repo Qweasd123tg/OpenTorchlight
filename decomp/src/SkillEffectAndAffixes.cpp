@@ -126,3 +126,58 @@ CSkillEffectAndAffixes::~CSkillEffectAndAffixes()
     m_effectData.deleteAll();
     m_affixData.deleteAll();
 }
+
+#include "EffectManager.h"
+#include "MasterResourceManager.h"
+#include "Skill.h"
+
+bool CSkillEffectAndAffixes::removeAffixesAndEffects(CBaseUnit* unit, CCharacter*)
+{
+    if (!unit || !unit->m_pEffectManager)
+        return false;
+    bool removed = false;
+    for (unsigned int i = 0; i < m_affixNames.size(); ++i)
+        if (unit->m_pEffectManager->deleteAffix(m_affixNames[i]))
+            removed = true;
+    for (unsigned int i = 0; i < m_effectNames.size(); ++i)
+        if (unit->m_pEffectManager->removeEffect(m_effectNames[i], true))
+            removed = true;
+    return removed;
+}
+
+std::wstring CSkillEffectAndAffixes::getDisplayStats()
+{
+    if (!m_pSkill)
+        return EMPTY_WSTRING;
+    createAffixesForDisplay(m_pSkill->m_resources);
+    std::wstring result = m_name;
+    CMasterResourceManager::getSingleton();
+    for (unsigned int i = 0; i < m_displayAffixes.size(); ++i)
+    {
+        std::wstring text = m_displayAffixes[i]->getDisplayStats(static_cast<unsigned int>(-1));
+        if (result != EMPTY_WSTRING && text != EMPTY_WSTRING)
+            result += L"\n";
+        result += text;
+    }
+    std::wstring effects = EMPTY_WSTRING;
+    for (unsigned int i = 0; i < m_effectData.size(); ++i)
+    {
+        std::wstring group = EMPTY_WSTRING;
+        CSkillEffectData* data = m_effectData[i];
+        if (data)
+            for (unsigned int j = 0; j < data->m_effects.size(); ++j)
+            {
+                std::wstring text = data->m_effects[j]->getDisplayStats(static_cast<unsigned int>(-1), false);
+                if (group != EMPTY_WSTRING && text != EMPTY_WSTRING)
+                    group += L"\n";
+                group += text;
+            }
+        if (effects != EMPTY_WSTRING && group != EMPTY_WSTRING)
+            effects += L"\n";
+        effects += group;
+    }
+    if (result != EMPTY_WSTRING && effects != EMPTY_WSTRING)
+        result += L"\n";
+    result += effects;
+    return result;
+}

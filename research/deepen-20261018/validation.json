@@ -1,0 +1,3650 @@
+{
+ "baseline_commit": "c3b265125bb6fe1343f185865cdee04df7d0bb10",
+ "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+ "accepted_before": 4117,
+ "accepted_after": 4210,
+ "net_accepted_change": 93,
+ "game_functions": 5247,
+ "matched_before": 2756,
+ "matched_after": 2779,
+ "behavioral_after": 1431,
+ "compiler_matches_before": 812,
+ "compiler_matches_after": 814,
+ "accepted_bytes": 2008566,
+ "game_bytes": 3702188,
+ "lost_accepted": [],
+ "prior_strong_MATCH_rows": 3568,
+ "old_MATCH_reproved_BEHAVIORAL": [
+  {
+   "tu": "SkillManager.cpp",
+   "address": "0xcd5460",
+   "old_code": "9fe12eb82c96f582",
+   "label": "main",
+   "final_code": "8e71085bcbec4033",
+   "coverage": [
+    {
+     "fixture": "state_skill_manager_create",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "tu": "EffectManager.cpp",
+   "address": "0x7ebc60",
+   "old_code": "6ee76c0b31f0182b",
+   "label": "main",
+   "final_code": "3049d114df1e5f07",
+   "coverage": [
+    {
+     "fixture": "state_effect_clear_affixes",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "tu": "EffectManager.cpp",
+   "address": "0x7ec4f0",
+   "old_code": "089b9c47ac5d300f",
+   "label": "main",
+   "final_code": "a495ca218beed1dd",
+   "coverage": [
+    {
+     "fixture": "state_effect_add_affix",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "tu": "EffectManager.cpp",
+   "address": "0x7f3270",
+   "old_code": "c316d8e59dd82611",
+   "label": "main",
+   "final_code": "5b947ee86a997ee4",
+   "coverage": [
+    {
+     "fixture": "state_effect_clone_list",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "tu": "DataGroup.cpp",
+   "address": "0xc5fb30",
+   "old_code": "536f20bcefb1e2f0",
+   "label": "editor",
+   "final_code": "05a7f7c72b4db0f0",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_data_old_add_string",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    },
+    {
+     "fixture": "data_group_new_add_string",
+     "completed": 36,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "tu": "ModFileFilter.cpp",
+   "address": "0xc845e0",
+   "old_code": "11c55b606275049b",
+   "label": "editor",
+   "final_code": "b100c31deec93680",
+   "coverage": [
+    {
+     "fixture": "resource_mod_path",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    },
+    {
+     "fixture": "deepen_editor_mod_old_path",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "tu": "Timeline.cpp",
+   "address": "0x7b7110",
+   "old_code": "4dd95dcbcd076416",
+   "label": "editor",
+   "final_code": "71702cdd112baebe",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_timeline_old_binary",
+     "completed": 100,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  }
+ ],
+ "stale_behavioral": [],
+ "unknown_references": [],
+ "compiler_kind_hooks": [],
+ "input_digest": "3208202b901f7e357481f536701c27960df5b00c1579cf9eb31330e9036aa5f2",
+ "tree_unchanged": true,
+ "inputs_unchanged": true,
+ "newly_accepted": [
+  {
+   "address": "0x5c7060",
+   "tu": "DescriptorController.cpp",
+   "name": "CDescriptorController::returnCarchedObject(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CEditorBaseObject*)",
+   "original_size": 985,
+   "status": "DIFF",
+   "code": "4cb441d164d075b1",
+   "object_digest": "59a8d7ac2e86e303a0659ffb76c0fa14dda0d0bf617d48e2d00270845007c2e3",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_descriptor_cache",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5ea290",
+   "tu": "LayoutDescriptor.cpp",
+   "name": "CLayoutDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+   "original_size": 521,
+   "status": "DIFF",
+   "code": "17296e4db36e8f5f",
+   "object_digest": "ddae0d2003d1b8ca44d1fded273fc3c69477ba99c7f2ecf26b26d22ec2d78822",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_layout_input",
+     "completed": 432,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x70ac40",
+   "tu": "DescriptorProp.cpp",
+   "name": "CDescriptorProp::serializeProperty(CDataGroup*, unsigned int)",
+   "original_size": 2691,
+   "status": "DIFF",
+   "code": "226afb36b32468ea",
+   "object_digest": "32768393ecdc0c7298ba33f6b564c57300cce3c68934dcfb2bf6243f3ac76e29",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_descriptor_serialize",
+     "completed": 180,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x70b6d0",
+   "tu": "DescriptorProp.cpp",
+   "name": "CDescriptorProp::setPropertyValueByString(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CEditorBaseObject*)",
+   "original_size": 3286,
+   "status": "DIFF",
+   "code": "b92cab6949a5c434",
+   "object_digest": "32768393ecdc0c7298ba33f6b564c57300cce3c68934dcfb2bf6243f3ac76e29",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_descriptor_parse",
+     "completed": 320,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x788c70",
+   "tu": "pov.cpp",
+   "name": "CPOV::UpdateMouseInput(void*, float)",
+   "original_size": 693,
+   "status": "DIFF",
+   "code": "394812e701bdc376",
+   "object_digest": "0507972d82887cd33e944dbdadf6765e3fa145959501fec291b0994a1c484272",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_pov_mouse",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x789cb0",
+   "tu": "pov.cpp",
+   "name": "CPOV::Update(float, float)",
+   "original_size": 334,
+   "status": "DIFF",
+   "code": "ca429b7aa88544e2",
+   "object_digest": "0507972d82887cd33e944dbdadf6765e3fa145959501fec291b0994a1c484272",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_pov_update",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x789e00",
+   "tu": "pov.cpp",
+   "name": "CPOV::ResetPOV(bool, float, float)",
+   "original_size": 1253,
+   "status": "DIFF",
+   "code": "886557e384aab2bb",
+   "object_digest": "0507972d82887cd33e944dbdadf6765e3fa145959501fec291b0994a1c484272",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_pov_reset",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x796f30",
+   "tu": "LogicGroup.cpp",
+   "name": "CLogicGroup::loadLogicGroupToDataGroup(CDataGroup*, COgreReader*, CDescriptorLoadConfiguration*)",
+   "original_size": 2273,
+   "status": "DIFF",
+   "code": "470591b70668fce9",
+   "object_digest": "a99810a6ed1b8b5634017caa58c1dbcc921b8a2d6554919315200633d5977f68",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_logic_group",
+     "completed": 160,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7b20e0",
+   "tu": "LogicObject.cpp",
+   "name": "CLogicObject::saveLogicObjectToDataGroup(CDataGroup*)",
+   "original_size": 850,
+   "status": "DIFF",
+   "code": "bb7aee28719a38c3",
+   "object_digest": "317aa1b0252e23b991693bf2d12986f5b3d0c6bca0dce3c0f8b555bc7893d109",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_logic_object_save",
+     "completed": 100,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7b2440",
+   "tu": "LogicObject.cpp",
+   "name": "CLogicObject::loadLogicObjectByDataGroup(CLogicGroup*, CDataGroup*, CDescriptorLoadConfiguration*, std::map<int, int, std::less<int>, std::allocator<std::pair<int const, int> > >*)",
+   "original_size": 2096,
+   "status": "DIFF",
+   "code": "c25a147426ebc98b",
+   "object_digest": "317aa1b0252e23b991693bf2d12986f5b3d0c6bca0dce3c0f8b555bc7893d109",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_logic_object_load",
+     "completed": 100,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7baa30",
+   "tu": "Timeline.cpp",
+   "name": "CTimeline::saveTimelineToBinaryFile(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >*)",
+   "original_size": 1204,
+   "status": "DIFF",
+   "code": "ccc2a81f6f8c37fb",
+   "object_digest": "36e5738c4fa98a59047258ee1168db4d24cb822e04e86cb3018c826968240aa1",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_timeline_save_binary",
+     "completed": 100,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7bb720",
+   "tu": "Timeline.cpp",
+   "name": "CTimeline::saveTimelineToDataGroup(CEditorScene*, CDataGroup*)",
+   "original_size": 2468,
+   "status": "DIFF",
+   "code": "780c33b7325aeef4",
+   "object_digest": "36e5738c4fa98a59047258ee1168db4d24cb822e04e86cb3018c826968240aa1",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_timeline_save_data",
+     "completed": 100,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7bc0d0",
+   "tu": "Timeline.cpp",
+   "name": "CTimeline::loadTimelineFromDataGroup(CEditorScene*, CDataGroup*, CDescriptorLoadConfiguration*)",
+   "original_size": 2805,
+   "status": "DIFF",
+   "code": "6dedd2885fedb28a",
+   "object_digest": "36e5738c4fa98a59047258ee1168db4d24cb822e04e86cb3018c826968240aa1",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_timeline_load_data",
+     "completed": 100,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7ea100",
+   "tu": "EffectGroupManager.cpp",
+   "name": "CEffectGroupManager::rollAndCreateRandomAffixes(unsigned int, unsigned int, unsigned int, TArrayList<CAffix*>&)",
+   "original_size": 1263,
+   "status": "DIFF",
+   "code": "4e624ac960a9c95b",
+   "object_digest": "39ca93dff161d3cebd0df42a1f5a57f7718412e853d3b647f4715739fd0cfe2c",
+   "coverage": [
+    {
+     "fixture": "deepen_effect_groups_roll",
+     "completed": 512,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7ea5f0",
+   "tu": "EffectGroupManager.cpp",
+   "name": "CEffectGroupManager::reload()",
+   "original_size": 1268,
+   "status": "DIFF",
+   "code": "1a6e001ee4f583c4",
+   "object_digest": "39ca93dff161d3cebd0df42a1f5a57f7718412e853d3b647f4715739fd0cfe2c",
+   "coverage": [
+    {
+     "fixture": "deepen_effect_groups_reload",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7f2f10",
+   "tu": "EffectManager.cpp",
+   "name": "CEffectManager::addNewEffect(CEffect*)",
+   "original_size": 641,
+   "status": "DIFF",
+   "code": "cdcdf960f990fef2",
+   "object_digest": "0507fd92f774c21589bdc24d4def89f8d8fad104386fc3f23cccfcdc42bfe923",
+   "coverage": [
+    {
+     "fixture": "deepen_effect_add",
+     "completed": 256,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x86b810",
+   "tu": "dynamicline.cpp",
+   "name": "CDynamicLine::CDynamicLine(Ogre::RenderOperation::OperationType)",
+   "original_size": 269,
+   "status": "MATCH",
+   "code": "f98d2a3e2616a5f7",
+   "object_digest": "1966223bde9e5675e279cccfa7b2fd96cf335c2e3922eee2e1e4916895c9ddb4",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_dynamic_constructor",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x927110",
+   "tu": "automap.cpp",
+   "name": "CAutomap::update(Ogre::Vector3 const&, float)",
+   "original_size": 1798,
+   "status": "DIFF",
+   "code": "7485d1e291dab940",
+   "object_digest": "25d3e0f458a38ca2965d37426078da0e6ab16cd3462dcad63118cd73989002d9",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_automap_update",
+     "completed": 256,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x927820",
+   "tu": "automap.cpp",
+   "name": "CAutomap::zoom(float)",
+   "original_size": 229,
+   "status": "DIFF",
+   "code": "6596032b363abfa9",
+   "object_digest": "25d3e0f458a38ca2965d37426078da0e6ab16cd3462dcad63118cd73989002d9",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_automap_zoom",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x927910",
+   "tu": "automap.cpp",
+   "name": "CAutomap::setVisible(bool)",
+   "original_size": 696,
+   "status": "DIFF",
+   "code": "bf181df265c5a938",
+   "object_digest": "25d3e0f458a38ca2965d37426078da0e6ab16cd3462dcad63118cd73989002d9",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_automap_visible",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x928560",
+   "tu": "automap.cpp",
+   "name": "CAutomap::~CAutomap()",
+   "original_size": 647,
+   "status": "MATCH",
+   "code": "76a154c3b49c2d5d",
+   "object_digest": "25d3e0f458a38ca2965d37426078da0e6ab16cd3462dcad63118cd73989002d9",
+   "coverage": []
+  },
+  {
+   "address": "0x9287f0",
+   "tu": "automap.cpp",
+   "name": "CAutomap::~CAutomap()",
+   "original_size": 18,
+   "status": "MATCH",
+   "code": "671ee8c569099f8d",
+   "object_digest": "25d3e0f458a38ca2965d37426078da0e6ab16cd3462dcad63118cd73989002d9",
+   "coverage": []
+  },
+  {
+   "address": "0x9c19c0",
+   "tu": "DamageShape.cpp",
+   "name": "non-virtual thunk to CDamageShape::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",
+   "original_size": 9,
+   "status": "MATCH",
+   "code": "30e413e7830353db",
+   "object_digest": "cef6b0313fa4197f56bb5f033c45e74c4f2bbead03befa0d98c6c5faeb2f58f9",
+   "coverage": []
+  },
+  {
+   "address": "0x9c19d0",
+   "tu": "DamageShape.cpp",
+   "name": "CDamageShape::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",
+   "original_size": 999,
+   "status": "DIFF",
+   "code": "9520dc3ff1e6f244",
+   "object_digest": "cef6b0313fa4197f56bb5f033c45e74c4f2bbead03befa0d98c6c5faeb2f58f9",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_damage_update",
+     "completed": 256,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9c2020",
+   "tu": "DamageShape.cpp",
+   "name": "CDamageShape::doDamageToItem(float, CItem*, float)",
+   "original_size": 556,
+   "status": "DIFF",
+   "code": "6ddf6ca2e7fb9f51",
+   "object_digest": "cef6b0313fa4197f56bb5f033c45e74c4f2bbead03befa0d98c6c5faeb2f58f9",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_damage_item",
+     "completed": 256,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9c2250",
+   "tu": "DamageShape.cpp",
+   "name": "CDamageShape::doDamageToCharacter(float, CCharacter*, float)",
+   "original_size": 1663,
+   "status": "DIFF",
+   "code": "f5b0db4bb004e33f",
+   "object_digest": "cef6b0313fa4197f56bb5f033c45e74c4f2bbead03befa0d98c6c5faeb2f58f9",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_damage_character",
+     "completed": 512,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa0ab40",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::createParticleSystemAt(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, Ogre::Vector3 const&, Ogre::Quaternion const&, unsigned int)",
+   "original_size": 638,
+   "status": "DIFF",
+   "code": "56c137174f073990",
+   "object_digest": "eab5acc43acc063899a88a3b813e2c156d0572db9edd90d7cc57313d6ca62502",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_spawner_particles",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa15f10",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::~CUnitSpawner()",
+   "original_size": 1151,
+   "status": "DIFF",
+   "code": "3e4e6481821883c9",
+   "object_digest": "eab5acc43acc063899a88a3b813e2c156d0572db9edd90d7cc57313d6ca62502",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_spawner_destructor",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa16390",
+   "tu": "UnitSpawner.cpp",
+   "name": "non-virtual thunk to CUnitSpawner::~CUnitSpawner()",
+   "original_size": 12,
+   "status": "MATCH",
+   "code": "dfd2a93e47b92f60",
+   "object_digest": "eab5acc43acc063899a88a3b813e2c156d0572db9edd90d7cc57313d6ca62502",
+   "coverage": []
+  },
+  {
+   "address": "0xa163a0",
+   "tu": "UnitSpawner.cpp",
+   "name": "non-virtual thunk to CUnitSpawner::~CUnitSpawner()",
+   "original_size": 12,
+   "status": "MATCH",
+   "code": "1af70f05faaf9dea",
+   "object_digest": "eab5acc43acc063899a88a3b813e2c156d0572db9edd90d7cc57313d6ca62502",
+   "coverage": []
+  },
+  {
+   "address": "0xa163b0",
+   "tu": "UnitSpawner.cpp",
+   "name": "non-virtual thunk to CUnitSpawner::~CUnitSpawner()",
+   "original_size": 9,
+   "status": "MATCH",
+   "code": "a4e636c199622141",
+   "object_digest": "eab5acc43acc063899a88a3b813e2c156d0572db9edd90d7cc57313d6ca62502",
+   "coverage": []
+  },
+  {
+   "address": "0xa163c0",
+   "tu": "UnitSpawner.cpp",
+   "name": "non-virtual thunk to CUnitSpawner::~CUnitSpawner()",
+   "original_size": 9,
+   "status": "MATCH",
+   "code": "60d5e188f77d0f99",
+   "object_digest": "eab5acc43acc063899a88a3b813e2c156d0572db9edd90d7cc57313d6ca62502",
+   "coverage": []
+  },
+  {
+   "address": "0xa163d0",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::~CUnitSpawner()",
+   "original_size": 18,
+   "status": "MATCH",
+   "code": "acc85f02adac3cbc",
+   "object_digest": "eab5acc43acc063899a88a3b813e2c156d0572db9edd90d7cc57313d6ca62502",
+   "coverage": []
+  },
+  {
+   "address": "0xa163f0",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::setResourceSpawn(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "original_size": 937,
+   "status": "DIFF",
+   "code": "14c8fd0d9ea0788f",
+   "object_digest": "eab5acc43acc063899a88a3b813e2c156d0572db9edd90d7cc57313d6ca62502",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_spawner_resource",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa17780",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::spawn()",
+   "original_size": 168,
+   "status": "DIFF",
+   "code": "5e6053786e28bb88",
+   "object_digest": "eab5acc43acc063899a88a3b813e2c156d0572db9edd90d7cc57313d6ca62502",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_spawner_spawn",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa17830",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::update(float)",
+   "original_size": 1314,
+   "status": "DIFF",
+   "code": "e8796881e88e51de",
+   "object_digest": "eab5acc43acc063899a88a3b813e2c156d0572db9edd90d7cc57313d6ca62502",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_spawner_update",
+     "completed": 288,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa532c0",
+   "tu": "Hierachy.cpp",
+   "name": "CHierarchy::~CHierarchy()",
+   "original_size": 117,
+   "status": "MATCH",
+   "code": "4b46099d05364cc7",
+   "object_digest": "59e0e853a3cece1f96ba5124a835ae00c1dea4dd3ffcef856893d90f5ae360b8",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_hierarchy_dtor",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa53340",
+   "tu": "Hierachy.cpp",
+   "name": "CHierarchy::~CHierarchy()",
+   "original_size": 18,
+   "status": "MATCH",
+   "code": "ca4ddc31eb3108d3",
+   "object_digest": "59e0e853a3cece1f96ba5124a835ae00c1dea4dd3ffcef856893d90f5ae360b8",
+   "coverage": []
+  },
+  {
+   "address": "0xa53700",
+   "tu": "Hierachy.cpp",
+   "name": "CHierarchy::parseHierachy(CDataGroup*)",
+   "original_size": 1925,
+   "status": "DIFF",
+   "code": "4bcebb225d09de6f",
+   "object_digest": "59e0e853a3cece1f96ba5124a835ae00c1dea4dd3ffcef856893d90f5ae360b8",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_hierarchy_parse",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa53e90",
+   "tu": "Hierachy.cpp",
+   "name": "CHierarchy::CHierarchy(wchar_t const*)",
+   "original_size": 517,
+   "status": "DIFF",
+   "code": "120220f88fec6391",
+   "object_digest": "59e0e853a3cece1f96ba5124a835ae00c1dea4dd3ffcef856893d90f5ae360b8",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_hierarchy_ctor",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa5c900",
+   "tu": "MasterResourceManager.cpp",
+   "name": "CMasterResourceManager::loadParticles()",
+   "original_size": 66,
+   "status": "MATCH",
+   "code": "1ce686dde5f2807c",
+   "object_digest": "550fc3c2cec72858da57afaad079433c6bba138c6ac1741e8a689bf34e1726e0",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_master_particles",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa5dba0",
+   "tu": "MasterResourceManager.cpp",
+   "name": "CMasterResourceManager::reloadResources()",
+   "original_size": 367,
+   "status": "DIFF",
+   "code": "e9fbd9b1abba85be",
+   "object_digest": "550fc3c2cec72858da57afaad079433c6bba138c6ac1741e8a689bf34e1726e0",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_master_reload",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa5f0e0",
+   "tu": "MasterResourceManager.cpp",
+   "name": "CMasterResourceManager::addResourceLocation(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, bool)",
+   "original_size": 807,
+   "status": "DIFF",
+   "code": "ebcb8d156c0e7894",
+   "object_digest": "550fc3c2cec72858da57afaad079433c6bba138c6ac1741e8a689bf34e1726e0",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_master_location",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa61f90",
+   "tu": "RoomPieceDataInformation.cpp",
+   "name": "CRoomPieceDataInformation::LoadSpecificLevelTileSet(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",
+   "original_size": 903,
+   "status": "DIFF",
+   "code": "d77c821722f84130",
+   "object_digest": "56cc877c6b854c2fd1adf973c0bf7b4b68bcf14aade18fff1119e74967404ee7",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_room_specific",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa62320",
+   "tu": "RoomPieceDataInformation.cpp",
+   "name": "CRoomPieceDataInformation::LoadRoomData()",
+   "original_size": 565,
+   "status": "DIFF",
+   "code": "3e705d75befc778f",
+   "object_digest": "56cc877c6b854c2fd1adf973c0bf7b4b68bcf14aade18fff1119e74967404ee7",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_room_load",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa62560",
+   "tu": "RoomPieceDataInformation.cpp",
+   "name": "CRoomPieceDataInformation::CRoomPieceDataInformation(CResourceSettings*)",
+   "original_size": 146,
+   "status": "MATCH",
+   "code": "2c934679df267b40",
+   "object_digest": "56cc877c6b854c2fd1adf973c0bf7b4b68bcf14aade18fff1119e74967404ee7",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_room_ctor",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa63740",
+   "tu": "SoundBankDataInformation.cpp",
+   "name": "CSoundBankDataInformation::getSoundNames(TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",
+   "original_size": 1216,
+   "status": "DIFF",
+   "code": "e4b213f1f01b8087",
+   "object_digest": "91abe2d4f578de02fde3f688ef8087960f24e1695ead7b57d3a66a7ecb8296fc",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_sound_names",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa63c00",
+   "tu": "SoundBankDataInformation.cpp",
+   "name": "CSoundBankDataInformation::getSoundNamesByCatgoryName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*)",
+   "original_size": 1254,
+   "status": "DIFF",
+   "code": "4e08500849919ebb",
+   "object_digest": "91abe2d4f578de02fde3f688ef8087960f24e1695ead7b57d3a66a7ecb8296fc",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_sound_category",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa640f0",
+   "tu": "SoundBankDataInformation.cpp",
+   "name": "CSoundBankDataInformation::createSoundData(CDataGroup*)",
+   "original_size": 1834,
+   "status": "DIFF",
+   "code": "5a914de1d9373ae3",
+   "object_digest": "91abe2d4f578de02fde3f688ef8087960f24e1695ead7b57d3a66a7ecb8296fc",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_sounddata_create",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa64820",
+   "tu": "SoundBankDataInformation.cpp",
+   "name": "CSoundBankDataInformation::~CSoundBankDataInformation()",
+   "original_size": 450,
+   "status": "DIFF",
+   "code": "9bcc94ea52c9c44c",
+   "object_digest": "91abe2d4f578de02fde3f688ef8087960f24e1695ead7b57d3a66a7ecb8296fc",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_sounddata_destructor",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa649f0",
+   "tu": "SoundBankDataInformation.cpp",
+   "name": "CSoundBankDataInformation::~CSoundBankDataInformation()",
+   "original_size": 18,
+   "status": "MATCH",
+   "code": "57da58e4b217b34c",
+   "object_digest": "91abe2d4f578de02fde3f688ef8087960f24e1695ead7b57d3a66a7ecb8296fc",
+   "coverage": []
+  },
+  {
+   "address": "0xa64a10",
+   "tu": "SoundBankDataInformation.cpp",
+   "name": "CSoundBankDataInformation::parseSoundData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "original_size": 3368,
+   "status": "DIFF",
+   "code": "e49287483c60f8c9",
+   "object_digest": "91abe2d4f578de02fde3f688ef8087960f24e1695ead7b57d3a66a7ecb8296fc",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_sounddata_parse",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa65740",
+   "tu": "SoundBankDataInformation.cpp",
+   "name": "CSoundBankDataInformation::reload(CResourceSettings*)",
+   "original_size": 485,
+   "status": "DIFF",
+   "code": "50f5c7ad3d042d92",
+   "object_digest": "91abe2d4f578de02fde3f688ef8087960f24e1695ead7b57d3a66a7ecb8296fc",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_sounddata_reload",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa69180",
+   "tu": "soundbank.cpp",
+   "name": "CSoundBank::addSample(int, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool, bool, float, float, float, float, int)",
+   "original_size": 1005,
+   "status": "DIFF",
+   "code": "59d8a1aea5c947d0",
+   "object_digest": "a3e34411a07fbb240f7a4224775e85ef127c0801cf5e41153d881e1316c03a94",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_bank_named",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa69570",
+   "tu": "soundbank.cpp",
+   "name": "CSoundBank::addSample(int, long long)",
+   "original_size": 412,
+   "status": "DIFF",
+   "code": "1196df86b0a90bf6",
+   "object_digest": "a3e34411a07fbb240f7a4224775e85ef127c0801cf5e41153d881e1316c03a94",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_bank_guid",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa69b60",
+   "tu": "soundbank.cpp",
+   "name": "CSoundBank::update(float, Ogre::SceneNode*)",
+   "original_size": 861,
+   "status": "DIFF",
+   "code": "d0b4b79ffe122b33",
+   "object_digest": "a3e34411a07fbb240f7a4224775e85ef127c0801cf5e41153d881e1316c03a94",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_bank_update",
+     "completed": 256,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa7ddf0",
+   "tu": "SpawnClassData.cpp",
+   "name": "CSpawnClassData::CSpawnClassData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "original_size": 528,
+   "status": "DIFF",
+   "code": "7cd36235c54730e0",
+   "object_digest": "c33c7e489bd67a7b5910c41f4cd2fa907db034341f52adb3d10d51e9875c335c",
+   "coverage": [
+    {
+     "fixture": "deepen_spawn_data_constructor",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa7f060",
+   "tu": "SpawnClassParser.cpp",
+   "name": "CSpawnClassParser::createEmptySpawnClass(CDataGroup*)",
+   "original_size": 937,
+   "status": "DIFF",
+   "code": "e3b9e119514bae79",
+   "object_digest": "65540169ac63faa368f57ec561dd01abbf0582e76587515424e680571859f3bb",
+   "coverage": [
+    {
+     "fixture": "deepen_spawn_parser_empty",
+     "completed": 72,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa80060",
+   "tu": "SpawnClassParser.cpp",
+   "name": "CSpawnClassParser::createSpawnClassDataRefSpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",
+   "original_size": 3131,
+   "status": "DIFF",
+   "code": "bf523c52dc99cca6",
+   "object_digest": "65540169ac63faa368f57ec561dd01abbf0582e76587515424e680571859f3bb",
+   "coverage": [
+    {
+     "fixture": "deepen_spawn_parser_reference",
+     "completed": 80,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa80ca0",
+   "tu": "SpawnClassParser.cpp",
+   "name": "CSpawnClassParser::createSpawnClassDataWithUnit(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",
+   "original_size": 853,
+   "status": "DIFF",
+   "code": "558c856519140fec",
+   "object_digest": "65540169ac63faa368f57ec561dd01abbf0582e76587515424e680571859f3bb",
+   "coverage": [
+    {
+     "fixture": "deepen_spawn_parser_unit",
+     "completed": 80,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa81000",
+   "tu": "SpawnClassParser.cpp",
+   "name": "CSpawnClassParser::createSpawnClassData(CDataGroup*)",
+   "original_size": 1196,
+   "status": "DIFF",
+   "code": "13a8bb250cea7f29",
+   "object_digest": "65540169ac63faa368f57ec561dd01abbf0582e76587515424e680571859f3bb",
+   "coverage": [
+    {
+     "fixture": "deepen_spawn_parser_dispatch",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa814b0",
+   "tu": "SpawnClassParser.cpp",
+   "name": "CSpawnClassParser::fillEmptySpawnClass(CDataGroup*)",
+   "original_size": 519,
+   "status": "DIFF",
+   "code": "4ced479f35929939",
+   "object_digest": "65540169ac63faa368f57ec561dd01abbf0582e76587515424e680571859f3bb",
+   "coverage": [
+    {
+     "fixture": "deepen_spawn_parser_fill",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc5efe0",
+   "tu": "DataGroup.cpp",
+   "name": "CDataGroup::CopyDataValue(CDataValue*, TArrayList<CDataValue*>*)",
+   "original_size": 469,
+   "status": "MATCH",
+   "code": "49b04a3b3a4e89b1",
+   "object_digest": "33b51868f8a41ea45551bdcd90027438ca3998b68fb80973cc6f30280a3e79e4",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_data_copy_value",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc5fa00",
+   "tu": "DataGroup.cpp",
+   "name": "CDataGroup::AddDataValue(unsigned int, UNIONDATA64BIT, CDataValue::EDATAVALUETYPES)",
+   "original_size": 304,
+   "status": "DIFF",
+   "code": "936e5e37ba74dc5c",
+   "object_digest": "33b51868f8a41ea45551bdcd90027438ca3998b68fb80973cc6f30280a3e79e4",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_data_add_id",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc602d0",
+   "tu": "DataGroup.cpp",
+   "name": "CDataGroup::AddDataValue(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "original_size": 272,
+   "status": "DIFF",
+   "code": "5efb35708bd18715",
+   "object_digest": "33b51868f8a41ea45551bdcd90027438ca3998b68fb80973cc6f30280a3e79e4",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_data_add_typed",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc60ab0",
+   "tu": "DataGroup.cpp",
+   "name": "CDataGroup::SetGroupName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "original_size": 2598,
+   "status": "DIFF",
+   "code": "6dc75d9b3df27ab4",
+   "object_digest": "33b51868f8a41ea45551bdcd90027438ca3998b68fb80973cc6f30280a3e79e4",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_data_set_name",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc61e00",
+   "tu": "DataGroup.cpp",
+   "name": "CDataGroup::CopyDataGroup(CDataGroup*, bool)",
+   "original_size": 646,
+   "status": "DIFF",
+   "code": "41e70737e14db8f7",
+   "object_digest": "33b51868f8a41ea45551bdcd90027438ca3998b68fb80973cc6f30280a3e79e4",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_data_copy_group",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc62090",
+   "tu": "DataGroup.cpp",
+   "name": "CDataGroup::LoadFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CTimerStatics*)",
+   "original_size": 1713,
+   "status": "DIFF",
+   "code": "1436d40926274913",
+   "object_digest": "33b51868f8a41ea45551bdcd90027438ca3998b68fb80973cc6f30280a3e79e4",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_data_load",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc68b90",
+   "tu": "OgreResourceFile.cpp",
+   "name": "COgreResourceFile::LoadDataValues(COgreReader*, CDataGroup*, std::map<unsigned int, unsigned int, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned int> > >&, unsigned int, CTimerStatics*)",
+   "original_size": 1339,
+   "status": "DIFF",
+   "code": "3ec6c4b9a0b3452f",
+   "object_digest": "6457371dfa8845506a79790dffac620d8cf5ca97c421009fbcd3c71c07aab51a",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_ogre_values",
+     "completed": 60,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc690d0",
+   "tu": "OgreResourceFile.cpp",
+   "name": "COgreResourceFile::Load(COgreReader*, CDataGroup*, std::map<unsigned int, unsigned int, std::less<unsigned int>, std::allocator<std::pair<unsigned int const, unsigned int> > >&, unsigned int, CTimerStatics*)",
+   "original_size": 1293,
+   "status": "DIFF",
+   "code": "f10180eeafa8de66",
+   "object_digest": "6457371dfa8845506a79790dffac620d8cf5ca97c421009fbcd3c71c07aab51a",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_ogre_load",
+     "completed": 60,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc86410",
+   "tu": "ModFileFilter.cpp",
+   "name": "CModFileFilter::getFiles(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >&, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",
+   "original_size": 1817,
+   "status": "DIFF",
+   "code": "18e32a266188e93b",
+   "object_digest": "7c64bf9a6b2a2a68575a29d5100822b867f4b2db248e0fb5fa09c3e673179ea8",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_mod_files",
+     "completed": 240,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc86ed0",
+   "tu": "OgreUtilities.cpp",
+   "name": "OGRE_UTILITIES::createEntity(Ogre::SceneManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, OGRE_UTILITIES::EQUERYMASK, char const*)",
+   "original_size": 1118,
+   "status": "MATCH",
+   "code": "df8af5ddb0116523",
+   "object_digest": "b6f21bebc79e0e88e25ed7f18b5ca2afdfcecfdb63c145ab6ed1e35fe63b0ec4",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_ogre_mesh",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc87330",
+   "tu": "OgreUtilities.cpp",
+   "name": "OGRE_UTILITIES::createEntity(Ogre::SceneManager*, OGRE_UTILITIES::EPRIMITIVES, OGRE_UTILITIES::EQUERYMASK, char const*)",
+   "original_size": 652,
+   "status": "DIFF",
+   "code": "6165499d5ce18702",
+   "object_digest": "b6f21bebc79e0e88e25ed7f18b5ca2afdfcecfdb63c145ab6ed1e35fe63b0ec4",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_ogre_primitive",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc88d90",
+   "tu": "path.cpp",
+   "name": "CPath::AddPoint(Ogre::Vector3 const&, float, float)",
+   "original_size": 1558,
+   "status": "DIFF",
+   "code": "a769788b8f517427",
+   "object_digest": "76cb609132e9eb6c3aca62fe1c508e9fff20ae7a58774a2f5f3ae70fb306f411",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_path_add",
+     "completed": 80,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc89880",
+   "tu": "path.cpp",
+   "name": "CPath::CPath(CPath&)",
+   "original_size": 1278,
+   "status": "DIFF",
+   "code": "b05ea7a8f619ae39",
+   "object_digest": "76cb609132e9eb6c3aca62fe1c508e9fff20ae7a58774a2f5f3ae70fb306f411",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_path_copy",
+     "completed": 80,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc938e0",
+   "tu": "ExecuteSkillProps.cpp",
+   "name": "CExecuteSkillProps::executeSkill(CBaseUnit*, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&, CBaseUnit*, int)",
+   "original_size": 558,
+   "status": "DIFF",
+   "code": "5c79ae185a5ed4a1",
+   "object_digest": "84d0c2d8836aca6b8b5789d9c5d732761c0943682f82399af4cbc3c2b5dc1c6e",
+   "coverage": [
+    {
+     "fixture": "deepen_execute_skill",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc9cb30",
+   "tu": "ExecuteSkillProps.cpp",
+   "name": "CExecuteSkillProps::CExecuteSkillProps(CSkill*, CSkillEvent*, CDataGroup*)",
+   "original_size": 249,
+   "status": "DIFF",
+   "code": "f6490ff5b86745da",
+   "object_digest": "84d0c2d8836aca6b8b5789d9c5d732761c0943682f82399af4cbc3c2b5dc1c6e",
+   "coverage": [
+    {
+     "fixture": "deepen_execute_skill_ctor",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcacb60",
+   "tu": "SkillEffectAndAffixes.cpp",
+   "name": "CSkillEffectAndAffixes::removeAffixesAndEffects(CBaseUnit*, CCharacter*)",
+   "original_size": 228,
+   "status": "DIFF",
+   "code": "6a768853bbdb2526",
+   "object_digest": "e3ffea25063710782492e1feef660fcc6a6757ee53cda81952c7aa4d03f552c3",
+   "coverage": [
+    {
+     "fixture": "deepen_skill_effect_remove",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcb3980",
+   "tu": "SkillEffectAndAffixes.cpp",
+   "name": "CSkillEffectAndAffixes::getDisplayStats()",
+   "original_size": 1414,
+   "status": "DIFF",
+   "code": "b3de37f9964b414d",
+   "object_digest": "e3ffea25063710782492e1feef660fcc6a6757ee53cda81952c7aa4d03f552c3",
+   "coverage": [
+    {
+     "fixture": "deepen_skill_effect_stats",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xccadc0",
+   "tu": "SkillManager.cpp",
+   "name": "CSkillManager::stopAllSkills(bool, bool, bool)",
+   "original_size": 409,
+   "status": "DIFF",
+   "code": "c3a5f679f1bf15ab",
+   "object_digest": "67ff9c408aa45f62612ac226d83b2affb464e611cc59eb79f8e6c3940fb36598",
+   "coverage": [
+    {
+     "fixture": "deepen_skill_stop",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcd3610",
+   "tu": "SkillManager.cpp",
+   "name": "CSkillManager::deleteSpecificSkill(CSkill*)",
+   "original_size": 1208,
+   "status": "DIFF",
+   "code": "6ec9b1199158222c",
+   "object_digest": "67ff9c408aa45f62612ac226d83b2affb464e611cc59eb79f8e6c3940fb36598",
+   "coverage": [
+    {
+     "fixture": "deepen_skill_delete_specific",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcd4b00",
+   "tu": "SkillManager.cpp",
+   "name": "CSkillManager::startPassiveSkills(CBaseUnit*, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&)",
+   "original_size": 463,
+   "status": "DIFF",
+   "code": "f59d01a58b71032c",
+   "object_digest": "67ff9c408aa45f62612ac226d83b2affb464e611cc59eb79f8e6c3940fb36598",
+   "coverage": [
+    {
+     "fixture": "deepen_skill_passive",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcd4cd0",
+   "tu": "SkillManager.cpp",
+   "name": "CSkillManager::setSkillLevel(CSkill*, unsigned int)",
+   "original_size": 945,
+   "status": "DIFF",
+   "code": "d6a9b1bad5d9fc56",
+   "object_digest": "67ff9c408aa45f62612ac226d83b2affb464e611cc59eb79f8e6c3940fb36598",
+   "coverage": [
+    {
+     "fixture": "deepen_skill_set_level",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcd5260",
+   "tu": "SkillManager.cpp",
+   "name": "CSkillManager::fireSkillsOnDeath(CBaseUnit*, ESKILL_ACTIVATION_TYPE, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&, CCharacter*)",
+   "original_size": 511,
+   "status": "DIFF",
+   "code": "21b3ab0b205f476b",
+   "object_digest": "67ff9c408aa45f62612ac226d83b2affb464e611cc59eb79f8e6c3940fb36598",
+   "coverage": [
+    {
+     "fixture": "deepen_skill_death",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xde5ed0",
+   "tu": "ParticleCache.cpp",
+   "name": "CParticleCache::playSounds(Ogre::SceneNode*)",
+   "original_size": 133,
+   "status": "MATCH",
+   "code": "bf03235eae99821f",
+   "object_digest": "771d8e8a1e6b2dc75dc4a8d3c27f5f78b2dda4c7f1e532b5ae9b90849cb0847c",
+   "coverage": [
+    {
+     "fixture": "deep_runtime_cache_sounds",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xdf6540",
+   "tu": "QuestDialogItem.cpp",
+   "name": "CQuestDialogItem::parseDialogItemGroup(CDataGroup*, bool)",
+   "original_size": 525,
+   "status": "DIFF",
+   "code": "cc987cb76f256bda",
+   "object_digest": "06fa0994d79ddf1c5742f20efe59369988bb39250572158dc0e7eea1b840a1a3",
+   "coverage": [
+    {
+     "fixture": "deepen_quest_dialog_parse",
+     "completed": 224,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe79c90",
+   "tu": "Cinematics.cpp",
+   "name": "CCinematics::reload()",
+   "original_size": 1806,
+   "status": "DIFF",
+   "code": "ed8b3de34e7518e3",
+   "object_digest": "241c94490664161d0df93dbf95b897b653fb1289c9b5abdc88dee72fab6efe7d",
+   "coverage": [
+    {
+     "fixture": "deepen_editor_cinematics_reload",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe7a520",
+   "tu": "UnitResourceList.cpp",
+   "name": "CUnitResourceList::CUnitResourceList()",
+   "original_size": 329,
+   "status": "MATCH",
+   "code": "f887222f3725cf6e",
+   "object_digest": "b6c980dd6747666e95fbc4eeeb8e0f0dbf1c7a0495b5dfe38a9515ad456e48cc",
+   "coverage": []
+  },
+  {
+   "address": "0xe7b3d0",
+   "tu": "UnitResourceList.cpp",
+   "name": "CUnitResourceList::~CUnitResourceList()",
+   "original_size": 409,
+   "status": "DIFF",
+   "code": "4b2c907186ce5d1c",
+   "object_digest": "b6c980dd6747666e95fbc4eeeb8e0f0dbf1c7a0495b5dfe38a9515ad456e48cc",
+   "coverage": [
+    {
+     "fixture": "deepen_unit_resources_destructor",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe7b570",
+   "tu": "UnitResourceList.cpp",
+   "name": "CUnitResourceList::~CUnitResourceList()",
+   "original_size": 18,
+   "status": "MATCH",
+   "code": "f80b799304f4cddc",
+   "object_digest": "b6c980dd6747666e95fbc4eeeb8e0f0dbf1c7a0495b5dfe38a9515ad456e48cc",
+   "coverage": []
+  },
+  {
+   "address": "0xe7b730",
+   "tu": "UnitResourceList.cpp",
+   "name": "CUnitResourceList::getDataGroupByFileName(wchar_t const*, wchar_t const*)",
+   "original_size": 1052,
+   "status": "MATCH",
+   "code": "9d122fde22f1a1c2",
+   "object_digest": "b6c980dd6747666e95fbc4eeeb8e0f0dbf1c7a0495b5dfe38a9515ad456e48cc",
+   "coverage": [
+    {
+     "fixture": "deepen_unit_resources_wide_lookup",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe7c170",
+   "tu": "UnitResourceList.cpp",
+   "name": "CUnitResourceList::parseChildFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",
+   "original_size": 2805,
+   "status": "DIFF",
+   "code": "d76a27f9daab2dc0",
+   "object_digest": "b6c980dd6747666e95fbc4eeeb8e0f0dbf1c7a0495b5dfe38a9515ad456e48cc",
+   "coverage": [
+    {
+     "fixture": "deepen_unit_resources_child_files",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe7f0e0",
+   "tu": "UnitResourceList.cpp",
+   "name": "CUnitResourceList::parseMasterDirectory(ERESOURCE_GROUPS, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, CDataGroup*, bool)",
+   "original_size": 705,
+   "status": "DIFF",
+   "code": "4f826b23e5540562",
+   "object_digest": "b6c980dd6747666e95fbc4eeeb8e0f0dbf1c7a0495b5dfe38a9515ad456e48cc",
+   "coverage": [
+    {
+     "fixture": "deepen_unit_resources_master_directory",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  }
+ ],
+ "validation": {
+  "focused": {
+   "tests": 115,
+   "failed": 0,
+   "normal_pairs": 13936,
+   "seconds": 47.500988721847534
+  },
+  "full": {
+   "tests": 1674,
+   "failed": 0,
+   "seconds": 1665.0105800628662,
+   "build_timing": {
+    "schema": 1,
+    "status": "completed",
+    "phases": [
+     {
+      "name": "context",
+      "wall_seconds": 0.26709460300116916,
+      "process_cpu_seconds": 0.2637625189999966,
+      "children_cpu_seconds": 0.0
+     },
+     {
+      "name": "compile",
+      "wall_seconds": 119.29334883299816,
+      "process_cpu_seconds": 49.067440934,
+      "children_cpu_seconds": 402.904041
+     },
+     {
+      "name": "rewrite_assemble_metadata",
+      "wall_seconds": 11.643873061002523,
+      "process_cpu_seconds": 10.261710409000003,
+      "children_cpu_seconds": 10.31568900000002
+     },
+     {
+      "name": "hook_reduction",
+      "wall_seconds": 22.612382560997503,
+      "process_cpu_seconds": 7.76157095100001,
+      "children_cpu_seconds": 14.76650799999993
+     },
+     {
+      "name": "hooks_imports",
+      "wall_seconds": 0.6474152930022683,
+      "process_cpu_seconds": 0.15272375999998644,
+      "children_cpu_seconds": 0.49294400000007954
+     },
+     {
+      "name": "link",
+      "wall_seconds": 0.6318487690004986,
+      "process_cpu_seconds": 0.0006149170000071535,
+      "children_cpu_seconds": 0.6147529999999506
+     },
+     {
+      "name": "loader",
+      "wall_seconds": 0.17009955599860405,
+      "process_cpu_seconds": 0.00047159599999702095,
+      "children_cpu_seconds": 0.1678670000000011
+     },
+     {
+      "name": "manifest",
+      "wall_seconds": 0.24388869800168322,
+      "process_cpu_seconds": 0.24245426800000303,
+      "children_cpu_seconds": 0.0
+     }
+    ],
+    "total": {
+     "wall_seconds": 155.50996138100163,
+     "process_cpu_seconds": 67.75075797400001,
+     "children_cpu_seconds": 429.261802
+    },
+    "compiler_slot_wait_seconds": null,
+    "note": "CPU is process-wide; phase wall time includes unseparated compiler slot waits."
+   },
+   "selftest_timing": {
+    "schema": 1,
+    "phases": {
+     "environment": 0.09081165799943847,
+     "schedule": 1.3847938290018647,
+     "execute": 1473.0941185850024,
+     "parse": 0.16503490899776807
+    },
+    "returncode": 0,
+    "elapsed": 1474.7348190039993,
+    "shard_count": 60,
+    "raw_sha256": "65ba4fe7be3f327bd17c7f4c3ea75567ad1098ce8891401ec007167a47ba9a38",
+    "schedule": {
+     "method": "object-predicted-first",
+     "reason": "verified test objects and shared runtime; unknown costs estimated",
+     "known_costs": 1583,
+     "estimated_costs": 91
+    },
+    "workers": [
+     {
+      "index": 0,
+      "elapsed": 180.69367882499864,
+      "returncode": 0,
+      "queue_elapsed": 899.7872932869977,
+      "slot_wait_elapsed": 0.0002688160020625219
+     },
+     {
+      "index": 1,
+      "elapsed": 186.7751096960019,
+      "returncode": 0,
+      "queue_elapsed": 497.62131661400053,
+      "slot_wait_elapsed": 0.00039007099985610694
+     },
+     {
+      "index": 2,
+      "elapsed": 152.7348575169999,
+      "returncode": 0,
+      "queue_elapsed": 684.3968359239989,
+      "slot_wait_elapsed": 0.0017881169987958856
+     },
+     {
+      "index": 3,
+      "elapsed": 131.3052960770001,
+      "returncode": 0,
+      "queue_elapsed": 749.5350113280001,
+      "slot_wait_elapsed": 0.00033296499896096066
+     },
+     {
+      "index": 4,
+      "elapsed": 174.1598923019992,
+      "returncode": 0,
+      "queue_elapsed": 507.81796538399794,
+      "slot_wait_elapsed": 0.0004831750011362601
+     },
+     {
+      "index": 5,
+      "elapsed": 158.74418848799905,
+      "returncode": 0,
+      "queue_elapsed": 681.9783566699989,
+      "slot_wait_elapsed": 0.0003159539992338978
+     },
+     {
+      "index": 6,
+      "elapsed": 160.27739638999992,
+      "returncode": 0,
+      "queue_elapsed": 589.2572920230014,
+      "slot_wait_elapsed": 0.0003059490009036381
+     },
+     {
+      "index": 7,
+      "elapsed": 189.8945960150013,
+      "returncode": 0,
+      "queue_elapsed": 415.2812686310026,
+      "slot_wait_elapsed": 0.0002647319997777231
+     },
+     {
+      "index": 8,
+      "elapsed": 91.06988907499908,
+      "returncode": 0,
+      "queue_elapsed": 1084.351232858,
+      "slot_wait_elapsed": 0.00035956200008513406
+     },
+     {
+      "index": 9,
+      "elapsed": 144.8048175269978,
+      "returncode": 0,
+      "queue_elapsed": 746.8241816049995,
+      "slot_wait_elapsed": 0.00041032000081031583
+     },
+     {
+      "index": 10,
+      "elapsed": 254.23231127200052,
+      "returncode": 0,
+      "queue_elapsed": 0.0011197720014024526,
+      "slot_wait_elapsed": 0.00223021800047718
+     },
+     {
+      "index": 11,
+      "elapsed": 122.50089989599655,
+      "returncode": 0,
+      "queue_elapsed": 840.7228751699986,
+      "slot_wait_elapsed": 0.0003282770012447145
+     },
+     {
+      "index": 12,
+      "elapsed": 159.9632215950005,
+      "returncode": 0,
+      "queue_elapsed": 586.860474273999,
+      "slot_wait_elapsed": 0.00046940800166339613
+     },
+     {
+      "index": 13,
+      "elapsed": 269.5381104350017,
+      "returncode": 0,
+      "queue_elapsed": 0.0006105329994170461,
+      "slot_wait_elapsed": 0.0022328720006044023
+     },
+     {
+      "index": 14,
+      "elapsed": 239.03070383399972,
+      "returncode": 0,
+      "queue_elapsed": 350.2262706360016,
+      "slot_wait_elapsed": 0.00030271499781520106
+     },
+     {
+      "index": 15,
+      "elapsed": 137.0225127140002,
+      "returncode": 0,
+      "queue_elapsed": 762.7644952679984,
+      "slot_wait_elapsed": 0.00026801100102602504
+     },
+     {
+      "index": 16,
+      "elapsed": 85.79118622900205,
+      "returncode": 0,
+      "queue_elapsed": 1172.3882718810019,
+      "slot_wait_elapsed": 0.0002672480004548561
+     },
+     {
+      "index": 17,
+      "elapsed": 44.7595492090004,
+      "returncode": 0,
+      "queue_elapsed": 1339.928219341,
+      "slot_wait_elapsed": 0.00038271400262601674
+     },
+     {
+      "index": 18,
+      "elapsed": 27.71929388100034,
+      "returncode": 0,
+      "queue_elapsed": 1381.8338828859996,
+      "slot_wait_elapsed": 0.00034533600046415813
+     },
+     {
+      "index": 19,
+      "elapsed": 28.280737089000468,
+      "returncode": 0,
+      "queue_elapsed": 1382.955290482998,
+      "slot_wait_elapsed": 0.00042095300159417093
+     },
+     {
+      "index": 20,
+      "elapsed": 66.54382423599964,
+      "returncode": 0,
+      "queue_elapsed": 1271.403319729001,
+      "slot_wait_elapsed": 0.000299895997159183
+     },
+     {
+      "index": 21,
+      "elapsed": 299.37629863999973,
+      "returncode": 0,
+      "queue_elapsed": 0.0015333060000557452,
+      "slot_wait_elapsed": 0.003487278998363763
+     },
+     {
+      "index": 22,
+      "elapsed": 178.79078186499828,
+      "returncode": 0,
+      "queue_elapsed": 1082.9070907319983,
+      "slot_wait_elapsed": 0.00036823200207436457
+     },
+     {
+      "index": 23,
+      "elapsed": 103.50936958199964,
+      "returncode": 0,
+      "queue_elapsed": 1079.7404656140025,
+      "slot_wait_elapsed": 0.00039465399822802283
+     },
+     {
+      "index": 24,
+      "elapsed": 52.98600041800091,
+      "returncode": 0,
+      "queue_elapsed": 1329.9689785100018,
+      "slot_wait_elapsed": 0.0002980050012411084
+     },
+     {
+      "index": 25,
+      "elapsed": 90.86475701800009,
+      "returncode": 0,
+      "queue_elapsed": 1110.322682828999,
+      "slot_wait_elapsed": 0.00044480700307758525
+     },
+     {
+      "index": 26,
+      "elapsed": 71.78896091999923,
+      "returncode": 0,
+      "queue_elapsed": 1258.1797394950008,
+      "slot_wait_elapsed": 0.00026286099819117226
+     },
+     {
+      "index": 27,
+      "elapsed": 119.68261258099665,
+      "returncode": 0,
+      "queue_elapsed": 963.2241252809981,
+      "slot_wait_elapsed": 0.0003374740008439403
+     },
+     {
+      "index": 28,
+      "elapsed": 91.59687515399855,
+      "returncode": 0,
+      "queue_elapsed": 1175.421497839001,
+      "slot_wait_elapsed": 0.000357659999281168
+     },
+     {
+      "index": 29,
+      "elapsed": 60.84255876300085,
+      "returncode": 0,
+      "queue_elapsed": 1281.5818002689994,
+      "slot_wait_elapsed": 0.00041936900015571155
+     },
+     {
+      "index": 30,
+      "elapsed": 112.01956193599835,
+      "returncode": 0,
+      "queue_elapsed": 891.6294272529994,
+      "slot_wait_elapsed": 0.00042419899909873493
+     },
+     {
+      "index": 31,
+      "elapsed": 157.58804223599873,
+      "returncode": 0,
+      "queue_elapsed": 605.1761476300017,
+      "slot_wait_elapsed": 0.0002871449978556484
+     },
+     {
+      "index": 32,
+      "elapsed": 243.3846339820011,
+      "returncode": 0,
+      "queue_elapsed": 254.23568350500136,
+      "slot_wait_elapsed": 0.0009841949977271724
+     },
+     {
+      "index": 33,
+      "elapsed": 96.16580114300086,
+      "returncode": 0,
+      "queue_elapsed": 1008.3269603990011,
+      "slot_wait_elapsed": 0.0003002459998242557
+     },
+     {
+      "index": 34,
+      "elapsed": 128.39947920299892,
+      "returncode": 0,
+      "queue_elapsed": 837.1334973039993,
+      "slot_wait_elapsed": 0.00037290000182110816
+     },
+     {
+      "index": 35,
+      "elapsed": 106.67278788800104,
+      "returncode": 0,
+      "queue_elapsed": 1003.6494298030011,
+      "slot_wait_elapsed": 0.00044834499931312166
+     },
+     {
+      "index": 36,
+      "elapsed": 135.14605811599904,
+      "returncode": 0,
+      "queue_elapsed": 1337.9474609919998,
+      "slot_wait_elapsed": 0.00035335799839231186
+     },
+     {
+      "index": 37,
+      "elapsed": 45.14063740900019,
+      "returncode": 0,
+      "queue_elapsed": 1339.3771872800025,
+      "slot_wait_elapsed": 0.0003435869984969031
+     },
+     {
+      "index": 38,
+      "elapsed": 74.33267170799809,
+      "returncode": 0,
+      "queue_elapsed": 1265.5950324410005,
+      "slot_wait_elapsed": 0.0005017250005039386
+     },
+     {
+      "index": 39,
+      "elapsed": 82.34436521000316,
+      "returncode": 0,
+      "queue_elapsed": 1183.2502471740008,
+      "slot_wait_elapsed": 0.00040501600233255886
+     },
+     {
+      "index": 40,
+      "elapsed": 72.35807080499944,
+      "returncode": 0,
+      "queue_elapsed": 1267.0187463300026,
+      "slot_wait_elapsed": 0.00035461399966152385
+     },
+     {
+      "index": 41,
+      "elapsed": 92.28447730500193,
+      "returncode": 0,
+      "queue_elapsed": 1104.4930769040002,
+      "slot_wait_elapsed": 0.00035125900103594176
+     },
+     {
+      "index": 42,
+      "elapsed": 44.72556850800174,
+      "returncode": 0,
+      "queue_elapsed": 1337.1079763550006,
+      "slot_wait_elapsed": 0.00032164699950953946
+     },
+     {
+      "index": 43,
+      "elapsed": 190.2360465769998,
+      "returncode": 0,
+      "queue_elapsed": 505.367634895003,
+      "slot_wait_elapsed": 0.0003622229996835813
+     },
+     {
+      "index": 44,
+      "elapsed": 235.82446582400007,
+      "returncode": 0,
+      "queue_elapsed": 269.54267990600056,
+      "slot_wait_elapsed": 0.0004713439993793145
+     },
+     {
+      "index": 45,
+      "elapsed": 74.62503505199857,
+      "returncode": 0,
+      "queue_elapsed": 1196.7779199469987,
+      "slot_wait_elapsed": 0.0003514599993650336
+     },
+     {
+      "index": 46,
+      "elapsed": 261.1651715469998,
+      "returncode": 0,
+      "queue_elapsed": 246.65244725499724,
+      "slot_wait_elapsed": 0.0003266580024501309
+     },
+     {
+      "index": 47,
+      "elapsed": 350.2242610159992,
+      "returncode": 0,
+      "queue_elapsed": 0.00036551700031850487,
+      "slot_wait_elapsed": 0.0016255530026683118
+     },
+     {
+      "index": 48,
+      "elapsed": 80.39342621900141,
+      "returncode": 0,
+      "queue_elapsed": 1201.187900555,
+      "slot_wait_elapsed": 0.0004592950026562903
+     },
+     {
+      "index": 49,
+      "elapsed": 91.90674227099953,
+      "returncode": 0,
+      "queue_elapsed": 1080.481256758001,
+      "slot_wait_elapsed": 0.00025893799829646014
+     },
+     {
+      "index": 50,
+      "elapsed": 415.28051793100167,
+      "returncode": 0,
+      "queue_elapsed": 0.00014064299830351956,
+      "slot_wait_elapsed": 0.0005944240001554135
+     },
+     {
+      "index": 51,
+      "elapsed": 139.7474863669995,
+      "returncode": 0,
+      "queue_elapsed": 695.6040591980018,
+      "slot_wait_elapsed": 0.0003884409998136107
+     },
+     {
+      "index": 52,
+      "elapsed": 246.65000971900008,
+      "returncode": 0,
+      "queue_elapsed": 0.0008547479992557783,
+      "slot_wait_elapsed": 0.0015654529997846112
+     },
+     {
+      "index": 53,
+      "elapsed": 127.48596798699873,
+      "returncode": 0,
+      "queue_elapsed": 880.8406556199989,
+      "slot_wait_elapsed": 0.0003239760008000303
+     },
+     {
+      "index": 54,
+      "elapsed": 128.6958718269998,
+      "returncode": 0,
+      "queue_elapsed": 835.3519515579974,
+      "slot_wait_elapsed": 0.00042327900155214593
+     },
+     {
+      "index": 55,
+      "elapsed": 114.20670804200199,
+      "returncode": 0,
+      "queue_elapsed": 965.5333658029995,
+      "slot_wait_elapsed": 0.0003759040009754244
+     },
+     {
+      "index": 56,
+      "elapsed": 287.47872326799916,
+      "returncode": 0,
+      "queue_elapsed": 299.3813342169997,
+      "slot_wait_elapsed": 0.0003995180013589561
+     },
+     {
+      "index": 57,
+      "elapsed": 45.11932713100032,
+      "returncode": 0,
+      "queue_elapsed": 1342.4247920769994,
+      "slot_wait_elapsed": 0.0004267410004104022
+     },
+     {
+      "index": 58,
+      "elapsed": 75.40927089400066,
+      "returncode": 0,
+      "queue_elapsed": 1261.6982553729977,
+      "slot_wait_elapsed": 0.00043550700138439424
+     },
+     {
+      "index": 59,
+      "elapsed": 120.30261020499893,
+      "returncode": 0,
+      "queue_elapsed": 964.048261048003,
+      "slot_wait_elapsed": 0.00034668799708015285
+     }
+    ]
+   }
+  }
+ },
+ "sources": [
+  {
+   "tu": "SkillManager.cpp",
+   "candidate": "build-decomp/deepen-20261018/main-candidate/sources/SkillManager.cpp",
+   "sha256": "bf38ad446f6eca0e1b5aaca7be1d0ee69fd7565829ddccbf33cbfa23529bcbc5",
+   "object_digest": "67ff9c408aa45f62612ac226d83b2affb464e611cc59eb79f8e6c3940fb36598"
+  },
+  {
+   "tu": "ExecuteSkillProps.cpp",
+   "candidate": "build-decomp/deepen-20261018/main-candidate/sources/ExecuteSkillProps.cpp",
+   "sha256": "c62ea440d5ba7131a0b08cefacf71edc31eb10aaee79a460f794b6d52507dd2b",
+   "object_digest": "84d0c2d8836aca6b8b5789d9c5d732761c0943682f82399af4cbc3c2b5dc1c6e"
+  },
+  {
+   "tu": "EffectManager.cpp",
+   "candidate": "build-decomp/deepen-20261018/main-candidate/sources/EffectManager.cpp",
+   "sha256": "f761f56537895908f3619fa007a19baf34ee248c48a62ea873d9018368b17c12",
+   "object_digest": "0507fd92f774c21589bdc24d4def89f8d8fad104386fc3f23cccfcdc42bfe923"
+  },
+  {
+   "tu": "SkillEffectAndAffixes.cpp",
+   "candidate": "build-decomp/deepen-20261018/main-candidate/sources/SkillEffectAndAffixes.cpp",
+   "sha256": "05bb2ee5eb8c739c0971ee6d8d3fc0dfad11213c538139b3fc0a771c9dd976ca",
+   "object_digest": "e3ffea25063710782492e1feef660fcc6a6757ee53cda81952c7aa4d03f552c3"
+  },
+  {
+   "tu": "QuestDialogItem.cpp",
+   "candidate": "build-decomp/deepen-20261018/main-candidate/sources/QuestDialogItem.cpp",
+   "sha256": "45ae50900fae042809d2d809b557cea57649b49bd569b24d429b4b51cbbef52d",
+   "object_digest": "06fa0994d79ddf1c5742f20efe59369988bb39250572158dc0e7eea1b840a1a3"
+  },
+  {
+   "tu": "Cinematics.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/Cinematics.cpp",
+   "sha256": "7763eea0bf99ba5cb59898137f6d7ba08b577291cd743ce19455f4514cb13a86",
+   "object_digest": "241c94490664161d0df93dbf95b897b653fb1289c9b5abdc88dee72fab6efe7d"
+  },
+  {
+   "tu": "DataGroup.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/DataGroup.cpp",
+   "sha256": "1a61a90bb231b0ea63c3ec75d90a6bb25764b123abbfbbc8fe7cf50e9bd27321",
+   "object_digest": "33b51868f8a41ea45551bdcd90027438ca3998b68fb80973cc6f30280a3e79e4"
+  },
+  {
+   "tu": "DescriptorController.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/DescriptorController.cpp",
+   "sha256": "813cbdbe193b51151859562f1a0d82c231bb6fc304aceb813099133a8b400a56",
+   "object_digest": "59a8d7ac2e86e303a0659ffb76c0fa14dda0d0bf617d48e2d00270845007c2e3"
+  },
+  {
+   "tu": "DescriptorProp.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/DescriptorProp.cpp",
+   "sha256": "841b6f842eea9808077e1667f3dcfcdbf0ef1e4f1fd510e2b6c012a12b92ede2",
+   "object_digest": "32768393ecdc0c7298ba33f6b564c57300cce3c68934dcfb2bf6243f3ac76e29"
+  },
+  {
+   "tu": "Hierachy.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/Hierachy.cpp",
+   "sha256": "898bf7f9a820e156a059e159a0b1f7f2e0027f179691ba925f23b71742691b0a",
+   "object_digest": "59e0e853a3cece1f96ba5124a835ae00c1dea4dd3ffcef856893d90f5ae360b8"
+  },
+  {
+   "tu": "LayoutDescriptor.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/LayoutDescriptor.cpp",
+   "sha256": "f4de3e8a9e5c3bd1a15fe9241cfa7c45e72f6362134bfcb4dd6dbeaf1bc033bf",
+   "object_digest": "ddae0d2003d1b8ca44d1fded273fc3c69477ba99c7f2ecf26b26d22ec2d78822"
+  },
+  {
+   "tu": "LogicGroup.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/LogicGroup.cpp",
+   "sha256": "504e1a735ba217000c68fcdd48dbf0e625ba295dd7834b9a317cd5a62e9146f0",
+   "object_digest": "a99810a6ed1b8b5634017caa58c1dbcc921b8a2d6554919315200633d5977f68"
+  },
+  {
+   "tu": "LogicObject.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/LogicObject.cpp",
+   "sha256": "31b70fe3c077dbba68225dafd49c31a2d243d924dad21aa8df15bbd262a42847",
+   "object_digest": "317aa1b0252e23b991693bf2d12986f5b3d0c6bca0dce3c0f8b555bc7893d109"
+  },
+  {
+   "tu": "ModFileFilter.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/ModFileFilter.cpp",
+   "sha256": "ae6fb4dde43cb581c5c22c8e141a71995d2df58e2eec09f1575eb626ef22bcb1",
+   "object_digest": "7c64bf9a6b2a2a68575a29d5100822b867f4b2db248e0fb5fa09c3e673179ea8"
+  },
+  {
+   "tu": "OgreResourceFile.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/OgreResourceFile.cpp",
+   "sha256": "40caacbd0903a7ac8d2477f7e714463f89e48003124ad8ecf0d5855236f43613",
+   "object_digest": "6457371dfa8845506a79790dffac620d8cf5ca97c421009fbcd3c71c07aab51a"
+  },
+  {
+   "tu": "RoomPieceDataInformation.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/RoomPieceDataInformation.cpp",
+   "sha256": "4a881ce9557cd0931e750419587e2bd0b8b92a582347101fb20f452f623b27c8",
+   "object_digest": "56cc877c6b854c2fd1adf973c0bf7b4b68bcf14aade18fff1119e74967404ee7"
+  },
+  {
+   "tu": "Timeline.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/Timeline.cpp",
+   "sha256": "9eb92250ca83c5dae9009c1bc16a0d94ac330f09ccfd55d5ce0a93ede28cacba",
+   "object_digest": "36e5738c4fa98a59047258ee1168db4d24cb822e04e86cb3018c826968240aa1"
+  },
+  {
+   "tu": "path.cpp",
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/src/path.cpp",
+   "sha256": "7b18404f259638466017685122e56bdb74e05edd0260275bffa4b69f573d9980",
+   "object_digest": "76cb609132e9eb6c3aca62fe1c508e9fff20ae7a58774a2f5f3ae70fb306f411"
+  },
+  {
+   "tu": "DamageShape.cpp",
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/src/DamageShape.cpp",
+   "sha256": "43ab5d3d7b13c7876646936579f44b5fc5599c2b06fa379b4dbd0a6f7ab859b4",
+   "object_digest": "cef6b0313fa4197f56bb5f033c45e74c4f2bbead03befa0d98c6c5faeb2f58f9"
+  },
+  {
+   "tu": "MasterResourceManager.cpp",
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/src/MasterResourceManager.cpp",
+   "sha256": "f99c383ede307c7ff23fcb57feea3daf34a4b67a4f9287081b37e43893f0c26f",
+   "object_digest": "550fc3c2cec72858da57afaad079433c6bba138c6ac1741e8a689bf34e1726e0"
+  },
+  {
+   "tu": "ParticleCache.cpp",
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/src/ParticleCache.cpp",
+   "sha256": "36c4ba4f6cd7e0518add4dbe3121b1492f2096ff414401a4760e742b5df5fc6e",
+   "object_digest": "771d8e8a1e6b2dc75dc4a8d3c27f5f78b2dda4c7f1e532b5ae9b90849cb0847c"
+  },
+  {
+   "tu": "SoundBankDataInformation.cpp",
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/src/SoundBankDataInformation.cpp",
+   "sha256": "865b7d980c51480426da86dfdfd9751d1805acefdb96f4eee6d4adb0d276fa94",
+   "object_digest": "91abe2d4f578de02fde3f688ef8087960f24e1695ead7b57d3a66a7ecb8296fc"
+  },
+  {
+   "tu": "UnitSpawner.cpp",
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/src/UnitSpawner.cpp",
+   "sha256": "7398e56de5a7df58047e58eb31c061931fb6456d780640b96d9734054d1c7788",
+   "object_digest": "eab5acc43acc063899a88a3b813e2c156d0572db9edd90d7cc57313d6ca62502"
+  },
+  {
+   "tu": "pov.cpp",
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/src/pov.cpp",
+   "sha256": "a282739349fe6193b382b3680db605cf118909a9563fbe7db1582da83faeb6b7",
+   "object_digest": "0507972d82887cd33e944dbdadf6765e3fa145959501fec291b0994a1c484272"
+  },
+  {
+   "tu": "soundbank.cpp",
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/src/soundbank.cpp",
+   "sha256": "6ed4ec419c7e50ce7c1ee6513bec656c9e65cc45fa742a3d43dbd723c50872d7",
+   "object_digest": "a3e34411a07fbb240f7a4224775e85ef127c0801cf5e41153d881e1316c03a94"
+  },
+  {
+   "tu": "dynamicline.cpp",
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/src/dynamicline.cpp",
+   "sha256": "544d17ead33bd0e38b672b753cfcce6d6e913e84a0186de99e4511b13b060a98",
+   "object_digest": "1966223bde9e5675e279cccfa7b2fd96cf335c2e3922eee2e1e4916895c9ddb4"
+  },
+  {
+   "tu": "automap.cpp",
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/src/automap.cpp",
+   "sha256": "2c7b81c24d2a2f5250a146bd18c0f060df9c4ffc5dd54801467d92620fdcfe46",
+   "object_digest": "25d3e0f458a38ca2965d37426078da0e6ab16cd3462dcad63118cd73989002d9"
+  },
+  {
+   "tu": "OgreUtilities.cpp",
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/src/OgreUtilities.cpp",
+   "sha256": "e9ab226c1486c4c851a2532b056951e2b5a61b4f8e67b9cf580e3f7268dacd24",
+   "object_digest": "b6f21bebc79e0e88e25ed7f18b5ca2afdfcecfdb63c145ab6ed1e35fe63b0ec4"
+  },
+  {
+   "tu": "UnitResourceList.cpp",
+   "candidate": "build-decomp/deepen-20261018/data-candidate/sources/UnitResourceList.cpp",
+   "sha256": "62809484059caee65244f6b3b181b50e4e42c486e335058b18c84d1a0bdc668e",
+   "object_digest": "b6c980dd6747666e95fbc4eeeb8e0f0dbf1c7a0495b5dfe38a9515ad456e48cc"
+  },
+  {
+   "tu": "SpawnClassParser.cpp",
+   "candidate": "build-decomp/deepen-20261018/data-candidate/sources/SpawnClassParser.cpp",
+   "sha256": "7bd263078d434a8fefc66b47bd9bb33726877e44b7181e4ca8cecf1360179db6",
+   "object_digest": "65540169ac63faa368f57ec561dd01abbf0582e76587515424e680571859f3bb"
+  },
+  {
+   "tu": "SpawnClassData.cpp",
+   "candidate": "build-decomp/deepen-20261018/data-candidate/sources/SpawnClassData.cpp",
+   "sha256": "d46952305b50554801c78c9be40c1f1fe76b907292426b9b1912aff6f78ff20a",
+   "object_digest": "c33c7e489bd67a7b5910c41f4cd2fa907db034341f52adb3d10d51e9875c335c"
+  },
+  {
+   "tu": "EffectGroupManager.cpp",
+   "candidate": "build-decomp/deepen-20261018/group-candidate/sources/EffectGroupManager.cpp",
+   "sha256": "1e198ad83e3d51b3275c49a8b051c3a99a9489c9431ea4e202a028350a6132db",
+   "object_digest": "39ca93dff161d3cebd0df42a1f5a57f7718412e853d3b647f4715739fd0cfe2c"
+  }
+ ],
+ "fixtures": [
+  {
+   "candidate": "build-decomp/deepen-20261018/main-candidate/tests/DeepenEffectTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEffectTest.cpp",
+   "sha256": "17d6f04a96f159c5a20bcecdc3d9c5dde372f43478e47b427b08564038717be9"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/main-candidate/tests/DeepenExecuteSkillTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenExecuteSkillTest.cpp",
+   "sha256": "bc5f2990c724f4a7b734118abd416988f9e8be9e17dc3979cb427d34f38fcb3c"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/main-candidate/tests/DeepenQuestDialogTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenQuestDialogTest.cpp",
+   "sha256": "0a510fe48a5b37df74f7c807489aa97439f2de741980430c926b7a4493a5aa25"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/main-candidate/tests/DeepenSkillManagerTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenSkillManagerTest.cpp",
+   "sha256": "edbebb37b0b3ed51320ddd9f02e86ba0f2530155d673820a20e6b6bec5133a55"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorCacheTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorCacheTest.cpp",
+   "sha256": "6e8adf0d332dd5f3596ca855b00ea5da82a13dcfbb4c82d9ba2adf27564b6bf0"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorCinematicsTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorCinematicsTest.cpp",
+   "sha256": "fe5fa7d7ecc73a041663b79be3ff8c13e21f591e83707902aa081a34313e6160"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorDataGroupTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorDataGroupTest.cpp",
+   "sha256": "0b04d4d2783c56e897607899617104cb27880cfc000736b0ee26294f1161e978"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorDescriptorPropTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorDescriptorPropTest.cpp",
+   "sha256": "c106508227436ce17f68f4fa214b542c7df5a0ec9474898430e3719d4e47a17f"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorHierarchyTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorHierarchyTest.cpp",
+   "sha256": "54d969534571ae98ae55ce8bbcc1ba44772492caedece383833a9cdf69b396dc"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorLayoutInputTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorLayoutInputTest.cpp",
+   "sha256": "662645f0a9bd20d34a0def1fa982c7e96b7d9ef1fd707befbe009be8d6310fa0"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorLogicGroupTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorLogicGroupTest.cpp",
+   "sha256": "23e27b78f8ac52c692300cd8f7420da6b9f6758224fedb547d4207e10cf071d8"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorLogicObjectTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorLogicObjectTest.cpp",
+   "sha256": "c5fe7a7ab3604a006ed32df56b24f6e03c5040309087bf04bf8c89e952bc6e77"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorModFilesTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorModFilesTest.cpp",
+   "sha256": "e4fc05b11624fac65d1922205fba760e3d74796fb8ca5035a02ad70003d7460f"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorModQueriesTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorModQueriesTest.cpp",
+   "sha256": "797e9235f1ef396e2584cea331f1b6d5d619b62385689b514e1dbd9fc4156d84"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorOgreResourceTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorOgreResourceTest.cpp",
+   "sha256": "becbdc3c5f9a50dd8f18b283475f0cbfd3d396f6bf3e954462013600e7887eff"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorPathTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorPathTest.cpp",
+   "sha256": "304cfe33a5ea790e5f96070f755cedba548b4e6fca95608a5c50eddf7a46fbc1"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorRoomDataTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorRoomDataTest.cpp",
+   "sha256": "9317fc51881bf46f7d8f50ccca7905ab8b06be4b6f021c3b30557a8f667fa501"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/editor-candidate/tests/DeepenEditorTimelineTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEditorTimelineTest.cpp",
+   "sha256": "c777827b7a0e621c9254d64eda59e0d82bef27ab77637f67a7a97afcecd57360"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/tests/DeepRuntimeAutomapTest.cpp",
+   "path": "decomp/hybrid/tests/DeepRuntimeAutomapTest.cpp",
+   "sha256": "8762bd87f5382e3ebae58e17fe866d014fe774b9a94ae1fce881f0a672c5d8fd"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/tests/DeepRuntimeBankTest.cpp",
+   "path": "decomp/hybrid/tests/DeepRuntimeBankTest.cpp",
+   "sha256": "1c975498ce7811f07a4fe6b56b30218ae7464a98e4d7df03e44d9ac679a1d7c4"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/tests/DeepRuntimeBankUpdateTest.cpp",
+   "path": "decomp/hybrid/tests/DeepRuntimeBankUpdateTest.cpp",
+   "sha256": "b1e28de65a24322813040425c50112db60f18b41369fb7c88f5f2203f0f8dea3"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/tests/DeepRuntimeCacheTest.cpp",
+   "path": "decomp/hybrid/tests/DeepRuntimeCacheTest.cpp",
+   "sha256": "5119d87a9cb00d6eb29f0084097711bd4738c61abc54dca2cda7b3413d683f1e"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/tests/DeepRuntimeDamageTest.cpp",
+   "path": "decomp/hybrid/tests/DeepRuntimeDamageTest.cpp",
+   "sha256": "286a56a9b20f4f7fa998eef6946678e241551ca311bccc2c20099d33098549f3"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/tests/DeepRuntimeDynamicTest.cpp",
+   "path": "decomp/hybrid/tests/DeepRuntimeDynamicTest.cpp",
+   "sha256": "3ec60c38b49a90674b80620257a158234310d30d131dde439180daaabee5cf47"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/tests/DeepRuntimeMasterTest.cpp",
+   "path": "decomp/hybrid/tests/DeepRuntimeMasterTest.cpp",
+   "sha256": "1dce601925f4c60af20b7b22c7892faf3ff1e78a30d2d285e9276204d3613fdd"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/tests/DeepRuntimeOgreTest.cpp",
+   "path": "decomp/hybrid/tests/DeepRuntimeOgreTest.cpp",
+   "sha256": "0088481e5fde3c76db397792dc2944019a82baeffe28343b1c893c7308a00dfc"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/tests/DeepRuntimePOVTest.cpp",
+   "path": "decomp/hybrid/tests/DeepRuntimePOVTest.cpp",
+   "sha256": "c3e7b635e29fa196259909a301d2d13097554a226bebe71f2c636abc3858102c"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/tests/DeepRuntimeSoundDataTest.cpp",
+   "path": "decomp/hybrid/tests/DeepRuntimeSoundDataTest.cpp",
+   "sha256": "56e8bdc91de7521bccd1981b6b07109968b24bee8b494b0b90afe335a650c454"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/runtime-candidate/tests/DeepRuntimeSpawnerTest.cpp",
+   "path": "decomp/hybrid/tests/DeepRuntimeSpawnerTest.cpp",
+   "sha256": "7253335abe7755f93f979b5658ef2e46e00152c45ddfb4dfdf7cf086fbcfc370"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/data-candidate/tests/DeepenSpawnDataTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenSpawnDataTest.cpp",
+   "sha256": "a7d2ad503afa764daede3344a682e1b7f2035e7850a5bf7aff9ad357985fb2c9"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/data-candidate/tests/DeepenUnitResourcesTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenUnitResourcesTest.cpp",
+   "sha256": "7307592a76f6cfa7a7f212d8093c64970ef7a0d5f8399baafd62e110097648dc"
+  },
+  {
+   "candidate": "build-decomp/deepen-20261018/group-candidate/tests/DeepenEffectGroupsTest.cpp",
+   "path": "decomp/hybrid/tests/DeepenEffectGroupsTest.cpp",
+   "sha256": "df605c80221a05539f96d6aa086e67b304a7a11bafbb8cd02142c3c9454c0b0b"
+  }
+ ],
+ "reserved": [
+  {
+   "tu": "SkillManager.cpp",
+   "address": "0xcca700",
+   "size": 3,
+   "name": "CSkillManager::showWeaponTrailsOnCurrentSkill(CEquipment*, CEquipment*)",
+   "prepare_mode": "address",
+   "reason": "Original xor eax,eax;ret returns zero; proposed void declaration does not prove the return contract. No definition integrated.",
+   "label": "main"
+  },
+  {
+   "tu": "SkillManager.cpp",
+   "address": "0xcd1570",
+   "size": 2824,
+   "name": "CSkillManager::getPositionForSkill(CSkill*, CBaseUnit*)",
+   "prepare_mode": "address",
+   "reason": "Prepared next method; implementation and branch-complete acceptance remain outstanding.",
+   "label": "main"
+  },
+  {
+   "tu": "SkillManager.cpp",
+   "address": "0xcd3fd0",
+   "size": 1512,
+   "name": "CSkillManager::addSkill(CSkill*, bool, bool)",
+   "prepare_mode": "address",
+   "reason": "Fresh group blocked by missing direct TArrayList<CSkill*>::add declaration context.",
+   "label": "main"
+  },
+  {
+   "tu": "SkillManager.cpp",
+   "address": "0xcd45c0",
+   "size": 878,
+   "name": "CSkillManager::executeSkill(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CBaseUnit*, ESKILL_ACTIVATION_TYPE, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&, CBaseUnit*, int)",
+   "prepare_mode": "address",
+   "reason": "Fresh group blocked by missing direct TArrayList<CSkill*>::add declaration context.",
+   "label": "main"
+  },
+  {
+   "tu": "SkillManager.cpp",
+   "address": "0xcd4930",
+   "size": 460,
+   "name": "CSkillManager::executeSkill(CSkill*, CBaseUnit*, ESKILL_ACTIVATION_TYPE, Ogre::Vector3 const&, Ogre::Quaternion const&, Ogre::Vector3 const&, CBaseUnit*)",
+   "prepare_mode": "address",
+   "reason": "Fresh group blocked by missing direct TArrayList<CSkill*>::add declaration context.",
+   "label": "main"
+  },
+  {
+   "tu": "SkillEffectAndAffixes.cpp",
+   "address": "0xcabbc0",
+   "size": 842,
+   "name": "CSkillEffectAndAffixes::canAffixesAndEffectsBeAppliedToUnit(CBaseUnit*, CCharacter*)",
+   "prepare_mode": "address",
+   "reason": "Prepared; original uses private CCharacter master-resource field without a declared friend/accessor.",
+   "label": "main"
+  },
+  {
+   "tu": "SkillEffectAndAffixes.cpp",
+   "address": "0xcac040",
+   "size": 2328,
+   "name": "CSkillEffectAndAffixes::applyAffixesAndEffects(CBaseUnit*, CCharacter*, Ogre::Vector3 const*, bool)",
+   "prepare_mode": "address",
+   "reason": "Prepared; original uses private CCharacter master-resource field without a declared friend/accessor.",
+   "label": "main"
+  },
+  {
+   "tu": "EffectManager.cpp",
+   "address": "0x7f58f0",
+   "size": 725,
+   "name": "CEffectManager::createEffect(CDataGroup*, bool)",
+   "prepare_mode": "address",
+   "reason": "Fresh group blocked by missing CEffect(CDataGroup*,CBaseUnit*) declaration context.",
+   "label": "main"
+  },
+  {
+   "tu": "QuestDialogItem.cpp",
+   "address": "0xdf5fd0",
+   "size": 947,
+   "name": "CQuestDialogItem::dialogComplete(CPlayer*)",
+   "prepare_mode": "address",
+   "reason": "Prepared; quest resource at +0x10 remains opaque and character pet access is private.",
+   "label": "main"
+  },
+  {
+   "tu": "DataGroup.cpp",
+   "address": "0xc61550",
+   "size": 1364,
+   "name": "CDataGroup::~CDataGroup()",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "tier": "A",
+   "header_needs": [],
+   "fixture": "Real repository/name refcounts, replace-existing values, nonempty recursive groups and shared-cache ownership; LoadFile real style selection with synthetic file service; preserve preexisting MATCH.",
+   "headers": [
+    "decomp/include/DataGroup.h",
+    "decomp/include/DataValue.h",
+    "decomp/include/TRepository.h",
+    "decomp/include/DataGroupRepository.h"
+   ],
+   "original_names": [
+    "_ZN10CDataGroupD1Ev",
+    "_ZN10CDataGroupD2Ev"
+   ],
+   "proof": [
+    "build-decomp/drafts/DataGroup.cpp/raw/0xc61550.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "fresh packet: no existing TRepository<wstring>::~TRepository declaration at 0xc629f0",
+   "label": "editor"
+  },
+  {
+   "tu": "PairStyle.cpp",
+   "address": "0xc6ae40",
+   "size": 1662,
+   "name": "CPairStyle::SaveDataGroupToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "tier": "B",
+   "header_needs": [],
+   "fixture": "Real temporary file round trips, empty/nonempty nested groups, absent/empty paths, timers and defined failure branches. File/cache side effects dominate fixture cost.",
+   "headers": [
+    "decomp/include/PairStyle.h",
+    "decomp/include/FileReader.h",
+    "decomp/include/FileSystem.h"
+   ],
+   "original_names": [
+    "_ZN10CPairStyle19SaveDataGroupToFileERKSbIwSt11char_traitsIwESaIwEEP10CDataGroup"
+   ],
+   "proof": [
+    "build-decomp/drafts/PairStyle.cpp/raw/0xc6ae40.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "fresh packet: CPairStyle::Save(FILE*,CDataGroup*) 0xc6d260 and _wfopen_s 0xf620d0 declarations absent",
+   "label": "editor"
+  },
+  {
+   "tu": "PairStyle.cpp",
+   "address": "0xc6c950",
+   "size": 1004,
+   "name": "CPairStyle::LoadDataGroupToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*, CTimerStatics*)",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "tier": "B",
+   "header_needs": [],
+   "fixture": "Real temporary file round trips, empty/nonempty nested groups, absent/empty paths, timers and defined failure branches. File/cache side effects dominate fixture cost.",
+   "headers": [
+    "decomp/include/PairStyle.h",
+    "decomp/include/FileReader.h",
+    "decomp/include/FileSystem.h"
+   ],
+   "original_names": [
+    "_ZN10CPairStyle19LoadDataGroupToFileERKSbIwSt11char_traitsIwESaIwEEP10CDataGroupP13CTimerStatics"
+   ],
+   "proof": [
+    "build-decomp/drafts/PairStyle.cpp/raw/0xc6c950.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "explicit native 0/1 return at c6cbc0 conflicts with void parent and CPairStyle interface; see pair-return-proof.md",
+   "label": "editor"
+  },
+  {
+   "tu": "DynamicPropertyFile.cpp",
+   "address": "0xc6ea60",
+   "size": 3282,
+   "name": "CDynamicPropertyFile::saveSettings(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool)",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "tier": "B",
+   "header_needs": [],
+   "fixture": "Real temporary settings files for every scalar/string property, include/default flags; observe original file sink/order/errors.",
+   "headers": [
+    "decomp/include/DynamicPropertyFile.h"
+   ],
+   "original_names": [
+    "_ZN20CDynamicPropertyFile12saveSettingsERKSbIwSt11char_traitsIwESaIwEEb"
+   ],
+   "proof": [
+    "build-decomp/drafts/DynamicPropertyFile.cpp/raw/0xc6ea60.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "fresh packet: _wfopen_s 0xf620d0 declaration absent; complete TU reserved",
+   "label": "editor"
+  },
+  {
+   "tu": "LogicObject.cpp",
+   "address": "0x7b1ba0",
+   "size": 1192,
+   "name": "CLogicObject::loadAndRelinkObjectInFromBinaryFile(CLogicGroup*, COgreReader*, CDescriptorLoadConfiguration*, std::map<int, int, std::less<int>, std::allocator<std::pair<int const, int> > >&)",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "tier": "H",
+   "header_needs": [
+    "Add symbol-proven void nonvirtual declarations loadAndRelinkObjectInFromBinaryFile(CLogicGroup*,COgreReader*,CDescriptorLoadConfiguration*,std::map<int,int>&) and loadLogicObjectByDataGroup(CLogicGroup*,CDataGroup*,CDescriptorLoadConfiguration*,std::map<int,int>*).",
+    "Review existing scratch UTF16 globals declarations before prepare; no manual ABI casts."
+   ],
+   "fixture": "Real links and remap maps, absent targets/wrappers, duplicate remap IDs, valid binary/data group paths; compare links and reader cursor.",
+   "headers": [
+    "decomp/include/LogicObject.h",
+    "decomp/include/LogicGroup.h",
+    "decomp/include/LogicWrapper.h"
+   ],
+   "original_names": [
+    "_ZN12CLogicObject35loadAndRelinkObjectInFromBinaryFileEP11CLogicGroupP11COgreReaderP28CDescriptorLoadConfigurationRSt3mapIiiSt4lessIiESaISt4pairIKiiEEE"
+   ],
+   "proof": [
+    "build-decomp/drafts/LogicObject.cpp/raw/0x7b1ba0.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "fresh packet: m_gStringTEMP 0x146fa00 and m_gStringTEMP1 0x146fb00 declarations absent",
+   "label": "editor"
+  },
+  {
+   "tu": "dungeon.cpp",
+   "address": "0x92c0c0",
+   "size": 381,
+   "name": "CDungeon::CDungeon()",
+   "status": "DIFF",
+   "prepare_mode": "repair-address",
+   "tier": "B",
+   "header_needs": [],
+   "fixture": "Repair existing DIFF ctor with full scalar/randomizer/list baseline, preserve original unwind/old MATCH.",
+   "headers": [
+    "decomp/include/Dungeon.h",
+    "decomp/include/Randomizer.h"
+   ],
+   "original_names": [
+    "_ZN8CDungeonC2Ev",
+    "_ZN8CDungeonC1Ev"
+   ],
+   "proof": [
+    "build-decomp/drafts/dungeon.cpp/raw/0x92c0c0.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "fresh repair packet: TArrayList<TArrayList<wstring>*>::~TArrayList 0x935e40 declaration absent",
+   "label": "editor"
+  },
+  {
+   "tu": "dungeon.cpp",
+   "address": "0x9337f0",
+   "size": 2022,
+   "name": "CDungeon::getStrataTemplate(unsigned int)",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "tier": "A",
+   "header_needs": [],
+   "fixture": "Strata cache hit/miss, depth bounds, all property defaults and actual LevelTemplateData construction; D1 nested nonempty owning string lists/template data. Existing CDungeon friend on LevelTemplateData ready.",
+   "headers": [
+    "decomp/include/Dungeon.h",
+    "decomp/include/LevelTemplateData.h"
+   ],
+   "original_names": [
+    "_ZN8CDungeon17getStrataTemplateEj"
+   ],
+   "proof": [
+    "build-decomp/drafts/dungeon.cpp/raw/0x9337f0.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "fresh packet: g_LEVELLAYOUT_CREATION_COUNTS 0x1490f80, NAMES 0x1490e00, PATHNODES 0x1490ec0, RANDOMIZED_NAMES 0x1490e60 absent",
+   "label": "editor"
+  },
+  {
+   "tu": "dungeon.cpp",
+   "address": "0x934190",
+   "size": 1387,
+   "name": "CDungeon::~CDungeon()",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "tier": "A",
+   "header_needs": [],
+   "fixture": "Strata cache hit/miss, depth bounds, all property defaults and actual LevelTemplateData construction; D1 nested nonempty owning string lists/template data. Existing CDungeon friend on LevelTemplateData ready.",
+   "headers": [
+    "decomp/include/Dungeon.h",
+    "decomp/include/LevelTemplateData.h"
+   ],
+   "original_names": [
+    "_ZN8CDungeonD1Ev",
+    "_ZN8CDungeonD2Ev"
+   ],
+   "proof": [
+    "build-decomp/drafts/dungeon.cpp/raw/0x934190.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "fresh packet: TArrayList<TArrayList<wstring>*>::~TArrayList 0x935e40 declaration absent",
+   "label": "editor"
+  },
+  {
+   "tu": "DescriptorController.cpp",
+   "address": "0x5c8ad0",
+   "size": 1010,
+   "name": "CDescriptorController::~CDescriptorController()",
+   "status": "DIFF",
+   "prepare_mode": "repair-address",
+   "tier": "H",
+   "header_needs": [
+    "Declare nonvirtual ~CDescriptorController(). Current progress is DIFF despite mechanical remaining.json saying MISSING, because implicit dtor emitted for TU-local g_DescriptorController. Must use --repair-address.",
+    "Adding explicit destructor changes global lifetime/unwind closure; keep all existing strong code and existing accepted evidence. Existing two typed property maps sufficient."
+   ],
+   "fixture": "Destroy both nonempty property maps plus global object cache, verify destructor calls/deallocators exactly; no invented key cache layouts.",
+   "headers": [
+    "decomp/include/DescriptorController.h",
+    "decomp/include/DescriptorControllerState.h",
+    "decomp/include/DescriptorRegistry.h"
+   ],
+   "original_names": [
+    "_ZN21CDescriptorControllerD1Ev",
+    "_ZN21CDescriptorControllerD2Ev"
+   ],
+   "proof": [
+    "build-decomp/drafts/DescriptorController.cpp/raw/0x5c8ad0.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "fresh repair prepare error ValueError(\"repair progress object differs from fresh baseline\")",
+   "label": "editor"
+  },
+  {
+   "tu": "LayoutDescriptor.cpp",
+   "address": "0x5f3d40",
+   "size": 3441,
+   "name": "CLayoutDescriptor::CLayoutDescriptor(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, ELAYOUT_TYPES)",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "tier": "B",
+   "header_needs": [],
+   "fixture": "Typed descriptor constructor property/default list; initialization order, exact name/category and property callbacks. Uses current LayoutDescriptor type with original enum; ensure all builder calls declared.",
+   "headers": [
+    "decomp/include/LayoutDescriptor.h",
+    "decomp/include/Descriptor.h"
+   ],
+   "original_names": [
+    "_ZN17CLayoutDescriptorC1ESbIwSt11char_traitsIwESaIwEE13ELAYOUT_TYPES",
+    "_ZN17CLayoutDescriptorC2ESbIwSt11char_traitsIwESaIwEE13ELAYOUT_TYPES"
+   ],
+   "proof": [
+    "build-decomp/drafts/LayoutDescriptor.cpp/raw/0x5f3d40.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "taken-address callbacks CLayoutDescriptor::Set_setEnabled 0x5f4ac0/Get_getEnabled 0x5f4b30 and others lack declarations",
+   "label": "editor"
+  },
+  {
+   "tu": "Layout.cpp",
+   "address": "0x9dfe70",
+   "size": 2942,
+   "name": "CLayout::loadLayoutFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, bool, CTimerStatics*, bool, bool, unsigned int)",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "tier": "B",
+   "header_needs": [],
+   "fixture": "File load unchanged/cache/force/ignoreSame flags, cloned objects and config/remap, seeds, failures; existing typed layout/header adequate but SDK calls need fresh context review.",
+   "headers": [
+    "decomp/include/Layout.h",
+    "decomp/include/DescriptorLoadConfiguration.h"
+   ],
+   "original_names": [
+    "_ZN7CLayout14loadLayoutFileERKSbIwSt11char_traitsIwESaIwEEbP13CTimerStaticsbbj"
+   ],
+   "proof": [
+    "build-decomp/drafts/Layout.cpp/raw/0x9dfe70.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "required CResourceManager +0x42 m_bFlag2 is private with no CLayout friendship/accessor; see layout-resource-proof.md",
+   "label": "editor"
+  },
+  {
+   "tu": "Mod.cpp",
+   "address": "0xc81ad0",
+   "size": 3491,
+   "name": "CMod::reloadModFiles()",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "tier": "B",
+   "header_needs": [],
+   "fixture": "Directory/list service returns synthetic mod files; real name/path maps and cleanup, extension/relative path behavior. Existing CMod fields complete though unnamed.",
+   "headers": [
+    "decomp/include/Mod.h",
+    "decomp/include/FileSystem.h"
+   ],
+   "original_names": [
+    "_ZN4CMod14reloadModFilesEv"
+   ],
+   "proof": [
+    "build-decomp/drafts/Mod.cpp/raw/0xc81ad0.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "required shipped SDK method ResourceGroupManager::setResourceGroupAllowedToAccessFileSystemOnSearch(std::string const&,bool) PLT552ee8 absent pinned SDK header",
+   "label": "editor"
+  },
+  {
+   "tu": "ModFileFilter.cpp",
+   "address": "0xc844a0",
+   "size": 276,
+   "name": "CModFileFilter::~CModFileFilter()",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "tier": "B",
+   "header_needs": [
+    "saveModFile current void vs original normal EAX=1 may need caller-based return correction; preserve undefined return cases if any."
+   ],
+   "fixture": "Shared mod array/file filter harness, forced/no-op save, enabled/disabled mods, recursive/nonrecursive files and cleanup. Synthetic temporary file only.",
+   "headers": [
+    "decomp/include/ModFileFilter.h",
+    "decomp/include/Mod.h"
+   ],
+   "original_names": [
+    "_ZN14CModFileFilterD1Ev",
+    "_ZN14CModFileFilterD2Ev"
+   ],
+   "proof": [
+    "build-decomp/drafts/ModFileFilter.cpp/raw/0xc844a0.c"
+   ],
+   "draft": {
+    "raw_exists": true,
+    "receipt_exists": false,
+    "state": "unreceipted raw; fresh prepare mandatory"
+   },
+   "source_exists": true,
+   "reason": "fresh packet: TArrayList<CMod*>::~TArrayList 0xc86b30 declaration absent",
+   "label": "editor"
+  },
+  {
+   "tu": "MissilePreloader.cpp",
+   "address": "0xd067d0",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "MissilePreloader.cpp",
+   "address": "0xd0a440",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "MissilePreloader.cpp",
+   "address": "0xd0bbd0",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "ResourceManager.cpp",
+   "address": "0xd79290",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "SoundManager.cpp",
+   "address": "0xa6bb90",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "SoundManager.cpp",
+   "address": "0xa6c100",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "SoundManager.cpp",
+   "address": "0xa6d270",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "SoundManager.cpp",
+   "address": "0xa6dc50",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "SoundManager.cpp",
+   "address": "0xa6e180",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "UnitSpawner.cpp",
+   "address": "0xa167a0",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "automap.cpp",
+   "address": "0x928910",
+   "reason": "Fresh full address prepare blocked by unresolved KAutomap data/ColourValue::White; excluded from fresh narrow4 package",
+   "label": "runtime"
+  },
+  {
+   "tu": "automap.cpp",
+   "address": "0x92b4b0",
+   "reason": "Fresh full address prepare blocked by unresolved KAutomap data/ColourValue::White; excluded from fresh narrow4 package",
+   "label": "runtime"
+  },
+  {
+   "tu": "dynamicline.cpp",
+   "address": "0x86b500",
+   "reason": "Fresh full address prepare blocked by prepareHardwareBuffers(unsigned long,unsigned long) declaration parser; excluded from fresh narrow ctor package",
+   "label": "runtime"
+  },
+  {
+   "tu": "pov.cpp",
+   "address": "0x789120",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "RandomGroup.cpp",
+   "address": "0x9f1e40",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "RandomGroup.cpp",
+   "address": "0x9f9c00",
+   "reason": "Outside bounded 31-target tranche; candidate remains unchanged / method not added",
+   "label": "runtime"
+  },
+  {
+   "tu": "soundbank.cpp",
+   "address": "0xa698a0",
+   "reason": "Fresh full address prepare blocked by TArrayList<int>::add direct callee; excluded from fresh narrow3 package",
+   "label": "runtime"
+  },
+  {
+   "tu": "FormationNode.cpp",
+   "address": "0x9d32e0",
+   "size": 1905,
+   "name": "CFormationNode::updateLevelObject(float, Ogre::Camera*, Ogre::Vector3 const&)",
+   "names": [
+    "_ZN14CFormationNode17updateLevelObjectEfPN4Ogre6CameraERKNS0_7Vector3E"
+   ],
+   "owner": "opencode",
+   "status": "DIFF",
+   "prepare_mode": "repair-address",
+   "readiness": "fresh-prepare-repair-guard-required",
+   "blocker_or_required_proof": "Existing DIFF repair. Original full update1905B; must retain accepted D0/D1 closure guard and old strong hashes. No owning destructor repair requested.",
+   "proof_paths": [
+    "build-decomp/deepen-20261018/frontier-runtime-proof/0x9d32e0.asm"
+   ],
+   "ghidra": "Not used; require fresh COMPLETE receipt for any Ghidra draft before recovery; ASM is original truth.",
+   "reason": "ambiguous unaligned original list access; header/layout remains unproven",
+   "label": "runtime"
+  },
+  {
+   "tu": "SoundManager.cpp",
+   "address": "0xa6ca20",
+   "size": 2124,
+   "name": "CSoundManager::playSound(CSoundInstance*, Ogre::SceneNode*, int, float)",
+   "names": [
+    "_ZN13CSoundManager9playSoundEP14CSoundInstancePN4Ogre9SceneNodeEif"
+   ],
+   "owner": "opencode",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "readiness": "after-header-phase-and-fresh-prepare",
+   "blocker_or_required_proof": "FMOD call-only declarations and exact opaque pointer types supplied in patch. static FMOD_RESULT open callback proven by setFileSystem function-pointer type and register layout. getSoundLength CSWTCH3054 reserve excluded; prepare must expose any similar readonly compiler-object blocker before code.",
+   "proof_paths": [
+    "build-decomp/deepen-20261018/frontier-runtime-proof/0xa6ca20.asm"
+   ],
+   "ghidra": "Not used; require fresh COMPLETE receipt for any Ghidra draft before recovery; ASM is original truth.",
+   "reason": "original readonly CSWTCH.3054 context unsupported",
+   "label": "runtime"
+  },
+  {
+   "tu": "SoundManager.cpp",
+   "address": "0xa6d4b0",
+   "size": 1950,
+   "name": "CSoundManager::createSound(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, SOUND_TYPE, bool, float, float)",
+   "names": [
+    "_ZN13CSoundManager11createSoundESbIwSt11char_traitsIwESaIwEE10SOUND_TYPEbff"
+   ],
+   "owner": "opencode",
+   "status": "MISSING",
+   "prepare_mode": "address",
+   "readiness": "after-header-phase-and-fresh-prepare",
+   "blocker_or_required_proof": "FMOD call-only declarations and exact opaque pointer types supplied in patch. static FMOD_RESULT open callback proven by setFileSystem function-pointer type and register layout. getSoundLength CSWTCH3054 reserve excluded; prepare must expose any similar readonly compiler-object blocker before code.",
+   "proof_paths": [
+    "build-decomp/deepen-20261018/frontier-runtime-proof/0xa6d4b0.asm"
+   ],
+   "ghidra": "Not used; require fresh COMPLETE receipt for any Ghidra draft before recovery; ASM is original truth.",
+   "reason": "original readonly CSWTCH.3054 context unsupported",
+   "label": "runtime"
+  },
+  {
+   "tu": "UnitResourceList.cpp",
+   "address": "0xe7eb00",
+   "name": "CUnitResourceList::loadFile(ERESOURCE_GROUPS, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool, CDataGroup*)",
+   "reason": "fresh original group blocked: no existing declaration of TArrayList<CDataGroup*>::add at 0xa7e5e0",
+   "original_blocked_group": [
+    {
+     "mode": "address",
+     "blocked": {
+      "0xe7eb00": "packet context unresolved: No existing declaration of direct callee TArrayList<CDataGroup*>::add(CDataGroup*) at 0xa7e5e0",
+      "0xe7f3b0": "packet context unresolved: No existing header declaration for referenced data gRESOURCE_GROUP_FILE_LOCATIONS (0x152f180)"
+     },
+     "blockers": [
+      "0xe7eb00: packet context unresolved: No existing declaration of direct callee TArrayList<CDataGroup*>::add(CDataGroup*) at 0xa7e5e0",
+      "0xe7f3b0: packet context unresolved: No existing header declaration for referenced data gRESOURCE_GROUP_FILE_LOCATIONS (0x152f180)"
+     ]
+    }
+   ],
+   "fresh_ready_packet": null,
+   "label": "data"
+  },
+  {
+   "tu": "UnitResourceList.cpp",
+   "address": "0xe7f3b0",
+   "name": "CUnitResourceList::InitUnitResourceList(CResourceSettings*, CHierarchy*)",
+   "reason": "fresh original group blocked: no header declaration of gRESOURCE_GROUP_FILE_LOCATIONS at 0x152f180",
+   "original_blocked_group": [
+    {
+     "mode": "address",
+     "blocked": {
+      "0xe7eb00": "packet context unresolved: No existing declaration of direct callee TArrayList<CDataGroup*>::add(CDataGroup*) at 0xa7e5e0",
+      "0xe7f3b0": "packet context unresolved: No existing header declaration for referenced data gRESOURCE_GROUP_FILE_LOCATIONS (0x152f180)"
+     },
+     "blockers": [
+      "0xe7eb00: packet context unresolved: No existing declaration of direct callee TArrayList<CDataGroup*>::add(CDataGroup*) at 0xa7e5e0",
+      "0xe7f3b0: packet context unresolved: No existing header declaration for referenced data gRESOURCE_GROUP_FILE_LOCATIONS (0x152f180)"
+     ]
+    }
+   ],
+   "fresh_ready_packet": null,
+   "label": "data"
+  },
+  {
+   "tu": "SpawnClassParser.cpp",
+   "address": "0xa7f410",
+   "name": "CSpawnClassParser::createSpawnClassDataByUnitType(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",
+   "reason": "fresh original group blocked: no existing declaration of createSpawnClass(const wstring&, CDataGroup*) at 0xa81d80",
+   "original_blocked_group": [
+    {
+     "mode": "address",
+     "blocked": {
+      "0xa7f410": "packet context unresolved: No existing declaration of direct callee createSpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*) at 0xa81d80",
+      "0xa81b90": "packet context unresolved: No existing header declaration for referenced data m_gSpawnClassParser (0x14b7cf0)"
+     },
+     "blockers": [
+      "0xa7f410: packet context unresolved: No existing declaration of direct callee createSpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*) at 0xa81d80",
+      "0xa81b90: packet context unresolved: No existing header declaration for referenced data m_gSpawnClassParser (0x14b7cf0)"
+     ]
+    }
+   ],
+   "fresh_ready_packet": null,
+   "label": "data"
+  },
+  {
+   "tu": "SpawnClassParser.cpp",
+   "address": "0xa816c0",
+   "name": "CSpawnClassParser::reloadFromDirectory(wchar_t const*)",
+   "reason": "fresh narrow packet ready, but return ABI is bool (a81a43 test rbp; a81a46 setne AL; return), current header declares void; source not added",
+   "original_blocked_group": [
+    {
+     "mode": "address",
+     "blocked": {
+      "0xa7f410": "packet context unresolved: No existing declaration of direct callee createSpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*) at 0xa81d80",
+      "0xa81b90": "packet context unresolved: No existing header declaration for referenced data m_gSpawnClassParser (0x14b7cf0)"
+     },
+     "blockers": [
+      "0xa7f410: packet context unresolved: No existing declaration of direct callee createSpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*) at 0xa81d80",
+      "0xa81b90: packet context unresolved: No existing header declaration for referenced data m_gSpawnClassParser (0x14b7cf0)"
+     ]
+    }
+   ],
+   "fresh_ready_packet": {
+    "tu": "SpawnClassParser.cpp",
+    "address": "0xa816c0",
+    "mode": "address",
+    "prompt": "/home/qweasd123tg/Code/\u043b\u0435\u0432\u044b\u0435 \u043f\u0440\u043e\u0435\u043a\u0442\u044b/OpenTorchlight/build-decomp/deepen-20261018/data-narrow-candidate/SpawnClassParser.cpp-address/packet/prompts/0xa816c0.md",
+    "prompt_sha256": "7da4a99212498c34b1f5d4bff207196dbef7d5120c91704caf203a6fbaaa3456",
+    "checkpoint_sha256": "567602f115e086b47d132c4d9d4bb929e12e25e4e2bb4264c679606e34e4a106",
+    "prior_status": "MISSING",
+    "packet": "/home/qweasd123tg/Code/\u043b\u0435\u0432\u044b\u0435 \u043f\u0440\u043e\u0435\u043a\u0442\u044b/OpenTorchlight/build-decomp/deepen-20261018/data-narrow-candidate/SpawnClassParser.cpp-address/packet"
+   },
+   "label": "data"
+  },
+  {
+   "tu": "SpawnClassParser.cpp",
+   "address": "0xa81b90",
+   "name": "CSpawnClassParser::CSpawnClassParser()",
+   "reason": "fresh original group blocked: no existing header declaration of m_gSpawnClassParser at 0x14b7cf0; fixture avoids unavailable startup constructor",
+   "original_blocked_group": [
+    {
+     "mode": "address",
+     "blocked": {
+      "0xa7f410": "packet context unresolved: No existing declaration of direct callee createSpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*) at 0xa81d80",
+      "0xa81b90": "packet context unresolved: No existing header declaration for referenced data m_gSpawnClassParser (0x14b7cf0)"
+     },
+     "blockers": [
+      "0xa7f410: packet context unresolved: No existing declaration of direct callee createSpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*) at 0xa81d80",
+      "0xa81b90: packet context unresolved: No existing header declaration for referenced data m_gSpawnClassParser (0x14b7cf0)"
+     ]
+    }
+   ],
+   "fresh_ready_packet": null,
+   "label": "data"
+  },
+  {
+   "tu": "SpawnClassData.cpp",
+   "address": "0xa768c0",
+   "name": "CSpawnClassData::addUnitDataObject(CDataGroup*)",
+   "reason": "fresh repair group blocked: TArrayList<CDataGroup*>::add weak insertion declaration; old source remains byte-identical",
+   "original_blocked_group": [
+    {
+     "mode": "repair-address",
+     "blocked": {
+      "0xa768c0": "packet context unresolved: No existing declaration of direct callee TArrayList<CDataGroup*>::add(CDataGroup*) at 0xa7e5e0"
+     },
+     "blockers": [
+      "0xa768c0: packet context unresolved: No existing declaration of direct callee TArrayList<CDataGroup*>::add(CDataGroup*) at 0xa7e5e0"
+     ]
+    }
+   ],
+   "fresh_ready_packet": null,
+   "label": "data"
+  },
+  {
+   "tu": "SpawnClassData.cpp",
+   "address": "0xa7cf40",
+   "name": "CSpawnClassData::fillRandomizer(CCharacter*, int, int, int, int)",
+   "reason": "fresh supplemental packet ready, but reads CPlayer private m_saveOnDeath (+0xa15 at a7cfb9), no accessor/friend; source not added",
+   "original_blocked_group": [
+    {
+     "mode": "address",
+     "blocked": {
+      "0xa7e170": "packet context unresolved: No existing declaration of direct callee TArrayList<CDataGroup*>::add(CDataGroup*) at 0xa7e5e0; No existing declaration of direct callee TArrayList<bool>::add(bool) at 0x90da90"
+     },
+     "blockers": [
+      "0xa7e170: packet context unresolved: No existing declaration of direct callee TArrayList<CDataGroup*>::add(CDataGroup*) at 0xa7e5e0; No existing declaration of direct callee TArrayList<bool>::add(bool) at 0x90da90"
+     ]
+    }
+   ],
+   "fresh_ready_packet": {
+    "tu": "SpawnClassData.cpp",
+    "address": "0xa7cf40",
+    "mode": "address",
+    "prompt": "/home/qweasd123tg/Code/\u043b\u0435\u0432\u044b\u0435 \u043f\u0440\u043e\u0435\u043a\u0442\u044b/OpenTorchlight/build-decomp/deepen-20261018/data-randomizer-candidate/SpawnClassData.cpp-address/packet/prompts/0xa7cf40.md",
+    "prompt_sha256": "21eb260473b8cfc992099c7602564c21e7224ed1d3d8832c120e9c5c53f4ddb4",
+    "checkpoint_sha256": "87888b1196f0033e5dfe166406b2c74817061aaf997b690771ad6903c6cb84de",
+    "prior_status": "MISSING",
+    "packet": "/home/qweasd123tg/Code/\u043b\u0435\u0432\u044b\u0435 \u043f\u0440\u043e\u0435\u043a\u0442\u044b/OpenTorchlight/build-decomp/deepen-20261018/data-randomizer-candidate/SpawnClassData.cpp-address/packet"
+   },
+   "label": "data"
+  },
+  {
+   "tu": "SpawnClassData.cpp",
+   "address": "0xa7e170",
+   "name": "CSpawnClassData::rollSpawnClassData(TArrayList<CDataGroup*>&, TArrayList<bool>*, CCharacter*, CCharacter*, int, int, int, int, int)",
+   "reason": "fresh original group blocked: no existing declarations of TArrayList<CDataGroup*>::add at 0xa7e5e0 and TArrayList<bool>::add at 0x90da90",
+   "original_blocked_group": [
+    {
+     "mode": "address",
+     "blocked": {
+      "0xa7e170": "packet context unresolved: No existing declaration of direct callee TArrayList<CDataGroup*>::add(CDataGroup*) at 0xa7e5e0; No existing declaration of direct callee TArrayList<bool>::add(bool) at 0x90da90"
+     },
+     "blockers": [
+      "0xa7e170: packet context unresolved: No existing declaration of direct callee TArrayList<CDataGroup*>::add(CDataGroup*) at 0xa7e5e0; No existing declaration of direct callee TArrayList<bool>::add(bool) at 0x90da90"
+     ]
+    }
+   ],
+   "fresh_ready_packet": null,
+   "label": "data"
+  }
+ ],
+ "fresh_final_packets": {
+  "targets": 83,
+  "manifest_sha256": "d023d2fb52a01fe029f934c68a51b0285b90915dea192a9e015c247a3b96fda4",
+  "revalidation_sha256": "60c1efc438300fc6e2fe2b308e33afa903d6ddec211969c72ea0e67cea9d8b73"
+ },
+ "fixture_performance": {
+  "pilot": {
+   "fixture_seconds": {
+    "old": [
+     65.003,
+     64.482
+    ],
+    "new": [
+     55.461,
+     54.697
+    ]
+   },
+   "reduction_percent": 14.926053210796631,
+   "completed_pairs_each_run": 25992,
+   "runs": 4,
+   "source_tree_unchanged": true
+  },
+  "expansion": {
+   "input_digest": "9d8530024166f2112ac6e18cc69edc69ae52b8f292121b3289e492b5f4a87b59",
+   "tree_unchanged": true,
+   "coverage_identical": true,
+   "coverage": {
+    "inventory_slot_transfer": {
+     "address": "0xb51bf0",
+     "completed": 12996,
+     "different": 0,
+     "incomplete": 0
+    },
+    "merchant_pet_slot_differential": {
+     "address": "0xb6ab50",
+     "completed": 12960,
+     "different": 0,
+     "incomplete": 0
+    }
+   },
+   "fixture_seconds": {
+    "inventory_slot_transfer": {
+     "old": 34.178,
+     "new": 28.513,
+     "reduction_percent": 16.574989759494397
+    },
+    "merchant_pet_slot_differential": {
+     "old": 33.352,
+     "new": 28.212,
+     "reduction_percent": 15.411369633005512
+    }
+   },
+   "driver_seconds": {
+    "old": 67.80072760400071,
+    "new": 56.992317281001306
+   },
+   "runs": 2
+  },
+  "lifecycle": {
+   "returncode": 0,
+   "report": [
+    "tlhybrid: begin merchant_parent_detour_lifecycle_pilot",
+    "    parent detour lifecycle: 16 code entries restored with permissions; arena-reset children and child _exit isolated; partial setup failure restored; 0 failures",
+    "tlhybrid: timing merchant_parent_detour_lifecycle_pilot 0.007 seconds",
+    "tlhybrid: merchant_parent_detour_lifecycle_pilot           PASS (0)",
+    "tlhybrid: 1 tests, 0 failed"
+   ],
+   "tree_unchanged": true
+  },
+  "manifest_sha256": "199e889ba3887753bedacec27be208df86b5cd78a1d7511ae1a28dbe898fb3f8"
+ },
+ "workflow_savings": {
+  "redundant_fixture_precompile_pass_omitted": true,
+  "final_full_checks": 1,
+  "new_orchestration_framework": false,
+  "findings": [
+   "Freeze shared ABI headers before preparing implementation packages; unresolved contracts remain reserved.",
+   "Existing candidate.py --cycle-spec supplies resumable single-TU phases and a compact summary; reuse where applicable, without adding per-TU full gates to a multi-TU batch.",
+   "Observed remaining template-context blockers: 11 addresses in 7 TUs. Fix reviewed identities as a shared future context task, retaining ELF/header identity guards.",
+   "Fixture inputs must vary independently; numeric pair counts alone missed branch correlations."
+  ]
+ },
+ "notes": [
+  "Canonical check.py is the acceptance authority; focused results are preliminary.",
+  "Seven old MATCH bodies remain byte-identical; code generation drift is accepted only by fresh original/candidate paired comparisons.",
+  "Expected constructor exceptions are excluded from normal acceptance.",
+  "Performance percentages apply to the three measured fixtures, not the whole suite.",
+  "No windowed gameplay or standalone game acceptance was performed."
+ ],
+ "full_performance_comparison": {
+  "before_full_seconds": 1363.3756520748138,
+  "after_full_seconds": 1665.0105800628662,
+  "before_selftest_seconds": 1271.067424793,
+  "after_selftest_seconds": 1474.7348190039993,
+  "new_tests": 88,
+  "new_fixture_sum_seconds": 77.876,
+  "common_fixture_sum_before": 7533.827,
+  "common_fixture_sum_after": 8368.234,
+  "median_common_slow_ratio": 1.0512844774250185,
+  "optimization_fixtures": [
+   {
+    "test": "merchant_main_slot_differential",
+    "before": 155.269,
+    "after": 89.219
+   },
+   {
+    "test": "merchant_pet_slot_differential",
+    "before": 80.001,
+    "after": 69.863
+   },
+   {
+    "test": "inventory_slot_transfer",
+    "before": 93.364,
+    "after": 83.537
+   }
+  ],
+  "current_slot_utilization_percent": 95.61054251380337,
+  "current_tail_seconds": 61.857423596000444,
+  "largest_common_increases": [
+   {
+    "test": "equipment_sockets_differential",
+    "before": 65.076,
+    "after": 114.223,
+    "delta": 49.147000000000006
+   },
+   {
+    "test": "merchantmenu_layout",
+    "before": 121.144,
+    "after": 165.148,
+    "delta": 44.00399999999999
+   },
+   {
+    "test": "editor_mass_logic_timeline_differential",
+    "before": 66.299,
+    "after": 105.811,
+    "delta": 39.512
+   },
+   {
+    "test": "equipment_damage_arrays_differential",
+    "before": 61.634,
+    "after": 94.14,
+    "delta": 32.506
+   },
+   {
+    "test": "equipment_requirement_values_differential",
+    "before": 94.123,
+    "after": 122.492,
+    "delta": 28.369
+   },
+   {
+    "test": "equipment_use_differential",
+    "before": 103.927,
+    "after": 131.74,
+    "delta": 27.813000000000002
+   },
+   {
+    "test": "inventory_mass_differential",
+    "before": 52.213,
+    "after": 79.886,
+    "delta": 27.672999999999995
+   },
+   {
+    "test": "inventorymenu_set_spell",
+    "before": 101.208,
+    "after": 127.219,
+    "delta": 26.010999999999996
+   },
+   {
+    "test": "stash_main_slot_transfer",
+    "before": 96.712,
+    "after": 122.115,
+    "delta": 25.40299999999999
+   },
+   {
+    "test": "stash_pet_slot_transfer",
+    "before": 85.237,
+    "after": 110.216,
+    "delta": 24.979
+   }
+  ]
+ },
+ "next_fixture_costs": {
+  "source": "previous successful canonical full check",
+  "source_log": "build-decomp/advance-20261018/full-check.log",
+  "total_fixture_cpu_slot_seconds": 7533.827,
+  "already_optimized": [
+   "inventory_slot_transfer",
+   "merchant_main_slot_differential",
+   "merchant_pet_slot_differential"
+  ],
+  "next_heaviest": [
+   {
+    "test": "merchantmenu_layout",
+    "seconds": 121.144
+   },
+   {
+    "test": "equipment_use_differential",
+    "seconds": 103.927
+   },
+   {
+    "test": "inventorymenu_set_spell",
+    "seconds": 101.208
+   },
+   {
+    "test": "stash_main_slot_transfer",
+    "seconds": 96.712
+   },
+   {
+    "test": "equipment_requirement_values_differential",
+    "seconds": 94.123
+   },
+   {
+    "test": "equipment_enchant_differential",
+    "seconds": 85.866
+   },
+   {
+    "test": "stash_pet_slot_transfer",
+    "seconds": 85.237
+   },
+   {
+    "test": "combine_layout_equipped",
+    "seconds": 84.729
+   },
+   {
+    "test": "combine_slot_transfer",
+    "seconds": 83.579
+   },
+   {
+    "test": "enchant_slot_transfer",
+    "seconds": 82.852
+   },
+   {
+    "test": "equipment_fire_missiles_differential",
+    "seconds": 71.647
+   },
+   {
+    "test": "equipment_procs_differential",
+    "seconds": 68.542
+   }
+  ],
+  "top12_share_percent": 14.329583092364611
+ },
+ "context_proposal": {
+  "status": "proposal_only_not_live_implemented",
+  "tests": {
+   "total": 193,
+   "unchanged_existing": 188,
+   "new_tests": 5,
+   "failures": 0,
+   "errors": 0
+  },
+  "genuine_address_unlock_count": 7,
+  "unlocked": [
+   {
+    "address": "0xcd3fd0",
+    "tu": "SkillManager.cpp"
+   },
+   {
+    "address": "0xcd45c0",
+    "tu": "SkillManager.cpp"
+   },
+   {
+    "address": "0xcd4930",
+    "tu": "SkillManager.cpp"
+   },
+   {
+    "address": "0xa698a0",
+    "tu": "soundbank.cpp"
+   },
+   {
+    "address": "0xe7eb00",
+    "tu": "UnitResourceList.cpp"
+   },
+   {
+    "address": "0xa768c0",
+    "tu": "SpawnClassData.cpp"
+   },
+   {
+    "address": "0xa7e170",
+    "tu": "SpawnClassData.cpp"
+   }
+  ],
+  "remaining_blocked": [
+   {
+    "address": "0xc61550",
+    "tu": "DataGroup.cpp",
+    "gaps": [
+     "No existing declaration of direct callee TRepository<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >::~TRepository() at 0xc629f0"
+    ]
+   },
+   {
+    "address": "0x92c0c0",
+    "tu": "dungeon.cpp",
+    "gaps": [
+     "No existing declaration of direct callee TArrayList<TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*>::~TArrayList() at 0x935e40"
+    ]
+   },
+   {
+    "address": "0x934190",
+    "tu": "dungeon.cpp",
+    "gaps": [
+     "No existing declaration of direct callee TArrayList<TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >*>::~TArrayList() at 0x935e40"
+    ]
+   },
+   {
+    "address": "0xc844a0",
+    "tu": "ModFileFilter.cpp",
+    "gaps": [
+     "No existing declaration of direct callee TArrayList<CMod*>::~TArrayList() at 0xc86b30"
+    ]
+   }
+  ],
+  "canonical_sha256": "ce1d323818e887b6df50b158fa7b1a6db5271d5c33fe969ef53270586addddbc",
+  "proposal_sha256": "7ed2a2a9a4858dce26a7f4d0733a55f75763146a43b5956764a6d9720c557d87",
+  "patch_sha256": "417556f5b32e52b4680c11e788c5140250fb39c93ca478e000147cdf103371c3",
+  "original_context_patch_sha256": "a4bced5355f1302f1c6c27a76a13b06ba64ca6591b2de8a3196ed1a62eca07ce"
+ }
+}

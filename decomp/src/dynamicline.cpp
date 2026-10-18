@@ -61,3 +61,10 @@ void CDynamicLine::addPoint(const Ogre::Vector3& point)
 CDynamicLine::~CDynamicLine()
 {
 }
+
+CDynamicLine::CDynamicLine(Ogre::RenderOperation::OperationType operationType) : CDynamicRenderable()
+{
+    initialize(operationType, false);
+    setMaterial("FishingLine");
+    m_dirty=true;
+}

@@ -2,6 +2,7 @@
 #include "GameEnums.h"
 #include "GameVariables.h"
 #include "Timeline.h"
+#include "TimelineDescriptorNames.h"
 #include "DataGroup.h"
 #include "Descriptor.h"
 #include "DescriptorLoadConfiguration.h"
@@ -478,17 +479,6 @@ void CTimeline::Reset_To_End()
 void CTimeline::loadTimelineFromDataGroup(CEditorScene* scene, CDataGroup* dataGroup,
                                            CDescriptorLoadConfiguration* configuration)
 {
-    static const wchar_t* const interpolationTypes[] = {
-        L"LINEAR",
-        L"EASEIN",
-        L"EASEOUT",
-        L"EASEINOUT",
-        L"CONSTANT",
-        L"STEP",
-        L"DISCRETE",
-        L"NONE"
-    };
-
     if (configuration == NULL || scene == NULL || dataGroup == NULL)
         return;
 
@@ -554,11 +544,11 @@ void CTimeline::loadTimelineFromDataGroup(CEditorScene* scene, CDataGroup* dataG
 
                 float timePercent = pointGroup->GetDataValue(L"TIMEPERCENT", 0.0f);
                 std::wstring interpolation =
-                    pointGroup->GetDataValue(L"INTERPOLATION", interpolationTypes[7]);
+                    pointGroup->GetDataValue(L"INTERPOLATION", gTIMELINE_INTERP_TYPES[7]);
 
                 int interpolationType = 7;
                 for (int i = 0; i < 8; ++i) {
-                    if (interpolation == interpolationTypes[i]) {
+                    if (interpolation == gTIMELINE_INTERP_TYPES[i]) {
                         interpolationType = i;
                         break;
                     }
@@ -735,4 +725,92 @@ float CTimeline::UpdateTimeline(float elapsedTime)
     if (!getSceneOwner()->getResourceManager()->getEditorIsRunning())
         m_bEnabled = enabled;
     return percent;
+}
+
+#include "LogicWrapper.h"
+void CTimeline::saveTimelineToDataGroup(CEditorScene* scene, CDataGroup* dataGroup)
+{
+    unsigned int count = m_timelineProperties.size();
+    CDataGroup* data = dataGroup->AddDataGroup(L"TIMELINEDATA");
+    data->AddDataValue(L"ID", getOriginalGuid());
+    for (unsigned int i = 0; i < count; ++i) {
+        long long objectID = GetObjectIDInTimelineByIndex(i);
+        if (objectID == -1) continue;
+        CEditorBaseObject* object = scene->GetObjectInScene(objectID);
+        if (!object || object->HasBaseObjectFlag(static_cast<EEDITOROBJECT_FLAG>(8))) continue;
+        CDataGroup* objectData = data->AddDataGroup(L"TIMELINEOBJECT");
+        objectData->AddDataValue(L"OBJECTID", object->getOriginalGuid());
+        CDescriptor* descriptor = object->getDescriptor();
+        if (!descriptor) continue;
+        int index = 0;
+        std::pair<int, bool> key = GetPropertyIDForObjectInTimelineByIndex(objectID, index);
+        while (key.first >= 0) {
+            CDataGroup* propertyData;
+            if (key.second) {
+                propertyData = objectData->AddDataGroup(L"TIMELINEOBJECTEVENT");
+                CLogicWrapper* wrapper = descriptor->GetInputLogicWrapper(key.first);
+                if (!wrapper) continue;
+                propertyData->AddDataValue(L"OBJECTEVENTNAME", wrapper->m_sName, false);
+            } else {
+                CDescriptorProp* property = descriptor->GetPropertyByIndex(key.first);
+                if (!property) continue;
+                propertyData = objectData->AddDataGroup(L"TIMELINEOBJECTPROPERTY");
+                propertyData->AddDataValue(L"OBJECTPROPERTYNAME", property->m_sName, false);
+            }
+            for (int j = 0, pointID = GetPointIDInTimelinePropertyByIndex(objectID,key.first,0,key.second);
+                 pointID >= 0; pointID=GetPointIDInTimelinePropertyByIndex(objectID,key.first,++j,key.second)) {
+                CTimelineProperty* property = GetProperty(objectID,key.first,key.second);
+                if (!property) continue;
+                CDataGroup* point = propertyData->AddDataGroup(L"TIMELINEPOINT");
+                point->AddDataValue(L"TIMEPERCENT", property->GetTimePercentAtPoint(pointID));
+                point->AddDataValue(L"INTERPOLATION", gTIMELINE_INTERP_TYPES[property->m_interpolationType], false);
+                if (!key.second) point->AddDataValue(L"VALUE", property->GetValueAtPointAsString(pointID), false);
+            }
+            key = GetPropertyIDForObjectInTimelineByIndex(objectID, ++index);
+        }
+    }
+}
+
+void CTimeline::saveTimelineToBinaryFile(CEditorScene* scene, std::ofstream* stream)
+{
+    unsigned int count = m_timelineProperties.size(), saved = 0;
+    for (unsigned int i = 0; i < count; ++i) {
+        long long id = GetObjectIDInTimelineByIndex(i);
+        if (id == -1) continue;
+        CEditorBaseObject* object = scene->GetObjectInScene(id);
+        std::map<long long,std::map<std::pair<int,bool>,CTimelineProperty*>*>::iterator found=m_timelineProperties.find(id);
+        if (found!=m_timelineProperties.end() && !found->second->empty() && object && object->getDescriptor() && !object->HasBaseObjectFlag(static_cast<EEDITOROBJECT_FLAG>(1))) ++saved;
+    }
+    stream->write(reinterpret_cast<const char*>(&saved),4);
+    if (!saved) return;
+    for (unsigned int i=0;i<count;++i) {
+        long long id=GetObjectIDInTimelineByIndex(i);
+        if(id==-1) continue;
+        CEditorBaseObject* object=scene->GetObjectInScene(id);
+        std::map<long long,std::map<std::pair<int,bool>,CTimelineProperty*>*>::iterator found=m_timelineProperties.find(id);
+        if(found==m_timelineProperties.end() || found->second->empty() || !object || !object->getDescriptor() || object->HasBaseObjectFlag(static_cast<EEDITOROBJECT_FLAG>(1))) continue;
+        id=GetObjectIDInTimelineByIndex(i);
+        object=scene->GetObjectInScene(id);
+        found=m_timelineProperties.find(id);
+        unsigned int propertyCount=found==m_timelineProperties.end()?0:found->second->size();
+        long long guid=object->getOriginalGuid();
+        stream->write(reinterpret_cast<const char*>(&guid),8);
+        stream->write(reinterpret_cast<const char*>(&propertyCount),4);
+        int index=0;std::pair<int,bool> key=GetPropertyIDForObjectInTimelineByIndex(id,index);
+        while(key.first>=0) {
+            stream->write(reinterpret_cast<const char*>(&key.first),4);
+            stream->write(reinterpret_cast<const char*>(&key.second),1);
+            unsigned int points=GetNumberOfPointsForAProperty(id,key.first,key.second);
+            stream->write(reinterpret_cast<const char*>(&points),4);
+            if(points) for(int j=0,pointID=GetPointIDInTimelinePropertyByIndex(id,key.first,0,key.second);pointID>=0;pointID=GetPointIDInTimelinePropertyByIndex(id,key.first,++j,key.second)) {
+                CTimelineProperty* property=GetProperty(id,key.first,key.second);
+                float time=property->GetTimePercentAtPoint(pointID);
+                int interpolation=property->m_interpolationType;
+                stream->write(reinterpret_cast<const char*>(&time),4);
+                stream->write(reinterpret_cast<const char*>(&interpolation),4);
+                if(!key.second) {unsigned int size=0;void* value=property->GetValueAtPoint(pointID,size);stream->write(reinterpret_cast<const char*>(&size),4);stream->write(static_cast<const char*>(value),size*4);}
+            }
+            key=GetPropertyIDForObjectInTimelineByIndex(id,++index);
+        }
+    }
 }

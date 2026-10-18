@@ -634,3 +634,26 @@ void CEffectManager::transferEffects(CCharacter* target, EEFFECT_ACTIVATION acti
             clearOutDescriptions();
         }
 }
+
+CEffect* CEffectManager::addNewEffect(CEffect* effect)
+{
+    if (effect->m_flag31)
+        for (unsigned int group = 0; group < 3; ++group)
+            for (unsigned int i = 0; i < m_Effects[group].size(); ++i)
+            {
+                CEffect* previous = m_Effects[group][i];
+                if (previous->m_sName == effect->m_sName && previous->m_eType == effect->m_eType &&
+                    (previous->m_fValue24 == -900.0f || previous->m_fValue24 == -1000.0f ||
+                     !(previous->m_fRemainingDuration >= previous->m_fValue24)) && !previous->m_bDead)
+                {
+                    if (previous->m_fValue24 != -900.0f && previous->m_fValue24 != -1000.0f)
+                        previous->m_fRemainingDuration = previous->m_fValue24;
+                    previous->m_bDead = true;
+                }
+            }
+    if (m_Owner.getObject() && !effect->m_Owner.getObject())
+        effect->setOwner(m_Owner.getObject(), true);
+    m_Effects[effect->m_activation].add(effect);
+    clearOutDescriptions();
+    return effect;
+}
