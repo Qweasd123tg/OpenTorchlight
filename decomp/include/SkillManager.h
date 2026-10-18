@@ -12,6 +12,7 @@ class CSkill;
 class CBaseUnit;
 class CResourceManager;
 class CCharacter;
+class CItem;
 // Partial, with the complete 0x98 layout and original destructor slots.
 class CSkillManager : public CRunicCore
 {
@@ -25,6 +26,9 @@ public:
     bool knowsSkill(const std::wstring& name);
     bool getSkillIsUpdatingByName(const std::wstring& name);
     void clearAllUnitReferences();
+    void notifyOfDeletion(CCharacter* character);
+    void notifyOfDeletion(CItem* item);
+    void decrementSkillCharges(CSkill* skill);
     void attemptDeleteOfSkill(CSkill* skill);
     void fireSkillsOnCreate(CBaseUnit* caster, ESKILL_ACTIVATION_TYPE activation,
                            const Ogre::Vector3& position, const Ogre::Quaternion& orientation,

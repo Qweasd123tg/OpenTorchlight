@@ -1494,9 +1494,7 @@ void CEquipment::fillSaveState(CItemSaveState& state,int index,bool flag)
     if (m_pEffectManager)
         for (int activation=0;activation<3;++activation)
         {
-            // EffectManager retains its opaque layout in its own TU. These
-            // three original TArrayLists start at manager+0x28, stride0x18.
-            TArrayList<CEffect*>& effects=reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10+0x18)[activation];
+            TArrayList<CEffect*>& effects=m_pEffectManager->m_Effects[activation];
             for (unsigned int i=0;i<effects.size();++i)
             {
                 CEffect* copy=new CEffect(effects[i]);
@@ -1545,7 +1543,7 @@ void CEquipment::enchant(bool force)
         m_pResourceManager->createAffixesForUnit(this,m_iUnknown274,count);
         m_bUnknown348=false;
     }
-    if (ISA(UNITTYPES::UNIQUE) && (!m_pEffectManager || reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10+0x18)->size()==0))
+    if (ISA(UNITTYPES::UNIQUE) && (!m_pEffectManager || m_pEffectManager->m_Effects->size()==0))
     {
         unsigned int count=UTILITIES::randomIntegerBetweenVolatile(CGameGlobals::getSingleton()->m_iMinUniqueItemSlots,CGameGlobals::getSingleton()->m_iMaxUniqueItemSlots);
         m_pResourceManager->createAffixesForUnit(this,m_iUnknown274+1,count);
@@ -1716,7 +1714,7 @@ void CEquipment::useOnTarget(CCharacter* character,CBaseUnit* target)
     bool applied=false;
     if (m_pEffectManager)
     {
-        TArrayList<CEffect*>& effects=reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10+0x30)[0];
+        TArrayList<CEffect*>& effects=m_pEffectManager->m_Effects[1];
         for (unsigned int i=0;i<effects.size();++i)
         {
             if (target->isEffectValidForUnit(character,effects[i]->m_Owner.getObject(),effects[i]) &&
@@ -1768,7 +1766,7 @@ void CEquipment::executeProcs(CCharacter* character,EEFFECT_TYPE type,CBaseUnit*
     if (hasEffect(type) && m_pSkillManager)
         for (int activation=0;activation<3;++activation)
         {
-            TArrayList<CEffect*>& effects=reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10+0x18)[activation];
+            TArrayList<CEffect*>& effects=m_pEffectManager->m_Effects[activation];
             for (unsigned int i=0;i<effects.size();++i)
                 if (effects[i]->m_eType==type)
                 {
@@ -1832,7 +1830,7 @@ bool CEquipment::canUseOnTarget(CCharacter* character, CBaseUnit* target)
     int level = static_cast<int>(levelCharacter->m_iUnitLevel);
     if (getLevelRequirement(character) > level) return false;
     if (m_pEffectManager) {
-        TArrayList<CEffect*>& effects = *reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10 + 0x30);
+        TArrayList<CEffect*>& effects = m_pEffectManager->m_Effects[1];
         if (effects.size() != 0) {
             bool valid = false;
             for (unsigned int i = 0; i < effects.size(); ++i) {
@@ -1935,8 +1933,7 @@ void CEquipment::improveHeirloom()
     calculateCombatStats(true);
     if (m_iUnknown28C < 10 && m_pEffectManager) {
         for (unsigned int activation = 0; activation < 3; ++activation) {
-            TArrayList<CEffect*>& effects = *reinterpret_cast<TArrayList<CEffect*>*>(
-                m_pEffectManager->m_EffectData10 + 0x18 + activation * 0x18);
+            TArrayList<CEffect*>& effects = m_pEffectManager->m_Effects[activation];
             for (unsigned int i = 0; i < effects.size(); ++i) {
                 float saved = effects[i]->m_fValueC0;
                 float value = effects[i]->value(static_cast<EEFFECT_VALUES>(0));
@@ -2088,7 +2085,7 @@ int CEquipment::getDamageBonus(EDAMAGE_TYPES type)
     for (int socket = 0; socket < static_cast<int>(m_SocketedEquipment.size()); ++socket) {
         CEffectManager* manager = m_SocketedEquipment[socket]->m_pEffectManager;
         if (!manager) continue;
-        TArrayList<CEffect*>& effects = *reinterpret_cast<TArrayList<CEffect*>*>(manager->m_EffectData10 + 0x18);
+        TArrayList<CEffect*>& effects = *manager->m_Effects;
         for (int i = 0; i < static_cast<int>(effects.size()); ++i) {
             CEffect* effect = effects[i];
             if ((effect->m_eType == static_cast<EEFFECT_TYPE>(52) || effect->m_eType == static_cast<EEFFECT_TYPE>(10))
@@ -2161,7 +2158,7 @@ void CEquipment::createElementalDamages()
     if (!ISA(UNITTYPES::WEAPON)) return;
     CEffectManager* manager = m_pEffectManager;
     if (manager) {
-        TArrayList<CEffect*>& effects = *reinterpret_cast<TArrayList<CEffect*>*>(manager->m_EffectData10 + 0x18);
+        TArrayList<CEffect*>& effects = *manager->m_Effects;
         for (int i = 0; i < static_cast<int>(effects.size()); ++i) {
             CEffect* effect = effects[i];
             if (effect->m_eType == static_cast<EEFFECT_TYPE>(52) || effect->m_eType == static_cast<EEFFECT_TYPE>(10)) {
@@ -2312,7 +2309,7 @@ std::wstring CEquipment::getSet()
 long long CEquipment::hasEffects() {
  if(!m_pEffectManager)return 0;
  if(m_pEffectManager->getAffixes().size())return 1;
- TArrayList<CEffect*>& effects=*reinterpret_cast<TArrayList<CEffect*>*>(m_pEffectManager->m_EffectData10+0x18);
+ TArrayList<CEffect*>& effects=*m_pEffectManager->m_Effects;
  for(int i=0;i<static_cast<int>(effects.size());++i)if(effects[i]->m_eType!=static_cast<EEFFECT_TYPE>(62))return 1;
  return 0;
 }

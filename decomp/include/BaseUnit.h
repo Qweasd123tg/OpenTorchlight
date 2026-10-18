@@ -39,6 +39,7 @@ class CBaseUnit : public CPositionableObject
 {
     friend class CSkill;
     friend class CQuestUnitData;
+    friend class CMonsterDescriptor;
 
     friend class CLevel;
     friend struct SmallmatchPass7Probe;

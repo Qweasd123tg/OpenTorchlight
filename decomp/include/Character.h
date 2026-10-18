@@ -56,6 +56,8 @@ enum EAIState
 class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
+    friend class CDamageShape;
+    friend class CMonsterDescriptor;
     friend class CSkillController;
     friend class CDieMenu;
     friend class CQuestUnitData;
@@ -553,7 +555,9 @@ private:
     unsigned char m_Padding52D[0x1];
     bool m_bInvulnerable;
     friend class CEquipment;
-    unsigned char m_Padding52F[0x9];
+    unsigned char m_Padding52F[0x2];
+    bool m_damageShapeEnabled; // +0x531, checked by CDamageShape callback
+    unsigned char m_Padding532[0x6];
     std::vector<bool> m_followerFlags; // +0x538
     Ogre::Entity* m_PaperdollItems[12];
     Ogre::Entity* m_PaperdollItemsSecondary[12];

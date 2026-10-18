@@ -19,7 +19,7 @@ namespace {
 template<class T>struct Raw{unsigned long long data[(sizeof(T)+7)/8];Raw(){std::memset(data,0,sizeof(data));}T*get(){return reinterpret_cast<T*>(data);}};
 struct Case{unsigned n,count,flags,mode;};const Case*input;autotest::Capture*capture;
 void number(int n){capture->add(&n,sizeof(n));}void real(float f){capture->add(&f,sizeof(f));}
-TArrayList<CEffect*>&list(CEffectManager*m){return *reinterpret_cast<TArrayList<CEffect*>*>(m->m_EffectData10+0x18);}
+TArrayList<CEffect*>&list(CEffectManager*m){return *reinterpret_cast<TArrayList<CEffect*>*>(reinterpret_cast<unsigned char*>(&m->m_Affixes)+0x18);}
 struct World;World*world;
 struct World{Raw<CEquipment>item;Raw<CCharacter>actor;Raw<CEffectManager>managers[2];Raw<CEffect>effects[6];unsigned adds,dead,particles;bool changed;
  World():adds(0),dead(0),particles(0),changed(false){for(unsigned j=0;j<2;++j)new(&list(managers[j].get()))TArrayList<CEffect*>;for(unsigned i=0;i<input->count;++i)list(managers[0].get()).add(effects[i].get());list(managers[1].get()).add(effects[5].get());static const int types[]={52,10,51,11};static const float values[]={-2.8f,-0.2f,0,0.8f,1.2f,19.7f};for(unsigned i=0;i<6;++i){effects[i].get()->m_eType=static_cast<EEFFECT_TYPE>(types[(input->n/8+i)%4]);effects[i].get()->m_eDamageType=static_cast<EDAMAGE_TYPES>((input->n/32+i)%8);effects[i].get()->m_fValueC0=values[(input->n/256+i)%6];effects[i].get()->m_fValue24=3.25f+i;}}

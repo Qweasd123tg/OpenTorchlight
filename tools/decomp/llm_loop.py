@@ -243,6 +243,30 @@ def validate_repair_thunks(snapshot, final_rows):
             raise RuntimeError('repair changed or omitted protected MATCH adjustment thunk: ' + pinned['address'])
 
 
+def _coherent_repair_aliases(function, rows):
+    """The two original C1/C2 or D1/D2 names may share one emitted body."""
+    if len(rows) != 2 or function.get("kind") not in ("ctor", "dtor"):
+        return False
+    names = sorted(row.get("name", "") for row in rows)
+    if len(set(names)) != 2 or set(names) != set(function.get("names", ())):
+        return False
+    if len(names[0]) != len(names[1]):
+        return False
+    different = [i for i, (a, b) in enumerate(zip(*names)) if a != b]
+    if len(different) != 1:
+        return False
+    at = different[0]
+    marker = "C" if function["kind"] == "ctor" else "D"
+    if (at == 0 or at + 1 == len(names[0]) or names[0][at - 1] != marker
+            or names[0][at + 1] != "E" or (names[0][at], names[1][at]) != ("1", "2")):
+        return False
+    body = [{k: v for k, v in row.items() if k not in ("name", "demangled")}
+            for row in rows]
+    return (body[0] == body[1]
+            and re.fullmatch(r"[0-9a-f]{16}", str(body[0].get("code", ""))) is not None
+            and type(body[0].get("size")) is int and body[0]["size"] > 0)
+
+
 def repair_snapshot(root, tu, functions, db, compare_rows):
     """Bind explicit unaccepted-body repair to existing source/protection inputs."""
     root = Path(root)
@@ -278,9 +302,11 @@ def repair_snapshot(root, tu, functions, db, compare_rows):
                 sibling, f, db, units[0]['functions'], compare_rows)
         for rows in (units[0]["functions"], compare_rows):
             found = [r for r in rows if r.get("address") == address]
-            if (len(found) != 1 or found[0].get("status") != "DIFF" or found[0].get("weak") is not False
-                    or found[0].get("name") not in f["names"]
-                    or not re.fullmatch(r"[0-9a-f]{64}", str(found[0].get("object_digest", "")))):
+            if ((len(found) != 1 and not _coherent_repair_aliases(f, found))
+                    or any(row.get("status") != "DIFF" or row.get("weak") is not False
+                           or row.get("name") not in f["names"]
+                           or not re.fullmatch(r"[0-9a-f]{64}", str(row.get("object_digest", "")))
+                           for row in found)):
                 raise ValueError("repair requires an existing strong unaccepted DIFF: " + address)
         targets.append(address)
     source = root / "decomp/src" / tu

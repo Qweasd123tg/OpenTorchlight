@@ -9,6 +9,8 @@
 #include <OgreVector3.h>
 #include <string>
 #include "GenericModel.h"
+#include "TArrayList.h"
+#include <OgreEntity.h>
 #include "PositionableObject.h"
 #include "ResourceManager.h"
 
@@ -28,8 +30,8 @@ public:
     // fields
     int m_iLightDensity;
     unsigned char m_gap104[0x4] __attribute__((aligned(4)));
-    unsigned char m_Unknown108[0x18] __attribute__((aligned(8)));
-    void* m_pBitmapFile;
+    TArrayList<Ogre::Entity*> m_entities; // +0x108
+    std::wstring m_bitmapFile; // +0x120
     int m_iUnknown128;
     unsigned char m_gap12C[0x4] __attribute__((aligned(4)));
     CGenericModel* m_pGenericModel;

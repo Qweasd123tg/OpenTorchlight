@@ -407,3 +407,21 @@ void FILESYSTEM::GetFileListSorted(const std::wstring& path, TArrayList<std::wst
         delete pairs[i];
     }
 }
+
+extern int CreateDirectory(const wchar_t* path, void* security);
+extern long GetLastError();
+
+bool FILESYSTEM::CreateLocalDirectory(const std::wstring& path)
+{
+    std::wstring directory(path);
+    std::wstring::size_type separator = path.find(L'\\', 1);
+    while (separator != std::wstring::npos) {
+        directory = std::wstring(path, 0, separator);
+        if (!CreateDirectory(directory.c_str(), NULL) && GetLastError() != 17)
+            return false;
+        separator = path.find(L'\\', separator + 1);
+    }
+    if (CreateDirectory(path.c_str(), NULL))
+        return true;
+    return GetLastError() == 17;
+}

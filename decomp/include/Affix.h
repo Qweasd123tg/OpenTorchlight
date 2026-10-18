@@ -7,6 +7,7 @@
 #include "EffectDefines.h"
 #include "RunicCore.h"
 #include "TArrayList.h"
+#include "SafePointer.h"
 
 class CAffix;
 class CBaseUnit;
@@ -45,14 +46,11 @@ public:
 
     CAffix *m_pOriginalAffix;
 
-    CSkill *m_pSkillOwner;
-    int m_iSkillOwnerSafePointerId;
+    TSafePointer<CSkill> m_SkillOwner; // +0x18
 
-    CBaseUnit *m_pOwner;
-    int m_iOwnerSafePointerId;
+    TSafePointer<CBaseUnit> m_Owner; // +0x28
 
-    CEffectManager *m_pEffectManager;
-    int m_iEffectManagerSafePointerId;
+    TSafePointer<CEffectManager> m_EffectManager; // +0x38
 
     std::wstring m_sAffixFileName;
     std::wstring m_sDisplayName;

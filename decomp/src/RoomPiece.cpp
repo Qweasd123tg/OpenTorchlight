@@ -59,3 +59,83 @@ int CRoomPiece::getVisualMeshCountInRoomPiece()
         return m_pRoomPieceData->m_coreData->m_visualMeshFiles.size();
     return 1;
 }
+
+#include "Level.h"
+#include "Utilities.h"
+void CRoomPiece::clearCollisionData()
+{
+    m_pEntity=NULL;
+    if (m_bUnknown154) {
+        CMasterResourceManager::getSingleton()->removeBatchModel(m_pGenericModel);
+        m_pGenericModel=NULL;
+    } else if (m_pGenericModel) {delete m_pGenericModel;m_pGenericModel=NULL;}
+    CMasterResourceManager::getSingleton()->removeCollisionModel(m_collisionModel);
+    m_collisionModel=NULL;
+    if (m_pRoomPieceData) {delete m_pRoomPieceData;m_pRoomPieceData=NULL;}
+}
+void CRoomPiece::setVisible(bool visible)
+{
+    CSceneNodeObject::setVisible(visible);
+    if (!m_bUnknown15C && m_iUnknown158>0 && visible && m_bVisibleOnMap && m_pResourceManager->getLevel()->m_automapRoomPieces) {
+        m_bUnknown15C=true;
+        m_pResourceManager->getLevel()->addRoomPieceToAutomap(this);
+    }
+}
+void CRoomPiece::resetRoomPiece()
+{
+    clearCollisionData();
+    m_bCollisionEnabled=false;m_bUnknown151=false;m_bUnknown152=false;m_bUnknown154=false;
+    m_iUnknown158=0;m_bIsBakeable=true;m_bVisibleOnMap=true;m_bUnknown15C=false;
+    m_iVisualIndex=-1;m_bUnknown15D=false;
+    m_pRoomPieceData=new CRoomPieceData;
+    m_pRoomPieceData->m_guid=-1;m_pRoomPieceData->m_coreData=NULL;
+    m_pRoomPieceData->m_guid=m_iVisualIndex_140;
+    if(m_iVisualIndex_140!=-1) m_pRoomPieceData->m_coreData=CRoomPieceDataInformation::getSingleton()->_GetRoomPieceCoreDataByGuid(m_iVisualIndex_140);
+}
+void CRoomPiece::setRoomPieceGuid(long long guid)
+{
+    m_iVisualIndex_140=guid;
+    m_pRoomPieceData->m_guid=guid;
+    if(guid!=-1) m_pRoomPieceData->m_coreData=CRoomPieceDataInformation::getSingleton()->_GetRoomPieceCoreDataByGuid(guid);
+    if(m_iVisualIndex_140!=-1 && m_pRoomPieceData && m_pRoomPieceData->m_coreData && m_pResourceManager->getEditorIsRunning()) initRoomPiece();
+}
+void CRoomPiece::selectNewVisualIndex()
+{
+    if (m_iVisualIndex_140==-1 || !m_pRoomPieceData || !m_pRoomPieceData->m_coreData || m_pRoomPieceData->m_coreData->m_visualMeshFiles.size()==1) {
+        m_iVisualIndex=0;setRoomPieceGuid(m_iVisualIndex_140);
+    }
+    int maximum=0;
+    if(m_iVisualIndex_140!=-1 && m_pRoomPieceData && m_pRoomPieceData->m_coreData)
+        maximum=m_pRoomPieceData->m_coreData->m_visualMeshFiles.size()-1;
+    m_iVisualIndex=UTILITIES::randomIntegerBetween(0,maximum);
+    setRoomPieceGuid(m_iVisualIndex_140);
+}
+
+#include "EmptyStrings.h"
+CRoomPiece::CRoomPiece(CResourceManager* resources)
+    : CPositionableObject(resources,NULL),m_collisionModel(NULL),m_pGenericModel(NULL),
+      m_collisionMeshFile(EMPTY_WSTRING),m_meshFile(EMPTY_WSTRING),m_iVisualIndex(-1),m_iVisualIndex_140(-1),
+      m_pRoomPieceData(NULL),m_bCollisionEnabled(true),m_bUnknown151(false),m_bUnknown152(false),m_bIsBakeable(true),
+      m_bUnknown154(false),m_bVisibleOnMap(true),m_iUnknown158(0),m_bUnknown15C(false),m_bUnknown15D(false)
+{
+    m_pRoomPieceData=new CRoomPieceData;
+    m_pRoomPieceData->m_coreData=NULL;m_pRoomPieceData->m_guid=-1;
+    setVisible(true);
+}
+CRoomPiece::~CRoomPiece() { clearCollisionData(); }
+
+void CRoomPiece::setCollisionMeshFilePath(const std::wstring& path)
+{
+    if(m_meshFile==path) return;
+    CMasterResourceManager::getSingleton()->removeCollisionModel(m_collisionModel);
+    m_collisionModel=NULL;
+    if(path.empty()) return;
+    if(m_pResourceManager->getEditorIsRunning() && m_collisionMeshFile!=EMPTY_WSTRING) {
+        m_meshFile=m_collisionMeshFile;
+        m_collisionModel=CMasterResourceManager::getSingleton()->addCollisionModel(m_meshFile);
+    } else {
+        m_meshFile=path;
+        if(!m_pResourceManager->getEditorIsRunning() && !m_bCollisionEnabled) m_meshFile=EMPTY_WSTRING;
+        if(m_meshFile!=EMPTY_WSTRING) m_collisionModel=CMasterResourceManager::getSingleton()->addCollisionModel(path);
+    }
+}

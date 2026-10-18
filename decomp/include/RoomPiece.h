@@ -17,6 +17,8 @@
 #include "iHighlight.h"
 #include "iSnap.h"
 
+class CCollisionModel;
+
 class CRoomPiece : public CPositionableObject, public iSnap, public iHighlight, public iCollision
 {
 public:
@@ -41,10 +43,10 @@ public:
     void selectNewVisualIndex();
 
     // fields
-    long long m_iCollisionMesh;
+    CCollisionModel* m_collisionModel; // +0x118
     CGenericModel* m_pGenericModel;
-    void* m_pUnknown128;
-    CMasterResourceManager* m_pMasterResourceManager;
+    std::wstring m_collisionMeshFile; // +0x128
+    std::wstring m_meshFile; // +0x130
     int m_iVisualIndex;
     unsigned char m_gap13C[0x4] __attribute__((aligned(4)));
     long long m_iVisualIndex_140;

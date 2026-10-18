@@ -36,7 +36,7 @@ template<class T>struct Raw{unsigned long long data[(sizeof(T)+7)/8];Raw(){std::
 struct Case{unsigned id,kind,graph,effects,elements,flags,mode;};
 struct World;World* world;const Case* input;autotest::Capture* capture;
 void number(int n){capture->add(&n,sizeof(n));}void real(float f){capture->add(&f,sizeof(f));}void text(const std::wstring& s){number(s.size());capture->add(s.data(),s.size()*sizeof(wchar_t));}
-TArrayList<CEffect*>* lists(CEffectManager* p){return reinterpret_cast<TArrayList<CEffect*>*>(p->m_EffectData10+0x18);}
+TArrayList<CEffect*>* lists(CEffectManager* p){return reinterpret_cast<TArrayList<CEffect*>*>(reinterpret_cast<unsigned char*>(&p->m_Affixes)+0x18);}
 struct World{
  Raw<CEquipment> items[4];Raw<CEffectManager> managers[2];void* tables[4][110];std::vector<CEffect*> sources;bool enabled[4];unsigned kind[4],calls[4];bool changed;
  World(bool ours):changed(false){for(unsigned m=0;m<2;++m)for(unsigned a=0;a<4;++a)new(lists(managers[m].get())+a)TArrayList<CEffect*>;

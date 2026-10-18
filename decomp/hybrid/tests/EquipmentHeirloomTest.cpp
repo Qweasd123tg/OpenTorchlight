@@ -23,7 +23,7 @@ typedef char effect_size[sizeof(CEffect)==0x138?1:-1];
 template<class T>struct Raw{unsigned long long data[(sizeof(T)+7)/8];Raw(){std::memset(data,0,sizeof(data));}T*get(){return reinterpret_cast<T*>(data);}};
 struct Case{unsigned n,mode,count,trigger;int rank;};const Case*input;autotest::Capture*capture;
 void number(int n){capture->add(&n,sizeof(n));}void real(float f){capture->add(&f,sizeof(f));}
-TArrayList<CEffect*>&list(CEffectManager*m,unsigned a){return *reinterpret_cast<TArrayList<CEffect*>*>(m->m_EffectData10+0x18+a*0x18);}
+TArrayList<CEffect*>&list(CEffectManager*m,unsigned a){return *reinterpret_cast<TArrayList<CEffect*>*>(reinterpret_cast<unsigned char*>(&m->m_Affixes)+0x18+a*0x18);}
 struct World;World*world;detour::Set*valuePatch;
 struct World{
  Raw<CEquipment>item;Raw<CEffectManager>managers[2];Raw<CEffect>effects[9];unsigned valueCalls,baseCalls;bool changed;

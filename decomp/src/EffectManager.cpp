@@ -18,8 +18,7 @@ bool CEffectManager::hasEffect(EEFFECT_TYPE type)
 {
     for (unsigned int i = 0; i < 2; ++i) {
         TArrayList<CEffect*>* effects =
-            reinterpret_cast<TArrayList<CEffect*>*>(
-                m_EffectData10 + 0x18 + i * sizeof(TArrayList<CEffect*>));
+            &m_Effects[i];
 
         for (unsigned int j = 0; j < effects->size(); ++j) {
             if (*reinterpret_cast<EEFFECT_TYPE*>(
@@ -34,7 +33,7 @@ bool CEffectManager::hasEffect(EEFFECT_TYPE type)
 float CEffectManager::getEffectValue(EEFFECT_TYPE type, EDAMAGE_TYPES damage)
 {
     const float* effectValues =
-        reinterpret_cast<const float*>(m_EffectData10 + 0x70);
+        m_EffectValues;
 
     if (damage == 7)
         return effectValues[type];
@@ -43,9 +42,7 @@ float CEffectManager::getEffectValue(EEFFECT_TYPE type, EDAMAGE_TYPES damage)
     if (effectValues[type] != 0.0f) {
         for (unsigned int pass = 0; pass < 2; ++pass) {
             TArrayList<CEffect*>& effects =
-                *reinterpret_cast<TArrayList<CEffect*>*>(
-                    m_EffectData10 + 0x18 +
-                    pass * sizeof(TArrayList<CEffect*>));
+                m_Effects[pass];
 
             for (unsigned int index = 0; index < effects.size(); ++index) {
                 const unsigned char* effect =
@@ -93,12 +90,11 @@ float CEffectManager::getEffectValue(EEFFECT_ACTIVATION activation, EEFFECT_TYPE
 
     float value = 0.0f;
 
-    if (reinterpret_cast<const float *>(m_EffectData10 + 0x70)[type] == 0.0f)
+    if (m_EffectValues[type] == 0.0f)
         return value;
 
     TArrayList<CEffect*>& effects =
-        *reinterpret_cast<TArrayList<CEffect*>*>(
-            m_EffectData10 + 0x18 + activation * sizeof(TArrayList<CEffect*>));
+        m_Effects[activation];
 
     for (unsigned int i = 0; i < effects.size(); ++i) {
         CEffect* effect = effects[i];
@@ -152,7 +148,7 @@ bool CEffectManager::removeEffect(const std::wstring& name, bool flag)
 
     bool removed = false;
     TArrayList<CEffect*>* effectLists =
-        reinterpret_cast<TArrayList<CEffect*>*>(m_EffectData10 + 0x18);
+        m_Effects;
 
     for (int listIndex = 0; listIndex < 3; ++listIndex) {
         TArrayList<CEffect*>& effects = effectLists[listIndex];
@@ -199,12 +195,11 @@ float CEffectManager::getEffectValue(EEFFECT_TYPE type, const std::wstring& name
 
     float result = 0.0f;
     const float* effectValues =
-        reinterpret_cast<const float*>(m_EffectData10 + 0x70);
+        m_EffectValues;
 
     if (effectValues[type] != 0.0f) {
         for (unsigned int listIndex = 0; listIndex < 2; ++listIndex) {
-            EffectList& effects = *reinterpret_cast<EffectList*>(
-                m_EffectData10 + 0x18 + listIndex * sizeof(EffectList));
+            EffectList& effects = m_Effects[listIndex];
 
             for (unsigned int i = 0; i < effects.size(); ++i) {
                 const EffectLayout* effect =
@@ -235,7 +230,7 @@ bool CEffectManager::hasEffect(const std::wstring& name)
     for (unsigned int i = 0; i < 2; ++i)
     {
         TArrayList<CEffect*>* effects =
-            reinterpret_cast<TArrayList<CEffect*>*>(m_EffectData10 + 0x18 + i * sizeof(TArrayList<CEffect*>));
+            &m_Effects[i];
 
         for (unsigned int j = 0; j < effects->size(); ++j)
         {
@@ -472,7 +467,7 @@ bool CEffectManager::deleteAffix(const std::wstring& name)
 CEffect* CEffectManager::cloneEffect(CBaseUnit* source, CEffect* effect)
 {
     if (effect->m_pAffixOwner != NULL &&
-        effect->m_pAffixOwner->m_pEffectManager == this)
+        effect->m_pAffixOwner->m_EffectManager.getObject() == this)
     {
         addNewEffect(effect);
         return effect;
@@ -525,4 +520,117 @@ unsigned int CEffectManager::createEffects(CDataGroup* data, bool flag)
         createEffect(groups[i], flag);
     clearOutDescriptions();
     return count;
+}
+
+#include "Character.h"
+
+void CEffectManager::clearEffects(bool removeEffects)
+{
+    if (removeEffects)
+        for (unsigned int group = 0; group < 3; ++group)
+            for (unsigned int i = 0; i < m_Effects[group].size(); ++i)
+            {
+                if (m_Effects[group][i]->m_eType == static_cast<EEFFECT_TYPE>(62)) continue;
+                delete m_Effects[group][i];
+                m_Effects[group][i] = NULL;
+                m_Effects[group].removeAt(i);
+                --i;
+            }
+    m_Affixes.deleteAll();
+    clearOutDescriptions();
+    m_UnitThemes.clear();
+}
+
+void CEffectManager::calculateEffectValues()
+{
+    m_UnitThemes.clear();
+    for (unsigned int type = 0; type < 145; ++type)
+    {
+        m_EffectValues[type] = 0.0f;
+        for (unsigned int group = 0; group < 2; ++group)
+            for (unsigned int i = 0; i < m_Effects[group].size(); ++i)
+            {
+                CEffect* effect = m_Effects[group][i];
+                if (effect->m_eType != static_cast<EEFFECT_TYPE>(type)) continue;
+                if (effect->m_fValue24 != -900.0f && effect->m_fValue24 != -1000.0f &&
+                    effect->m_fRemainingDuration >= effect->m_fValue24) continue;
+                if (effect->m_bDead) continue;
+                if (effect->m_pUnitTheme && m_UnitThemes.find(effect->m_pUnitTheme) == -1)
+                    m_UnitThemes.add(effect->m_pUnitTheme);
+                float value = effect->m_fValueC0;
+                if (effect->m_fValue24 != -900.0f && effect->m_fValue24 != -1000.0f &&
+                    (effect->m_eType == static_cast<EEFFECT_TYPE>(7) || effect->m_eType == static_cast<EEFFECT_TYPE>(6) ||
+                     effect->m_eType == static_cast<EEFFECT_TYPE>(124) || effect->m_eType == static_cast<EEFFECT_TYPE>(123)))
+                    value *= 0.016f;
+                m_EffectValues[type] = value + m_EffectValues[type];
+            }
+    }
+}
+
+CEffectManager::CEffectManager(CBaseUnit* owner)
+    : m_Affixes(1), m_UnitThemes(1)
+{
+    m_Owner.setObject(owner);
+    for (unsigned int group = 0; group < 3; ++group) m_Effects[group].setGrowBy(1);
+    calculateEffectValues();
+}
+
+CEffectManager::~CEffectManager()
+{
+    clearEffects(false);
+    m_Owner.setObject(NULL);
+}
+
+
+
+void CEffectManager::deleteDeadEffects()
+{
+    bool removed = false;
+    for (unsigned int group = 0; group < 3; ++group)
+        for (unsigned int i = 0; i < m_Effects[group].size(); ++i)
+        {
+            CEffect* effect = m_Effects[group][i];
+            if (effect->m_fValue24 == -900.0f ||
+                (effect->m_fValue24 != -1000.0f && effect->m_fRemainingDuration >= effect->m_fValue24) ||
+                effect->m_bDead)
+            {
+                if (effect->m_name88 != EMPTY_WSTRING)
+                    for (unsigned int otherGroup = 0; otherGroup < 3; ++otherGroup)
+                        for (unsigned int j = 0; j < m_Effects[otherGroup].size(); ++j)
+                        {
+                            CEffect* other = m_Effects[otherGroup][j];
+                            if (other->m_sName != effect->m_name88) continue;
+                            if (other->m_fValue24 != -900.0f && other->m_fValue24 != -1000.0f)
+                                other->m_fRemainingDuration = other->m_fValue24;
+                            other->m_bDead = true;
+                        }
+                if (!m_Effects[group][i]->m_pAffixOwner)
+                {
+                    delete m_Effects[group][i];
+                    m_Effects[group][i] = NULL;
+                }
+                m_Effects[group].removeAt(i);
+                --i;
+                removed = true;
+            }
+        }
+    if (removed) clearOutDescriptions();
+}
+
+void CEffectManager::transferEffects(CCharacter* target, EEFFECT_ACTIVATION activation, EEFFECT_TYPE type)
+{
+    TArrayList<CEffect*>& effects = m_Effects[activation];
+    for (unsigned int i = 0; i < effects.size(); ++i)
+        if (effects[i]->m_eType == type &&
+            target->isEffectValidForUnit(target, m_Owner.getObject(), effects[i]))
+        {
+            CEffect* effect = new CEffect(type, false, EFFECT_ACTIVATION_DYNAMIC,
+                                          effects[i]->m_fValue24, effects[i]->m_fValueC0, 0.0f, false);
+            effect->m_flag33 = false;
+            effect->m_flag31 = effects[i]->m_flag31;
+            effect->m_pUnitTheme = effects[i]->m_pUnitTheme;
+            target->applyEffectOnUnit(target, m_Owner.getObject(), effect);
+            delete effect;
+            clearOutDescriptions();
+        }
 }

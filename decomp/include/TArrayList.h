@@ -132,6 +132,7 @@ public:
     }
 
 private:
+    friend class CDataGroup;
     T* m_pData;
     unsigned int m_nCount;
     unsigned int m_nCapacity;

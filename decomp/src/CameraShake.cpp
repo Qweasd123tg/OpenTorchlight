@@ -110,3 +110,32 @@ void CCameraShake::setCameraShakeName(const std::wstring& name)
     m_strCameraShakeName = STRINGS::StringUpper(name);
     m_graph.setObject(CGraphManager::getSingleton()->getGraph(m_strCameraShakeName));
 }
+
+CCameraShake::CCameraShake(const std::wstring& name,Ogre::Vector3 direction,float duration)
+    : CEditorBaseObject(),m_fDuration(duration),m_fElapsedTime(0),m_fMagnitudeMultiplier(1),
+      m_fDirectionX(direction.x),m_fDirectionY(direction.y),m_fDirectionZ(direction.z),m_graph(),
+      m_strCameraShakeName(name),m_nDirectionOrientation(0),m_fCameraPositionX(0),m_fCameraPositionY(0),m_fCameraPositionZ(0),
+      m_bCameraShakeActive(false),m_bCameraFallsOffWithDistance(true)
+{
+    setCameraShakeName(name);
+}
+CCameraShake::~CCameraShake()
+{
+    m_graph.setObject(NULL);
+    m_strCameraShakeName=EMPTY_WSTRING;
+}
+void CCameraShake::startCameraShake(const Ogre::Vector3& position,bool updateCamera)
+{
+    m_fCameraPositionX=position.x;m_fCameraPositionY=position.y;m_fCameraPositionZ=position.z;
+    m_bCameraShakeActive=true;
+    CCameraControl* camera=CCameraControl::getSingleton();
+    if (updateCamera) {
+        TSafePointer<CCameraShake>* reference=OGRE_NEW_T(TSafePointer<CCameraShake>,Ogre::MEMCATEGORY_GENERAL)();
+        reference->setObject(this);
+        camera->m_cameraShakes.add(reference);
+    } else {
+        TSafePointer<CCameraShake>* reference=OGRE_NEW_T(TSafePointer<CCameraShake>,Ogre::MEMCATEGORY_GENERAL)();
+        reference->setObject(this);
+        camera->m_cameraShakesSecondary.add(reference);
+    }
+}

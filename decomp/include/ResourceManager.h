@@ -86,6 +86,7 @@ public:
     CGameClient* getGameClient() { return m_GameClients.size() != 0 ? m_GameClients[0] : NULL; }
 
 private:
+    friend class CRandomGroup;
     Ogre::SceneManager* m_pSceneManager;
     CLevel* m_pLevel;
     CHierarchy* m_pHierarchy;

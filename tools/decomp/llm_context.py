@@ -1008,7 +1008,7 @@ class ContextIndex:
             return set()
         return headers | {"SafePointer.h"}
 
-    WINDOW_ARRAY_HEADER_SHA256 = "e45608b683e95c9fb0a5eb0129bb99c3d09826270d14b06cf1f407a35208b4be"
+    WINDOW_ARRAY_HEADER_SHA256 = "d91f88adac805622a3e58081386a6b121b6b8f0d57bc4621886b9e5af591519f"
 
     def _window_array_headers(self, callee, scope):
         """Pinned existing pointer-array destructor, without an invented prototype.
@@ -1041,7 +1041,7 @@ class ContextIndex:
         return {header}
 
     def _pinned_destructor_headers(self, callee, scope):
-        """Twelve reviewed existing template bodies, never a generic exemption.
+        """Reviewed existing template bodies, never a generic exemption.
 
         Original ASM: wstring delete[] destroys elements using the array cookie,
         then frees and clears data; safe pointers unregister and reset both fields.
@@ -1050,6 +1050,9 @@ class ContextIndex:
         """
         wide = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
         reviewed = {
+            "TArrayList<float>":
+                (0x59fb40, 26, "_ZN10TArrayListIfE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<UNIONDATA32BIT>":
                 (0x70ca90, 26, "_ZN10TArrayListI14UNIONDATA32BITE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
@@ -1086,6 +1089,18 @@ class ContextIndex:
             "TSafePointer<CEquipment>":
                 (0xacbc90, 47, "_ZN12TSafePointerI10CEquipmentE",
                  "~TSafePointer", "SafePointer.h", self.SAFE_POINTER_HEADER_SHA256, "CEquipment"),
+            "TSafePointer<CGraph>":
+                (0xcf8e70, 47, "_ZN12TSafePointerI6CGraphE",
+                 "~TSafePointer", "SafePointer.h", self.SAFE_POINTER_HEADER_SHA256, "CGraph"),
+            "TSafePointer<CSkill>":
+                (0x7d5f90, 47, "_ZN12TSafePointerI6CSkillE",
+                 "~TSafePointer", "SafePointer.h", self.SAFE_POINTER_HEADER_SHA256, "CSkill"),
+            "TSafePointer<CBaseUnit>":
+                (0x7d5fc0, 47, "_ZN12TSafePointerI9CBaseUnitE",
+                 "~TSafePointer", "SafePointer.h", self.SAFE_POINTER_HEADER_SHA256, "CBaseUnit"),
+            "TSafePointer<CEffectManager>":
+                (0x7d5ff0, 47, "_ZN12TSafePointerI14CEffectManagerE",
+                 "~TSafePointer", "SafePointer.h", self.SAFE_POINTER_HEADER_SHA256, "CEffectManager"),
         }
         entry = reviewed.get(scope)
         if entry is None:

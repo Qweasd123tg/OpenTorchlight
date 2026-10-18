@@ -36,7 +36,6 @@ void CMusicObject::stop()
 
 CMusicObject::CMusicObject(CResourceManager* resourceManager)
     : CEditorBaseObject(),
-      m_pSoundManager(NULL),
       m_bFadeIn(false),
       m_bFadeOut(false),
       m_bLoops(true),
@@ -45,15 +44,8 @@ CMusicObject::CMusicObject(CResourceManager* resourceManager)
       m_fPlaybackCheckTimer(0.2f),
       m_pResourceManager(resourceManager)
 {
-    if (m_pResourceManager != NULL &&
-        *reinterpret_cast<CSoundManager **>(
-            reinterpret_cast<char *>(
-                CMasterResourceManager::getSingleton()) + 0x98) != NULL)
-    {
-        m_pSoundManager = *reinterpret_cast<CSoundManager **>(
-            reinterpret_cast<char *>(
-                CMasterResourceManager::getSingleton()) + 0x98);
-    }
+    if (m_pResourceManager != NULL && CMasterResourceManager::getSingleton()->m_pSoundManager != NULL)
+        m_pSoundManager = CMasterResourceManager::getSingleton()->m_pSoundManager;
 }
 
 CMusicObject::~CMusicObject()
@@ -110,4 +102,17 @@ bool CMusicObject::getIsPlaying()
     if (m_pSoundManager != NULL)
         return m_sPlayingMusicFile == m_pSoundManager->getMusicFilePlaying();
     return false;
+}
+
+#include "Level.h"
+#include "LevelTemplateData.h"
+void CMusicObject::playNormalLevelMusic()
+{
+    if (m_pResourceManager->getLevel()) {
+        std::wstring music=m_pResourceManager->getLevel()->getLevelTemplateData()->m_music;
+        if (music!=m_pSoundManager->getMusicFilePlaying()) {
+            m_pSoundManager->playMusic(music,true);
+            m_bMusicPlaybackActive=false;
+        }
+    }
 }

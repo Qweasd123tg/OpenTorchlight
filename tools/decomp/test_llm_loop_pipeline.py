@@ -680,6 +680,42 @@ class RepairWorkflow(unittest.TestCase):
         self.assertEqual('known inputs', (self.loop.work / 'prompts/0x2.md').read_text())
         self.model_class.assert_not_called(); self.loop.compile.assert_not_called()
 
+    def repair_alias_rows(self, kind):
+        marker = 'C' if kind == 'ctor' else 'D'
+        names = ['_ZN6CProbe' + marker + n + 'Ev' for n in ('1', '2')]
+        target = self.loop.funcs[0]
+        target.update(kind=kind, names=names, mangled=names[0])
+        self.loop.db['functions']['0x2'] = target
+        rows = [dict(self.row, name=name, code='123456789abcdef0', size=24) for name in names]
+        self.progress['units'][0]['functions'] = rows
+        self.write_progress()
+        return rows
+
+    def test_repair_admits_exact_coherent_constructor_and_destructor_aliases(self):
+        for kind in ('ctor', 'dtor'):
+            with self.subTest(kind=kind):
+                rows = self.repair_alias_rows(kind)
+                self.assertEqual(['0x2'], self.snapshot(rows)['addresses'])
+
+    def test_repair_aliases_reject_inconsistent_rows_and_non_abi_names(self):
+        for kind in ('ctor', 'dtor'):
+            for change in ('name', 'code', 'size', 'missing_code', 'weak', 'status',
+                           'digest', 'extra_row', 'ordinary_kind', 'original_names'):
+                with self.subTest(kind=kind, change=change):
+                    rows = [dict(row) for row in self.repair_alias_rows(kind)]
+                    if change == 'name': rows[1]['name'] = rows[0]['name']
+                    elif change == 'code': rows[1]['code'] = '0' * 16
+                    elif change == 'size': rows[1]['size'] += 1
+                    elif change == 'missing_code':
+                        for row in rows: row.pop('code')
+                    elif change == 'weak': rows[1]['weak'] = True
+                    elif change == 'status': rows[1]['status'] = 'MATCH'
+                    elif change == 'digest': rows[1]['object_digest'] = 'b' * 64
+                    elif change == 'extra_row': rows.append(dict(rows[0]))
+                    elif change == 'ordinary_kind': self.loop.funcs[0]['kind'] = 'function'
+                    else: self.loop.funcs[0]['names'] = [row['name'] + '_alias' for row in rows]
+                    with self.assertRaises(ValueError): self.snapshot(rows)
+
     def test_repair_existing_status_does_not_skip_mandatory_declaration(self):
         self.loop.declaration_error = Mock(return_value='Missing mandatory owning declaration')
         self.prepared_checkpoint()

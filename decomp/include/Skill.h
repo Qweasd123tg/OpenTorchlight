@@ -22,6 +22,7 @@ class CSkill : public CRunicCore, public iUnitObserver
 public:
     bool requirementsMet(CBaseUnit*, ESKILL_ACTIVATION_TYPE, const Ogre::Vector3*, CBaseUnit*, bool);
     bool getCanStop();
+    void attemptToStopSkill();
     bool getIsExclusive();
     bool getCanBeInterrupted();
     unsigned int getManaCost();

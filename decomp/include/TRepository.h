@@ -26,6 +26,7 @@ public:
 private:
     friend class CDataGroup;
     friend class CDataValue;
+    friend class CBinaryStyle;
     unsigned int m_iNextID;
     std::map<unsigned int, T> m_Values;
     std::map<T, unsigned int> m_IDs;

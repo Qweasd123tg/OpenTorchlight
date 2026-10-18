@@ -43,3 +43,105 @@ void CLevelState::addLogicState(CLogicNodeState *pLogicState, CLevel &Level)
 {
     m_lLogicStates.push_back(pLogicState);
 }
+
+#include "UTFConversion.h"
+#include "FormationNode.h"
+#include "FormationNodeSaveAndLoad.h"
+#include "ItemSaveState.h"
+#include "CharacterSaveState.h"
+
+void CLevelState::addAutomap(CAutomap* map)
+{
+    delete[] static_cast<float*>(m_pAutomapData);
+    m_iAutomapWidth = map->m_iMapGridWidth;
+    m_iAutomapHeight = map->m_iMapGridHeight;
+    m_pAutomapData = new float[m_iAutomapWidth * m_iAutomapHeight];
+    memcpy(m_pAutomapData, map->m_pRevealedTiles,
+           static_cast<long>(m_iAutomapWidth * m_iAutomapHeight) * 4);
+}
+
+void CLevelState::addFormations(TArrayList<CFormationNode*>* formations, CLevel& level)
+{
+    for (unsigned int i = 0; i < formations->size(); ++i)
+        if (!(*formations)[i]->m_bActivationStarted)
+            m_lFormations.add(new CFormationNodeSaveAndLoad((*formations)[i]));
+}
+
+void CLevelState::addItem(CItem& item)
+{
+    CItemSaveState* state = new CItemSaveState;
+    item.fillSaveState(*state, -1, false);
+    m_lItems.push_back(state);
+}
+
+void CLevelState::addCharacter(CCharacter& character, CLevel& level)
+{
+    CCharacterSaveState* state = new CCharacterSaveState;
+    character.fillSaveState(*state);
+    m_lCharacters.push_back(state);
+}
+
+void CLevelState::save(FILE* file)
+{
+    fwrite(&m_iLevelId, 4, 1, file);
+    fwrite(&m_iStateVersion, 4, 1, file);
+    unsigned short length = m_sLevelName.length();
+    fwrite(&length, 2, 1, file);
+    WriteUTF32ToUTF16(file, m_sLevelName, length);
+    unsigned char flag = m_bUnknownB0;
+    fwrite(&flag, 1, 1, file);
+    flag = m_bUnknownB1;
+    fwrite(&flag, 1, 1, file);
+    fwrite(&m_iAutomapWidth, 4, 1, file);
+    fwrite(&m_iAutomapHeight, 4, 1, file);
+    if (m_iAutomapWidth > 0)
+        fwrite(m_pAutomapData, static_cast<size_t>(m_iAutomapWidth) * m_iAutomapHeight * 4, 1, file);
+    unsigned int count = m_lCharacters.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i) m_lCharacters[i]->save(file);
+    count = m_lItems.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i) m_lItems[i]->save(file);
+    count = m_lLogicStates.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i) m_lLogicStates[i]->save(file);
+    count = m_lLevelStrings.size();
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        std::wstring text = m_lLevelStrings[i];
+        unsigned short length = text.length();
+        fwrite(&length, 2, 1, file);
+        WriteUTF32ToUTF16(file, text, length);
+    }
+    count = 0;
+    for (unsigned int i = 0; i < m_lFormations.size(); ++i)
+        if (m_lFormations[i]->m_bSavePosition) ++count;
+    fwrite(&count, 4, 1, file);
+    for (unsigned int i = 0; i < m_lFormations.size(); ++i)
+        if (m_lFormations[i]->m_bSavePosition) m_lFormations[i]->saveFormationNode(file);
+}
+
+CLevelState::~CLevelState()
+{
+    delete[] static_cast<float*>(m_pAutomapData);
+    m_lFormations.deleteAll();
+    for (int i = 0; i < static_cast<int>(m_lLogicStates.size()); ++i)
+    {
+        delete m_lLogicStates[i];
+        m_lLogicStates[i] = NULL;
+    }
+    m_lLogicStates.clear();
+    for (int i = 0; i < static_cast<int>(m_lItems.size()); ++i)
+    {
+        delete m_lItems[i];
+        m_lItems[i] = NULL;
+    }
+    m_lItems.clear();
+    for (int i = 0; i < static_cast<int>(m_lCharacters.size()); ++i)
+    {
+        delete m_lCharacters[i];
+        m_lCharacters[i] = NULL;
+    }
+    m_lCharacters.clear();
+}

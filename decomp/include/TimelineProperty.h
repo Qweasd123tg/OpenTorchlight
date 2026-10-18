@@ -20,6 +20,12 @@ public:
     class CTimelinePoint : public CRunicCore
     {
     public:
+        CTimelinePoint(CDescriptorProp* source, CEditorBaseObject* object, int id)
+            : CRunicCore(), m_timePercent(0.0f),
+              m_descriptorProperty(source, object), m_pointID(id)
+        {
+        }
+
         float m_timePercent;                         // 0x10
         unsigned char m_padding14[4];                 // 0x14
         CDescriptorProp m_descriptorProperty;         // 0x18

@@ -1,0 +1,2778 @@
+{
+ "baseline_commit": "06ce978ca5a8c2204a792e42936a3899fdf2d6c9",
+ "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+ "accepted_before": 3844,
+ "accepted_after": 3998,
+ "net_accepted_change": 154,
+ "game_functions": 5247,
+ "matched_before": 2644,
+ "matched_after": 2709,
+ "behavioral_after": 1289,
+ "accepted_bytes": 1870800,
+ "game_bytes": 3702188,
+ "lost_accepted": [],
+ "prior_strong_MATCH_rows": 3456,
+ "prior_MATCH_code_lost": [],
+ "stale_behavioral": [],
+ "unknown_references": [],
+ "compiler_kind_hooks": [],
+ "new_behavioral_missing_completed_pairs": [],
+ "input_digest": "c94dada37ae6a9a534e0c77bc8685c22bce1ca7b2d1c0609a2171a6d0a11577f",
+ "tree_unchanged": true,
+ "newly_accepted": [
+  {
+   "address": "0x5a7610",
+   "tu": "collisionlist.cpp",
+   "names": [
+    "_ZN14CCollisionList8optimizeEv"
+   ],
+   "original_size": 603,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_collision_geometry",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5a7870",
+   "tu": "collisionlist.cpp",
+   "names": [
+    "_ZN14CCollisionList7pointInERKN4Ogre7Vector3Ei"
+   ],
+   "original_size": 443,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_collision_geometry",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5a7aa0",
+   "tu": "collisionlist.cpp",
+   "names": [
+    "_ZN14CCollisionList15sphereCollisionERKSt6vectorIjSaIjEERKN4Ogre7Vector3ES8_S8_S8_fRS6_S9_S9_RjS9_Rf"
+   ],
+   "original_size": 2080,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_collision_geometry",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5a82c0",
+   "tu": "collisionlist.cpp",
+   "names": [
+    "_ZN14CCollisionList15sphereCollisionERKN4Ogre7Vector3ES3_S3_S3_fRS1_S4_S4_RjS4_Rf"
+   ],
+   "original_size": 2054,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_collision_geometry",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5a8cb0",
+   "tu": "collisionlist.cpp",
+   "names": [
+    "_ZN14CCollisionList12rayCollisionERKSt6vectorIjSaIjEERKN4Ogre7Vector3ES8_S8_S8_RS6_S9_RjS9_Rf"
+   ],
+   "original_size": 965,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_collision_geometry",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5a9080",
+   "tu": "collisionlist.cpp",
+   "names": [
+    "_ZN14CCollisionList12rayCollisionERKN4Ogre7Vector3ES3_S3_S3_RS1_S4_RjS4_Rf"
+   ],
+   "original_size": 1024,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_collision_geometry",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5a96f0",
+   "tu": "collisionlist.cpp",
+   "names": [
+    "_ZN14CCollisionList19calculateFaceBoundsEv"
+   ],
+   "original_size": 557,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_collision_geometry",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5a9920",
+   "tu": "collisionlist.cpp",
+   "names": [
+    "_ZN14CCollisionList16calculateNormalsEv"
+   ],
+   "original_size": 531,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_collision_geometry",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5a9c30",
+   "tu": "collisionlist.cpp",
+   "names": [
+    "_ZN14CCollisionList16addCollisionListEPS_RKN4Ogre7Matrix4Ei"
+   ],
+   "original_size": 655,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_collision_geometry",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5a9fa0",
+   "tu": "collisionlist.cpp",
+   "names": [
+    "_ZN14CCollisionListC1Ev",
+    "_ZN14CCollisionListC2Ev"
+   ],
+   "original_size": 687,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x5ea0e0",
+   "tu": "LayoutDescriptor.cpp",
+   "names": [
+    "_ZN17CLayoutDescriptor6updateEf"
+   ],
+   "original_size": 103,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x5ea150",
+   "tu": "LayoutDescriptor.cpp",
+   "names": [
+    "_ZN17CLayoutDescriptor26descriptorSceneDeactivatedEP12CEditorScene"
+   ],
+   "original_size": 127,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x5ea1d0",
+   "tu": "LayoutDescriptor.cpp",
+   "names": [
+    "_ZN17CLayoutDescriptor24descriptorSceneActivatedEP12CEditorScene"
+   ],
+   "original_size": 181,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_layout_activated",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5ea4a0",
+   "tu": "LayoutDescriptor.cpp",
+   "names": [
+    "_ZN17CLayoutDescriptor21descriptorSceneLoadedEP12CEditorScene"
+   ],
+   "original_size": 233,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_layout_loaded",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5ea590",
+   "tu": "LayoutDescriptor.cpp",
+   "names": [
+    "_ZN17CLayoutDescriptor12CreateObjectEP12CEditorScene"
+   ],
+   "original_size": 105,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x6079c0",
+   "tu": "MonsterDescriptor.cpp",
+   "names": [
+    "_ZN18CMonsterDescriptor15InputLogicEventEP17CEditorBaseObjectjS1_"
+   ],
+   "original_size": 1156,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_monster_input",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x607e80",
+   "tu": "MonsterDescriptor.cpp",
+   "names": [
+    "_ZN18CMonsterDescriptor29DescriptorObjectHasBeenInitedEP17CEditorBaseObject"
+   ],
+   "original_size": 111,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x607ef0",
+   "tu": "MonsterDescriptor.cpp",
+   "names": [
+    "_ZN18CMonsterDescriptor24descriptorSceneActivatedEP12CEditorScene"
+   ],
+   "original_size": 545,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_monster_activated",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x608120",
+   "tu": "MonsterDescriptor.cpp",
+   "names": [
+    "_ZN18CMonsterDescriptor12CreateObjectEP12CEditorScene"
+   ],
+   "original_size": 156,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x613ae0",
+   "tu": "MonsterDescriptor.cpp",
+   "names": [
+    "_ZN18CMonsterDescriptor14ReloadMonstersEv"
+   ],
+   "original_size": 303,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_monster_reload",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7027c0",
+   "tu": "DescriptorManager.cpp",
+   "names": [
+    "_ZN18CDescriptorManagerC2EP12CEditorScene",
+    "_ZN18CDescriptorManagerC1EP12CEditorScene"
+   ],
+   "original_size": 110,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x705930",
+   "tu": "DescriptorManager.cpp",
+   "names": [
+    "_ZN18CDescriptorManagerD2Ev",
+    "_ZN18CDescriptorManagerD1Ev"
+   ],
+   "original_size": 296,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x705a60",
+   "tu": "DescriptorManager.cpp",
+   "names": [
+    "_ZN18CDescriptorManagerD0Ev"
+   ],
+   "original_size": 18,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x705b60",
+   "tu": "DescriptorManager.cpp",
+   "names": [
+    "_ZN18CDescriptorManager13AddDescriptorEP11CDescriptor"
+   ],
+   "original_size": 537,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x705ff0",
+   "tu": "DescriptorManager.cpp",
+   "names": [
+    "_ZN18CDescriptorManager23deleteUnusedDescriptorsEv"
+   ],
+   "original_size": 1019,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x7c8c40",
+   "tu": "TimelineProperty.cpp",
+   "names": [
+    "_ZN17CTimelineProperty21DoLinearInterpolationEP9CTimelinefPNS_14CTimelinePointES3_"
+   ],
+   "original_size": 1318,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_timeline_linear",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7c9270",
+   "tu": "TimelineProperty.cpp",
+   "names": [
+    "_ZN17CTimelineProperty6UpdateEfb"
+   ],
+   "original_size": 831,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_timeline_update",
+     "completed": 72,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7c97c0",
+   "tu": "TimelineProperty.cpp",
+   "names": [
+    "_ZN17CTimelineProperty8AddPointEv"
+   ],
+   "original_size": 413,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_timeline_add",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7cd0f0",
+   "tu": "affix.cpp",
+   "names": [
+    "_ZN6CAffix18fillOutStatBonusesERA6_fb"
+   ],
+   "original_size": 434,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_affix_values_and_lifetime",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7cd600",
+   "tu": "affix.cpp",
+   "names": [
+    "_ZN6CAffix10setPercentEc"
+   ],
+   "original_size": 523,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_affix_values_and_lifetime",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7d3bb0",
+   "tu": "affix.cpp",
+   "names": [
+    "_ZN6CAffix5cloneEPKS_"
+   ],
+   "original_size": 1165,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_affix_values_and_lifetime",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7d5870",
+   "tu": "affix.cpp",
+   "names": [
+    "_ZN6CAffixC1ERKSbIwSt11char_traitsIwESaIwEE",
+    "_ZN6CAffixC2ERKSbIwSt11char_traitsIwESaIwEE"
+   ],
+   "original_size": 514,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_affix_values_and_lifetime",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7d5a80",
+   "tu": "affix.cpp",
+   "names": [
+    "_ZN6CAffixD2Ev",
+    "_ZN6CAffixD1Ev"
+   ],
+   "original_size": 834,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_affix_values_and_lifetime",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7d5dd0",
+   "tu": "affix.cpp",
+   "names": [
+    "_ZN6CAffixD0Ev"
+   ],
+   "original_size": 18,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x7d5df0",
+   "tu": "affix.cpp",
+   "names": [
+    "_ZN6CAffixC2EPS_j",
+    "_ZN6CAffixC1EPS_j"
+   ],
+   "original_size": 405,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_affix_values_and_lifetime",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7ebd40",
+   "tu": "EffectManager.cpp",
+   "names": [
+    "_ZN14CEffectManager12clearEffectsEb"
+   ],
+   "original_size": 496,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_effect_manager_lifetime",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7ebf30",
+   "tu": "EffectManager.cpp",
+   "names": [
+    "_ZN14CEffectManager21calculateEffectValuesEv"
+   ],
+   "original_size": 1002,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_effect_manager_lifetime",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7ec7a0",
+   "tu": "EffectManager.cpp",
+   "names": [
+    "_ZN14CEffectManager15transferEffectsEP10CCharacter18EEFFECT_ACTIVATION12EEFFECT_TYPE"
+   ],
+   "original_size": 489,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_effect_manager_lifetime",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7f37f0",
+   "tu": "EffectManager.cpp",
+   "names": [
+    "_ZN14CEffectManager17deleteDeadEffectsEv"
+   ],
+   "original_size": 850,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_effect_manager_lifetime",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7f4550",
+   "tu": "EffectManager.cpp",
+   "names": [
+    "_ZN14CEffectManagerD2Ev",
+    "_ZN14CEffectManagerD1Ev"
+   ],
+   "original_size": 515,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_effect_manager_lifetime",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7f4760",
+   "tu": "EffectManager.cpp",
+   "names": [
+    "_ZN14CEffectManagerD0Ev"
+   ],
+   "original_size": 18,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x7f5d50",
+   "tu": "EffectManager.cpp",
+   "names": [
+    "_ZN14CEffectManagerC1EP9CBaseUnit",
+    "_ZN14CEffectManagerC2EP9CBaseUnit"
+   ],
+   "original_size": 495,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_effect_manager_lifetime",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x91a6b0",
+   "tu": "keymanager.cpp",
+   "names": [
+    "_ZN11CKeyManager14shiftCharacterEib"
+   ],
+   "original_size": 604,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_shift_character",
+     "completed": 560,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x91ab90",
+   "tu": "keymanager.cpp",
+   "names": [
+    "_ZN11CKeyManager8keyEventEjj"
+   ],
+   "original_size": 126,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_key_event",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x926a80",
+   "tu": "automap.cpp",
+   "names": [
+    "_ZN8CAutomap13clearNPCIconsEv"
+   ],
+   "original_size": 179,
+   "status": "MATCH",
+   "coverage": [
+    {
+     "fixture": "continue_automap_clear",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x926b40",
+   "tu": "automap.cpp",
+   "names": [
+    "_ZN8CAutomap22setNPCBillboardVisibleEPN4Ogre9BillboardEb"
+   ],
+   "original_size": 431,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continue_automap_visibility",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x926cf0",
+   "tu": "automap.cpp",
+   "names": [
+    "_ZN8CAutomap8finalizeEv"
+   ],
+   "original_size": 567,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continue_automap_finalize",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x926f40",
+   "tu": "automap.cpp",
+   "names": [
+    "_ZN8CAutomap17setPlayerPositionERKN4Ogre7Vector3E"
+   ],
+   "original_size": 406,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continue_automap_position",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x969050",
+   "tu": "levelstate.cpp",
+   "names": [
+    "_ZN11CLevelState10addAutomapEP8CAutomap"
+   ],
+   "original_size": 118,
+   "status": "MATCH",
+   "coverage": [
+    {
+     "fixture": "continuation_level_state_storage",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x96f2b0",
+   "tu": "levelstate.cpp",
+   "names": [
+    "_ZN11CLevelState13addFormationsEP10TArrayListIP14CFormationNodeER6CLevel"
+   ],
+   "original_size": 396,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_level_state_storage",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x96f690",
+   "tu": "levelstate.cpp",
+   "names": [
+    "_ZN11CLevelState4saveEP8_IO_FILE"
+   ],
+   "original_size": 1014,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_level_state_storage",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x970500",
+   "tu": "levelstate.cpp",
+   "names": [
+    "_ZN11CLevelState7addItemER5CItem"
+   ],
+   "original_size": 179,
+   "status": "MATCH",
+   "coverage": [
+    {
+     "fixture": "continuation_level_state_storage",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9705c0",
+   "tu": "levelstate.cpp",
+   "names": [
+    "_ZN11CLevelState12addCharacterER10CCharacterR6CLevel"
+   ],
+   "original_size": 171,
+   "status": "MATCH",
+   "coverage": [
+    {
+     "fixture": "continuation_level_state_storage",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x970dd0",
+   "tu": "levelstate.cpp",
+   "names": [
+    "_ZN11CLevelStateD2Ev",
+    "_ZN11CLevelStateD1Ev"
+   ],
+   "original_size": 982,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_level_state_storage",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9711b0",
+   "tu": "levelstate.cpp",
+   "names": [
+    "_ZN11CLevelStateD0Ev"
+   ],
+   "original_size": 18,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9c1930",
+   "tu": "DamageShape.cpp",
+   "names": [
+    "_ZN12CDamageShape15doInstantDamageEv"
+   ],
+   "original_size": 139,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9c1e20",
+   "tu": "DamageShape.cpp",
+   "names": [
+    "_ZThn368_N12CDamageShape18itemUpdatedInLevelEfP5CItem"
+   ],
+   "original_size": 9,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9c1e30",
+   "tu": "DamageShape.cpp",
+   "names": [
+    "_ZN12CDamageShape18itemUpdatedInLevelEfP5CItem"
+   ],
+   "original_size": 206,
+   "status": "MATCH",
+   "coverage": [
+    {
+     "fixture": "scene_damage_item",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9c1f00",
+   "tu": "DamageShape.cpp",
+   "names": [
+    "_ZThn368_N12CDamageShape23characterUpdatedInLevelEfP10CCharacter"
+   ],
+   "original_size": 9,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9c1f10",
+   "tu": "DamageShape.cpp",
+   "names": [
+    "_ZN12CDamageShape23characterUpdatedInLevelEfP10CCharacter"
+   ],
+   "original_size": 269,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_damage_character",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9e1130",
+   "tu": "Light.cpp",
+   "names": [
+    "_ZN6CLight13destroyLightsEv"
+   ],
+   "original_size": 228,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9e6300",
+   "tu": "Light.cpp",
+   "names": [
+    "_ZN6CLightC1EP16CResourceManager",
+    "_ZN6CLightC2EP16CResourceManager"
+   ],
+   "original_size": 300,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9e6430",
+   "tu": "Light.cpp",
+   "names": [
+    "_ZN6CLight18updateLightDensityEb"
+   ],
+   "original_size": 978,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_light_density",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9e6d30",
+   "tu": "Light.cpp",
+   "names": [
+    "_ZN6CLightD2Ev",
+    "_ZN6CLightD1Ev"
+   ],
+   "original_size": 220,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9e6e10",
+   "tu": "Light.cpp",
+   "names": [
+    "_ZN6CLightD0Ev"
+   ],
+   "original_size": 18,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9e6e30",
+   "tu": "Light.cpp",
+   "names": [
+    "_ZN6CLight13setBitmapFileESbIwSt11char_traitsIwESaIwEE"
+   ],
+   "original_size": 582,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9e7dd0",
+   "tu": "PropertyNode.cpp",
+   "names": [
+    "_ZThn256_N13CPropertyNode23characterUpdatedInLevelEfP10CCharacter"
+   ],
+   "original_size": 9,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9e7de0",
+   "tu": "PropertyNode.cpp",
+   "names": [
+    "_ZN13CPropertyNode23characterUpdatedInLevelEfP10CCharacter"
+   ],
+   "original_size": 267,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_property_character",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9e7ef0",
+   "tu": "PropertyNode.cpp",
+   "names": [
+    "_ZN13CPropertyNode8activateEv"
+   ],
+   "original_size": 110,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_property_activate",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9e82c0",
+   "tu": "PropertyNode.cpp",
+   "names": [
+    "_ZN13CPropertyNode15updatePathNodesEv"
+   ],
+   "original_size": 332,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_property_path_nodes",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9e8410",
+   "tu": "PropertyNode.cpp",
+   "names": [
+    "_ZN13CPropertyNode13jumpDownLogicEv"
+   ],
+   "original_size": 109,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9e84f0",
+   "tu": "PropertyNode.cpp",
+   "names": [
+    "_ZN13CPropertyNodeD2Ev",
+    "_ZN13CPropertyNodeD1Ev"
+   ],
+   "original_size": 194,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_property_destroy",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9e85c0",
+   "tu": "PropertyNode.cpp",
+   "names": [
+    "_ZThn256_N13CPropertyNodeD1Ev"
+   ],
+   "original_size": 12,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9e85d0",
+   "tu": "PropertyNode.cpp",
+   "names": [
+    "_ZThn256_N13CPropertyNodeD0Ev"
+   ],
+   "original_size": 9,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9e85e0",
+   "tu": "PropertyNode.cpp",
+   "names": [
+    "_ZN13CPropertyNodeD0Ev"
+   ],
+   "original_size": 18,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9e8600",
+   "tu": "PropertyNode.cpp",
+   "names": [
+    "_ZN13CPropertyNodeC2EP16CResourceManager",
+    "_ZN13CPropertyNodeC1EP16CResourceManager"
+   ],
+   "original_size": 467,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_property_construct",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9f0e90",
+   "tu": "PropertyNode.cpp",
+   "names": [
+    "_ZN13CPropertyNode12scaleUpdatedERKN4Ogre7Vector3E"
+   ],
+   "original_size": 160,
+   "status": "MATCH",
+   "coverage": [
+    {
+     "fixture": "scene_property_scale",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9f1a70",
+   "tu": "RandomGroup.cpp",
+   "names": [
+    "_ZN12CRandomGroup38canGroupBeCreatedBasedOffOfPlayerClassEv"
+   ],
+   "original_size": 198,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_random_player_class",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9f1b40",
+   "tu": "RandomGroup.cpp",
+   "names": [
+    "_ZN12CRandomGroup33canGroupBeCreatedBasedOffOfQuestsEv"
+   ],
+   "original_size": 350,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_random_quests",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9f1ca0",
+   "tu": "RandomGroup.cpp",
+   "names": [
+    "_ZN12CRandomGroup37canGroupBeCreatedBasedOffOfDifficultyEv"
+   ],
+   "original_size": 83,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_random_difficulty",
+     "completed": 56,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9f2340",
+   "tu": "RandomGroup.cpp",
+   "names": [
+    "_ZN12CRandomGroup15positionUpdatedERKN4Ogre7Vector3E"
+   ],
+   "original_size": 916,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_random_position",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9f26e0",
+   "tu": "RandomGroup.cpp",
+   "names": [
+    "_ZN12CRandomGroupC1EP16CResourceManager",
+    "_ZN12CRandomGroupC2EP16CResourceManager"
+   ],
+   "original_size": 498,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_random_construct",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9f9950",
+   "tu": "RandomGroup.cpp",
+   "names": [
+    "_ZN12CRandomGroupD1Ev",
+    "_ZN12CRandomGroupD2Ev"
+   ],
+   "original_size": 624,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_random_destroy",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9fa3d0",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZN10CRoomPiece18clearCollisionDataEv"
+   ],
+   "original_size": 164,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9fa480",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZN10CRoomPiece10setVisibleEb"
+   ],
+   "original_size": 127,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0x9fa6f0",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZN10CRoomPieceC1EP16CResourceManager",
+    "_ZN10CRoomPieceC2EP16CResourceManager"
+   ],
+   "original_size": 434,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_room_construct",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa00460",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZN10CRoomPiece14resetRoomPieceEv"
+   ],
+   "original_size": 211,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_room_reset",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa00540",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZN10CRoomPiece24setCollisionMeshFilePathERKSbIwSt11char_traitsIwESaIwEE"
+   ],
+   "original_size": 468,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_room_collision_path",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa00ff0",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZN10CRoomPieceD1Ev",
+    "_ZN10CRoomPieceD2Ev"
+   ],
+   "original_size": 321,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_room_destroy",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa01140",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZThn272_N10CRoomPieceD1Ev"
+   ],
+   "original_size": 12,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xa01150",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZThn264_N10CRoomPieceD1Ev"
+   ],
+   "original_size": 12,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xa01160",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZThn256_N10CRoomPieceD1Ev"
+   ],
+   "original_size": 12,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xa01170",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZThn272_N10CRoomPieceD0Ev"
+   ],
+   "original_size": 9,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xa01180",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZThn264_N10CRoomPieceD0Ev"
+   ],
+   "original_size": 9,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xa01190",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZThn256_N10CRoomPieceD0Ev"
+   ],
+   "original_size": 9,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xa011a0",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZN10CRoomPieceD0Ev"
+   ],
+   "original_size": 18,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xa01890",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZN10CRoomPiece16setRoomPieceGuidEx"
+   ],
+   "original_size": 162,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_room_guid",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa01940",
+   "tu": "RoomPiece.cpp",
+   "names": [
+    "_ZN10CRoomPiece20selectNewVisualIndexEv"
+   ],
+   "original_size": 158,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_room_visual_index",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa0a6c0",
+   "tu": "UnitSpawner.cpp",
+   "names": [
+    "_ZN12CUnitSpawner16stopAllParticlesEv"
+   ],
+   "original_size": 95,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xa0a720",
+   "tu": "UnitSpawner.cpp",
+   "names": [
+    "_ZN12CUnitSpawner5resetEv"
+   ],
+   "original_size": 167,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_spawner_reset",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa0a7d0",
+   "tu": "UnitSpawner.cpp",
+   "names": [
+    "_ZN12CUnitSpawner5clearEv"
+   ],
+   "original_size": 135,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_spawner_clear",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa2ac50",
+   "tu": "Particle.cpp",
+   "names": [
+    "_ZN9CParticle17updateLevelObjectEfPN4Ogre6CameraERKNS0_7Vector3E"
+   ],
+   "original_size": 112,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continue_particle_update",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa2acc0",
+   "tu": "Particle.cpp",
+   "names": [
+    "_ZN9CParticleC1EP18CParticlePreloaderRKSbIwSt11char_traitsIwESaIwEEP16CResourceManager",
+    "_ZN9CParticleC2EP18CParticlePreloaderRKSbIwSt11char_traitsIwESaIwEEP16CResourceManager"
+   ],
+   "original_size": 203,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continue_particle_construct",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa4a020",
+   "tu": "WeaponTrail.cpp",
+   "names": [
+    "_ZN12CWeaponTrail9setActiveEb"
+   ],
+   "original_size": 103,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_weapon_active",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc63820",
+   "tu": "DataValue.cpp",
+   "names": [
+    "_ZN10CDataValueD2Ev",
+    "_ZN10CDataValueD1Ev"
+   ],
+   "original_size": 1943,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_data_value_lifetime",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc63fc0",
+   "tu": "DataValue.cpp",
+   "names": [
+    "_ZN10CDataValueD0Ev"
+   ],
+   "original_size": 18,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xc65910",
+   "tu": "BinaryStyle.cpp",
+   "names": [
+    "_ZN12CBinaryStyle19SaveDataGroupToFileERKSbIwSt11char_traitsIwESaIwEEP10CDataGroup"
+   ],
+   "original_size": 1722,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_binary_save",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc65fd0",
+   "tu": "BinaryStyle.cpp",
+   "names": [
+    "_ZN12CBinaryStyle14LoadDataValuesERSt14basic_ifstreamIcSt11char_traitsIcEEP10CDataGroupRSt3mapIjjSt4lessIjESaISt4pairIKjjEEEjP13CTimerStatics"
+   ],
+   "original_size": 1307,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_binary_values",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc664f0",
+   "tu": "BinaryStyle.cpp",
+   "names": [
+    "_ZN12CBinaryStyle4LoadERSt14basic_ifstreamIcSt11char_traitsIcEEP10CDataGroupRSt3mapIjjSt4lessIjESaISt4pairIKjjEEEjP13CTimerStatics"
+   ],
+   "original_size": 1269,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_binary_load",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc752e0",
+   "tu": "FileUtilities.cpp",
+   "names": [
+    "_ZN10FILESYSTEM20CreateLocalDirectoryERKSbIwSt11char_traitsIwESaIwEE"
+   ],
+   "original_size": 322,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_local_directory",
+     "completed": 70,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc77d10",
+   "tu": "GameSpeed.cpp",
+   "names": [
+    "_ZN10CGameSpeed18calculateGameSpeedEf"
+   ],
+   "original_size": 393,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_speed_calculate",
+     "completed": 128,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc78030",
+   "tu": "GameSpeed.cpp",
+   "names": [
+    "_ZN10CGameSpeed5clearEv"
+   ],
+   "original_size": 139,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_speed_clear",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc781d0",
+   "tu": "GameSpeed.cpp",
+   "names": [
+    "_ZN10CGameSpeedD1Ev",
+    "_ZN10CGameSpeedD2Ev"
+   ],
+   "original_size": 238,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_speed_destroy",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    },
+    {
+     "fixture": "services_speed_real_lifetime",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc83ab0",
+   "tu": "ModFileFilter.cpp",
+   "names": [
+    "_ZN14CModFileFilter10refreshModERKSs"
+   ],
+   "original_size": 132,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_mod_refresh",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc83b40",
+   "tu": "ModFileFilter.cpp",
+   "names": [
+    "_ZN14CModFileFilter9addNewModERKSbIwSt11char_traitsIwESaIwEE"
+   ],
+   "original_size": 318,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_mod_add",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc84440",
+   "tu": "ModFileFilter.cpp",
+   "names": [
+    "_ZN14CModFileFilter14refreshAllModsEv"
+   ],
+   "original_size": 94,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_mod_refresh_all",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc8d720",
+   "tu": "StringUtilities.cpp",
+   "names": [
+    "_ZN7STRINGS22StringSizeOfWCharArrayEPKwj"
+   ],
+   "original_size": 54,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_wide_size",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc8d760",
+   "tu": "StringUtilities.cpp",
+   "names": [
+    "_ZN7STRINGS21StringSizeOfCharArrayEPKcj"
+   ],
+   "original_size": 46,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_char_size",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc8ebb0",
+   "tu": "StringUtilities.cpp",
+   "names": [
+    "_ZN7STRINGS14TokenizeStringEPSt5queueISbIwSt11char_traitsIwESaIwEESt5dequeIS4_SaIS4_EEERKS4_PKw"
+   ],
+   "original_size": 915,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_wide_tokens",
+     "completed": 104,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc8f060",
+   "tu": "StringUtilities.cpp",
+   "names": [
+    "_ZN7STRINGS14TokenizeStringEPSt5queueISsSt5dequeISsSaISsEEERKSsPKc"
+   ],
+   "original_size": 916,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_char_tokens",
+     "completed": 104,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcab750",
+   "tu": "SkillEffectAndAffixes.cpp",
+   "names": [
+    "_ZN22CSkillEffectAndAffixes28addMinAndMaxValuesOfAnEffectEP16CResourceManagerjRfS2_"
+   ],
+   "original_size": 568,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_effect_values",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcab990",
+   "tu": "SkillEffectAndAffixes.cpp",
+   "names": [
+    "_ZN22CSkillEffectAndAffixes23createAffixesForDisplayEP16CResourceManager"
+   ],
+   "original_size": 416,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_effect_values",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcac960",
+   "tu": "SkillEffectAndAffixes.cpp",
+   "names": [
+    "_ZN22CSkillEffectAndAffixes10isDamagingEv"
+   ],
+   "original_size": 508,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_effect_values",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcb3f10",
+   "tu": "SkillEffectAndAffixes.cpp",
+   "names": [
+    "_ZN22CSkillEffectAndAffixes18fillOutStatBonusesERA6_fb"
+   ],
+   "original_size": 720,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_effect_values",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcb41e0",
+   "tu": "SkillEffectAndAffixes.cpp",
+   "names": [
+    "_ZN22CSkillEffectAndAffixesD1Ev",
+    "_ZN22CSkillEffectAndAffixesD2Ev"
+   ],
+   "original_size": 1515,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_effect_values",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcb47d0",
+   "tu": "SkillEffectAndAffixes.cpp",
+   "names": [
+    "_ZN22CSkillEffectAndAffixesD0Ev"
+   ],
+   "original_size": 18,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xcd11b0",
+   "tu": "SkillManager.cpp",
+   "names": [
+    "_ZN13CSkillManager16notifyOfDeletionEP10CCharacter"
+   ],
+   "original_size": 489,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_manager_ownership",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcd13a0",
+   "tu": "SkillManager.cpp",
+   "names": [
+    "_ZN13CSkillManager16notifyOfDeletionEP5CItem"
+   ],
+   "original_size": 459,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_manager_ownership",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcd3040",
+   "tu": "SkillManager.cpp",
+   "names": [
+    "_ZN13CSkillManagerD1Ev",
+    "_ZN13CSkillManagerD2Ev"
+   ],
+   "original_size": 546,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_manager_ownership",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcd3270",
+   "tu": "SkillManager.cpp",
+   "names": [
+    "_ZN13CSkillManagerD0Ev"
+   ],
+   "original_size": 18,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xcd3440",
+   "tu": "SkillManager.cpp",
+   "names": [
+    "_ZN13CSkillManager16stopSkillsByNameESbIwSt11char_traitsIwESaIwEEb"
+   ],
+   "original_size": 453,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_manager_ownership",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcd3ad0",
+   "tu": "SkillManager.cpp",
+   "names": [
+    "_ZN13CSkillManager21decrementSkillChargesEP6CSkill"
+   ],
+   "original_size": 452,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_manager_ownership",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcd3ca0",
+   "tu": "SkillManager.cpp",
+   "names": [
+    "_ZN13CSkillManager11deleteSkillERKSbIwSt11char_traitsIwESaIwEE"
+   ],
+   "original_size": 761,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_manager_ownership",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcd5530",
+   "tu": "SkillManager.cpp",
+   "names": [
+    "_ZN13CSkillManager8addSkillERKSbIwSt11char_traitsIwESaIwEEb"
+   ],
+   "original_size": 427,
+   "status": "MATCH",
+   "coverage": [
+    {
+     "fixture": "continuation_skill_manager_ownership",
+     "completed": 40,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xceb380",
+   "tu": "CameraControl.cpp",
+   "names": [
+    "_ZN14CCameraControl17clearCameraShakesEv"
+   ],
+   "original_size": 322,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_camera_clear",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcf1e80",
+   "tu": "CameraShake.cpp",
+   "names": [
+    "_ZN12CCameraShake6updateEfRN4Ogre7Vector3ES2_b"
+   ],
+   "original_size": 659,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_shake_update",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcf2120",
+   "tu": "CameraShake.cpp",
+   "names": [
+    "_ZN12CCameraShakeC2Ev",
+    "_ZN12CCameraShakeC1Ev"
+   ],
+   "original_size": 189,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_shake_default",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcf89f0",
+   "tu": "CameraShake.cpp",
+   "names": [
+    "_ZN12CCameraShakeC1ERKSbIwSt11char_traitsIwESaIwEEN4Ogre7Vector3Ef",
+    "_ZN12CCameraShakeC2ERKSbIwSt11char_traitsIwESaIwEEN4Ogre7Vector3Ef"
+   ],
+   "original_size": 282,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_shake_construct",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcf8b10",
+   "tu": "CameraShake.cpp",
+   "names": [
+    "_ZN12CCameraShakeD1Ev",
+    "_ZN12CCameraShakeD2Ev"
+   ],
+   "original_size": 266,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_shake_destroy",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xcf8c20",
+   "tu": "CameraShake.cpp",
+   "names": [
+    "_ZN12CCameraShakeD0Ev"
+   ],
+   "original_size": 18,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xcf8c40",
+   "tu": "CameraShake.cpp",
+   "names": [
+    "_ZN12CCameraShake16startCameraShakeERKN4Ogre7Vector3Eb"
+   ],
+   "original_size": 559,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_shake_start",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd8e690",
+   "tu": "CameraController.cpp",
+   "names": [
+    "_ZN17CCameraController10stopCameraEv"
+   ],
+   "original_size": 441,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_camera_stop",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd8e850",
+   "tu": "CameraController.cpp",
+   "names": [
+    "_ZN17CCameraController6updateEf"
+   ],
+   "original_size": 901,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_camera_update",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd96600",
+   "tu": "CameraController.cpp",
+   "names": [
+    "_ZN17CCameraController11startCameraEv"
+   ],
+   "original_size": 743,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_camera_start",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd97660",
+   "tu": "CameraController.cpp",
+   "names": [
+    "_ZN17CCameraControllerD1Ev",
+    "_ZN17CCameraControllerD2Ev"
+   ],
+   "original_size": 333,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_controller_destroy",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd977d0",
+   "tu": "CameraController.cpp",
+   "names": [
+    "_ZN17CCameraControllerC2EP16CResourceManager",
+    "_ZN17CCameraControllerC1EP16CResourceManager"
+   ],
+   "original_size": 469,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_controller_construct",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xdd2aa0",
+   "tu": "AnimationPlayer.cpp",
+   "names": [
+    "_ZN16CAnimationPlayerD2Ev",
+    "_ZN16CAnimationPlayerD1Ev"
+   ],
+   "original_size": 523,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_animation_destroy",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    },
+    {
+     "fixture": "services_animation_real_lifetime",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe553b0",
+   "tu": "MusicObject.cpp",
+   "names": [
+    "_ZN12CMusicObjectC1EP16CResourceManager",
+    "_ZN12CMusicObjectC2EP16CResourceManager"
+   ],
+   "original_size": 157,
+   "status": "MATCH",
+   "coverage": [
+    {
+     "fixture": "scene_music_construct",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe5ce60",
+   "tu": "MusicObject.cpp",
+   "names": [
+    "_ZN12CMusicObject20playNormalLevelMusicEv"
+   ],
+   "original_size": 347,
+   "status": "MATCH",
+   "coverage": []
+  },
+  {
+   "address": "0xe5d060",
+   "tu": "MusicObject.cpp",
+   "names": [
+    "_ZN12CMusicObject12setMusicFileESbIwSt11char_traitsIwESaIwEE"
+   ],
+   "original_size": 454,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "scene_music_file",
+     "completed": 24,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xebf6a0",
+   "tu": "Achievement.cpp",
+   "names": [
+    "_ZN12CAchievementD2Ev",
+    "_ZN12CAchievementD1Ev"
+   ],
+   "original_size": 107,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "continuation_achievement_lifetime",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xebfac0",
+   "tu": "Achievements.cpp",
+   "names": [
+    "_ZN13CAchievements5cheatEv"
+   ],
+   "original_size": 82,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_achievement_cheat",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xec71d0",
+   "tu": "Achievements.cpp",
+   "names": [
+    "_ZN13CAchievements20getAchievementStatusEv"
+   ],
+   "original_size": 1439,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_achievement_status",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xec7850",
+   "tu": "Achievements.cpp",
+   "names": [
+    "_ZN13CAchievements22setAchievementCompleteEP12CAchievement"
+   ],
+   "original_size": 237,
+   "status": "behavioral",
+   "coverage": [
+    {
+     "fixture": "services_achievement_complete",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  }
+ ],
+ "PASS": true,
+ "schema": 1,
+ "status": "PASS",
+ "date": "2026-10-18",
+ "command": "python3 tools/decomp/check.py",
+ "environment": {
+  "LANG": "C.UTF-8",
+  "LC_ALL": "",
+  "TZ": "",
+  "OTL_JOBS": "4",
+  "OTL_COMPARE_JOBS": "4",
+  "OTL_BUILD_JOBS": "4",
+  "OTL_SELFTEST_JOBS": "6",
+  "OTL_SELFTEST_SHARDS": "60",
+  "OTL_SELFTEST_TIMEOUT": "1800",
+  "PYTHONUNBUFFERED": "1"
+ },
+ "full_gate": {
+  "returncode": 0,
+  "started_unix": 1792316799.1256826,
+  "ended_unix": 1792318088.1663413,
+  "elapsed_seconds": 1289.0406591892242,
+  "error": null,
+  "tests": 1498,
+  "failed": 0,
+  "log_sha256": "7da856751c1025a6687555a5af50ca37f8826163e46805dfa030f56b82fa110a",
+  "progress_sha256": "8e44437d77efebc5339b15d80b750612670473df39d04b2b94115b569394517b",
+  "blob_sha256": "4524f425b0c9595ebc13c160b7958fdb9b340d6de6bf79e80999b41467ba1907",
+  "loader_sha256": "ce2686eaf8a40b71f08d21e721abeb40e8f78c243ec840a36aede29e24f48752",
+  "build_seconds": 53.49229358999992,
+  "selftest_seconds": 1203.659632373
+ },
+ "focused_gate": {
+  "started_unix": 1792316718.6132836,
+  "environment": {
+   "LANG": "C.UTF-8",
+   "LC_ALL": "",
+   "TZ": "",
+   "OTL_JOBS": "4",
+   "OTL_COMPARE_JOBS": "4",
+   "OTL_BUILD_JOBS": "4",
+   "OTL_SELFTEST_JOBS": "6",
+   "OTL_SELFTEST_SHARDS": "24",
+   "OTL_SELFTEST_TIMEOUT": "1800",
+   "PYTHONUNBUFFERED": "1"
+  },
+  "returncode": 0,
+  "tree_unchanged": true,
+  "inputs_unchanged": true,
+  "elapsed_seconds": 63.005656480789185,
+  "tests": 95,
+  "failed": 0,
+  "completed_pairs": 7590,
+  "log_sha256": "0783bc405056fe09bc4e3d70156c63e5a88c690a05ccf7794d3b6d9dc9006910"
+ },
+ "tool_tests": {
+  "tests": 329,
+  "failed": 0,
+  "logs": {
+   "tool-tests2.log": "d12cea186f1b37a9e2645d93c99d3474df96ee35efba6134a70889f6801a1003",
+   "repair-boundary-tests.log": "f4af8bbb030a7a9671df35c05bf970fe579ce3355d565c87f71273f0b2d146ce"
+  }
+ },
+ "prior_accepted_behavioral_upgraded_to_MATCH": [
+  "0x702490",
+  "0x702510",
+  "0x702570",
+  "0x7025d0",
+  "0x7026d0",
+  "0x702740",
+  "0x705d80",
+  "0x74b130",
+  "0x7ebc60",
+  "0x7ec450",
+  "0x7ec4f0",
+  "0x7f2b70",
+  "0x7f31a0",
+  "0x7f3270",
+  "0x7f36c0"
+ ],
+ "existing_definitions_accepted_after_coverage_label_correction": [
+  "0x91a6b0",
+  "0xc77d10",
+  "0xc78030",
+  "0xc781d0",
+  "0xc83ab0",
+  "0xc83b40",
+  "0xc84440",
+  "0xc8d720",
+  "0xc8d760",
+  "0xc8ebb0",
+  "0xc8f060",
+  "0xceb380",
+  "0xd97660",
+  "0xd977d0",
+  "0xdd2aa0",
+  "0xebfac0",
+  "0xec71d0",
+  "0xec7850"
+ ],
+ "integrated_files": {
+  "decomp/hybrid/tests/ContinuationAchievementLifetimeTest.cpp": "463d8fa654eb96a593593fd416af71eea196cdd8e01f9d3364f5f632a890ae5f",
+  "decomp/hybrid/tests/ContinuationAffixTest.cpp": "410c083e466572f3aa070a7bc2281797c283aa78c97e8193d5a3847d7e78b58e",
+  "decomp/hybrid/tests/ContinuationBinaryStyleTest.cpp": "66ee87b6aa458011f023458c662aa07af9e596255d759b4c9baaf2388aca6dc2",
+  "decomp/hybrid/tests/ContinuationCollisionTest.cpp": "907604f05caf52255caaa38a133dcd20aa8266f1e3643e9edfc5981c6788f1b1",
+  "decomp/hybrid/tests/ContinuationDescriptorsTest.cpp": "da8982c88187d8f97d7dbe285b9c392abe737dc77911f17325a33b19cf21ce13",
+  "decomp/hybrid/tests/ContinuationEffectManagerTest.cpp": "b7142a5c574b8dd2dd0f6a365a28b5b77c9be47390b469df2fb8cbe0c933586e",
+  "decomp/hybrid/tests/ContinuationLevelStateTest.cpp": "c34b6494d859c403a8ae95250f61d11adea03410fa432d89391aa1d44c484482",
+  "decomp/hybrid/tests/ContinuationSkillEffectsTest.cpp": "0cdc00c59d7ab74ec1cfe74fe71578d2922658c2bdb176f159ac2ec831262bd8",
+  "decomp/hybrid/tests/ContinuationSkillManagerTest.cpp": "ec66ff7ae989a784218b798eaf41167a948f1b9e8500ef69aacc9c254440d440",
+  "decomp/hybrid/tests/ContinuationStorageTest.cpp": "822d4b3e59933024874d8552996f9644c5bf6bb4939eb0650a6e298fe556b757",
+  "decomp/hybrid/tests/ContinuationTimelineTest.cpp": "662aa73b316ad622c9cb542b6b829058e176b59ffc4e19f774b0fdfc90fabb5b",
+  "decomp/hybrid/tests/ContinuationUtilDispatchTest.cpp": "fc9c93fd552a40866f6b64dfd6647dc33447cb483becd99c897b1cc8f323aa45",
+  "decomp/hybrid/tests/ContinueAutomapTest.cpp": "05b14cca1a3896d897a339b422cd62bf727fc4401caa4015c74367307bee32cb",
+  "decomp/hybrid/tests/ContinueParticleTest.cpp": "dafdaa4b13c34a286dfd8ead31c0f8d1e01729b5640e9e614ac465a3eecf3eef",
+  "decomp/hybrid/tests/SceneCameraCompare.cpp": "62a5baa2abc3c0fc1d9f842e5521f7b14a963da4ade5c97671113c8b2b57feb8",
+  "decomp/hybrid/tests/SceneDamageCompare.cpp": "131fd3ccfddc7a32f5525fcdb3b39f9c005a2f3ba72fbd9502c4a3886ee03768",
+  "decomp/hybrid/tests/SceneLifetimeCompare.cpp": "c4de20fc38954ad6b0ae1a7caf550d533fe5f5544517c88e6ab8913b3aefdf6a",
+  "decomp/hybrid/tests/SceneLightDensityCompare.cpp": "0205ad821a30f79f44a44b74b4779a3d57bee65d04d0687d1c4a712b75832ddd",
+  "decomp/hybrid/tests/SceneMusicStorageCompare.cpp": "b08aff2e2788e78b5f39a517fea5e5feb27e64b33277944fe41a25c8297710f9",
+  "decomp/hybrid/tests/ScenePropertyPathCompare.cpp": "e89e648660fae5e7fc84c8eecfff527439cabae4fb7c59b7a80d68c5cca2d61e",
+  "decomp/hybrid/tests/SceneRandomPositionCompare.cpp": "1492a6e873b747ae583b9061a4a91a2d03cdb34031f13fed04f3c19ff822cbd7",
+  "decomp/hybrid/tests/SceneRestrictionCompare.cpp": "5dab67e898d0270e1bb1fdbe5426d0a3f726adf88794bdb884eb1494a73351e1",
+  "decomp/hybrid/tests/SceneRoomCollisionCompare.cpp": "54bd8a79321bab1bddf2b2e406c9e9c7b8cf4725feadfc94cbbd102d6785bbbd",
+  "decomp/hybrid/tests/SceneRoomGuidCompare.cpp": "62a41a3c09cbedf2a5a0883176ce56f22de9ff23c24068e0bd78ec7c614cbb17",
+  "decomp/hybrid/tests/SceneShakeCompare.cpp": "fc8e7d2d97a26d61b92b67e73a78e740c88b229be95d12049ef6c346830c18d6",
+  "decomp/hybrid/tests/SceneShakeUpdateCompare.cpp": "3c9c45faef2c8a753afc304f3564f2dcb647404e0ae8ac9a4454533915c8f533",
+  "decomp/hybrid/tests/SceneSimpleCompare.cpp": "1c36b65c31fb476ab6cfe2952b3cde0f136e466f438b298960f9fa9e8a5bc8f5",
+  "decomp/hybrid/tests/StateEffectManagerTest.cpp": "59960a9ccb31f83fa57254731f00617eed37108f2eed62b4e6e7a385749089cb",
+  "decomp/src/BinaryStyle.cpp": "febe14c95dd09a2d7f94d95840a8f4095c74ede1ac01e9a97f346044af78d3d8",
+  "decomp/src/CameraController.cpp": "3815983d07457204ce98d3ded94120b4cd85ee4c9bd16ec33ee8a6a22441b420",
+  "decomp/src/CameraShake.cpp": "c315ccba3d9036bb4f9a68e1bb3d542c2f4e6ec7886d4098266779f019a317fb",
+  "decomp/src/DamageShape.cpp": "b34fade216291e3e8b0cd029b5fbca0563d14cac6e9a7604d3b9775e56ddceac",
+  "decomp/src/DataValue.cpp": "c9f27e488b5ef57a4f4605d0e4e639f47d46fb6ae75ae18d887b570e4f9ba713",
+  "decomp/src/DescriptorManager.cpp": "30fc6d826de11d2177d930f6f8710a8c4f43a9ed60c8a3808935e6d98123fd01",
+  "decomp/src/EffectManager.cpp": "0f0b458734e4ba08c853708c934d1afedf1f3acc49d84ff08ce812622f9018c2",
+  "decomp/src/FileUtilities.cpp": "b9085fc0bd2be0274080e111a7cb04b66dbcab002ee0177bdab3078d520aaf00",
+  "decomp/src/LayoutDescriptor.cpp": "a761e8422e5df58dba6d2f9bf0b462744bdd6327f6f7f5bd5065ab8554905899",
+  "decomp/src/Light.cpp": "670a261987ca215177867f5b6434351a0f404bf3ab739e4fca3ba391d3403d66",
+  "decomp/src/MonsterDescriptor.cpp": "15693bf770a9c8154190995717d497c2ab990b9a1e3c07f15b7850f512234a94",
+  "decomp/src/MusicObject.cpp": "a9c5b43825f7fb127a5db1a2f6133bb1d3e50839e0c3d202173d1731064325fd",
+  "decomp/src/Particle.cpp": "85c89822ebab5e9d62b80db60f3ebe7c88f8ba39aa1b1932648a5fd09604a902",
+  "decomp/src/PropertyNode.cpp": "e92195b8be581dad13c09760cf5f05e1dcfa0adf59c1c1db3223bbf999988bac",
+  "decomp/src/RandomGroup.cpp": "c325828477d2aba09cb9621ae25f42ae91d138dea7d91cfc47aed1954a8e5501",
+  "decomp/src/RoomPiece.cpp": "4d953e8567d8cf70278de9f267ef74efe2acdcead6262404f6d5b5dfda5f564a",
+  "decomp/src/SkillEffectAndAffixes.cpp": "fe6264b748c481a2e85090766a25390f7063a10e021b3b968f43434ab45a2d22",
+  "decomp/src/SkillManager.cpp": "a841c8aa0599590f6b3e17acacf1e75aae6c5ef172e487e9fcdc6a659fad0d9b",
+  "decomp/src/TimelineProperty.cpp": "a5ff403e8258ef707b18d142687db87f438575dcb32b19263bbb490dca72e178",
+  "decomp/src/UnitSpawner.cpp": "f0bf95856b653ccef1b4d8d4c5a57a2a8760ae8c55f59300f2de7faea98e69c4",
+  "decomp/src/WeaponTrail.cpp": "991251e8b7a03d8fd7e21a14f1ccd312b435ceeb2970a7c681f3569443e7db3b",
+  "decomp/src/affix.cpp": "2533e32e061a80337d348b4387b7052e66b27b5f70b592b2874c3754449d577c",
+  "decomp/src/automap.cpp": "3b8c81cda7ff0d4ee2824f489e5e3a31baf0af57934d1075c8b853a86d5ffe6a",
+  "decomp/src/collisionlist.cpp": "3766e08e085fb0e7c9641c50b88d0321043137c89b5cc4bb649dad6237c2ffd2",
+  "decomp/src/keymanager.cpp": "ad5191489db6f965351e8ae06928e99990ed028b1f459348a88b32cc2abfd182",
+  "decomp/src/levelstate.cpp": "8eea14292d7770e33c3d36f1c4d782c08ee8a4c00007f1a453c3be6883a6c119"
+ },
+ "tested_tree_sha256": "91d7f2435add3f41967e5988a840ecdb01a51fea5ce0feb726c83d74f88e75b2",
+ "independent_consistency_review": {
+  "status": "read_only_review_complete_no_blocker",
+  "scope": "Final saved manifests, source/fixture hashes, frozen preparation metadata, prior strong MATCH code, ready/reserve boundaries and exact tool changes. No build, game run or canonical write performed.",
+  "source_fixture_hashes_verified": 54,
+  "prepared_checkpoints_verified": 39,
+  "prepared_prompt_hashes_verified": 144,
+  "prepared_tree_equals": "frozen-tree2.json",
+  "ready_source_units": 31,
+  "unchanged_ready_source_units": 5,
+  "canonical_ready_source_bytes_equal": true,
+  "prior_strong_match_rows_verified": 258,
+  "prior_strong_match_losses": 0,
+  "unknown_definitions": 0,
+  "potential_net_new_addresses": 134,
+  "potential_counts_note": "All 134 ready original addresses are unique and absent from baseline accepted set of 3844. Includes two additional util D0 aliases. Canonical full gate remains authoritative.",
+  "focused_completed_pairs": {
+   "scene": 1328,
+   "combat": 1536,
+   "util": 2346,
+   "parent": 416,
+   "total": 5626
+  },
+  "focused_labels_registered_and_passed": true,
+  "focused_different": 0,
+  "focused_incomplete": 0,
+  "minimum_completed": 24,
+  "resolved_inconsistency": "Root refreshed parent result.json to latest Particle fixture SHA; all four parent source/test hashes now match.",
+  "nonblocking_consistency_issue": "RoomPiece.h +0x128 m_collisionMeshFile is visual mesh path; +0x130 m_meshFile is collision path. Proven offsets and candidate behavior are correct. Semantic rename belongs to a future coordinated header context, not this frozen gate.",
+  "tool_review": "No acceptance weakening found. _coherent_repair_aliases admits only exact two original C1/C2 or D1/D2 DIFF rows with every non-name field identical, positive size and normalized code; existing accepted/D0/thunk guards remain. New template destructor cases retain exact ELF identity, header SHA and complete-pointee guards.",
+  "ready_excludes": [
+   "scene PathController additions",
+   "scene RoomPiece setMeshFilePath/initRoomPiece",
+   "scene MusicObject::play",
+   "combat SteamStats additions",
+   "combat SkillProperty additions",
+   "combat EffectManager::addNewEffect",
+   "combat SkillManager::stopAllSkills",
+   "combat three unrecovered SkillEffectAndAffixes methods",
+   "util DataGroup additions",
+   "util ModFileFilter getFiles/updateDirectories",
+   "util LayoutDescriptor::setVisible"
+  ]
+ },
+ "reserves": [
+  {
+   "address": "0x5941f0",
+   "tu": "PathController.cpp",
+   "demangled": "CPathController::CPathController(CResourceManager*)",
+   "comparison_status": "MISSING",
+   "disposition": "reserved",
+   "reason": "Adding the recovered PathController constructor/destructor changes prior strong MATCH positionUpdated(0x593fc0) register allocation. Candidate reverted to canonical; alternatives and comparison evidence retained."
+  },
+  {
+   "address": "0x59d750",
+   "tu": "PathController.cpp",
+   "demangled": "CPathController::~CPathController()",
+   "comparison_status": "MISSING",
+   "disposition": "reserved",
+   "reason": "Same PathController preservation blocker as constructor; no candidate integrated."
+  },
+  {
+   "address": "0x59e920",
+   "tu": "PathController.cpp",
+   "demangled": "CPathController::setNumberOfPathPoints(unsigned int)",
+   "comparison_status": "MISSING",
+   "disposition": "reserved",
+   "reason": "Same PathController preservation blocker; recovered alternative is retained only in PathController-all.cpp."
+  },
+  {
+   "address": "0xa011c0",
+   "tu": "RoomPiece.cpp",
+   "demangled": "CRoomPiece::setMeshFilePath(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "comparison_status": "MISSING",
+   "disposition": "reserved",
+   "reason": "setMeshFilePath remains a larger recovery reserve; not implemented in this candidate."
+  },
+  {
+   "address": "0xa01590",
+   "tu": "RoomPiece.cpp",
+   "demangled": "CRoomPiece::initRoomPiece()",
+   "comparison_status": "MISSING",
+   "disposition": "reserved",
+   "reason": "initRoomPiece requires still-opaque CoreData fields +24/+28/+29/+2c/+31; no guessed layout or third context reset."
+  },
+  {
+   "address": "0xe5d230",
+   "tu": "MusicObject.cpp",
+   "demangled": "CMusicObject::play()",
+   "comparison_status": "MISSING",
+   "disposition": "reserved",
+   "reason": "CMusicObject::play caller expects float in XMM0 from SoundManager::playMusic at 0xa6dc50; current shared declaration is int. Header/caller ABI audit explicitly deferred by main. See reserved-abi.json."
+  },
+  {
+   "tu": "SkillProperty.cpp",
+   "addresses": [
+    "0xcdce70",
+    "0xce5940"
+   ],
+   "reason": "CSkillEvent incomplete; missing owner-property +98 and SkillEffects +a0. No layout guesses."
+  },
+  {
+   "tu": "SteamStats.cpp",
+   "addresses": [
+    "0xece240",
+    "0xece5d0",
+    "0xecea70",
+    "0xecec20"
+   ],
+   "reason": "4 bodies and 128 runtime pairs exist, but prior statModified ece450 loses exact MATCH (two RA instructions) even after the two authorized natural forms. Whole TU excluded.",
+   "source": "build-decomp/continuation-20261016/combat-candidate/sources/SteamStats.cpp",
+   "fixture": "build-decomp/continuation-20261016/combat-candidate/tests/ContinuationSteamStatsTest.cpp"
+  },
+  {
+   "tu": "SkillManager.cpp",
+   "addresses": [
+    "0xccadc0"
+   ],
+   "reason": "New stopAllSkills alone changes prior fireSkillsOnCreate cd5460 MATCH (two RA instructions). Remove-one probe isolates it; preserving source omitted this one definition.",
+   "source": "build-decomp/continuation-20261016/combat-candidate/SkillManager-with-stopAll-reserve.cpp"
+  },
+  {
+   "tu": "EffectManager.cpp",
+   "addresses": [
+    "0x7f2f10"
+   ],
+   "reason": "New addNewEffect together with deleteDeadEffects changes freeze2 clearOutAffixEffects 7ebc60 MATCH (two RA instructions). Remove-one probe proves excluding addNewEffect preserves all 10 old strong MATCH.",
+   "source": "build-decomp/continuation-20261016/combat-candidate/EffectManager-with-addNew-reserve.cpp"
+  },
+  {
+   "tu": "SkillEffectAndAffixes.cpp",
+   "addresses": [
+    "0xcabbc0"
+   ],
+   "reason": "Frozen headers lack access to protected BaseUnit::m_eBaseUnitType +188 and private Character::m_pMaster +640."
+  },
+  {
+   "tu": "SkillEffectAndAffixes.cpp",
+   "addresses": [
+    "0xcacb60"
+   ],
+   "reason": "Frozen BaseUnit header does not grant access to protected m_pEffectManager +1b8; no public getter."
+  },
+  {
+   "tu": "SkillEffectAndAffixes.cpp",
+   "addresses": [
+    "0xcb3980"
+   ],
+   "reason": "Frozen Skill header does not grant access to private m_resources +18; no public getter."
+  },
+  {
+   "address": "0x5ea290",
+   "tu": null,
+   "category": "new_owning_body",
+   "status": "RESERVE",
+   "code": null,
+   "proof": "Ogre SceneNode setVisible vtable offset original0x218, pinned SDK0x378; original fixture passes while candidate crashes. Header ABI repair and fresh packet needed."
+  },
+  {
+   "address": "0xc5efe0",
+   "tu": null,
+   "category": "new_owning_body",
+   "status": "RESERVE",
+   "code": null,
+   "proof": "Full DataGroup changes previous strong MATCH c5fb30/c5f1c0. Reserve fixture passed64 pairs."
+  },
+  {
+   "address": "0xc5fa00",
+   "tu": null,
+   "category": "new_owning_body",
+   "status": "RESERVE",
+   "code": null,
+   "proof": "Full DataGroup old MATCH drift; reserve fixture passed64 pairs."
+  },
+  {
+   "address": "0xc602d0",
+   "tu": null,
+   "category": "new_owning_body",
+   "status": "RESERVE",
+   "code": null,
+   "proof": "Full DataGroup old MATCH drift; new body is MATCH but cannot integrate whole TU. Reserve fixture passed64 pairs."
+  },
+  {
+   "address": "0xc61e00",
+   "tu": null,
+   "category": "new_owning_body",
+   "status": "RESERVE",
+   "code": null,
+   "proof": "Full DataGroup old MATCH drift; reserve fixture passed64 pairs."
+  },
+  {
+   "address": "0xc62090",
+   "tu": null,
+   "category": "new_owning_body",
+   "status": "RESERVE",
+   "code": null,
+   "proof": "Full DataGroup old MATCH drift. Body compiled but LoadFile lacks dedicated runtime fixture; reserved."
+  },
+  {
+   "address": "0xc83c80",
+   "tu": null,
+   "category": "new_owning_body",
+   "status": "RESERVE",
+   "code": null,
+   "proof": "Frozen declaration void conflicts with original EAX0/1; return-type ABI unresolved; no body written."
+  },
+  {
+   "address": "0xc86410",
+   "tu": null,
+   "category": "new_owning_body",
+   "status": "RESERVE",
+   "code": null,
+   "proof": "Full ModFileFilter new method changes previous strong MATCH c845e0. Reserve fixture passed64 execute pairs."
+  }
+ ],
+ "corrections": [
+  "Exact vector, weak-pointer, inline property, bounds and effect layouts from original instructions and pinned SDK declarations.",
+  "Particle update replaces recursive placeholder with original expiry/visibility/particle-count branches; constructor forwards resources.",
+  "Collision and scene fixtures cover non-identity subsets, ownership cleanup, floating edge cases, propagation and real weak references.",
+  "Services coverage labels now equal the successful TL_TEST names; original acceptance rules remain unchanged."
+ ],
+ "tooling": [
+  "Pinned template destructor contexts require exact names, original sizes, unchanged implementation hashes and complete pointee declarations.",
+  "A coherent original C1/C2 or D1/D2 DIFF pair may be repaired together; accepted aliases, D0, independent matches and ambiguous rows remain guarded."
+ ],
+ "limits": [
+  "Headless original-versus-replacement acceptance; interactive gameplay was not launched.",
+  "RoomPiece +0x128/+0x130 string field names are semantically reversed; recovered offsets and behavior are tested. Rename only in a fresh coordinated header context.",
+  "SoundManager::playMusic return ABI, incomplete SkillEvent/CoreData context and old MATCH register-allocation regressions remain explicit reserves.",
+  "A first full attempt stopped before runtime because the disk filled while writing a derived cache; inactive generated stages were archived and verified before the final successful run.",
+  "A subsequent compile-only failure exposed one legacy Affix pointer access; it was adapted to the identical +0x38 safe-pointer object member and added to the focused regression run."
+ ]
+}

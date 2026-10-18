@@ -74,7 +74,7 @@ void side(void*raw,autotest::Capture&out,bool ours){const Case&c=*static_cast<Ca
  new(&affix->m_Effects)TArrayList<CEffect*>(2);for(unsigned i=0;i<seed%6;++i)affix->m_Effects.add(reinterpret_cast<CEffect*>(es[i]));if((seed&16)&&affix->m_Effects.size())affix->m_Effects.m_nCapacity=(seed/8)%2;
  new(&affix->m_ApplicableUnitTypes)TArrayList<unsigned>(2);for(unsigned i=0;i<seed%6;++i)affix->m_ApplicableUnitTypes.add((i+seed/3)%10);if((seed&16)&&affix->m_ApplicableUnitTypes.size())affix->m_ApplicableUnitTypes.m_nCapacity=seed%2;
  for(unsigned i=0;i<5;++i){CEffect*e=reinterpret_cast<CEffect*>(es[i]);e->m_flag33=(i+seed)%2;e->m_Owner.m_pObject=(i+seed)%3?reinterpret_cast<CBaseUnit*>(us[i%2]):NULL;}
- affix->m_pOwner=seed&1?reinterpret_cast<CBaseUnit*>(us[0]):NULL;affix->m_iOwnerSafePointerId=7;affix->m_pSkillOwner=seed&1?reinterpret_cast<CSkill*>(ss[0]):NULL;affix->m_iSkillOwnerSafePointerId=8;affix->m_pEffectManager=seed&1?reinterpret_cast<CEffectManager*>(ms[0]):NULL;affix->m_iEffectManagerSafePointerId=9;
+ affix->m_Owner.m_pObject=seed&1?reinterpret_cast<CBaseUnit*>(us[0]):NULL;affix->m_Owner.m_nIndex=7;affix->m_SkillOwner.m_pObject=seed&1?reinterpret_cast<CSkill*>(ss[0]):NULL;affix->m_SkillOwner.m_nIndex=8;affix->m_EffectManager.m_pObject=seed&1?reinterpret_cast<CEffectManager*>(ms[0]):NULL;affix->m_EffectManager.m_nIndex=9;
  unsigned durations[]={0xbf800000,0x80000000,0,0x3f000000,0x3f800000,0x7f800000,0x7fc00001};float dt[]={-1,0,0.25f,1,2};std::memcpy(&affix->m_fDuration,&durations[(seed/2)%7],4);float elapsed=dt[(seed/3)%5];float expected=affix->m_fDuration;bool expectedAlive=true;if(!(expected<0)){expected-=elapsed;if(expected<=0){expected=0;expectedAlive=false;}}
  unsigned sourceKind=(seed/4)%3;
  if(c.mode==6){
@@ -82,14 +82,14 @@ void side(void*raw,autotest::Capture&out,bool ours){const Case&c=*static_cast<Ca
     if(addressPoint!=reinterpret_cast<void**>(originalCharacterVTable+2*sizeof(void*))||addressPoint[-2]!=NULL||addressPoint[-1]!=&originalCharacterRTTI||dynamic_cast<CCharacter*>(characterWitness.base())!=characterWitness.character()){
         out.issue=autotest::Capture::InvalidReport;return;
     }
-    affix->m_pOwner=sourceKind==0?NULL:sourceKind==1?reinterpret_cast<CBaseUnit*>(us[0]):characterWitness.base();
+    affix->m_Owner.m_pObject=sourceKind==0?NULL:sourceKind==1?reinterpret_cast<CBaseUnit*>(us[0]):characterWitness.base();
  }
  CBaseUnit*newOwner=(seed/2)%3==0?NULL:reinterpret_cast<CBaseUnit*>(us[(seed/2)%2]);CSkill*newSkill=(seed/2)%3==0?NULL:reinterpret_cast<CSkill*>(ss[(seed/2)%2]);CEffectManager*newManager=reinterpret_cast<CEffectManager*>(ms[(seed/2)%2]);
  expectedSource=c.mode==6&&sourceKind==2?characterWitness.character():NULL;
- expectedOwner=affix->m_pOwner;
+ expectedOwner=affix->m_Owner.m_pObject;
  expectedReceiver=newManager->getOwnerReference().getObject();
  unsigned wantedValid=0,wantedApply=0;
- if(c.mode==6&&affix->m_pEffectManager!=newManager&&expectedReceiver){
+ if(c.mode==6&&affix->m_EffectManager.m_pObject!=newManager&&expectedReceiver){
     wantedValid=affix->m_Effects.size();
     for(unsigned i=0;i<wantedValid;++i)if((seed+id(affix->m_Effects[i]))%3!=0)++wantedApply;
  }
@@ -107,7 +107,7 @@ void side(void*raw,autotest::Capture&out,bool ours){const Case&c=*static_cast<Ca
     out.add(&sourceKind,4);int sourceIdentity=id(expectedSource);out.add(&sourceIdentity,4);out.add(&validCalls,4);out.add(&applyCalls,4);
  }
  if(c.mode==1&&(result!=expectedAlive||std::memcmp(&expected,&affix->m_fDuration,4)))out.issue=autotest::Capture::InvalidReport;
- out.add(&result,1);out.add(&affix->m_fDuration,4);void*p[]={affix->m_pOwner,affix->m_pSkillOwner,affix->m_pEffectManager};for(unsigned i=0;i<3;++i){int v=id(p[i]);out.add(&v,4);}out.add(&affix->m_iOwnerSafePointerId,4);out.add(&affix->m_iSkillOwnerSafePointerId,4);out.add(&affix->m_iEffectManagerSafePointerId,4);for(unsigned i=0;i<5;++i)out.add(&reinterpret_cast<CEffect*>(es[i])->m_flag33,1);
+ out.add(&result,1);out.add(&affix->m_fDuration,4);void*p[]={affix->m_Owner.m_pObject,affix->m_SkillOwner.m_pObject,affix->m_EffectManager.m_pObject};for(unsigned i=0;i<3;++i){int v=id(p[i]);out.add(&v,4);}out.add(&affix->m_Owner.m_nIndex,4);out.add(&affix->m_SkillOwner.m_nIndex,4);out.add(&affix->m_EffectManager.m_nIndex,4);for(unsigned i=0;i<5;++i)out.add(&reinterpret_cast<CEffect*>(es[i])->m_flag33,1);
  affix->m_Effects.~TArrayList<CEffect*>();affix->m_ApplicableUnitTypes.~TArrayList<unsigned>();
 }
 void original(void*p,autotest::Capture&o){side(p,o,false);}void replacement(void*p,autotest::Capture&o){side(p,o,true);}

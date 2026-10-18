@@ -22,7 +22,7 @@ public:
                TRepository<std::wstring>* repository);
     CDataValue(CDataValue* source, TRepository<std::wstring>* repository);
     void SetDataValueName(std::wstring& name);
-    void SetValueByString(const std::wstring& value, std::wstring& type);
+    void SetValueByString(const std::wstring& type, std::wstring& value);
     void Copy(CDataValue* source, TRepository<std::wstring>* repository);
     virtual ~CDataValue();
     void SetValueString(const wchar_t* value);

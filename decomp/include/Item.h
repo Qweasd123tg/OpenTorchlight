@@ -33,6 +33,7 @@ public:
 
 protected:
     friend class CEnchantMenu;
+    friend class CDamageShape;
     CSoundBank* m_pSoundBank;
     float m_fForcedActiveTime;
     CEGUI::Window* m_pItemText;

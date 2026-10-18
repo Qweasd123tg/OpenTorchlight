@@ -55,6 +55,8 @@ public:
     void setQueryMask(OGRE_UTILITIES::EQUERYMASK mask);
     void setWireframe(bool wireframe);
 
+    void loadModel(std::wstring modelPath, std::wstring resourceGroup, bool flag0, bool flag1, bool flag2);
+
     void reloadAnimations();
 
     void clearAnimations();

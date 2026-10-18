@@ -15,7 +15,17 @@ void CParticle::SetParticleDirection(const Ogre::Vector3&, const Ogre::Vector3&)
 
 bool CParticle::updateLevelObject(float delta, Ogre::Camera* camera, const Ogre::Vector3& position)
 {
-    return updateLevelObject(delta, camera, position);
+    m_fUnknown120 -= delta;
+    if (m_fUnknown120 <= 0.0f || !m_bVisible)
+    {
+        if (m_bUnknown128 && m_bVisible)
+            if (getNumberOfParticlesUpdating(true) != 0)
+                return true;
+        m_bUnknown126 = false;
+        Stop(true);
+        return false;
+    }
+    return true;
 }
 
 CParticle::~CParticle()
@@ -82,4 +92,21 @@ void CParticle::getAllEmitters(TArrayList<ParticleUniverse::ParticleEmitter*>& e
                     emitters.add(technique->getEmitter(k));
         }
     }
+}
+
+
+CParticle::CParticle(CParticlePreloader* preloader, const std::wstring& file,
+                     CResourceManager* resources)
+    : CPositionableObject(resources, NULL), m_pParticleCache(NULL),
+      m_pUnknown110(file)
+{
+    m_pParticlePreloader = preloader;
+    m_iUnknown118 = 0;
+    m_iUnknown11C = 0;
+    m_fUnknown120 = 0.0f;
+    m_bUnknown124 = false;
+    m_bUnknown125 = true;
+    m_bUnknown126 = false;
+    m_bUnknown127 = false;
+    m_bUnknown128 = false;
 }

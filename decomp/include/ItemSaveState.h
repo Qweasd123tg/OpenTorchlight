@@ -1,6 +1,7 @@
 #ifndef ITEMSAVESTATE_H
 #define ITEMSAVESTATE_H
 #include "RunicCore.h"
+#include <cstdio>
 #include <OgreVector3.h>
 #include <OgreMatrix4.h>
 #include <string>
@@ -14,6 +15,7 @@ class CItemSaveState : public CRunicCore
 public:
     CItemSaveState();
     virtual ~CItemSaveState();
+    void save(FILE* file);
     std::wstring m_sItemName;
     std::wstring m_sStateString18;
     std::wstring m_sStateString20;

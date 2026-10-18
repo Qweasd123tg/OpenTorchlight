@@ -12,6 +12,7 @@ class CBaseUnit;
 class CCharacter;
 class CResourceManager;
 class CEffect;
+class CAffix;
 
 // SkillEffectAndAffixes.cpp: original CRunicCore base, size 0x98.
 class CSkillEffectAndAffixes : public CRunicCore
@@ -42,6 +43,9 @@ public:
     virtual ~CSkillEffectAndAffixes();
     CSkillEffectAndAffixes(CSkill* skill, CDataGroup* data, CSkillEffectAndAffixes* source);
     void setDurationOverride(float duration);
+    void createAffixesForDisplay(CResourceManager* resources);
+    bool isDamaging();
+    std::wstring getDisplayStats();
     bool removeAffixesAndEffects(CBaseUnit* unit, CCharacter* character);
     void appendName(const std::wstring& name);
     bool effectsTargetEnemy(CBaseUnit* unit);
@@ -56,7 +60,7 @@ public:
     CSkill* m_pSkill; // +0x10
     TArrayList<CSkillAffixData*> m_affixData; // +0x18
     TArrayList<CSkillEffectData*> m_effectData; // +0x30
-    unsigned char m_unrecovered48[0x18];
+    TArrayList<CAffix*> m_displayAffixes; // +0x48
     TArrayList<std::wstring> m_affixNames; // +0x60
     TArrayList<std::wstring> m_effectNames; // +0x78
     std::wstring m_name; // +0x90

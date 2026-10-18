@@ -6,6 +6,8 @@
 // and return types are placeholders until the class's own TU is recovered.
 
 #include <OgreMatrix4.h>
+#include <OgreAxisAlignedBox.h>
+#include "CullingBounds.h"
 #include <OgreVector3.h>
 #include "Character.h"
 #include "Item.h"
@@ -42,16 +44,8 @@ public:
     int m_iUnknown114;
     bool m_bUnknown118;
     unsigned char m_gap119[0x7];
-    int m_iUnknown120;
-    int m_iUnknown124;
-    int m_iUnknown128;
-    int m_iUnknown12C;
-    int m_iUnknown130;
-    int m_iUnknown134;
-    int m_iUnknown138;
-    unsigned char m_gap13C[0x4] __attribute__((aligned(4)));
-    long long m_iUnknown140;
-    void* m_pUnknown148;
+    Ogre::AxisAlignedBox m_bounds; // +0x120
+    CCullingBounds* m_cullingBounds; // +0x148
     bool m_bUnknown150;
 
 public:
