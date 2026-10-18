@@ -7,6 +7,7 @@ This is deliberately a shallow declaration scanner, not a C++ parser or a type o
 from __future__ import annotations
 
 from dataclasses import dataclass
+from fractions import Fraction
 from pathlib import Path
 import re
 import hashlib
@@ -41,6 +42,8 @@ class Declaration:
     array_width: int = 0
     int_array_values: tuple[int, ...] | None = None
     whole_header: bool = False
+    scalar_array_bytes: bytes | None = None
+    asm_symbol: str | None = None
 
 
 @dataclass(frozen=True)
@@ -71,6 +74,40 @@ def _mask(text):
                   lambda m: re.sub(r"[^\n]", " ", m[0]), masked, flags=re.M)
 
 
+def _float32_literal_bytes(token):
+    """Round a bounded decimal float literal exactly, including ties/subnormals."""
+    if (len(token) > 32 or not re.fullmatch(
+            r"-?(?:(?:0|[1-9][0-9]*)\.[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]{1,2})?[fF]", token)):
+        return None
+    value = abs(Fraction(token[:-1]))
+    sign = (1 << 31) if token.startswith("-") else 0
+    if not value:
+        return sign.to_bytes(4, "little")
+    numerator, denominator = value.numerator, value.denominator
+    exponent = numerator.bit_length() - denominator.bit_length()
+    if ((exponent >= 0 and numerator < denominator << exponent)
+            or (exponent < 0 and numerator << -exponent < denominator)):
+        exponent -= 1
+    quantum = max(exponent - 23, -149)
+    if quantum < 0:
+        numerator <<= -quantum
+    else:
+        denominator <<= quantum
+    significand, remainder = divmod(numerator, denominator)
+    if remainder * 2 > denominator or (remainder * 2 == denominator and significand & 1):
+        significand += 1
+    if significand >= 1 << 24:
+        significand >>= 1
+        quantum += 1
+    if significand < 1 << 23:
+        bits = significand
+    elif quantum + 23 > 127:
+        return None
+    else:
+        bits = ((quantum + 150) << 23) | (significand - (1 << 23))
+    return (sign | bits).to_bytes(4, "little")
+
+
 def _scan(text, *, typedefs=False):
     """Only simple declarations outside function bodies; exact source slices.
 
@@ -91,10 +128,12 @@ def _scan(text, *, typedefs=False):
             cls = re.fullmatch(r"(?:class|struct|union)\s+(?:__attribute__\(\(\w+\)\)\s+)?(\w+)\s*(?::[^{};]*)?", head)
             array = re.fullmatch(r"(?:static\s+)?(?:const\s+)?std::(?:w?string)\s+(\w+)\s*\[\s*(?:[0-9]+)?\s*\]\s*=", head)
             integer_array = re.fullmatch(r"static\s+const\s+int\s+(\w+)\s*\[\s*([1-9][0-9]{0,3})\s*\]\s*=", head)
+            scalar_array = re.fullmatch(r"static\s+const\s+(bool|float)\s+(\w+)\s*\[\s*([1-9][0-9]{0,3})\s*\]\s*=", head)
             kind, name = (("namespace", ns[1]) if ns else
                           ("class", cls[1]) if cls else
                           ("string_array", array[1]) if array else
-                          ("int_array", integer_array[1]) if integer_array else ("body", ""))
+                          ("int_array", integer_array[1]) if integer_array else
+                          ("scalar_array", scalar_array[2]) if scalar_array else ("body", ""))
             scopes = tuple((k, n) for k, n, *_ in stack)
             stack.append((kind, name, start, i, scopes))
             start = i + 1
@@ -130,6 +169,27 @@ def _scan(text, *, typedefs=False):
                                 declaration = text[beginning + first.start():i + 1 + tail.end()].strip()
                                 qualified = "::".join([n for _, n in scopes] + [name])
                                 declarations.append(Declaration(qualified, "data", declaration, scopes, 0, numbers))
+                if kind == "scalar_array" and all(k == "namespace" for k, _ in scopes):
+                    # Only complete literal initializers, with exact ELF bytes
+                    # required at use. No expressions, casts, macros or zero fill.
+                    array_head = masked[beginning:opening]
+                    scalar_type = re.search(r"static\s+const\s+(bool|float)\b", array_head)[1]
+                    extent = int(re.search(r"\[\s*([1-9][0-9]{0,3})\s*\]", array_head)[1])
+                    values = text[opening + 1:i]
+                    tail = re.match(r"\s*;", masked[i + 1:])
+                    if tail and extent <= 4096 and len(values) <= 65536:
+                        tokens = values.strip().removesuffix(",").split(",")
+                        chunks = []
+                        for value in tokens:
+                            value = value.strip()
+                            chunks.append((b"\x01" if value == "true" else b"\x00" if value == "false" else None)
+                                          if scalar_type == "bool" else _float32_literal_bytes(value))
+                        if len(chunks) == extent and all(c is not None for c in chunks):
+                            first = re.search(r"\S", masked[beginning:opening])
+                            declaration = text[beginning + first.start():i + 1 + tail.end()].strip()
+                            qualified = "::".join([n for _, n in scopes] + [name])
+                            declarations.append(Declaration(qualified, "data", declaration, scopes,
+                                                            scalar_array_bytes=b"".join(chunks)))
                 if kind == "class":
                     end = i + 1
                     semicolon = re.match(r"\s*;", masked[end:])
@@ -170,7 +230,12 @@ def _scan(text, *, typedefs=False):
                 callback = re.fullmatch(r"typedef\s+([^;{}]+?)\s*\(\s*\*\s*(\w+)\s*\)\s*\(([^;{}]*)\)", clean)
                 typedef = re.fullmatch(r"typedef\s+[^;{}()]+?\s+(\w+)", clean)
                 whole_header = False
-                if callback and typedefs:
+                asm_symbol = None
+                asm_alias = re.fullmatch(r'extern\s+std::wstring\s+(\w+)\s+__asm__\(\s*"([A-Za-z_]\w*)"\s*\)\s*;', original)
+                if asm_alias and all(k == "namespace" for k, _ in scopes):
+                    name, kind, width = asm_alias[1], "data", 0
+                    asm_symbol = asm_alias[2]
+                elif callback and typedefs:
                     name, kind, width = callback[2], "callback", 0
                 elif typedef and typedefs:
                     name, kind, width = typedef[1], "typedef", 0
@@ -207,7 +272,7 @@ def _scan(text, *, typedefs=False):
                         width = 4 if re.search(r"\bwchar_t\b", typ) else 1
                 qualified = "::".join([n for _, n in scopes] + [name])
                 declarations.append(Declaration(qualified, kind, original, scopes, width,
-                                                whole_header=whole_header))
+                                                whole_header=whole_header, asm_symbol=asm_symbol))
             start = i + 1
     return declarations, types
 
@@ -510,6 +575,11 @@ class ContextIndex:
     OGRE_VALUE_HEADER_SHA256 = {'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf', 'OgreVector3.h': '3eb0c292006d0d57cb4756169f0390fea22e4d14905be127d353be5d4b493051', 'OgreQuaternion.h': '58fee85f3032d4d0d1e5de279b5cf8e45734a8e40fbe5961a60fd4cbfeddb0b9', 'OgreString.h': '9cdc1263f53e0f5aa49e115e6e3dcaad4b90140a6b5c8ceeab5d95a5fd586ad7', 'OgreMatrix4.h': '9d379f1bd2be7be264de50fed7b6ddad034af06e30eb30a3c2ce752f36e8d416', 'OgreMath.h': '01516be146b17a6a3700f2001f2f33e89953b0f738b5c23ca4475075f33b88f1'}
     OGRE_CONFIG_SHA256 = '0a11e5cd5b3dafe9f832362747afb8147f24f912c88a1e31a303dd466ca47317'
 
+    OGRE_VALUE_HEADER_SHA256.update({
+        'OgreColourValue.h': 'c0d1e6f49898e76c710af5ec486252123bd40b58533f08ad6295a33654587cbf',
+        'OgreMovableObject.h': '05f263df5d38820f92812185506ed9cbb285ab49f1af01eb8a948b26006fe88c',
+    })
+
     SAFE_POINTER_HEADER_SHA256 = "f9b4be018fdd063427743f5035c9b297f883475e373a3610b7fdeb2450d9bb47"
 
     DIAGNOSTIC_BYTES = 32
@@ -590,7 +660,7 @@ class ContextIndex:
                 or _address(g["address"]) < address < _address(g["address"]) + g.get("size", 0))]
 
     def _library_data(self, obj):
-        """Only version-proven imported std/__gnu_cxx objects, not missing globals.
+        """Version-proven imported C++ objects and the three stdio stream pointers.
 
         Require agreement of DB scope, actual Itanium namespace encoding, a
         defined nonlocal ELF object at the same base/name, GLIBCXX version on
@@ -601,7 +671,11 @@ class ContextIndex:
             return None
         raw = obj.get("name", "").split("@", 1)[0]
         readable = obj.get("demangled") or ""
-        if readable.startswith("std::") and re.match(r"^_ZN(?:St(?=[0-9])|Ss(?=[0-9])|Sb(?=I))", raw):
+        if raw in ("stdin", "stdout", "stderr") and readable.split("@", 1)[0] == raw:
+            if obj.get("size") != 8:
+                return None
+            owner = "stdio"
+        elif readable.startswith("std::") and re.match(r"^_ZN(?:St(?=[0-9])|Ss(?=[0-9])|Sb(?=I))", raw):
             owner = "std"
         elif readable.startswith("__gnu_cxx::") and re.match(r"^_ZN9__gnu_cxx(?=[0-9IE])", raw):
             owner = "__gnu_cxx"
@@ -610,8 +684,11 @@ class ContextIndex:
         base = _address(obj["address"])
         if self.copy_data.get(base) != raw:
             return None
+        if owner == "stdio" and self.elf_object_sizes.get((base, raw)) != {8}:
+            return None
         for name in sorted(self.elf_object_names.get((base, raw), ())):
-            version = re.search(r"@{1,2}(GLIBCXX_[0-9]+(?:\.[0-9]+)*)$", name)
+            version = re.search(r"@{1,2}(GLIBC_2\.2\.5)$" if owner == "stdio" else
+                                r"@{1,2}(GLIBCXX_[0-9]+(?:\.[0-9]+)*)$", name)
             if version:
                 return f"{owner}; borrowed ELF STT_OBJECT + {version[1]} + matching R_X86_64_COPY"
         return None
@@ -818,10 +895,13 @@ class ContextIndex:
             "_ZN4Ogre7Vector36UNIT_ZE": ("Ogre::Vector3::UNIT_Z", 12, "OgreVector3.h", "Vector3", "UNIT_Z"),
             "_ZN4Ogre4Math12POS_INFINITYE": ("Ogre::Math::POS_INFINITY", 4, "OgreMath.h", "Real", "POS_INFINITY"),
             "_ZN4Ogre7Vector36UNIT_YE": ("Ogre::Vector3::UNIT_Y", 12, "OgreVector3.h", "Vector3", "UNIT_Y"),
+            "_ZN4Ogre7Vector315NEGATIVE_UNIT_YE": ("Ogre::Vector3::NEGATIVE_UNIT_Y", 12, "OgreVector3.h", "Vector3", "NEGATIVE_UNIT_Y"),
             "_ZN4Ogre7Matrix48IDENTITYE": ("Ogre::Matrix4::IDENTITY", 64, "OgreMatrix4.h", "Matrix4", "IDENTITY"),
             "_ZN4Ogre7Vector34ZEROE": ("Ogre::Vector3::ZERO", 12, "OgreVector3.h", "Vector3", "ZERO"),
             "_ZN4Ogre10Quaternion8IDENTITYE": ("Ogre::Quaternion::IDENTITY", 16, "OgreQuaternion.h", "Quaternion", "IDENTITY"),
             "_ZN4Ogre10StringUtil5BLANKE": ("Ogre::StringUtil::BLANK", 8, "OgreString.h", "String", "BLANK"),
+            "_ZN4Ogre11ColourValue5WhiteE": ("Ogre::ColourValue::White", 16, "OgreColourValue.h", "ColourValue", "White"),
+            "_ZN4Ogre13MovableObject24msDefaultVisibilityFlagsE": ("Ogre::MovableObject::msDefaultVisibilityFlags", 4, "OgreMovableObject.h", "uint32", "msDefaultVisibilityFlags"),
         }
         raw = obj.get("name", "")
         row = identities.get(raw)
@@ -862,14 +942,16 @@ class ContextIndex:
             declarations, _ = _scan(re.sub(r"\b_OgreExport\b", "", sources[header]))
         except (OSError, UnicodeError, KeyError):
             return None
-        expected = r"static\s+const\s+" + typ + r"\s+" + member + r"\s*;"
+        qualifier = "" if raw == "_ZN4Ogre13MovableObject24msDefaultVisibilityFlagsE" else r"const\s+"
+        expected = r"static\s+" + qualifier + typ + r"\s+" + member + r"\s*;"
         matches = [d for d in declarations if d.kind == "data" and d.qualified == label
                    and re.fullmatch(expected, _mask(d.text).strip())]
         if len(matches) != 1:
             return None
         return ("OGRE1.6.5 SDK declaration " + _mask(matches[0].text).strip()
                 + "; exact ELF object/COPY identity, pinned float/narrow-string profile, "
-                + str(size) + " bytes; eight SDK header pins and decomp/config.json SHA256 "
+                + str(size) + " bytes; " + str(len(self.OGRE_VALUE_HEADER_SHA256))
+                + " SDK header pins and decomp/config.json SHA256 "
                 + self.OGRE_CONFIG_SHA256 + "; referenced subobject offsets do not imply separate symbols")
 
     def _ogre_data(self, obj):
@@ -1053,6 +1135,12 @@ class ContextIndex:
             "TArrayList<float>":
                 (0x59fb40, 26, "_ZN10TArrayListIfE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<EEFFECT_STAT_MODIFIERS>":
+                (0x7e4740, 26, "_ZN10TArrayListI22EEFFECT_STAT_MODIFIERSE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<CDataGroup*>":
+                (0x85acd0, 26, "_ZN10TArrayListIP10CDataGroupE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<UNIONDATA32BIT>":
                 (0x70ca90, 26, "_ZN10TArrayListI14UNIONDATA32BITE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
@@ -1073,6 +1161,9 @@ class ContextIndex:
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<CBaseUnit*>":
                 (0xd49940, 26, "_ZN10TArrayListIP9CBaseUnitE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<CQuestDialogItem*>":
+                (0xd26480, 26, "_ZN10TArrayListIP16CQuestDialogItemE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<CQuestDialog*>":
                 (0xd1d3f0, 26, "_ZN10TArrayListIP12CQuestDialogE",
@@ -1439,9 +1530,19 @@ class ContextIndex:
                     gaps.append(f"Ambiguous header declarations for referenced data {name} ({address:#x})")
                     continue
                 for header, declaration in matches:
-                    if declaration.int_array_values is not None:
-                        expected = b"".join(n.to_bytes(4, "little", signed=True)
-                                            for n in declaration.int_array_values)
+                    if declaration.asm_symbol is not None:
+                        identity = (_address(obj["address"]), obj.get("name"), obj.get("size"), owner)
+                        section = self.image.section_at(identity[0])
+                        if (obj.get("name") != declaration.asm_symbol or obj.get("bind") != "local"
+                                or obj.get("size") != 8 or identity not in self.local_object_names
+                                or section is None or section.type != 8 or section.flags != 3
+                                or identity[0] + 8 > section.addr + section.size):
+                            gaps.append(f"Asm-labelled wstring {name} lacks exact local ELF identity/storage")
+                            continue
+                    if declaration.int_array_values is not None or declaration.scalar_array_bytes is not None:
+                        expected = (b"".join(n.to_bytes(4, "little", signed=True)
+                                             for n in declaration.int_array_values)
+                                    if declaration.int_array_values is not None else declaration.scalar_array_bytes)
                         base = _address(obj["address"])
                         section, available = self._available(base, [obj])
                         identity = (base, obj.get("name", ""), obj.get("size"), owner)
@@ -1449,7 +1550,8 @@ class ContextIndex:
                                 or obj.get("size") != len(expected) or section is None
                                 or available < len(expected)
                                 or self._read_bytes(base, len(expected)) != expected):
-                            gaps.append(f"Literal int array {name} lacks exact local ELF identity/size/read-only bytes")
+                            kind = "int" if declaration.int_array_values is not None else "scalar"
+                            gaps.append(f"Literal {kind} array {name} lacks exact local ELF identity/size/read-only bytes")
                             continue
                     if declaration.array_width:
                         widths.add(declaration.array_width)

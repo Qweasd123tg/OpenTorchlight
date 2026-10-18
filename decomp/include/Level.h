@@ -56,6 +56,7 @@ enum ELevelEntryType { ELevelEntryType_GEN_LAST = 0x7fffffff };
 // level.cpp is recovered. Size 0x2f0 follows CGameClient::loadMenuLevel allocation.
 class CLevel : public CRunicCore
 {
+    friend class CSpawnClassData;
     friend class CGameClient;
 public:
     void setNonLightStaticGeometryVisible(bool); // 0x935e60

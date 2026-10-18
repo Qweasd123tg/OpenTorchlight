@@ -6,8 +6,11 @@
 #include <OgreNode.h>
 #include <OgreColourValue.h>
 #include <string>
+class CSceneNodeObject;
 class CWeaponTrail : public CRunicCore {
 public:
+    CWeaponTrail(Ogre::SceneManager*, const std::string&, int, float);
+    void update(float, Ogre::Vector3*, Ogre::Vector3*, bool, CSceneNodeObject*);
     virtual ~CWeaponTrail();
     void clear();
     void setActive(bool active);

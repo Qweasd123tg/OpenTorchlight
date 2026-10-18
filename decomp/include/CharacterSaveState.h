@@ -19,7 +19,8 @@ public:
     unsigned char m_padding19[7];
     long long m_guid20;
     long long m_guid28;
-    bool m_flag30, m_flag31, m_flag32, m_flag33, m_flag34;
+    bool m_flag30, m_flag31, m_flag32, m_flag33;
+    unsigned char m_flag34; // +0x34, player cheat marker
     unsigned char m_padding35[3];
     int m_value38;
     unsigned char m_padding3C[4];
@@ -32,7 +33,9 @@ public:
     int m_valueD0, m_valueD4, m_valueD8, m_valueDC;
     float m_hp; // +0xe0
     unsigned int m_valueE4, m_valueE8;
-    unsigned char m_unrecoveredEC[0x118-0xec];
+    unsigned char m_unrecoveredEC[0xc];
+    float m_playTime; // +0xf8
+    unsigned char m_unrecoveredFC[0x1c];
     std::wstring m_knownSpells[4]; // +0x118
     unsigned char m_unrecovered138[0x184-0x138];
     int m_value184;

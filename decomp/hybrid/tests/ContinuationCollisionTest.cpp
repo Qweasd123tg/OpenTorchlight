@@ -62,7 +62,8 @@ void side(void* raw,autotest::Capture& out,bool ours){
   Ogre::Vector3 start=starts[c.seed%8],end=start;end.y=c.seed%3==0?start.y:c.seed%3==1?-4:0.25f;
   if(c.seed%8==4){start=Ogre::Vector3(3,1,1);end=Ogre::Vector3(-3,1,1);}
   Ogre::Vector3 minimum(-10),maximum(10);if(c.seed%11==0){minimum=Ogre::Vector3(100);maximum=Ogre::Vector3(101);}
-  std::vector<unsigned> faces;if(c.seed%9){faces.push_back(2);faces.push_back(0);if(c.seed%2)faces.push_back(1);}
+  // Subset indices must name existing mesh faces, including for empty meshes.
+  std::vector<unsigned> faces;if(c.seed%9&&!p.m_IndicesA.empty()){faces.push_back(2);faces.push_back(0);if(c.seed%2)faces.push_back(1);}
   float radius=c.seed%4==0?0:c.seed%4==1?0.25f:c.seed%4==2?1:3;
   if(c.op==5)collisionInvoke<bool(*)(CCollisionList*,const Ogre::Vector3&,const Ogre::Vector3&,const Ogre::Vector3&,const Ogre::Vector3&,Ogre::Vector3&,Ogre::Vector3&,unsigned&,Ogre::Vector3&,float&),CCollisionList*,const Ogre::Vector3&,const Ogre::Vector3&,const Ogre::Vector3&,const Ogre::Vector3&,Ogre::Vector3&,Ogre::Vector3&,unsigned&,Ogre::Vector3&,float&>(out,ours?&cnRay:&coRay,&p,start,end,minimum,maximum,hit,normal,material,color,distance);
   if(c.op==6)collisionInvoke<bool(*)(CCollisionList*,const std::vector<unsigned>&,const Ogre::Vector3&,const Ogre::Vector3&,const Ogre::Vector3&,const Ogre::Vector3&,Ogre::Vector3&,Ogre::Vector3&,unsigned&,Ogre::Vector3&,float&),CCollisionList*,const std::vector<unsigned>&,const Ogre::Vector3&,const Ogre::Vector3&,const Ogre::Vector3&,const Ogre::Vector3&,Ogre::Vector3&,Ogre::Vector3&,unsigned&,Ogre::Vector3&,float&>(out,ours?&cnRaySubset:&coRaySubset,&p,faces,start,end,minimum,maximum,hit,normal,material,color,distance);

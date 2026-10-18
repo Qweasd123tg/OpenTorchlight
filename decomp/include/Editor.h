@@ -16,7 +16,7 @@ class CEditorObjectManager;
 class CEditorScene;
 class CResourceManager;
 class CSettings;
-namespace Ogre { class Camera; }
+namespace Ogre { class Camera; class Viewport; }
 class CUndo;
 class CPOV;
 class CGameClient;
@@ -35,6 +35,8 @@ public:
 
     CResourceManager* getResourceManager() { return m_pUnknown128; }
 
+    void InitEditor(iEditorResourceManager*, Ogre::Viewport*);
+    void releaseResources();
     void addUndo(CUndo* undo, bool clearRedo);
     void addRedo(CUndo* redo);
     CEditorScene* GetEditorScene(std::wstring name);

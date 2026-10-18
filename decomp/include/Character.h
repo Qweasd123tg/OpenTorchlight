@@ -19,7 +19,7 @@ class CGenericModel;
 class CCharacterSaveState;
 class CWardrobe;
 class CParticle;
-namespace Ogre { class Billboard; }
+namespace Ogre { class Billboard; class Bone; }
 namespace CEGUI { class Window; }
 class CPathController;
 class CSpawnClass;
@@ -56,6 +56,8 @@ enum EAIState
 class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
+    friend class CSpawnClassData;
+    friend class CSkillEvent;
     friend class CLevel;
     friend class CSkill;
     friend class CUnitSpawner;
@@ -66,7 +68,32 @@ class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
     friend class CQuestUnitData;
 friend class CPlayer;
 friend class CGameClient;
+    friend class CBreakable;
 public:
+    void executeProcs(EEFFECT_TYPE type, CBaseUnit* target);
+    void applyDamageEffects(CCharacter* target, float amount, int (*damages)[2], unsigned int flags, bool value);
+    int maxDamage(CAttackDescription* attack, CCharacter* target);
+    void deleteUnitSpecificData();
+    void updateBonePositions();
+    void calculateActiveRange(const Ogre::Vector3& position);
+    void updatePathing(float elapsed);
+    void displayPath();
+    bool attack();
+    void updatePathFollowing(bool value);
+    bool attemptJumpDown();
+    void createSpecificUnitThemeParticles(CUnitTheme* theme);
+    void createPathfinder(CLevel& level);
+    void updateMotion(float elapsed, CLevel& level);
+    void createAdditionalUnitThemeParticles();
+    void setRimlight(std::wstring value);
+    int modifyDamage(int damage, EDAMAGE_TYPES type, int value, float scale);
+    bool rollCritical(CCharacter* target);
+    void updateInTownTimer(float elapsed, CLevel& level);
+    void getItem(CItem* item, CLevel& level);
+    void revertTransformation();
+    void applyInstantEffect(CEffect* effect);
+    void updateEffects(float elapsed, CLevel& level);
+    bool availableForCommand();
     void makeChampion(const std::wstring& name, int level, std::wstring type);
     void completeDeath(CLevel& level);
     void applyDamage(CLevel& level, const Ogre::Vector3& position, float damage,
@@ -127,10 +154,13 @@ public:
         CResourceManager* m_resources; // +0x10
         CParticle* m_particle; // +0x18
         bool m_stopOnDeath; // +0x20
-        unsigned char m_Padding21[0x17];
+        unsigned char m_Padding21[3];
+        int m_animationIndex; // +0x24
+        Ogre::Vector3 m_offset; // +0x28
+        unsigned char m_Padding34[4];
         Ogre::SceneNode* m_node; // +0x38
         std::string m_name; // +0x40
-        void* m_nodeOwner; // +0x48
+        Ogre::Bone* m_nodeOwner; // +0x48
         CUnitTheme* m_theme; // +0x50
         bool m_stopWhenHidden; // +0x58
         bool m_stopFlag59;
@@ -138,6 +168,7 @@ public:
         unsigned char m_Padding5B[5];
     };
 
+    void configureParticleTrigger(CParticleAnimationTrigger* trigger, unsigned int bone);
     void stopParticles(bool immediate);
     bool transferEffect(CCharacter* source, CBaseUnit* owner, CEffect* effect);
     void updateVisualEquippedItems(float elapsed);
@@ -319,7 +350,7 @@ public:
     virtual bool missileApplyingEffects(CMissile* missile, CCharacter* target, const Ogre::Vector3* position,
                                         float damageScale, float effectScale);
     virtual bool getCharacterCanBeHarmedByMissile(CMissile* missile, CCharacter* target);
-    virtual bool missileValidateTargetBeforeLaunch(CMissile* missile, CPositionableObject* target,
+    virtual CPositionableObject* missileValidateTargetBeforeLaunch(CMissile* missile, CPositionableObject* target,
                                                    Ogre::Vector3& position);
     virtual void equipmentPickedUp(CEquipment* equipment);
     virtual void equipmentDropped(CEquipment* equipment);
@@ -434,13 +465,15 @@ public:
 
 private:
     friend class CGameUI;
-    friend class CPlayer;
+    friend class CQuestDialog;
+    friend class CSkillEffectAndAffixes;
     friend class CMonster;
     float m_pathTime; // +0x1e8
     float m_damageOverTimeTaken; // +0x1ec
     unsigned char m_Padding1F0[4];
     bool m_groundFlag; // +0x1f4
-    unsigned char m_Padding1F5[0xb];
+    bool m_attackFlag1F5;
+    unsigned char m_Padding1F6[0xa];
 public:
     CGenericModel* m_pUnitModel;
     CGenericModel* m_pPaperdollModel;
@@ -458,16 +491,26 @@ private:
     bool m_moveInputHeld;
     bool m_skillLooping; // +0x267
     CAstarPathfinder* m_pathfinder; // +0x268
-    unsigned char m_Padding270[0x8];
+    CPath* m_movementPath; // +0x270
     float m_pathGraceTime; // +0x278
-    unsigned char m_Padding27C[0x10];
+    unsigned char m_Padding27C[4];
+    float m_idleSoundTime; // +0x280
+    float m_fidgetTime; // +0x284
+    unsigned char m_Padding288[4];
     float m_walkingSpeed; // +0x28c
     float m_runningSpeed; // +0x290
     unsigned char m_Padding294[4];
     CSoundBank* m_levelSound; // +0x298
     unsigned char m_Padding2A0[8];
     unsigned int m_aiAnimation; // +0x2a8
-    unsigned char m_Padding2AC[0x3c];
+    unsigned char m_Padding2AC[4];
+    Ogre::Bone* m_rightHandBone; // +0x2b0
+    Ogre::Bone* m_fishingBone;
+    Ogre::Bone* m_leftHandBone;
+    Ogre::Bone* m_shieldBone;
+    Ogre::Bone* m_leftShoulderBone;
+    Ogre::Bone* m_rightShoulderBone;
+    Ogre::Bone* m_headBone; // +0x2e0
 public:
     Ogre::SceneNode* m_pRightHandNode;
 private:
@@ -483,13 +526,13 @@ private:
     bool m_returningToTown; // +0x321
     unsigned char m_Padding322[0xe];
     EAIState m_eAIState;
-    unsigned char m_Padding334[0x4];
+    int m_aiType; // +0x334
     EAlignment m_alignment; // +0x338
     unsigned char m_Padding33C[0x4];
     TSafePointer<CCharacter> m_targetCharacter; // +0x340
     TSafePointer<CItem> m_targetItem; // +0x350
     float m_sightRange; // +0x360
-    unsigned char m_Padding364[4];
+    float m_nearWalkRadius; // +0x364, NEAR_WALK_RADIUS
     float m_viewAngle; // +0x368
     unsigned char m_Padding36C[0x4];
     float m_followRange; // +0x370
@@ -500,7 +543,9 @@ private:
     unsigned char m_Padding37E[0x2];
     float m_skillTime; // +0x380
     bool m_skillEventTriggered; // +0x384
-    unsigned char m_Padding385[0xb];
+    unsigned char m_Padding385[3];
+    float m_playTime; // +0x388
+    unsigned char m_Padding38C[4];
     CAttackDescription* m_attack; // +0x390
     CSkill* m_activeSkill; // +0x398
     CSkill* m_previousSkill; // +0x3a0
@@ -511,7 +556,9 @@ private:
     long long m_leftMouseSkillGuid;
     std::wstring m_knownSpells[4]; // +0x3c8
     int m_knownSpellLevels[4]; // +0x3e8
-    unsigned char m_Padding3F8[0x1c];
+    std::vector<CAttackDescription*> m_attacks; // +0x3f8
+    bool m_flag410;
+    unsigned char m_padding411[3];
     float m_fHPFloat;
     int m_maxHPBase; // +0x418
     int m_maxHPBonus; // +0x41c
@@ -556,13 +603,16 @@ private:
     float m_attackRadius; // +0x4e0
     unsigned char m_Padding4E4[4];
     CWardrobe* m_wardrobe; // +0x4e8
-    unsigned char m_Padding4F0[0x38];
+    std::wstring m_wardrobeNames[6]; // +0x4f0
+    int m_aiThinkTier; // +0x520
+    float m_aiThinkTime; // +0x524
     float m_currentOpacity; // +0x528
     bool m_characterVisible; // +0x52c
     unsigned char m_Padding52D[0x1];
     bool m_bInvulnerable;
     friend class CEquipment;
-    unsigned char m_Padding52F[0x2];
+    unsigned char m_Padding52F;
+    bool m_castsDynamicShadow; // +0x530
     bool m_damageShapeEnabled; // +0x531, checked by CDamageShape callback
     unsigned char m_Padding532[0x6];
     std::vector<bool> m_followerFlags; // +0x538
@@ -587,11 +637,13 @@ private:
     unsigned char m_Padding68C[4];
     long long m_originalUnitGuid; // +0x690
     CWeaponTrail* m_weaponTrails[4]; // +0x698
-    unsigned char m_Padding6B8[8];
+    CSpawnClass* m_pendingPetSpawn; // +0x6b8
     CSpawnClass* m_merchantSpawnClass; // +0x6c0
     int m_merchantMinimum; // +0x6c8
     int m_merchantMaximum; // +0x6cc
-    unsigned char m_Padding6D0[0x31];
+    unsigned char m_Padding6D0[0x18];
+    std::vector<std::wstring> m_additionalParticles; // +0x6e8
+    bool m_flag700;
     bool m_experienceDisabled; // +0x701
     bool m_champion; // +0x702
     union {
@@ -618,7 +670,8 @@ private:
     float m_facingAngle; // +0x76c
     unsigned char m_Padding770;
     bool m_keepPathWhenAIChanges; // +0x771
-    unsigned char m_Padding772[6];
+    bool m_alwaysActive; // +0x772
+    unsigned char m_Padding773[5];
 };
 
 #endif

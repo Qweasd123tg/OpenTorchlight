@@ -299,6 +299,32 @@ def patch_window_ok(ctx, address):
     return None
 
 
+def native_crt_aliases(image):
+    """The original local atexit wrapper used by CGame, absent from dynsym.
+
+    It tail-calls __cxa_atexit with the executable's DSO handle. Other local
+    functions retain their scoped linkage; no generic local-name fallback.
+    """
+    if getattr(image, "sha256", None) != elfimage.ORIGINAL_SHA256:
+        return {}
+    symbols = [s for s in image.symbols if s.name == "atexit"]
+    if len(symbols) != 1:
+        return {}
+    symbol = symbols[0]
+    if (not symbol.defined or symbol.type != elfimage.STT_FUNC
+            or symbol.bind != elfimage.STB_LOCAL
+            or (symbol.value, symbol.size) != (0xf9f710, 26)):
+        return {}
+    section = image.section_at(symbol.value)
+    if (section is None or section.type != 1 or section.flags != 6
+            or symbol.value + symbol.size > section.addr + section.size):
+        return {}
+    body = image.read(symbol.value, symbol.size)
+    if hashlib.sha256(body).hexdigest() != "22c0e78dc3b06f2d379825e0ac0a3f278761c8db3754b05da859faac4e82a3de":
+        return {}
+    return {symbol.name: symbol.value}
+
+
 def originals_script(ctx, extra_aliases):
     lines = []
     seen = set()
@@ -335,6 +361,8 @@ def originals_script(ctx, extra_aliases):
     for s in ctx.image.dynsyms:
         if s.defined and s.value and s.name:
             provide(s.name.split("@")[0], s.value)
+    for name, address in native_crt_aliases(ctx.image).items():
+        provide(name, address)
     for name, address in extra_aliases:
         provide(name, address)
     return "\n".join(lines) + "\n", seen

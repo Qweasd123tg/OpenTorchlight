@@ -23,6 +23,9 @@ class CSkillEvent;
 // Skill.cpp is recovered.
 class CSkill : public CRunicCore, public iUnitObserver
 {
+    friend class CSkillEvent;
+    friend class CEffect;
+    friend class CBreakable;
 public:
     bool weaponRequirementsMet(CCharacter* character);
     bool requirementsMet(CBaseUnit*, ESKILL_ACTIVATION_TYPE, const Ogre::Vector3*, CBaseUnit*, bool);

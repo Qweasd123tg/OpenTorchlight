@@ -797,3 +797,63 @@ void CPlayer::setQuestManager(CQuestManager* manager)
         }
     }
 }
+
+void CPlayer::fishingAI(float elapsed, CLevel& level)
+{
+    m_fishingValue854 += elapsed * 4.0f;
+    if (m_fishingTime > 1.0f && m_fishingTime < 2.0f)
+        m_fishingDelay += UTILITIES::randomBetweenVolatile(-4.1f, 4.0f) * elapsed;
+    else if (m_fishingTime >= 2.0f)
+        m_fishingDelay += UTILITIES::randomBetweenVolatile(-8.0f, 0.0f) * elapsed;
+    else if (m_fishingTime <= 1.0f)
+        m_fishingDelay += UTILITIES::randomBetweenVolatile(0.5f, 10.0f) * elapsed;
+    if (m_fishingTime < 1.75f && UTILITIES::randomBetweenVolatile(0.0f, 10000.0f) < 5.0f)
+        m_fishingDelay += UTILITIES::randomBetweenVolatile(30.0f, 40.0f);
+    if (m_fishingValue860 > 0.0f)
+        m_fishingValue860 -= elapsed;
+    if (!(m_fishingDelay < 10.0f))
+        m_fishingDelay = 10.0f;
+    if (m_fishingDelay <= -4.0f)
+        m_fishingDelay = -4.0f;
+    m_fishingTime = std::min(2.0f, m_fishingTime + m_fishingDelay * elapsed);
+    if (m_fishingTime + sinf(m_fishingValue854) * 0.2f <= 1.0f)
+    {
+        m_fishingTime = 1.0f;
+        m_fishingDelay = 1.0f;
+        if (!m_pUnitModel->animationPlayingSubstring("FISHING_CAST") &&
+            !m_pUnitModel->animationPlayingSubstring("FISHING_BITE"))
+        {
+            m_fishingValue860 = UTILITIES::randomBetweenVolatile(0.25f, 0.4f);
+            fishingSplash();
+        }
+    }
+}
+
+#include "CharacterSaveState.h"
+#include "FileSystem.h"
+
+void CPlayer::fillSaveState(CCharacterSaveState& state)
+{
+    CCharacter::fillSaveState(state);
+    state.m_flag34 = m_cheatMarker;
+    state.m_value68 = m_levelSaveSerial;
+    state.m_playTime = m_playTime;
+    TArrayList<std::wstring> mods(10);
+    CFileSystem::getSingleton()->getEnabledModNames(&mods);
+    for (unsigned int i = 0; i < mods.size(); ++i)
+        state.m_strings.add(mods[i]);
+}
+
+void CPlayer::applySaveState(CCharacterSaveState& state)
+{
+    CCharacter::applySaveState(state);
+    m_cheatMarker = state.m_flag34;
+    m_levelSaveSerial = state.m_value68;
+    m_playTime = state.m_playTime;
+    m_loadedModNames.clear();
+    for (unsigned int i = 0; i < state.m_strings.size(); ++i)
+        m_loadedModNames.add(state.m_strings[i]);
+    calculateNaturalArmor();
+    if (!getEnabled())
+        setEnabled(true);
+}

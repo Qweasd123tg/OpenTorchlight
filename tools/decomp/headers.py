@@ -234,9 +234,9 @@ def declared_signatures(text, name, parameter_transform=None):
                 valid = False
                 break
             if "(" in p or ")" in p:
-                array = re.fullmatch(r"([^()\[\]]+)\(\s*&\s*(?:[A-Za-z_]\w*)?\s*\)\s*\[\s*([1-9][0-9]*)\s*\]", p.strip())
+                array = re.fullmatch(r"([^()\[\]]+)\(\s*([&*])\s*(?:[A-Za-z_]\w*)?\s*\)\s*\[\s*([1-9][0-9]*)\s*\]", p.strip())
                 if array and _callback_type(array[1]):
-                    params.append(ghidra_cpp.parameter_key(array[1].strip() + " (&)[" + array[2] + "]"))
+                    params.append(ghidra_cpp.parameter_key(array[1].strip() + " (" + array[2] + ")[" + array[3] + "]"))
                     continue
                 if not _unnamed_callback(p):
                     valid = False

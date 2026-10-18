@@ -29,6 +29,7 @@ public:
     const std::wstring& getSetColor(bool selected) const { return selected ? m_sSetColor : m_sSetColorUnselected; }
     const std::wstring& getQuestColor(bool selected) const { return selected ? m_sQuestColor : m_sQuestColorUnselected; }
 private:
+    friend class CSpawnClassData;
     friend class CEquipment;
     friend class CCharacter;
     friend class CEnchantMenu;

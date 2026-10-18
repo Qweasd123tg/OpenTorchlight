@@ -293,3 +293,127 @@ void CSoundManager::releaseUnusedSounds()
     }
     Ogre::LogManager::getSingleton().logMessage("Released sounds : " + Ogre::StringConverter::toString(released));
 }
+
+
+CSoundManager::~CSoundManager()
+{
+    if (m_iUnknown6B8) m_iUnknown6B8->release();
+    if (m_iUnknown6C0) m_iUnknown6C0->release();
+    stopMusic();
+    stopSound(m_iUnknown6F0);
+    m_iUnknown6F0 = -1;
+    for (unsigned int i = 0; i < m_soundList1.size(); ++i)
+        --m_soundList1[i]->m_referenceCount;
+    m_soundList1.clear();
+    m_soundList0.clear();
+    m_soundList2.clear();
+    m_soundList3.clear();
+    m_pendingSounds.deleteAll();
+    if (m_iUnknown6E0) m_iUnknown6E0->release();
+    if (m_iUnknown6E8) m_iUnknown6E8->release();
+    if (m_iUnknown18) m_iUnknown18->release();
+}
+
+void CSoundManager::update(Ogre::SceneNode* node, const Ogre::Vector3& position, float elapsed)
+{
+    if (!m_bUnknown6A8) return;
+    m_iUnknown10 = 0;
+    Ogre::Vector3 forward = node->getOrientation().zAxis();
+    Ogre::Vector3 up = node->getOrientation().yAxis();
+    m_iUnknown18->update();
+    m_listenerX = position.x;
+    m_listenerY = position.y;
+    m_listenerZ = position.z;
+    if (m_soundList2.empty())
+    {
+        if (!isChannelPlaying(m_iUnknown6F0))
+        {
+            m_queueTimer = 0.0f;
+            m_iUnknown6F0 = -1;
+        }
+    }
+    else if (m_iUnknown6F0 == -1 || !isChannelPlaying(m_iUnknown6F0))
+    {
+        m_queueTimer += elapsed;
+        if (m_queueTimer >= m_soundList3[0])
+        {
+            m_queueTimer = 0.0f;
+            stopSound(m_iUnknown6F0);
+            m_iUnknown6F0 = playSound(m_soundList1[0],NULL,static_cast<int>(m_soundList2[0]),1.0f);
+            --m_soundList1[0]->m_referenceCount;
+            m_lastQueuedBank = m_soundList0[0];
+            for (int i = 0; i < static_cast<int>(m_soundList0.size()) - 1; ++i)
+            {
+                m_soundList1[i] = m_soundList1[i+1];
+                m_soundList2[i] = m_soundList2[i+1];
+                m_soundList0[i] = m_soundList0[i+1];
+                m_soundList3[i] = m_soundList3[i+1];
+            }
+            m_soundList1.pop_back();
+            m_soundList2.pop_back();
+            m_soundList0.pop_back();
+            m_soundList3.pop_back();
+        }
+    }
+}
+
+#include "FileSystem.h"
+#include "FileUtilities.h"
+#include "StringUtilities.h"
+#include <OgreUTFString.h>
+#include <OgreLogManager.h>
+
+FMOD_RESULT CSoundManager::fmodFileOpenCallback(const char* filename,int,unsigned int* size,void** handle,void** userData)
+{
+    CSoundInstance* sound=reinterpret_cast<CSoundInstance*>(const_cast<char*>(filename));
+    *handle=sound;
+    *userData=NULL;
+    std::wstring full=sound->m_soundName;
+    std::wstring directory;
+    std::wstring name;
+    name=FILESYSTEM::GetFileName(full);
+    directory=FILESYSTEM::RemoveFileName(full);
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(sound->m_soundName,info,false,true,false);
+    sound->m_stream.setNull();
+    sound->m_stream=CFileSystem::getSingleton()->getDataStream(info);
+    if (!sound->m_stream.isNull()) {
+        *size=sound->m_stream->size();
+        return FMOD_OK;
+    }
+    *size=0;
+    return static_cast<FMOD_RESULT>(23);
+}
+
+void CSoundManager::dumpSounds()
+{
+    for (unsigned int i=0;i<m_pendingSounds.size();++i)
+        Ogre::LogManager::getSingleton().logMessage(static_cast<std::string>(Ogre::UTFString("Sound : ")+Ogre::UTFString(m_pendingSounds[i]->m_soundName)),Ogre::LML_CRITICAL);
+}
+
+float CSoundManager::playMusic(std::wstring& name,bool loop)
+{
+    stopMusic();
+    name=STRINGS::StringUpper(name);
+    if (name.find(L"MUSIC")!=std::wstring::npos)
+        name=name.substr(name.find(L"MUSIC")+5,name.length()-name.find(L"MUSIC")+5);
+    while (name[0]==L'.' || name[0]==L'/') name=name.substr(1,name.length()-1);
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(name,info,false,true,false);
+    m_iUnknown6D0=createSound(info.m_sPath,static_cast<SOUND_TYPE>(loop?6:5),false,0.0f,0.0f);
+    if (!m_iUnknown6D0) return 0.0f;
+    m_iUnknown6D0->m_pSound->setSoundGroup(m_iUnknown6E0);
+    m_iUnknown6D8=playSound(m_iUnknown6D0,NULL,-1,1.0f);
+    if (m_iUnknown6D8==-1) return 0.0f;
+    FMOD::Channel* channel;
+    if (m_iUnknown18->getChannel(m_iUnknown6D8,&channel)==FMOD_OK)
+        channel->setChannelGroup(m_iUnknown6E8);
+    if (m_pDynamicPropertyFile) {
+        bool musicMute=m_pDynamicPropertyFile->GetInt(KSETTINGS_MUSICMUTE)!=0;
+        bool soundMute=m_pDynamicPropertyFile->GetInt(KSETTINGS_SOUNDMUTE)!=0;
+        float music=m_pDynamicPropertyFile->GetFloat(KSETTINGS_F_MUSICVOLUME);
+        float sound=m_pDynamicPropertyFile->GetFloat(KSETTINGS_F_SOUNDVOLUME);
+        updateAudioLevels(sound,music,soundMute,musicMute);
+    }
+    return getSoundLength(m_iUnknown6D0);
+}

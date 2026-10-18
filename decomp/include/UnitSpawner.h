@@ -15,6 +15,7 @@ class CBaseUnit;
 class CUnitSpawner : public CShape, public iRandomWeight, public iUnitObserver
 {
     friend class CUnitSpawnerDescriptor;
+    friend class CSkillEvent;
 public:
     void setResourceSpawn(std::wstring name);
     bool spawnUnitByIndex(unsigned int index);

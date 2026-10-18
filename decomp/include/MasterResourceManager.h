@@ -36,6 +36,7 @@ class CMasterResourceManager : public CRunicCore
 {
     friend class CGameClient;
 public:
+    CMasterResourceManager(CSettings*);
     void loadParticles();
     void reloadResources();
     void addResourceLocation(const std::wstring& path, const std::string& type, bool recursive);
@@ -94,15 +95,20 @@ private:
 public:
     Ogre::RenderTarget* m_renderTarget; // +0xb0; add/removeViewport calls
 private:
-    unsigned char m_UnrecoveredB8[0x10];
+    unsigned char m_UnrecoveredB8[8];
+public:
+    bool m_loadingResources; // +0xc0, CGame::frameStarted
+private:
+    unsigned char m_UnrecoveredC1[7];
 public:
     Ogre::SceneManager* m_pDefaultSceneManager; // +0xc8, ResourceManager constructor fallback
 private:
 public:
     Ogre::SceneManager* m_pSceneManager;
 private:
-    CResourceManager* m_clientResources; // +0xd8
-    unsigned char m_UnrecoveredE0[8];
+public:
+    Ogre::SceneManager* m_renderBehindParticleScene; // +0xd8
+    Ogre::SceneManager* m_automapScene; // +0xe0
 public:
     CRoomPieceDataInformation* m_pRoomPieceInformation; // +0xe8
     union {

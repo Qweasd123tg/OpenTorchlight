@@ -106,3 +106,18 @@ void CSkillParser::getSkillNames(TArrayList<std::wstring>& skillNames)
          i != getSingleton()->m_skills.end(); ++i)
         skillNames.add(i->first);
 }
+
+#include "Utilities.h"
+
+void CSkillParser::parseSkill(const std::wstring& fileName)
+{
+    CDataGroup* data=new CDataGroup(L"SKILL",NULL,20,10,NULL);
+    data->LoadFile(fileName,static_cast<CTimerStatics*>(NULL));
+    std::wstring name=data->GetDataValue(L"NAME",EMPTY_WSTRING);
+    if(name.empty()) {delete data;return;}
+    if(data->GetDataValue(L"UNIQUE_GUID",-1LL)==-1LL) {
+        data->SetDataValue(L"UNIQUE_GUID",UTILITIES::createUniqueGuid());
+        data->SaveToFile(fileName);
+    }
+    m_skills[STRINGS::StringUpper(name)]=data;
+}

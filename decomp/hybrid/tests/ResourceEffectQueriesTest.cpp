@@ -25,7 +25,7 @@ void side(void* raw,autotest::Capture& out,bool ours){
  std::memset(managerSpace,0xa5,sizeof(managerSpace));std::memset(effectSpace,0x3c,sizeof(effectSpace));std::memset(affixSpace,0x5a,sizeof(affixSpace));
  CEffectManager* manager=reinterpret_cast<CEffectManager*>(managerSpace);void* effects[8];void* affixes[5];
  const wchar_t* names[]={L"",L"A",L"AA",L"Ж"};
- for(unsigned i=0;i<8;++i){CEffect* e=reinterpret_cast<CEffect*>(effectSpace[i]);effects[i]=e;new(&e->m_sName)std::wstring(names[(i+c.seed/7)%4]);e->m_eType=static_cast<EEFFECT_TYPE>((i+c.seed)%4);e->m_pSkillOwner=(i+c.seed)%4==3?NULL:reinterpret_cast<CSkill*>(skills[(i+c.seed)%3]);}
+ for(unsigned i=0;i<8;++i){CEffect* e=reinterpret_cast<CEffect*>(effectSpace[i]);effects[i]=e;new(&e->m_sName)std::wstring(names[(i+c.seed/7)%4]);e->m_eType=static_cast<EEFFECT_TYPE>((i+c.seed)%4);e->m_pSkillOwner.m_pObject=(i+c.seed)%4==3?NULL:reinterpret_cast<CSkill*>(skills[(i+c.seed)%3]);}
  for(unsigned i=0;i<5;++i){CAffix* a=reinterpret_cast<CAffix*>(affixSpace[i]);affixes[i]=a;new(&a->m_sAffixFileName)std::wstring(names[(i+1+c.seed/11)%4]);new(&a->m_sDisplayName)std::wstring(names[(i+c.seed/11)%4]);}
  TArrayList<CAffix*>* affixList=new(reinterpret_cast<unsigned char*>(&manager->m_Affixes))TArrayList<CAffix*>(2);
  for(unsigned i=0;i<c.seed%6;++i)affixList->add(static_cast<CAffix*>(affixes[i]));
@@ -36,7 +36,7 @@ void side(void* raw,autotest::Capture& out,bool ours){
  unsigned char before[sizeof(managerSpace)];std::memcpy(before,managerSpace,sizeof(managerSpace));
  std::wstring query=names[(c.seed/3)%4];EEFFECT_TYPE type=static_cast<EEFFECT_TYPE>((c.seed/5)%5);const CSkill* skill=c.seed&1?NULL:reinterpret_cast<CSkill*>(skills[c.seed%3]);unsigned index=(c.seed/13)%5;
  int expected=-1,result=-1;
- if(c.mode==0||c.mode==1||c.mode==4||c.mode==5){for(unsigned g=0;g<2&&expected<0;++g)for(unsigned i=0;i<groups[g]->size();++i){CEffect* e=(*groups[g])[i];bool match=c.mode==0?e->m_eType==type:c.mode==1?e->m_pSkillOwner==skill:c.mode==4?(e->m_eType==type&&e->m_sName==query):e->m_sName==query;if(match){if(c.mode==5&&index){--index;continue;}expected=id(e,effects,8);break;}}}
+ if(c.mode==0||c.mode==1||c.mode==4||c.mode==5){for(unsigned g=0;g<2&&expected<0;++g)for(unsigned i=0;i<groups[g]->size();++i){CEffect* e=(*groups[g])[i];bool match=c.mode==0?e->m_eType==type:c.mode==1?e->m_pSkillOwner.m_pObject==skill:c.mode==4?(e->m_eType==type&&e->m_sName==query):e->m_sName==query;if(match){if(c.mode==5&&index){--index;continue;}expected=id(e,effects,8);break;}}}
  if(c.mode==3)for(unsigned i=0;i<affixList->size();++i)if((*affixList)[i]->m_sDisplayName==query){expected=id((*affixList)[i],affixes,5);break;}
  if(c.mode==0){void*(*fn)(void*,EEFFECT_TYPE)=ours?newByType:oldByType;if(!autotest::beginInvocation(out,fn))return;result=id(fn(manager,type),effects,8);out.callCompleted=1;}
  else if(c.mode==1){bool(*fn)(void*,const CSkill*)=ours?newFromSkill:oldFromSkill;if(!autotest::beginInvocation(out,fn))return;result=fn(manager,skill)?1:0;out.callCompleted=1;expected=expected>=0?1:0;}

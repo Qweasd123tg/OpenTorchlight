@@ -53,4 +53,17 @@ static const EEFFECT_TYPE gDAMAGE_DEFENSE_EFFECT_TYPES[] = {
     static_cast<EEFFECT_TYPE>(39), static_cast<EEFFECT_TYPE>(40)
 };
 
+// Existing GLOBAL ELF objects. Strings: constructor/assign/stdwstring ABI.
+extern std::wstring gEFFECT_TYPE_NAMES[145];
+extern std::wstring gEFFECT_TYPE_DESCRIPTIONS_GOOD[145];
+extern std::wstring gEFFECT_TYPE_DESCRIPTIONS_GOOD_OT[145];
+extern std::wstring gEFFECT_TYPE_DESCRIPTIONS_BAD[145];
+extern std::wstring gEFFECT_TYPE_DESCRIPTIONS_BAD_OT[145];
+extern std::wstring gEFFECT_TYPE_PROPERTY_TAGS[145][5];
+extern std::wstring gEFFECT_TYPE_GRAPHS[145][5];
+extern int gEFFECT_TYPE_MIN_VALUES[145];
+extern int gEFFECT_TYPE_MAX_VALUES[145];
+extern int gEFFECT_TYPE_BONUS[145];
+
+
 #endif

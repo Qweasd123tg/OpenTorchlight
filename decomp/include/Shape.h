@@ -6,6 +6,7 @@
 // Partial: full 0x168-byte primary base used by UnitSpawner's RTTI.
 class CShape : public CPositionableObject
 {
+    friend class CSkillEvent;
 public:
     CShape(CResourceManager* resources);
     float getAngleOffsetAtPercent(float percent);

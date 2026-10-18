@@ -127,3 +127,106 @@ bool CQuestDialog::parseDialogTag(const std::wstring& sTag, CDataGroup* pDataGro
     }
     return true;
 }
+
+#include "Quest.h"
+#include "QuestManager.h"
+#include "Utilities.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+#include "MasterResourceManager.h"
+
+bool CQuestDialog::dialogIsForNPC(CBaseUnit* unit)
+{
+    if (m_pQuest == NULL) return false;
+    if (m_pNPCDataGroup != NULL)
+        return unit != NULL && m_pNPCDataGroup == unit->getDataGroup();
+    if (m_pQuest->m_iUnknown1E8 == 0) return false;
+    return reinterpret_cast<CDataGroup*>(m_pQuest->m_iUnknown1E8) == unit->getDataGroup();
+}
+
+std::wstring CQuestDialog::getDialog(bool random)
+{
+    int index = 0;
+    if (m_dialogText.size() > 1 && m_pQuest != NULL)
+    {
+        if (m_pQuest->m_iUnknown1C != -1) UTILITIES::setSeed(m_pQuest->m_iUnknown1C);
+        index = UTILITIES::randomIntegerBetween(1,m_dialogText.size()) - 1;
+    }
+    if (!random && m_pQuest != NULL)
+        return m_pQuest->replaceStringTags(m_dialogText[index]);
+    return m_dialogText[index];
+}
+
+void CQuestDialog::giveOrRemoveItems(CBaseUnit* unit)
+{
+    if (m_bItemsGiven) return;
+    for (unsigned int i=0;i<m_dialogItemsToRemove.size();++i)
+        m_dialogItemsToRemove[i]->dialogComplete(m_pQuest->getPlayer());
+    for (unsigned int i=0;i<m_dialogItemsToGive.size();++i)
+        m_dialogItemsToGive[i]->dialogComplete(m_pQuest->getPlayer());
+    CPlayer* player = m_pQuest->getPlayer();
+    if (m_bMakePetOnAccept && player != NULL && unit != NULL)
+    {
+        CCharacter* character = dynamic_cast<CCharacter*>(unit);
+        if (character != NULL)
+        {
+            player->addPet(character);
+            m_pQuest->m_pQuestManager->calculateNPCIcon(character);
+        }
+    }
+    m_bItemsGiven = true;
+}
+
+void CQuestDialog::cleanUp()
+{
+    CPlayer* player = m_pQuest->getPlayer();
+    if (!m_bDialogInitialized || !m_bRemoveAsPetOnComplete || player == NULL) return;
+    for (int i=0;i<static_cast<int>(player->m_Followers.size());++i)
+    {
+        CCharacter* pet = player->m_Followers[i];
+        if (m_pNPCDataGroup != pet->getDataGroup()) continue;
+        player->removePet(pet);
+        if (m_bDestroyPet)
+        {
+            pet->m_bBaseUnitFlag190 = true;
+            pet->setVisible(false,true);
+        }
+        else m_pQuest->m_pQuestManager->calculateNPCIcon(pet);
+        --i;
+    }
+}
+
+void CQuestDialog::playDialogSound()
+{
+    if (m_pSoundBank == NULL)
+    {
+        CSoundData* data = CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation->getSoundDataObject(m_sSoundName);
+        if (data != NULL)
+        {
+            if (m_pSoundBank == NULL)
+                m_pSoundBank = new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager,false);
+            if (m_pSoundBank != NULL) m_pSoundBank->addSample(0x25,data->m_iGuid);
+        }
+    }
+    if (m_pSoundBank != NULL) m_pSoundBank->playSample(0x25,NULL,0.0f,0.0f,false);
+}
+
+CQuestDialog::CQuestDialog(CQuest* quest)
+    : CRunicCore(),m_pQuest(quest),m_dialogText(1),m_dialogItemsToGive(1),m_dialogItemsToRemove(1),
+      m_sNPCName(),m_pNPCDataGroup(NULL),m_iDialogType(0),
+      m_bFloatyText(false),m_bIconAboveHead(true),m_bDialogInitialized(false),m_bItemsGiven(false),
+      m_bMakePetOnAccept(true),m_bRemoveAsPetOnComplete(false),m_bDestroyPet(false),m_bLookAtPlayer(false),
+      m_pSoundBank(NULL),m_cameraOffset(0,0,0),m_sThemeOverride(EMPTY_WSTRING),m_sSoundName()
+{
+}
+
+CQuestDialog::~CQuestDialog()
+{
+    m_dialogItemsToGive.deleteAll();
+    m_dialogItemsToRemove.deleteAll();
+    if (m_pSoundBank != NULL)
+    {
+        delete m_pSoundBank;
+        m_pSoundBank = NULL;
+    }
+}

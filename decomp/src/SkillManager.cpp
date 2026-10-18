@@ -588,3 +588,86 @@ CSkill* CSkillManager::executeSkill(CSkill* skill, CBaseUnit* caster,
     decrementSkillCharges(skill);
     return skill;
 }
+
+
+bool CSkillManager::showWeaponTrailsOnCurrentSkill(CEquipment*,CEquipment*)
+{
+    return false;
+}
+
+#include "Utilities.h"
+#include <cmath>
+
+Ogre::Vector3* CSkillManager::getPositionForSkill(CSkill* skill,CBaseUnit* target)
+{
+    m_skillPosition=skill->m_targetPosition;
+    int targetType=skill->getTargetType();
+    if(targetType==5 || targetType==6) {
+        m_skillPosition.x=UTILITIES::randomBetweenVolatile(-1.0f,1.0f);
+        m_skillPosition.y=UTILITIES::randomBetweenVolatile(-1.0f,1.0f);
+        m_skillPosition.normalise();
+        if(targetType==5) {
+            float range=skill->getRandomRange();
+            float minimum=skill->getRandomRangeMin();
+            m_skillPosition*=range-minimum;
+            Ogre::Vector3 direction=m_skillPosition;
+            direction.normalise();
+            m_skillPosition+=direction*skill->getRandomRangeMin();
+            if(m_Owner.getObject()) {
+                if(target) {
+                    Ogre::Vector3 ownerPosition=m_Owner.getObject()->getPosition(true);
+                    Ogre::Vector3 targetPosition=target->getPosition(true);
+                    Ogre::Vector3 forward(targetPosition.x-ownerPosition.x,0,targetPosition.z-ownerPosition.z);
+                    float distance=std::sqrt(forward.x*forward.x+0.0f+forward.z*forward.z);
+                    float range=skill->getRange();
+                    distance=distance<range?distance:range;
+                    float minimum=skill->getRangeMin();
+                    distance=distance>minimum?distance:minimum;
+                    forward.normalise();
+                    Ogre::Vector3 offset(0,-m_Owner.getObject()->m_fBaseUnitValue194,0);
+                    Ogre::Vector3 position=m_Owner.getObject()->getPosition(true);
+                    m_skillPosition=forward*distance+position+offset+m_skillPosition;
+                } else {
+                    Ogre::Vector3 offset(0,-m_Owner.getObject()->m_fBaseUnitValue194,0);
+                    Ogre::Vector3 position=m_Owner.getObject()->getPosition(true);
+                    m_skillPosition=position+offset+m_skillPosition;
+                }
+            } else if(target) {
+                Ogre::Vector3 offset(0,-target->m_fBaseUnitValue194,0);
+                Ogre::Vector3 position=target->getPosition(true);
+                m_skillPosition=position+offset+m_skillPosition;
+            }
+        } else {
+            float range=skill->getRange();
+            float minimum=skill->getRangeMin();
+            m_skillPosition*=range-minimum;
+            Ogre::Vector3 direction=m_skillPosition;
+            direction.normalise();
+            m_skillPosition+=direction*skill->getRangeMin();
+            m_skillPosition*=0.25f;
+            if(target) {
+                if(m_Owner.getObject()) {
+                    m_skillPosition+=m_Owner.getObject()->getPosition(true);
+                    Ogre::Vector3 ownerPosition=m_Owner.getObject()->getPosition(true);
+                    Ogre::Vector3 targetPosition=target->getPosition(true);
+                    Ogre::Vector3 forward=targetPosition-ownerPosition;
+                    forward.normalise();
+                    float range=skill->getRange();
+                    m_skillPosition=forward*-0.5f*range+Ogre::Vector3(0,-m_Owner.getObject()->m_fBaseUnitValue194,0)+m_skillPosition;
+                } else {
+                    m_skillPosition+=target->getPosition(true);
+                    float range=skill->getRange();
+                    Ogre::Vector3 forward=target->getForward();
+                    m_skillPosition=forward*-0.5f*range+Ogre::Vector3(0,-m_Owner.getObject()->m_fBaseUnitValue194,0)+m_skillPosition;
+                }
+            } else if(m_Owner.getObject()) {
+                m_skillPosition+=m_Owner.getObject()->getPosition(true);
+                float range=skill->getRange();
+                Ogre::Vector3 forward=m_Owner.getObject()->getForward();
+                m_skillPosition=forward*-0.5f*range+Ogre::Vector3(0,-m_Owner.getObject()->m_fBaseUnitValue194,0)+m_skillPosition;
+            }
+        }
+    } else if(targetType!=1)
+        return NULL;
+    return &m_skillPosition;
+}

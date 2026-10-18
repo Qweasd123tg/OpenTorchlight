@@ -2982,13 +2982,13 @@ CCharacter* CCharacter::updateHP(CLevel& level, float elapsed)
             bool harmful = false;
             if (effect->m_eType == 7 || effect->m_eType == 0x34 || effect->m_eType == 0x7c)
                 harmful = effect->value(static_cast<EEFFECT_VALUES>(0)) < 0.0f;
-            if ((harmful || effects[i]->m_eType == 0x34) && effects[i]->m_sourceCharacter)
+            if ((harmful || effects[i]->m_eType == 0x34) && effects[i]->m_sourceCharacter.getObject())
             {
-                effects[i]->m_sourceCharacter->awardExperience(level, this, m_experienceReward, false);
-                effects[i]->m_sourceCharacter->awardFame(level, this, m_fameReward, false);
+                effects[i]->m_sourceCharacter.getObject()->awardExperience(level, this, m_experienceReward, false);
+                effects[i]->m_sourceCharacter.getObject()->awardFame(level, this, m_fameReward, false);
                 m_experienceReward = 0;
                 m_fameReward = 0;
-                killer = effects[i]->m_sourceCharacter;
+                killer = effects[i]->m_sourceCharacter.getObject();
                 effects[i]->setOwner(NULL, true);
                 break;
             }
@@ -3053,4 +3053,525 @@ void CCharacter::transformCharacter(std::wstring name, float duration)
     m_characterDisplayName = std::wstring(displayName);
     setVisible(false, true);
     setVisible(true, true);
+}
+
+#include <OgreSkeletonInstance.h>
+#include <OgreBone.h>
+#include <OgreSceneManager.h>
+
+void CCharacter::configureParticleTrigger(CParticleAnimationTrigger* trigger, unsigned int bone)
+{
+    if (!trigger)
+        return;
+    bool everyBone = trigger->m_name == "Every Bone";
+    Ogre::SceneNode* parent = m_pSceneNode;
+    if (getUnitModel() && static_cast<CGenericModel*>(getUnitModel())->m_pSkeleton && trigger->m_name != "")
+    {
+        if (trigger->m_name == "Random" || everyBone || static_cast<CGenericModel*>(getUnitModel())->m_pSkeleton->hasBone(trigger->m_name))
+        {
+            std::string name = trigger->m_name;
+            Ogre::Bone* node;
+            if (trigger->m_name == "Random" || everyBone)
+            {
+                if (!everyBone)
+                    bone = static_cast<unsigned int>(UTILITIES::randomBetweenVolatile(0.0f,
+                        static_cast<float>(static_cast<CGenericModel*>(getUnitModel())->m_pSkeleton->getNumBones() - 1)));
+                node = static_cast<CGenericModel*>(getUnitModel())->m_pSkeleton->getBone(static_cast<unsigned short>(bone));
+                if (node)
+                    name = node->getName();
+            }
+            else
+                node = static_cast<CGenericModel*>(getUnitModel())->m_pSkeleton->getBone(name);
+            trigger->m_nodeOwner = node;
+            if (node)
+            {
+                trigger->m_name = node->getName();
+                if (trigger->m_stopWhenHidden)
+                {
+                    parent = getResourceManager()->getSceneManager()->createSceneNode();
+                    m_pSceneNode->addChild(parent);
+                    trigger->m_node = parent;
+                }
+            }
+        }
+    }
+    if (trigger->m_stopWhenHidden)
+        trigger->m_particle->sceneNodeSetParent(parent, false);
+}
+
+void CCharacter::displayPath()
+{
+    if (!m_weaponTrails[3])
+    {
+        Ogre::SceneManager* scene = m_pResourceManager ? m_pResourceManager->getSceneManager() : NULL;
+        m_weaponTrails[3] = new CWeaponTrail(scene, STRINGS::uniqueName("trail_"), 50, 2.0f);
+        m_weaponTrails[3]->setMaterialName("WeaponTrail");
+    }
+    m_weaponTrails[3]->setActive(true);
+    Ogre::Vector3 down = Ogre::Vector3::NEGATIVE_UNIT_Y;
+    for (int i = 0; i < static_cast<int>(m_movementPath->m_lPoints.size()); ++i)
+    {
+        Ogre::Vector3 point = characterPathPoint(m_movementPath, i);
+        point.y = getPosition(false).y;
+        m_weaponTrails[3]->update(0.0f, &point, &down, false, NULL);
+    }
+}
+
+void CCharacter::calculateActiveRange(const Ogre::Vector3& position)
+{
+    bool forced = m_pResourceManager->getEditorIsRunning();
+    if (ISA(static_cast<UNITTYPES::EUNITTYPES>(28)) || m_alwaysActive ||
+        (m_pMaster && m_pMaster->m_bInActiveRange) || m_eAIState == 5)
+        forced = true;
+    if (m_activeSkill && (m_activeSkill->m_animationID == -1 || m_activeSkill->m_interruptible) &&
+        (m_skillLooping || m_skillTime > 0.0f))
+        forced = true;
+    else if (m_pSkillManager && m_pSkillManager->m_UpdatingSkills.size())
+        forced = true;
+    float x = position.x - m_vPosition.x;
+    float z = position.z - m_vPosition.z;
+    float distance = sqrtf(x * x + 0.0f + z * z);
+    float rangeModifier;
+    if (forced)
+    {
+        rangeModifier = 1000.0f;
+        m_bInActiveRange = true;
+        m_bInFadeRange = true;
+    }
+    else
+    {
+        CLevel* level = getLevel();
+        CLevelTemplateData* data = level ? level->getLevelTemplateData() : NULL;
+        float range = data && !data->getUnitLightFade() ?
+            CGameGlobals::getSingleton()->getOutdoorUnitActiveRange() :
+            CGameGlobals::getSingleton()->getIndoorUnitActiveRange();
+        rangeModifier = getEffectValueWithoutInventory(static_cast<EEFFECT_TYPE>(44), DAMAGE_TYPE_COUNT);
+        level = getLevel();
+        data = level ? level->getLevelTemplateData() : NULL;
+        if (data && m_eAIState != 5 && m_eAIState != 6)
+            rangeModifier += data->getSightRangeModifier();
+        if (rangeModifier != 0.0f)
+            range += (rangeModifier * range) / 100.0f;
+        if (distance > range)
+        {
+            m_bInActiveRange = false;
+            m_bInFadeRange = CGameGlobals::getSingleton()->getUnitNearRange() >= distance;
+        }
+        else
+        {
+            m_bInActiveRange = true;
+            m_bInFadeRange = true;
+        }
+    }
+    m_castsDynamicShadow = false;
+    if (getCastsShadows())
+    {
+        CSettings* settings = m_pResourceManager ? CMasterResourceManager::getSingleton()->m_pSettings : NULL;
+        if (settings->GetInt(KSETTINGS_SHADOWS_ENABLED) > 0)
+        {
+            m_castsDynamicShadow = true;
+            if (!m_bInActiveRange || distance > CGameGlobals::getSingleton()->getUnitShadowRange() ||
+                m_eAIState == 12 || fabsf(position.y - m_vPosition.y) > 3.0f || m_eAIState == 6)
+                m_castsDynamicShadow = false;
+        }
+    }
+    if (m_bInActiveRange)
+    {
+        if (rangeModifier != 0.0f)
+            distance /= rangeModifier / 100.0f;
+        m_aiThinkTier = 3;
+        if (distance <= 10.0f)
+            m_aiThinkTier = 0;
+        else if (distance <= 15.0f)
+            m_aiThinkTier = 1;
+        else if (distance <= 20.0f)
+            m_aiThinkTier = 2;
+        else if (distance <= 25.0f)
+            m_aiThinkTier = 3;
+    }
+    if (m_pMaster && m_pMaster->ISA(static_cast<UNITTYPES::EUNITTYPES>(28)))
+        m_aiThinkTier = 0;
+}
+
+void CCharacter::createPathfinder(CLevel& level)
+{
+    if (m_pathfinder)
+    {
+        delete m_pathfinder;
+        m_pathfinder = NULL;
+    }
+    float originX = level.topLeftX();
+    float originY = level.topLeftY();
+    m_pathfinder = new CAstarPathfinder(originX, originY, level.m_passWidth, level.m_passHeight,
+        level.m_mapPassability, level.m_objectPassability, 0.4f);
+    m_savedPathIterations = m_pathfinder->m_iMaxIterations;
+    if (m_isPathing)
+        m_pathGraceTime = 10.0f;
+    m_isPathing = false;
+    m_pathDestination = m_vPosition;
+    if (m_pendingPetSpawn)
+    {
+        TArrayList<CDataGroup*> units;
+        m_pendingPetSpawn->rollSpawnClass(units, NULL, this, this, -1, static_cast<unsigned int>(-1), 0, -1, 0, 0);
+        for (unsigned int i = 0; i < units.size(); ++i)
+        {
+            CBaseUnit* unit = m_pResourceManager->createUnit(units[i], level.m_dungeonDepth, false, false);
+            Ogre::Vector3 direction(0.0f, 0.0f, 1.0f);
+            float angle = static_cast<float>(static_cast<double>(UTILITIES::randomBetweenVolatile(0.0f, 360.0f)) * 0.01745329252);
+            MATH::rotateY(&direction, angle);
+            unit->setDirection(direction);
+            CCharacter* character = dynamic_cast<CCharacter*>(unit);
+            if (character)
+            {
+                Ogre::Vector3 position = getPosition(true);
+                Ogre::Vector3 spawnPosition = level.randomOpenPositionRange(position, 1.0f, 4.0f, true);
+                level.addCharacter(character, spawnPosition, false);
+                addPet(character);
+            }
+        }
+        m_pendingPetSpawn = NULL;
+    }
+}
+
+void CCharacter::updateBonePositions()
+{
+    if (m_pRightHandNode)
+    {
+        Ogre::Vector3 position = m_pUnitModel->getPosition(false);
+        position += m_rightHandBone->_getDerivedPosition();
+        m_pRightHandNode->setPosition(position);
+        m_pRightHandNode->setOrientation(m_rightHandBone->_getDerivedOrientation());
+    }
+    if (m_fishingNode)
+    {
+        Ogre::Vector3 position = m_pUnitModel->getPosition(false);
+        position += m_fishingBone->_getDerivedPosition();
+        m_fishingNode->setPosition(position);
+        m_fishingNode->setOrientation(m_fishingBone->_getDerivedOrientation());
+    }
+    if (m_pLeftHandNode)
+    {
+        Ogre::Vector3 position = m_pUnitModel->getPosition(false);
+        position += m_leftHandBone->_getDerivedPosition();
+        m_pLeftHandNode->setPosition(position);
+        m_pLeftHandNode->setOrientation(m_leftHandBone->_getDerivedOrientation());
+    }
+    if (m_pShieldNode)
+    {
+        Ogre::Vector3 position = m_pUnitModel->getPosition(false);
+        position += m_shieldBone->_getDerivedPosition();
+        m_pShieldNode->setPosition(position);
+        m_pShieldNode->setOrientation(m_shieldBone->_getDerivedOrientation());
+    }
+    if (m_pRightShoulderNode)
+    {
+        Ogre::Vector3 position = m_pUnitModel->getPosition(false);
+        position += m_leftShoulderBone->_getDerivedPosition();
+        m_pRightShoulderNode->setPosition(position);
+        m_pRightShoulderNode->setOrientation(m_leftShoulderBone->_getDerivedOrientation());
+    }
+    if (m_pLeftShoulderNode)
+    {
+        Ogre::Vector3 position = m_pUnitModel->getPosition(false);
+        position += m_rightShoulderBone->_getDerivedPosition();
+        m_pLeftShoulderNode->setPosition(position);
+        m_pLeftShoulderNode->setOrientation(m_rightShoulderBone->_getDerivedOrientation());
+    }
+    if (m_pHeadNode)
+    {
+        Ogre::Vector3 position = m_pUnitModel->getPosition(false);
+        position += m_headBone->_getDerivedPosition();
+        m_pHeadNode->setPosition(position);
+        m_pHeadNode->setOrientation(m_headBone->_getDerivedOrientation());
+    }
+    for (unsigned int i = 0; i < m_particleTriggers.size(); ++i)
+    {
+        if (m_particleTriggers[i]->m_node && m_particleTriggers[i]->m_nodeOwner &&
+            m_particleTriggers[i]->m_stopWhenHidden)
+        {
+            Ogre::Vector3 position = m_pUnitModel->getPosition(false);
+            position += m_particleTriggers[i]->m_nodeOwner->_getDerivedPosition();
+            m_particleTriggers[i]->m_node->setPosition(position);
+            if (!m_particleTriggers[i]->m_stopFlag59)
+                m_particleTriggers[i]->m_node->setOrientation(m_particleTriggers[i]->m_nodeOwner->_getDerivedOrientation());
+        }
+        else if (m_particleTriggers[i]->m_stopFlag59 && m_particleTriggers[i]->m_nodeOwner &&
+                 m_particleTriggers[i]->m_particle)
+        {
+            Ogre::Vector3 position = m_particleTriggers[i]->m_nodeOwner->_getDerivedPosition();
+            Ogre::Vector3 origin = getPosition(true);
+            position += m_particleTriggers[i]->m_offset;
+            position = getOrientation() * position;
+            m_particleTriggers[i]->m_particle->setPosition(origin + position);
+        }
+    }
+}
+
+#include "UnitTheme.h"
+#include "UnitThemeParticle.h"
+#include "ParticlePreloader.h"
+
+void CCharacter::createSpecificUnitThemeParticles(CUnitTheme* theme)
+{
+    if (!theme || !m_pUnitModel)
+        return;
+    for (unsigned int i = 0; i < m_particleTriggers.size(); ++i)
+        if (m_particleTriggers[i]->m_particle && m_particleTriggers[i]->m_theme == theme)
+            return;
+    for (unsigned int i = 0; i < theme->m_particles.size(); ++i)
+    {
+        CUnitThemeParticle* descriptor = theme->m_particles[i];
+        if (!ISA(static_cast<UNITTYPES::EUNITTYPES>(descriptor->m_iUnitTypeID)))
+            continue;
+        unsigned int count = descriptor->m_iCount ? descriptor->m_iCount : 1;
+        if (descriptor->m_wstrBone == L"Every Bone")
+            count = static_cast<CGenericModel*>(getUnitModel())->m_pSkeleton->getNumBones();
+        for (unsigned int bone = 0; bone < count; ++bone)
+        {
+            CParticleAnimationTrigger* trigger = new CParticleAnimationTrigger;
+            trigger->m_resources = m_pResourceManager;
+            trigger->m_particle = NULL;
+            trigger->m_stopOnDeath = false;
+            trigger->m_animationIndex = -1;
+            trigger->m_offset = Ogre::Vector3::ZERO;
+            trigger->m_node = NULL;
+            trigger->m_nodeOwner = NULL;
+            trigger->m_theme = NULL;
+            trigger->m_stopWhenHidden = true;
+            trigger->m_stopFlag59 = false;
+            trigger->m_stopFlag5A = false;
+            m_particleTriggers.add(trigger);
+            std::wstring name = STRINGS::StringUpper(CMasterResourceManager::getSingleton()->m_pParticlePreloader->getParticleNameByFileName(descriptor->m_wstrFile));
+            if (name.empty())
+            {
+                name = STRINGS::StringUpper(descriptor->m_wstrFile);
+                CMasterResourceManager::getSingleton()->m_pParticlePreloader->LoadParticle(name, name);
+            }
+            trigger->m_particle = CMasterResourceManager::getSingleton()->m_pParticlePreloader->GetParticle(m_pResourceManager, STRINGS::StringUpper(descriptor->m_wstrFile).c_str());
+            if (trigger->m_particle)
+            {
+                trigger->m_particle->setPosition(Ogre::Vector3::ZERO);
+                trigger->m_stopOnDeath = true;
+                trigger->m_animationIndex = -1;
+                trigger->m_theme = theme;
+                trigger->m_stopWhenHidden = descriptor->m_bAttaches;
+                trigger->m_stopFlag59 = descriptor->m_bFollows;
+                STRINGS::StringConvertToNarrow(descriptor->m_wstrBone, trigger->m_name);
+                configureParticleTrigger(trigger, bone);
+            }
+        }
+    }
+}
+
+void CCharacter::unitThemeUpdated(CUnitTheme* theme, bool stopping)
+{
+    if (!stopping)
+    {
+        bool exists = false;
+        for (unsigned int i = 0; i < m_particleTriggers.size(); ++i)
+            if (m_particleTriggers[i]->m_theme == theme && m_particleTriggers[i]->m_particle)
+            {
+                exists = true;
+                break;
+            }
+        if (!exists)
+            createSpecificUnitThemeParticles(theme);
+    }
+    for (unsigned int i = 0; i < m_particleTriggers.size(); ++i)
+    {
+        if (m_particleTriggers[i]->m_theme != theme || !m_particleTriggers[i]->m_particle)
+            continue;
+        if (stopping)
+            m_particleTriggers[i]->m_particle->Stop(!m_particleTriggers[i]->m_particle->getVisible());
+        else
+        {
+            if (m_particleTriggers[i]->m_nodeOwner)
+            {
+                if (m_particleTriggers[i]->m_stopWhenHidden && m_particleTriggers[i]->m_node)
+                {
+                    m_particleTriggers[i]->m_node->setPosition(m_particleTriggers[i]->m_nodeOwner->_getDerivedPosition());
+                    if (!m_particleTriggers[i]->m_stopFlag59)
+                        m_particleTriggers[i]->m_node->setOrientation(m_particleTriggers[i]->m_nodeOwner->_getDerivedOrientation());
+                }
+                else if (!m_particleTriggers[i]->m_stopWhenHidden)
+                {
+                    Ogre::Vector3 modelPosition = m_pUnitModel->getPosition(false);
+                    Ogre::Vector3 origin = getPosition(true);
+                    Ogre::Vector3 bonePosition = m_particleTriggers[i]->m_nodeOwner->_getDerivedPosition();
+                    Ogre::Vector3 position = getOrientation() * bonePosition;
+                    m_particleTriggers[i]->m_particle->setPosition((position + origin) + modelPosition);
+                }
+            }
+            else if (!m_particleTriggers[i]->m_stopWhenHidden)
+            {
+                Ogre::Vector3 modelPosition = m_pUnitModel->getPosition(false);
+                Ogre::Vector3 origin = getPosition(true);
+                Ogre::Vector3 position = getOrientation() * m_particleTriggers[i]->m_offset;
+                m_particleTriggers[i]->m_particle->setPosition((position + origin) + modelPosition);
+            }
+            m_particleTriggers[i]->m_particle->Start();
+        }
+    }
+}
+
+#include "UnitThemes.h"
+void CCharacter::createAdditionalUnitThemeParticles()
+{
+    if (!m_pUnitModel)
+        return;
+    CUnitThemes* themes = CUnitThemes::getSingleton();
+    for (unsigned int themeIndex = 0; themeIndex < themes->getThemes().size(); ++themeIndex)
+    {
+        CUnitTheme* theme = themes->getThemes()[themeIndex];
+        bool exists = false;
+        for (unsigned int i = 0; i < m_particleTriggers.size(); ++i)
+            if (m_particleTriggers[i]->m_particle && m_particleTriggers[i]->m_theme == theme)
+            {
+                exists = true;
+                break;
+            }
+        if (exists)
+            continue;
+        for (unsigned int i = 0; i < theme->m_particles.size(); ++i)
+        {
+            CUnitThemeParticle* descriptor = theme->m_particles[i];
+            if (!ISA(static_cast<UNITTYPES::EUNITTYPES>(descriptor->m_iUnitTypeID)))
+                continue;
+            unsigned int count = descriptor->m_iCount ? descriptor->m_iCount : 1;
+            if (descriptor->m_wstrBone == L"Every Bone")
+                count = static_cast<CGenericModel*>(getUnitModel())->m_pSkeleton->getNumBones();
+            for (unsigned int bone = 0; bone < count; ++bone)
+            {
+                CParticleAnimationTrigger* trigger = new CParticleAnimationTrigger;
+                trigger->m_resources = m_pResourceManager;
+                trigger->m_particle = NULL;
+                trigger->m_stopOnDeath = false;
+                trigger->m_animationIndex = -1;
+                trigger->m_offset = Ogre::Vector3::ZERO;
+                trigger->m_node = NULL;
+                trigger->m_nodeOwner = NULL;
+                trigger->m_theme = NULL;
+                trigger->m_stopWhenHidden = true;
+                trigger->m_stopFlag59 = false;
+                trigger->m_stopFlag5A = false;
+                m_particleTriggers.add(trigger);
+                std::wstring name = STRINGS::StringUpper(CMasterResourceManager::getSingleton()->m_pParticlePreloader->getParticleNameByFileName(descriptor->m_wstrFile));
+                if (name.empty())
+                {
+                    name = STRINGS::StringUpper(descriptor->m_wstrFile);
+                    CMasterResourceManager::getSingleton()->m_pParticlePreloader->LoadParticle(name, name);
+                }
+                trigger->m_particle = CMasterResourceManager::getSingleton()->m_pParticlePreloader->GetParticle(m_pResourceManager, STRINGS::StringUpper(descriptor->m_wstrFile).c_str());
+                if (trigger->m_particle)
+                {
+                    trigger->m_particle->setPosition(Ogre::Vector3::ZERO);
+                    trigger->m_stopOnDeath = true;
+                    trigger->m_animationIndex = -1;
+                    trigger->m_theme = theme;
+                    trigger->m_stopWhenHidden = true;
+                    trigger->m_stopFlag59 = false;
+                    STRINGS::StringConvertToNarrow(descriptor->m_wstrBone, trigger->m_name);
+                    configureParticleTrigger(trigger, bone);
+                }
+            }
+        }
+    }
+}
+
+void CCharacter::getBones()
+{
+    if (!m_pUnitModel)
+        return;
+    Ogre::SkeletonInstance* skeleton = m_pUnitModel->m_pSkeleton;
+    if (skeleton)
+    {
+        for (unsigned int i = 0; i < m_particleTriggers.size(); ++i)
+            if (m_particleTriggers[i]->m_nodeOwner)
+                m_particleTriggers[i]->m_nodeOwner = skeleton->getBone(m_particleTriggers[i]->m_name);
+        const char* right = NULL;
+        if (skeleton->hasBone("tag_righthand"))
+            right = "tag_righthand";
+        else if (skeleton->hasBone("Bip01 R Hand"))
+            right = "Bip01 R Hand";
+        if (right)
+        {
+            m_rightHandBone = skeleton->getBone(right);
+            m_fishingBone = skeleton->getBone(right);
+            if (!m_pRightHandNode)
+            {
+                m_pRightHandNode = m_pResourceManager->getSceneManager()->createSceneNode();
+                m_pSceneNode->addChild(m_pRightHandNode);
+                float scale = m_pDataGroup->GetDataValue(L"WEAPON_SCALE", 1.0f);
+                m_pRightHandNode->setScale(scale, scale, scale);
+            }
+            if (ISA(static_cast<UNITTYPES::EUNITTYPES>(28)) && !m_fishingNode)
+            {
+                m_fishingNode = m_pResourceManager->getSceneManager()->createSceneNode();
+                m_pSceneNode->addChild(m_fishingNode);
+                m_fishingNode->setVisible(false, true);
+            }
+        }
+        const char* left = NULL;
+        if (skeleton->hasBone("tag_lefthand"))
+            left = "tag_lefthand";
+        else if (skeleton->hasBone("Bip01 L Hand"))
+            left = "Bip01 L Hand";
+        if (left)
+        {
+            m_leftHandBone = skeleton->getBone(left);
+            if (!m_pLeftHandNode)
+            {
+                m_pLeftHandNode = m_pResourceManager->getSceneManager()->createSceneNode();
+                m_pSceneNode->addChild(m_pLeftHandNode);
+                float scale = m_pDataGroup->GetDataValue(L"WEAPON_SCALE", 1.0f);
+                m_pLeftHandNode->setScale(scale, scale, scale);
+            }
+        }
+        if (skeleton->hasBone("tag_leftarm"))
+        {
+            m_shieldBone = skeleton->getBone("tag_leftarm");
+            if (!m_pShieldNode)
+            {
+                m_pShieldNode = m_pResourceManager->getSceneManager()->createSceneNode();
+                m_pSceneNode->addChild(m_pShieldNode);
+                float scale = m_pDataGroup->GetDataValue(L"SHIELD_SCALE", 1.0f);
+                m_pShieldNode->setScale(scale, scale, scale);
+            }
+        }
+        if (skeleton->hasBone("Bip01 Head"))
+        {
+            m_headBone = skeleton->getBone("Bip01 Head");
+            if (!m_pHeadNode)
+            {
+                m_pHeadNode = m_pResourceManager->getSceneManager()->createSceneNode();
+                m_pSceneNode->addChild(m_pHeadNode);
+            }
+        }
+        if (ISA(static_cast<UNITTYPES::EUNITTYPES>(28)) && skeleton->hasBone("Bip01 R Clavicle"))
+        {
+            m_leftShoulderBone = skeleton->getBone("Bip01 R Clavicle");
+            if (!m_pRightShoulderNode)
+            {
+                m_pRightShoulderNode = m_pResourceManager->getSceneManager()->createSceneNode();
+                m_pSceneNode->addChild(m_pRightShoulderNode);
+            }
+        }
+        if (ISA(static_cast<UNITTYPES::EUNITTYPES>(28)) && skeleton->hasBone("Bip01 L Clavicle"))
+        {
+            m_rightShoulderBone = skeleton->getBone("Bip01 L Clavicle");
+            if (!m_pLeftShoulderNode)
+            {
+                m_pLeftShoulderNode = m_pResourceManager->getSceneManager()->createSceneNode();
+                m_pSceneNode->addChild(m_pLeftShoulderNode);
+            }
+        }
+    }
+    if (m_pInventory)
+        for (unsigned int i = 0; i < 12; ++i)
+        {
+            CEquipment* equipment = m_pInventory->getEquipmentInSlot(i);
+            if (equipment)
+                equipment->attachToGivenLocation(m_pInventory->m_pPositionableObject, static_cast<EEQUIP_LOCATIONS>(i));
+        }
+    updateBonePositions();
 }

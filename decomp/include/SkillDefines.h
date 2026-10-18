@@ -2,6 +2,7 @@
 #define SKILLDEFINES_H
 
 #include <string>
+#include "UnitTypes.h"
 
 // Skill event, target, activation and type names. Internal linkage: every
 // including TU constructs its own copy. Enumerator names are ours; values
@@ -87,5 +88,9 @@ static const std::wstring gSKILL_BONE_ATTACHMENT_NAMES[] =
     L"LEFTSHOULDER",
     L"POSITION",
 };
+
+std::wstring getWeaponString(UNITTYPES::EUNITTYPES);
+static const bool gSKILL_EVENT_TYPE_CLONE_ALLOWED[11] = {false,false,false,true,true,true,true,true,false,true,false};
+static const std::wstring gSKILL_EFFECT_AND_AFFIXES_TARGET_NAMES[5] = {L"ENEMY",L"SELF",L"PET",L"EVERYBODY",L"FRIEND"};
 
 #endif

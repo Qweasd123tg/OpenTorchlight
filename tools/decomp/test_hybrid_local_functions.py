@@ -4,10 +4,53 @@ import subprocess
 import tempfile
 from pathlib import Path
 import unittest
+from types import SimpleNamespace
+import copy
 import elfimage
 import hybrid
 
 class LocalHookTests(unittest.TestCase):
+    def crt_image(self):
+        symbol=SimpleNamespace(name='atexit',value=0xf9f710,size=26,type=elfimage.STT_FUNC,
+                               bind=elfimage.STB_LOCAL,defined=True)
+        section=SimpleNamespace(type=1,flags=6,addr=0xf9f000,size=0x1000)
+        body=bytes.fromhex('488b0501fa47004885c0740a488b1031f6e9c25a5bff31d2ebf5')
+        return SimpleNamespace(sha256=elfimage.ORIGINAL_SHA256,symbols=[symbol],
+                               section_at=lambda address:section,read=lambda address,size:body)
+
+    def test_original_local_atexit_wrapper_is_explicitly_linked(self):
+        image=self.crt_image()
+        self.assertEqual(hybrid.native_crt_aliases(image),{'atexit':0xf9f710})
+        image.plt={};image.dynsyms=[]
+        ctx=SimpleNamespace(functions={},global_data={},local_data={},image=image)
+        text,provided=hybrid.originals_script(ctx,[])
+        self.assertIn('PROVIDE("atexit" = 0xf9f710);',text)
+        self.assertIn('atexit',provided)
+
+    def test_local_crt_alias_rejects_unverified_or_ambiguous_identity(self):
+        for change in ('elf','name','address','size','binding','type','undefined','missing','duplicate',
+                       'section','writable','no_section','short_section','body','short_body','other_function'):
+            with self.subTest(change=change):
+                image=self.crt_image();symbol=image.symbols[0]
+                if change=='elf':image.sha256='0'*64
+                elif change=='name':symbol.name='atexit_other'
+                elif change=='address':symbol.value+=1
+                elif change=='size':symbol.size+=1
+                elif change=='binding':symbol.bind=elfimage.STB_GLOBAL
+                elif change=='type':symbol.type=elfimage.STT_OBJECT
+                elif change=='undefined':symbol.defined=False
+                elif change=='missing':image.symbols=[]
+                elif change=='duplicate':image.symbols.append(copy.copy(symbol))
+                elif change=='no_section':image.section_at=lambda address:None
+                elif change in ('section','writable','short_section'):
+                    section=image.section_at(0xf9f710)
+                    if change=='section':section.type=8
+                    elif change=='writable':section.flags=7
+                    else:section.size=1
+                elif change=='body':image.read=lambda address,size:b'\0'*26
+                elif change=='short_body':image.read=lambda address,size:b'\0'
+                else:symbol.name='another_local_runtime'
+                self.assertEqual(hybrid.native_crt_aliases(image),{})
     @unittest.skipUnless(shutil.which("as") and shutil.which("ld"), "requires ELF assembler and linker")
     def test_two_tus_can_hook_same_local_name_without_merging_bodies(self):
         owned={"helper": {"names":["helper"], "bind":["local"]},

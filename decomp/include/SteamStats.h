@@ -1,6 +1,8 @@
 #ifndef STEAMSTATS_H
 #define STEAMSTATS_H
 
+class CGame;
+
 #include "DescriptorProp.h"
 #include "GameEnums.h"
 #include "Player.h"
@@ -73,7 +75,7 @@ public:
 	TStatListenerMap m_statListeners;
 	TArrayList<SStatChange> m_pendingStatChanges;
 
-	long long m_llLastStoreTime;
+	CGame* m_game; // +0x90, assigned by CGame::setup
 	CPlayer* m_pPlayer;
 };
 

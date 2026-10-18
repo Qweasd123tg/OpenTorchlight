@@ -9,13 +9,17 @@ class CLevelState;
 class CDungeonTracker;
 class CParticle;
 class CQuestManager;
+class CPath;
+class CDynamicLine;
 
 // Partial: Player.cpp is not recovered. Virtual overrides follow the original
 // vtable; the unexamined player fields retain their original extent.
 class CPlayer : public CCharacter
 {
+    friend class CSpawnClassData;
 friend class CGameClient;
 public:
+    void storeLevelSavedState(CLevel& level);
     bool removeItemFromInventoryOrPetsInventoryByGuid(long long guid, bool wholeStack, bool destroy, UNITTYPES::EUNITTYPES type);
     bool removeQuestItemFromInventoryOrPetsInventoryByGuid(long long quest, long long guid, bool wholeStack, bool destroy, UNITTYPES::EUNITTYPES type);
     void setQuestManager(CQuestManager* manager);
@@ -83,9 +87,9 @@ public:
 
 private:
     friend class CSteamStats;
-    unsigned char m_Padding778[0x8];
+    CParticle* m_levelUpParticle; // +0x778
     long long m_itemLinks[2]; // +0x780
-    unsigned char m_Padding790;
+    bool m_godMode; // +0x790
     unsigned char m_cheatMarker;
     unsigned char m_Padding792[6];
     std::vector<CLevelState*> m_savedLevels; // +0x798
@@ -96,7 +100,7 @@ private:
     Ogre::Vector3 m_portalPosition; // +0x7c0
     int m_returnDepth; // +0x7cc
     std::wstring m_returnDungeon; // +0x7d0
-    unsigned char m_Padding7D8[4];
+    int m_levelSaveSerial; // +0x7d8
     union {
         int m_journalStats[43];
         // This overlay begins at +0x7dc; packing preserves the original
@@ -106,7 +110,8 @@ private:
     unsigned char m_Padding824[4];
     CGenericModel* m_fishingPole; // +0x828
     CGenericModel* m_fishingParticle; // +0x830, the animated fish model
-    unsigned char m_Padding838[0x10];
+    CPath* m_fishingPath; // +0x838
+    CDynamicLine* m_fishingLine; // +0x840
     Ogre::SceneNode* m_fishingLineNode; // +0x848
     float m_fishingTime; // +0x850
     float m_fishingValue854; // +0x854
@@ -129,12 +134,13 @@ private:
     long long m_leftSkillMap[10]; // +0x900
     long long m_functionSkills[12]; // +0x950
     long long m_leftFunctionSkills[12]; // +0x9b0
-    unsigned char m_PaddingA10[0x5];
+    unsigned char m_PaddingA10[4];
+    bool m_playerTranslucent; // +0xa14
     bool m_saveOnDeath; // +0xa15
     bool m_followersEnabled; // +0xa16
     unsigned char m_PaddingA17[0x29];
     TArrayList<CDungeonTracker*> m_dungeonTrackers; // +0xa40
-    unsigned char m_PaddingA58[0x18];
+    TArrayList<std::wstring> m_loadedModNames; // +0xa58
 };
 
 #endif
