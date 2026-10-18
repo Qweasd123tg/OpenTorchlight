@@ -128,7 +128,8 @@ void CGraph::loadGraphLine(CDataGroup* data)
 bool CGraph::loadGraph(const wchar_t* filename)
 {
     CDataGroup data(L"", NULL, 20, 10, NULL);
-    data.LoadFile(filename, NULL);
+    std::wstring wideFilename(filename);
+    data.LoadFile(wideFilename, NULL);
     std::wstring type = STRINGS::StringUpper(data.GetDataValue(L"TYPE", L"LINE"));
     m_eType = static_cast<EGRAPH_TYPES>(data.GetDataValue(L"CURVED", false));
     m_sName = data.GetDataValue(L"NAME", EMPTY_WSTRING);

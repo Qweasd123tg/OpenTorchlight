@@ -145,3 +145,83 @@ void CGameClient::notifyOfDeletion(CCharacter* object)
     if (m_selectedCharacter.getObject() == object) m_selectedCharacter.setObject(NULL);
     if (m_pGameUI) m_pGameUI->notifyOfDeletion(object);
 }
+
+#include "SettingsVariables.h"
+#include "CameraControl.h"
+#include "UtilitiesMath.h"
+#include "EmptyStrings.h"
+#include "DungeonManager.h"
+#include "Dungeon.h"
+#include "Level.h"
+#include "LevelState.h"
+#include "CharacterSaveState.h"
+
+void CGameClient::setSpeedMult(float speed)
+{
+    if (speed <= 0) m_speedMult = 0;
+    else if (speed > 5) m_speedMult = 5;
+    else m_speedMult = speed;
+}
+
+bool CGameClient::getIsPaused()
+{
+    if (m_interactionState) return true;
+    if (m_pGameUI && m_pGameUI->bothCoveredPartial()) return true;
+    if (m_pGameUI && m_pGameUI->getConsoleIsOpen() && !m_settings->GetInt(KSETTINGS_CONSOLE_NOPAUSE)) return true;
+    if (m_pGameUI && m_pGameUI->modalDialogOpenPartial()) return true;
+    if (m_pGameUI) return m_pGameUI->m_paused;
+    return false;
+}
+
+void CGameClient::findCameraTargetLocation(Ogre::Vector3& result, float height)
+{
+    Ogre::Ray ray;
+    Ogre::Vector3 normal(0,1,0);
+    m_cameraControl->m_cameras[0]->getCameraToViewportRay(0.5f,0.5f,&ray);
+    float x=ray.getDirection().x, z=ray.getDirection().z;
+    float distance=MATH::distanceToPlane(ray.getOrigin(),ray.getDirection(),normal,height);
+    result.z=ray.getOrigin().z+z*distance;
+    result.y=0;
+    result.x=ray.getOrigin().x+x*distance;
+}
+
+void CGameClient::killPets()
+{
+    for (int i=0;i<static_cast<int>(m_pPlayer->getFollowerCount());++i) {
+        CCharacter* follower=m_pPlayer->getFollower(i);
+        if (follower->diesOnWarp()) { follower->die(NULL,NULL,0,false); --i; }
+    }
+}
+
+void CGameClient::setCurrentDungeon(std::wstring name)
+{
+    name=STRINGS::StringUpper(name);
+    CDungeon* dungeon=CDungeonManager::getSingleton()->getDungeonByName(name);
+    if(dungeon)m_currentDungeon=dungeon;
+}
+
+void CGameClient::warpLevels(std::wstring dungeon,int delta,int depth,bool flag,std::wstring name,bool pending)
+{
+    m_warpFlag=flag;
+    m_warpPending=pending;
+    m_warpName=STRINGS::StringUpper(name);
+    if(STRINGS::StringUpper(dungeon)==L"LASTDUNGEON" && m_pPlayer->m_returnDungeon!=EMPTY_WSTRING) {
+        m_warpDungeon=m_pPlayer->m_returnDungeon;
+        m_warpDelta=0;
+        m_warpDepth=m_pPlayer->m_returnDepth;
+    } else {
+        m_warpDungeon=dungeon;
+        m_warpDepth=depth;
+        m_warpDelta=delta;
+    }
+    m_warpWaypoint=true;
+}
+
+bool CGameClient::storedUnitExists(long long guid)
+{
+    if(!m_level || !m_pPlayer)return false;
+    CLevelState* state=m_pPlayer->getLevelSavedState(m_level->getDungeonName(),m_level->getLevelDepth());
+    for(unsigned int i=0;i<static_cast<unsigned int>(state->m_lCharacters.size());++i)
+        if(state->m_lCharacters[i]->m_guid10==guid)return true;
+    return false;
+}

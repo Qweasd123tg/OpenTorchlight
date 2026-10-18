@@ -42,6 +42,7 @@ class CGameUI;
 class CCameraControl;
 class CResourceManager : public CRunicCore
 {
+    friend class CLevel;
 public:
     CBaseUnit* createUnit(const wchar_t* category, const wchar_t* name, int level, bool flag);
     int ISA(const std::wstring& unit, const std::wstring& parent);

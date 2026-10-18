@@ -18,6 +18,7 @@ class CEquipment;
 class CSkillManager : public CRunicCore
 {
     friend class CSkill;
+    friend class CSkillController;
 
 friend class CEquipment;
 friend class CCharacter;

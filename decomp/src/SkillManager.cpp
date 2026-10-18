@@ -496,3 +496,95 @@ void CSkillManager::setSkillLevel(CSkill* skill, unsigned int level)
         startPassiveSkills(m_Owner.getObject(), m_Owner.getObject()->getPosition(true),
                            m_Owner.getObject()->getOrientationQuaternion(), m_Owner.getObject()->getPosition(true));
 }
+
+CSkill* CSkillManager::addSkill(CSkill* skill, bool clone, bool addToList)
+{
+    if (!skill)
+        return NULL;
+    CSkill* result = skill;
+    if (clone)
+    {
+        unsigned int level = skill->m_skillLevel;
+        result = new CSkill(m_pResourceManager, skill->m_pDataGroup);
+        result->_setLevelOfSkillFromSkillManager(level);
+        result->m_bExecutedByProperty = !skill->enabledWithoutProperty();
+        result->m_iCharges = skill->m_iCharges;
+        result->m_iColumn = skill->m_iColumn;
+    }
+    std::map<std::wstring,TArrayList<CSkill*>*>::iterator found =
+        m_SkillsByName.find(STRINGS::StringUpper(result->getName()));
+    if (found == m_SkillsByName.end())
+    {
+        m_SkillsByName[STRINGS::StringUpper(result->getName())] = new TArrayList<CSkill*>(1);
+        found = m_SkillsByName.find(STRINGS::StringUpper(result->getName()));
+        m_OtherSkills.add(result);
+    }
+    else if (addToList)
+        m_OtherSkills.add(result);
+    found->second->add(result);
+    result->m_pSkillManager = this;
+    return result;
+}
+
+CSkill* CSkillManager::executeSkill(const std::wstring& name, CBaseUnit* caster,
+    ESKILL_ACTIVATION_TYPE activation, const Ogre::Vector3& position,
+    const Ogre::Quaternion& orientation, const Ogre::Vector3& targetPosition,
+    CBaseUnit* target, int level)
+{
+    if (m_gDisableSkillFromBeingCasted)
+        return NULL;
+    std::map<std::wstring,TArrayList<CSkill*>*>::iterator found =
+        m_SkillsByName.find(STRINGS::StringUpper(name));
+    if (found == m_SkillsByName.end())
+        return NULL;
+    CSkill* skill = NULL;
+    CSkill* last = NULL;
+    for (unsigned int i = 0; i < found->second->size(); ++i)
+    {
+        if (!(*found->second)[i]->m_interruptible)
+        {
+            skill = (*found->second)[i];
+            break;
+        }
+        last = (*found->second)[i];
+    }
+    if (!skill && last)
+    {
+        skill = addSkill(last, true, false);
+        skill->_setLevelOfSkillFromSkillManager(level);
+    }
+    if (!skill)
+        return NULL;
+    if (skill->getIsExclusive())
+        for (unsigned int i = 0; i < m_UpdatingSkills.size(); ++i)
+            if (m_UpdatingSkills[i]->m_Guid == skill->m_Guid)
+                m_UpdatingSkills[i]->stopSkill();
+    if (m_UpdatingSkills.find(skill) != -1)
+        return NULL;
+    if (!skill->startSkill(caster, activation, position, orientation, targetPosition, target))
+        return NULL;
+    m_UpdatingSkills.add(skill);
+    decrementSkillCharges(skill);
+    return skill;
+}
+
+CSkill* CSkillManager::executeSkill(CSkill* skill, CBaseUnit* caster,
+    ESKILL_ACTIVATION_TYPE activation, const Ogre::Vector3& position,
+    const Ogre::Quaternion& orientation, const Ogre::Vector3& targetPosition,
+    CBaseUnit* target)
+{
+    if (!skill || m_gDisableSkillFromBeingCasted)
+        return NULL;
+    if (skill->getIsExclusive())
+        for (unsigned int i = 0; i < m_UpdatingSkills.size(); ++i)
+            if (m_UpdatingSkills[i]->m_Guid == skill->m_Guid)
+                m_UpdatingSkills[i]->stopSkill();
+    if (m_UpdatingSkills.find(skill) != -1)
+        return executeSkill(skill->getName(), caster, activation, position,
+                            orientation, targetPosition, target, skill->m_skillLevel);
+    if (!skill->startSkill(caster, activation, position, orientation, targetPosition, target))
+        return NULL;
+    m_UpdatingSkills.add(skill);
+    decrementSkillCharges(skill);
+    return skill;
+}

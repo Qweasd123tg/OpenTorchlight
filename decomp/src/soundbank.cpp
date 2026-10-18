@@ -171,3 +171,40 @@ void CSoundBank::update(float, Ogre::SceneNode* node)
     m_lastPosition=listener;m_dirty=false;m_lastVolume=volume;
     for(unsigned i=0;i<m_channels.size();++i)m_soundManager->setSoundVolume(m_channels[i],volume);
 }
+
+int CSoundBank::playSample(int sample, Ogre::SceneNode* node, float volume,
+                           float radius, bool untracked)
+{
+    if (!m_soundManager->m_bUnknown6A9 || !m_soundManager->m_bUnknown6A8)
+        return -1;
+    if (sample >= static_cast<int>(m_samples.size()) || sample < 0)
+        return -1;
+    if (m_probabilities[sample] >= 0 &&
+        UTILITIES::randomIntegerBetweenVolatile(1, 100) >= m_probabilities[sample])
+        return -1;
+    if (volume == 0.0f)
+        volume = m_volumes[sample];
+    else
+        volume *= m_volumeScale;
+    if (radius == 0.0f)
+        radius = m_radii[sample];
+    if (static_cast<unsigned int>(m_samples[sample].size()) == 0)
+        return -1;
+    float scale = node ? configureVolumeScale(radius, node->_getDerivedPosition()) : 1.0f;
+    m_lastVolume = volume * scale;
+    unsigned int index = UTILITIES::randomIntegerBetweenVolatile(0, m_samples[sample].size() - 1);
+    CSoundInstance* sound = m_samples[sample][index];
+    if (m_loop)
+        stop();
+    else {
+        m_channels.clear();
+        m_sampleIDs.clear();
+    }
+    int channel = m_soundManager->playSound(sound, m_loop ? node : NULL, -1, m_lastVolume);
+    if (!untracked && channel != -1) {
+        m_channels.add(channel);
+        m_sampleIDs.add(sample);
+    }
+    m_dirty = true;
+    return channel;
+}

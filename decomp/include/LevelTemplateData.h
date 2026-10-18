@@ -60,6 +60,7 @@ struct CLevelCreationRange { float minimum, maximum; };
 // Owning layout: 0x778 bytes. Some trivial members retain descriptive or offset names.
 class CLevelTemplateData : public CRunicCore
 {
+    friend class CLevel;
 public:
     CLevelTemplateData(wchar_t const* filename);
     void load(wchar_t const* filename);

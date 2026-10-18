@@ -19,6 +19,7 @@ public:
 template <class T>
 class TLinkedList : public Ogre::GeneralAllocatedObject
 {
+    friend class CLevel;
 public:
     TLinkedListNode<T>* getHead() { return m_pHead; }
 
