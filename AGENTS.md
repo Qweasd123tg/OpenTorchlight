@@ -82,18 +82,21 @@
 с согласованным владельцем TU, а не обходить чужую работу.
 
 ```sh
-OTL_OWNER=opencode python3 tools/decomp/llm_loop.py collisionlist.cpp --address 0x5a82c0 --address 0x5a9080 --jobs 2 --rounds 2 --model-retries 0 --no-autotest --prepare-only
+OTL_OWNER=opencode python3 tools/decomp/llm_loop.py collisionlist.cpp --address 0x5a82c0 --address 0x5a9080 --jobs 2 --rounds 2 --model-retries 0 --no-autotest --prepare-only --json
 ```
 
-TU и адреса заменяй назначенным срезом. Из строки `isolated attempt:` возьми
-путь попытки; её `build-decomp/llm-loop/<TU>/result.json` перечисляет блокировки
-и пути к `prompts/<address>.md`, checkpoint и исходнику. Пиши код только после
+TU и адреса заменяй назначенным срезом. В stdout получи один JSON с
+`result_path` и сохранённым `external_handoff`; журнал идёт в stderr.
+Handoff уже содержит блокировки, точные пути и хеши пакетов, checkpoint и
+исходника; повторно собирать их вручную не нужно. Полный `result.json` открывай
+для дополнительных диагностик. Пиши код только после
 проверки, что все назначенные адреса имеют непустой пакет, не заблокированы
 и не оказались уже реализованными. В пакет входят ASM, полный заголовок
 владельца, доступные прямые зависимости и данные; не собирай их вручную заново.
-Отдельного статуса ready нет. `artifacts.source` — путь, который для ещё
-пустого TU может не существовать; прежний текст также есть в checkpoint
-в поле `existing`.
+`external_handoff.status: ready` означает только готовность пакета, не приёмку
+функций. При `blocked`/`unprepared` выясни причины из `blockers`; одного нулевого
+кода завершения недостаточно. `submission.source` может ещё не существовать
+для пустого TU; прежний текст также есть в checkpoint в поле `existing`.
 
 Ghidra остаётся черновиком: отсутствие свежего COMPLETE receipt не заменяй
 догадкой о типах. При смене исходников, заголовков или инструментов подготовь
