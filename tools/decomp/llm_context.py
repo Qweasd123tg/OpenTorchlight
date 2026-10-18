@@ -1149,7 +1149,7 @@ class ContextIndex:
     REPOSITORY_HEADER_SHA256 = "7ba56f5caed6ad2de4c4bb6600a1d8e0fb2160127366e9bfb5f7d3269356c7f1"
 
     def _pinned_insert_headers(self, callee, scope):
-        """Three reviewed weak insertions already declared by generic headers.
+        """Seven reviewed weak insertions already declared by generic headers.
 
         The shallow scanner omits class templates. Supply only authenticated
         existing source for these exact identities, never a generated declaration
@@ -1163,6 +1163,18 @@ class ContextIndex:
             "TArrayList<CEditorBaseObject*>":
                 (0x9e0a30, 180, "_ZN10TArrayListIP17CEditorBaseObjectE3addES1_", "add", "CEditorBaseObject*",
                  "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CEditorBaseObject"),
+            "TArrayList<CSkill*>":
+                (0xcd56e0, 180, "_ZN10TArrayListIP6CSkillE3addES1_", "add", "CSkill*",
+                 "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CSkill"),
+            "TArrayList<CDataGroup*>":
+                (0xa7e5e0, 180, "_ZN10TArrayListIP10CDataGroupE3addES1_", "add", "CDataGroup*",
+                 "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CDataGroup"),
+            "TArrayList<int>":
+                (0xa69ec0, 180, "_ZN10TArrayListIiE3addEi", "add", "int",
+                 "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<bool>":
+                (0x90da90, 176, "_ZN10TArrayListIbE3addEb", "add", "bool",
+                 "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TRepository<" + wide + " >":
                 (0xc64bf0, 1409, "_ZN11TRepositoryISbIwSt11char_traitsIwESaIwEEE7addItemERS3_",
                  "addItem", wide + "&", "TRepository.h", self.REPOSITORY_HEADER_SHA256, None),
@@ -1196,7 +1208,7 @@ class ContextIndex:
             if self._path("include", owner).read_text() != self.sources[owner]:
                 return set()
             headers.update(complete)
-        elif not self._string_template_headers():
+        elif scope not in ("TArrayList<int>", "TArrayList<bool>") and not self._string_template_headers():
             return set()
         return headers
 

@@ -1,7 +1,7 @@
 """Finite pipeline tests: no original ELF, Ghidra, provider or game needed."""
 import json
 import io
-from contextlib import nullcontext, redirect_stdout
+from contextlib import nullcontext, redirect_stdout, redirect_stderr
 from pathlib import Path
 from types import SimpleNamespace
 import tempfile
@@ -460,6 +460,54 @@ class Pipeline(unittest.TestCase):
         stage = self.main_stage([])
         stage.validate.assert_not_called()
         stage.publish.assert_not_called()
+
+    def test_cli_json_emits_saved_handoff_once_and_keeps_logs_on_stderr(self):
+        self.loop.prepare_only = True
+        self.loop.external_handoff = Mock(return_value={
+            "schema": 1, "status": "ready", "blockers": [],
+            "targets": [{"address": "0x2", "prompt": "prepared.md", "sha256": "pinned"}],
+            "submission": {"prepared_source_exists": False, "prepared_source_sha256": None}})
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with redirect_stdout(stdout), redirect_stderr(stderr):
+            stage = self.main_stage(["--prepare-only", "--json"])
+        output = json.loads(stdout.getvalue())
+        self.assertEqual(str(self.loop.work / "result.json"), output["result_path"])
+        self.assertEqual(self.result()["external_handoff"], output["external_handoff"])
+        self.loop.external_handoff.assert_called_once_with(True, None)
+        self.assertIn("isolated attempt:", stderr.getvalue())
+        self.assertIn("done in", stderr.getvalue())
+        self.model_class.assert_not_called()
+        stage.validate.assert_not_called()
+        stage.publish.assert_not_called()
+
+    def test_cli_json_preserves_blockers_and_has_no_cycle_command(self):
+        self.loop.prepare_only = True
+        self.loop.prompt_for.side_effect = ValueError("missing ABI")
+        stdout = io.StringIO()
+        with redirect_stdout(stdout), redirect_stderr(io.StringIO()):
+            self.main_stage(["--prepare-only", "--json"])
+        handoff = json.loads(stdout.getvalue())["external_handoff"]
+        self.assertEqual(self.result()["external_handoff"], handoff)
+        self.assertEqual("blocked", handoff["status"])
+        self.assertTrue(any("missing ABI" in b for b in handoff["blockers"]))
+        self.assertIsNone(handoff["cycle_argv_template"])
+
+    def test_cli_json_requires_prepare_and_never_publishes(self):
+        for options in (["--json"], ["--prepare-only", "--json", "--publish"]):
+            with self.subTest(options=options), redirect_stderr(io.StringIO()), \
+                    self.assertRaises(SystemExit) as error:
+                self.main_stage(options)
+            self.assertEqual(2, error.exception.code)
+        self.model_class.assert_not_called()
+
+    def test_cli_json_does_not_emit_success_after_preparation_error(self):
+        self.loop.prepare_only = True
+        self.loop.header.side_effect = RuntimeError("preparation interrupted")
+        stdout = io.StringIO()
+        with redirect_stdout(stdout), redirect_stderr(io.StringIO()), \
+                self.assertRaisesRegex(RuntimeError, "preparation interrupted"):
+            self.main_stage(["--prepare-only", "--json"])
+        self.assertEqual("", stdout.getvalue())
 
     def test_cli_publish_calls_existing_stage_safeguards_once(self):
         self.model.ask.return_value = ("int CProbe::work() { return 1; }", "session")

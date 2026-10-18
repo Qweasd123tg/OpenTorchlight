@@ -143,4 +143,116 @@ class PinnedInsertionTests(TestCase):
         self.assertTrue(self.index().build(self.target,'1000: call '+old).gaps)
 
 
+class AdditionalInsertionTests(TestCase):
+    """Four reviewed identities; no ELF or ignored proposal input is required."""
+
+    setUp = fixtures.PacketContextTests.setUp
+    write_header = fixtures.PacketContextTests.write_header
+    add_function = fixtures.PacketContextTests.add_function
+    index = fixtures.PacketContextTests.index
+    rows = (
+        ('CSkill*', 0xcd56e0, 180, '_ZN10TArrayListIP6CSkillE3addES1_'),
+        ('CDataGroup*', 0xa7e5e0, 180, '_ZN10TArrayListIP10CDataGroupE3addES1_'),
+        ('int', 0xa69ec0, 180, '_ZN10TArrayListIiE3addEi'),
+        ('bool', 0x90da90, 176, '_ZN10TArrayListIbE3addEb'),
+    )
+
+    def insertion(self, row):
+        element, address, size, symbol = row
+        scope = 'TArrayList<' + element + '>'
+        f = fixtures.function(address, scope, 'add', tu=1, size=size,
+                              kind='inline_or_template', bind=['weak'],
+                              names=[symbol], params=element)
+        f['mangled'] = symbol
+        self.add_function(f)
+        source = Path(__file__).resolve().parents[2] / 'decomp/include/TArrayList.h'
+        (self.include/'TArrayList.h').write_bytes(source.read_bytes())
+        if element.endswith('*'):
+            name = element[:-1]
+            self.write_header('Element.h', 'class ' + name + ' { public: int value; };\n')
+            self.mapping[name] = 'Element.h'
+        self.image.symbols = [SimpleNamespace(type=2, bind=2, defined=True,
+                                              value=address, name=symbol, size=size)]
+        return f
+
+    def context(self, f, index=None):
+        return (index or self.index()).build(self.target, '1000: call ' + f['address'])
+
+    def test_four_reviewed_positive_headers_without_string_runtime(self):
+        for row in self.rows:
+            with self.subTest(element=row[0]), mock.patch.object(
+                    ContextIndex, '_string_template_headers', return_value=False):
+                f = self.insertion(row)
+                result = self.context(f).require_complete()
+                expected = {'TArrayList.h'} | ({'Element.h'} if row[0].endswith('*') else set())
+                self.assertEqual(set(result.headers), expected)
+                self.assertIn((self.include/'TArrayList.h').read_text(), result.text)
+                self.assertIn('No specialization or prototype synthesized', result.text)
+
+    def test_wrong_db_symbol_address_size_kind_and_element_type_rejected(self):
+        changes = [('mangled', '_wrong'), ('names', ['_wrong']), ('address', '0x1234'),
+                   ('size', 1), ('kind', 'function'), ('bind', ['global']),
+                   ('params', 'unsigned int'), ('cv', 'const'),
+                   ('qualified', 'Other::add'), ('scope', 'TArrayList<unsigned int>')]
+        for row in self.rows:
+            for key, value in changes:
+                with self.subTest(element=row[0], field=key):
+                    f = self.insertion(row)
+                    address = f['address']
+                    f[key] = value
+                    self.assertTrue(self.index().build(self.target, '1000: call ' + address).gaps)
+
+    def test_wrong_or_missing_elf_function_identity_rejected(self):
+        changes = [('name', '_wrong'), ('value', 0x1234), ('size', 1), ('bind', 1),
+                   ('type', 1), ('defined', False), ('missing', True)]
+        for row in self.rows:
+            for key, value in changes:
+                with self.subTest(element=row[0], field=key):
+                    f = self.insertion(row)
+                    if key == 'missing':
+                        self.image.symbols = []
+                    else:
+                        setattr(self.image.symbols[0], key, value)
+                    self.assertTrue(self.context(f).gaps)
+
+    def test_header_digest_and_scanned_freshness_rejected(self):
+        for row in self.rows:
+            for change in ('digest', 'stale', 'missing'):
+                with self.subTest(element=row[0], change=change):
+                    f = self.insertion(row)
+                    index = self.index()
+                    header = self.include/'TArrayList.h'
+                    if change == 'digest':
+                        header.write_text(header.read_text() + '// changed\n')
+                        index = self.index()
+                    elif change == 'stale':
+                        index.sources['TArrayList.h'] += '// stale\n'
+                    else:
+                        header.unlink()
+                        index = self.index()
+                    self.assertTrue(self.context(f, index).gaps)
+
+    def test_pointer_type_requires_unique_complete_current_header(self):
+        for row in self.rows:
+            if not row[0].endswith('*'):
+                continue
+            for change in ('unmapped', 'forward', 'ambiguous', 'stale'):
+                with self.subTest(element=row[0], change=change):
+                    f = self.insertion(row)
+                    name = row[0][:-1]
+                    index = None
+                    if change == 'unmapped':
+                        self.mapping.pop(name)
+                    elif change == 'forward':
+                        self.write_header('Element.h', 'class ' + name + ';\n')
+                    elif change == 'ambiguous':
+                        self.write_header('Other.h', 'class ' + name + ' { int other; };\n')
+                        self.mapping[name] = ['Element.h', 'Other.h']
+                    else:
+                        index = self.index()
+                        self.write_header('Element.h', 'class ' + name + ' { int changed; };\n')
+                    self.assertTrue(self.context(f, index).gaps)
+                    (self.include/'Other.h').unlink(missing_ok=True)
+
+
 if __name__=='__main__':main()

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import nullcontext, redirect_stdout
 import difflib
 import fcntl
 import hashlib
@@ -1344,6 +1345,7 @@ def main():
     parser.add_argument("--publish", action="store_true", help="validate the final Stage and explicitly publish")
     parser.add_argument("--no-autotest", action="store_true", help="MATCH diagnostics only; keep DIFF candidates out")
     parser.add_argument("--prepare-only", action="store_true", help="snapshot headers and prompts; no model/game calls")
+    parser.add_argument("--json", action="store_true", help="with --prepare-only: saved handoff on stdout, logs on stderr")
     parser.add_argument("--attempt", type=Path, help="resume this existing Stage; changed inputs fail closed")
     parser.add_argument("--model-timeout", type=int, default=180)
     parser.add_argument("--model-retries", type=int, default=2)
@@ -1351,6 +1353,8 @@ def main():
     parser.add_argument("--ignore-owner", action="store_true", help="work on a TU decomp/owners.json gives to "
                         "someone else than $OTL_OWNER")
     args = parser.parse_args()
+    if args.json and not args.prepare_only:
+        parser.error("--json requires --prepare-only")
     if args.repair_address and (not args.prepare_only or args.publish or args.address):
         parser.error("--repair-address requires --prepare-only without --publish or --address")
     if any(getattr(args, n) <= 0 for n in ("rounds", "switch_after", "jobs", "limit", "max_size", "model_timeout", "max_prompt_chars")) or args.model_retries < 0:
@@ -1360,6 +1364,16 @@ def main():
     models = [m.strip() for m in args.models.split(",") if m.strip()]
     if not models:
         parser.error("at least one explicit model is required")
+    with redirect_stdout(sys.stderr) if args.json else nullcontext():
+        result_path = run_attempt(args, models)
+    if args.json:
+        result = json.loads(result_path.read_text())
+        print(json.dumps({"result_path": str(result_path),
+                          "external_handoff": result["external_handoff"]}, ensure_ascii=False))
+
+
+def run_attempt(args, models):
+    """Run the existing Stage pipeline; JSON output reuses its saved handoff."""
     select_functions(elfdb.load_db(), args.tu, args.repair_address or args.address, args.limit, args.max_size)
     import parallel
     owner = parallel.owned_by_others(args.tu)
@@ -1419,6 +1433,7 @@ def main():
             print("published:", ", ".join(published) or "unchanged")
     from collections import Counter
     print(f"done in {(time.time() - started) / 60:.1f} min: {dict(Counter(status.values()))}")
+    return loop.work / "result.json"
 
 
 if __name__ == "__main__":
