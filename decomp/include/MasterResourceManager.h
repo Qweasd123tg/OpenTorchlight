@@ -34,6 +34,8 @@ class CSoundBankDataInformation;
 class CMasterResourceManager : public CRunicCore
 {
 public:
+    void removeUnused();
+    void removeAll();
     void destroyStash();
     CollisionModelRef* getCollisionModel(CCollisionModel* model);
     BatchModelRef* getBatchModel(CGenericModel* model);
@@ -83,7 +85,10 @@ public:
     CSettings* m_pSettings;
     CSoundManager* m_pSoundManager;
 private:
-    unsigned char m_UnrecoveredA0[0xd0-0xa0];
+    unsigned char m_UnrecoveredA0[0xc8-0xa0];
+public:
+    Ogre::SceneManager* m_pDefaultSceneManager; // +0xc8, ResourceManager constructor fallback
+private:
 public:
     Ogre::SceneManager* m_pSceneManager;
 private:

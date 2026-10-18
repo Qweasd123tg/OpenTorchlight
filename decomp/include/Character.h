@@ -66,6 +66,9 @@ friend class CGameClient;
 public:
     void makeChampion(const std::wstring& name, int level, std::wstring type);
     void completeDeath(CLevel& level);
+    void applyDamage(CLevel& level, const Ogre::Vector3& position, float damage,
+        const Ogre::Vector3& direction, float force, CCharacter* source,
+        bool flag1, bool flag2, bool flag3, bool flag4, unsigned int flags);
     CInventory* getInventory() const { return m_pInventory; }
     void createDefaultEquipment();
     void generateMerchantInventory();
@@ -283,6 +286,7 @@ public:
     std::wstring getSkillTabName(int);
     CEquipment* getWeaponInLeftHand();
     CCharacter(CResourceManager* resourceManager);
+    void spawn();
     virtual ~CCharacter();
 
     virtual void setVisible(bool visible);

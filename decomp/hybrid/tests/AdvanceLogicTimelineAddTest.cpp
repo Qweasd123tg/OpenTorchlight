@@ -1,0 +1,19 @@
+#include "ParentPairs.h"
+#include "Detour.h"
+#include "Timeline.h"
+#include "TimelineProperty.h"
+#include "Descriptor.h"
+TL_ORIGINAL(void,oldAdd,(CTimeline*,CEditorScene*,long long,int,bool),"_ZN9CTimeline11AddPropertyEP12CEditorScenexib")
+extern "C" void newAdd(CTimeline*,CEditorScene*,long long,int,bool) __asm__("_ZN9CTimeline11AddPropertyEP12CEditorScenexib");
+TL_FUNCTION(sceneLookup,"_ZN12CEditorScene16GetObjectInSceneEx")
+TL_FUNCTION(interpolate,"_ZN17CTimelineProperty20SetInterpolationTypeE22ETIMELINE_INTERP_TYPES")
+namespace {
+struct Descriptor:CDescriptor{Descriptor():CDescriptor(0){}virtual CEditorBaseObject*CreateObject(CEditorScene*){return NULL;}void add(CDescriptorProp*p){m_PropertyIDs[p->m_sName]=m_Properties.size();m_Properties.add(p);}};
+autotest::Capture*cap;CEditorBaseObject*object;CEditorScene*scene;unsigned seed;
+CEditorBaseObject*lookup(CEditorScene*p,long long id){parentpairs::scalar(*cap,p==scene);parentpairs::scalar(*cap,id);if(p!=scene)cap->issue=autotest::Capture::InvalidReport;return seed%9==1?NULL:object;}
+void interpolation(CTimelineProperty*p,ETIMELINE_INTERP_TYPES type){parentpairs::scalar(*cap,type);parentpairs::scalar(*cap,p->m_objectID);parentpairs::scalar(*cap,p->m_descriptorProperty!=NULL);parentpairs::scalar(*cap,p->m_eventID);parentpairs::scalar(*cap,p->m_inputEvent);p->m_interpolationType=type;}
+void side(void*raw,autotest::Capture&out,bool ours){seed=static_cast<parentpairs::Case*>(raw)->seed;cap=&out;Descriptor descriptor;CDescriptorProp property(L"category",L"VALUE",L"description",NULL,NULL,VARIABLE_TYPE_INTEGER,0);descriptor.add(&property);CEditorBaseObject base;object=&base;CDescriptor*d=seed%9==2?NULL:&descriptor;std::memcpy(reinterpret_cast<char*>(&base)+0x38,&d,sizeof(d));unsigned long long sceneMemory[(sizeof(CEditorScene)+7)/8]={0};scene=reinterpret_cast<CEditorScene*>(sceneMemory);CTimeline timeline;timeline.m_iDefaultInterpolationType=seed%8;typedef std::map<std::pair<int,bool>,CTimelineProperty*> Map;long long query=seed%13==0?-1:seed%5==0?0xffffffffLL:17;int index=seed%13==1?-1:seed%9==3?99:0;bool event=seed&1;for(unsigned i=0;i<seed%5;++i){Map*m=new Map;(*m)[std::make_pair(0,false)]=new CTimelineProperty(&timeline,scene,&descriptor,~0u,false,100+i);timeline.m_timelineProperties[100+i]=m;}if(seed%7<=2){Map*m=new Map;(*m)[std::make_pair(index,event)]=seed%7==0?new CTimelineProperty(&timeline,scene,&descriptor,~0u,false,query):NULL;timeline.m_timelineProperties[query]=m;}
+ detour::Set patches;TL_REDIRECT(patches,sceneLookup,&lookup);TL_REDIRECT(patches,interpolate,&interpolation);if(patches.failed()){out.issue=autotest::Capture::InvalidReport;return;}typedef void(*Fn)(CTimeline*,CEditorScene*,long long,int,bool);Fn fn=ours?newAdd:oldAdd;autotest::invoke(out,fn,&timeline,seed%13==2?NULL:scene,query,index,event);parentpairs::scalar(out,timeline.m_timelineProperties.size());for(std::map<long long,Map*>::iterator i=timeline.m_timelineProperties.begin();i!=timeline.m_timelineProperties.end();++i){parentpairs::scalar(out,i->first);parentpairs::scalar(out,i->second->size());for(Map::iterator j=i->second->begin();j!=i->second->end();++j){parentpairs::scalar(out,j->first.first);parentpairs::scalar(out,j->first.second);bool present=j->second!=NULL;parentpairs::scalar(out,present);if(present){CTimelineProperty*p=j->second;parentpairs::scalar(out,p->m_objectID);parentpairs::scalar(out,p->m_propertyID);parentpairs::scalar(out,p->m_eventID);parentpairs::scalar(out,p->m_inputEvent);parentpairs::scalar(out,p->m_descriptorProperty==&property);parentpairs::scalar(out,p->m_interpolationType);parentpairs::scalar(out,p->m_timeline==&timeline);}}}std::memset(reinterpret_cast<char*>(&base)+0x38,0,sizeof(d));}
+void a(void*p,autotest::Capture&c){side(p,c,false);}void b(void*p,autotest::Capture&c){side(p,c,true);}
+}
+TL_TEST(advance_logic_timeline_add){return parentpairs::run(host,"advance_logic_timeline_add",(uintptr_t)oldAdd,112,a,b);}

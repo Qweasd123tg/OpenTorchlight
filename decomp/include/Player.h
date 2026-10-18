@@ -52,6 +52,7 @@ public:
     void soldItem(CEquipment*);
     void incrementJournalStatistic(EJournalStatistic,int);
     void attemptToStopPlayerSkill(bool force);
+    CPlayer(CResourceManager* resources);
     virtual ~CPlayer();
     virtual void unitInit(CDataGroup*, bool);
     virtual void levelResetting();

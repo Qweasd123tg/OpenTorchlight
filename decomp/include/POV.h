@@ -34,22 +34,8 @@ public:
 
     // fields
     long long m_Unknown10;
-    unsigned char m_fUnknown18[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown20[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown28[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown30[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown38[0x8] __attribute__((aligned(8)));
-    unsigned char m_fUnknown40[0x8] __attribute__((aligned(8)));
-    long long m_iUnknown48;
-    long long m_iUnknown50;
-    long long m_iUnknown58;
-    long long m_iUnknown60;
-    long long m_iUnknown68;
-    long long m_iUnknown70;
-    long long m_iUnknown78;
-    long long m_iUnknown80;
-    long long m_iUnknown88;
-    long long m_iUnknown90;
+    Ogre::Matrix4 m_orientation; // +0x18
+    Ogre::Matrix4 m_viewOrientation; // +0x58
     unsigned char m_gap98[0x40] __attribute__((aligned(8)));
     float m_fUnknownD8;
     float m_fUnknownDC;

@@ -15,27 +15,24 @@
 
 void CPOV::ExtractOrientationVectors()
 {
-    m_fUnknown108 = *reinterpret_cast<const float *>(&m_fUnknown18[0]);
-    m_fUnknown110 = *reinterpret_cast<const float *>(&m_fUnknown38[0]);
-    m_fUnknown10C = *reinterpret_cast<const float *>(&m_fUnknown28[0]);
-    m_fUnknownF0 = *reinterpret_cast<const float *>(&m_fUnknown18[4]);
-    m_fUnknownF4 = *reinterpret_cast<const float *>(&m_fUnknown28[4]);
-    m_fUnknownF8 = *reinterpret_cast<const float *>(&m_fUnknown38[4]);
-    m_fUnknownFC = *reinterpret_cast<const float *>(&m_fUnknown20[0]);
-    m_fUnknown100 = *reinterpret_cast<const float *>(&m_fUnknown30[0]);
-    m_fUnknown104 = *reinterpret_cast<const float *>(&m_fUnknown40[0]);
-    m_iUnknown134 = *reinterpret_cast<const int *>(&m_iUnknown78);
-    m_iUnknown12C = *reinterpret_cast<const int *>(&m_iUnknown58);
-    m_iUnknown130 = *reinterpret_cast<const int *>(&m_iUnknown68);
-    m_iUnknown114 = *reinterpret_cast<const int *>(
-        reinterpret_cast<const unsigned char *>(&m_iUnknown58) + 4);
-    m_iUnknown118 = *reinterpret_cast<const int *>(
-        reinterpret_cast<const unsigned char *>(&m_iUnknown68) + 4);
-    m_iUnknown11C = *reinterpret_cast<const int *>(
-        reinterpret_cast<const unsigned char *>(&m_iUnknown78) + 4);
-    m_iUnknown120 = *reinterpret_cast<const int *>(&m_iUnknown60);
-    m_fUnknown124 = *reinterpret_cast<const float *>(&m_iUnknown70);
-    m_iUnknown128 = *reinterpret_cast<const int *>(&m_iUnknown80);
+    m_fUnknown108 = m_orientation[0][0];
+    m_fUnknown110 = m_orientation[2][0];
+    m_fUnknown10C = m_orientation[1][0];
+    m_fUnknownF0 = m_orientation[0][1];
+    m_fUnknownF4 = m_orientation[1][1];
+    m_fUnknownF8 = m_orientation[2][1];
+    m_fUnknownFC = m_orientation[0][2];
+    m_fUnknown100 = m_orientation[1][2];
+    m_fUnknown104 = m_orientation[2][2];
+    m_iUnknown134 = *reinterpret_cast<const int*>(&m_viewOrientation[2][0]);
+    m_iUnknown12C = *reinterpret_cast<const int*>(&m_viewOrientation[0][0]);
+    m_iUnknown130 = *reinterpret_cast<const int*>(&m_viewOrientation[1][0]);
+    m_iUnknown114 = *reinterpret_cast<const int*>(&m_viewOrientation[0][1]);
+    m_iUnknown118 = *reinterpret_cast<const int*>(&m_viewOrientation[1][1]);
+    m_iUnknown11C = *reinterpret_cast<const int*>(&m_viewOrientation[2][1]);
+    m_iUnknown120 = *reinterpret_cast<const int*>(&m_viewOrientation[0][2]);
+    m_fUnknown124 = m_viewOrientation[1][2];
+    m_iUnknown128 = *reinterpret_cast<const int*>(&m_viewOrientation[2][2]);
 }
 
 void CPOV::DampContactVelocity(float param_1)
@@ -138,8 +135,8 @@ CPOV::CPOV(CSettings& settings)
 {
     m_Unknown10 = reinterpret_cast<long long>(&settings);
 
-    *reinterpret_cast<Ogre::Matrix4*>(&m_fUnknown18[0]) = Ogre::Matrix4::IDENTITY;
-    *reinterpret_cast<Ogre::Matrix4*>(&m_iUnknown58) = Ogre::Matrix4::IDENTITY;
+    m_orientation = Ogre::Matrix4::IDENTITY;
+    m_viewOrientation = Ogre::Matrix4::IDENTITY;
 
     m_fUnknownD8 = 0.0f;
     m_fUnknownDC = 0.0f;
@@ -174,4 +171,64 @@ CPOV::CPOV(CSettings& settings)
     m_iUnknown170 = 0;
     m_bUnknown178 = false;
     m_bUnknown179 = false;
+}
+
+
+#include "Utilities.h"
+
+void CPOV::DampLateralVelocity(float amount)
+{
+    float projection = m_fUnknown138 * m_fUnknown108 +
+                       m_fUnknown13C * m_fUnknown10C +
+                       m_fUnknown140 * m_fUnknown110;
+    float x = m_fUnknown108 * projection;
+    float y = m_fUnknown10C * projection;
+    float z = m_fUnknown110 * projection;
+    m_fUnknown138 = (m_fUnknown138 - x) + x * amount;
+    m_fUnknown13C = (m_fUnknown13C - y) + y * amount;
+    m_fUnknown140 = (m_fUnknown140 - z) + z * amount;
+}
+
+void CPOV::CapContactVelocity(float maximum)
+{
+    Ogre::Vector3 velocity(m_fUnknown138, m_fUnknown13C, m_fUnknown140);
+    Ogre::Vector3 up(m_fUnknownF0, m_fUnknownF4, m_fUnknownF8);
+    Ogre::Vector3 contact = up * velocity.dotProduct(up);
+    velocity -= contact;
+    if (velocity.length() > maximum) {
+        velocity.normalise();
+        velocity *= maximum;
+    }
+    velocity += contact;
+    m_fUnknown138 = velocity.x;
+    m_fUnknown13C = velocity.y;
+    m_fUnknown140 = velocity.z;
+}
+
+void CPOV::SetOrientation(const Ogre::Matrix4& orientation)
+{
+    Ogre::Vector3 forward(orientation[0][2], orientation[1][2], orientation[2][2]);
+    forward.normalise();
+    Ogre::Vector3 up(0.0f, 1.0f, 0.0f);
+    Ogre::Vector3 right = forward.crossProduct(up);
+    m_orientation[0][0] = right.x;
+    m_orientation[1][0] = right.y;
+    m_orientation[2][0] = right.z;
+    m_orientation[0][1] = up.x;
+    m_orientation[1][1] = up.y;
+    m_orientation[2][1] = up.z;
+    m_orientation[0][2] = forward.x;
+    m_orientation[1][2] = forward.y;
+    m_orientation[2][2] = forward.z;
+}
+
+void CPOV::SetViewOrientation(const Ogre::Matrix4& orientation)
+{
+    m_viewOrientation = orientation;
+    Ogre::Vector3 forward(orientation[0][2], orientation[1][2], orientation[2][2]);
+    Ogre::Vector3 horizontal(forward.x, 0.0f, forward.z);
+    horizontal.normalise();
+    m_fUnknown150 = UTILITIES::VerifyFloat(MATH::angleBetween(horizontal, forward) * 57.295826f, 180.0f);
+    if (forward.y > 0.0f)
+        m_fUnknown150 = -m_fUnknown150;
 }

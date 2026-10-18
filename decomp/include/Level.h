@@ -127,6 +127,8 @@ private:
     friend class CPlayer;
     friend class CMonster;
     friend class CDamageShape;
+    friend class CResourceManager;
+    friend class CUnitSpawnerDescriptor;
     friend class CRoomPiece;
     friend class CRandomGroup;
     friend class CPropertyNode;

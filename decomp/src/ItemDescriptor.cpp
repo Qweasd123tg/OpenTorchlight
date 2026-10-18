@@ -5,6 +5,9 @@
 #include "GameEnums.h"
 #include "GameVariables.h"
 #include "EditorBaseObject.h"
+#include "EditorScene.h"
+#include "ResourceManager.h"
+#include "Level.h"
 
 CItemDescriptor::CItemDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
     : CPositionableObjectDescriptor(name, group, description, true, true, true, true, false)
@@ -65,4 +68,28 @@ std::wstring CItemDescriptor::getItemStringByID(CEditorScene*, CEditorBaseObject
         --index;
     }
     return fallback;
+}
+
+CEditorBaseObject* CItemDescriptor::CreateObject(CEditorScene* scene)
+{
+    CEditorBaseObject* object = new CEquipment(scene->getResourceManager());
+    CBaseUnit* unit = dynamic_cast<CBaseUnit*>(object);
+    if (unit)
+        unit->m_bBaseUnitFlag0 = true;
+    return object;
+}
+
+void CItemDescriptor::descriptorSceneActivated(CEditorScene*)
+{
+    if (!getSceneOwner()->getResourceManager()->getLevel() ||
+        getSceneOwner()->getResourceManager()->getEditorIsRunning())
+        return;
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CEquipment* equipment = dynamic_cast<CEquipment*>(m_Objects[i]);
+        if (!equipment)
+            continue;
+        equipment->m_bSaveFlag191 = true;
+        Ogre::Vector3 position = equipment->getPosition(false);
+        getSceneOwner()->getResourceManager()->getLevel()->addItem(equipment, position, true);
+    }
 }

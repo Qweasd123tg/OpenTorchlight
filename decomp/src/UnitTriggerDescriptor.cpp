@@ -1,4 +1,6 @@
 #include "TriggerUnit.h"
+#include "ResourceManager.h"
+#include "Level.h"
 #include "GameVariables.h"
 #include "UnitResourceList.h"
 #include "UnitTriggerDescriptor.h"
@@ -158,4 +160,12 @@ std::wstring CUnitTriggerDescriptor::GetTriggerModelStringByID(CEditorScene*, CE
         --index;
     }
     return L"";
+}
+
+bool CUnitTriggerDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject* object)
+{
+    CTriggerUnit* unit = dynamic_cast<CTriggerUnit*>(object);
+    if (unit && unit->getResourceManager() && unit->getResourceManager()->getLevel())
+        unit->getResourceManager()->getLevel()->removeItem(unit, true);
+    return true;
 }

@@ -22,7 +22,7 @@ class CMenuManager : public CRunicCore
 {
 public:
     virtual ~CMenuManager();
-    long long canLoad();
+    bool canLoad();
     void closeMenus();
     void update(float, CGameClient*, Ogre::RenderWindow*);
     void flushProcessInput();

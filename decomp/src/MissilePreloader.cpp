@@ -102,3 +102,71 @@ void CMissilePreloader::getMissileNames(TArrayList<std::wstring>& missileNames)
          i != m_missilesToLoad.end(); ++i)
         missileNames.add(i->first);
 }
+
+#include "FileSystem.h"
+
+void CMissilePreloader::clearCachedMissiles()
+{
+    m_activeMissiles.deleteAll();
+    for (std::map<std::wstring,TArrayList<CMissile*>*>::iterator it = m_cachedMissiles.begin(); it != m_cachedMissiles.end(); ++it) {
+        if (it->second) {
+            it->second->deleteAll();
+            if (it->second) {
+                delete it->second;
+                it->second = NULL;
+            }
+        }
+    }
+    m_cachedMissiles.clear();
+}
+
+void CMissilePreloader::reloadMissiles()
+{
+    if (!m_pResourceManager)
+        m_pResourceManager = new CResourceManager(NULL);
+    clear();
+    TArrayList<std::wstring> files(25);
+    const std::wstring& directory = m_pResourceSettings->GetString(KRESOURCESETTING_S_MISSILE_FOLDER);
+    CFileSystem::getSingleton()->getFileList(directory, files, L"*.layout", true, true, false, false);
+    for (unsigned int i = 0; i < files.size(); ++i)
+        loadMissile(files[i]);
+}
+
+CMissile* CMissilePreloader::createNewMissileRef(CResourceManager* resources, const std::wstring& filename)
+{
+    if (!getSinglelton())
+        return NULL;
+    std::wstring name = STRINGS::StringUpper(filename);
+    std::map<std::wstring,TArrayList<CMissile*>*>::iterator cached = m_cachedMissiles.find(name);
+    if (cached != m_cachedMissiles.end() && cached->second->size()) {
+        CMissile* missile = (*cached->second)[0];
+        cached->second->removeAt(0);
+        missile->setResourceManager(resources);
+        m_activeMissiles.add(missile);
+        missile->resetMissile();
+        return missile;
+    }
+    std::map<std::wstring,CMissile*>::iterator original = getSinglelton()->m_missilesToLoad.find(name);
+    if (original == getSinglelton()->m_missilesToLoad.end())
+        return NULL;
+    CMissile* missile = new CMissile(resources, original->second);
+    if (cached == m_cachedMissiles.end())
+        m_cachedMissiles[name] = new TArrayList<CMissile*>(10);
+    m_activeMissiles.add(missile);
+    return missile;
+}
+
+void CMissilePreloader::cacheMissile(CMissile* missile)
+{
+    if (!missile)
+        return;
+    missile->setVisible(false);
+    std::map<std::wstring,TArrayList<CMissile*>*>::iterator found = m_cachedMissiles.find(std::wstring(missile->m_sMissileName));
+    if (found != m_cachedMissiles.end() && found->second) {
+        found->second->add(missile);
+        return;
+    }
+    TArrayList<CMissile*>* list = new TArrayList<CMissile*>(10);
+    m_cachedMissiles[std::wstring(missile->m_sMissileName)] = list;
+    cacheMissile(missile);
+}

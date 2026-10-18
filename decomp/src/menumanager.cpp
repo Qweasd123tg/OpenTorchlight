@@ -146,3 +146,83 @@ CMenuManager::~CMenuManager()
     reinterpret_cast<CMouseManager*>(&m_UnknownD58)->CMouseManager::~CMouseManager();
     reinterpret_cast<CKeyManager*>(&m_Unknown40)->CKeyManager::~CKeyManager();
 }
+
+bool CMenuManager::canLoad()
+{
+    return static_cast<int>(m_pContinueGameMenu->m_savePaths.size()) > 0;
+}
+
+void CMenuManager::update(float elapsed, CGameClient*, Ogre::RenderWindow*)
+{
+    CDropdownMenu* menu = static_cast<CMainMenu*>(m_pUnknownDD0);
+    if (menu->m_bUnknown30 || !menu->m_bUnknown31)
+        menu->update(elapsed);
+    menu = static_cast<CNewGameMenu*>(m_pUnknownDD8);
+    if (menu->m_bUnknown30 || !menu->m_bUnknown31)
+        menu->update(elapsed);
+    menu = m_pContinueGameMenu;
+    if (menu->m_bUnknown30 || !menu->m_bUnknown31)
+        menu->update(elapsed);
+    menu = static_cast<CDifficultyMenu*>(m_pUnknownDE0);
+    if (menu->m_bUnknown30 || !menu->m_bUnknown31)
+        menu->update(elapsed);
+}
+
+bool CMenuManager::processInput(void* window, float elapsed, bool active)
+{
+    if (!active)
+        return true;
+    reinterpret_cast<CMouseManager*>(&m_UnknownD58)->update(window);
+    CDropdownMenu* menu = static_cast<CMainMenu*>(m_pUnknownDD0);
+    if ((menu->m_bUnknown30 || !menu->m_bUnknown31) && !menu->processInput(window, elapsed, true))
+        return false;
+    menu = static_cast<CNewGameMenu*>(m_pUnknownDD8);
+    if ((menu->m_bUnknown30 || !menu->m_bUnknown31) && !menu->processInput(window, elapsed, true))
+        return false;
+    menu = static_cast<CDifficultyMenu*>(m_pUnknownDE0);
+    if ((menu->m_bUnknown30 || !menu->m_bUnknown31) && !menu->processInput(window, elapsed, true))
+        return false;
+    menu = m_pContinueGameMenu;
+    if (menu->m_bUnknown30 || !menu->m_bUnknown31)
+        return menu->processInput(window, elapsed, true);
+    return true;
+}
+
+void CMenuManager::setActiveMenu(EMenu menu)
+{
+    if (m_UnknownDF0 == menu)
+        return;
+    switch (menu) {
+    case 0:
+        if (m_pContinueGameMenu->canContinue())
+            m_pContinueGameMenu->selectCharacter(0, true);
+        static_cast<CDifficultyMenu*>(m_pUnknownDE0)->setOpen(false);
+        static_cast<CMainMenu*>(m_pUnknownDD0)->setOpen(true);
+        static_cast<CNewGameMenu*>(m_pUnknownDD8)->setOpen(false);
+        m_pContinueGameMenu->setOpen(false);
+        break;
+    case 1:
+    case 2:
+        static_cast<CDifficultyMenu*>(m_pUnknownDE0)->setOpen(false);
+        static_cast<CNewGameMenu*>(m_pUnknownDD8)->m_bUnknownF8 = menu == 2;
+        static_cast<CNewGameMenu*>(m_pUnknownDD8)->setOpen(true);
+        static_cast<CMainMenu*>(m_pUnknownDD0)->setOpen(false);
+        m_pContinueGameMenu->setOpen(false);
+        break;
+    case 3:
+        static_cast<CDifficultyMenu*>(m_pUnknownDE0)->setOpen(false);
+        m_pContinueGameMenu->setOpen(true);
+        static_cast<CMainMenu*>(m_pUnknownDD0)->setOpen(false);
+        static_cast<CNewGameMenu*>(m_pUnknownDD8)->setOpen(false);
+        break;
+    case 4:
+    case 5:
+        static_cast<CDifficultyMenu*>(m_pUnknownDE0)->m_bUnknownD0 = menu == 5;
+        static_cast<CDifficultyMenu*>(m_pUnknownDE0)->setOpen(true);
+        static_cast<CNewGameMenu*>(m_pUnknownDD8)->setOpen(false);
+        static_cast<CMainMenu*>(m_pUnknownDD0)->setOpen(false);
+        m_pContinueGameMenu->setOpen(false);
+        break;
+    }
+    m_UnknownDF0 = menu;
+}

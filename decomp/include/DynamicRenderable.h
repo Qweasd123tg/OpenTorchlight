@@ -3,6 +3,9 @@
 #include <OgreSimpleRenderable.h>
 class CDynamicRenderable : public Ogre::SimpleRenderable {
 public:
+    CDynamicRenderable();
+    void initialize(Ogre::RenderOperation::OperationType operationType, bool useIndices);
+    void prepareHardwareBuffers(size_t vertexCount, size_t indexCount);
     virtual ~CDynamicRenderable();
     virtual Ogre::Real getBoundingRadius() const;
     virtual Ogre::Real getSquaredViewDepth(const Ogre::Camera*) const;

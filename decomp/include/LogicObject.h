@@ -7,6 +7,7 @@
 #include "EditorBaseObject.h"
 #include "TArrayList.h"
 
+class CDataGroup;
 class CLogicLink;
 class CLogicWrapper;
 class CLogicGroup;
@@ -24,6 +25,7 @@ public:
     void saveLogicObjectLinksToBinaryFile(std::basic_ofstream<char, std::char_traits<char> >* stream);
     unsigned int AddLogicLink(CLogicWrapper* output, CLogicObject* input, CLogicWrapper* function);
     void saveLogicObjectToBinaryFile(std::basic_ofstream<char, std::char_traits<char> >* stream);
+    void saveLogicObjectToDataGroup(CDataGroup* group);
     void loadLogicObjectByBinaryFile(CLogicGroup* group, COgreReader* reader,
                                     CDescriptorLoadConfiguration* configuration,
                                     std::map<int, int>& remappedIDs);
@@ -48,6 +50,7 @@ private:
     friend long long EditorGetObjectIDRefedInLogicObject(long long, unsigned int);
     friend void EditorGetLogicObjectPosition(long long, unsigned int, int&, int&);
     friend class CLogicLink;
+    friend class CLogicGroup;
     friend struct SmallmatchPass7Probe;
     unsigned int m_iID;
     long long m_iObjectID;

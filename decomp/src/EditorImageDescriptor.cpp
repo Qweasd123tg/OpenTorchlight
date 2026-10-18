@@ -4,6 +4,7 @@
 #include "GameVariables.h"
 #include "EditorBaseObject.h"
 #include "EditorImage.h"
+#include "EditorScene.h"
 
 CEditorImageDescriptor::CEditorImageDescriptor()
     : CBaseObjectDescriptor(L"IMAGE", L"A Bitmap", L"image")
@@ -61,4 +62,9 @@ void CEditorImageDescriptor::descriptorSceneActivated(CEditorScene* value)
 {
     for (unsigned int i = 0; i < m_Objects.size(); ++i)
         static_cast<CEditorImage*>(m_Objects[i])->activate();
+}
+
+CEditorBaseObject* CEditorImageDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CEditorImage(scene->getResourceManager(), CEGUI::String("GuiLook/StaticImage"));
 }

@@ -17,6 +17,9 @@ class CSpawnClass;
 namespace Ogre { class TextureManager; }
 class CBaseUnit;
 class CCharacter;
+class CMonster;
+class CPlayer;
+class CItem;
 class CGameClient;
 class CParticle;
 class CGenericModel;
@@ -69,6 +72,14 @@ public:
     virtual ~CResourceManager();
 
     CDataGroup* getUnitDataByGuid(long long);
+    CMonster* createMonster(long long guid, int level, bool flag);
+    CMonster* createMonster(const wchar_t* name, int level, bool flag);
+    CPlayer* createPlayer(const wchar_t* name, bool flag);
+    CItem* createNewItem(CDataGroup* data);
+    CItem* createItem(long long guid, bool flag1, bool flag2, bool flag3);
+    CItem* createItem(const wchar_t* name, bool flag1, bool flag2);
+    void createUnitsBySpawnClass(const std::wstring& name, TArrayList<CBaseUnit*>& units,
+        unsigned int count, CCharacter* first, CCharacter* second, int level, int flags);
     CBaseUnit* createUnit(long long guid,int level,bool flag1,bool flag2);
     CBaseUnit* createUnit(CDataGroup*,int,bool,bool);
     void createAffixesForUnit(CBaseUnit* unit,unsigned int level,unsigned int count);

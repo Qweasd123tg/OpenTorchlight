@@ -154,3 +154,105 @@ CAnimationSet* CMasterResourceManager::getAnimationSet(std::wstring name)
         if (m_animationSets[i]->m_wsName == name) return m_animationSets[i];
     return NULL;
 }
+
+#include "FileSystem.h"
+
+void CMasterResourceManager::removeUnused()
+{
+    for (int i = 0; i < static_cast<int>(m_collisionModels.size()); ++i) {
+        if (m_collisionModels[i]->m_referenceCount == 0) {
+            delete m_collisionModels[i];
+            m_collisionModels[i] = NULL;
+            m_collisionModels[i] = m_collisionModels[m_collisionModels.size() - 1];
+            m_collisionModels.pop_back();
+            --i;
+        }
+    }
+    for (int i = 0; i < static_cast<int>(m_batchModels.size()); ++i) {
+        if (m_batchModels[i]->m_referenceCount == 0) {
+            delete m_batchModels[i];
+            m_batchModels[i] = NULL;
+            m_batchModels[i] = m_batchModels[m_batchModels.size() - 1];
+            m_batchModels.pop_back();
+            --i;
+        }
+    }
+    for (int i = 0; i < static_cast<int>(m_animationSets.size()); ++i) {
+        if (m_animationSets[i]->m_nAnimationCount == 0) {
+            delete m_animationSets[i];
+            m_animationSets[i] = NULL;
+            m_animationSets[i] = m_animationSets[m_animationSets.size() - 1];
+            m_animationSets.pop_back();
+            --i;
+        }
+    }
+}
+
+void CMasterResourceManager::removeAll()
+{
+    for (unsigned int i = 0; i < m_collisionModels.size(); ++i) {
+        if (m_collisionModels[i]) {
+            delete m_collisionModels[i];
+            m_collisionModels[i] = NULL;
+        }
+    }
+    m_collisionModels.clear();
+    for (unsigned int i = 0; i < m_batchModels.size(); ++i) {
+        if (m_batchModels[i]) {
+            delete m_batchModels[i];
+            m_batchModels[i] = NULL;
+        }
+    }
+    m_batchModels.clear();
+    for (unsigned int i = 0; i < m_animationSets.size(); ++i) {
+        if (m_animationSets[i]) {
+            delete m_animationSets[i];
+            m_animationSets[i] = NULL;
+        }
+    }
+    m_animationSets.clear();
+}
+
+CGenericModel* CMasterResourceManager::addBatchModel(CResourceManager* resources, Ogre::SceneManager* scene, std::wstring name, bool& shared)
+{
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(name, info, false, true, false);
+    if (!info.m_bExists)
+        return NULL;
+    shared = true;
+    BatchModelRef* found = getBatchModel(name);
+    if (found) {
+        ++found->m_referenceCount;
+        return found->m_pBatchModel;
+    }
+    CGenericModel* model = new CGenericModel(resources, NULL, name, EMPTY_WSTRING, false);
+    if (model->getAnimationCount()) {
+        shared = false;
+        return model;
+    }
+    BatchModelRef* reference = new BatchModelRef;
+    m_batchModels.push_back(reference);
+    reference->m_pBatchModel = model;
+    reference->m_referenceCount = 1;
+    reference->m_sBatchModelName = name;
+    return reference->m_pBatchModel;
+}
+
+CCollisionModel* CMasterResourceManager::addCollisionModel(std::wstring name)
+{
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(name, info, false, true, false);
+    if (!info.m_bExists)
+        return NULL;
+    CollisionModelRef* found = getCollisionModel(name);
+    if (found) {
+        ++found->m_referenceCount;
+        return found->m_pCollisionModel;
+    }
+    CollisionModelRef* reference = new CollisionModelRef;
+    m_collisionModels.push_back(reference);
+    reference->m_pCollisionModel = new CCollisionModel(m_pDefaultSceneManager, name);
+    reference->m_referenceCount = 1;
+    reference->m_sUnknown20 = name;
+    return reference->m_pCollisionModel;
+}

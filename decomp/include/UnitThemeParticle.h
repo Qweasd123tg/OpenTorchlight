@@ -14,8 +14,8 @@ public:
     void load(CDataGroup *pDataGroup);
 
     std::wstring m_wstrFile;
-    int m_iUnitTypeID;
     int m_iCount;
+    int m_iUnitTypeID;
     bool m_bAttaches;
     bool m_bFollows;
     std::wstring m_wstrBone;

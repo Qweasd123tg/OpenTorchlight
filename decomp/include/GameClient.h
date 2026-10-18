@@ -34,6 +34,7 @@ friend class CDropdownMenu;
     friend class CCinematicMenu;
     friend class CQuestDialogMenu;
 friend class CDifficultyMenu;
+    friend class CResourceManager;
     friend class CInteract;
     friend class CCameraController;
     friend class CRandomGroup;

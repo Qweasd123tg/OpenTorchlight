@@ -29,6 +29,7 @@ public:
     std::wstring getParticleNameByFileName(const std::wstring&);
     CParticle* GetParticle(CResourceManager*, const wchar_t*);
     CParticleCache* getParticleCache(const std::wstring&);
+    CParticleCache* createParticleCache(const std::wstring&);
     void returnParticleCache(CParticleCache*);
     void clean();
     void ReloadParticles();
@@ -42,4 +43,7 @@ private:
     CSoundBank* m_soundBank; // +0xb8
     CLayout* m_layout; // +0xc0
 };
+extern CParticlePreloader* m_gParticlePreloader;
+// Original ParticlePreloader.cpp local setting index.
+static unsigned int KRESOURCESETTING_S_PARTICLEFILE;
 #endif

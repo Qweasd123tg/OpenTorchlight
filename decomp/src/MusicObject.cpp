@@ -116,3 +116,14 @@ void CMusicObject::playNormalLevelMusic()
         }
     }
 }
+
+
+void CMusicObject::play()
+{
+    if (m_pSoundManager && m_sPlayingMusicFile != m_pSoundManager->getMusicFilePlaying()) {
+        m_fRemainingPlayTime = m_pSoundManager->playMusic(m_sMusicFile, m_bLoops);
+        m_sPlayingMusicFile = m_pSoundManager->getMusicFilePlaying();
+        m_bMusicPlaybackActive = true;
+        BroadcastEvent(11);
+    }
+}

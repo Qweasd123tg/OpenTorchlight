@@ -76,6 +76,10 @@ public:
     CSkill* executeSkill(CSkill* skill, CBaseUnit* caster, ESKILL_ACTIVATION_TYPE activation,
                          const Ogre::Vector3& position, const Ogre::Quaternion& orientation,
                          const Ogre::Vector3& targetPosition, CBaseUnit* target);
+    CSkill* executeSkill(const std::wstring& name, CBaseUnit* caster,
+                         ESKILL_ACTIVATION_TYPE activation, const Ogre::Vector3& position,
+                         const Ogre::Quaternion& orientation, const Ogre::Vector3& targetPosition,
+                         CBaseUnit* target, int level);
 private:
     CResourceManager* m_pResourceManager;
     std::map<std::wstring,TArrayList<CSkill*>*> m_SkillsByName;

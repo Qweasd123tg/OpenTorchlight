@@ -10,6 +10,9 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "Timeline.h"
+#include "ParticleTechWrapper.h"
+#include "SoundObject.h"
+#include "CameraShake.h"
 
 void CLayout::setCacheingParticlesForLevel(bool enable)
 {
@@ -200,6 +203,24 @@ void CLayout::SetSceneOwner(CEditorScene* sceneOwner)
                 m_pEntity->setMaterialName("lightBlue");
                 setScale(1.0f);
             }
+        }
+    }
+}
+
+void CLayout::editorObjectCreated(CEditorBaseObject* object)
+{
+    if (!object->getParentPositionableObject() || object->getParentPositionableObject() == getSceneOwner())
+        object->setParentPositionableObject(this);
+    if (m_Unknown1B8 == 1) {
+        if (dynamic_cast<CParticleTechWrapper*>(object) || dynamic_cast<CSoundObject*>(object) || dynamic_cast<CCameraShake*>(object))
+            m_Unknown1D0.add(object);
+    } else if (m_Unknown1B8 == 2) {
+        CTimeline* timeline = dynamic_cast<CTimeline*>(object);
+        if (timeline) {
+            timeline->m_bManualUpdate = true;
+            m_Unknown1D0.add(object);
+        } else if (dynamic_cast<CSoundObject*>(object)) {
+            m_Unknown1D0.add(object);
         }
     }
 }

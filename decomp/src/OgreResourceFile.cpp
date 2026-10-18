@@ -64,3 +64,12 @@ void COgreResourceFile::getStringIndexs(CDataGroup* group,
     for (unsigned int i = 0; i < group->m_DataGroups.size(); ++i)
         getStringIndexs(group->m_DataGroups[i], indexes);
 }
+
+
+#include <OgreLogManager.h>
+
+int COgreResourceFile::SaveDataGroupToFile(const std::wstring&, CDataGroup*)
+{
+    Ogre::LogManager::getSingleton().logMessage("Unable to save into a OgreResourceFile.", Ogre::LML_CRITICAL, false);
+    return 0;
+}

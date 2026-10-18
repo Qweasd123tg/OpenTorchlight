@@ -857,7 +857,18 @@ def save_norm_cache(original):
     import pickle
     cache = original.__dict__.get("_norm_cache")
     if cache and _NORM_DIRTY:
-        NORM_CACHE.write_bytes(pickle.dumps({"key": _norm_key(), "functions": cache}))
+        payload = pickle.dumps({"key": _norm_key(), "functions": cache})
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(dir=NORM_CACHE.parent,
+                                             prefix=NORM_CACHE.name + ".",
+                                             suffix=".tmp", delete=False) as stream:
+                temporary = Path(stream.name)
+                stream.write(payload)
+            os.replace(temporary, NORM_CACHE)
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
         _NORM_DIRTY.clear()
 
 

@@ -1,3 +1,4 @@
+#include "Level.h"
 #include "EmptyStrings.h"
 #include "GameEnums.h"
 #include "CinematicObject.h"
@@ -29,10 +30,8 @@ void CCinematicObject::menuEventOccured(void* pTarget,
                                        EMENU_TYPE eMenuType,
                                        EMENU_EVENT eMenuEvent)
 {
-    if (m_eMenuEvent == eMenuEvent)
-    {
-        play();
-    }
+    m_eMenuEvent = eMenuEvent;
+    m_pResourceManager->getLevel()->addUpdateObject(this);
 }
 
 CCinematicObject::CCinematicObject(CResourceManager* resourceManager)

@@ -1131,7 +1131,7 @@ class ContextIndex:
             # have the reviewed trivial destruction semantics. Pin its actual
             # defining header; do not generalize this to arbitrary unions.
             element_header = "DescriptorProp.h"
-            expected = "4995f4b33858d32a1313ca67a7a4697a568ac5bf54c63c87b37c00b5b3737721"
+            expected = "fa61042a581530fd2af7fae6abb34fc71ae2cec53c914749af7b2f1e7902193a"
             source = self.sources.get(element_header)
             if (source is None or hashlib.sha256(source.encode()).hexdigest() != expected
                     or self._path("include", element_header).read_text() != source
@@ -1144,6 +1144,60 @@ class ContextIndex:
             if len(complete) != 1:
                 return set()
             headers.update(complete)
+        return headers
+
+    REPOSITORY_HEADER_SHA256 = "7ba56f5caed6ad2de4c4bb6600a1d8e0fb2160127366e9bfb5f7d3269356c7f1"
+
+    def _pinned_insert_headers(self, callee, scope):
+        """Three reviewed weak insertions already declared by generic headers.
+
+        The shallow scanner omits class templates. Supply only authenticated
+        existing source for these exact identities, never a generated declaration
+        or permission for arbitrary methods/instantiations.
+        """
+        wide = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
+        reviewed = {
+            "TArrayList<CBaseUnit*>":
+                (0x9ca560, 180, "_ZN10TArrayListIP9CBaseUnitE3addES1_", "add", "CBaseUnit*",
+                 "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CBaseUnit"),
+            "TArrayList<CEditorBaseObject*>":
+                (0x9e0a30, 180, "_ZN10TArrayListIP17CEditorBaseObjectE3addES1_", "add", "CEditorBaseObject*",
+                 "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CEditorBaseObject"),
+            "TRepository<" + wide + " >":
+                (0xc64bf0, 1409, "_ZN11TRepositoryISbIwSt11char_traitsIwESaIwEEE7addItemERS3_",
+                 "addItem", wide + "&", "TRepository.h", self.REPOSITORY_HEADER_SHA256, None),
+        }
+        entry = reviewed.get(scope)
+        if entry is None:
+            return set()
+        address, size, symbol, method, params, header, digest, pointee = entry
+        if (callee.get("kind") != "inline_or_template"
+                or set(callee.get("bind", ())) != {"weak"}
+                or _address(callee["address"]) != address or callee.get("size") != size
+                or callee.get("method") != method or callee.get("cv", "")
+                or callee.get("qualified") != scope + "::" + method
+                or callee.get("params") != params or callee.get("mangled") != symbol
+                or set(callee.get("names", ())) != {symbol}
+                or (address, symbol, size) not in self.elf_weak_functions):
+            return set()
+        source = self.sources.get(header)
+        if source is None:
+            return set()
+        raw = self._path("include", header).read_bytes()
+        if hashlib.sha256(raw).hexdigest() != digest or raw.decode("utf-8") != source:
+            return set()
+        headers = {header}
+        if pointee:
+            complete = {h for h in self._mapped(pointee)
+                        if pointee in self.header_classes.get(h, ())}
+            if len(complete) != 1:
+                return set()
+            owner = next(iter(complete))
+            if self._path("include", owner).read_text() != self.sources[owner]:
+                return set()
+            headers.update(complete)
+        elif not self._string_template_headers():
+            return set()
         return headers
 
     def _implicit_destructor_headers(self, callee, scope, candidates):
@@ -1278,6 +1332,7 @@ class ContextIndex:
             template_headers = self._safe_pointer_headers(callee, scope)
             window_array_headers = self._window_array_headers(callee, scope)
             pinned_destructor_headers = self._pinned_destructor_headers(callee, scope)
+            pinned_insert_headers = self._pinned_insert_headers(callee, scope)
             if matched_headers:
                 wanted.update(matched_headers | matched_dependencies)
             elif implicit_headers:
@@ -1298,6 +1353,12 @@ class ContextIndex:
                 notes.append(f"{address:#x}: existing pinned {scope} D1/D2 destructor body; "
                              "exact reviewed address/size and both weak ELF/DB identities; "
                              f"template source SHA256 {self.SAFE_POINTER_HEADER_SHA256 if scope.startswith('TSafePointer<') else self.WINDOW_ARRAY_HEADER_SHA256}. "
+                             "No specialization or prototype synthesized.")
+            elif pinned_insert_headers:
+                wanted.update(pinned_insert_headers)
+                notes.append(f"{address:#x}: existing pinned {scope} insertion template declaration; "
+                             "exact reviewed address/size and weak ELF/DB identity; "
+                             f"template source SHA256 {self.REPOSITORY_HEADER_SHA256 if scope.startswith('TRepository<') else self.WINDOW_ARRAY_HEADER_SHA256}. "
                              "No specialization or prototype synthesized.")
             elif scope in local_types and ("::" in scope or self._tu(callee, None) == tu):
                 local_names.add(scope)

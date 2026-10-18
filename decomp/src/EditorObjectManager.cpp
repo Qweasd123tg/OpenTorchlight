@@ -258,3 +258,37 @@ CEditorBaseObject* CEditorObjectManager::getObjectUnderMouse()
         return m_pObjectControl->getObjectUnderMouse();
     return NULL;
 }
+
+void CEditorObjectManager::EditorObjectDeselected(CEditorBaseObject* object)
+{
+    m_SelectedObjects.remove(object);
+    m_bUnknown78 = true;
+    dehighlightObject(object);
+    iSelected* selected = dynamic_cast<iSelected*>(object);
+    if (selected)
+        selected->editorSelectionChanged(false);
+    m_bUnknown78 = true;
+}
+
+void CEditorObjectManager::EditorObjectDeleted(CEditorBaseObject* object)
+{
+    if (!object)
+        return;
+    ObjectMap::iterator found = m_Objects.find(object->getGuid());
+    if (found == m_Objects.end())
+        return;
+    m_Objects.erase(found);
+    m_SelectedObjects.remove(object);
+    dehighlightObject(object);
+}
+
+void CEditorObjectManager::EditorDeleteAllObjects()
+{
+    ClearSelectedObjects();
+    std::map<CEditorScene*, CEditorScene*> scenes;
+    for (ObjectMap::iterator it = m_Objects.begin(); it != m_Objects.end(); ++it)
+        scenes[it->second->getSceneOwner()] = it->second->getSceneOwner();
+    m_Objects.clear();
+    for (std::map<CEditorScene*, CEditorScene*>::iterator it = scenes.begin(); it != scenes.end(); ++it)
+        it->first->DeleteAllObjectsFromScene();
+}
