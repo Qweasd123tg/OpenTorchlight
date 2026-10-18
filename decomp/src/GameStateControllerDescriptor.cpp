@@ -5,6 +5,8 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "GameStateController.h"
+#include "Player.h"
+#include "GameClient.h"
 #include "GameStateControllerDescriptorNames.h"
 
 CGameStateControllerDescriptor::CGameStateControllerDescriptor(const wchar_t* name, const wchar_t* group, const wchar_t* description)
@@ -115,4 +117,38 @@ unsigned int CGameStateControllerDescriptor::getTipIDByString(CEditorScene* scen
             return index;
     }
     return 0;
+}
+
+void CGameStateControllerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    CGameStateController* control = dynamic_cast<CGameStateController*>(object);
+    if (!control)
+        return;
+    switch (event) {
+    case 2:
+        if (control->m_bEnabled != true) {
+            control->m_bEnabled = true;
+            control->performStateControl();
+        }
+        break;
+    case 3:
+        if (control->m_bEnabled != false) {
+            control->m_bEnabled = false;
+            control->performStateControl();
+        }
+        break;
+    case 75: {
+        CPlayer* player = getSceneOwner()->getResourceManager()->getGameClient()->getPlayer();
+        if (player)
+            for (unsigned int i = 0; i < player->getFollowerCount(); ++i)
+                player->getFollower(i)->teleportToMaster(1.0f);
+        break;
+    }
+    case 76:
+        control->healPlayer();
+        break;
+    case 80:
+        control->showHelp();
+        break;
+    }
 }

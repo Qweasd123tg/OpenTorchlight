@@ -91,6 +91,7 @@ class BuildTests(unittest.TestCase):
             patch.object(hybrid, 'patch_window_ok', side_effect=lambda ctx,a:'short' if a==48 else None),
             patch.object(hybrid, 'originals_script', return_value=('provided\n', {'owned'})),
             patch.object(hybrid, 'library_objects', return_value={}),
+            patch.object(hybrid.selftest_schedule, 'write_inputs', return_value=None),
             patch.object(toolchain, 'compile_source', side_effect=self.compile),
             patch.object(toolchain, 'assemble', side_effect=self.assemble),
             patch.object(toolchain, 'run_compiler', side_effect=self.loader),

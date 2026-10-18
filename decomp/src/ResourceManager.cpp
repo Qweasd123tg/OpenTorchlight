@@ -204,3 +204,163 @@ void CResourceManager::createUnitsBySpawnClass(CSpawnClass* spawn, TArrayList<CB
         }
     }
 }
+
+#include "BaseUnit.h"
+#include "Monster.h"
+#include "Player.h"
+#include "Item.h"
+#include "Equipment.h"
+#include "GenericModel.h"
+#include "GameClient.h"
+#include "Settings.h"
+#include "CmdLineParser.h"
+
+void CResourceManager::createAffixesForUnit(CBaseUnit* unit, unsigned int level, unsigned int count)
+{
+    if (!count || !unit)
+        return;
+    TArrayList<CAffix*> affixes(count);
+    CMasterResourceManager::getSingleton()->m_effectGroups->rollAndCreateRandomAffixes(unit->m_eUnitType, level, count, affixes);
+    for (unsigned int i = 0; i < affixes.size(); ++i)
+        unit->addAffix(affixes[i], level, unit, -1.0f);
+}
+
+CGraph* CResourceManager::getGraphDamage()
+{
+    if (m_GameClients.size() && m_GameClients[0]) {
+        switch (m_GameClients[0]->m_startDifficulty) {
+        case 0: return CGraphManager::getSingleton()->getGraph(L"DAMAGE_MONSTER_EASY");
+        case 1: return CGraphManager::getSingleton()->getGraph(L"DAMAGE_MONSTER");
+        case 2: return CGraphManager::getSingleton()->getGraph(L"DAMAGE_MONSTER_HARD");
+        case 3: return CGraphManager::getSingleton()->getGraph(L"DAMAGE_MONSTER_VERYHARD");
+        }
+    }
+    return NULL;
+}
+
+CMonster* CResourceManager::createMonster(long long guid, int level, bool initialize)
+{
+    CDataGroup* data = CUnitResourceList::getSingleton()->getDataGroupByGuid(guid);
+    if (!data)
+        return NULL;
+    if (level <= 0)
+        level = m_pLevel ? m_pLevel->getDungeonDepth() : 1;
+    CMonster* monster = new CMonster(this, level);
+    monster->unitInit(data, initialize);
+    return monster;
+}
+
+CMonster* CResourceManager::createMonster(const wchar_t* name, int level, bool initialize)
+{
+    CDataGroup* data = CUnitResourceList::getSingleton()->getDataGroupByObjectName(L"MONSTERS", name);
+    if (!data)
+        return NULL;
+    if (level <= 0)
+        level = m_pLevel ? m_pLevel->getDungeonDepth() : 1;
+    CMonster* monster = new CMonster(this, level);
+    monster->unitInit(data, initialize);
+    return monster;
+}
+
+CPlayer* CResourceManager::createPlayer(const wchar_t* name, bool initialize)
+{
+    CDataGroup* data = CUnitResourceList::getSingleton()->getDataGroupByObjectName(L"PLAYERS", name);
+    if (!data)
+        return NULL;
+    CPlayer* player = new CPlayer(this);
+    player->unitInit(data, initialize);
+    return player;
+}
+
+CGenericModel* CResourceManager::createGenericModel(Ogre::SceneManager* scene, const wchar_t* mesh, const wchar_t* material, bool first, bool second, bool third)
+{
+    CGenericModel* model = new CGenericModel(this, scene, EMPTY_WSTRING, EMPTY_WSTRING, first);
+    model->loadModel(mesh, material ? std::wstring(material) : EMPTY_WSTRING, second, third, false);
+    return model;
+}
+
+CItem* CResourceManager::createItem(long long guid, bool initialize, bool flag, bool enchantItem)
+{
+    CDataGroup* data = CUnitResourceList::getSingleton()->getDataGroupByGuid(guid);
+    if (!data)
+        return NULL;
+    CItem* item = createNewItem(data);
+    if (item) {
+        item->m_bItemFlag20A = flag;
+        item->unitInit(data, initialize);
+        CEquipment* equipment = dynamic_cast<CEquipment*>(item);
+        if (enchantItem && equipment)
+            equipment->enchant(true);
+    }
+    return item;
+}
+
+CItem* CResourceManager::createItem(const wchar_t* name, bool initialize, bool flag)
+{
+    CDataGroup* data = CUnitResourceList::getSingleton()->getDataGroupByObjectName(L"ITEMS", name);
+    if (!data)
+        return NULL;
+    CItem* item = createNewItem(data);
+    if (item) {
+        item->m_bItemFlag20A = flag;
+        item->unitInit(data, initialize);
+    }
+    return item;
+}
+
+CEquipment* CResourceManager::createEquipment(const wchar_t* name, bool initialize, bool flag)
+{
+    CItem* item = createItem(name, initialize, flag);
+    if (!item)
+        return NULL;
+    CEquipment* equipment = dynamic_cast<CEquipment*>(item);
+    if (!equipment)
+        delete item;
+    return equipment;
+}
+
+CResourceManager::CResourceManager(Ogre::SceneManager* scene)
+    : CRunicCore(), m_pSceneManager(scene), m_pLevel(NULL), m_GameClients(10),
+      m_bFlag0(false), m_bFlag1(true), m_bFlag2(false), m_bFlag3(false)
+{
+    if (CMasterResourceManager::getSingleton()) {
+        m_pHierarchy = CMasterResourceManager::getSingleton()->m_pHierarchy;
+        if (!m_pSceneManager)
+            m_pSceneManager = CMasterResourceManager::getSingleton()->m_pDefaultSceneManager;
+        if (CMasterResourceManager::getSingleton()->m_pSettings)
+            m_bFlag3 = CMasterResourceManager::getSingleton()->m_pSettings->m_pCmdLineParser->GetStringParam(L"COMPRESS", EMPTY_WSTRING) != EMPTY_WSTRING;
+    }
+}
+
+CBaseUnit* CResourceManager::createUnit(long long guid, int level, bool initialize, bool enchantItem)
+{
+    if (guid == -1)
+        return NULL;
+    if (level <= 0)
+        level = m_pLevel ? m_pLevel->getDungeonDepth() : 1;
+    CDataGroup* data = CUnitResourceList::getSingleton()->getDataGroupByGuid(guid);
+    if (!data)
+        return NULL;
+    unsigned int group = data->GetDataValue(L"RESOURCEGROUP", static_cast<unsigned int>(-1));
+    if (group == static_cast<unsigned int>(-1) || group == 2)
+        return NULL;
+    if (group == 1)
+        return createMonster(guid, level, initialize);
+    if (group == 0)
+        return createItem(guid, initialize, true, enchantItem);
+    CItem* item = createItem(guid, initialize, true, false);
+    if (item)
+        item->setLevel(level);
+    return item;
+}
+
+void CResourceManager::createUnitsBySpawnClass(const std::wstring& name, TArrayList<CBaseUnit*>& units,
+    unsigned int count, CCharacter* first, CCharacter* second, int level, int flags)
+{
+    units.clear();
+    if (!name.empty() && count) {
+        CSpawnClass* spawn = getSpawnClassByName(name);
+        if (spawn)
+            createUnitsBySpawnClass(spawn, units, count, first, second, level, flags);
+    }
+}

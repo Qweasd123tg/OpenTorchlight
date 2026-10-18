@@ -1,0 +1,8 @@
+#ifndef SETTINGSVARIABLES_H
+#define SETTINGSVARIABLES_H
+
+extern int KSETTINGS_RES_HEIGHT;
+extern int KSETTINGS_RES_WIDTH;
+extern unsigned int KSETTINGS_F_AUTOMAP_ZOOM;
+
+#endif

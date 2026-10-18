@@ -40,8 +40,10 @@ class CBaseUnit : public CPositionableObject
     friend class CSkill;
     friend class CQuestUnitData;
     friend class CMonsterDescriptor;
+    friend class CItemDescriptor;
 
     friend class CLevel;
+    friend class CResourceManager;
     friend struct SmallmatchPass7Probe;
     friend class CEquipment;
     friend class CEnchantMenu;

@@ -679,3 +679,60 @@ CTimeline::~CTimeline()
     }
     m_timelineProperties.clear();
 }
+
+float CTimeline::UpdateTimeline(float elapsedTime)
+{
+    if (!m_bTimelineLoops && (m_bIsPlayingBackwards ? m_fTimelinePosition <= 0.0f
+                                                  : m_fTimelinePosition >= m_fSetTimelineDuration)) {
+        m_bEnabled = false;
+        return 1.0f;
+    }
+    if (!m_bEnabled && !getSceneOwner()->getResourceManager()->getEditorIsRunning())
+        return m_fSetTimelineDuration <= 0.0f ? 1.0f : m_fTimelinePosition / m_fSetTimelineDuration;
+    float elapsed = m_bIsPlayingBackwards ? -elapsedTime : elapsedTime;
+    if (m_fGetTimelineStep > 0.0f) {
+        m_fSetTimelineStep += elapsed;
+        if (m_fSetTimelineStep >= m_fGetTimelineStep) {
+            m_fTimelinePosition += m_fGetTimelineStep;
+            m_fSetTimelineStep -= m_fGetTimelineStep;
+        }
+    } else m_fTimelinePosition += elapsed;
+    bool enabled = m_bEnabled;
+    if (m_bIsPlayingBackwards) {
+        if (m_fTimelinePosition < 0.0f) {
+            if (m_bTimelineLoops) {
+                m_fTimelinePosition += m_fSetTimelineDuration;
+                BroadcastEvent(40);
+            } else {
+                m_fTimelinePosition = 0.0f;
+                BroadcastEvent(45);
+                BroadcastEvent(35);
+                BroadcastEvent(43);
+                enabled = false;
+            }
+        }
+    } else if (m_fTimelinePosition >= m_fSetTimelineDuration) {
+        if (m_bTimelineLoops) {
+            m_fTimelinePosition -= m_fSetTimelineDuration;
+            BroadcastEvent(40);
+        } else {
+            m_fTimelinePosition = m_fSetTimelineDuration;
+            BroadcastEvent(45);
+            BroadcastEvent(35);
+            BroadcastEvent(44);
+            enabled = false;
+        }
+    }
+    float percent = m_fSetTimelineDuration <= 0.0f ? 1.0f : m_fTimelinePosition / m_fSetTimelineDuration;
+    if (m_bEnabled || getSceneOwner()->getResourceManager()->getEditorIsRunning()) {
+        typedef std::map<std::pair<int, bool>, CTimelineProperty*> Properties;
+        for (std::map<long long, Properties*>::iterator object = m_timelineProperties.begin();
+             object != m_timelineProperties.end(); ++object)
+            for (Properties::iterator property = object->second->begin();
+                 property != object->second->end(); ++property)
+                property->second->Update(percent, m_bIsPlayingBackwards);
+    }
+    if (!getSceneOwner()->getResourceManager()->getEditorIsRunning())
+        m_bEnabled = enabled;
+    return percent;
+}

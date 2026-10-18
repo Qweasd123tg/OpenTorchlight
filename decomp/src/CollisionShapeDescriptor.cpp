@@ -28,6 +28,8 @@ void CCollisionShapeDescriptor::InputLogicEvent(CEditorBaseObject* object,
     if (shape != NULL) {
         if (event == 2 || event == 3)
             shape->setEnabled(event == 2);
+        else
+            CPositionableObjectDescriptor::InputLogicEvent(object, event, data);
     }
 }
 

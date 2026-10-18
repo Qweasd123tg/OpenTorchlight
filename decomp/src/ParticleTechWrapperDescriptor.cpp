@@ -165,3 +165,20 @@ CParticleTechWrapperDescriptor::CParticleTechWrapperDescriptor()
     AddProperty(L"UV ANIMATION", L"U RATE", L"U scroll rate", (void*)Set_setUScroll, (void*)Get_getUScroll, VARIABLE_TYPE_FLOAT, 0);
     AddProperty(L"UV ANIMATION", L"V RATE", L"V scroll rate", (void*)Set_setVScroll, (void*)Get_getVScroll, VARIABLE_TYPE_FLOAT, 0);
 }
+
+void CParticleTechWrapperDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject* sender)
+{
+    CParticleTechWrapper* technique = dynamic_cast<CParticleTechWrapper*>(object);
+    if (!technique)
+        return;
+    if (event == 16) {
+        if (!technique->getEnabled())
+            technique->setActivated(true);
+        technique->start();
+        object->BroadcastEvent(31);
+    } else if (event == 17) {
+        technique->stop();
+        object->BroadcastEvent(32);
+    }
+    CPositionableObjectDescriptor::InputLogicEvent(object, event, sender);
+}

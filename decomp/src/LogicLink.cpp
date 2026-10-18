@@ -1,3 +1,4 @@
+#include "UTFConversion.h"
 
 #include "Descriptor.h"
 #include "EditorScene.h"
@@ -68,4 +69,26 @@ CLogicLink::CLogicLink(CEditorScene* scene, CLogicObject* initiating, CLogicWrap
     if (!destination->m_pLinkedDescriptor) return;
     m_pLinkingToDescriptor = destination->m_pLinkedDescriptor;
     initiating->GetObject();
+}
+
+void CLogicLink::saveLogicLinksToBinaryFile(std::ofstream* file)
+{
+    unsigned int id = m_pLinkingToLogicObject->m_iID;
+    file->write(reinterpret_cast<const char*>(&id), 4);
+    unsigned int length = m_pOutputLogicWrapper->m_sName.length();
+    file->write(reinterpret_cast<const char*>(&length), 4);
+    utf16string name = UTF32ToUTF16(m_pOutputLogicWrapper->m_sName);
+    file->write(reinterpret_cast<const char*>(name.c_str()), length * 2);
+    length = m_pInputLogicWrapper->m_sName.length();
+    file->write(reinterpret_cast<const char*>(&length), 4);
+    name = UTF32ToUTF16(m_pInputLogicWrapper->m_sName);
+    file->write(reinterpret_cast<const char*>(name.c_str()), length * 2);
+}
+
+void CLogicLink::saveLogicLinksToDataGroup(CDataGroup* dataGroup)
+{
+    CDataGroup* group = dataGroup->AddDataGroup(L"LOGICLINK");
+    group->AddDataValue(L"LINKINGTO", static_cast<int>(m_pLinkingToLogicObject->m_iID));
+    group->AddDataValue(L"OUTPUTNAME", m_pOutputLogicWrapper->m_sName, false);
+    group->AddDataValue(L"INPUTNAME", m_pInputLogicWrapper->m_sName, false);
 }

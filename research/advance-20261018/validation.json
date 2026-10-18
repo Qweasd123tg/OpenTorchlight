@@ -1,0 +1,3676 @@
+{
+ "baseline_commit": "4f9f634d02398ead39b215f07732d2af808b9b4e",
+ "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+ "accepted_before": 3998,
+ "accepted_after": 4117,
+ "net_accepted_change": 119,
+ "game_functions": 5247,
+ "matched_before": 2709,
+ "matched_after": 2756,
+ "compiler_matches_before": 812,
+ "compiler_matches_after": 812,
+ "behavioral_after": 1361,
+ "accepted_bytes": 1920461,
+ "game_bytes": 3702188,
+ "lost_accepted": [],
+ "prior_strong_MATCH_rows": 3521,
+ "prior_MATCH_code_lost": [],
+ "stale_behavioral": [],
+ "unknown_references": [],
+ "compiler_kind_hooks": [],
+ "input_digest": "db71327b30bad149b849e3ad67ad1e565334664e4de46e34900cadca6c1998f7",
+ "tree_unchanged": true,
+ "inputs_unchanged": true,
+ "tested_tree_sha256": "0e58cfc540964219b8b4c4bfc75101479450715f5850c7a98ac12b3d7c659161",
+ "environment": {
+  "LANG": "C.UTF-8",
+  "LC_ALL": "",
+  "TZ": "",
+  "OTL_ORIGINAL_DISASM": "tu",
+  "OTL_JOBS": "4",
+  "OTL_COMPARE_JOBS": "4",
+  "OTL_BUILD_JOBS": "4",
+  "OTL_SELFTEST_JOBS": "6",
+  "OTL_SELFTEST_SHARDS": "60",
+  "OTL_SELFTEST_TIMEOUT": "1800"
+ },
+ "newly_accepted": [
+  {
+   "address": "0x5a69f0",
+   "tu": "PathNode.cpp",
+   "name": "CPathNode::CPathNode(CPathController*, CResourceManager*)",
+   "original_size": 709,
+   "status": "DIFF",
+   "code": "c586df092c9fed99",
+   "object_digest": "c1f53d0c8c36601c4f4178ebc656abaaf10d02d612ba1fe0bf661cf582c8c00a",
+   "coverage": [
+    {
+     "fixture": "advance_logic_path_ctor",
+     "completed": 90,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5adeb0",
+   "tu": "CameraShakeDescriptor.cpp",
+   "name": "CCameraShakeDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+   "original_size": 226,
+   "status": "DIFF",
+   "code": "692940ee85d39d52",
+   "object_digest": "1e0e4a6773d01876f09f040169e56e5c14bda9b36924c5edc6cbd9dd4d8ca230",
+   "coverage": [
+    {
+     "fixture": "advance_editor_shake_dispatch",
+     "completed": 736,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5b21f0",
+   "tu": "CollisionShapeDescriptor.cpp",
+   "name": "CCollisionShapeDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+   "original_size": 217,
+   "status": "DIFF",
+   "code": "11bd5b02e963978b",
+   "object_digest": "63bc5b67b41e4d15df7eb565dcd95656f052cae47df2bd901d4a74222ac35946",
+   "coverage": [
+    {
+     "fixture": "advance_editor_collision_dispatch",
+     "completed": 768,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5d8bc0",
+   "tu": "DescriptorController.cpp",
+   "name": "CDescriptorController::addDescriptorProperty(CDescriptor*, CDescriptorProp*, bool)",
+   "original_size": 1393,
+   "status": "DIFF",
+   "code": "e21b23079e9ea44d",
+   "object_digest": "074edd29db3814d04257b612bc276e02226410b695c02dd33fef285fa346d783",
+   "coverage": [
+    {
+     "fixture": "advance_logic_register_property",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5de150",
+   "tu": "GenericModelDescriptor.cpp",
+   "name": "CGenericModelDescriptor::CreateObject(CEditorScene*)",
+   "original_size": 309,
+   "status": "DIFF",
+   "code": "2c1c744375e09788",
+   "object_digest": "51b2915ed70a1b08bbf99abcaae9cd7c42142bf291b866d2ee609dc0668beac3",
+   "coverage": [
+    {
+     "fixture": "advance_editor_generic_factory",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5dfb00",
+   "tu": "ItemDescriptor.cpp",
+   "name": "CItemDescriptor::descriptorSceneActivated(CEditorScene*)",
+   "original_size": 259,
+   "status": "DIFF",
+   "code": "efb619036a56b256",
+   "object_digest": "4a7e1481d559c5a1a82930f59dfdd85c7d209dbfb98823e60326b28d14e8f70f",
+   "coverage": [
+    {
+     "fixture": "advance_editor_item_activation",
+     "completed": 288,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x5dfc40",
+   "tu": "ItemDescriptor.cpp",
+   "name": "CItemDescriptor::CreateObject(CEditorScene*)",
+   "original_size": 106,
+   "status": "MATCH",
+   "code": "178befac031b739e",
+   "object_digest": "4a7e1481d559c5a1a82930f59dfdd85c7d209dbfb98823e60326b28d14e8f70f",
+   "coverage": []
+  },
+  {
+   "address": "0x63cd70",
+   "tu": "RoomDescriptor.cpp",
+   "name": "CRoomDescriptor::saveObject(CEditorBaseObject*, CDataGroup*, CDescriptorSaveConfiguration*)",
+   "original_size": 674,
+   "status": "DIFF",
+   "code": "f904e6035ad99dd0",
+   "object_digest": "d8f44e67c31a2d2a34f7504c14cc1d265834154e39943ce30ee9c01a3abb5d72",
+   "coverage": [
+    {
+     "fixture": "advance_editor_room_save",
+     "completed": 288,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x652790",
+   "tu": "UnitSpawnerDescriptor.cpp",
+   "name": "CUnitSpawnerDescriptor::update(float)",
+   "original_size": 127,
+   "status": "DIFF",
+   "code": "c728610d3415cb74",
+   "object_digest": "8aaaf6229b6a9b19f5d97da707f9f85434ce96abb78b398d0a99640759e0aa94",
+   "coverage": [
+    {
+     "fixture": "advance_editor_spawner_update",
+     "completed": 288,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x652850",
+   "tu": "UnitSpawnerDescriptor.cpp",
+   "name": "CUnitSpawnerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+   "original_size": 153,
+   "status": "MATCH",
+   "code": "4f7fdc2163696a43",
+   "object_digest": "8aaaf6229b6a9b19f5d97da707f9f85434ce96abb78b398d0a99640759e0aa94",
+   "coverage": []
+  },
+  {
+   "address": "0x65bb80",
+   "tu": "UnitSpawnerDescriptor.cpp",
+   "name": "CUnitSpawnerDescriptor::descriptorSceneActivated(CEditorScene*)",
+   "original_size": 558,
+   "status": "DIFF",
+   "code": "d8a2afa0f50998d2",
+   "object_digest": "8aaaf6229b6a9b19f5d97da707f9f85434ce96abb78b398d0a99640759e0aa94",
+   "coverage": [
+    {
+     "fixture": "advance_editor_spawner_activation",
+     "completed": 288,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x676700",
+   "tu": "TeleportDescriptor.cpp",
+   "name": "CTeleportDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+   "original_size": 303,
+   "status": "DIFF",
+   "code": "fb7074a9aa6c15a2",
+   "object_digest": "788c9bd1b8fd48288ccd066d16177b27035837d2f3c00e88498ada00e136fed5",
+   "coverage": [
+    {
+     "fixture": "advance_editor_teleport_dispatch",
+     "completed": 288,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x684450",
+   "tu": "UnitTriggerDescriptor.cpp",
+   "name": "CUnitTriggerDescriptor::DescriptorObjectBeingDeleted(CEditorBaseObject*)",
+   "original_size": 75,
+   "status": "MATCH",
+   "code": "db0f1a97e69ad791",
+   "object_digest": "7c51cc97bf9b0a90412d5c9eb3e91c52b4c32fc05ef3ae0280b46cc023f97cab",
+   "coverage": []
+  },
+  {
+   "address": "0x6ec830",
+   "tu": "ParticleTechWrapperDescriptor.cpp",
+   "name": "CParticleTechWrapperDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+   "original_size": 275,
+   "status": "DIFF",
+   "code": "85f347ef375d76bc",
+   "object_digest": "a85c83ea6b917947edeecc230508bc657200b1ffc8041c45d1128e411e868f2c",
+   "coverage": [
+    {
+     "fixture": "advance_editor_particle_dispatch",
+     "completed": 768,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x701f90",
+   "tu": "DescriptorLoadConfiguration.cpp",
+   "name": "CDescriptorLoadConfiguration::addRemap(long long, long long)",
+   "original_size": 506,
+   "status": "DIFF",
+   "code": "6af64fc2ec34c701",
+   "object_digest": "9593f9a5cb6daee9f4f5586fb54bba8c0f44f3c4d56a518e12fefa5469848ab8",
+   "coverage": [
+    {
+     "fixture": "advance_logic_add_remap",
+     "completed": 98,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x70a450",
+   "tu": "DescriptorProp.cpp",
+   "name": "CDescriptorProp::cloneValue(CEditorBaseObject*, CEditorBaseObject*)",
+   "original_size": 170,
+   "status": "DIFF",
+   "code": "c5653cde3b77d656",
+   "object_digest": "5b0f1aa9a6d34d6f9ba9cf9652f96fb1f13bf9a80048033219e1d3613dafdfa1",
+   "coverage": [
+    {
+     "fixture": "advance_logic_property_clone",
+     "completed": 112,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x70a730",
+   "tu": "DescriptorProp.cpp",
+   "name": "CDescriptorProp::saveProperty(CEditorBaseObject*, CDataGroup*)",
+   "original_size": 1282,
+   "status": "DIFF",
+   "code": "378788e71e89c95b",
+   "object_digest": "5b0f1aa9a6d34d6f9ba9cf9652f96fb1f13bf9a80048033219e1d3613dafdfa1",
+   "coverage": [
+    {
+     "fixture": "advance_logic_property_save",
+     "completed": 156,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x70c3b0",
+   "tu": "DescriptorProp.cpp",
+   "name": "CDescriptorProp::loadProperty(CEditorBaseObject*, CDataGroup*, unsigned int)",
+   "original_size": 1655,
+   "status": "DIFF",
+   "code": "30cd5a1cc765d232",
+   "object_digest": "5b0f1aa9a6d34d6f9ba9cf9652f96fb1f13bf9a80048033219e1d3613dafdfa1",
+   "coverage": [
+    {
+     "fixture": "advance_logic_property_load",
+     "completed": 360,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x73f6d0",
+   "tu": "EditorObjectManager.cpp",
+   "name": "CEditorObjectManager::EditorObjectDeselected(CEditorBaseObject*)",
+   "original_size": 162,
+   "status": "MATCH",
+   "code": "87ac1ea486afd93a",
+   "object_digest": "ddc4eb5bf21f57c399fbe24e8cc7fdf3cf8897ea57326feb747e57fd02e64f6c",
+   "coverage": []
+  },
+  {
+   "address": "0x73fab0",
+   "tu": "EditorObjectManager.cpp",
+   "name": "CEditorObjectManager::EditorObjectDeleted(CEditorBaseObject*)",
+   "original_size": 210,
+   "status": "MATCH",
+   "code": "b3ef79d3e40c5f3f",
+   "object_digest": "ddc4eb5bf21f57c399fbe24e8cc7fdf3cf8897ea57326feb747e57fd02e64f6c",
+   "coverage": []
+  },
+  {
+   "address": "0x73fb90",
+   "tu": "EditorObjectManager.cpp",
+   "name": "CEditorObjectManager::EditorDeleteAllObjects()",
+   "original_size": 351,
+   "status": "MATCH",
+   "code": "c8ccf9f09a030458",
+   "object_digest": "ddc4eb5bf21f57c399fbe24e8cc7fdf3cf8897ea57326feb747e57fd02e64f6c",
+   "coverage": []
+  },
+  {
+   "address": "0x7549b0",
+   "tu": "AllDescriptorsScene.cpp",
+   "name": "CAllDescriptorsScene::createDescriptors()",
+   "original_size": 254,
+   "status": "DIFF",
+   "code": "d15367e768c91bd4",
+   "object_digest": "2b7ae1e03384ffa43b217062683b6a6311c6dc57b81244d3a47c525486567961",
+   "coverage": [
+    {
+     "fixture": "advance_editor_all_descriptors",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x75ecc0",
+   "tu": "LayoutScene.cpp",
+   "name": "CLayoutScene::createDescriptors()",
+   "original_size": 571,
+   "status": "DIFF",
+   "code": "38d64d4a5a1d00ce",
+   "object_digest": "0f55619ce14a84e1acca234825081b0b0dbe18bcf0b2b4c321139d8f6aefcfc9",
+   "coverage": [
+    {
+     "fixture": "advance_editor_layout_descriptors",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x75ef30",
+   "tu": "LayoutScene.cpp",
+   "name": "CLayoutScene::CLayoutScene()",
+   "original_size": 23,
+   "status": "DIFF",
+   "code": "62b50798cbebe951",
+   "object_digest": "0f55619ce14a84e1acca234825081b0b0dbe18bcf0b2b4c321139d8f6aefcfc9",
+   "coverage": [
+    {
+     "fixture": "advance_editor_layout_ctor",
+     "completed": 32,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x788730",
+   "tu": "pov.cpp",
+   "name": "CPOV::DampLateralVelocity(float)",
+   "original_size": 160,
+   "status": "DIFF",
+   "code": "139e3d1d7cbb50b6",
+   "object_digest": "f6b8255cef5c242943d9f4f41be3ad69796e832463a43e8316f8c8f265980aa0",
+   "coverage": [
+    {
+     "fixture": "advance_pov_lateral",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x788ab0",
+   "tu": "pov.cpp",
+   "name": "CPOV::CapContactVelocity(float)",
+   "original_size": 370,
+   "status": "DIFF",
+   "code": "5d6f3bb1e6e4d821",
+   "object_digest": "f6b8255cef5c242943d9f4f41be3ad69796e832463a43e8316f8c8f265980aa0",
+   "coverage": [
+    {
+     "fixture": "advance_pov_cap",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x78a2f0",
+   "tu": "pov.cpp",
+   "name": "CPOV::SetOrientation(Ogre::Matrix4 const&)",
+   "original_size": 190,
+   "status": "MATCH",
+   "code": "851007591f891644",
+   "object_digest": "f6b8255cef5c242943d9f4f41be3ad69796e832463a43e8316f8c8f265980aa0",
+   "coverage": [
+    {
+     "fixture": "advance_pov_orientation",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x78a3b0",
+   "tu": "pov.cpp",
+   "name": "CPOV::SetViewOrientation(Ogre::Matrix4 const&)",
+   "original_size": 326,
+   "status": "DIFF",
+   "code": "52996704393a436b",
+   "object_digest": "f6b8255cef5c242943d9f4f41be3ad69796e832463a43e8316f8c8f265980aa0",
+   "coverage": [
+    {
+     "fixture": "advance_pov_view",
+     "completed": 120,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x795bf0",
+   "tu": "LogicGroup.cpp",
+   "name": "CLogicGroup::AddLogicObject(CLogicObject*)",
+   "original_size": 191,
+   "status": "DIFF",
+   "code": "9aa66da09284e516",
+   "object_digest": "66f134e8bf5195be1d263b58b94451ad3c27d93e51556f783609f7a9b23dd157",
+   "coverage": [
+    {
+     "fixture": "advance_logic_group_add",
+     "completed": 54,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x795f10",
+   "tu": "LogicGroup.cpp",
+   "name": "CLogicGroup::RemoveLogicObjectsRefingObjectID(long long)",
+   "original_size": 204,
+   "status": "DIFF",
+   "code": "cbeeee3a5324bc31",
+   "object_digest": "66f134e8bf5195be1d263b58b94451ad3c27d93e51556f783609f7a9b23dd157",
+   "coverage": [
+    {
+     "fixture": "advance_logic_group_remove",
+     "completed": 72,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x796ab0",
+   "tu": "LogicGroup.cpp",
+   "name": "CLogicGroup::saveLogicGroupToDataGroup(CDataGroup*, std::basic_ofstream<char, std::char_traits<char> >*, CDescriptorSaveConfiguration*)",
+   "original_size": 1139,
+   "status": "DIFF",
+   "code": "ca917941bea6ba69",
+   "object_digest": "66f134e8bf5195be1d263b58b94451ad3c27d93e51556f783609f7a9b23dd157",
+   "coverage": [
+    {
+     "fixture": "advance_logic_group_save",
+     "completed": 60,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7a3c20",
+   "tu": "LogicLink.cpp",
+   "name": "CLogicLink::saveLogicLinksToBinaryFile(std::basic_ofstream<char, std::char_traits<char> >*)",
+   "original_size": 583,
+   "status": "MATCH",
+   "code": "6ec5995056c847de",
+   "object_digest": "8357586168048e1703a1132453a5996eca91e4ac622e991eb9e668418e60ee62",
+   "coverage": [
+    {
+     "fixture": "advance_logic_link_binary",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7a4ae0",
+   "tu": "LogicLink.cpp",
+   "name": "CLogicLink::saveLogicLinksToDataGroup(CDataGroup*)",
+   "original_size": 601,
+   "status": "DIFF",
+   "code": "09bab0e4ccb19114",
+   "object_digest": "8357586168048e1703a1132453a5996eca91e4ac622e991eb9e668418e60ee62",
+   "coverage": [
+    {
+     "fixture": "advance_logic_link_group",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7b6d90",
+   "tu": "Timeline.cpp",
+   "name": "CTimeline::AddProperty(CEditorScene*, long long, int, bool)",
+   "original_size": 895,
+   "status": "DIFF",
+   "code": "a530f09cb79488c6",
+   "object_digest": "e69ed507a6d86d94ebf87964aeaef8269a168bb827516d59b174345dc50ceac1",
+   "coverage": [
+    {
+     "fixture": "advance_logic_timeline_add",
+     "completed": 112,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x7b7420",
+   "tu": "Timeline.cpp",
+   "name": "CTimeline::UpdateTimeline(float)",
+   "original_size": 885,
+   "status": "DIFF",
+   "code": "2c45beefb48e9667",
+   "object_digest": "e69ed507a6d86d94ebf87964aeaef8269a168bb827516d59b174345dc50ceac1",
+   "coverage": [
+    {
+     "fixture": "advance_logic_timeline_update",
+     "completed": 448,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x86cd20",
+   "tu": "dynamicrenderable.cpp",
+   "name": "CDynamicRenderable::initialize(Ogre::RenderOperation::OperationType, bool)",
+   "original_size": 162,
+   "status": "DIFF",
+   "code": "b9178bca7adfdd8a",
+   "object_digest": "5d1fa3587ddd2277dcdb9da12c8a29d532654f190808496c542540562d2af0c6",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_dynamic_initialize",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x86cdd0",
+   "tu": "dynamicrenderable.cpp",
+   "name": "CDynamicRenderable::~CDynamicRenderable()",
+   "original_size": 146,
+   "status": "MATCH",
+   "code": "3b9db94c9acbfe8f",
+   "object_digest": "5d1fa3587ddd2277dcdb9da12c8a29d532654f190808496c542540562d2af0c6",
+   "coverage": []
+  },
+  {
+   "address": "0x86ce70",
+   "tu": "dynamicrenderable.cpp",
+   "name": "non-virtual thunk to CDynamicRenderable::~CDynamicRenderable()",
+   "original_size": 12,
+   "status": "MATCH",
+   "code": "57c1d651248d4334",
+   "object_digest": "5d1fa3587ddd2277dcdb9da12c8a29d532654f190808496c542540562d2af0c6",
+   "coverage": []
+  },
+  {
+   "address": "0x86ce80",
+   "tu": "dynamicrenderable.cpp",
+   "name": "non-virtual thunk to CDynamicRenderable::~CDynamicRenderable()",
+   "original_size": 9,
+   "status": "MATCH",
+   "code": "d7f9d6cacf063c06",
+   "object_digest": "5d1fa3587ddd2277dcdb9da12c8a29d532654f190808496c542540562d2af0c6",
+   "coverage": []
+  },
+  {
+   "address": "0x86ce90",
+   "tu": "dynamicrenderable.cpp",
+   "name": "non-virtual thunk to CDynamicRenderable::~CDynamicRenderable()",
+   "original_size": 9,
+   "status": "MATCH",
+   "code": "d6ab3ef6f26ba4e1",
+   "object_digest": "5d1fa3587ddd2277dcdb9da12c8a29d532654f190808496c542540562d2af0c6",
+   "coverage": []
+  },
+  {
+   "address": "0x86cea0",
+   "tu": "dynamicrenderable.cpp",
+   "name": "non-virtual thunk to CDynamicRenderable::~CDynamicRenderable()",
+   "original_size": 6,
+   "status": "MATCH",
+   "code": "4b731a8583f5faa7",
+   "object_digest": "5d1fa3587ddd2277dcdb9da12c8a29d532654f190808496c542540562d2af0c6",
+   "coverage": []
+  },
+  {
+   "address": "0x86ceb0",
+   "tu": "dynamicrenderable.cpp",
+   "name": "CDynamicRenderable::~CDynamicRenderable()",
+   "original_size": 18,
+   "status": "MATCH",
+   "code": "8daed60993a1669f",
+   "object_digest": "5d1fa3587ddd2277dcdb9da12c8a29d532654f190808496c542540562d2af0c6",
+   "coverage": []
+  },
+  {
+   "address": "0x86ced0",
+   "tu": "dynamicrenderable.cpp",
+   "name": "CDynamicRenderable::CDynamicRenderable()",
+   "original_size": 37,
+   "status": "MATCH",
+   "code": "f38b5407db8285cd",
+   "object_digest": "5d1fa3587ddd2277dcdb9da12c8a29d532654f190808496c542540562d2af0c6",
+   "coverage": []
+  },
+  {
+   "address": "0x86cf00",
+   "tu": "dynamicrenderable.cpp",
+   "name": "CDynamicRenderable::prepareHardwareBuffers(unsigned long, unsigned long)",
+   "original_size": 725,
+   "status": "DIFF",
+   "code": "650265453eab0c05",
+   "object_digest": "5d1fa3587ddd2277dcdb9da12c8a29d532654f190808496c542540562d2af0c6",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_dynamic_buffers",
+     "completed": 144,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9340a0",
+   "tu": "dungeon.cpp",
+   "name": "CDungeon::getLevelTemplateDataForDepth(CGameClient*, unsigned int)",
+   "original_size": 237,
+   "status": "DIFF",
+   "code": "9628db8655531e7c",
+   "object_digest": "e3fb7d152be1c7ebf0c78ddcd1114d8bd0c1bbd03b649c2760ce2bb518792d7b",
+   "coverage": [
+    {
+     "fixture": "advance_dungeon_depth",
+     "completed": 140,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9c28d0",
+   "tu": "DamageShape.cpp",
+   "name": "CDamageShape::setEnabled(bool)",
+   "original_size": 420,
+   "status": "DIFF",
+   "code": "d3774a0f3d242a49",
+   "object_digest": "8c443568d884c63e01cf2a637eab9cf46d02d2b3e27ad6a8f8f5c39167c70211",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_damage_enabled",
+     "completed": 126,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9c2a80",
+   "tu": "DamageShape.cpp",
+   "name": "CDamageShape::~CDamageShape()",
+   "original_size": 300,
+   "status": "DIFF",
+   "code": "8b6809d4a936393d",
+   "object_digest": "8c443568d884c63e01cf2a637eab9cf46d02d2b3e27ad6a8f8f5c39167c70211",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_damage_dtor",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9c2bb0",
+   "tu": "DamageShape.cpp",
+   "name": "non-virtual thunk to CDamageShape::~CDamageShape()",
+   "original_size": 12,
+   "status": "MATCH",
+   "code": "622b8b4031d62a8f",
+   "object_digest": "8c443568d884c63e01cf2a637eab9cf46d02d2b3e27ad6a8f8f5c39167c70211",
+   "coverage": []
+  },
+  {
+   "address": "0x9c2bc0",
+   "tu": "DamageShape.cpp",
+   "name": "non-virtual thunk to CDamageShape::~CDamageShape()",
+   "original_size": 12,
+   "status": "MATCH",
+   "code": "7ba722fe9a6f8aff",
+   "object_digest": "8c443568d884c63e01cf2a637eab9cf46d02d2b3e27ad6a8f8f5c39167c70211",
+   "coverage": []
+  },
+  {
+   "address": "0x9c2bd0",
+   "tu": "DamageShape.cpp",
+   "name": "non-virtual thunk to CDamageShape::~CDamageShape()",
+   "original_size": 9,
+   "status": "MATCH",
+   "code": "432bc2f63681ace1",
+   "object_digest": "8c443568d884c63e01cf2a637eab9cf46d02d2b3e27ad6a8f8f5c39167c70211",
+   "coverage": []
+  },
+  {
+   "address": "0x9c2be0",
+   "tu": "DamageShape.cpp",
+   "name": "non-virtual thunk to CDamageShape::~CDamageShape()",
+   "original_size": 9,
+   "status": "MATCH",
+   "code": "4beabfc7c7ac7e4c",
+   "object_digest": "8c443568d884c63e01cf2a637eab9cf46d02d2b3e27ad6a8f8f5c39167c70211",
+   "coverage": []
+  },
+  {
+   "address": "0x9c2bf0",
+   "tu": "DamageShape.cpp",
+   "name": "CDamageShape::~CDamageShape()",
+   "original_size": 18,
+   "status": "MATCH",
+   "code": "784bdcca8e941a2a",
+   "object_digest": "8c443568d884c63e01cf2a637eab9cf46d02d2b3e27ad6a8f8f5c39167c70211",
+   "coverage": []
+  },
+  {
+   "address": "0x9ca2c0",
+   "tu": "DamageShape.cpp",
+   "name": "CDamageShape::CDamageShape(CResourceManager*)",
+   "original_size": 606,
+   "status": "DIFF",
+   "code": "f1d7810967fb2add",
+   "object_digest": "8c443568d884c63e01cf2a637eab9cf46d02d2b3e27ad6a8f8f5c39167c70211",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_damage_ctor",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9ca630",
+   "tu": "DamageShape.cpp",
+   "name": "CFormationNodeSaveAndLoad::saveFormationNode(_IO_FILE*)",
+   "original_size": 136,
+   "status": "MATCH",
+   "code": "70343847f7006ee3",
+   "object_digest": "8c443568d884c63e01cf2a637eab9cf46d02d2b3e27ad6a8f8f5c39167c70211",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_formation_save",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9ca6c0",
+   "tu": "DamageShape.cpp",
+   "name": "CFormationNodeSaveAndLoad::loadFormationNode(_IO_FILE*)",
+   "original_size": 211,
+   "status": "MATCH",
+   "code": "e58213d629ac61e1",
+   "object_digest": "8c443568d884c63e01cf2a637eab9cf46d02d2b3e27ad6a8f8f5c39167c70211",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_formation_load",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9d2ef0",
+   "tu": "FormationNode.cpp",
+   "name": "CFormationNode::setLayoutFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CResourceManager*)",
+   "original_size": 482,
+   "status": "DIFF",
+   "code": "689fc9442e2c79c0",
+   "object_digest": "cbc3bbed4ae3b0f3d6bae88c72886fbb5cfb65c4d2414195eb165fc6aedd6d93",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_formation_layout",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9d30e0",
+   "tu": "FormationNode.cpp",
+   "name": "CFormationNode::CFormationNode(CResourceManager*, CFormationNodeSaveAndLoad*)",
+   "original_size": 177,
+   "status": "DIFF",
+   "code": "c631ef5b33326e34",
+   "object_digest": "cbc3bbed4ae3b0f3d6bae88c72886fbb5cfb65c4d2414195eb165fc6aedd6d93",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_formation_ctor",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0x9d31a0",
+   "tu": "FormationNode.cpp",
+   "name": "CFormationNodeSaveAndLoad::CFormationNodeSaveAndLoad(CFormationNode*)",
+   "original_size": 292,
+   "status": "MATCH",
+   "code": "71f69cfc2d53c043",
+   "object_digest": "cbc3bbed4ae3b0f3d6bae88c72886fbb5cfb65c4d2414195eb165fc6aedd6d93",
+   "coverage": []
+  },
+  {
+   "address": "0x9df820",
+   "tu": "Layout.cpp",
+   "name": "CLayout::editorObjectCreated(CEditorBaseObject*)",
+   "original_size": 574,
+   "status": "DIFF",
+   "code": "84dbec3aa0896541",
+   "object_digest": "bb21a64124b7ebc7a3ab0e03b353fa86151279a228b40134418ea2a662975066",
+   "coverage": [
+    {
+     "fixture": "advance_editor_layout_created",
+     "completed": 140,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa0a660",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::createUnitsInMemory()",
+   "original_size": 93,
+   "status": "DIFF",
+   "code": "86ce6f2872f3f169",
+   "object_digest": "7594e1672f0e30369cb68d34a0c3c787aba382a98e8f96b1be858af02dfd03b0",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_spawner_memory",
+     "completed": 192,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa0a860",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::addSpawnedUnit(CBaseUnit*)",
+   "original_size": 724,
+   "status": "DIFF",
+   "code": "120dd0d71dc84ba7",
+   "object_digest": "7594e1672f0e30369cb68d34a0c3c787aba382a98e8f96b1be858af02dfd03b0",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_spawner_add",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa0adc0",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::createAndFireMissile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, Ogre::Vector3 const&, Ogre::Quaternion const&)",
+   "original_size": 229,
+   "status": "DIFF",
+   "code": "05e363ad253c33c4",
+   "object_digest": "7594e1672f0e30369cb68d34a0c3c787aba382a98e8f96b1be858af02dfd03b0",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_spawner_missile",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa0aeb0",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::hideAndDisableUnits(bool)",
+   "original_size": 402,
+   "status": "DIFF",
+   "code": "8e2d13fed66d7382",
+   "object_digest": "7594e1672f0e30369cb68d34a0c3c787aba382a98e8f96b1be858af02dfd03b0",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_spawner_hide",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa0b050",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::CUnitSpawner(CResourceManager*)",
+   "original_size": 543,
+   "status": "DIFF",
+   "code": "d52fbfec341829fa",
+   "object_digest": "7594e1672f0e30369cb68d34a0c3c787aba382a98e8f96b1be858af02dfd03b0",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_spawner_ctor",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa14500",
+   "tu": "UnitSpawner.cpp",
+   "name": "non-virtual thunk to CUnitSpawner::unitStateChange(CBaseUnit*, EUNIT_STATES)",
+   "original_size": 9,
+   "status": "MATCH",
+   "code": "7564242c543eca30",
+   "object_digest": "7594e1672f0e30369cb68d34a0c3c787aba382a98e8f96b1be858af02dfd03b0",
+   "coverage": []
+  },
+  {
+   "address": "0xa14510",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::unitStateChange(CBaseUnit*, EUNIT_STATES)",
+   "original_size": 721,
+   "status": "DIFF",
+   "code": "2e45e4f6f095ef0c",
+   "object_digest": "7594e1672f0e30369cb68d34a0c3c787aba382a98e8f96b1be858af02dfd03b0",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_spawner_state",
+     "completed": 150,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa147f0",
+   "tu": "UnitSpawner.cpp",
+   "name": "CUnitSpawner::destroyUnits()",
+   "original_size": 617,
+   "status": "DIFF",
+   "code": "9958591941c39a7b",
+   "object_digest": "7594e1672f0e30369cb68d34a0c3c787aba382a98e8f96b1be858af02dfd03b0",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_spawner_destroy",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa38040",
+   "tu": "ParticlePreloader.cpp",
+   "name": "CParticlePreloader::getParticleCache(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "original_size": 860,
+   "status": "DIFF",
+   "code": "f5c647c2090ba100",
+   "object_digest": "43a2e46939f925682b2c707fa85b982c1488fe010a29c5f8cb7eb947e7c52b53",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_particle_cache",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa38680",
+   "tu": "ParticlePreloader.cpp",
+   "name": "CParticlePreloader::~CParticlePreloader()",
+   "original_size": 230,
+   "status": "MATCH",
+   "code": "bf32a0d84c21e784",
+   "object_digest": "43a2e46939f925682b2c707fa85b982c1488fe010a29c5f8cb7eb947e7c52b53",
+   "coverage": []
+  },
+  {
+   "address": "0xa38770",
+   "tu": "ParticlePreloader.cpp",
+   "name": "CParticlePreloader::~CParticlePreloader()",
+   "original_size": 18,
+   "status": "MATCH",
+   "code": "b188a58ab8ea86fb",
+   "object_digest": "43a2e46939f925682b2c707fa85b982c1488fe010a29c5f8cb7eb947e7c52b53",
+   "coverage": []
+  },
+  {
+   "address": "0xa38790",
+   "tu": "ParticlePreloader.cpp",
+   "name": "CParticlePreloader::CParticlePreloader(CResourceSettings*)",
+   "original_size": 563,
+   "status": "DIFF",
+   "code": "a9934006bf670b63",
+   "object_digest": "43a2e46939f925682b2c707fa85b982c1488fe010a29c5f8cb7eb947e7c52b53",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_particle_ctor",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa3acc0",
+   "tu": "ParticlePreloader.cpp",
+   "name": "CParticlePreloader::LoadParticle(CDataGroup*)",
+   "original_size": 1328,
+   "status": "DIFF",
+   "code": "ae8febfe810f90ab",
+   "object_digest": "43a2e46939f925682b2c707fa85b982c1488fe010a29c5f8cb7eb947e7c52b53",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_particle_group",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa3b1f0",
+   "tu": "ParticlePreloader.cpp",
+   "name": "CParticlePreloader::ReloadParticles()",
+   "original_size": 420,
+   "status": "DIFF",
+   "code": "5661442a3ca3f50d",
+   "object_digest": "43a2e46939f925682b2c707fa85b982c1488fe010a29c5f8cb7eb947e7c52b53",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_particle_reload",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa3b3a0",
+   "tu": "ParticlePreloader.cpp",
+   "name": "CParticlePreloader::LoadParticle(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "original_size": 496,
+   "status": "MATCH",
+   "code": "1a8c3b1dbbd768aa",
+   "object_digest": "43a2e46939f925682b2c707fa85b982c1488fe010a29c5f8cb7eb947e7c52b53",
+   "coverage": []
+  },
+  {
+   "address": "0xa545c0",
+   "tu": "MasterResourceManager.cpp",
+   "name": "CMasterResourceManager::removeUnused()",
+   "original_size": 462,
+   "status": "MATCH",
+   "code": "4e119e7c72641816",
+   "object_digest": "ba8f263ce5001e194b7fc4938f5ea31522087e58b8f13d31b73220f3ec0a6e1a",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_master_unused",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa54790",
+   "tu": "MasterResourceManager.cpp",
+   "name": "CMasterResourceManager::removeAll()",
+   "original_size": 350,
+   "status": "MATCH",
+   "code": "6a1b8046de4bb8d2",
+   "object_digest": "ba8f263ce5001e194b7fc4938f5ea31522087e58b8f13d31b73220f3ec0a6e1a",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_master_all",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa5f410",
+   "tu": "MasterResourceManager.cpp",
+   "name": "CMasterResourceManager::addBatchModel(CResourceManager*, Ogre::SceneManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool&)",
+   "original_size": 1073,
+   "status": "MATCH",
+   "code": "050536aa4bdeaa90",
+   "object_digest": "ba8f263ce5001e194b7fc4938f5ea31522087e58b8f13d31b73220f3ec0a6e1a",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_master_batch",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa5f850",
+   "tu": "MasterResourceManager.cpp",
+   "name": "CMasterResourceManager::addCollisionModel(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+   "original_size": 994,
+   "status": "MATCH",
+   "code": "b660377782bfb4a2",
+   "object_digest": "ba8f263ce5001e194b7fc4938f5ea31522087e58b8f13d31b73220f3ec0a6e1a",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_master_collision",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xa67690",
+   "tu": "UnitThemes.cpp",
+   "name": "CUnitThemeParticle::load(CDataGroup*)",
+   "original_size": 877,
+   "status": "DIFF",
+   "code": "569bf929845ff089",
+   "object_digest": "46217ca604d79df481474970e289d029ebf766b161febe65931c7137834ee809",
+   "coverage": [
+    {
+     "fixture": "advance_theme_load",
+     "completed": 64,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xb3d200",
+   "tu": "interactiveMenu.cpp",
+   "name": "CInteractiveMenu::setVisible(bool)",
+   "original_size": 234,
+   "status": "MATCH",
+   "code": "5952d941b0927e2c",
+   "object_digest": "df13ccf932333f74a1aa7d12f7f973cd5185aaec5f492a08fc9fa76ce3df9285",
+   "coverage": []
+  },
+  {
+   "address": "0xb3d2f0",
+   "tu": "interactiveMenu.cpp",
+   "name": "CInteractiveMenu::update(float)",
+   "original_size": 356,
+   "status": "MATCH",
+   "code": "ca4e9b941ebcd935",
+   "object_digest": "df13ccf932333f74a1aa7d12f7f973cd5185aaec5f492a08fc9fa76ce3df9285",
+   "coverage": []
+  },
+  {
+   "address": "0xb45080",
+   "tu": "interactiveMenu.cpp",
+   "name": "CInteractiveMenu::createMenus()",
+   "original_size": 1680,
+   "status": "DIFF",
+   "code": "7aaed75668bcf983",
+   "object_digest": "df13ccf932333f74a1aa7d12f7f973cd5185aaec5f492a08fc9fa76ce3df9285",
+   "coverage": [
+    {
+     "fixture": "advance_editor_interactive_create",
+     "completed": 96,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc2b700",
+   "tu": "menumanager.cpp",
+   "name": "CMenuManager::canLoad()",
+   "original_size": 31,
+   "status": "MATCH",
+   "code": "f2527d477861cdf4",
+   "object_digest": "27c25f12c6e3f1322e528a1d244703b0012ede1a8e35f1c392ce1c972534a120",
+   "coverage": []
+  },
+  {
+   "address": "0xc2b770",
+   "tu": "menumanager.cpp",
+   "name": "CMenuManager::update(float, CGameClient*, Ogre::RenderWindow*)",
+   "original_size": 177,
+   "status": "DIFF",
+   "code": "5108d77804e64824",
+   "object_digest": "27c25f12c6e3f1322e528a1d244703b0012ede1a8e35f1c392ce1c972534a120",
+   "coverage": [
+    {
+     "fixture": "advance_editor_menu_update",
+     "completed": 1024,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc2b840",
+   "tu": "menumanager.cpp",
+   "name": "CMenuManager::processInput(void*, float, bool)",
+   "original_size": 319,
+   "status": "DIFF",
+   "code": "091884a9b985ad6d",
+   "object_digest": "27c25f12c6e3f1322e528a1d244703b0012ede1a8e35f1c392ce1c972534a120",
+   "coverage": [
+    {
+     "fixture": "advance_editor_menu_input",
+     "completed": 1024,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc2b9d0",
+   "tu": "menumanager.cpp",
+   "name": "CMenuManager::setActiveMenu(EMenu)",
+   "original_size": 429,
+   "status": "DIFF",
+   "code": "fff1383e1c313931",
+   "object_digest": "27c25f12c6e3f1322e528a1d244703b0012ede1a8e35f1c392ce1c972534a120",
+   "coverage": [
+    {
+     "fixture": "advance_editor_menu_active",
+     "completed": 324,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc63fe0",
+   "tu": "DataValue.cpp",
+   "name": "CDataValue::SetDataValueName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >&)",
+   "original_size": 947,
+   "status": "DIFF",
+   "code": "cd6506b1bfaa9845",
+   "object_digest": "24b487ad6b4e7ba786608c237f95de0a462c31262af2f9f8a31d7f60954d7492",
+   "coverage": [
+    {
+     "fixture": "advance_data_name",
+     "completed": 192,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc64480",
+   "tu": "DataValue.cpp",
+   "name": "CDataValue::SetValueString(wchar_t const*)",
+   "original_size": 1163,
+   "status": "DIFF",
+   "code": "fbd3070e67e4c6da",
+   "object_digest": "24b487ad6b4e7ba786608c237f95de0a462c31262af2f9f8a31d7f60954d7492",
+   "coverage": [
+    {
+     "fixture": "advance_data_string",
+     "completed": 192,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xc68af0",
+   "tu": "OgreResourceFile.cpp",
+   "name": "COgreResourceFile::SaveDataGroupToFile(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, CDataGroup*)",
+   "original_size": 150,
+   "status": "MATCH",
+   "code": "6cd0cf2c8110ab1f",
+   "object_digest": "11bede616e129e8684b0b446e07088f3db5868cef83e423b86022dd97865f03c",
+   "coverage": []
+  },
+  {
+   "address": "0xd09be0",
+   "tu": "MissilePreloader.cpp",
+   "name": "CMissilePreloader::clearCachedMissiles()",
+   "original_size": 455,
+   "status": "MATCH",
+   "code": "dcdfb8934ef182ad",
+   "object_digest": "d97694192f7cbdffbf10beff5c724d5f8b66943a4b98fb0a28b352e4feddb42b",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_missile_clear",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd0ae50",
+   "tu": "MissilePreloader.cpp",
+   "name": "CMissilePreloader::reloadMissiles()",
+   "original_size": 628,
+   "status": "DIFF",
+   "code": "b65d5551dadcde0a",
+   "object_digest": "d97694192f7cbdffbf10beff5c724d5f8b66943a4b98fb0a28b352e4feddb42b",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_missile_reload",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd0b0d0",
+   "tu": "MissilePreloader.cpp",
+   "name": "CMissilePreloader::createNewMissileRef(CResourceManager*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "original_size": 1586,
+   "status": "DIFF",
+   "code": "89ac5018af2e3035",
+   "object_digest": "d97694192f7cbdffbf10beff5c724d5f8b66943a4b98fb0a28b352e4feddb42b",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_missile_create",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd0b710",
+   "tu": "MissilePreloader.cpp",
+   "name": "CMissilePreloader::cacheMissile(CMissile*)",
+   "original_size": 1210,
+   "status": "DIFF",
+   "code": "e558e3d603eccbed",
+   "object_digest": "d97694192f7cbdffbf10beff5c724d5f8b66943a4b98fb0a28b352e4feddb42b",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_missile_cache",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd6f790",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::createAffixesForUnit(CBaseUnit*, unsigned int, unsigned int)",
+   "original_size": 230,
+   "status": "DIFF",
+   "code": "0d399b774563fb8e",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_resource_affix",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd6f880",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::getGraphDamage()",
+   "original_size": 390,
+   "status": "DIFF",
+   "code": "52fb6564fd0b4288",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_resource_graph",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd76940",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::createMonster(long long, int, bool)",
+   "original_size": 219,
+   "status": "MATCH",
+   "code": "76be0b4cd02e7670",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_resource_monster_guid",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd77c80",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::createMonster(wchar_t const*, int, bool)",
+   "original_size": 441,
+   "status": "DIFF",
+   "code": "92e5ef8c0a99a48f",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_resource_monster_name",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd77e40",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::createGenericModel(Ogre::SceneManager*, wchar_t const*, wchar_t const*, bool, bool, bool)",
+   "original_size": 698,
+   "status": "MATCH",
+   "code": "4adce528f80a8c2b",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": []
+  },
+  {
+   "address": "0xd78100",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::createPlayer(wchar_t const*, bool)",
+   "original_size": 389,
+   "status": "DIFF",
+   "code": "f5d44973e6f9caf7",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_resource_player",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd784a0",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::createItem(long long, bool, bool, bool)",
+   "original_size": 201,
+   "status": "MATCH",
+   "code": "0696695b3baac9c9",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_resource_item_guid",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd78570",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::createItem(wchar_t const*, bool, bool)",
+   "original_size": 372,
+   "status": "DIFF",
+   "code": "306a6321286c4d44",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_resource_item_name",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd786f0",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::createEquipment(wchar_t const*, bool, bool)",
+   "original_size": 89,
+   "status": "MATCH",
+   "code": "ef5638d41f58caf3",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_resource_equipment",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd78820",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::CResourceManager(Ogre::SceneManager*)",
+   "original_size": 606,
+   "status": "DIFF",
+   "code": "36a4f4dca1680c83",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_resource_ctor",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd78a80",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::createUnit(long long, int, bool, bool)",
+   "original_size": 449,
+   "status": "DIFF",
+   "code": "e0959514db62be9c",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_resource_unit_guid",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd79190",
+   "tu": "ResourceManager.cpp",
+   "name": "CResourceManager::createUnitsBySpawnClass(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CBaseUnit*>&, unsigned int, CCharacter*, CCharacter*, int, int)",
+   "original_size": 249,
+   "status": "DIFF",
+   "code": "744f7ae634b917e2",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d",
+   "coverage": [
+    {
+     "fixture": "advance_runtime_resource_spawn_name",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xd9d5d0",
+   "tu": "EditorImageDescriptor.cpp",
+   "name": "CEditorImageDescriptor::CreateObject(CEditorScene*)",
+   "original_size": 275,
+   "status": "MATCH",
+   "code": "755c1b6015e3f46c",
+   "object_digest": "6d257837b450e2d7d798729465157248aea3fc0e562db8dee9488bc2a52513b5",
+   "coverage": []
+  },
+  {
+   "address": "0xdafdd0",
+   "tu": "GameStateControllerDescriptor.cpp",
+   "name": "CGameStateControllerDescriptor::InputLogicEvent(CEditorBaseObject*, unsigned int, CEditorBaseObject*)",
+   "original_size": 293,
+   "status": "DIFF",
+   "code": "0f7c16fd9cc634be",
+   "object_digest": "97b06abbd8dae67b553ed56ca2a09a710df0551a25d7f5d5d44905d3fce2eb06",
+   "coverage": [
+    {
+     "fixture": "advance_editor_state_dispatch",
+     "completed": 768,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xdff080",
+   "tu": "DungeonManager.cpp",
+   "name": "CDungeonManager::clear()",
+   "original_size": 145,
+   "status": "MATCH",
+   "code": "0e4de56ac7842d19",
+   "object_digest": "8174edea9209ac068b7e3151a262f88c84257f20caa83baa2507f35d40e4af91",
+   "coverage": []
+  },
+  {
+   "address": "0xe03cb0",
+   "tu": "DungeonManager.cpp",
+   "name": "CDungeonManager::reload()",
+   "original_size": 812,
+   "status": "DIFF",
+   "code": "ee0b817adecead92",
+   "object_digest": "8174edea9209ac068b7e3151a262f88c84257f20caa83baa2507f35d40e4af91",
+   "coverage": [
+    {
+     "fixture": "advance_dungeon_reload",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe20450",
+   "tu": "SkillController.cpp",
+   "name": "CSkillController::configureUnit()",
+   "original_size": 464,
+   "status": "DIFF",
+   "code": "2add0305acd22eb3",
+   "object_digest": "5b7e5e57c1f84705cdd683564c2dc5ac7ddbdbd881134e16d3f2c9bb79f31e13",
+   "coverage": [
+    {
+     "fixture": "advance_logic_configure",
+     "completed": 84,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe29320",
+   "tu": "editorimage.cpp",
+   "name": "CEditorImage::setVisible(bool)",
+   "original_size": 82,
+   "status": "DIFF",
+   "code": "41a30151b993a0ff",
+   "object_digest": "ba764fe0637fe3c7799d269fc6d1f9cea560a11628ee0c70eb307f60c4c99f8a",
+   "coverage": [
+    {
+     "fixture": "advance_editor_image_visibility",
+     "completed": 256,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe31960",
+   "tu": "editorimage.cpp",
+   "name": "CEditorImage::~CEditorImage()",
+   "original_size": 252,
+   "status": "MATCH",
+   "code": "ce366f7f044c3768",
+   "object_digest": "ba764fe0637fe3c7799d269fc6d1f9cea560a11628ee0c70eb307f60c4c99f8a",
+   "coverage": []
+  },
+  {
+   "address": "0xe31a60",
+   "tu": "editorimage.cpp",
+   "name": "CEditorImage::~CEditorImage()",
+   "original_size": 18,
+   "status": "MATCH",
+   "code": "168979464edbaaac",
+   "object_digest": "ba764fe0637fe3c7799d269fc6d1f9cea560a11628ee0c70eb307f60c4c99f8a",
+   "coverage": []
+  },
+  {
+   "address": "0xe33220",
+   "tu": "editorimage.cpp",
+   "name": "CEditorImage::setImageFileName(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+   "original_size": 128,
+   "status": "DIFF",
+   "code": "ecedac4594a0440a",
+   "object_digest": "ba764fe0637fe3c7799d269fc6d1f9cea560a11628ee0c70eb307f60c4c99f8a",
+   "coverage": [
+    {
+     "fixture": "advance_editor_image_file",
+     "completed": 256,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe5d230",
+   "tu": "MusicObject.cpp",
+   "name": "CMusicObject::play()",
+   "original_size": 356,
+   "status": "DIFF",
+   "code": "e5a4c5df1853edf7",
+   "object_digest": "fc34dca5f58f417abb7e60d8b1cc889d5f6d67d58955a424f68a7d6d06873acf",
+   "coverage": [
+    {
+     "fixture": "advance_music_play",
+     "completed": 100,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe79710",
+   "tu": "Cinematics.cpp",
+   "name": "CCinematic::load(CDataGroup*)",
+   "original_size": 588,
+   "status": "DIFF",
+   "code": "be9a40015be8f6f3",
+   "object_digest": "5325e00aaebfd8f258278fbd8848d27abe84af2e19edeed02b775bc0384013c1",
+   "coverage": [
+    {
+     "fixture": "advance_logic_cinematic_load",
+     "completed": 48,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe79960",
+   "tu": "Cinematics.cpp",
+   "name": "CCinematics::~CCinematics()",
+   "original_size": 772,
+   "status": "DIFF",
+   "code": "e7a80ef148c8a9cd",
+   "object_digest": "5325e00aaebfd8f258278fbd8848d27abe84af2e19edeed02b775bc0384013c1",
+   "coverage": [
+    {
+     "fixture": "advance_logic_cinematics_destroy",
+     "completed": 36,
+     "different": 0,
+     "incomplete": 0
+    }
+   ]
+  },
+  {
+   "address": "0xe79c70",
+   "tu": "Cinematics.cpp",
+   "name": "CCinematics::~CCinematics()",
+   "original_size": 18,
+   "status": "MATCH",
+   "code": "7841cb05c743b435",
+   "object_digest": "5325e00aaebfd8f258278fbd8848d27abe84af2e19edeed02b775bc0384013c1",
+   "coverage": []
+  },
+  {
+   "address": "0xe812a0",
+   "tu": "CinematicObject.cpp",
+   "name": "CCinematicObject::menuEventOccured(void*, EMENU_TYPE, EMENU_EVENT)",
+   "original_size": 20,
+   "status": "MATCH",
+   "code": "19f0dfc8fb9a1cb4",
+   "object_digest": "b1754e24773decc4de0c3c13bbf1990d1c430d6333cba4b61b7f7099cc00fbda",
+   "coverage": []
+  }
+ ],
+ "previous_behavioral_now_MATCH": [
+  "0xd0a2b0"
+ ],
+ "validation": {
+  "focused": {
+   "tests": 88,
+   "failed": 0,
+   "normal_pairs": 14270,
+   "total_seconds": 112.50431299209595,
+   "build_timing": {
+    "schema": 1,
+    "status": "completed",
+    "phases": [
+     {
+      "name": "context",
+      "wall_seconds": 0.2736022770004638,
+      "process_cpu_seconds": 0.272778948,
+      "children_cpu_seconds": 0.0
+     },
+     {
+      "name": "compile",
+      "wall_seconds": 74.41491141099868,
+      "process_cpu_seconds": 18.845510315,
+      "children_cpu_seconds": 270.810215
+     },
+     {
+      "name": "rewrite_assemble_metadata",
+      "wall_seconds": 5.336581810001007,
+      "process_cpu_seconds": 4.992046873,
+      "children_cpu_seconds": 3.6497889999999416
+     },
+     {
+      "name": "hook_reduction",
+      "wall_seconds": 20.91537129199969,
+      "process_cpu_seconds": 6.644972579000001,
+      "children_cpu_seconds": 14.256091000000026
+     },
+     {
+      "name": "hooks_imports",
+      "wall_seconds": 0.6529470700006641,
+      "process_cpu_seconds": 0.14134435300000092,
+      "children_cpu_seconds": 0.4832880000000159
+     },
+     {
+      "name": "link",
+      "wall_seconds": 0.2736893209985283,
+      "process_cpu_seconds": 0.00034691699999811476,
+      "children_cpu_seconds": 0.2687599999999861
+     },
+     {
+      "name": "loader",
+      "wall_seconds": 0.2684150650002266,
+      "process_cpu_seconds": 0.0005125550000002477,
+      "children_cpu_seconds": 0.17468999999999824
+     },
+     {
+      "name": "manifest",
+      "wall_seconds": 0.08496604900028615,
+      "process_cpu_seconds": 0.08157275399999975,
+      "children_cpu_seconds": 0.0
+     }
+    ],
+    "total": {
+     "wall_seconds": 102.22049515800063,
+     "process_cpu_seconds": 30.979091824999998,
+     "children_cpu_seconds": 289.642833
+    },
+    "compiler_slot_wait_seconds": null,
+    "note": "CPU is process-wide; phase wall time includes unseparated compiler slot waits."
+   },
+   "selftest_timing": {
+    "schema": 1,
+    "clock": "time.monotonic",
+    "started": 14972.085534549,
+    "shard_count": 12,
+    "phases": {
+     "environment": 0.07537028400111012,
+     "schedule": 0.3410340800000995,
+     "execute": 9.667749971999001,
+     "parse": 0.019969224000305985
+    },
+    "shards": [
+     {
+      "index": 0,
+      "enqueued": 14972.501949894,
+      "dispatched": 14972.502290378,
+      "slot_acquired": 14972.505102057,
+      "process_started": 14972.50510258,
+      "ended": 14979.394077887,
+      "elapsed": 6.888975306999782,
+      "returncode": 0,
+      "queue_elapsed": 0.00034048400084429886,
+      "slot_wait_elapsed": 0.002811678999933065
+     },
+     {
+      "index": 1,
+      "enqueued": 14972.501950623,
+      "dispatched": 14972.503257905,
+      "slot_acquired": 14972.505534357,
+      "process_started": 14972.505534742,
+      "ended": 14977.786226871,
+      "elapsed": 5.2806921289993625,
+      "returncode": 0,
+      "queue_elapsed": 0.001307282000198029,
+      "slot_wait_elapsed": 0.0022764519999327604
+     },
+     {
+      "index": 2,
+      "enqueued": 14972.501950251,
+      "dispatched": 14972.502513681,
+      "slot_acquired": 14972.503894088,
+      "process_started": 14972.50389453,
+      "ended": 14979.024348088,
+      "elapsed": 6.5204535579996445,
+      "returncode": 0,
+      "queue_elapsed": 0.0005634299996017944,
+      "slot_wait_elapsed": 0.0013804070003970992
+     },
+     {
+      "index": 3,
+      "enqueued": 14972.501950516,
+      "dispatched": 14972.502963411,
+      "slot_acquired": 14972.506050295,
+      "process_started": 14972.506050691,
+      "ended": 14977.795182572,
+      "elapsed": 5.289131880999776,
+      "returncode": 0,
+      "queue_elapsed": 0.0010128949998033931,
+      "slot_wait_elapsed": 0.003086884000367718
+     },
+     {
+      "index": 4,
+      "enqueued": 14972.501951383,
+      "dispatched": 14979.418516086,
+      "slot_acquired": 14979.41875861,
+      "process_started": 14979.41875893,
+      "ended": 14981.14241289,
+      "elapsed": 1.723653959999865,
+      "returncode": 0,
+      "queue_elapsed": 6.916564703000404,
+      "slot_wait_elapsed": 0.00024252399998658802
+     },
+     {
+      "index": 5,
+      "enqueued": 14972.50195128,
+      "dispatched": 14979.394092091,
+      "slot_acquired": 14979.394454151,
+      "process_started": 14979.394454487,
+      "ended": 14982.169409745,
+      "elapsed": 2.774955258000773,
+      "returncode": 0,
+      "queue_elapsed": 6.89214081099999,
+      "slot_wait_elapsed": 0.00036206000004312955
+     },
+     {
+      "index": 6,
+      "enqueued": 14972.501950933,
+      "dispatched": 14978.503461031,
+      "slot_acquired": 14978.503780246,
+      "process_started": 14978.503780645,
+      "ended": 14981.799901108,
+      "elapsed": 3.29612046299917,
+      "returncode": 0,
+      "queue_elapsed": 6.001510097999926,
+      "slot_wait_elapsed": 0.0003192149997630622
+     },
+     {
+      "index": 7,
+      "enqueued": 14972.501951143,
+      "dispatched": 14979.02436306,
+      "slot_acquired": 14979.024664115,
+      "process_started": 14979.024664371,
+      "ended": 14982.105941547,
+      "elapsed": 3.0812771760010946,
+      "returncode": 0,
+      "queue_elapsed": 6.522411916999772,
+      "slot_wait_elapsed": 0.00030105500081845094
+     },
+     {
+      "index": 8,
+      "enqueued": 14972.501950829,
+      "dispatched": 14977.795202919,
+      "slot_acquired": 14977.795625022,
+      "process_started": 14977.795625488,
+      "ended": 14981.314698117,
+      "elapsed": 3.5190726290002203,
+      "returncode": 0,
+      "queue_elapsed": 5.2932520899994415,
+      "slot_wait_elapsed": 0.0004221029994369019
+     },
+     {
+      "index": 9,
+      "enqueued": 14972.501950727,
+      "dispatched": 14977.786241007,
+      "slot_acquired": 14977.786608915,
+      "process_started": 14977.786609275,
+      "ended": 14981.844713845,
+      "elapsed": 4.058104570000069,
+      "returncode": 0,
+      "queue_elapsed": 5.284290279998459,
+      "slot_wait_elapsed": 0.0003679080000438262
+     },
+     {
+      "index": 10,
+      "enqueued": 14972.501949193,
+      "dispatched": 14972.502091556,
+      "slot_acquired": 14972.503566868,
+      "process_started": 14972.503567407,
+      "ended": 14979.418501367,
+      "elapsed": 6.914933959998962,
+      "returncode": 0,
+      "queue_elapsed": 0.00014236300012271386,
+      "slot_wait_elapsed": 0.0014753119994566077
+     },
+     {
+      "index": 11,
+      "enqueued": 14972.501950409,
+      "dispatched": 14972.502750835,
+      "slot_acquired": 14972.504423526,
+      "process_started": 14972.5044239,
+      "ended": 14978.503444841,
+      "elapsed": 5.999020941000708,
+      "returncode": 0,
+      "queue_elapsed": 0.0008004259998415364,
+      "slot_wait_elapsed": 0.0016726909998396877
+     }
+    ],
+    "schedule": {
+     "order": [
+      10,
+      0,
+      2,
+      11,
+      3,
+      1,
+      9,
+      8,
+      6,
+      7,
+      5,
+      4
+     ],
+     "method": "object-predicted-first",
+     "reason": "verified test objects and shared runtime; unknown costs estimated",
+     "predicted_seconds": [
+      3.5780000000000003,
+      2.653,
+      3.1830000000000003,
+      2.667,
+      0.896,
+      1.623,
+      1.882,
+      1.801,
+      1.894,
+      2.257,
+      3.71,
+      3.0460000000000003
+     ],
+     "fixture_sha256": "df57d62ff769f6fe0e894bc11d62c3c03c8d1a65458c3a606e0696943f17e170",
+     "artifact": {
+      "kind": "test-objects",
+      "sha256": "6c085cdbd922b980f62e0ba3015508b857dd27c2b98b5f25283ddf5f754dff72"
+     },
+     "profile_key": "55412866df4aebeb2a8430c0b8e9c22d7fa7ee790803891d9227539114be4fdd",
+     "known_costs": 88,
+     "estimated_costs": 0,
+     "estimated_test_seconds": 0.181,
+     "selected_count": 88,
+     "selected_sha256": "fb32feb25d18e97bb843be83978f86448fa67390b66342a164206f08b1c8562b",
+     "inventory_count": 88,
+     "inventory_sha256": "fb32feb25d18e97bb843be83978f86448fa67390b66342a164206f08b1c8562b",
+     "object_inputs_count": 2,
+     "object_inputs_sha256": "0c4b53023182d5a817eab6cb53e2b75479405625deef485f7da91eaa07bcbe3d"
+    },
+    "returncode": 0,
+    "ended": 14982.189689852,
+    "elapsed": 10.10415530300088
+   }
+  },
+  "full": {
+   "tests": 1586,
+   "failed": 0,
+   "total_seconds": 1363.3756520748138,
+   "build_timing": {
+    "schema": 1,
+    "status": "completed",
+    "phases": [
+     {
+      "name": "context",
+      "wall_seconds": 0.26002739400064456,
+      "process_cpu_seconds": 0.2577671530000032,
+      "children_cpu_seconds": 0.0
+     },
+     {
+      "name": "compile",
+      "wall_seconds": 21.564043529000628,
+      "process_cpu_seconds": 41.889198177000004,
+      "children_cpu_seconds": 41.09128
+     },
+     {
+      "name": "rewrite_assemble_metadata",
+      "wall_seconds": 10.821801609999966,
+      "process_cpu_seconds": 9.764989490999994,
+      "children_cpu_seconds": 9.807804000000012
+     },
+     {
+      "name": "hook_reduction",
+      "wall_seconds": 21.97865854599877,
+      "process_cpu_seconds": 7.283827458000005,
+      "children_cpu_seconds": 14.716753999999995
+     },
+     {
+      "name": "hooks_imports",
+      "wall_seconds": 0.6251011479998851,
+      "process_cpu_seconds": 0.14609364599999708,
+      "children_cpu_seconds": 0.48246400000000733
+     },
+     {
+      "name": "link",
+      "wall_seconds": 0.7983458730013808,
+      "process_cpu_seconds": 0.0008050959999934548,
+      "children_cpu_seconds": 0.6073609999999832
+     },
+     {
+      "name": "loader",
+      "wall_seconds": 0.25640348899833043,
+      "process_cpu_seconds": 0.0005146539999998367,
+      "children_cpu_seconds": 0.16803500000000327
+     },
+     {
+      "name": "manifest",
+      "wall_seconds": 0.2753103990016825,
+      "process_cpu_seconds": 0.23316675800001008,
+      "children_cpu_seconds": 0.0
+     }
+    ],
+    "total": {
+     "wall_seconds": 56.57970069700059,
+     "process_cpu_seconds": 59.576369334000006,
+     "children_cpu_seconds": 66.873698
+    },
+    "compiler_slot_wait_seconds": null,
+    "note": "CPU is process-wide; phase wall time includes unseparated compiler slot waits."
+   },
+   "selftest_timing": {
+    "schema": 1,
+    "clock": "time.monotonic",
+    "started": 15091.213409032,
+    "shard_count": 60,
+    "phases": {
+     "environment": 0.1808794000007765,
+     "schedule": 1.325788834999912,
+     "execute": 1269.3772373909997,
+     "parse": 0.18345860000044922
+    },
+    "shards": [
+     {
+      "index": 0,
+      "enqueued": 15092.720105913,
+      "dispatched": 15934.733545257,
+      "slot_acquired": 15934.733876558,
+      "process_started": 15934.733877047,
+      "ended": 16051.360158854,
+      "elapsed": 116.62628180700085,
+      "returncode": 0,
+      "queue_elapsed": 842.0134393440003,
+      "slot_wait_elapsed": 0.00033130100018752273
+     },
+     {
+      "index": 1,
+      "enqueued": 15092.720105095,
+      "dispatched": 15794.082581103,
+      "slot_acquired": 15794.082982183,
+      "process_started": 15794.082982554,
+      "ended": 15917.404856918,
+      "elapsed": 123.32187436399909,
+      "returncode": 0,
+      "queue_elapsed": 701.3624760080002,
+      "slot_wait_elapsed": 0.0004010799984826008
+     },
+     {
+      "index": 2,
+      "enqueued": 15092.720104267,
+      "dispatched": 15642.499945864,
+      "slot_acquired": 15642.500306906,
+      "process_started": 15642.500307501,
+      "ended": 15784.074863756,
+      "elapsed": 141.57455625499824,
+      "returncode": 0,
+      "queue_elapsed": 549.7798415969992,
+      "slot_wait_elapsed": 0.0003610420008044457
+     },
+     {
+      "index": 3,
+      "enqueued": 15092.720103747,
+      "dispatched": 15493.045788593,
+      "slot_acquired": 15493.046070198,
+      "process_started": 15493.046070765,
+      "ended": 15642.499930061,
+      "elapsed": 149.4538592959998,
+      "returncode": 0,
+      "queue_elapsed": 400.3256848460005,
+      "slot_wait_elapsed": 0.00028160499823570717
+     },
+     {
+      "index": 4,
+      "enqueued": 15092.720102519,
+      "dispatched": 15266.381705269,
+      "slot_acquired": 15266.382655284,
+      "process_started": 15266.38265597,
+      "ended": 15478.802157532,
+      "elapsed": 212.41950156200073,
+      "returncode": 0,
+      "queue_elapsed": 173.66160274999856,
+      "slot_wait_elapsed": 0.0009500150008534547
+     },
+     {
+      "index": 5,
+      "enqueued": 15092.720106379,
+      "dispatched": 16025.781223185,
+      "slot_acquired": 16025.781633291,
+      "process_started": 16025.78163365,
+      "ended": 16128.543901176,
+      "elapsed": 102.76226752600087,
+      "returncode": 0,
+      "queue_elapsed": 933.0611168060004,
+      "slot_wait_elapsed": 0.00041010600034496747
+     },
+     {
+      "index": 6,
+      "enqueued": 15092.720104495,
+      "dispatched": 15694.113107442,
+      "slot_acquired": 15694.113416633,
+      "process_started": 15694.113417331,
+      "ended": 15825.620892024,
+      "elapsed": 131.5074746930004,
+      "returncode": 0,
+      "queue_elapsed": 601.3930029469993,
+      "slot_wait_elapsed": 0.0003091910002694931
+     },
+     {
+      "index": 7,
+      "enqueued": 15092.720104986,
+      "dispatched": 15791.751264165,
+      "slot_acquired": 15791.751645842,
+      "process_started": 15791.751646124,
+      "ended": 15908.068407606,
+      "elapsed": 116.31676148200131,
+      "returncode": 0,
+      "queue_elapsed": 699.0311591789996,
+      "slot_wait_elapsed": 0.00038167700040503405
+     },
+     {
+      "index": 8,
+      "enqueued": 15092.720102053,
+      "dispatched": 15092.720594053,
+      "slot_acquired": 15092.722742614,
+      "process_started": 15092.722742921,
+      "ended": 15306.3307328,
+      "elapsed": 213.60798987899943,
+      "returncode": 0,
+      "queue_elapsed": 0.0004920000010315562,
+      "slot_wait_elapsed": 0.002148560999557958
+     },
+     {
+      "index": 9,
+      "enqueued": 15092.720103401,
+      "dispatched": 15478.802172449,
+      "slot_acquired": 15478.802574377,
+      "process_started": 15478.80257471,
+      "ended": 15640.476128519,
+      "elapsed": 161.6735538089997,
+      "returncode": 0,
+      "queue_elapsed": 386.08206904800136,
+      "slot_wait_elapsed": 0.00040192799860960804
+     },
+     {
+      "index": 10,
+      "enqueued": 15092.720107243,
+      "dispatched": 16138.460977331,
+      "slot_acquired": 16138.461306243,
+      "process_started": 16138.46130658,
+      "ended": 16223.268813279,
+      "elapsed": 84.80750669900044,
+      "returncode": 0,
+      "queue_elapsed": 1045.7408700880005,
+      "slot_wait_elapsed": 0.0003289119995315559
+     },
+     {
+      "index": 11,
+      "enqueued": 15092.720107131,
+      "dispatched": 16128.543918015,
+      "slot_acquired": 16128.544387194,
+      "process_started": 16128.544387569,
+      "ended": 16217.835176925,
+      "elapsed": 89.29078935600046,
+      "returncode": 0,
+      "queue_elapsed": 1035.8238108840014,
+      "slot_wait_elapsed": 0.00046917899999243673
+     },
+     {
+      "index": 12,
+      "enqueued": 15092.720107904,
+      "dispatched": 16222.195412357,
+      "slot_acquired": 16222.195734285,
+      "process_started": 16222.195734656,
+      "ended": 16297.782251482,
+      "elapsed": 75.58651682600066,
+      "returncode": 0,
+      "queue_elapsed": 1129.475304452999,
+      "slot_wait_elapsed": 0.000321928000630578
+     },
+     {
+      "index": 13,
+      "enqueued": 15092.720107016,
+      "dispatched": 16117.138204756,
+      "slot_acquired": 16117.138463978,
+      "process_started": 16117.138464402,
+      "ended": 16213.246952175,
+      "elapsed": 96.10848777300089,
+      "returncode": 0,
+      "queue_elapsed": 1024.4180977399992,
+      "slot_wait_elapsed": 0.00025922200075001456
+     },
+     {
+      "index": 14,
+      "enqueued": 15092.720108438,
+      "dispatched": 16292.114312246,
+      "slot_acquired": 16292.114599693,
+      "process_started": 16292.11459999,
+      "ended": 16343.595739359,
+      "elapsed": 51.48113936899972,
+      "returncode": 0,
+      "queue_elapsed": 1199.3942038080004,
+      "slot_wait_elapsed": 0.0002874470010283403
+     },
+     {
+      "index": 15,
+      "enqueued": 15092.720104157,
+      "dispatched": 15640.47615198,
+      "slot_acquired": 15640.476599008,
+      "process_started": 15640.476599327,
+      "ended": 15794.082564606,
+      "elapsed": 153.60596527900088,
+      "returncode": 0,
+      "queue_elapsed": 547.7560478229989,
+      "slot_wait_elapsed": 0.00044702800005325116
+     },
+     {
+      "index": 16,
+      "enqueued": 15092.720102736,
+      "dispatched": 15302.818705784,
+      "slot_acquired": 15302.819195293,
+      "process_started": 15302.819195651,
+      "ended": 15486.472821965,
+      "elapsed": 183.65362631400058,
+      "returncode": 0,
+      "queue_elapsed": 210.09860304799986,
+      "slot_wait_elapsed": 0.0004895089987257961
+     },
+     {
+      "index": 17,
+      "enqueued": 15092.72010735,
+      "dispatched": 16142.626381697,
+      "slot_acquired": 16142.626712191,
+      "process_started": 16142.626712577,
+      "ended": 16222.195397236,
+      "elapsed": 79.56868465900152,
+      "returncode": 0,
+      "queue_elapsed": 1049.9062743470004,
+      "slot_wait_elapsed": 0.0003304940000816714
+     },
+     {
+      "index": 18,
+      "enqueued": 15092.72010352,
+      "dispatched": 15486.472838461,
+      "slot_acquired": 15486.473234979,
+      "process_started": 15486.473235299,
+      "ended": 15663.143312449,
+      "elapsed": 176.67007715,
+      "returncode": 0,
+      "queue_elapsed": 393.7527349410011,
+      "slot_wait_elapsed": 0.00039651799852435943
+     },
+     {
+      "index": 19,
+      "enqueued": 15092.720100876,
+      "dispatched": 15092.720275444,
+      "slot_acquired": 15092.722133456,
+      "process_started": 15092.722133891,
+      "ended": 15367.206301273,
+      "elapsed": 274.4841673819992,
+      "returncode": 0,
+      "queue_elapsed": 0.00017456800014770124,
+      "slot_wait_elapsed": 0.001858011999502196
+     },
+     {
+      "index": 20,
+      "enqueued": 15092.720107456,
+      "dispatched": 16146.262130842,
+      "slot_acquired": 16146.262512253,
+      "process_started": 16146.262512677,
+      "ended": 16223.417114555,
+      "elapsed": 77.1546018780009,
+      "returncode": 0,
+      "queue_elapsed": 1053.5420233860004,
+      "slot_wait_elapsed": 0.0003814110004896065
+     },
+     {
+      "index": 21,
+      "enqueued": 15092.720106898,
+      "dispatched": 16091.764137663,
+      "slot_acquired": 16091.764535482,
+      "process_started": 16091.764535965,
+      "ended": 16195.951094257,
+      "elapsed": 104.18655829199997,
+      "returncode": 0,
+      "queue_elapsed": 999.0440307650006,
+      "slot_wait_elapsed": 0.00039781899977242574
+     },
+     {
+      "index": 22,
+      "enqueued": 15092.720101601,
+      "dispatched": 15092.720434809,
+      "slot_acquired": 15092.721416294,
+      "process_started": 15092.721416781,
+      "ended": 15321.510937164,
+      "elapsed": 228.7895203829994,
+      "returncode": 0,
+      "queue_elapsed": 0.00033320799957436975,
+      "slot_wait_elapsed": 0.000981485000011162
+     },
+     {
+      "index": 23,
+      "enqueued": 15092.720104609,
+      "dispatched": 15703.428181941,
+      "slot_acquired": 15703.428510884,
+      "process_started": 15703.42851127,
+      "ended": 15834.160432392,
+      "elapsed": 130.73192112200013,
+      "returncode": 0,
+      "queue_elapsed": 610.7080773320013,
+      "slot_wait_elapsed": 0.00032894299874897115
+     },
+     {
+      "index": 24,
+      "enqueued": 15092.720103633,
+      "dispatched": 15489.557802237,
+      "slot_acquired": 15489.558179961,
+      "process_started": 15489.558180456,
+      "ended": 15705.71039817,
+      "elapsed": 216.15221771399956,
+      "returncode": 0,
+      "queue_elapsed": 396.83769860399843,
+      "slot_wait_elapsed": 0.00037772400173707865
+     },
+     {
+      "index": 25,
+      "enqueued": 15092.720105548,
+      "dispatched": 15907.650186588,
+      "slot_acquired": 15907.650841476,
+      "process_started": 15907.65084193,
+      "ended": 16015.236143577,
+      "elapsed": 107.58530164699914,
+      "returncode": 0,
+      "queue_elapsed": 814.93008104,
+      "slot_wait_elapsed": 0.0006548879991896683
+     },
+     {
+      "index": 26,
+      "enqueued": 15092.72010522,
+      "dispatched": 15825.620907926,
+      "slot_acquired": 15825.621329432,
+      "process_started": 15825.62132982,
+      "ended": 15942.607468989,
+      "elapsed": 116.98613916899922,
+      "returncode": 0,
+      "queue_elapsed": 732.9008027060008,
+      "slot_wait_elapsed": 0.0004215059998387005
+     },
+     {
+      "index": 27,
+      "enqueued": 15092.720106488,
+      "dispatched": 16044.918148524,
+      "slot_acquired": 16044.918530648,
+      "process_started": 16044.91853111,
+      "ended": 16146.262114428,
+      "elapsed": 101.34358331800104,
+      "returncode": 0,
+      "queue_elapsed": 952.1980420360014,
+      "slot_wait_elapsed": 0.0003821239988610614
+     },
+     {
+      "index": 28,
+      "enqueued": 15092.720102413,
+      "dispatched": 15092.721764179,
+      "slot_acquired": 15092.725310709,
+      "process_started": 15092.725311193,
+      "ended": 15266.381686142,
+      "elapsed": 173.65637494899966,
+      "returncode": 0,
+      "queue_elapsed": 0.0016617659985058708,
+      "slot_wait_elapsed": 0.0035465300006762845
+     },
+     {
+      "index": 29,
+      "enqueued": 15092.720108786,
+      "dispatched": 16297.782268775,
+      "slot_acquired": 16297.782596443,
+      "process_started": 16297.782596839,
+      "ended": 16342.7991659,
+      "elapsed": 45.016569060999245,
+      "returncode": 0,
+      "queue_elapsed": 1205.062159989,
+      "slot_wait_elapsed": 0.0003276679999544285
+     },
+     {
+      "index": 30,
+      "enqueued": 15092.720107681,
+      "dispatched": 16213.246968023,
+      "slot_acquired": 16213.247368611,
+      "process_started": 16213.247369088,
+      "ended": 16291.934164816,
+      "elapsed": 78.68679572800102,
+      "returncode": 0,
+      "queue_elapsed": 1120.5268603420009,
+      "slot_wait_elapsed": 0.0004005880000477191
+     },
+     {
+      "index": 31,
+      "enqueued": 15092.720108546,
+      "dispatched": 16292.419180735,
+      "slot_acquired": 16292.41960598,
+      "process_started": 16292.419606432,
+      "ended": 16346.554701449,
+      "elapsed": 54.13509501699991,
+      "returncode": 0,
+      "queue_elapsed": 1199.6990721889997,
+      "slot_wait_elapsed": 0.00042524499986029696
+     },
+     {
+      "index": 32,
+      "enqueued": 15092.720103174,
+      "dispatched": 15321.510955746,
+      "slot_acquired": 15321.511238938,
+      "process_started": 15321.511239415,
+      "ended": 15493.045773437,
+      "elapsed": 171.5345340219992,
+      "returncode": 0,
+      "queue_elapsed": 228.7908525719995,
+      "slot_wait_elapsed": 0.000283191999187693
+     },
+     {
+      "index": 33,
+      "enqueued": 15092.720106713,
+      "dispatched": 16051.360177493,
+      "slot_acquired": 16051.360504714,
+      "process_started": 16051.360505324,
+      "ended": 16142.626364089,
+      "elapsed": 91.26585876499848,
+      "returncode": 0,
+      "queue_elapsed": 958.6400707799985,
+      "slot_wait_elapsed": 0.00032722100149840117
+     },
+     {
+      "index": 34,
+      "enqueued": 15092.720106273,
+      "dispatched": 16015.236158953,
+      "slot_acquired": 16015.236660348,
+      "process_started": 16015.236661038,
+      "ended": 16117.13819058,
+      "elapsed": 101.9015295420013,
+      "returncode": 0,
+      "queue_elapsed": 922.5160526799991,
+      "slot_wait_elapsed": 0.0005013950012653368
+     },
+     {
+      "index": 35,
+      "enqueued": 15092.720105442,
+      "dispatched": 15834.160450535,
+      "slot_acquired": 15834.161863233,
+      "process_started": 15834.161864013,
+      "ended": 15934.733529899,
+      "elapsed": 100.57166588600012,
+      "returncode": 0,
+      "queue_elapsed": 741.4403450930004,
+      "slot_wait_elapsed": 0.0014126979986031074
+     },
+     {
+      "index": 36,
+      "enqueued": 15092.720105336,
+      "dispatched": 15827.033539694,
+      "slot_acquired": 15827.033908157,
+      "process_started": 15827.033908491,
+      "ended": 15946.681734366,
+      "elapsed": 119.64782587500122,
+      "returncode": 0,
+      "queue_elapsed": 734.3134343580004,
+      "slot_wait_elapsed": 0.00036846299917669967
+     },
+     {
+      "index": 37,
+      "enqueued": 15092.720104379,
+      "dispatched": 15663.143330169,
+      "slot_acquired": 15663.143709833,
+      "process_started": 15663.14371063,
+      "ended": 15791.751248372,
+      "elapsed": 128.6075377420002,
+      "returncode": 0,
+      "queue_elapsed": 570.4232257900003,
+      "slot_wait_elapsed": 0.0003796640012296848
+     },
+     {
+      "index": 38,
+      "enqueued": 15092.720105659,
+      "dispatched": 15908.068422402,
+      "slot_acquired": 15908.068801545,
+      "process_started": 15908.06880193,
+      "ended": 16044.918133074,
+      "elapsed": 136.84933114399973,
+      "returncode": 0,
+      "queue_elapsed": 815.3483167430004,
+      "slot_wait_elapsed": 0.0003791429990087636
+     },
+     {
+      "index": 39,
+      "enqueued": 15092.720106165,
+      "dispatched": 15946.681750977,
+      "slot_acquired": 15946.682148478,
+      "process_started": 15946.682148923,
+      "ended": 16091.764121876,
+      "elapsed": 145.08197295299942,
+      "returncode": 0,
+      "queue_elapsed": 853.9616448120014,
+      "slot_wait_elapsed": 0.00039750099858792964
+     },
+     {
+      "index": 40,
+      "enqueued": 15092.720107569,
+      "dispatched": 16195.951109944,
+      "slot_acquired": 16195.951463485,
+      "process_started": 16195.951463761,
+      "ended": 16292.419164647,
+      "elapsed": 96.4677008860017,
+      "returncode": 0,
+      "queue_elapsed": 1103.2310023749997,
+      "slot_wait_elapsed": 0.000353540999640245
+     },
+     {
+      "index": 41,
+      "enqueued": 15092.720108999,
+      "dispatched": 16341.864519377,
+      "slot_acquired": 16341.864952338,
+      "process_started": 16341.864952771,
+      "ended": 16362.09706072,
+      "elapsed": 20.232107948999328,
+      "returncode": 0,
+      "queue_elapsed": 1249.1444103780013,
+      "slot_wait_elapsed": 0.0004329610001150286
+     },
+     {
+      "index": 42,
+      "enqueued": 15092.720103857,
+      "dispatched": 15499.288966437,
+      "slot_acquired": 15499.289364517,
+      "process_started": 15499.289365388,
+      "ended": 15703.428167144,
+      "elapsed": 204.13880175600025,
+      "returncode": 0,
+      "queue_elapsed": 406.5688625799994,
+      "slot_wait_elapsed": 0.0003980800011049723
+     },
+     {
+      "index": 43,
+      "enqueued": 15092.720105764,
+      "dispatched": 15917.404874676,
+      "slot_acquired": 15917.405298857,
+      "process_started": 15917.405299155,
+      "ended": 16025.781206183,
+      "elapsed": 108.37590702800117,
+      "returncode": 0,
+      "queue_elapsed": 824.6847689120004,
+      "slot_wait_elapsed": 0.00042418100019858684
+     },
+     {
+      "index": 44,
+      "enqueued": 15092.720104034,
+      "dispatched": 15545.04093585,
+      "slot_acquired": 15545.041285066,
+      "process_started": 15545.041285484,
+      "ended": 15694.113092451,
+      "elapsed": 149.07180696700016,
+      "returncode": 0,
+      "queue_elapsed": 452.32083181599955,
+      "slot_wait_elapsed": 0.00034921599944937043
+     },
+     {
+      "index": 45,
+      "enqueued": 15092.720102629,
+      "dispatched": 15277.73589445,
+      "slot_acquired": 15277.736345853,
+      "process_started": 15277.736346188,
+      "ended": 15489.557785715,
+      "elapsed": 211.82143952700062,
+      "returncode": 0,
+      "queue_elapsed": 185.01579182099886,
+      "slot_wait_elapsed": 0.0004514030006248504
+     },
+     {
+      "index": 46,
+      "enqueued": 15092.720102198,
+      "dispatched": 15092.720924488,
+      "slot_acquired": 15092.723177092,
+      "process_started": 15092.723177485,
+      "ended": 15277.735878147,
+      "elapsed": 185.01270066199868,
+      "returncode": 0,
+      "queue_elapsed": 0.0008222899996326305,
+      "slot_wait_elapsed": 0.0022526040011143778
+     },
+     {
+      "index": 47,
+      "enqueued": 15092.720104718,
+      "dispatched": 15705.710412415,
+      "slot_acquired": 15705.710872657,
+      "process_started": 15705.710873302,
+      "ended": 15827.033522095,
+      "elapsed": 121.32264879300055,
+      "returncode": 0,
+      "queue_elapsed": 612.9903076969986,
+      "slot_wait_elapsed": 0.00046024200128158554
+     },
+     {
+      "index": 48,
+      "enqueued": 15092.720108123,
+      "dispatched": 16223.417130301,
+      "slot_acquired": 16223.417493007,
+      "process_started": 16223.417493292,
+      "ended": 16313.669391031,
+      "elapsed": 90.25189773900092,
+      "returncode": 0,
+      "queue_elapsed": 1130.6970221780011,
+      "slot_wait_elapsed": 0.00036270599957788363
+     },
+     {
+      "index": 49,
+      "enqueued": 15092.720108651,
+      "dispatched": 16293.763068877,
+      "slot_acquired": 16293.763794131,
+      "process_started": 16293.763794809,
+      "ended": 16341.864500699,
+      "elapsed": 48.10070588999952,
+      "returncode": 0,
+      "queue_elapsed": 1201.042960226001,
+      "slot_wait_elapsed": 0.0007252539999171859
+     },
+     {
+      "index": 50,
+      "enqueued": 15092.720104832,
+      "dispatched": 15784.074880886,
+      "slot_acquired": 15784.075193949,
+      "process_started": 15784.075194337,
+      "ended": 15907.65017032,
+      "elapsed": 123.5749759829996,
+      "returncode": 0,
+      "queue_elapsed": 691.3547760540005,
+      "slot_wait_elapsed": 0.0003130629993393086
+     },
+     {
+      "index": 51,
+      "enqueued": 15092.720108894,
+      "dispatched": 16313.669408129,
+      "slot_acquired": 16313.669896448,
+      "process_started": 16313.669896971,
+      "ended": 16351.280169428,
+      "elapsed": 37.610272457000974,
+      "returncode": 0,
+      "queue_elapsed": 1220.9492992350006,
+      "slot_wait_elapsed": 0.0004883189994870918
+     },
+     {
+      "index": 52,
+      "enqueued": 15092.720108013,
+      "dispatched": 16223.268831025,
+      "slot_acquired": 16223.26915528,
+      "process_started": 16223.269155727,
+      "ended": 16292.114295806,
+      "elapsed": 68.84514007899998,
+      "returncode": 0,
+      "queue_elapsed": 1130.5487230119998,
+      "slot_wait_elapsed": 0.000324255001032725
+     },
+     {
+      "index": 53,
+      "enqueued": 15092.720102306,
+      "dispatched": 15092.721199328,
+      "slot_acquired": 15092.724759072,
+      "process_started": 15092.724759643,
+      "ended": 15302.818687997,
+      "elapsed": 210.09392835399922,
+      "returncode": 0,
+      "queue_elapsed": 0.0010970219991577324,
+      "slot_wait_elapsed": 0.0035597440000856295
+     },
+     {
+      "index": 54,
+      "enqueued": 15092.720103029,
+      "dispatched": 15306.330749152,
+      "slot_acquired": 15306.331164512,
+      "process_started": 15306.331164865,
+      "ended": 15499.288946319,
+      "elapsed": 192.95778145400072,
+      "returncode": 0,
+      "queue_elapsed": 213.61064612300106,
+      "slot_wait_elapsed": 0.0004153599984419998
+     },
+     {
+      "index": 55,
+      "enqueued": 15092.720106032,
+      "dispatched": 15942.607485701,
+      "slot_acquired": 15942.607777414,
+      "process_started": 15942.607777786,
+      "ended": 16045.045168008,
+      "elapsed": 102.43739022200134,
+      "returncode": 0,
+      "queue_elapsed": 849.8873796690004,
+      "slot_wait_elapsed": 0.00029171299865993205
+     },
+     {
+      "index": 56,
+      "enqueued": 15092.720108331,
+      "dispatched": 16291.934186961,
+      "slot_acquired": 16291.934500139,
+      "process_started": 16291.934500443,
+      "ended": 16348.645609275,
+      "elapsed": 56.71110883199981,
+      "returncode": 0,
+      "queue_elapsed": 1199.2140786300006,
+      "slot_wait_elapsed": 0.00031317799948737957
+     },
+     {
+      "index": 57,
+      "enqueued": 15092.720106601,
+      "dispatched": 16045.045184078,
+      "slot_acquired": 16045.045575704,
+      "process_started": 16045.04557613,
+      "ended": 16138.460959189,
+      "elapsed": 93.4153830590003,
+      "returncode": 0,
+      "queue_elapsed": 952.3250774770004,
+      "slot_wait_elapsed": 0.0003916259993275162
+     },
+     {
+      "index": 58,
+      "enqueued": 15092.720107792,
+      "dispatched": 16217.835193016,
+      "slot_acquired": 16217.835613248,
+      "process_started": 16217.835613711,
+      "ended": 16293.7604848,
+      "elapsed": 75.92487108899877,
+      "returncode": 0,
+      "queue_elapsed": 1125.1150852240007,
+      "slot_wait_elapsed": 0.00042023199966934044
+     },
+     {
+      "index": 59,
+      "enqueued": 15092.720103287,
+      "dispatched": 15367.20631749,
+      "slot_acquired": 15367.206621288,
+      "process_started": 15367.206621735,
+      "ended": 15545.040916698,
+      "elapsed": 177.8342949630005,
+      "returncode": 0,
+      "queue_elapsed": 274.4862142029997,
+      "slot_wait_elapsed": 0.00030379800045921
+     }
+    ],
+    "schedule": {
+     "order": [
+      19,
+      22,
+      8,
+      46,
+      53,
+      28,
+      4,
+      45,
+      16,
+      54,
+      32,
+      59,
+      9,
+      18,
+      24,
+      3,
+      42,
+      44,
+      15,
+      2,
+      37,
+      6,
+      23,
+      47,
+      50,
+      7,
+      1,
+      26,
+      36,
+      35,
+      25,
+      38,
+      43,
+      0,
+      55,
+      39,
+      34,
+      5,
+      27,
+      57,
+      33,
+      21,
+      13,
+      11,
+      10,
+      17,
+      20,
+      40,
+      30,
+      58,
+      12,
+      52,
+      48,
+      56,
+      14,
+      31,
+      49,
+      29,
+      51,
+      41
+     ],
+     "method": "object-predicted-first",
+     "reason": "verified test objects and shared runtime; unknown costs estimated",
+     "predicted_seconds": [
+      98.02499999999999,
+      108.518,
+      131.213,
+      142.48,
+      209.584,
+      92.459,
+      120.807,
+      109.714,
+      221.81900000000002,
+      164.982,
+      83.08800000000001,
+      83.807,
+      69.742,
+      88.293,
+      44.451,
+      135.115,
+      184.25,
+      78.715,
+      162.381,
+      254.991,
+      78.465,
+      91.263,
+      226.496,
+      120.78399999999999,
+      154.524,
+      103.471,
+      107.69800000000001,
+      92.1,
+      212.509,
+      36.96,
+      72.944,
+      41.535000000000004,
+      172.845,
+      91.3,
+      92.802,
+      105.14,
+      106.9,
+      121.77499999999999,
+      100.276,
+      95.69,
+      77.748,
+      25.717,
+      138.79399999999998,
+      99.33,
+      137.75300000000001,
+      196.246,
+      220.594,
+      114.383,
+      63.355,
+      40.528,
+      113.60799999999999,
+      35.493,
+      63.586999999999996,
+      212.61,
+      175.721,
+      97.83200000000001,
+      53.226,
+      91.923,
+      69.81700000000001,
+      169.877
+     ],
+     "fixture_sha256": "df57d62ff769f6fe0e894bc11d62c3c03c8d1a65458c3a606e0696943f17e170",
+     "artifact": {
+      "kind": "test-objects",
+      "sha256": "3195c9f33447b61c58951f9acfc3010da5d990f668b3a8f2577fd250d98c29d2"
+     },
+     "profile_key": "7b4af990bae05a2c6884a47599e00a36a42c9e7f6bffca1eab02a1afd144b98b",
+     "known_costs": 1498,
+     "estimated_costs": 88,
+     "estimated_test_seconds": 0.717,
+     "selected_count": 1586,
+     "selected_sha256": "7fa3b746f42bdfc335d344585cdad10d5bf9dddadfce735789d72dd82e04246b",
+     "inventory_count": 1586,
+     "inventory_sha256": "7fa3b746f42bdfc335d344585cdad10d5bf9dddadfce735789d72dd82e04246b",
+     "object_inputs_count": 2,
+     "object_inputs_sha256": "7582dd6c2bd608d964a460759b5c79126bfecad1295777558a18d61ff7b95e10"
+    },
+    "returncode": 0,
+    "ended": 16362.280833825,
+    "elapsed": 1271.067424793
+   }
+  },
+  "tool_tests": {
+   "passed": 992,
+   "seconds": 38.613
+  },
+  "existing_fixture_compilation": {
+   "compiled": 545,
+   "seconds": 187.14352703094482
+  }
+ },
+ "sources": [
+  {
+   "tu": "AllDescriptorsScene.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/AllDescriptorsScene.cpp",
+   "sha256": "9ffc4aa661abae31dcbbeab5e151d3760bf11ed69c9183aab88e0fb8924f731f",
+   "object_digest": "2b7ae1e03384ffa43b217062683b6a6311c6dc57b81244d3a47c525486567961"
+  },
+  {
+   "tu": "CameraShakeDescriptor.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/CameraShakeDescriptor.cpp",
+   "sha256": "d97a097e276ca0219a8c00b1eea92f7bb957443cd65422ccc454cfc9965dcef9",
+   "object_digest": "1e0e4a6773d01876f09f040169e56e5c14bda9b36924c5edc6cbd9dd4d8ca230"
+  },
+  {
+   "tu": "CollisionShapeDescriptor.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/CollisionShapeDescriptor.cpp",
+   "sha256": "e6cdf01b69e5556acc3e5f6b8d8f2655713dc1fa02119a3632d59d16c42ada47",
+   "object_digest": "63bc5b67b41e4d15df7eb565dcd95656f052cae47df2bd901d4a74222ac35946"
+  },
+  {
+   "tu": "EditorImageDescriptor.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/EditorImageDescriptor.cpp",
+   "sha256": "31f4523d46312a7a0c45f0a446494c32feb1ea9fbb54207254f0eafde147abe7",
+   "object_digest": "6d257837b450e2d7d798729465157248aea3fc0e562db8dee9488bc2a52513b5"
+  },
+  {
+   "tu": "EditorObjectManager.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/EditorObjectManager.cpp",
+   "sha256": "9e0e52b754105f18aef5694c7cace5c6c37affc8347b5946bdcb816bfe28aec3",
+   "object_digest": "ddc4eb5bf21f57c399fbe24e8cc7fdf3cf8897ea57326feb747e57fd02e64f6c"
+  },
+  {
+   "tu": "GameStateControllerDescriptor.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/GameStateControllerDescriptor.cpp",
+   "sha256": "af6aff900ffbc3e033c37501c6a0bb2fcd1fdb6c5a6103530b5aed287ad08ce6",
+   "object_digest": "97b06abbd8dae67b553ed56ca2a09a710df0551a25d7f5d5d44905d3fce2eb06"
+  },
+  {
+   "tu": "GenericModelDescriptor.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/GenericModelDescriptor.cpp",
+   "sha256": "af6c8b123e736ff6dea69faa33427d95cbdb482f142f794c588e0baddb883f07",
+   "object_digest": "51b2915ed70a1b08bbf99abcaae9cd7c42142bf291b866d2ee609dc0668beac3"
+  },
+  {
+   "tu": "ItemDescriptor.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/ItemDescriptor.cpp",
+   "sha256": "fccdb7363fffb20be80cd191df62239890200a69e8e2eec8e98503cc25a9e542",
+   "object_digest": "4a7e1481d559c5a1a82930f59dfdd85c7d209dbfb98823e60326b28d14e8f70f"
+  },
+  {
+   "tu": "Layout.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/Layout.cpp",
+   "sha256": "7f980a19d2fa386a5ac3bec728eda934199f59ff26df145731488fff93f652a2",
+   "object_digest": "bb21a64124b7ebc7a3ab0e03b353fa86151279a228b40134418ea2a662975066",
+   "candidate_sha256": "1590b2376f919a5e6be78d9d56064cb43e02b067f02c7ca2a8fc217d04aad806",
+   "formatting_only": "Removed extra blank line at EOF after successful integrated regression; full check validates this final file."
+  },
+  {
+   "tu": "LayoutScene.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/LayoutScene.cpp",
+   "sha256": "345762093f49d9c464089575cca2357846ded6044ce0af243ed4d0e4ec7153b6",
+   "object_digest": "0f55619ce14a84e1acca234825081b0b0dbe18bcf0b2b4c321139d8f6aefcfc9"
+  },
+  {
+   "tu": "ParticleTechWrapperDescriptor.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/ParticleTechWrapperDescriptor.cpp",
+   "sha256": "5e1a6d86f949e6f4bea204dcae43bc383cc38c95fd297b78ebfe3b9cbdb4b697",
+   "object_digest": "a85c83ea6b917947edeecc230508bc657200b1ffc8041c45d1128e411e868f2c"
+  },
+  {
+   "tu": "RoomDescriptor.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/RoomDescriptor.cpp",
+   "sha256": "9f958b8f895e9eff452f2081e5fe8c2931cdeed690e115756f400e9c92789d5e",
+   "object_digest": "d8f44e67c31a2d2a34f7504c14cc1d265834154e39943ce30ee9c01a3abb5d72"
+  },
+  {
+   "tu": "TeleportDescriptor.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/TeleportDescriptor.cpp",
+   "sha256": "6b45e8163ca45428143ba23c5c06fbc6d7f1f888fa57a62310fe3b1c36c9db03",
+   "object_digest": "788c9bd1b8fd48288ccd066d16177b27035837d2f3c00e88498ada00e136fed5"
+  },
+  {
+   "tu": "UnitSpawnerDescriptor.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/UnitSpawnerDescriptor.cpp",
+   "sha256": "1bd0fe22bace988eed89aadb645928f293ecc6e0fb41195541240e896ce6fb9f",
+   "object_digest": "8aaaf6229b6a9b19f5d97da707f9f85434ce96abb78b398d0a99640759e0aa94"
+  },
+  {
+   "tu": "UnitTriggerDescriptor.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/UnitTriggerDescriptor.cpp",
+   "sha256": "37ed05b68898723e935a1697ea41d022edf29890643fc1117c346c66e5365c4e",
+   "object_digest": "7c51cc97bf9b0a90412d5c9eb3e91c52b4c32fc05ef3ae0280b46cc023f97cab"
+  },
+  {
+   "tu": "editorimage.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/editorimage.cpp",
+   "sha256": "bf70b9dc16211d96058f3df730e7a100d7eaa470b149d93f524d867ee2042edc",
+   "object_digest": "ba764fe0637fe3c7799d269fc6d1f9cea560a11628ee0c70eb307f60c4c99f8a"
+  },
+  {
+   "tu": "interactiveMenu.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/interactiveMenu.cpp",
+   "sha256": "2c58cf09334a89f257cb1b1c9071948f32b2907611a40fa511ff1cacd10b5c8f",
+   "object_digest": "df13ccf932333f74a1aa7d12f7f973cd5185aaec5f492a08fc9fa76ce3df9285"
+  },
+  {
+   "tu": "menumanager.cpp",
+   "candidate": "build-decomp/advance-20261018/editor-candidate/sources/menumanager.cpp",
+   "sha256": "5a3b5c122b11cb8973d4fee67837694b9650e0ad62a411a930eeb28e4746e6ab",
+   "object_digest": "27c25f12c6e3f1322e528a1d244703b0012ede1a8e35f1c392ce1c972534a120"
+  },
+  {
+   "tu": "CinematicObject.cpp",
+   "candidate": "build-decomp/advance-20261018/logic-candidate/sources/CinematicObject.cpp",
+   "sha256": "bf77c1b47392a549dc5f4d50d4695afb3901bed18ae1f96ad6f2ed5c077e444d",
+   "object_digest": "b1754e24773decc4de0c3c13bbf1990d1c430d6333cba4b61b7f7099cc00fbda"
+  },
+  {
+   "tu": "Cinematics.cpp",
+   "candidate": "build-decomp/advance-20261018/logic-candidate/sources/Cinematics.cpp",
+   "sha256": "0895bde821460eb8daef77cf9fb1e70c8fd4903ffebcd4fadefe9789d6bc49ac",
+   "object_digest": "5325e00aaebfd8f258278fbd8848d27abe84af2e19edeed02b775bc0384013c1"
+  },
+  {
+   "tu": "DescriptorController.cpp",
+   "candidate": "build-decomp/advance-20261018/logic-candidate/sources/DescriptorController.cpp",
+   "sha256": "eeb6b50f2e11a9fe57d33c683edab41af62bc43b53377a182533a36ab4318207",
+   "object_digest": "074edd29db3814d04257b612bc276e02226410b695c02dd33fef285fa346d783"
+  },
+  {
+   "tu": "DescriptorLoadConfiguration.cpp",
+   "candidate": "build-decomp/advance-20261018/logic-candidate/sources/DescriptorLoadConfiguration.cpp",
+   "sha256": "40cc5c0d43925bf303e1bbc99850ffd3cca11b40e3f7830fe074176d6cfb19b6",
+   "object_digest": "9593f9a5cb6daee9f4f5586fb54bba8c0f44f3c4d56a518e12fefa5469848ab8"
+  },
+  {
+   "tu": "DescriptorProp.cpp",
+   "candidate": "build-decomp/advance-20261018/logic-candidate/sources/DescriptorProp.cpp",
+   "sha256": "d2807321e395ed6ed4e670c35c21e83f1091a596a19370b9972ac2771af78406",
+   "object_digest": "5b0f1aa9a6d34d6f9ba9cf9652f96fb1f13bf9a80048033219e1d3613dafdfa1"
+  },
+  {
+   "tu": "LogicGroup.cpp",
+   "candidate": "build-decomp/advance-20261018/logic-candidate/sources/LogicGroup.cpp",
+   "sha256": "0517c98c2274da98ae20c7642d1bd590dc3230454292cfd0a7c3b2c4ba02f052",
+   "object_digest": "66f134e8bf5195be1d263b58b94451ad3c27d93e51556f783609f7a9b23dd157"
+  },
+  {
+   "tu": "LogicLink.cpp",
+   "candidate": "build-decomp/advance-20261018/logic-candidate/sources/LogicLink.cpp",
+   "sha256": "33c5db62122dc0be74e0fe821e5eb01b9e82deec43d5e5adfa336702b12e4e2b",
+   "object_digest": "8357586168048e1703a1132453a5996eca91e4ac622e991eb9e668418e60ee62"
+  },
+  {
+   "tu": "PathNode.cpp",
+   "candidate": "build-decomp/advance-20261018/logic-candidate/sources/PathNode.cpp",
+   "sha256": "7a01056f05e92c6c122d73d77b24ee116456e4fb979a191f384f9726e34305aa",
+   "object_digest": "c1f53d0c8c36601c4f4178ebc656abaaf10d02d612ba1fe0bf661cf582c8c00a"
+  },
+  {
+   "tu": "SkillController.cpp",
+   "candidate": "build-decomp/advance-20261018/logic-candidate/sources/SkillController.cpp",
+   "sha256": "a27a95b8060eefe5e65bafd65bc9ef353c3943bd1b11d051c58c41edcc41b5e8",
+   "object_digest": "5b7e5e57c1f84705cdd683564c2dc5ac7ddbdbd881134e16d3f2c9bb79f31e13"
+  },
+  {
+   "tu": "Timeline.cpp",
+   "candidate": "build-decomp/advance-20261018/logic-candidate/sources/Timeline.cpp",
+   "sha256": "0ad2320e074086d76547095acfe397d6a3920ff3d11cecbd06e58fc5e8f4a767",
+   "object_digest": "e69ed507a6d86d94ebf87964aeaef8269a168bb827516d59b174345dc50ceac1"
+  },
+  {
+   "tu": "ResourceManager.cpp",
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/sources/ResourceManager.cpp",
+   "sha256": "be31cc53ccd6adc122fdfd4289443b5570d536734d78f8bef34a6aa369197c1e",
+   "object_digest": "15a1bf09ce9468216cedfd52237669443f580f5669021867b5954fd6a8790c7d"
+  },
+  {
+   "tu": "FormationNode.cpp",
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/sources/FormationNode.cpp",
+   "sha256": "1bb8b400e8c4289e1596410676c44df8130f9e990513478bf7cc7bf4d05bfbe7",
+   "object_digest": "cbc3bbed4ae3b0f3d6bae88c72886fbb5cfb65c4d2414195eb165fc6aedd6d93"
+  },
+  {
+   "tu": "DamageShape.cpp",
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/sources/DamageShape.cpp",
+   "sha256": "31f1d52813500880a8f54e7949a6cc76fc604e75ccc27e3b1da82bf531145cda",
+   "object_digest": "8c443568d884c63e01cf2a637eab9cf46d02d2b3e27ad6a8f8f5c39167c70211"
+  },
+  {
+   "tu": "ParticlePreloader.cpp",
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/sources/ParticlePreloader.cpp",
+   "sha256": "fb6fad52f6c32f4b9f456bb3f289265f32b3e486b471c441c30c31aba57d3d63",
+   "object_digest": "43a2e46939f925682b2c707fa85b982c1488fe010a29c5f8cb7eb947e7c52b53"
+  },
+  {
+   "tu": "dynamicrenderable.cpp",
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/sources/dynamicrenderable.cpp",
+   "sha256": "5911577c1026a4f9179f3975f2a1c3672b5ce4998febdc36d8649b6fb0105272",
+   "object_digest": "5d1fa3587ddd2277dcdb9da12c8a29d532654f190808496c542540562d2af0c6"
+  },
+  {
+   "tu": "MasterResourceManager.cpp",
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/sources/MasterResourceManager.cpp",
+   "sha256": "7b24127268d0cbfed3a2cc62d498bb8da755925a5103f0c2a346f500b4e0f2c8",
+   "object_digest": "ba8f263ce5001e194b7fc4938f5ea31522087e58b8f13d31b73220f3ec0a6e1a"
+  },
+  {
+   "tu": "MissilePreloader.cpp",
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/sources/MissilePreloader.cpp",
+   "sha256": "6ced2d6cd322af48d7e0a021baeaa70bbdf2467bf8f8022c41493639980238fe",
+   "object_digest": "d97694192f7cbdffbf10beff5c724d5f8b66943a4b98fb0a28b352e4feddb42b"
+  },
+  {
+   "tu": "UnitSpawner.cpp",
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/sources/UnitSpawner.cpp",
+   "sha256": "6e5632d7b11dafe8d5088ac24194d4f074ed650fa9e5da3d308048d6e8467225",
+   "object_digest": "7594e1672f0e30369cb68d34a0c3c787aba382a98e8f96b1be858af02dfd03b0"
+  },
+  {
+   "tu": "DataValue.cpp",
+   "candidate": "build-decomp/advance-20261018/main-candidate/sources/DataValue.cpp",
+   "sha256": "bcc2521c622f6087870f6021bdbe82cb5f19a924de74cce1207f3c5c462fcd13",
+   "object_digest": "24b487ad6b4e7ba786608c237f95de0a462c31262af2f9f8a31d7f60954d7492"
+  },
+  {
+   "tu": "DungeonManager.cpp",
+   "candidate": "build-decomp/advance-20261018/main-candidate/sources/DungeonManager.cpp",
+   "sha256": "903a057c655a27646275aa9269b98a232ae3000fa34fd6dd489c1bb16c710dff",
+   "object_digest": "8174edea9209ac068b7e3151a262f88c84257f20caa83baa2507f35d40e4af91"
+  },
+  {
+   "tu": "MusicObject.cpp",
+   "candidate": "build-decomp/advance-20261018/main-candidate/sources/MusicObject.cpp",
+   "sha256": "69539270ee350aeedde033dbfbdccf4cadaaf1b977a4e916aa9de8f956051d7b",
+   "object_digest": "fc34dca5f58f417abb7e60d8b1cc889d5f6d67d58955a424f68a7d6d06873acf"
+  },
+  {
+   "tu": "OgreResourceFile.cpp",
+   "candidate": "build-decomp/advance-20261018/main-candidate/sources/OgreResourceFile.cpp",
+   "sha256": "725c769ba4d5e179239460bffe256bbd7739325871a6044100135234f6c52615",
+   "object_digest": "11bede616e129e8684b0b446e07088f3db5868cef83e423b86022dd97865f03c"
+  },
+  {
+   "tu": "UnitThemes.cpp",
+   "candidate": "build-decomp/advance-20261018/main-candidate/sources/UnitThemes.cpp",
+   "sha256": "d521a7c73055ac2e8aff0921fffbf146ebb5b58bfed2e71820426bc280972007",
+   "object_digest": "46217ca604d79df481474970e289d029ebf766b161febe65931c7137834ee809"
+  },
+  {
+   "tu": "dungeon.cpp",
+   "candidate": "build-decomp/advance-20261018/main-candidate/sources/dungeon.cpp",
+   "sha256": "8d23b452d355da7c5d01ab85d010e095f3315c79d85f23c537a76034f1a69bfa",
+   "object_digest": "e3fb7d152be1c7ebf0c78ddcd1114d8bd0c1bbd03b649c2760ce2bb518792d7b"
+  },
+  {
+   "tu": "pov.cpp",
+   "candidate": "build-decomp/advance-20261018/main-candidate/sources/pov.cpp",
+   "sha256": "ea8ce99f88879fdf1b351f6be51e92effddeaac95638fc3c05cac45cffffe281",
+   "object_digest": "f6b8255cef5c242943d9f4f41be3ad69796e832463a43e8316f8c8f265980aa0"
+  }
+ ],
+ "fixtures": [
+  {
+   "candidate": "build-decomp/advance-20261018/editor-candidate/tests/AdvanceEditorDispatchTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceEditorDispatchTest.cpp",
+   "sha256": "b95cc96d9274b2fecac10426e8e997c75c34608a6386af5b5c41fbc3ba92999a"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/editor-candidate/tests/AdvanceEditorFactoryTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceEditorFactoryTest.cpp",
+   "sha256": "afa56d23e36a681d4765dbbf92ab20b493e3aa88b557a89d4854adb78615ebb9"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/editor-candidate/tests/AdvanceEditorLayoutTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceEditorLayoutTest.cpp",
+   "sha256": "8a7e015ce42e1bbe8b2aef523e11a8ba1afc78cfc12276b3aa7f82397923ece4"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/editor-candidate/tests/AdvanceEditorMenusTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceEditorMenusTest.cpp",
+   "sha256": "498f35023a8ccefa73923adf7b7518708a391e8c36032c7d1f6e065236d8c05e"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/editor-candidate/tests/AdvanceEditorScenesTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceEditorScenesTest.cpp",
+   "sha256": "39cdc8bbada9970fac3fc97d0917b201a5a2226dd78a61db49a38e9373535c57"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/editor-candidate/tests/AdvanceEditorWorldTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceEditorWorldTest.cpp",
+   "sha256": "e5b5e2839dcde8f96d2d9182a44d92a067c70428d0199970211a798cc662a68f"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/logic-candidate/tests/AdvanceLogicCinematicsTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceLogicCinematicsTest.cpp",
+   "sha256": "c1af2d9da769081d138fda8078dd9814ef6cdcf7b17ca11136a99c60d67d2348"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/logic-candidate/tests/AdvanceLogicConfigureTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceLogicConfigureTest.cpp",
+   "sha256": "750902dbc75b68281bfca5e108ec3dcc59bfa770adfd07c9ff25b904eadbb20e"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/logic-candidate/tests/AdvanceLogicGroupsTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceLogicGroupsTest.cpp",
+   "sha256": "b8851ccd0349fd083918f8f16f0803291b37fd74efa448e71c9e15c3c7972f17"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/logic-candidate/tests/AdvanceLogicLinksTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceLogicLinksTest.cpp",
+   "sha256": "b204ddd0e472e42ab6cef1a07b0703eed2c70cc9fe93ea0697e01a3bda02b249"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/logic-candidate/tests/AdvanceLogicPathNodeCtorTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceLogicPathNodeCtorTest.cpp",
+   "sha256": "9a3411ce963706a2de4167d4a754dc6903dc310e17e9e2193b7123039aba5f5e"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/logic-candidate/tests/AdvanceLogicPropertiesTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceLogicPropertiesTest.cpp",
+   "sha256": "aeef2050d440945a09a174ba0f3f168dc19e2c913c698ef1200eea5dbddbb3d8"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/logic-candidate/tests/AdvanceLogicRegistryTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceLogicRegistryTest.cpp",
+   "sha256": "9d4a00c0b9cba0580e577588d34a663532cc6a188ec83bfc95715b8ab31ba2ab"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/logic-candidate/tests/AdvanceLogicRemapTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceLogicRemapTest.cpp",
+   "sha256": "0913aa09cee640c7e874bc84bad7a8fb279b6f63d54fc2037e9c836b4de68401"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/logic-candidate/tests/AdvanceLogicTimelineAddTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceLogicTimelineAddTest.cpp",
+   "sha256": "ed2ab24729ed5077a8783b247102ad222b5fa2331d6f74e1d4434c194023fb54"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/logic-candidate/tests/AdvanceLogicTimelineUpdateTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceLogicTimelineUpdateTest.cpp",
+   "sha256": "9202b843ba5be2904acbee03b3954d1069916a33a4da25c5be935309eec47693"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/tests/AdvanceRuntimeResourceTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceRuntimeResourceTest.cpp",
+   "sha256": "04a93dbc92b4abb69ceb3fca8efcda9d7a891008a547f43d7c2496d4ff263721"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/tests/AdvanceRuntimeFormationTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceRuntimeFormationTest.cpp",
+   "sha256": "c61aea72000f47a235eed2bdfe581ea298e8e949a8b325e4e194beae0d40115c"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/tests/AdvanceRuntimeDamageTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceRuntimeDamageTest.cpp",
+   "sha256": "21c6f850f4866015026fac3ac61651ec14d8a3ee6680421478cad8eb8cbf5f10"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/tests/AdvanceRuntimeParticleTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceRuntimeParticleTest.cpp",
+   "sha256": "01895e567930406fbfc9822b2010a38740a7eb23e96a1d61fed280ce776a87f9"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/tests/AdvanceRuntimeDynamicTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceRuntimeDynamicTest.cpp",
+   "sha256": "e81f5f423bfe7871c339991e8915620b4c7dd95c4fd001aaff25aa2f7fe9737c"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/tests/AdvanceRuntimeMasterTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceRuntimeMasterTest.cpp",
+   "sha256": "3b891660c75abab5700a04509e9946e73746e2e949ed5c4d4c3cc83a711765ea"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/tests/AdvanceRuntimeMissileTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceRuntimeMissileTest.cpp",
+   "sha256": "07ec6036288fde17de17ebf960d593ce05c7e93a463fbd60a244fa9782c73ee2"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/runtime-candidate/tests/AdvanceRuntimeSpawnerTest.cpp",
+   "path": "decomp/hybrid/tests/AdvanceRuntimeSpawnerTest.cpp",
+   "sha256": "aca25b23d45149ce34402fa7e554a2d0fef33158e5bc5b2d1a6157cc2d21e704"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/main-candidate/tests/AdvanceDataValueCompare.cpp",
+   "path": "decomp/hybrid/tests/AdvanceDataValueCompare.cpp",
+   "sha256": "893a388235819df4f2b69a301c6e5fda557fb8eb53c16a592d31d7f5894ae26a"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/main-candidate/tests/AdvanceDungeonReloadCompare.cpp",
+   "path": "decomp/hybrid/tests/AdvanceDungeonReloadCompare.cpp",
+   "sha256": "c412af551c50f7cb2ed743d53d90fcd2223d64b89840e38037c443b1c9059ebc"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/main-candidate/tests/AdvanceMusicPlayCompare.cpp",
+   "path": "decomp/hybrid/tests/AdvanceMusicPlayCompare.cpp",
+   "sha256": "3a95ed1196c29013c85a1646a8f998bb7bb9ea273ed945ed84de0e0b5a220ead"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/main-candidate/tests/AdvancePOVCompare.cpp",
+   "path": "decomp/hybrid/tests/AdvancePOVCompare.cpp",
+   "sha256": "b222a3fce56c0bdddfb40f7f2fc2b153dd12efd64849e727462f07d2ce05ef81"
+  },
+  {
+   "candidate": "build-decomp/advance-20261018/main-candidate/tests/AdvanceThemeDungeonCompare.cpp",
+   "path": "decomp/hybrid/tests/AdvanceThemeDungeonCompare.cpp",
+   "sha256": "8f729417fb8df23b3ef930bf4170bf365ff9fbbfb4e6b49c71cccafe198bae51"
+  }
+ ],
+ "reserved": [
+  {
+   "tu": "Layout.cpp",
+   "address": "0x9ddc00",
+   "reason": "Recovery requires ParticleUniverse::ParticleSystem::pause/resume declarations from the actual pinned SDK. Only direct-call symbol names were supplied, so the new local complete SDK class and control dispatcher were removed.",
+   "label": "editor"
+  },
+  {
+   "tu": "menumanager.cpp",
+   "address": "0xc2be40",
+   "reason": "The original embeds KeyManager+0x40 and MouseManager+0xd58; changing current opaque ranges to typed members would double-destruct through the accepted manual destructor. No constructor stub added.",
+   "label": "editor"
+  },
+  {
+   "tu": "SkillController.cpp",
+   "address": "0xe17970",
+   "reason": "Frozen raw weak-pointer pairs cannot express original automatic constructor unwind before base destruction.",
+   "proof": "build-decomp/advance-20261018/logic-candidate/reserve/BLOCKERS.md",
+   "label": "logic"
+  },
+  {
+   "tu": "SkillController.cpp",
+   "address": "0xe20cc0",
+   "reason": "Original weak registration/string/ID cleanup order requires a future safe header/lifetime decision.",
+   "proof": "build-decomp/advance-20261018/logic-candidate/reserve/BLOCKERS.md",
+   "label": "logic"
+  },
+  {
+   "tu": "TimelineProperty.cpp",
+   "address": "0x7c9960",
+   "reason": "No actual complete CLList<CTimelineProperty::CTimelinePoint*> template declaration; fresh packet blocked.",
+   "proof": "build-decomp/advance-20261018/logic-candidate/reserve/BLOCKERS.md",
+   "label": "logic"
+  },
+  {
+   "tu": "TimelineProperty.cpp",
+   "address": "0x7ccae0",
+   "reason": "No actual complete CLList<CTimelineProperty::CTimelinePoint*> template declaration; fresh packet blocked.",
+   "proof": "build-decomp/advance-20261018/logic-candidate/reserve/BLOCKERS.md",
+   "label": "logic"
+  },
+  {
+   "tu": "Undo.cpp",
+   "address": "0x795600",
+   "reason": "Recovered addition loses old AddNewObject and DoAsRedo strong MATCH in all 13 natural source positions.",
+   "proof": "build-decomp/advance-20261018/logic-candidate/reserve/BLOCKERS.md",
+   "label": "logic"
+  },
+  {
+   "tu": "LogicObject.cpp",
+   "address": "0x7b2c70",
+   "reason": "Missing descriptor name access/friend and return ABI uncertainty in frozen headers.",
+   "proof": "build-decomp/advance-20261018/logic-candidate/reserve/BLOCKERS.md",
+   "label": "logic"
+  },
+  {
+   "tu": "SkillController.cpp",
+   "address": "0xe207b0",
+   "reason": "Frozen float return declaration conflicts with unresolved original return ABI; no invented float return.",
+   "proof": "build-decomp/advance-20261018/logic-candidate/reserve/BLOCKERS.md",
+   "label": "logic"
+  },
+  {
+   "tu": "Timeline.cpp",
+   "address": "0x7baa30",
+   "reason": "Recovered addition loses old binary loader strong MATCH in every natural position/order; Update-only source preserves it.",
+   "proof": "build-decomp/advance-20261018/logic-candidate/reserve/BLOCKERS.md",
+   "label": "logic"
+  },
+  {
+   "address": "0xd79290",
+   "tu": "ResourceManager.cpp",
+   "reason": "Prepared but not recovered in this batch. The position, orientation and lifetime branches need a complete comparative fixture before publication.",
+   "label": "runtime"
+  },
+  {
+   "address": "0x9c19d0",
+   "tu": "DamageShape.cpp",
+   "reason": "Not recovered in this batch. The timer reset at +0x1a0 copies raw float bits, while the frozen header currently declares m_iDelayTimer as int; no cast was used to bypass that type.",
+   "label": "runtime"
+  },
+  {
+   "address": "0x9c2020",
+   "tu": "DamageShape.cpp",
+   "reason": "Frozen GameUI.h makes m_console private without granting CDamageShape access. The original logging path directly reads +0x1690. The isolated source and fixture draft are retained outside sources/tests and are not published.",
+   "label": "runtime"
+  },
+  {
+   "address": "0x9c2250",
+   "tu": "DamageShape.cpp",
+   "reason": "Frozen GameUI.h makes the console field private on the original combat logging path. No source or field-access cast was published.",
+   "label": "runtime"
+  },
+  {
+   "address": "0xa0ab40",
+   "tu": "UnitSpawner.cpp",
+   "reason": "Not recovered: the original SceneNode visibility call uses vtable slot +0x218; the pinned SDK declaration must be reconciled with that ABI before implementing the layout/particle path.",
+   "label": "runtime"
+  },
+  {
+   "address": "0xd78290",
+   "tu": "ResourceManager.cpp",
+   "reason": "Missing proven Breakable/TriggerUnit full layouts (createNewItem).",
+   "label": "runtime"
+  },
+  {
+   "address": "0xd067d0",
+   "tu": "MissilePreloader.cpp",
+   "reason": "Prepare repair guard: current object differs from recorded accepted progress. No guard was bypassed.",
+   "label": "runtime"
+  },
+  {
+   "address": "0xd0bbd0",
+   "tu": "MissilePreloader.cpp",
+   "reason": "Prepare repair guard: current object differs from recorded accepted progress. No guard was bypassed.",
+   "label": "runtime"
+  },
+  {
+   "tu": "automap.cpp",
+   "address": "0x927820",
+   "reason": "Original viewport/zoom members remain opaque in Automap.h; typed layout must be recovered before implementation.",
+   "label": "main"
+  },
+  {
+   "tu": "automap.cpp",
+   "address": "0x927910",
+   "reason": "Original viewport/zoom members remain opaque in Automap.h; typed layout must be recovered before implementation.",
+   "label": "main"
+  },
+  {
+   "tu": "automap.cpp",
+   "address": "0x928560",
+   "reason": "Original viewport member remains opaque in Automap.h; destructor needs typed original lifetime.",
+   "label": "main"
+  },
+  {
+   "tu": "SoundManager.cpp",
+   "address": "0xa6c880",
+   "reason": "Preparation blocked on original read-only compiler object CSWTCH.3054; no synthesized declaration or acceptance bypass.",
+   "label": "main"
+  },
+  {
+   "tu": "SoundManager.cpp",
+   "address": "0xa6dc50",
+   "reason": "Pinned FMOD interface lacks Sound::setSoundGroup and Channel::setChannelGroup, called at a6de3d/a6dff4. Requires an SDK declaration phase before recovery.",
+   "label": "main"
+  }
+ ],
+ "normalization_probe": {
+  "records": [
+   {
+    "mode": "function",
+    "seconds": 1.4943547479997505,
+    "stats": {
+     "batch_commands": 0,
+     "individual_commands": 42,
+     "hits": 1,
+     "boundary_fallbacks": 0,
+     "evictions": 10
+    }
+   },
+   {
+    "mode": "tu",
+    "seconds": 0.7317859810009395,
+    "stats": {
+     "batch_commands": 1,
+     "individual_commands": 0,
+     "hits": 42,
+     "boundary_fallbacks": 0,
+     "evictions": 0
+    }
+   }
+  ],
+  "same_rows": true,
+  "scope": "Single collisionlist TU; deliberately cold session-local normalization dictionary; no cache publication or acceptance."
+ },
+ "cache_refresh": {
+  "functions": 8203,
+  "seconds": 143.62255034899863,
+  "same_payload_entries": true,
+  "stats": {
+   "batch_commands": 301,
+   "individual_commands": 495,
+   "hits": 8627,
+   "boundary_fallbacks": 0,
+   "evictions": 750
+  },
+  "scope": "Recomputed original cache after atomic writer tool change; no game or acceptance"
+ },
+ "performance_followup": {
+  "status": "read-only finding; no measured speedup or implementation",
+  "baseline_total_seconds": 1289.04,
+  "baseline_selftest_seconds": 1203.659632373,
+  "runtime_slot_utilization_percent": 96.35,
+  "aggregate_process_overhead_seconds": 4.153,
+  "fixture": "merchant_main_slot_differential",
+  "fixture_seconds_in_baseline_full_load": 160.979,
+  "completed_cases": 25992,
+  "fresh_child_processes": 51984,
+  "invariant_detour_requests_per_child": 14,
+  "minimum_repeated_mprotect_calls": 2911104,
+  "proposed_pilot": "Install invariant detours once in the fixture parent; children inherit them; retain every fresh child, case, capture and acceptance floor. Measure before expansion."
+ },
+ "notes": [
+  "Only the final full check supplies current canonical acceptance.",
+  "Expected constructor exceptions and original invalid-input faults are excluded from normal acceptance.",
+  "One trailing blank line in Layout.cpp was removed before the final full check.",
+  "No windowed gameplay or standalone game acceptance was performed."
+ ]
+}

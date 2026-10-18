@@ -102,11 +102,12 @@ extern unsigned int KSETTINGS_DIRECTIONAL_LIGHT_RED;
 extern unsigned int KSETTINGS_DIRECTIONAL_LIGHT_GREEN;
 extern unsigned int KSETTINGS_DIRECTIONAL_LIGHT_BLUE;
 extern unsigned int KSETTINGS_F_DIRECTIONAL_INTENSITY;
-extern int KSETTINGS_RES_WIDTH;
-extern int KSETTINGS_RES_HEIGHT;
+#include "SettingsVariables.h"
 extern unsigned int KSETTINGS_WIN_WIDTH;
 extern unsigned int KSETTINGS_WIN_HEIGHT;
 extern unsigned int KSETTINGS_XRATIO;
+extern unsigned int KSETTINGS_SHOW_DAMAGE_SHAPES;
+extern unsigned int KSETTINGS_COMBAT_LOG;
 #endif
 
 extern unsigned int KSETTINGS_DISPLAY_COLLISION;

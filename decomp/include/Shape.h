@@ -16,6 +16,7 @@ public:
     Ogre::Vector3 calculatePositionBetweenAnglesAndRadius(float percent,float radius);
     void calculateLineSequment(float percent,Ogre::Vector3& start,Ogre::Vector3& end);
     void calculateOrientation(const Ogre::Vector3& position,Ogre::Vector3& forward,Ogre::Vector3& up,Ogre::Vector3& right);
+    void updateVisual(bool enabled, float percent);
     void updatePositionAndOrientation(Ogre::Vector3& position,Ogre::Quaternion& orientation,float percent,float radius);
     std::pair<bool,float> lineIntersectsPosition(float percent,const Ogre::Vector3& position,float radius);
     std::pair<bool,float> positionWithRadiusIntersectsBox(float percent,const Ogre::Vector3& position,float radius);

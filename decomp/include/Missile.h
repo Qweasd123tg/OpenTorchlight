@@ -22,7 +22,7 @@ class CMissile : public CPositionableObject
 {
 public:
     virtual ~CMissile();
-    virtual long long update(float);
+    virtual bool update(float);
     bool getCollisionSphereVisible();
     void setCollisionSphereVisible(bool);
     bool getAOESphereVisible();

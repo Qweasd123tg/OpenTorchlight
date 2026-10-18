@@ -42,6 +42,7 @@ bool CEditorImage::getVisibleHie()
 }
 
 #include <CEGUIWindow.h>
+#include <CEGUIWindowManager.h>
 
 void CEditorImage::setEnabled(bool enabled)
 {
@@ -120,5 +121,15 @@ void CEditorImage::update(float elapsed)
     } else if (m_bWindowVisible) {
         m_bWindowVisible = false;
         m_pWindow->setVisible(false);
+    }
+}
+
+CEditorImage::~CEditorImage()
+{
+    setVisible(false);
+    if (m_pWindow) {
+        if (m_pWindow->getParent())
+            m_pWindow->getParent()->removeChildWindow(m_pWindow);
+        CEGUI::WindowManager::getSingleton().destroyWindow(m_pWindow);
     }
 }

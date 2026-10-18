@@ -53,3 +53,18 @@ CCinematic* CCinematics::getCinematic(const wchar_t* name)
         return getCinematic(found->second);
     return NULL;
 }
+
+CCinematics::~CCinematics()
+{
+    m_mapCinematics.clear();
+    for (unsigned int i = 0; i < m_lCinematics.size(); ++i) {
+        if (m_lCinematics[i]) {
+            m_lCinematics[i]->~CCinematic();
+            Ogre::NedAllocImpl::deallocBytes(m_lCinematics[i]);
+            m_lCinematics[i] = NULL;
+        }
+        m_lCinematics[i] = NULL;
+    }
+    m_lCinematics.clear();
+    g_pCinematics = NULL;
+}

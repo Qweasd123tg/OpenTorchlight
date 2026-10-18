@@ -6,6 +6,7 @@
 #include "EditorBaseObject.h"
 #include "EditorScene.h"
 #include "CameraShakeDescriptorNames.h"
+#include "ResourceManager.h"
 
 CCameraShakeDescriptor::CCameraShakeDescriptor()
     : CBaseObjectDescriptor(L"Camera Shake", L"Does a camera shake", L"shake")
@@ -71,4 +72,16 @@ std::wstring CCameraShakeDescriptor::getCameraShakeNameStringByID(CEditorScene*,
         --index;
     }
     return firstName;
+}
+
+void CCameraShakeDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    CCameraShake* shake = dynamic_cast<CCameraShake*>(object);
+    // The original uses a conjunction here, including its null-owner behavior.
+    if (shake == NULL && getSceneOwner() == NULL &&
+        getSceneOwner()->getResourceManager() == NULL &&
+        getSceneOwner()->getResourceManager()->getCameraControl() == NULL)
+        return;
+    if (event == 15)
+        shake->startCameraShake(shake->getSceneOwner()->getPosition(true), false);
 }

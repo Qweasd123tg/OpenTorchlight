@@ -6,6 +6,7 @@
 
 #include <string>
 #include "TArrayList.h"
+#include "SettingsVariables.h"
 
 // One-byte TU-local switches from the original gameui.cpp BSS symbols.
 static bool gToggleInventory;
@@ -16,8 +17,6 @@ extern int KSETTINGS_KEYMAP_CLOSEALL;
 extern int KSETTINGS_KEYMAP_PAUSE;
 extern int KSETTINGS_KEYMAP_ZOOMIN;
 extern int KSETTINGS_KEYMAP_ZOOMOUT;
-extern int KSETTINGS_RES_HEIGHT;
-extern int KSETTINGS_RES_WIDTH;
 static std::wstring gANIMATIONPLAYER_TYPE_NAMES[4] = {
     L"PLAYER", L"MONSTERS", L"UNITTYPE", L"PROP"
 };

@@ -7,6 +7,7 @@ class CParticle;
 class CItemGold : public CItem
 {
 public:
+    CItemGold(CResourceManager* resources, int amount);
     virtual ~CItemGold();
     virtual void setActiveInLevel(bool);
     virtual CGenericModel* getUnitModel();

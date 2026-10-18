@@ -1,3 +1,5 @@
+#include <OgreLogManager.h>
+#include "StringUtilities.h"
 #include "EmptyStrings.h"
 #include "DescriptorLoadConfiguration.h"
 
@@ -21,4 +23,16 @@ CDescriptorLoadConfiguration::CDescriptorLoadConfiguration()
 
 CDescriptorLoadConfiguration::~CDescriptorLoadConfiguration()
 {
+}
+
+void CDescriptorLoadConfiguration::addRemap(long long id, long long remappedID)
+{
+    if (id == -1 || remappedID == -1)
+        return;
+    if (m_Remaps.find(id) == m_Remaps.end())
+        m_Remaps[id] = remappedID;
+    else
+        Ogre::LogManager::getSingleton().logMessage(
+            "ERROR ITEM HAS THE SAME ORIGINAL GUID " + STRINGS::GetValueAsString(id),
+            Ogre::LML_CRITICAL, false);
 }

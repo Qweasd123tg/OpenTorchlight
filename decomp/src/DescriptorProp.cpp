@@ -224,3 +224,132 @@ CDescriptorProp::CDescriptorProp(CDescriptorProp* source, CEditorBaseObject* obj
 {
     if (source) copy(*source, object);
 }
+
+#include "DataGroup.h"
+#include "Descriptor.h"
+
+bool CDescriptorProp::cloneValue(CEditorBaseObject* object, CEditorBaseObject* source)
+{
+    if (m_iFlags & 0x4000) return true;
+    if (!object || !source || !object->getDescriptor() || !source->getDescriptor() ||
+        object->getDescriptor()->m_sName != source->getDescriptor()->m_sName)
+        return false;
+    unsigned int count = 1;
+    UNIONDATA32BIT* data = getData(count, source);
+    setData(data, count, object);
+    return true;
+}
+
+bool CDescriptorProp::saveProperty(CEditorBaseObject* object, CDataGroup* group)
+{
+    if (m_iFlags & 0x100) return true;
+    if (!group) return false;
+    if (m_pInterpreter || m_eType == VARIABLE_TYPE_STRING) {
+        group->AddDataValue(m_sName, getPropertyValueAsString(object), false);
+        return true;
+    }
+    unsigned int count = 0;
+    UNIONDATA32BIT* value = getData(count, object);
+    if (m_pInterpreter) {
+        group->AddDataValue(m_sName, EMPTY_WSTRING, false);
+        return true;
+    }
+    switch (m_eType) {
+    case VARIABLE_TYPE_INTEGER:
+        if (count > 1) group->AddDataValue(m_sName, getPropertyValueAsString(object), false);
+        else group->AddDataValue(m_sName, value[0].m_iValue);
+        break;
+    case VARIABLE_TYPE_UNSIGNED_INTEGER:
+        if (count > 1) group->AddDataValue(m_sName, getPropertyValueAsString(object), false);
+        else group->AddDataValue(m_sName, value[0].m_uValue);
+        break;
+    case VARIABLE_TYPE_FLOAT:
+        if (count > 1) group->AddDataValue(m_sName, getPropertyValueAsString(object), false);
+        else group->AddDataValue(m_sName, value[0].m_fValue);
+        break;
+    case VARIABLE_TYPE_BOOL:
+        if (count > 1) group->AddDataValue(m_sName, getPropertyValueAsString(object), false);
+        else group->AddDataValue(m_sName, value[0].m_bValue);
+        break;
+    case VARIABLE_TYPE_VECTOR2:
+        group->AddDataValue(m_sName + L"X", value[0].m_fValue);
+        group->AddDataValue(m_sName + L"Y", value[1].m_fValue);
+        break;
+    case VARIABLE_TYPE_VECTOR3:
+        group->AddDataValue(m_sName + L"X", value[0].m_fValue);
+        group->AddDataValue(m_sName + L"Y", value[1].m_fValue);
+        group->AddDataValue(m_sName + L"Z", value[2].m_fValue);
+        break;
+    case VARIABLE_TYPE_VECTOR4:
+        group->AddDataValue(m_sName + L"X", value[0].m_fValue);
+        group->AddDataValue(m_sName + L"Y", value[1].m_fValue);
+        group->AddDataValue(m_sName + L"Z", value[2].m_fValue);
+        group->AddDataValue(m_sName + L"I", value[3].m_fValue);
+        break;
+    default: group->AddDataValue(m_sName, EMPTY_WSTRING, false); break;
+    }
+    return true;
+}
+
+bool CDescriptorProp::loadProperty(CEditorBaseObject* object, CDataGroup* group, unsigned int version)
+{
+    if (m_iFlags & 0x100) return true;
+    if (version <= 2) {
+        if (!group) return false;
+        CDataGroup* property = group->GetDataGroupByName(m_sName, false);
+        if (property)
+            setPropertyValueByString(property->GetDataValue(L"VALUE", EMPTY_WSTRING), object);
+        else {
+            unsigned int count = 0;
+            UNIONDATA32BIT* data = getData(count, object);
+            setData(data, count, object);
+        }
+        return true;
+    }
+    CDataValue* stored = group->GetDataValueByName(m_sName);
+    if (stored && stored->GetValueType() == CDataValue::DATAVALUE_STRING) {
+        setPropertyValueByString(group->GetDataValue(m_sName, EMPTY_WSTRING), object);
+        return true;
+    }
+    unsigned int count = 0;
+    UNIONDATA32BIT* initial = getData(count, object);
+    UNIONDATA32BIT data[4] = {};
+    if (!initial) return false;
+    if (m_pInterpreter) {
+        if (stored) setData(group->GetDataValue(m_sName, reinterpret_cast<const wchar_t*>(initial)), object);
+        return true;
+    }
+    switch (m_eType) {
+    case VARIABLE_TYPE_INTEGER:
+        if (stored) { data[0].m_iValue = group->GetDataValue(m_sName, initial[0].m_iValue); setData(data, 1, object); }
+        break;
+    case VARIABLE_TYPE_UNSIGNED_INTEGER:
+        if (stored) { data[0].m_uValue = group->GetDataValue(m_sName, initial[0].m_uValue); setData(data, 1, object); }
+        break;
+    case VARIABLE_TYPE_FLOAT:
+        if (stored) { data[0].m_fValue = group->GetDataValue(m_sName, initial[0].m_fValue); setData(data, 1, object); }
+        break;
+    case VARIABLE_TYPE_BOOL:
+        if (stored) { data[0].m_bValue = group->GetDataValue(m_sName, initial[0].m_bValue); setData(data, 1, object); }
+        break;
+    case VARIABLE_TYPE_VECTOR2:
+        data[0].m_fValue = group->GetDataValue(m_sName + L"X", initial[0].m_fValue);
+        data[1].m_fValue = group->GetDataValue(m_sName + L"Y", initial[1].m_fValue);
+        setData(data, 2, object); break;
+    case VARIABLE_TYPE_VECTOR3:
+        data[0].m_fValue = group->GetDataValue(m_sName + L"X", initial[0].m_fValue);
+        data[1].m_fValue = group->GetDataValue(m_sName + L"Y", initial[1].m_fValue);
+        data[2].m_fValue = group->GetDataValue(m_sName + L"Z", initial[2].m_fValue);
+        setData(data, 3, object); break;
+    case VARIABLE_TYPE_VECTOR4:
+        data[0].m_fValue = group->GetDataValue(m_sName + L"X", initial[0].m_fValue);
+        data[1].m_fValue = group->GetDataValue(m_sName + L"Y", initial[1].m_fValue);
+        data[2].m_fValue = group->GetDataValue(m_sName + L"Z", initial[2].m_fValue);
+        data[3].m_fValue = group->GetDataValue(m_sName + L"I", initial[3].m_fValue);
+        setData(data, 4, object); break;
+    default:
+        if (stored) setData(group->GetDataValue(m_sName, reinterpret_cast<const wchar_t*>(initial)), object);
+        break;
+    }
+    return true;
+}

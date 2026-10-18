@@ -97,3 +97,27 @@ void CSkillController::learnSkill()
         BroadcastEvent(105);
     }
 }
+
+#include "MasterResourceManager.h"
+#include "Hierarchy.h"
+#include "DataGroup.h"
+#include "Level.h"
+
+bool CSkillController::configureUnit()
+{
+    if (!m_pRunicCore) {
+        CBaseUnit* unit = NULL;
+        if (m_pUnitInteractDataGroup) {
+            unsigned int type = CMasterResourceManager::getSingleton()->m_pHierarchy->getTypeIDByName(
+                m_pUnitInteractDataGroup->GetDataValue(L"UNITTYPE", L""));
+            if (CMasterResourceManager::getSingleton()->m_pHierarchy->ISA(type, 28))
+                unit = m_pResourceManager->getLevel()->getPlayer();
+            else
+                unit = m_pResourceManager->getLevel()->getBaseUnitByDataGroup(m_pUnitInteractDataGroup);
+        } else if (m_sCategory == gRESOURCE_GROUP_NAMES[2])
+            unit = m_pResourceManager->getGameClient()->getPlayer();
+        if (unit)
+            reinterpret_cast<TSafePointer<CBaseUnit>*>(&m_pRunicCore)->setObject(unit);
+    }
+    return m_pRunicCore != NULL;
+}

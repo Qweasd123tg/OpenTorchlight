@@ -32,3 +32,16 @@ CLevelTemplateData* CDungeon::getRandomLevelTemplateData()
         depth = 0;
     return getStrataTemplate(depth);
 }
+
+
+CLevelTemplateData* CDungeon::getLevelTemplateDataForDepth(CGameClient*, unsigned int depth)
+{
+    CLevelTemplateData* level = getStrataTemplate(depth < m_levelTemplateData.size() ?
+                                                depth : m_levelTemplateData.size() - 1);
+    if (level && level->m_string60 != EMPTY_WSTRING) {
+        CDungeon* fallback = CDungeonManager::getSingleton()->getDungeonByName(level->m_string60);
+        if (fallback)
+            level = fallback->getRandomLevelTemplateData();
+    }
+    return level;
+}

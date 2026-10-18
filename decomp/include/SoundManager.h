@@ -49,7 +49,7 @@ public:
     int playSound(CSoundInstance*, Ogre::SceneNode*, int, float);
     void update(Ogre::SceneNode*, const Ogre::Vector3&, float);
     CSoundInstance* createSound(std::wstring, SOUND_TYPE, bool, float, float);
-    int playMusic(std::wstring&, bool);
+    float playMusic(std::wstring&, bool);
     void dumpSounds();
     void initialize(CSettings*);
 

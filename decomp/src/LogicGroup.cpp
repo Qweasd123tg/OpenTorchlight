@@ -74,3 +74,54 @@ CLogicGroup::~CLogicGroup()
 {
     m_logicObjects.deleteAll();
 }
+
+void CLogicGroup::AddLogicObject(CLogicObject* object)
+{
+    object->m_iID = m_logicObjects.size();
+    m_logicObjects.add(object);
+}
+
+bool CLogicGroup::RemoveLogicObjectsRefingObjectID(long long objectID)
+{
+    if (objectID == -1) return false;
+    bool result = true;
+    for (unsigned int i = 0; i < m_logicObjects.size(); ++i) {
+        if (m_logicObjects[i]) {
+            if (m_logicObjects[i]->m_iObjectID == objectID)
+                result &= RemoveLogicObjectByIndex(i);
+            else
+                result &= m_logicObjects[i]->RemoveLogicLinksRefingObjectID(objectID);
+        }
+    }
+    return result;
+}
+
+void CLogicGroup::saveLogicGroupToDataGroup(CDataGroup* dataGroup,
+    std::ofstream* stream, CDescriptorSaveConfiguration* configuration)
+{
+    TArrayList<bool> saved(m_logicObjects.size());
+    unsigned int count = 0;
+    for (unsigned int i = 0; i < m_logicObjects.size(); ++i) {
+        if (m_logicObjects[i]) {
+            CEditorBaseObject* object = m_logicObjects[i]->GetObject();
+            if (object) {
+                if (object->getSceneOwner()->canObjectBeSaved(m_pResourceManager, object)) {
+                    saved.add(true);
+                    ++count;
+                } else saved.add(false);
+            }
+        } else saved.add(false);
+    }
+    if (dataGroup) {
+        CDataGroup* group = dataGroup->AddDataGroup(L"LOGICGROUP");
+        for (unsigned int i = 0; i < m_logicObjects.size(); ++i)
+            if (m_logicObjects[i] && saved[i])
+                m_logicObjects[i]->saveLogicObjectToDataGroup(group);
+    } else if (stream) {
+        stream->write(reinterpret_cast<const char*>(&count), 4);
+        for (unsigned int i = 0; i < m_logicObjects.size(); ++i)
+            if (saved[i]) m_logicObjects[i]->saveLogicObjectToBinaryFile(stream);
+        for (unsigned int i = 0; i < m_logicObjects.size(); ++i)
+            if (saved[i]) m_logicObjects[i]->saveLogicObjectLinksToBinaryFile(stream);
+    }
+}

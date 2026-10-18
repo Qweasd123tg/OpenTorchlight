@@ -93,8 +93,8 @@ public:
                     void* getFunction, EVARIABLE_TYPES type, int flags);
     CDescriptorProp(CDescriptorProp* source, CEditorBaseObject* object);
     virtual ~CDescriptorProp();
-    virtual void saveProperty(CEditorBaseObject* object, CDataGroup* group);
-    virtual void loadProperty(CEditorBaseObject* object, CDataGroup* group, unsigned int version);
+    virtual bool saveProperty(CEditorBaseObject* object, CDataGroup* group);
+    virtual bool loadProperty(CEditorBaseObject* object, CDataGroup* group, unsigned int version);
 
     void setPropertyInterpreter(CDescriptorPropertyInterpreter* interpreter);
     void setDataOnObject(CEditorBaseObject* object, const UNIONDATA32BIT* data, unsigned int count);

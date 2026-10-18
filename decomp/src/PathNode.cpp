@@ -57,3 +57,25 @@ void CPathNode::setText(const std::wstring& text)
             CEGUI::colour(1.0f,1.0f,1.0f,1.0f), CEGUI::colour(1.0f,1.0f,1.0f,1.0f));
 }
 
+
+#include <OgreEntity.h>
+
+CPathNode::CPathNode(CPathController* pathController, CResourceManager* resourceManager)
+    : CPositionableObject(resourceManager, NULL), m_pPathController(pathController),
+      m_sText(), m_iReservedState(0), m_iReservedValue(0)
+{
+    Ogre::Entity* entity = OGRE_UTILITIES::createEntity(
+        m_pResourceManager->getSceneManager(), static_cast<OGRE_UTILITIES::EPRIMITIVES>(3),
+        static_cast<OGRE_UTILITIES::EQUERYMASK>(8), "gm");
+    entity->setMaterialName("lightYellow");
+    m_pSceneNode->showBoundingBox(false);
+    entity->setCastShadows(false);
+    sceneNodeAttachEntity(entity);
+    setScale(0.5f, 5.0f, 0.5f);
+    setVisible(true);
+    m_pTextEvent = CGameUI::getSingleton()->getTextEventObject(
+        getPosition(false), "", 1.0f, 255.0f,
+        CEGUI::colour(1.0f, 1.0f, 1.0f, 1.0f),
+        CEGUI::colour(1.0f, 1.0f, 1.0f, 1.0f), false);
+    if (m_pTextEvent) m_pTextEvent->m_Flag82 = true;
+}

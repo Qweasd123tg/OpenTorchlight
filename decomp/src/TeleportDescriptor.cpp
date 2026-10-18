@@ -24,3 +24,27 @@ CEditorBaseObject* CTeleportDescriptor::CreateObject(CEditorScene* scene)
 {
     return new CTeleport(scene->getResourceManager());
 }
+
+void CTeleportDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    CTeleport* teleport = dynamic_cast<CTeleport*>(object);
+    CPositionableObject* positionable = dynamic_cast<CPositionableObject*>(object);
+    if (!teleport)
+        return;
+    switch (event) {
+    case 2:
+        teleport->setEnabled(true);
+        break;
+    case 3:
+        teleport->setEnabled(false);
+        break;
+    case 38:
+        if (positionable) {
+            teleport->setVisible(true);
+            const Ogre::Vector3& forward = positionable->getForward();
+            teleport->activate(positionable->getPosition(true), forward);
+            teleport->setVisible(false);
+        }
+        break;
+    }
+}

@@ -15,6 +15,7 @@
 class CGraph;
 #include "iLevelUpdate.h"
 #include "iLevelUpdatedCharacter.h"
+#include "iDamageShape.h"
 
 class CDamageShape : public CShape, public iLevelUpdate, public iLevelUpdatedCharacter
 {
@@ -57,7 +58,7 @@ public:
     float m_fUnknown1BC;
     float m_fUnknown1C0;
     float m_fUnknown1C4;
-    unsigned char m_Unknown1C8[0x18] __attribute__((aligned(8)));
+    TArrayList<iDamageShape*> m_damageListeners; // +0x1c8
     TArrayList<CBaseUnit*> m_targets; // +0x1e0
     int m_iTotalNumberOfTargets;
     unsigned char m_gap1FC[0x4] __attribute__((aligned(4)));

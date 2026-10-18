@@ -37,3 +37,27 @@ CDungeon* CDungeonManager::getDungeonByName(std::wstring name)
             return m_lDungeons[i];
     return NULL;
 }
+
+
+#include "FileSystem.h"
+#include "Utilities.h"
+#include <climits>
+
+void CDungeonManager::clear()
+{
+    m_lDungeons.deleteAll();
+}
+
+void CDungeonManager::reload()
+{
+    clear();
+    UTILITIES::setSeed(0);
+    TArrayList<std::wstring> files(10);
+    CFileSystem::getSingleton()->getFileList(m_szDungeonPath, files, L"*.dat", true, true, false, false);
+    for (unsigned int i = 0; i < files.size(); ++i) {
+        CDungeon* dungeon = new CDungeon;
+        dungeon->loadDungeon(files[i].c_str());
+        m_lDungeons.add(dungeon);
+        dungeon->m_iDungeonIndex = UTILITIES::randomIntegerBetweenVolatile(0, INT_MAX);
+    }
+}

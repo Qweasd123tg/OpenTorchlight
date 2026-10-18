@@ -78,3 +78,8 @@ std::wstring CGenericModelDescriptor::GetAnimationStringByID(CEditorScene*, CEdi
         return STRINGS::StringConvertToWide(model->m_animationSet->m_lUnknown28[index]);
     return EMPTY_WSTRING;
 }
+
+CEditorBaseObject* CGenericModelDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CGenericModel(scene->getResourceManager(), NULL, L"", EMPTY_WSTRING, false);
+}

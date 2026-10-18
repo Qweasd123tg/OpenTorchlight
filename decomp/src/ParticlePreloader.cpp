@@ -115,3 +115,89 @@ void CParticlePreloader::clean()
         m_layout = 0;
     }
 }
+
+#include "ResourceManager.h"
+#include "ResourceSettings.h"
+#include "DataGroup.h"
+#include "SoundBank.h"
+#include <cstring>
+
+CParticlePreloader::CParticlePreloader(CResourceSettings* settings)
+    : CRunicCore(), m_resourceManager(NULL), m_resourceSettings(settings),
+      m_soundBank(NULL), m_layout(NULL)
+{
+    std::memset(m_unknownB0, 0, sizeof(m_unknownB0));
+    if (settings) {
+        KRESOURCESETTING_S_PARTICLEFILE = m_resourceSettings->GetStringPropertyIndex(L"Preload Particle", L"media\\particles\\preload.dat", false);
+        if (!m_gParticlePreloader)
+            m_gParticlePreloader = this;
+    }
+}
+
+CParticlePreloader::~CParticlePreloader()
+{
+    clean();
+    m_gParticlePreloader = NULL;
+    if (m_resourceManager) {
+        delete m_resourceManager;
+        m_resourceManager = NULL;
+    }
+    if (m_soundBank) {
+        delete m_soundBank;
+        m_soundBank = NULL;
+    }
+}
+
+void CParticlePreloader::LoadParticle(CDataGroup* data)
+{
+    if (!data)
+        return;
+    std::wstring name = data->GetDataValue(L"NAME", EMPTY_WSTRING);
+    if (name != EMPTY_WSTRING) {
+        std::wstring file = data->GetDataValue(L"FILE", EMPTY_WSTRING);
+        if (file != EMPTY_WSTRING) {
+            file = FILESYSTEM::CleanPath(STRINGS::StringUpper(file));
+            LoadParticle(file, name);
+        }
+    }
+}
+
+void CParticlePreloader::LoadParticle(std::wstring file)
+{
+    file = FILESYSTEM::CleanPath(STRINGS::StringUpper(file));
+    LoadParticle(file, file);
+}
+
+void CParticlePreloader::ReloadParticles()
+{
+    if (!m_resourceManager) {
+        m_resourceManager = new CResourceManager(NULL);
+        m_soundBank = new CSoundBank(*CMasterResourceManager::getSingleton()->m_pSoundManager, true);
+    }
+    if (m_resourceManager) {
+        clean();
+        CDataGroup data(L"", NULL, 20, 10, NULL);
+        data.LoadFile(m_resourceSettings->GetString(KRESOURCESETTING_S_PARTICLEFILE), NULL);
+        for (unsigned int i = 0; i < data.GetNumberOfDataGroups(); ++i)
+            LoadParticle(data.GetDataGroup(i));
+    }
+}
+
+CParticleCache* CParticlePreloader::getParticleCache(const std::wstring& filename)
+{
+    std::wstring name = filename;
+    std::map<std::wstring,TArrayList<CParticleCache*>*>::iterator found = m_particleCaches.find(name);
+    if (found == m_particleCaches.end() || !found->second)
+        return NULL;
+    if (found->second->size() <= 1) {
+        CParticleCache* first = createParticleCache(name);
+        first->m_pRootSceneNode = found->second;
+        CParticleCache* second = createParticleCache(name);
+        second->m_pRootSceneNode = found->second;
+        found->second->add(first);
+        found->second->add(second);
+    }
+    CParticleCache* cache = (*found->second)[1];
+    found->second->removeAt(1);
+    return cache;
+}

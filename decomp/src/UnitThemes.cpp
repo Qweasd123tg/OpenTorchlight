@@ -63,3 +63,18 @@ CUnitThemes::CUnitThemes(const wchar_t *fileName)
     if (g_pUnitThemes == NULL)
         g_pUnitThemes = this;
 }
+
+
+#include "MasterResourceManager.h"
+#include "Hierarchy.h"
+
+void CUnitThemeParticle::load(CDataGroup* group)
+{
+    m_wstrFile = group->GetDataValue(L"FILE", EMPTY_WSTRING);
+    m_iUnitTypeID = CMasterResourceManager::getSingleton()->m_pHierarchy->getTypeIDByName(
+        group->GetDataValue(L"UNITTYPE", L"ANY"));
+    m_iCount = group->GetDataValue(L"COUNT", 1);
+    m_wstrBone = group->GetDataValue(L"BONE", EMPTY_WSTRING);
+    m_bAttaches = group->GetDataValue(L"ATTACHES", true);
+    m_bFollows = group->GetDataValue(L"FOLLOWS", !m_bAttaches);
+}

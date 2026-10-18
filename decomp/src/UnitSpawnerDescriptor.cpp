@@ -6,6 +6,8 @@
 #include "EditorScene.h"
 #include "UnitSpawner.h"
 #include "UnitSpawnerDescriptorNames.h"
+#include "Level.h"
+#include "ResourceManager.h"
 
 CUnitSpawnerDescriptor::CUnitSpawnerDescriptor()
     : CShapeDescriptor(L"Unit Spawner", L"Spawns units in differnt formations", L"spawn", true, true, true)
@@ -52,34 +54,43 @@ void CUnitSpawnerDescriptor::descriptorSceneLoaded(CEditorScene* scene)
 {
 }
 
-void CUnitSpawnerDescriptor::update(float param_1)
-{
-    (void)param_1;
 
-    for (unsigned int i = 0; i < m_Objects.size(); ++i)
-    {
-        CUnitSpawner* unitSpawner = dynamic_cast<CUnitSpawner*>(m_Objects[i]);
-        if (unitSpawner != NULL)
-        {
-            (void)unitSpawner;
-        }
+void CUnitSpawnerDescriptor::update(float elapsed)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CUnitSpawner* spawner = dynamic_cast<CUnitSpawner*>(m_Objects[i]);
+        if (spawner)
+            spawner->update(elapsed);
     }
 }
 
 void CUnitSpawnerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
 {
-    if (dynamic_cast<CUnitSpawner*>(object) != NULL) {
-        switch (event) {
-        case 10:
-        case 0x20:
-        case 0x21:
-        case 0x22:
-        case 0x23:
-        case 0x24:
-            break;
-        default:
-            break;
-        }
+    CUnitSpawner* spawner = dynamic_cast<CUnitSpawner*>(object);
+    if (!spawner)
+        return;
+    switch (event) {
+    case 10: spawner->stop(); break;
+    case 32: spawner->spawn(); break;
+    case 33: spawner->destroyUnits(); break;
+    case 34: spawner->hideAndDisableUnits(true); break;
+    case 35: ++spawner->m_spawnLevelOverrideDelta; break;
+    case 36: --spawner->m_spawnLevelOverrideDelta; break;
+    }
+}
+
+void CUnitSpawnerDescriptor::descriptorSceneActivated(CEditorScene*)
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CUnitSpawner* spawner = dynamic_cast<CUnitSpawner*>(m_Objects[i]);
+        if (!spawner)
+            continue;
+        spawner->createUnitsInMemory();
+        if (spawner->m_spawnOnCreate &&
+            !(std::wstring(spawner->m_category) != gSPAWN_TYPE_NAMES[4] &&
+              std::wstring(spawner->m_category) != gSPAWN_TYPE_NAMES[2] &&
+              spawner->getResourceManager()->getLevel()->m_flag258))
+            spawner->spawn();
     }
 }
 

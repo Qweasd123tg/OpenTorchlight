@@ -677,3 +677,14 @@ CEditorBaseObject* CDescriptorController::getCachedObject(const std::wstring& na
     objects->removeAt(0);
     return object;
 }
+
+void CDescriptorController::addDescriptorProperty(CDescriptor* descriptor,
+    CDescriptorProp* property, bool defaults)
+{
+    if (!descriptor) return;
+    std::map<std::wstring, TArrayList<CDescriptorProp*>*>& properties = defaults
+        ? g_DescriptorController.m_DefaultProperties : g_DescriptorController.m_Properties;
+    if (properties.find(descriptor->m_sName) == properties.end())
+        properties[descriptor->m_sName] = new TArrayList<CDescriptorProp*>(20);
+    properties[descriptor->m_sName]->add(property);
+}
