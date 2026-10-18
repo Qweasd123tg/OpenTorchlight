@@ -90,3 +90,58 @@ void CRandomGroup::setVisible(bool visible)
             static_cast<CEditorScene*>(getSceneOwner())->setChildrenVisible(getGuid(), visible);
     }
 }
+
+#include "GameClient.h"
+#include "QuestManager.h"
+#include "Level.h"
+bool CRandomGroup::canGroupBeCreatedBasedOffOfPlayerClass()
+{
+    if (m_pResourceManager->m_bFlag3 || m_sPlayerClassName.empty()) return true;
+    if (!m_pResourceManager->getGameClient()) return false;
+    return m_pResourceManager->getGameClient()->getPlayerClassName()==m_sPlayerClassName;
+}
+bool CRandomGroup::canGroupBeCreatedBasedOffOfDifficulty()
+{
+    if (static_cast<unsigned int>(m_iDifficulty)>3) return true;
+    if (m_pResourceManager->getEditorIsRunning() || m_pResourceManager->m_bFlag3) return true;
+    if (!m_pResourceManager->getGameClient()) return true;
+    return m_pResourceManager->getGameClient()->m_startDifficulty==m_iDifficulty;
+}
+bool CRandomGroup::canGroupBeCreatedBasedOffOfQuests()
+{
+    if (m_pResourceManager->m_bFlag3) return true;
+    if (!m_sQuestHasToBeComplete.empty() && !CQuestManager::getSingleton()->getQuestComplete(m_sQuestHasToBeComplete)) return false;
+    if (!m_sQuestNotComplete.empty() && CQuestManager::getSingleton()->getQuestComplete(m_sQuestNotComplete)) return false;
+    if (!m_sQuestHasToBeActive.empty() && !CQuestManager::getSingleton()->getQuestIsActive(m_sQuestHasToBeActive)) return false;
+    if (!m_sQuestHasToBeActiveOrComplete.empty() && !CQuestManager::getSingleton()->getQuestIsActive(m_sQuestHasToBeActiveOrComplete) && !CQuestManager::getSingleton()->getQuestComplete(m_sQuestHasToBeActiveOrComplete)) return false;
+    if (!m_sQuestCannotBeActiveOrComplete.empty()) {
+        if (CQuestManager::getSingleton()->getQuestIsActive(m_sQuestCannotBeActiveOrComplete)) return false;
+        return !CQuestManager::getSingleton()->getQuestComplete(m_sQuestCannotBeActiveOrComplete);
+    }
+    return true;
+}
+void CRandomGroup::positionUpdated(const Ogre::Vector3& position)
+{
+    if (!m_pResourceManager->getEditorIsRunning()) return;
+    if (!m_bIsDynamicGroup) {
+        if (position!=Ogre::Vector3::ZERO) CPositionableObject::setPosition(Ogre::Vector3::ZERO);
+        return;
+    }
+    Ogre::Vector3 delta=position-m_lastPosition;
+    if (delta!=Ogre::Vector3::ZERO && m_bPropagatePosition) {
+        if (m_pResourceManager->getEditorIsRunning()) m_children.clear();
+        if (m_pResourceManager->getEditorIsRunning() || (m_pResourceManager->getLevel() && m_pResourceManager->getLevel()->m_automapRoomPieces)) {
+            if (m_children.size()==0) calculateChildren();
+            for (unsigned int i=0;i<m_children.size();++i) {
+                CRandomGroup* child=NULL;
+                if (m_children[i]->getDescriptor()==getDescriptor()) {
+                    child=dynamic_cast<CRandomGroup*>(m_children[i]);
+                    if (child) child->m_bPropagatePosition=false;
+                }
+                m_children[i]->CPositionableObject::setPosition(m_children[i]->getPosition(false)+delta);
+                if (child) child->m_bPropagatePosition=true;
+            }
+        }
+    }
+    m_lastPosition=position;
+}

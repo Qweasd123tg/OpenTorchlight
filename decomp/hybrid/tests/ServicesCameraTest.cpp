@@ -42,6 +42,6 @@ void execute(Case& c,bool ours,autotest::Capture& out){
  }
 }
 }
-TL_TEST(services_camera_aspect){return smallmass::run(host,0,"ServicesCameraAspect",0xce9ef0,execute,140);}
-TL_TEST(services_controller_construct){return smallmass::run(host,1,"ServicesControllerConstruct",0xd977d0,execute,24);}
-TL_TEST(services_controller_destroy){return smallmass::run(host,2,"ServicesControllerDestroy",0xd97660,execute,48);}
+TL_TEST(services_camera_aspect){return smallmass::run(host,0,"services_camera_aspect",0xce9ef0,execute,140);}
+TL_TEST(services_controller_construct){return smallmass::run(host,1,"services_controller_construct",0xd977d0,execute,24);}
+TL_TEST(services_controller_destroy){return smallmass::run(host,2,"services_controller_destroy",0xd97660,execute,48);}

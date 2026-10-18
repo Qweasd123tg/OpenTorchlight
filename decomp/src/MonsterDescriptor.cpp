@@ -220,3 +220,155 @@ unsigned int CMonsterDescriptor::GetAnimationIDByString(CEditorScene*, CEditorBa
     }
     return 0;
 }
+
+#include "ResourceManager.h"
+
+void CMonsterDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject* object)
+{
+    CLevel* level = getSceneOwner()->getResourceManager()->getLevel();
+    if (level) {
+        level->removeCharacter(static_cast<CCharacter*>(object), false);
+        getSceneOwner()->getResourceManager()->getLevel()->addCharacter(
+            static_cast<CCharacter*>(object), Ogre::Vector3::ZERO, true);
+    }
+}
+
+CEditorBaseObject* CMonsterDescriptor::CreateObject(CEditorScene* scene)
+{
+    CResourceManager* resources = scene->getResourceManager();
+    int depth = 1;
+    if (resources->getLevel())
+        depth = resources->getLevel()->getDungeonDepth();
+    CEditorBaseObject* object = new CMonster(resources, depth);
+    CMonster* monster = dynamic_cast<CMonster*>(object);
+    if (monster)
+        monster->m_bBaseUnitFlag0 = true;
+    return object;
+}
+
+void CMonsterDescriptor::ReloadMonsters()
+{
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CCharacter* character = dynamic_cast<CCharacter*>(m_Objects[i]);
+        if (character) {
+            bool visible = character->getVisible();
+            bool enabled = character->getEnabled();
+            character->convertCharacter(character->getName(), false);
+            character->setVisible(visible);
+            character->setEnabled(enabled);
+        }
+    }
+}
+
+#include "AIManager.h"
+#include "QuestManager.h"
+#include "GameUI.h"
+#include "GameClient.h"
+#include "Player.h"
+#include "SkillManager.h"
+#include "LevelTemplateData.h"
+#include <OgreSceneManager.h>
+
+void CMonsterDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    CMonster* monster = dynamic_cast<CMonster*>(object);
+    if (!monster)
+        return;
+    switch (event) {
+    case 0:
+        monster->setMeshVisible(true, false);
+        monster->BroadcastEvent(4);
+        CQuestManager::getSingleton()->calculateNPCIcon(monster);
+        break;
+    case 1:
+        monster->stopParticles(true);
+        monster->setMeshVisible(false, false);
+        monster->BroadcastEvent(5);
+        CQuestManager::getSingleton()->calculateNPCIcon(monster);
+        break;
+    case 2:
+        monster->setEnabled(true);
+        monster->BroadcastEvent(6);
+        CQuestManager::getSingleton()->calculateNPCIcon(monster);
+        break;
+    case 3:
+        monster->setEnabled(false);
+        monster->BroadcastEvent(7);
+        CQuestManager::getSingleton()->calculateNPCIcon(monster);
+        break;
+    case 48: {
+        CPlayer* player = monster->getResourceManager()->getGameClient()->getPlayer();
+        player->stopPathing();
+        player->setAIState(static_cast<EAIState>(44));
+        CGameUI::getSingleton()->forceInteractiveDialog(player, monster, NULL);
+        break;
+    }
+    case 49: monster->m_bInvulnerable = true; monster->BroadcastEvent(96); break;
+    case 50: monster->m_bInvulnerable = false; monster->BroadcastEvent(97); break;
+    case 64: monster->m_targetLocked = false;
+    case 61: {
+        CPlayer* player = static_cast<CPlayer*>(monster->getLevel()->getPlayer());
+        monster->m_targetLocked = false;
+        monster->addAffix(L"MONSTER_HUNT", 1, monster, -1.0f);
+        if (monster->m_pAIManager)
+            monster->m_pAIManager->addAIFlag(static_cast<EAIFLAG_TYPES>(4), 20.0f);
+        monster->setTarget(player);
+        break;
+    }
+    case 62: monster->m_targetLocked = false; break;
+    case 63:
+        monster->setTarget(NULL);
+        monster->removeAffix(L"MONSTER_HUNT");
+        monster->m_targetLocked = true;
+        break;
+    case 65: monster->setAIState(static_cast<EAIState>(4)); break;
+    case 70: monster->m_damageShapeEnabled = false; break;
+    case 71: monster->m_damageShapeEnabled = true; break;
+    case 72: monster->getResourceManager()->getGameClient()->getPlayer()->addPet(monster); break;
+    case 73: monster->getResourceManager()->getGameClient()->getPlayer()->removePet(monster); break;
+    case 74: monster->modifyHP(-monster->HPFloat()); break;
+    case 82:
+        if (monster->getSkillManager())
+            monster->getSkillManager()->stopAllSkills(true, false, false);
+        break;
+    case 83:
+        for (unsigned int i = 0; i < monster->getFollowerCount(); ++i) {
+            if (monster->getFollower(i)) {
+                int hp = monster->maxHP();
+                monster->getFollower(i)->modifyHP(static_cast<float>(hp));
+                monster->getFollower(i)->die(NULL, NULL, 0.0f, false);
+            }
+        }
+        break;
+    }
+}
+
+void CMonsterDescriptor::descriptorSceneActivated(CEditorScene*)
+{
+    if (!getSceneOwner()->getResourceManager()->getLevel() ||
+        getSceneOwner()->getResourceManager()->getEditorIsRunning())
+        return;
+    for (unsigned int i = 0; i < m_Objects.size(); ++i) {
+        CMonster* monster = dynamic_cast<CMonster*>(m_Objects[i]);
+        if (monster) {
+            Ogre::Quaternion orientation = monster->getOrientationQuaternionAbsolute();
+            getSceneOwner()->getResourceManager()->getLevel()->removeCharacter(monster, false);
+            CLevel* level = getSceneOwner()->getResourceManager()->getLevel();
+            if (level->m_flag1A1 && !level->getLevelTemplateData()->isTown())
+                monster->m_bBaseUnitFlag190 = true;
+            monster->m_bSaveFlag191 = true;
+            bool hidden = monster->m_forcedHidden;
+            monster->setMeshVisible(true, true);
+            Ogre::Vector3 position = monster->getPosition(true);
+            monster->sceneNodeSetParent(monster->getResourceManager()->getSceneManager()->getRootSceneNode(), false);
+            monster->setMeshVisible(!hidden, true);
+            level = getSceneOwner()->getResourceManager()->getLevel();
+            if (level) {
+                level->addCharacter(monster, position, false);
+                monster->setOrientation(orientation);
+            }
+            if (!monster->m_pathName.empty())
+                monster->setPathToFollowByName(monster->m_pathName);
+        }
+    }
+}

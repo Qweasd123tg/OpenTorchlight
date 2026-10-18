@@ -29,6 +29,8 @@ class CSkill;
 class CEditorScene;
 class CLevelTemplateData;
 class CPropertyNode;
+class CRoomPiece;
+class iLevelUpdatedCharacter;
 
 // Partial: members used by recovered TUs; unnamed regions are padding until
 // level.cpp is recovered. Size 0x2f0 follows CGameClient::loadMenuLevel allocation.
@@ -36,7 +38,12 @@ class CLevel : public CRunicCore
 {
 public:
     CBaseUnit* addUnit(CBaseUnit* unit, const Ogre::Vector3& position);
+    CCharacter* addCharacter(CCharacter* character, const Ogre::Vector3& position, bool activate);
     void addUpdateObject(iLevelUpdate* object);
+    void getBaseUnitsByDataGroup(CDataGroup* dataGroup, TArrayList<CBaseUnit*>& units);
+    void addCharacterUpdateListener(iLevelUpdatedCharacter* listener);
+    void removeCharacterUpdateListener(iLevelUpdatedCharacter* listener);
+    void addRoomPieceToAutomap(CRoomPiece* roomPiece);
     CBaseUnit* getBaseUnitByDataGroup(CDataGroup* dataGroup);
     void getUnitsByUnitType(UNITTYPES::EUNITTYPES type, TArrayList<CBaseUnit*>& units);
     bool isInNoSpawnRegion(const Ogre::Vector3& position, float radius);
@@ -84,6 +91,8 @@ public:
     void removeUnit(CBaseUnit* unit,bool flag);
     void incrementMapPassability(const Ogre::Vector3& minimum,const Ogre::Vector3& maximum,float radius);
     void decrementMapPassability(const Ogre::Vector3& minimum,const Ogre::Vector3& maximum,float radius);
+    void incrementMapPassability(const Ogre::AxisAlignedBox& bounds, float radius);
+    void decrementMapPassability(const Ogre::AxisAlignedBox& bounds, float radius);
     void incrementObjectPassability(const Ogre::Vector3& minimum,const Ogre::Vector3& maximum,float radius);
     void decrementObjectPassability(const Ogre::Vector3& minimum,const Ogre::Vector3& maximum,float radius);
     void incrementMapPassabilityCollision(const Ogre::AxisAlignedBox& bounds,CBaseUnit* unit);
@@ -117,6 +126,12 @@ private:
     friend class CCharacter;
     friend class CPlayer;
     friend class CMonster;
+    friend class CDamageShape;
+    friend class CRoomPiece;
+    friend class CRandomGroup;
+    friend class CPropertyNode;
+    friend class CLayoutDescriptor;
+    friend class CMonsterDescriptor;
     TArrayList<CEditorScene*> m_RoomScenes;
     TArrayList<Ogre::AxisAlignedBox> m_roomBounds;
     short** m_mapPassability;
@@ -136,7 +151,10 @@ private:
     Ogre::Vector3 m_returnPortalPosition; // +0x14c
     Ogre::Vector3 m_waypointPosition; // +0x158
     Ogre::Vector3 m_startDirection; // +0x164
-    char m_LevelData170[0x1a4-0x170];
+    char m_LevelData170[0x1a0-0x170];
+    bool m_automapRoomPieces;
+    bool m_flag1A1;
+    char m_LevelData1A2[2];
     int m_iLevelDepth;
     int m_dungeonDepth; // +0x1a8
     char m_LevelData1AC[0x1d8 - 0x1ac];
@@ -144,7 +162,9 @@ private:
     CAutomap* m_automap;
     char m_LevelData1E8[0x220-0x1e8];
     CGameClient* m_pGameClient;
-    char m_LevelData228[0x280 - 0x228];
+    char m_LevelData228[0x258 - 0x228];
+    bool m_flag258;
+    char m_LevelData259[0x280 - 0x259];
     std::wstring m_sDungeonName;
     char m_LevelData288[0x2a8-0x288];
     std::map<long long,TArrayList<iUnitObserver*>*> m_unitObservers;

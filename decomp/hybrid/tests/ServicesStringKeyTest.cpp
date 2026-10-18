@@ -38,8 +38,8 @@ void execute(Case& c,bool ours,autotest::Capture& out) {
  }
 }
 }
-TL_TEST(services_wide_size){return smallmass::run(host,0,"ServicesWideSize",0xc8d720,execute,64);}
-TL_TEST(services_char_size){return smallmass::run(host,1,"ServicesCharSize",0xc8d760,execute,64);}
-TL_TEST(services_shift_character){return smallmass::run(host,2,"ServicesShiftCharacter",0x91a6b0,execute,560);}
-TL_TEST(services_char_tokens){return smallmass::run(host,3,"ServicesCharTokens",0xc8f060,execute,104);}
-TL_TEST(services_wide_tokens){return smallmass::run(host,4,"ServicesWideTokens",0xc8ebb0,execute,104);}
+TL_TEST(services_wide_size){return smallmass::run(host,0,"services_wide_size",0xc8d720,execute,64);}
+TL_TEST(services_char_size){return smallmass::run(host,1,"services_char_size",0xc8d760,execute,64);}
+TL_TEST(services_shift_character){return smallmass::run(host,2,"services_shift_character",0x91a6b0,execute,560);}
+TL_TEST(services_char_tokens){return smallmass::run(host,3,"services_char_tokens",0xc8f060,execute,104);}
+TL_TEST(services_wide_tokens){return smallmass::run(host,4,"services_wide_tokens",0xc8ebb0,execute,104);}

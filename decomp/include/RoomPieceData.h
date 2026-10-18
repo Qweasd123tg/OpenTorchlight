@@ -10,7 +10,7 @@ class CRoomPieceData : public CRunicCore
 public:
     virtual ~CRoomPieceData();
     CRoomPieceDataInformation::CRoomPieceCoreData* m_coreData; // 0x10
-    unsigned char m_unknown18[8];
+    long long m_guid; // +0x18
 };
 
 #endif

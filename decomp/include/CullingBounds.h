@@ -29,5 +29,6 @@ private:
     Ogre::Vector3 m_vWorldMaximum;
     Ogre::Vector3 m_WorldCorners[8];
     friend class CBaseUnit;
+    friend class CPropertyNode;
 };
 #endif

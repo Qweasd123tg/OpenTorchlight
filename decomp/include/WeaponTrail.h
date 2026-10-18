@@ -32,8 +32,12 @@ private:
     char m_Unrecovered50[4];
     Ogre::ColourValue m_startColour;
     Ogre::ColourValue m_endColour;
-    char m_Unrecovered74[4];
+    float m_duration; // +0x74
     bool m_active;
-    char m_Unrecovered79[0x9c-0x79];
+    char m_gap79[3];
+    float m_fadeScale; // +0x7c
+    Ogre::SceneManager* m_sceneManager; // +0x80
+    bool m_fading; // +0x88
+    char m_Unrecovered89[0x9c-0x89];
 };
 #endif

@@ -234,6 +234,147 @@ void CSkillManager::triggerSkillEvent(ESKILL_EVENT_TYPE event, const Ogre::Vecto
     }
 }
 
+
+
+
+#include "SkillParser.h"
+#include "Item.h"
+
+
+
+void CSkillManager::stopSkillsByName(std::wstring name, bool force)
+{
+    name = STRINGS::StringUpper(name);
+    for (unsigned int i = 0; i < m_UpdatingSkills.size(); ++i)
+        if (STRINGS::StringUpper(m_UpdatingSkills[i]->getName()) == name)
+        {
+            if (force) m_UpdatingSkills[i]->stopSkill();
+            else m_UpdatingSkills[i]->attemptToStopSkill();
+        }
+}
+
+void CSkillManager::decrementSkillCharges(CSkill* skill)
+{
+    if (!skill) return;
+    std::map<std::wstring,TArrayList<CSkill*>*>::iterator found = m_SkillsByName.find(STRINGS::StringUpper(skill->getName()));
+    if (found == m_SkillsByName.end()) return;
+    int charges = (*found->second)[0]->m_iCharges;
+    if (charges <= 0) return;
+    --charges;
+    for (unsigned int i = 0; i < found->second->size(); ++i) (*found->second)[i]->m_iCharges = charges;
+}
+
+void CSkillManager::deleteSkill(const std::wstring& name)
+{
+    std::map<std::wstring,TArrayList<CSkill*>*>::iterator found = m_SkillsByName.find(STRINGS::StringUpper(name));
+    if (found == m_SkillsByName.end()) return;
+    for (unsigned int i = 0; i < found->second->size(); ++i)
+    {
+        CSkill* skill = (*found->second)[i];
+        m_OtherSkills.remove(skill);
+        if (m_UpdatingSkills.find(skill) == -1) delete skill;
+    }
+    delete found->second;
+    found->second = NULL;
+    m_SkillsByName.erase(found);
+}
+
+CSkill* CSkillManager::addSkill(const std::wstring& name, bool flag)
+{
+    if (!flag)
+    {
+        std::map<std::wstring,TArrayList<CSkill*>*>::iterator found = m_SkillsByName.find(STRINGS::StringUpper(name));
+        if (found != m_SkillsByName.end()) return (*found->second)[0];
+    }
+    CSkill* skill = CSkillParser::getSkill(m_pResourceManager, name);
+    if (!skill) return NULL;
+    return addSkill(skill, false, flag);
+}
+
+void CSkillManager::notifyOfDeletion(CCharacter* character)
+{
+    for (std::map<std::wstring,TArrayList<CSkill*>*>::iterator i = m_SkillsByName.begin(); i != m_SkillsByName.end(); ++i)
+    {
+        CSkill* skill = (*i->second)[0];
+        if (skill->getOwnerCharacter() == character && skill->m_pOwner)
+        {
+            skill->m_pOwner->removeSafePointer(reinterpret_cast<TSafePointer<void*>*>(&skill->m_pOwner), skill->m_iOwnerSafePointerId);
+            skill->m_pOwner = NULL;
+        }
+    }
+    for (unsigned int i = 0; i < m_UpdatingSkills.size(); ++i)
+    {
+        CSkill* skill = m_UpdatingSkills[i];
+        if (skill->m_Target.getObject() == character) skill->m_Target.setObject(NULL);
+        if (skill->getOwnerCharacter() == character && skill->m_pOwner)
+        {
+            skill->m_pOwner->removeSafePointer(reinterpret_cast<TSafePointer<void*>*>(&skill->m_pOwner), skill->m_iOwnerSafePointerId);
+            skill->m_pOwner = NULL;
+        }
+    }
+    for (unsigned int i = 0; i < m_OtherSkills.size(); ++i)
+    {
+        CSkill* skill = m_OtherSkills[i];
+        if (skill->m_Target.getObject() == character) skill->m_Target.setObject(NULL);
+        if (skill->getOwnerCharacter() == character && skill->m_pOwner)
+        {
+            skill->m_pOwner->removeSafePointer(reinterpret_cast<TSafePointer<void*>*>(&skill->m_pOwner), skill->m_iOwnerSafePointerId);
+            skill->m_pOwner = NULL;
+        }
+    }
+}
+
+void CSkillManager::notifyOfDeletion(CItem* item)
+{
+    for (std::map<std::wstring,TArrayList<CSkill*>*>::iterator i = m_SkillsByName.begin(); i != m_SkillsByName.end(); ++i)
+    {
+        CSkill* skill = (*i->second)[0];
+        if (skill->m_pOwner == item && item)
+        {
+            item->removeSafePointer(reinterpret_cast<TSafePointer<void*>*>(&skill->m_pOwner), skill->m_iOwnerSafePointerId);
+            skill->m_pOwner = NULL;
+        }
+    }
+    for (unsigned int i = 0; i < m_UpdatingSkills.size(); ++i)
+    {
+        CSkill* skill = m_UpdatingSkills[i];
+        if (skill->m_Target.getObject() == item) skill->m_Target.setObject(NULL);
+        if (skill->m_pOwner == item && item)
+        {
+            item->removeSafePointer(reinterpret_cast<TSafePointer<void*>*>(&skill->m_pOwner), skill->m_iOwnerSafePointerId);
+            skill->m_pOwner = NULL;
+        }
+    }
+    for (unsigned int i = 0; i < m_OtherSkills.size(); ++i)
+    {
+        CSkill* skill = m_OtherSkills[i];
+        if (skill->m_Target.getObject() == item) skill->m_Target.setObject(NULL);
+        if (skill->m_pOwner == item && item)
+        {
+            item->removeSafePointer(reinterpret_cast<TSafePointer<void*>*>(&skill->m_pOwner), skill->m_iOwnerSafePointerId);
+            skill->m_pOwner = NULL;
+        }
+    }
+}
+
+CSkillManager::~CSkillManager()
+{
+    for (unsigned int i = 0; i < m_UpdatingSkills.size(); ++i) attemptDeleteOfSkill(m_UpdatingSkills[i]);
+    for (std::map<std::wstring,TArrayList<CSkill*>*>::iterator i = m_SkillsByName.begin(); i != m_SkillsByName.end(); ++i)
+    {
+        i->second->deleteAll();
+        delete i->second;
+        i->second = NULL;
+    }
+}
+
+CSkillManager::CSkillManager(CResourceManager* resources, CBaseUnit* owner)
+    : CRunicCore(), m_pResourceManager(resources), m_UpdatingSkills(10),
+      m_OtherSkills(10)
+{
+    m_Owner.setObject(owner);
+}
+
 void CSkillManager::fireSkillsOnCreate(CBaseUnit* caster, ESKILL_ACTIVATION_TYPE activation,
     const Ogre::Vector3& position, const Ogre::Quaternion& orientation,
     const Ogre::Vector3& targetPosition, CCharacter* target)
@@ -242,11 +383,4 @@ void CSkillManager::fireSkillsOnCreate(CBaseUnit* caster, ESKILL_ACTIVATION_TYPE
         if (m_OtherSkills[i]->hasEvent(static_cast<ESKILL_EVENT_TYPE>(10)))
             executeSkill(m_OtherSkills[i], caster, activation, position, orientation, targetPosition, target);
     triggerSkillEvent(static_cast<ESKILL_EVENT_TYPE>(10), position, orientation, target);
-}
-
-CSkillManager::CSkillManager(CResourceManager* resources, CBaseUnit* owner)
-    : CRunicCore(), m_pResourceManager(resources), m_UpdatingSkills(10),
-      m_OtherSkills(10)
-{
-    m_Owner.setObject(owner);
 }

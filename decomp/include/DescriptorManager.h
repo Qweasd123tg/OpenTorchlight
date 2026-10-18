@@ -6,7 +6,6 @@
 #include "DescriptorLoadConfiguration.h"
 #include "EditorScene.h"
 #include "RunicCore.h"
-#include "TArrayList.h"
 
 #include <map>
 #include <string>
@@ -35,14 +34,13 @@ public:
     CDescriptor* GetDescriptorByCreated(unsigned int uiCreatedIndex,
                                         bool bCreateIfMissing);
     void deleteUnusedDescriptors();
-    // The shipped manager stores vector begin/end/capacity in these 24 bytes.
     std::vector<CDescriptor*>& getDescriptorVector()
     {
-        return *reinterpret_cast<std::vector<CDescriptor*>*>(&m_descriptors);
+        return m_descriptors;
     }
 
     std::map<std::wstring, unsigned int> m_descriptorIndices;
-    TArrayList<CDescriptor*> m_descriptors;
+    std::vector<CDescriptor*> m_descriptors;
     CEditorScene* m_pEditorScene;
 };
 

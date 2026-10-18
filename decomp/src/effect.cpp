@@ -9,14 +9,14 @@
 
 
 // Imported source candidates; historical status is not fresh acceptance.
-void CEffect::getMaxCaculatedValue()
+float CEffect::getMaxCaculatedValue()
 {
-    calculateBaseValue(static_cast<ECALCULATETYPES>(1));
+    return calculateBaseValue(static_cast<ECALCULATETYPES>(1));
 }
 
-void CEffect::getMinCaculatedValue()
+float CEffect::getMinCaculatedValue()
 {
-    calculateBaseValue(static_cast<ECALCULATETYPES>(2));
+    return calculateBaseValue(static_cast<ECALCULATETYPES>(2));
 }
 
 void CEffect::playFX(CResourceManager* manager, const Ogre::Vector3& position)

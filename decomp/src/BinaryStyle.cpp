@@ -109,3 +109,79 @@ void CBinaryStyle::SaveStringData(std::ofstream& stream, const std::wstring& val
     utf16string text = UTF32ToUTF16(value);
     stream.write(reinterpret_cast<const char*>(text.c_str()), text.size() * 2);
 }
+
+#include "FileUtilities.h"
+#include "StringUtilities.h"
+#include "TRepository.h"
+#include "TimerStatics.h"
+
+int CBinaryStyle::SaveDataGroupToFile(const std::wstring& file, CDataGroup* group)
+{
+    if (file == EMPTY_WSTRING || !group)
+        return 0;
+    std::wstring clean = FILESYSTEM::CleanPath(file);
+    std::wstring path(clean);
+    std::wstring directory = FILESYSTEM::GetDirectory(path);
+    std::string utf8 = STRINGS::StringConvertToUTF8(path);
+    std::ofstream stream(utf8.c_str(), std::ios::binary);
+    if (!stream.is_open())
+        return 0;
+    SaveUInt32BitDataValue(stream, 1);
+    std::map<unsigned int, bool> indexes;
+    getStringIndexs(group, indexes);
+    SaveUInt32BitDataValue(stream, indexes.size());
+    for (std::map<unsigned int, bool>::iterator i = indexes.begin(); i != indexes.end(); ++i) {
+        SaveUInt32BitDataValue(stream, i->first);
+        std::wstring text = group->m_pRepository->m_DefaultValue;
+        if (i->first != static_cast<unsigned int>(-1) && !group->m_pRepository->m_Values.empty()) {
+            std::map<unsigned int, std::wstring>::iterator value = group->m_pRepository->m_Values.find(i->first);
+            if (value != group->m_pRepository->m_Values.end())
+                text = value->second;
+        }
+        SaveStringData(stream, text);
+    }
+    Save(stream, group);
+    stream.close();
+    return 1;
+}
+
+void CBinaryStyle::LoadDataValues(std::ifstream& stream, CDataGroup* group,
+                                std::map<unsigned int, unsigned int>& names,
+                                unsigned int version, CTimerStatics* timers)
+{
+    if (timers)
+        timers->m_times.add(static_cast<unsigned int>(timers->m_timer.getMicroseconds()));
+    unsigned int count = Get32BitData(stream);
+    for (unsigned int i = 0; i < count; ++i) {
+        unsigned int name = names[static_cast<unsigned int>(Get32BitData(stream))];
+        CDataValue::EDATAVALUETYPES type = static_cast<CDataValue::EDATAVALUETYPES>(Get32BitData(stream));
+        UNIONDATA64BIT value;
+        if (type == 7 || type == 3)
+            value.signed64 = Get64BitData(stream);
+        else {
+            value.signed64 = static_cast<unsigned int>(Get32BitData(stream));
+            if (type == CDataValue::DATAVALUE_STRING || type == CDataValue::DATAVALUE_TRANSLATE)
+                value.signed64 = names[value.unsigned32];
+        }
+        group->AddDataValue(name, value, type);
+    }
+    if (timers)
+        timers->popTime(L"CHILD DATAVALUES");
+}
+
+void CBinaryStyle::Load(std::ifstream& stream, CDataGroup* group,
+                        std::map<unsigned int, unsigned int>& names,
+                        unsigned int version, CTimerStatics* timers)
+{
+    group->SetGroupNameID(names[static_cast<unsigned int>(Get32BitData(stream))]);
+    if (timers)
+        timers->popTime(L"DATA GROUPS");
+    LoadDataValues(stream, group, names, version, timers);
+    unsigned int count = Get32BitData(stream);
+    for (unsigned int i = 0; i < count; ++i) {
+        if (timers)
+            timers->m_times.add(static_cast<unsigned int>(timers->m_timer.getMicroseconds()));
+        CDataGroup* child = group->AddDataGroup(EMPTY_WSTRING);
+        Load(stream, child, names, version, timers);
+    }
+}

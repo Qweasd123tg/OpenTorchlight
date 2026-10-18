@@ -18,6 +18,7 @@ class CEditorObjectManager : public CRunicCore
 {
 public:
     void EditorObjectCreated(CEditorBaseObject* object);
+    void EditorObjectDeleted(CEditorBaseObject* object);
     TArrayList<CEditorBaseObject*>& getCreatedObjects() { return m_CreatedObjects; }
 
     void markChanged() { m_bUnknown79 = true; }

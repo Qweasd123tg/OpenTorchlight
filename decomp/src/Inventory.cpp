@@ -577,8 +577,7 @@ void CInventory::executeProcs(EEFFECT_TYPE type, CBaseUnit* target)
         CEquipment* equipment = getEquipmentInSlot(slot);
         if (!equipment || !equipment->hasEffect(type) || !equipment->getSkillManager()) continue;
         for (int activation = 0; activation < 3; ++activation) {
-            TArrayList<CEffect*>& effects = reinterpret_cast<TArrayList<CEffect*>*>(
-                equipment->m_pEffectManager->m_EffectData10 + 0x18)[activation];
+            TArrayList<CEffect*>& effects = equipment->m_pEffectManager->m_Effects[activation];
             for (unsigned int i = 0; i < effects.size(); ++i) {
                 if (effects[i]->m_eType != type) continue;
                 int roll = UTILITIES::randomIntegerBetweenVolatile(0, 100);

@@ -1,6 +1,7 @@
 #ifndef CHARACTER_SAVE_STATE_H
 #define CHARACTER_SAVE_STATE_H
 #include "RunicCore.h"
+#include <cstdio>
 #include "TArrayList.h"
 #include <string>
 #include <vector>
@@ -12,6 +13,7 @@ class CCharacterSaveState : public CRunicCore
 public:
     CCharacterSaveState();
     virtual ~CCharacterSaveState();
+    void save(FILE* file);
     long long m_guid10;
     bool m_flag18;
     unsigned char m_padding19[7];

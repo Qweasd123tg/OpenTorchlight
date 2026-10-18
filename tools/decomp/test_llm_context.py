@@ -1327,9 +1327,10 @@ class PacketContextTests(TestCase):
             scope = "TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >"
             address, size = 0x5f8e90, 155
             prefix, method = "_ZN10TArrayListISbIwSt11char_traitsIwESaIwEEE", "~TArrayList"
-        elif variant in ("quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
+        elif variant in ("float", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             f = self.window_array()
             scope, address, prefix = {
+                "float": ("TArrayList<float>", 0x59fb40, "_ZN10TArrayListIfE"),
                 "chunk": ("TArrayList<CChunk*>", 0x97cb30, "_ZN10TArrayListIP6CChunkE"),
                 "level_layout": ("TArrayList<CLevelLayout*>", 0x97cb50, "_ZN10TArrayListIP12CLevelLayoutE"),
                 "chunk_type": ("TArrayList<CChunkType*>", 0x97cb70, "_ZN10TArrayListIP10CChunkTypeE"),
@@ -1342,8 +1343,8 @@ class PacketContextTests(TestCase):
         else:
             f = self.safe_pointer(variant)
             scope = "TSafePointer<" + variant + ">"
-            address, size = {"CCharacter": (0x591b50, 47), "CEquipment": (0xacbc90, 47)}[variant]
-            prefix, method = "_ZN12TSafePointerI10" + variant + "E", "~TSafePointer"
+            address, size = {"CCharacter": (0x591b50, 47), "CEquipment": (0xacbc90, 47), "CGraph": (0xcf8e70, 47), "CSkill": (0x7d5f90, 47), "CBaseUnit": (0x7d5fc0, 47), "CEffectManager": (0x7d5ff0, 47)}[variant]
+            prefix, method = "_ZN12TSafePointerI" + str(len(variant)) + variant + "E", "~TSafePointer"
         self.db["functions"].pop("0x2000")
         names = [prefix + "D1Ev", prefix + "D2Ev"]
         f.update(address=hex(address), size=size, scope=scope, method=method,
@@ -1353,18 +1354,18 @@ class PacketContextTests(TestCase):
         return f
 
     def test_pinned_destructors_supply_existing_headers(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
+        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 result = self.index().build(self.target, "1000: call " + f["address"]).require_complete()
-                expected = ("TArrayList.h",) if variant in ("wstring", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type") else ("Node.h", "SafePointer.h")
+                expected = ("TArrayList.h",) if variant in ("wstring", "float", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type") else ("Node.h", "SafePointer.h")
                 self.assertEqual(result.headers, expected)
                 self.assertIn("No specialization or prototype synthesized", result.text)
 
     def test_base_unit_destructor_uses_real_pinned_header(self):
         f = self.pinned_destructor("base_unit")
         body = (Path(__file__).resolve().parents[2] / "decomp/include/TArrayList.h").read_bytes()
-        digest = "e45608b683e95c9fb0a5eb0129bb99c3d09826270d14b06cf1f407a35208b4be"
+        digest = "d91f88adac805622a3e58081386a6b121b6b8f0d57bc4621886b9e5af591519f"
         self.assertEqual(hashlib.sha256(body).hexdigest(), digest)
         (self.include / "TArrayList.h").write_bytes(body)
         with mock.patch.object(ContextIndex, "WINDOW_ARRAY_HEADER_SHA256", digest):
@@ -1376,7 +1377,7 @@ class PacketContextTests(TestCase):
     def test_editor_object_destructor_uses_real_pinned_header(self):
         f = self.pinned_destructor("editor_object")
         body = (Path(__file__).resolve().parents[2] / "decomp/include/TArrayList.h").read_bytes()
-        digest = "e45608b683e95c9fb0a5eb0129bb99c3d09826270d14b06cf1f407a35208b4be"
+        digest = "d91f88adac805622a3e58081386a6b121b6b8f0d57bc4621886b9e5af591519f"
         self.assertEqual(hashlib.sha256(body).hexdigest(), digest)
         (self.include / "TArrayList.h").write_bytes(body)
         with mock.patch.object(ContextIndex, "WINDOW_ARRAY_HEADER_SHA256", digest):
@@ -1387,7 +1388,7 @@ class PacketContextTests(TestCase):
 
     def test_level_array_destructors_use_real_pinned_header(self):
         body = (Path(__file__).resolve().parents[2] / "decomp/include/TArrayList.h").read_bytes()
-        digest = "e45608b683e95c9fb0a5eb0129bb99c3d09826270d14b06cf1f407a35208b4be"
+        digest = "d91f88adac805622a3e58081386a6b121b6b8f0d57bc4621886b9e5af591519f"
         self.assertEqual(hashlib.sha256(body).hexdigest(), digest)
         for variant in ("chunk", "level_layout", "chunk_type"):
             with self.subTest(variant=variant):
@@ -1417,7 +1418,7 @@ class PacketContextTests(TestCase):
         mutations = {"kind": "function", "bind": ["global"], "method": "clear", "params": "int",
                      "cv": "const", "mangled": "_fake", "names": ["_fake"], "qualified": "Other::~Other",
                      "scope": "TArrayList<CNode*>", "size": 99, "address": "0x2222"}
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
+        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             for field, value in mutations.items():
                 with self.subTest(variant=variant, field=field):
                     f = self.pinned_destructor(variant); address = f["address"]
@@ -1425,7 +1426,7 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + address).gaps)
 
     def test_pinned_destructors_require_both_weak_elf_aliases(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
+        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             for change in ("absent", "name", "size", "address", "binding", "type", "undefined", "D0"):
                 with self.subTest(variant=variant, change=change):
                     f = self.pinned_destructor(variant); symbol = self.image.symbols[1]
@@ -1442,12 +1443,12 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_reject_coherent_unreviewed_instantiations(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
+        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 if variant == "wstring":
                     scope, prefix = "TArrayList<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >", "_ZN10TArrayListISsE"
-                elif variant in ("quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
+                elif variant in ("float", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
                     scope, prefix = "TArrayList<CQuestUnitData*>", "_ZN10TArrayListIP14CQuestUnitDataE"
                 else:
                     scope, prefix = "TSafePointer<CNode>", "_ZN12TSafePointerI5CNodeE"
@@ -1459,15 +1460,15 @@ class PacketContextTests(TestCase):
                 self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_reject_changed_template(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
+        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
-                header = "TArrayList.h" if variant in ("wstring", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type") else "SafePointer.h"
+                header = "TArrayList.h" if variant in ("wstring", "float", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type") else "SafePointer.h"
                 with (self.include/header).open("a") as out: out.write("// changed\n")
                 self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_safe_destructors_require_unique_complete_type(self):
-        for variant in ("CCharacter", "CEquipment"):
+        for variant in ("CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager"):
             for change in ("unmapped", "forward", "ambiguous"):
                 with self.subTest(variant=variant, change=change):
                     f = self.pinned_destructor(variant)
@@ -1479,7 +1480,7 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_do_not_hide_unknown_callee(self):
-        for variant in ("wstring", "CCharacter", "CEquipment", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
+        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 self.add_function(function(0x3000, "CUnrelated", "missing", tu=2))

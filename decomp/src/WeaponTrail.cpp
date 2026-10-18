@@ -62,3 +62,14 @@ void CWeaponTrail::setMaterialName(const std::string& name)
     m_material = name;
     if (m_object) m_object->setMaterialName(0, m_material);
 }
+
+void CWeaponTrail::setActive(bool active)
+{
+    m_active=active;
+    if(!active) { m_weaponEntity=NULL;m_weaponNode=NULL; }
+    m_fadeScale=1;
+    SegmentLink* node=m_segments.next;
+    while(node!=&m_segments) { SegmentLink* next=node->next;delete node;node=next; }
+    m_segments.next=node;m_segments.previous=node;
+    m_fading=false;
+}

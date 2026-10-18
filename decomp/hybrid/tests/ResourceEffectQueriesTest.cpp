@@ -27,9 +27,9 @@ void side(void* raw,autotest::Capture& out,bool ours){
  const wchar_t* names[]={L"",L"A",L"AA",L"Ж"};
  for(unsigned i=0;i<8;++i){CEffect* e=reinterpret_cast<CEffect*>(effectSpace[i]);effects[i]=e;new(&e->m_sName)std::wstring(names[(i+c.seed/7)%4]);e->m_eType=static_cast<EEFFECT_TYPE>((i+c.seed)%4);e->m_pSkillOwner=(i+c.seed)%4==3?NULL:reinterpret_cast<CSkill*>(skills[(i+c.seed)%3]);}
  for(unsigned i=0;i<5;++i){CAffix* a=reinterpret_cast<CAffix*>(affixSpace[i]);affixes[i]=a;new(&a->m_sAffixFileName)std::wstring(names[(i+1+c.seed/11)%4]);new(&a->m_sDisplayName)std::wstring(names[(i+c.seed/11)%4]);}
- TArrayList<CAffix*>* affixList=new(manager->m_EffectData10)TArrayList<CAffix*>(2);
+ TArrayList<CAffix*>* affixList=new(reinterpret_cast<unsigned char*>(&manager->m_Affixes))TArrayList<CAffix*>(2);
  for(unsigned i=0;i<c.seed%6;++i)affixList->add(static_cast<CAffix*>(affixes[i]));
- TArrayList<CEffect*>* groups[3];for(unsigned g=0;g<3;++g){groups[g]=new(manager->m_EffectData10+0x18+g*0x18)TArrayList<CEffect*>(2);for(unsigned i=0;i<(c.seed+g*3)%7;++i)groups[g]->add(static_cast<CEffect*>(effects[(i+g*2)%8]));}
+ TArrayList<CEffect*>* groups[3];for(unsigned g=0;g<3;++g){groups[g]=new(reinterpret_cast<unsigned char*>(&manager->m_Affixes)+0x18+g*0x18)TArrayList<CEffect*>(2);for(unsigned i=0;i<(c.seed+g*3)%7;++i)groups[g]->add(static_cast<CEffect*>(effects[(i+g*2)%8]));}
  // The original indexed accessors deliberately fall back to slot zero when capacity is smaller.
  if(c.seed&16)for(unsigned g=0;g<3;++g)if(groups[g]->m_nCount)groups[g]->m_nCapacity=(c.seed/8)%2;
  if((c.seed&32)&&affixList->m_nCount)affixList->m_nCapacity=(c.seed/8)%2;

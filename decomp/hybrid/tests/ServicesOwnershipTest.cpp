@@ -72,11 +72,11 @@ void execute(Case& c,bool ours,autotest::Capture& out) {
  number(destroyed);
 }
 }
-TL_TEST(services_speed_calculate){return smallmass::run(host,0,"ServicesSpeedCalculate",0xc77d10,execute,128);}
-TL_TEST(services_speed_clear){return smallmass::run(host,1,"ServicesSpeedClear",0xc78030,execute,64);}
-TL_TEST(services_speed_destroy){return smallmass::run(host,2,"ServicesSpeedDestroy",0xc781d0,execute,64);}
-TL_TEST(services_camera_clear){return smallmass::run(host,3,"ServicesCameraClear",0xceb380,execute,64);}
-TL_TEST(services_animation_destroy){return smallmass::run(host,4,"ServicesAnimationDestroy",0xdd2aa0,execute,64);}
+TL_TEST(services_speed_calculate){return smallmass::run(host,0,"services_speed_calculate",0xc77d10,execute,128);}
+TL_TEST(services_speed_clear){return smallmass::run(host,1,"services_speed_clear",0xc78030,execute,64);}
+TL_TEST(services_speed_destroy){return smallmass::run(host,2,"services_speed_destroy",0xc781d0,execute,64);}
+TL_TEST(services_camera_clear){return smallmass::run(host,3,"services_camera_clear",0xceb380,execute,64);}
+TL_TEST(services_animation_destroy){return smallmass::run(host,4,"services_animation_destroy",0xdd2aa0,execute,64);}
 
 // Independent lifetime probes run the original constructors and actual base
 // destructors. The counter records constructions; D1 must not decrement it.
@@ -196,5 +196,5 @@ void realLifetime(smallmass::Case& c,bool ours,autotest::Capture& out)
     }
 }
 }
-TL_TEST(services_speed_real_lifetime){return smallmass::run(host,0,"ServicesSpeedRealLifetime",0xc781d0,realLifetime,64);}
-TL_TEST(services_animation_real_lifetime){return smallmass::run(host,1,"ServicesAnimationRealLifetime",0xdd2aa0,realLifetime,64);}
+TL_TEST(services_speed_real_lifetime){return smallmass::run(host,0,"services_speed_real_lifetime",0xc781d0,realLifetime,64);}
+TL_TEST(services_animation_real_lifetime){return smallmass::run(host,1,"services_animation_real_lifetime",0xdd2aa0,realLifetime,64);}

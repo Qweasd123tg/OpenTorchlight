@@ -11,6 +11,8 @@ class CUnitSpawner : public CShape, public iRandomWeight, public iUnitObserver
 {
 public:
     void reset();
+    void clear();
+    void stopAllParticles();
     void stop();
     bool getParticlesStillVisible();
     virtual ~CUnitSpawner();
@@ -19,7 +21,13 @@ public:
     virtual void SetRandomWeight(unsigned int weight);
     void addSpawnedUnit(CBaseUnit* unit);
 private:
-    unsigned char m_SpawnerData178[0x1c0-0x178];
+    unsigned char m_SpawnerData178[0x184-0x178];
+    int m_reset184;
+    int m_reset188;
+    int m_reset18c;
+    unsigned char m_SpawnerData190[0x1a0-0x190];
+    int m_reset1a0;
+    unsigned char m_SpawnerData1a4[0x1c0-0x1a4];
     bool m_editorSpawning;
     bool m_spawning;
     unsigned char m_gap1c2[0xe];

@@ -23,7 +23,7 @@ void CDescriptorManager::postProcessDescriptorObjects(
 }
 
 CDescriptorManager::CDescriptorManager(CEditorScene* pEditorScene)
-    : CRunicCore(), m_descriptors(0), m_pEditorScene(pEditorScene)
+    : CRunicCore(), m_descriptors(), m_pEditorScene(pEditorScene)
 {
 }
 
@@ -35,8 +35,8 @@ unsigned int CDescriptorManager::AddDescriptor(CDescriptor* pDescriptor)
     pDescriptor->SetSceneOwner(m_pEditorScene);
 
     unsigned int uiIndex = m_descriptors.size();
-    m_descriptorIndices[pDescriptor->getName()] = uiIndex;
-    m_descriptors.add(pDescriptor);
+    m_descriptorIndices[pDescriptor->m_sName] = uiIndex;
+    m_descriptors.push_back(pDescriptor);
 
     return uiIndex;
 }
@@ -126,4 +126,40 @@ void CDescriptorManager::SerializeDescriptors(CDataGroup* data)
     CDataGroup* group = data->AddDataGroup(L"OBJECT GROUP");
     for (unsigned int i = 0; i < getDescriptorVector().size(); ++i)
         getDescriptorVector()[i]->SerializeDescriptor(group, i);
+}
+
+#include "ResourceManager.h"
+
+CDescriptorManager::~CDescriptorManager()
+{
+    for (unsigned int i = 0; i < m_descriptors.size(); ++i) {
+        m_descriptors[i]->deleteNotification();
+        if (m_descriptors[i]) {
+            delete m_descriptors[i];
+            m_descriptors[i] = NULL;
+        }
+    }
+    m_descriptors.clear();
+    m_descriptorIndices.clear();
+    m_pEditorScene = NULL;
+}
+
+void CDescriptorManager::deleteUnusedDescriptors()
+{
+    if (m_pEditorScene && m_pEditorScene->getResourceManager()->getEditorIsRunning())
+        return;
+    for (unsigned int i = 0; i < m_descriptors.size(); ++i) {
+        CDescriptor* descriptor = m_descriptors[i];
+        if (descriptor->m_Objects.size() == 0) {
+            std::map<std::wstring, unsigned int>::iterator entry = m_descriptorIndices.find(descriptor->m_sName);
+            if (entry != m_descriptorIndices.end()) {
+                m_descriptorIndices.erase(entry);
+                m_descriptors[i] = m_descriptors[m_descriptors.size() - 1];
+                m_descriptors.pop_back();
+                delete descriptor;
+                --i;
+            }
+        } else
+            m_descriptorIndices[descriptor->m_sName] = i;
+    }
 }

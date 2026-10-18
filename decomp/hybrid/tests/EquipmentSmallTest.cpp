@@ -35,7 +35,7 @@ void side(void* data,autotest::Capture& out,bool ours){
  for(unsigned m=0;m<2;++m){
   managers[m]=(CEffectManager*)mm[m];
   managers[m]->getAffixes().m_nCount=(c.mask&2)?(m?0:1):0;
-  TArrayList<CEffect*>& effects=*reinterpret_cast<TArrayList<CEffect*>*>(managers[m]->m_EffectData10+0x18);
+  TArrayList<CEffect*>& effects=*reinterpret_cast<TArrayList<CEffect*>*>(reinterpret_cast<unsigned char*>(&managers[m]->m_Affixes)+0x18);
   effects.m_pData=refs[m];effects.m_nCount=c.profile==6?0xffffffffu:c.profile;effects.m_nCapacity=c.mask&4?2:5;
   for(unsigned i=0;i<5;++i){refs[m][i]=(CEffect*)fx[m][i];refs[m][i]->m_eType=static_cast<EEFFECT_TYPE>((c.mask&32)&&i==(m?0:3)?61:62);}
  }

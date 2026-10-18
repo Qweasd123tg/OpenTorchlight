@@ -46,9 +46,9 @@ void execute(Case& c,bool ours,autotest::Capture& out) {
  out.addHeapInUse();
 }
 }
-TL_TEST(services_mod_refresh){return smallmass::run(host,0,"ServicesModRefresh",0xc83ab0,execute,48);}
-TL_TEST(services_mod_refresh_all){return smallmass::run(host,1,"ServicesModRefreshAll",0xc84440,execute,48);}
-TL_TEST(services_mod_add){return smallmass::run(host,2,"ServicesModAdd",0xc83b40,execute,64);}
-TL_TEST(services_achievement_cheat){return smallmass::run(host,3,"ServicesAchievementCheat",0xebfac0,execute,48);}
-TL_TEST(services_achievement_complete){return smallmass::run(host,4,"ServicesAchievementComplete",0xec7850,execute,64);}
-TL_TEST(services_achievement_status){return smallmass::run(host,5,"ServicesAchievementStatus",0xec71d0,execute,48);}
+TL_TEST(services_mod_refresh){return smallmass::run(host,0,"services_mod_refresh",0xc83ab0,execute,48);}
+TL_TEST(services_mod_refresh_all){return smallmass::run(host,1,"services_mod_refresh_all",0xc84440,execute,48);}
+TL_TEST(services_mod_add){return smallmass::run(host,2,"services_mod_add",0xc83b40,execute,64);}
+TL_TEST(services_achievement_cheat){return smallmass::run(host,3,"services_achievement_cheat",0xebfac0,execute,48);}
+TL_TEST(services_achievement_complete){return smallmass::run(host,4,"services_achievement_complete",0xec7850,execute,64);}
+TL_TEST(services_achievement_status){return smallmass::run(host,5,"services_achievement_status",0xec71d0,execute,48);}

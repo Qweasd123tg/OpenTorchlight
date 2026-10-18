@@ -335,3 +335,133 @@ void CTimelineProperty::SetTimePercentAtPoint(int pointID, float timePercent)
     node->m_pPrevious = position; node->m_pNext = next;
     while (m_timelinePoints->m_pPrevious) m_timelinePoints = m_timelinePoints->m_pPrevious;
 }
+
+int CTimelineProperty::AddPoint()
+{
+    if (!m_descriptorProperty && m_eventID == static_cast<unsigned int>(-1))
+        return -1;
+    if (!m_editorScene || m_objectID == 0xffffffffLL)
+        return -1;
+    CEditorBaseObject* object = m_editorScene->GetObjectInScene(m_objectID);
+    if (!object)
+        return -1;
+    int id = GetFreeIDForPoint();
+    CTimelinePoint* point = new CTimelinePoint(m_descriptorProperty, object, id);
+    TLinkedListNode<CTimelinePoint*>* node = new TLinkedListNode<CTimelinePoint*>;
+    node->m_Data = point;
+    node->m_pNext = m_timelinePoints;
+    node->m_pPrevious = NULL;
+    if (m_timelinePoints)
+        m_timelinePoints->m_pPrevious = node;
+    m_timelinePoints = node;
+    SetInterpolationType(static_cast<ETIMELINE_INTERP_TYPES>(m_interpolationType));
+    return id;
+}
+
+void CTimelineProperty::DoLinearInterpolation(CTimeline* timeline, float percent,
+                                             CTimelinePoint* from, CTimelinePoint* to)
+{
+    if (!timeline || !m_editorScene || !m_descriptor || !from || !m_descriptorProperty || !to || m_objectID == -1LL)
+        return;
+    float fraction = from->m_timePercent == to->m_timePercent ? 0.0f :
+        (percent - from->m_timePercent) / (to->m_timePercent - from->m_timePercent);
+    unsigned int fromSize, toSize;
+    from->m_descriptorProperty.getData(fromSize, NULL);
+    to->m_descriptorProperty.getData(toSize, NULL);
+    unsigned int count = m_descriptorProperty->getVariableType() == 5 ? 1 : std::min(fromSize, toSize);
+    unsigned int interpolation = 0;
+    if (m_timeline && m_interpolationType == 7)
+        interpolation = m_timeline->m_iDefaultInterpolationType;
+    TArrayList<UNIONDATA32BIT> data(1);
+    for (unsigned int i = 0; i < count; ++i) {
+        data.add(UNIONDATA32BIT());
+        double value = getValueOfLinearPropertyByPercent(interpolation, fraction, from, to, i);
+        switch (m_descriptorProperty->getVariableType()) {
+        case 2: case 4: data[i].m_iValue = static_cast<int>(value); break;
+        case 3: case 7: case 8: case 9: data[i].m_fValue = static_cast<float>(value); break;
+        case 6: data[i].m_bValue = value >= 1.0; break;
+        case 5:
+            data.clear();
+            if (m_descriptorProperty) {
+                unsigned int size = 0;
+                CEditorBaseObject* object = m_editorScene->GetObjectInScene(m_objectID);
+                CDescriptorProp* property = value >= 1.0 ? &to->m_descriptorProperty : &from->m_descriptorProperty;
+                m_descriptorProperty->setData(property->getData(size, NULL), size, object);
+            }
+            break;
+        default: return;
+        }
+    }
+    if (data.size()) {
+        if (interpolation == 5 && m_descriptorProperty->getVariableType() == 8) {
+            Ogre::Vector3 direction(data[0].m_fValue, data[1].m_fValue, data[2].m_fValue);
+            direction.normalise();
+            data[0].m_fValue = direction.x;
+            data[1].m_fValue = direction.y;
+            data[2].m_fValue = direction.z;
+        }
+        SetValueOnObject(&data[0], data.size());
+    }
+}
+
+void CTimelineProperty::Update(float percent, bool forward)
+{
+    if (!m_editorScene || !m_descriptor || m_objectID == 0xffffffffLL)
+        return;
+    int interpolation = m_interpolationType;
+    if (m_timeline && interpolation == 7)
+        interpolation = m_timeline->m_iDefaultInterpolationType;
+    percent = percent > 0.0f ? std::min(percent, 1.0f) : 0.0f;
+    float last = m_lastTimePercent;
+    if (percent == last)
+        return;
+    if (!forward && last >= 1.0f && percent == 0.0f) {
+        m_lastTimePercent = -0.01f;
+        return;
+    }
+    if (forward) {
+        if (percent > last && last > 0.0f) {
+            m_updating = true;
+            Update(0.0f, true);
+            last = 1.01f;
+        }
+    } else if (last > percent && last < 1.0f) {
+        m_updating = true;
+        Update(1.0f, false);
+        last = -0.01f;
+    }
+    if (!m_descriptorProperty || interpolation == 6) {
+        TLinkedListNode<CTimelinePoint*>* node = m_timelinePoints;
+        if (!node)
+            return;
+        while (node) {
+            float time = node->m_Data->m_timePercent;
+            if (forward ? (time < last && time >= percent) : (time > last && time <= percent)) {
+                if (m_descriptorProperty)
+                    SetValueOnObject(node->m_Data);
+                else
+                    triggerEvent(m_timeline);
+                break;
+            }
+            node = node->m_pNext;
+        }
+    } else if (interpolation == 4) {
+        DoSplineInterpolation(m_timeline, percent);
+    } else {
+        TLinkedListNode<CTimelinePoint*>* node = m_timelinePoints;
+        CTimelinePoint* point = NULL;
+        while (node) {
+            point = node->m_Data;
+            if (forward ? !(point->m_timePercent < last) : point->m_timePercent >= percent)
+                break;
+            node = node->m_pNext;
+        }
+        if (!point)
+            return;
+        if (!node || !node->m_pPrevious || percent == point->m_timePercent)
+            SetValueOnObject(point);
+        else
+            DoLinearInterpolation(m_timeline, percent, node->m_pPrevious->m_Data, point);
+    }
+    m_lastTimePercent = percent;
+}

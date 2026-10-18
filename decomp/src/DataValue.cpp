@@ -265,3 +265,59 @@ CDataValue::CDataValue(unsigned int name, UNIONDATA64BIT value, EDATAVALUETYPES 
         }
     }
 }
+
+CDataValue::~CDataValue()
+{
+    if (m_pRepository) {
+        {
+
+        unsigned int id = m_iNameID;
+        std::wstring text = m_pRepository->m_DefaultValue;
+        if (id != static_cast<unsigned int>(-1) && !m_pRepository->m_Values.empty()) {
+            std::map<unsigned int, std::wstring>::iterator value = m_pRepository->m_Values.find(id);
+            if (value != m_pRepository->m_Values.end())
+                text = value->second;
+        }
+        if (text != m_pRepository->m_DefaultValue) {
+            std::map<unsigned int, unsigned short>::iterator count = m_pRepository->m_RefCounts.find(id);
+            if (count != m_pRepository->m_RefCounts.end()) {
+                --count->second;
+                if (count->second == 0) {
+                    m_pRepository->m_RefCounts.erase(count);
+                    std::map<std::wstring, unsigned int>::iterator name = m_pRepository->m_IDs.find(text);
+                    std::map<unsigned int, std::wstring>::iterator value = m_pRepository->m_Values.find(id);
+                    if (name != m_pRepository->m_IDs.end() && value != m_pRepository->m_Values.end()) {
+                        m_pRepository->m_IDs.erase(name);
+                        m_pRepository->m_Values.erase(value);
+                    }
+                }
+            }
+        }
+        }
+        if (m_eType == DATAVALUE_STRING || m_eType == DATAVALUE_TRANSLATE) {
+
+        unsigned int id = m_Value.unsigned32;
+        std::wstring text = m_pRepository->m_DefaultValue;
+        if (id != static_cast<unsigned int>(-1) && !m_pRepository->m_Values.empty()) {
+            std::map<unsigned int, std::wstring>::iterator value = m_pRepository->m_Values.find(id);
+            if (value != m_pRepository->m_Values.end())
+                text = value->second;
+        }
+        if (text != m_pRepository->m_DefaultValue) {
+            std::map<unsigned int, unsigned short>::iterator count = m_pRepository->m_RefCounts.find(id);
+            if (count != m_pRepository->m_RefCounts.end()) {
+                --count->second;
+                if (count->second == 0) {
+                    m_pRepository->m_RefCounts.erase(count);
+                    std::map<std::wstring, unsigned int>::iterator name = m_pRepository->m_IDs.find(text);
+                    std::map<unsigned int, std::wstring>::iterator value = m_pRepository->m_Values.find(id);
+                    if (name != m_pRepository->m_IDs.end() && value != m_pRepository->m_Values.end()) {
+                        m_pRepository->m_IDs.erase(name);
+                        m_pRepository->m_Values.erase(value);
+                    }
+                }
+            }
+        }
+        }
+    }
+}

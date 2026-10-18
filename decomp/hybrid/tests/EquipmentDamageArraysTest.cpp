@@ -20,7 +20,7 @@ namespace {
 typedef char effect_damage_offset[__builtin_offsetof(CEffect,m_eDamageType)==0x14?1:-1];
 template<class T>struct Raw{unsigned long long data[(sizeof(T)+7)/8];Raw(){std::memset(data,0,sizeof(data));}T*get(){return reinterpret_cast<T*>(data);}};
 struct Case{unsigned seed,kind;};
-TArrayList<CEffect*>&passive(CEffectManager*m){return *reinterpret_cast<TArrayList<CEffect*>*>(m->m_EffectData10+0x18);}
+TArrayList<CEffect*>&passive(CEffectManager*m){return *reinterpret_cast<TArrayList<CEffect*>*>(reinterpret_cast<unsigned char*>(&m->m_Affixes)+0x18);}
 struct World{
  Raw<CEquipment>item,children[3];Raw<CEffectManager>managers[3];Raw<CEffect>effects[12];
  World(unsigned n){CEquipment*p=item.get();new(&p->m_ElementalDamageTypes)std::vector<EDAMAGE_TYPES>;new(&p->m_ElementalDamageBonuses)std::vector<int>;new(&p->m_InherentElementalDamage)std::vector<int>;new(&p->m_SocketedEquipment)TArrayList<CEquipment*>;

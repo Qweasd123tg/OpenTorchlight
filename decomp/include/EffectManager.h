@@ -61,15 +61,17 @@ public:
     void createEffect(CDataGroup* data, bool flag);
     CAffix* getAffix(const std::wstring& name);
     TArrayList<CUnitTheme*>* getUnitThemes() { return &m_UnitThemes; }
-    TArrayList<CEffect*>& getActiveEffects(unsigned int group) { return *reinterpret_cast<TArrayList<CEffect*>*>(m_EffectData10 + 0x18 + group * 0x18); }
-    // Original owner safe reference at object +0x70.
-    TSafePointer<CBaseUnit>& getOwnerReference() { return *reinterpret_cast<TSafePointer<CBaseUnit>*>(m_EffectData10 + 0x60); }
-    // Partial layout: the affix list occupies the beginning of the opaque region.
-    TArrayList<CAffix*>& getAffixes() { return *reinterpret_cast<TArrayList<CAffix*>*>(m_EffectData10); }
+    TArrayList<CEffect*>& getActiveEffects(unsigned int group) { return m_Effects[group]; }
+    TSafePointer<CBaseUnit>& getOwnerReference() { return m_Owner; }
+    TArrayList<CAffix*>& getAffixes() { return m_Affixes; }
 private:
     friend class CEquipment;
     friend class CInventory;
-    unsigned char m_EffectData10[0x2c8-0x10];
+    TArrayList<CAffix*> m_Affixes; // +0x10
+    TArrayList<CEffect*> m_Effects[3]; // +0x28
+    TSafePointer<CBaseUnit> m_Owner; // +0x70
+    float m_EffectValues[145]; // +0x80
+    unsigned char m_padding2C4[4];
     TArrayList<CUnitTheme*> m_UnitThemes;
     std::wstring m_EffectString2E0;
     std::wstring m_EffectString2E8;

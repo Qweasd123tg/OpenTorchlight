@@ -4,6 +4,7 @@
 #include "RunicCore.h"
 #include <vector>
 #include <string>
+class CResourceManager;
 class CAnimationSet;
 class CGenericModel;
 class BatchModelRef;
@@ -53,6 +54,8 @@ public:
     int experienceGate(int);
     int fameGate(int);
     void removeCollisionModel(CCollisionModel* model);
+    CCollisionModel* addCollisionModel(std::wstring name);
+    CGenericModel* addBatchModel(CResourceManager* resources, Ogre::SceneManager* sceneManager, std::wstring name, bool& shared);
 
 private:
     unsigned char m_Unrecovered10[0x48-0x10];

@@ -167,6 +167,10 @@ python3 tools/decomp/llm_loop.py QuestRequirements.cpp --prepare-only --repair-a
 полный совместимый canonical progress с тем же digest всего объекта TU, что и
 свежее сравнение; устаревший объект progress блокирует подготовку. MATCH, accepted и прежние behavioral
 receipts (даже устаревшие), включая body/ctor/dtor aliases, запрещают такой repair.
+Две строки исходных C1/C2 или D1/D2 допускаются как одно тело, только если
+имена образуют точную пару оригинальных ABI aliases, а статус DIFF, размер,
+нормализованный код, digest объекта и прочие поля сравнения совпадают.
+Это не разрешает ремонт принятого alias или отдельного D0.
 Единственное исключение внутри closure — отдельно выпущенный non-virtual
 adjustment thunk: он должен оставаться сильным MATCH с тем же нормализованным
 кодом в canonical progress, свежем baseline и окончательном сравнении cycle.

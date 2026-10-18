@@ -26,7 +26,7 @@ template<class T>struct Raw{unsigned long long data[(sizeof(T)+7)/8];Raw(){std::
 struct Case{unsigned n,flags,effects,skills,results,mode,target;int charges,level,requirement;};
 const Case*input;autotest::Capture*capture;
 void number(int x){capture->add(&x,sizeof(x));}
-TArrayList<CEffect*>& effects(CEffectManager*p){return *reinterpret_cast<TArrayList<CEffect*>*>(p->m_EffectData10+0x30);}
+TArrayList<CEffect*>& effects(CEffectManager*p){return *reinterpret_cast<TArrayList<CEffect*>*>(reinterpret_cast<unsigned char*>(&p->m_Affixes)+0x30);}
 struct World;World*world;
 struct World{
  Raw<CEquipment>item,targetItem;Raw<CCharacter>actor,target;Raw<CBaseUnit>owners[2];Raw<CEffect>eff[4];Raw<CEffectManager>managers[2];Raw<CSkillManager>skills[2];unsigned long long tokens[4];void*table[112];void*otherTable[112];unsigned validCalls,skillCalls;bool changed;CBaseUnit*selected;

@@ -84,6 +84,7 @@ public:
     bool getUnitLightFade() const { return m_bUnitLightFade; }
 private:
     friend class CGameUI;
+    friend class CMusicObject;
     friend class CQuestUnitData;
     TArrayList<CChunkType*> m_chunkTypes; // +0x10; owning pointees
     TArrayList<CChunk*> m_chunks; // +0x28

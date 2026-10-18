@@ -6,6 +6,7 @@
 #include <OgreVector3.h>
 
 #include <string>
+#include <vector>
 
 #include "ResourceManager.h"
 #include "RunicCore.h"
@@ -61,7 +62,10 @@ public:
     Ogre::Billboard* m_pPlayerBillboard;
 
     Ogre::Billboard* m_pPetBillboard;
-    unsigned char m_PetBoundsState[0x10] __attribute__((aligned(8)));
+    float m_maximumX;
+    float m_maximumZ;
+    float m_minimumX;
+    float m_minimumZ;
     int m_iMapGridWidth;
     int m_iMapGridHeight;
     float* m_pRevealedTiles;
@@ -70,13 +74,11 @@ public:
     bool m_bFullMap;
     unsigned char m_gapA3[5];
 
-    TArrayList<Ogre::Billboard*> m_vMapTileBillboards;
-    TArrayList<float> m_vMapTileRevealValues;
-    TArrayList<Ogre::Billboard*> m_vNPCBillboards;
-    TArrayList<float> m_vNPCRevealValues;
-
-    unsigned char m_HiddenNPCBillboardListState[0x18]
-        __attribute__((aligned(8)));
+    std::vector<Ogre::Billboard*> m_vMapTileBillboards;
+    std::vector<float> m_vMapTileRevealValues;
+    std::vector<Ogre::Billboard*> m_vNPCBillboards;
+    std::vector<float> m_vNPCRevealValues;
+    TArrayList<Ogre::Billboard*> m_hiddenNPCBillboards;
 
     Ogre::SceneNode* m_pCullQuad;
     Ogre::Rectangle2D* m_pCullQuadBounds;

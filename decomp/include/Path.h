@@ -44,7 +44,7 @@ public:
                           Ogre::Vector3& offset,
                           unsigned int& pointIndex,
                           float& distance,
-                          float maximumDistance);
+                          float minimumDistance);
     bool FindNearestPoint(const Ogre::Vector3& target,
                           Ogre::Vector3& nearestPoint,
                           Ogre::Vector3& offset,

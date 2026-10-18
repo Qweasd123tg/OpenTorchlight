@@ -24,10 +24,10 @@ void CKeyManager::flush()
     memset(m_currentReleased, 0, sizeof(m_currentReleased));
 }
 
+extern "C" const unsigned char* SDL_GetKeyboardState(int*);
+
 void CKeyManager::keyEvent(unsigned int eventType, unsigned int keyCode)
 {
-    extern bool GetKeyState(unsigned int);
-
     unsigned char *currentKeyPressed =
         reinterpret_cast<unsigned char *>(m_currentPressed);
     unsigned char *currentKeyHeld =
@@ -37,18 +37,18 @@ void CKeyManager::keyEvent(unsigned int eventType, unsigned int keyCode)
 
     if (eventType == 0x101 || eventType == 0x105)
     {
-        if (currentKeyHeld[keyCode + 1])
-            currentKeyReleased[keyCode + 1] = 1;
-        currentKeyHeld[keyCode + 1] = 0;
+        if (currentKeyHeld[keyCode])
+            currentKeyReleased[keyCode] = 1;
+        currentKeyHeld[keyCode] = 0;
     }
     else if (eventType == 0x100 || eventType == 0x104)
     {
-        if (!currentKeyHeld[keyCode + 1])
-            currentKeyPressed[keyCode + 1] = 1;
-        currentKeyHeld[keyCode + 1] = 1;
+        if (!currentKeyHeld[keyCode])
+            currentKeyPressed[keyCode] = 1;
+        currentKeyHeld[keyCode] = 1;
     }
 
-    m_bRightShift = GetKeyState(0x39);
+    m_bRightShift = SDL_GetKeyboardState(0)[0x39] != 0;
 }
 
 CKeyManager::~CKeyManager()
