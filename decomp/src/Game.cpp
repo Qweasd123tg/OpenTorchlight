@@ -581,3 +581,479 @@ long CGame::begin(void* editorWindow)
     cleanUpGameObjects();
     return 0;
 }
+
+
+void CGame::createCamera()
+{
+    if (m_cameraControl) { delete m_cameraControl; m_cameraControl = NULL; }
+    Ogre::Camera* player = m_sceneManager->createCamera("PlayerCam");
+    player->setFOVy(Ogre::Degree(35.0f));
+    player->setPosition(Ogre::Vector3(0.0f,0.0f,500.0f));
+    player->lookAt(Ogre::Vector3(0.0f,0.0f,-300.0f));
+    player->setNearClipDistance(1.0f);
+    player->setAutoAspectRatio(true);
+    player->setFarClipDistance(m_settings->GetInt(KSETTINGS_NETBOOK_MODE)==1 ? 45.0f : 90.0f);
+
+    Ogre::Camera* ui = m_uiScene->createCamera("UICam");
+    ui->setProjectionType(Ogre::PT_ORTHOGRAPHIC);
+    ui->setFOVy(Ogre::Degree(35.0f));
+    ui->setPosition(Ogre::Vector3(0.0f,0.0f,10.0f));
+    ui->lookAt(Ogre::Vector3(0.0f,0.0f,0.0f));
+    ui->setNearClipDistance(0.1f);
+    ui->setFarClipDistance(90.0f);
+    ui->setAutoAspectRatio(true);
+
+    Ogre::Camera* background = m_backgroundScene->createCamera("BKCam");
+    background->setFOVy(Ogre::Degree(30.0f));
+    background->setPosition(Ogre::Vector3(0.0f,0.0f,500.0f));
+    background->lookAt(Ogre::Vector3(0.0f,0.0f,-300.0f));
+    background->setNearClipDistance(1.0f);
+    background->setFarClipDistance(2.0f);
+    background->setAutoAspectRatio(true);
+    m_cameraControl = new CCameraControl(player,ui,background,NULL,NULL);
+}
+
+void CGame::preViewportUpdate(const Ogre::RenderTargetViewportEvent& event)
+{
+    if (event.source!=m_viewport) return;
+    if (m_viewport && m_gameClient && m_gameClient->m_pGameUI &&
+        (m_gameClient->m_pGameUI->bothCovered() || m_gameClient->m_pGameUI->rightCovered() || m_gameClient->m_pGameUI->leftCovered())) {
+        unsigned width=m_settings->GetInt(KSETTINGS_RES_WIDTH);
+        m_settings->GetInt(KSETTINGS_RES_HEIGHT);
+        float right=m_gameClient && m_gameClient->m_pGameUI ? m_gameClient->m_pGameUI->rightScreenEdge() : -1.0f;
+        float left=m_gameClient && m_gameClient->m_pGameUI ? m_gameClient->m_pGameUI->leftScreenEdge() : 0.0f;
+        m_viewport->setDimensions(left/width,0.0f,right/width-left/width,1.0f);
+    } else {
+        m_viewport->setDimensions(0.0f,0.0f,1.0f,1.0f);
+    }
+    unsigned height=m_viewport->getActualHeight();
+    unsigned width=m_viewport->getActualWidth();
+    m_cameraControl->setAspectRatio(static_cast<ECAMERAS>(0),static_cast<float>(static_cast<int>(width)),static_cast<float>(static_cast<int>(height)));
+    m_sceneManager->setVisibilityMask(5);
+    if (m_gameClient && m_gameClient->m_level)
+        m_gameClient->m_level->setLightStaticGeometryVisible(false);
+    event.source->getCamera()->getSceneManager()->getRenderQueue()->setRenderableListener(this);
+}
+
+
+#include "Layout.h"
+#include "DataGroup.h"
+#include "FileUtilities.h"
+#include "StringUtilities.h"
+void CGame::convertAssetsToBinary()
+{
+    if (!m_gameClient || !m_gameClient->m_gameResources)
+        Ogre::LogManager::getSingleton().logMessage("Unable to convert raw assets to binary.",Ogre::LML_CRITICAL);
+    Ogre::LogManager::getSingleton().logMessage("Starting to convert layouts to compressed binary",Ogre::LML_CRITICAL);
+    TArrayList<std::wstring> files(10);
+    std::wstring base=FILESYSTEM::AssembleAbsolutePath(FILESYSTEM::GetApplicationPath(),L"media/");
+    FILESYSTEM::GetFileListRecursive(base,files,L"*.layout");
+    for (unsigned i=0;i<files.size();++i) {
+        std::wstring upper=STRINGS::StringUpper(files[i]);
+        std::wstring::size_type ui=upper.find(L"/UI/");
+        if (ui>0 && ui<upper.size()) continue;
+        if (!FILESYSTEM::FileExists(upper+L".cmp")) {
+            Ogre::LogManager::getSingleton().logMessage(STRINGS::StringConvertToNarrow((L"Compressing layout file: "+upper).c_str()),Ogre::LML_CRITICAL);
+            CLayout* layout=new CLayout(m_gameClient->m_gameResources,static_cast<ELAYOUT_TYPES>(0));
+            layout->loadLayoutFile(files[i],true,NULL,false,false,0);
+            delete layout;
+        }
+    }
+    files.clear();
+    FILESYSTEM::GetFileListRecursive(base,files,L"*.dat");
+    FILESYSTEM::GetFileListRecursive(base,files,L"*.hie");
+    FILESYSTEM::GetFileListRecursive(base,files,L"*.animation");
+    Ogre::LogManager::getSingleton().logMessage("Starting to convert dat and text files to binary",Ogre::LML_CRITICAL);
+    for (unsigned i=0;i<files.size();++i) {
+        Ogre::LogManager::getSingleton().logMessage(STRINGS::StringConvertToNarrow((L"Converting file to binary: "+files[i]).c_str()),Ogre::LML_CRITICAL);
+        CDataGroup* group=new CDataGroup(EMPTY_WSTRING,NULL,20,10,NULL);
+        group->LoadFile(files[i],NULL);
+        delete group;
+    }
+    Ogre::LogManager::getSingleton().logMessage("Completed Compression of files.",Ogre::LML_CRITICAL);
+}
+
+#include "RenderableStates.h"
+#include <OgreSubEntity.h>
+#include <OgreRenderQueueSortingGrouping.h>
+bool CGame::renderableQueued(Ogre::Renderable* renderable,unsigned char queueId,unsigned short priority,Ogre::Technique** technique,Ogre::RenderQueue* queue)
+{
+    if (static_cast<unsigned char>(queueId - 95) <= 4) return false;
+    if (!renderable) return true;
+    Ogre::SubEntity* sub = dynamic_cast<Ogre::SubEntity*>(renderable);
+    if (!sub || sub->getUserAny().isEmpty()) return true;
+    CRenderableStates* states = Ogre::any_cast<CRenderableStates*>(sub->getUserAny());
+    if (!states || !*technique || !(*technique)->getNumPasses()) return true;
+    (*technique)->getPass(0);
+    if (m_renderParticles)
+        queue->getQueueGroup(90)->addRenderable(renderable,m_particleMaterial->getTechnique(0),priority);
+    if (!m_disableRenderBehind && !m_disableRendering && m_renderBehind && states->renderBehind && states->m_opacity > 0.0f && (!m_gameClient || m_gameClient->m_gameState != 0)) {
+        Ogre::Technique* behind = states->highlighted ? states->material18->getTechnique(0) : *technique;
+        queue->getQueueGroup(88)->addRenderable(renderable,behind,priority);
+        if (states->m_state0) return false;
+        *technique = (states->material20 ? states->material20 : m_behindMaterial.getPointer())->getTechnique(0);
+    } else if (states->highlighted) {
+        *technique = states->material18->getTechnique(0);
+    }
+    return true;
+}
+
+#include "FileSystem.h"
+#include <OgreMaterialManager.h>
+
+void CGame::createMaterials()
+{
+    Ogre::MaterialPtr wire = Ogre::MaterialManager::getSingleton().create("Wireframe", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    wire->setReceiveShadows(false);
+    Ogre::Pass* pass = wire->getTechnique(0)->getPass(0);
+    pass->setPolygonMode(Ogre::PM_WIREFRAME);
+    pass->setSelfIllumination(1, 1, 1);
+    pass->setDiffuse(Ogre::ColourValue(1, 1, 1, .1f));
+    pass->setAmbient(Ogre::ColourValue(1, 1, 1, .1f));
+    pass->setDepthWriteEnabled(false);
+    wire->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+
+    m_particleMaterial = Ogre::MaterialManager::getSingleton().create("WireframeOverlay", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    m_particleMaterial->setReceiveShadows(false);
+    pass = m_particleMaterial->getTechnique(0)->getPass(0);
+    pass->setPolygonMode(Ogre::PM_WIREFRAME);
+    pass->setSelfIllumination(1, 1, 1);
+    pass->setDiffuse(Ogre::ColourValue(1, 1, 1, .2f));
+    pass->setAmbient(Ogre::ColourValue(1, 1, 1, .2f));
+    pass->setDepthWriteEnabled(false);
+    m_particleMaterial->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+    m_particleMaterial->getTechnique(0)->setDepthFunction(Ogre::CMPF_LESS_EQUAL);
+    m_particleMaterial->getTechnique(0)->setDepthWriteEnabled(false);
+
+    Ogre::MaterialPtr trail = Ogre::MaterialManager::getSingleton().create("WeaponTrail", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    trail->setReceiveShadows(false);
+    trail->setLightingEnabled(false);
+    pass = trail->getTechnique(0)->getPass(0);
+    pass->setDepthCheckEnabled(true);
+    pass->setSelfIllumination(0, 0, 0);
+    pass->setDepthWriteEnabled(false);
+    trail->setSceneBlending(Ogre::SBT_ADD);
+    trail->setCullingMode(Ogre::CULL_NONE);
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(L"media/sharedTextures/weapontrail.dds", info, false, true, false);
+    pass->createTextureUnitState(info.m_sResourceName);
+
+    Ogre::MaterialPtr evil = Ogre::MaterialManager::getSingleton().create("WeaponTrailEvil", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    evil->setReceiveShadows(false);
+    evil->setLightingEnabled(false);
+    pass = evil->getTechnique(0)->getPass(0);
+    pass->setDepthCheckEnabled(true);
+    pass->setSelfIllumination(0, 0, 0);
+    pass->setDepthWriteEnabled(false);
+    evil->setSceneBlending(Ogre::SBT_ADD);
+    evil->setCullingMode(Ogre::CULL_NONE);
+    CFileSystem::getSingleton()->getFileInfo(L"media/sharedTextures/weapontrailevil.dds", info, false, true, false);
+    pass->createTextureUnitState(info.m_sResourceName);
+
+    Ogre::MaterialPtr arrow = Ogre::MaterialManager::getSingleton().create("ArrowTrail", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    arrow->setReceiveShadows(false);
+    arrow->setLightingEnabled(false);
+    pass = arrow->getTechnique(0)->getPass(0);
+    pass->setDepthCheckEnabled(true);
+    pass->setSelfIllumination(0, 0, 0);
+    pass->setDepthWriteEnabled(false);
+    pass->setFog(true, Ogre::FOG_NONE, Ogre::ColourValue::White, .001f, 0, 1);
+    arrow->setSceneBlending(Ogre::SBT_ADD);
+    arrow->setCullingMode(Ogre::CULL_NONE);
+    CFileSystem::getSingleton()->getFileInfo(L"media/sharedTextures/arrowtrail.dds", info, false, true, false);
+    pass->createTextureUnitState(info.m_sResourceName);
+
+    Ogre::MaterialPtr reflected = Ogre::MaterialManager::getSingleton().create("ArrowTrailReflect", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    reflected->setReceiveShadows(false);
+    reflected->setLightingEnabled(false);
+    pass = reflected->getTechnique(0)->getPass(0);
+    pass->setDepthCheckEnabled(true);
+    pass->setSelfIllumination(1, 1, 1);
+    pass->setAmbient(Ogre::ColourValue(1, 0, 0, 1));
+    pass->setDiffuse(Ogre::ColourValue(1, 0, 0, 1));
+    pass->setDepthWriteEnabled(false);
+    pass->setFog(true, Ogre::FOG_NONE, Ogre::ColourValue::White, .001f, 0, 1);
+    reflected->setSceneBlending(Ogre::SBT_ADD);
+    reflected->setCullingMode(Ogre::CULL_NONE);
+    CFileSystem::getSingleton()->getFileInfo(L"media/sharedTextures/arrowtrailreflect.dds", info, false, true, false);
+    pass->createTextureUnitState(info.m_sResourceName);
+
+    const char* names[] = { "lightBlue", "lightYellow", "lightOrange", "WireframeBlue", "WireframeYellow" };
+    const Ogre::ColourValue illumination[] = {
+        Ogre::ColourValue(0, 0, 1), Ogre::ColourValue(1, 1, 0), Ogre::ColourValue(1, .9f, 0),
+        Ogre::ColourValue(0, 0, 1), Ogre::ColourValue(1, 1, 0)
+    };
+    Ogre::MaterialPtr colours[5];
+    for (unsigned i = 0; i < 5; ++i) {
+        colours[i] = Ogre::MaterialManager::getSingleton().create(names[i], Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+        colours[i]->setReceiveShadows(false);
+        pass = colours[i]->getTechnique(0)->getPass(0);
+        pass->setDepthCheckEnabled(true);
+        if (i >= 3) pass->setPolygonMode(Ogre::PM_WIREFRAME);
+        pass->setSelfIllumination(illumination[i].r, illumination[i].g, illumination[i].b);
+        Ogre::ColourValue colour = i == 4 ? Ogre::ColourValue(1, 1, .2f, .3f) : Ogre::ColourValue(.2f, .2f, 1, .3f);
+        if (i == 4) {
+            pass->setDiffuse(colour);
+            pass->setAmbient(colour);
+        } else {
+            pass->setAmbient(colour);
+            pass->setDiffuse(colour);
+        }
+        pass->setDepthWriteEnabled(false);
+        colours[i]->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+    }
+
+    m_behindMaterial = Ogre::MaterialManager::getSingleton().create("RenderBehind", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    m_behindMaterial->setReceiveShadows(false);
+    pass = m_behindMaterial->getTechnique(0)->getPass(0);
+    pass->setSelfIllumination(.4f, .4f, .5f);
+    pass->setAmbient(Ogre::ColourValue(0, 0, 0, 0));
+    pass->setDiffuse(Ogre::ColourValue(0, 0, 0, 0));
+    pass->setDepthWriteEnabled(false);
+    m_behindMaterial->getTechnique(0)->setDepthFunction(Ogre::CMPF_GREATER);
+    m_behindMaterial->getTechnique(0)->setDepthWriteEnabled(false);
+    pass->setSceneBlending(Ogre::SBF_ONE, Ogre::SBF_ZERO);
+    pass->setMaxSimultaneousLights(0);
+    m_behindMaterial->setSceneBlending(Ogre::SBT_TRANSPARENT_COLOUR);
+    pass = m_behindMaterial->createTechnique()->createPass();
+    pass->setSelfIllumination(.4f, .4f, .5f);
+    pass->setAmbient(Ogre::ColourValue(0, 0, 0, 0));
+    pass->setDiffuse(Ogre::ColourValue(0, 0, 0, 0));
+    pass->setDepthWriteEnabled(false);
+    pass->setSceneBlending(Ogre::SBF_ONE, Ogre::SBF_ZERO);
+    pass->setMaxSimultaneousLights(0);
+    m_behindMaterial->compile();
+
+    const char* shadows[] = { "RenderShadow", "RenderShadowSkinned", "RenderShadowSkinnedThree", "RenderShadowSkinnedTwo", "RenderShadowSkinnedOne" };
+    for (unsigned i = 0; i < 64; ++i) {
+        float intensity = .5f - static_cast<float>(i) * .0078125f;
+        Ogre::MaterialPtr materials[5];
+        for (unsigned j = 0; j < 5; ++j) {
+            materials[j] = Ogre::MaterialManager::getSingleton().create(shadows[j] + STRINGS::GetValueAsString(i), Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+            materials[j]->setReceiveShadows(false);
+            pass = materials[j]->getTechnique(0)->getPass(0);
+            pass->setSelfIllumination(intensity, intensity, intensity);
+            pass->setAmbient(Ogre::ColourValue(0, 0, 0, 1));
+            pass->setDiffuse(Ogre::ColourValue(0, 0, 0, 1));
+            pass->setDepthWriteEnabled(false);
+            pass->setDepthCheckEnabled(false);
+            pass->setMaxSimultaneousLights(0);
+            if (j) materials[j]->compile();
+        }
+    }
+    Ogre::MaterialPtr points = Ogre::MaterialManager::getSingleton().create("Points", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    points->setReceiveShadows(false);
+    pass = points->getTechnique(0)->getPass(0);
+    pass->setPolygonMode(Ogre::PM_POINTS);
+    pass->setSelfIllumination(1, 1, 1);
+    Ogre::MaterialPtr fishing = Ogre::MaterialManager::getSingleton().create("FishingLine", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    fishing->setReceiveShadows(false);
+    pass = fishing->getTechnique(0)->getPass(0);
+    pass->setSelfIllumination(.6f, .6f, .6f);
+    pass->setAmbient(Ogre::ColourValue(0, 0, 0, 1));
+    pass->setDiffuse(Ogre::ColourValue(0, 0, 0, 1));
+    pass->setDepthWriteEnabled(true);
+    pass->setDepthCheckEnabled(true);
+    fishing->getTechnique(0)->setDepthWriteEnabled(true);
+    fishing->setSceneBlending(Ogre::SBT_TRANSPARENT_COLOUR);
+}
+
+#include "Utilities.h"
+#include <OgreDefaultHardwareBufferManager.h>
+#include <OgreStringConverter.h>
+
+extern "C" {
+SDL_Window* SDL_CreateWindow(const char*,int,int,int,int,Uint32);
+void SDL_DestroyWindow(SDL_Window*);
+SDL_Surface* SDL_CreateRGBSurfaceFrom(void*,int,int,int,int,Uint32,Uint32,Uint32,Uint32);
+void SDL_SetWindowIcon(SDL_Window*,SDL_Surface*);
+}
+
+// Public lodepng-bf09e0a.h file-decoder API; the library implementation is supplied separately.
+enum LodePNGColorType { LCT_GREY=0, LCT_RGB=2, LCT_PALETTE=3, LCT_GREY_ALPHA=4, LCT_RGBA=6 };
+namespace lodepng {
+unsigned decode(std::vector<unsigned char>&, unsigned&, unsigned&, const std::string&, LodePNGColorType, unsigned);
+}
+
+Ogre::RenderWindow* CGame::createWindow(bool create)
+{
+    g_pGame=this;
+    if (!m_root || getWindowHandle()) return NULL;
+    static Ogre::RenderSystemList* pList=Ogre::Root::getSingleton().getAvailableRenderers();
+    if (pList->empty()) {
+        MessageBoxA(NULL,"Could not find a valid renderer","Initialization Error",0);
+        return NULL;
+    }
+    Ogre::RenderSystem* renderer=(*pList)[0];
+    std::string device;
+    if (!m_settings->GetInt(KSETTINGS_OPENGL)) {
+        Ogre::ConfigOption& option=renderer->getConfigOptions().find("Rendering Device")->second;
+        option.currentValue=option.possibleValues[0];
+        device=option.currentValue;
+    }
+    m_root->setRenderSystem(renderer);
+    m_root->initialise(false,"Game");
+    Ogre::NameValuePairList parameters;
+    parameters["border"]="fixed";
+    if (gFirstRun) {
+        int speed=UTILITIES::getProcessorSpeed();
+        int ram=UTILITIES::getAvailableRAM();
+        m_settings->assignDefault(ram,speed,device);
+    }
+    int width=m_settings->GetInt(KSETTINGS_RES_WIDTH);
+    int height=m_settings->GetInt(KSETTINGS_RES_HEIGHT);
+    int desktopWidth,desktopHeight;
+    LinuxUtils::GetDesktopResolution(desktopWidth,desktopHeight);
+    if ((width>desktopWidth || height>desktopHeight) && m_settings->GetInt(KSETTINGS_FULLSCREEN)) return NULL;
+    float yRatio=static_cast<float>(height)/768.0f;
+    m_settings->SetFloat(KSETTINGS_XRATIO,static_cast<float>(width)*(1.0f/1024.0f));
+    m_settings->SetFloat(KSETTINGS_YRATIO,yRatio);
+    Ogre::LogManager::getSingleton().logMessage("Setting YRatio Init - "+STRINGS::GetValueAsString(yRatio),Ogre::LML_CRITICAL);
+    bool fullscreen=m_settings->GetInt(KSETTINGS_FULLSCREEN)!=0;
+    if (m_settings->GetInt(KSETTINGS_VSYNCH)) parameters["vsync"]="true";
+    if (m_settings->GetInt(KSETTINGS_FSAA)) parameters["FSAA"]="2";
+    if (m_settings->GetInt(KSETTINGS_OPENGL)) parameters["RTT Preferred Mode"]="FBO";
+    if (gUseSplash) fullscreen=false;
+    Ogre::RenderWindow* window=NULL;
+    if (!create) {
+        new Ogre::DefaultHardwareBufferManager;
+        Ogre::MaterialManager::getSingleton().initialise();
+    } else {
+        SDL_Surface* icon=NULL;
+        {
+            std::vector<unsigned char> pixels;
+            Ogre::UTFString filename("Torchlight.png");
+            std::string path=STRINGS::StringConvertToUTF8(static_cast<std::wstring>(Ogre::UTFString(FILESYSTEM::GetApplicationPath())+filename));
+            unsigned iconWidth,iconHeight;
+            if (lodepng::decode(pixels,iconWidth,iconHeight,path,LCT_RGBA,8)==0) {
+                icon=SDL_CreateRGBSurfaceFrom(&pixels[0],iconWidth,iconHeight,32,iconWidth*4,0xff,0xff00,0xff0000,0xff000000);
+                if (!icon) MessageBoxA(NULL,SDL_GetError(),"Error loading icon",0);
+            }
+        }
+        if (fullscreen) {
+            m_width=width;m_height=height;
+            m_settings->SetInt(KSETTINGS_RES_WIDTH,width);
+            m_settings->SetInt(KSETTINGS_RES_HEIGHT,height);
+            m_sdlWindow=SDL_CreateWindow("Torchlight",0,0,width,height,3);
+            SDL_SetWindowIcon(m_sdlWindow,icon);
+            SDL_SetWindowGrab(m_sdlWindow,SDL_TRUE);
+            void* handle=LinuxUtils::GetSDLWindowHandle(m_sdlWindow);
+            parameters["parentWindowHandle"]=Ogre::StringConverter::toString(reinterpret_cast<unsigned long>(handle));
+            window=m_root->createRenderWindow("Torchlight",width,height,true,&parameters);
+        } else {
+            LinuxUtils::GetDesktopResolution(desktopWidth,desktopHeight);
+            int windowWidth=std::min(width,desktopWidth),windowHeight=std::min(height,desktopHeight);
+            m_sdlWindow=SDL_CreateWindow("Torchlight",0x2fff0000,0x2fff0000,windowWidth,windowHeight,gUseSplash?10:2);
+            SDL_SetWindowIcon(m_sdlWindow,icon);
+            void* handle=LinuxUtils::GetSDLWindowHandle(m_sdlWindow);
+            parameters["parentWindowHandle"]=Ogre::StringConverter::toString(reinterpret_cast<unsigned long>(handle));
+            window=m_root->createRenderWindow("Torchlight",windowWidth,windowHeight,false,&parameters);
+        }
+        window->setActive(true);
+        window->setAutoUpdated(true);
+        SDL_FreeSurface(icon);
+        if (window) { unsigned long handle;window->getCustomAttribute("WINDOW",&handle); }
+    }
+    checkCapabilities(m_root->getRenderSystem());
+    return window;
+}
+
+#include "FileUtilities.h"
+#include "MissilePreloader.h"
+#include "SteamStats.h"
+#include <ParticleUniverseSystemManager.h>
+#include <OgreException.h>
+#include <OgreLog.h>
+#include <algorithm>
+#include <sstream>
+
+int SetCurrentDirectory(std::wstring);
+
+bool CGame::setup(bool create)
+{
+    if (create && gUseSplash) {
+        m_gSplash.Init(m_editorWindow,0);
+        m_gSplash.Show();
+    }
+    std::wstring localPath=FILESYSTEM::GetLocalPath();
+    SetCurrentDirectory(localPath.c_str());
+    std::string plugins=m_pluginsFile+"plugins.cfg";
+    m_settings->SetInt(KSETTINGS_OPENGL,1);
+    plugins=m_pluginsFile+"lib64/plugins_opengl.cfg";
+    try {
+        std::string appData=STRINGS::StringConvertToUTF8(FILESYSTEM::GetAppDataPath());
+        m_root=new Ogre::Root(plugins,appData+"ogre.cfg",appData+"Ogre.log");
+    } catch (Ogre::Exception error) {
+        if (!m_settings->GetInt(KSETTINGS_FULLSCREEN))
+            MessageBoxA(NULL,error.getFullDescription().c_str(),"Error in Root",0);
+    }
+    Ogre::LogManager::getSingleton().getDefaultLog()->setDebugOutputEnabled(false);
+    Ogre::LogManager::getSingleton().getDefaultLog()->setLogDetail(Ogre::LL_LOW);
+    std::wstring savePath=L"Path for saving is ... "+(FILESYSTEM::GetAppDataPath()+L"Save");
+    std::string saveMessage=STRINGS::StringConvertToNarrow(savePath.c_str());
+    Ogre::LogManager::getSingleton().logMessage(saveMessage,Ogre::LML_CRITICAL);
+    setupResources();
+    if (!configure(create) && create && !m_renderWindow) return false;
+    if (m_renderWindow) {
+        if (gUseSplash) m_gSplash.Show();
+        m_renderWindow->setActive(false);
+        m_width=m_renderWindow->getWidth();
+        m_height=m_renderWindow->getHeight();
+        m_windowHandle=reinterpret_cast<void*>(static_cast<unsigned long>(SDL_GetWindowID(m_sdlWindow)));
+    }
+    chooseSceneManager();
+    createCamera();
+    if (m_renderWindow) createViewports();
+    m_viewport->setClearEveryFrame(true,3);
+    m_root->renderOneFrame();
+    m_viewport->setClearEveryFrame(false,3);
+    m_masterResourceManager=new CMasterResourceManager(m_settings);
+    CSteamStats::getSingleton()->m_game=this;
+    m_soundManager=new CSoundManager(m_settings->GetInt(KSETTINGS_NO_SOUNDS)==0);
+    m_soundManager->initialize(m_settings);
+    m_soundManager->m_bUnknown6A9=false;
+    int soundMute=m_settings->GetInt(KSETTINGS_SOUNDMUTE);
+    int musicMute=m_settings->GetInt(KSETTINGS_MUSICMUTE);
+    float soundVolume=m_settings->GetFloat(KSETTINGS_F_SOUNDVOLUME);
+    float musicVolume=m_settings->GetFloat(KSETTINGS_F_MUSICVOLUME);
+    m_soundManager->updateAudioLevels(soundVolume,musicVolume,soundMute!=0,musicMute!=0);
+    m_masterResourceManager->m_renderTarget=m_renderWindow;
+    m_masterResourceManager->m_pSoundManager=m_soundManager;
+    m_masterResourceManager->m_pDefaultSceneManager=m_sceneManager;
+    m_masterResourceManager->m_pSceneManager=m_renderBehindScene;
+    m_masterResourceManager->m_renderBehindParticleScene=m_renderBehindParticleScene;
+    m_masterResourceManager->m_automapScene=m_automapScene;
+    m_masterResourceManager->m_pParticleSystemManager->setMaxNumberOfParticles(20000);
+    m_masterResourceManager->m_pParticleSystemManager->m_particleFalloff=m_settings->GetFloat(KSETTINGS_F_PARTICLE_FALLOFF);
+    ParticleUniverse::ParticleSystemManager::setParticleFPS(m_settings->GetFloat(KSETTINGS_F_PARTICLEFPS));
+    float particlePercent=m_settings->GetFloat(KSETTINGS_F_PARTICLE_PCT);
+    ParticleUniverse::ParticleSystemManager::setEmitterLoopingReleasePCT(std::max(0.f,std::min(100.f,particlePercent))/100.f);
+    if (m_renderWindow && gUseSplash) m_gSplash.Show();
+    m_masterResourceManager->loadParticles();
+    m_masterResourceManager->m_missilePreloader->reloadMissiles();
+    createResourceListener();
+    loadResources();
+    createMaterials();
+    if (m_renderWindow) windowResized(m_renderWindow);
+    createFrameListener();
+    std::ostringstream windowText;
+    unsigned long windowHandle=0;
+    if (m_renderWindow) {
+        m_renderWindow->getCustomAttribute("WINDOW",&windowHandle);
+        windowText<<windowHandle;
+        Ogre::WindowEventUtilities::addWindowEventListener(m_renderWindow,this);
+        m_renderWindow->addListener(this);
+        m_renderWindow->setActive(true);
+        if (m_renderWindow && gUseSplash) {
+            int desktopWidth,desktopHeight,windowWidth,windowHeight;
+            LinuxUtils::GetDesktopResolution(desktopWidth,desktopHeight);
+            SDL_GetWindowSize(m_sdlWindow,&windowWidth,&windowHeight);
+            SDL_SetWindowPosition(m_sdlWindow,(desktopWidth-windowWidth)/2,(desktopHeight-windowHeight)/2);
+            SDL_ShowWindow(m_sdlWindow);
+            m_gSplash.Hide();
+        }
+    }
+    m_soundManager->m_bUnknown6A9=true;
+    createGameClient();
+    return true;
+}

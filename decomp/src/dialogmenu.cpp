@@ -73,3 +73,62 @@ CDialogMenu::CDialogMenu(CGameUI& ui, CSettings& settings, Ogre::SceneManager* s
         g_Dialog = CStringTranslate::getSinglton()->getTranslateString(L"Dialog");
     setTitle(g_Dialog);
 }
+
+#include "FileSystem.h"
+#include "EmptyStrings.h"
+#include "StringUtilities.h"
+#include "Quest.h"
+#include <CEGUIWindowManager.h>
+#include <OgreLogManager.h>
+void CDialogMenu::createMenus()
+{
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(L"media/ui/dialogmenu.layout",info,false,true,false);
+    CEGUI::Window* layout = CEGUI::WindowManager::getSingleton().loadWindowLayout(CEGUI::String(info.m_sResourceName),true);
+    m_declineWindow = layout->getChild("Decline");
+    m_acceptWindow = layout->getChild("Accept");
+    m_promptWindow = layout->getChild("Ok");
+    m_extraWindow = layout->getChild("DialogText");
+    m_iUnknown50 = layout->recursiveChildSearch("Title");
+    m_pGameUI->convertToScreenScale(layout,false);
+    m_pGameUI->mapToFunctions(layout);
+    mapEventHandlers(layout);
+    static_cast<CEGUI::Window*>(m_pUnknown20)->addChildWindow(layout);
+}
+void CDialogMenu::setNPC(CCharacter* npc)
+{
+    m_dialogOwner = NULL;
+    m_speaker = npc;
+    if (!m_acceptWindow || !m_declineWindow || !m_promptWindow) return;
+    m_acceptWindow->setVisible(false);
+    m_declineWindow->setVisible(false);
+    m_promptWindow->setVisible(false);
+    CPlayer* player = static_cast<CPlayer*>(m_pGameUI->getCharacter());
+    if (player || !player->getQuestManager() || !m_speaker) {
+        TArrayList<CQuestDialog*> dialogs(10);
+        player->getQuestManager()->getDialogsForNPC(dialogs,m_speaker,true);
+        if (dialogs.size()) {
+            m_dialogOwner = dialogs[0];
+            if (m_dialogOwner) {
+                std::wstring details = EMPTY_WSTRING;
+                switch (m_dialogOwner->m_iDialogType) {
+                case 2:
+                    details = L"\n\n" + m_dialogOwner->m_pQuest->getQuestDetails();
+                case 3:
+                    m_promptWindow->setVisible(true);
+                    break;
+                case 1:
+                    m_declineWindow->setVisible(true);
+                    m_acceptWindow->setVisible(true);
+                    break;
+                }
+                std::string label = STRINGS::StringConvertToUTF8(m_dialogOwner->getDialog(false)) +
+                                    STRINGS::StringConvertToUTF8(details);
+                m_extraWindow->setText(CEGUI::String(reinterpret_cast<const CEGUI::utf8*>(label.c_str())));
+            }
+        } else {
+            std::wstring message = L"Error occured getting NPC dialog for character : " + m_speaker->getName();
+            Ogre::LogManager::getSingleton().logMessage(STRINGS::StringConvertToNarrow(message.c_str()),Ogre::LML_CRITICAL,false);
+        }
+    }
+}

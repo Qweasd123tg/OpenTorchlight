@@ -42,6 +42,7 @@ static unsigned char g_MeshFilesByIndex[48];
 static long g_MissilePreloader;
 static long g_SkillParser;
 static bool g_bCachParticles;
+extern bool gbWasVisible; // original one-byte global used by level.cpp
 extern bool g_bWasRestarted;
 extern unsigned char g_hRestartingFile[4];
 static void* g_pCameraControl;

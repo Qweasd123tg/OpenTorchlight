@@ -97,7 +97,7 @@ void side(Case&c,bool ours,autotest::Capture&out){
  self->m_pSkill=op==3&&seed%17==0?NULL:skill;self->m_pResourceManager=resources;self->m_pSkillProperty=seed%19==0?NULL:property;self->m_pSkillEffectAndAffixes=seed&2?effects[0]:NULL;property->m_pSkillEffectAndAffixes=seed&4?effects[1]:NULL;
  property->m_bSingleTarget=seed&8;property->m_eTargetUnitType=seed&16?7:0;property->m_eTargetType=seed%7==0?4:0;property->m_iSkillLevel=seed/11%4;
  self->m_skillTarget.m_pObject=seed&32?characters[2]:characters[1];self->m_targetCorpses=seed&64;self->m_missileTargetSelf=seed&128;self->m_damageRequiresLOS=seed&16;
- self->m_eventType=static_cast<ESKILL_EVENT_TYPE>(seed/13%11);shape->m_bTargetOnlyDead=seed&256;shape->m_shapeKind=seed&512?4:0;missile->m_bUnknown294=seed&1024;missile->m_pSceneNode=static_cast<Ogre::SceneNode*>(node);missile->m_pRunicCore=seed%5?NULL:characters[0];
+ self->m_eventType=static_cast<ESKILL_EVENT_TYPE>(seed/13%11);shape->m_bTargetOnlyDead=seed&256;shape->m_shapeKind=seed&512?4:0;missile->m_bUnknown294=seed&1024;missile->m_pSceneNode=static_cast<Ogre::SceneNode*>(node);missile->m_owner.m_pObject=seed%5?NULL:characters[0];
  if(seed&256)self->m_specificUnits.add(groups[0]);if(seed&512)self->m_specificUnits.add(groups[1]);
  CCharacter*target=seed%23==0?NULL:characters[2];Ogre::Vector3 v(0.25f,-1.5f,3.75f);bool result=false;
  if(op==0){typedef bool(*Fn)(CSkillEvent*,CBaseUnit*,const Ogre::Vector3*,bool);Fn fn=ours?sdNewApply:sdOldApply;if(!autotest::beginInvocation(out,fn))return;result=fn(self,target,seed&1?&v:NULL,seed&8);}

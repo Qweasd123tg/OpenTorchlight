@@ -67,7 +67,7 @@ private:
     float m_fEnchanterDisenchantPerEnchant;
     int m_iShrineMaxEnchantments;
     float m_fShrineDisenchantPerEnchant;
-    unsigned char m_GlobalsData98[0x10];
+    union { unsigned char m_GlobalsData98[16]; float m_difficultyRadiusBonus[4]; }; // +0x98
     float m_fUnitShadowRange;
     float m_fUnitNearRange;
     float m_fTriggerNearRange;

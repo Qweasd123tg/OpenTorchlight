@@ -1,0 +1,609 @@
+--- a/ParticleRenderers/ParticleUniverseBillboardRenderer.h
++++ b/ParticleRenderers/ParticleUniverseBillboardRenderer.h
+@@ -54,6 +54,8 @@
+ 			/** 
+ 			*/
+ 			void setBillboardType(BillboardType bbt);
++			void setFlipbookWidthHeight(int width,int height);
++			virtual void _notifyFlipbookWidthHeight(int width,int height);
+ 
+ 			/** 
+ 			*/
+@@ -120,7 +122,7 @@
+ 
+ 			/** 
+ 			*/
+-			virtual void _notifyCurrentCamera(Ogre::Camera* cam);
++			virtual void notifyCurrentCamera(Ogre::Camera* cam);
+ 	
+ 			/** 
+ 			*/
+@@ -165,6 +167,10 @@
+ 			/** 
+ 			*/
+ 			BillboardType mBillboardType;
++			int mRunicFlipbookCount;
++			int mRunicFlipbookWidth;
++			int mRunicFlipbookHeight;
++			int mRunicValueA0;
+ 	};
+ 
+ }
+--- a/ParticleRenderers/ParticleUniverseRibbonTrailRenderer.h
++++ b/ParticleRenderers/ParticleUniverseRibbonTrailRenderer.h
+@@ -66,6 +66,7 @@
+ 			std::vector<RibbonTrailRendererVisualData*> mAllVisualData;
+ 			std::vector<RibbonTrailRendererVisualData*> mVisualData;
+ 			size_t mQuota;
++			Ogre::SceneNode* mRunicNodeC0;
+ 			Ogre::RibbonTrail* mTrail;
+ 			Ogre::String mRibbonTrailName;
+ 			bool mUseVertexColours;
+@@ -75,10 +76,16 @@
+ 			bool mRandomInitialColour;
+ 			bool mSetLength;
+ 			bool mSetWidth;
++			bool mTrailLocal;
+ 			Ogre::ColourValue mInitialColour;
+ 			Ogre::ColourValue mColourChange;
++			Ogre::ColourValue mStartColour;
++			Ogre::ColourValue mEndColour;
+ 
+ 		public:
++			void setTrailLocal(bool value);
++			void setStartColour(const Ogre::ColourValue& value);
++			void setEndColour(const Ogre::ColourValue& value);
+ 			RibbonTrailRenderer(void);
+ 	        virtual ~RibbonTrailRenderer(void);
+ 
+@@ -138,7 +145,7 @@
+ 
+ 			/** 
+ 			*/
+-			virtual void _notifyCurrentCamera(Ogre::Camera* cam);
++			virtual void notifyCurrentCamera(Ogre::Camera* cam);
+ 	
+ 			/** 
+ 			*/
+--- a/ParticleUniverseAffector.h
++++ b/ParticleUniverseAffector.h
+@@ -192,6 +192,7 @@
+ 			Ogre::Real _calculateAffectSpecialisationFactor (const Particle* particle);
+ 
+ 		protected:
++			bool mRunicFlag110;
+ 			ParticleTechnique* mParentTechnique;
+ 
+ 			// Type of the affector
+--- a/ParticleUniverseCommon.h
++++ b/ParticleUniverseCommon.h
+@@ -27,11 +27,14 @@
+ 		CO_GREATER_THAN
+ 	};
+ 
++#ifndef OTL_PU_INTERPOLATION_TYPE_DEFINED
++#define OTL_PU_INTERPOLATION_TYPE_DEFINED
+ 	enum InterpolationType
+ 	{
+ 		IT_LINEAR,
+ 		IT_SPLINE
+-	};
++	};
++#endif
+ 
+ }
+ #endif
+--- a/ParticleUniverseDynamicAttribute.h
++++ b/ParticleUniverseDynamicAttribute.h
+@@ -64,7 +64,7 @@
+ 
+ 			/** Pure virtual function that needs to be implemented by its childs.
+ 			*/
+-			virtual Ogre::Real getValue (Ogre::Real x = 0) = 0;
++			virtual Ogre::Real getValue (Particle* particle, Ogre::Real x = 0) = 0;
+ 
+ 			/** 
+ 			*/
+@@ -105,7 +105,7 @@
+ 
+ 			/** 
+ 			*/
+-			virtual Ogre::Real getValue (Ogre::Real x = 0);
++			virtual Ogre::Real getValue (Particle* particle, Ogre::Real x = 0);
+ 
+ 			/** 
+ 			*/
+@@ -138,7 +138,7 @@
+ 
+ 			/** 
+ 			*/
+-			virtual Ogre::Real getValue (Ogre::Real x = 0);
++			virtual Ogre::Real getValue (Particle* particle, Ogre::Real x = 0);
+ 
+ 			/** 
+ 			*/
+@@ -185,7 +185,7 @@
+ 
+ 			/** 
+ 			*/
+-			virtual Ogre::Real getValue (Ogre::Real x = 0);
++			virtual Ogre::Real getValue (Particle* particle, Ogre::Real x = 0);
+ 
+ 			/** 
+ 			*/
+@@ -198,6 +198,7 @@
+ 			/** 
+ 			*/
+ 			size_t getNumControlPoints(void) const;
++			void getControlPointValues(unsigned int index, Ogre::Real& x, Ogre::Real& y);
+ 
+ 			/** 
+ 			*/
+@@ -260,7 +261,7 @@
+ 
+ 			/** 
+ 			*/
+-			virtual Ogre::Real getValue (Ogre::Real x = 0);
++			virtual Ogre::Real getValue (Particle* particle, Ogre::Real x = 0);
+ 
+ 			/** Get and set the OscillationType
+ 			*/
+@@ -306,7 +307,7 @@
+ 		public:
+ 			/* Return the value of a DynamicAttribute, given te x value.
+ 			*/
+-			Ogre::Real calculate(DynamicAttribute* dyn, Ogre::Real x, Ogre::Real defaultValue = 0.0f);
++			Ogre::Real calculate(Particle* particle, DynamicAttribute* dyn, Ogre::Real x, Ogre::Real defaultValue = 0.0f);
+ 	};
+ 
+ };
+--- a/ParticleUniverseEmitter.h
++++ b/ParticleUniverseEmitter.h
+@@ -61,6 +61,7 @@
+ 
+ 			// Rate of particle emission.
+ 			DynamicAttribute* mDynEmissionRate;
++			DynamicAttribute* mDynChanceToEmit;
+ 
+ 			// Identifies the type of particle this emitter emits (default is visual particle).
+ 			ParticleType mEmitsType;
+@@ -96,6 +97,7 @@
+ 			*/
+ 			DynamicAttribute* mDynParticleAllDimensions;
+ 			bool mDynParticleAllDimensionsSet;
++			bool mRunicScaleOnLaunchSet;
+ 
+ 			/** Dynamic attribute used to define the (own) width of a particle.
+ 			@remarks
+@@ -146,6 +148,10 @@
+ 
+ 			/** Indication to determine whether duration is set.
+ 	        */
++			Ogre::Real mRunicOriginalDuration;
++			int mNumberOfLoops;
++			int mRemainingLoops;
++			bool mRunicLoopActive;
+ 			bool mDynDurationSet;
+ 
+ 			/** Repeat/delay remainder.
+@@ -155,6 +161,7 @@
+ 			/** Indication to determine whether repeat/delay is set.
+ 	        */
+ 			bool mDynRepeatDelaySet;
++			bool mRunicFlag20d;
+ 
+ 			/** Distance value that causes a decrease (or increase if needed) of the particle emission rate.
+ 			@remarks
+@@ -222,8 +229,15 @@
+ 			/** Determines whether particle positions should be kept local in relation to the emitter.
+ 	        */
+ 			bool mKeepLocal;
++			bool mNonExpiring;
++			bool mRunicFlag25b;
++			bool mRunicFlag25c;
+ 
+ 		public:
++			void setNumberOfLoops(int loops);
++			bool isNonExpiring(void) const;
++			void setNonExpiring(bool value);
++			void setDynChanceToEmit(DynamicAttribute* value);
+ 			ParticleEmitter(void);
+ 			
+ 			virtual ~ParticleEmitter(void);
+--- a/ParticleUniverseHook.h
++++ b/ParticleUniverseHook.h
+@@ -36,8 +36,8 @@
+ 				if (list->empty())
+ 					return;
+ 
+-				std::vector<T*>::iterator it;
+-				std::vector<T*>::iterator itEnd = list->end();
++				typename std::vector<T*>::iterator it;
++				typename std::vector<T*>::iterator itEnd = list->end();
+ 				for (it = list->begin(); it != itEnd; ++it)
+ 				{
+ 					(*it)->_prepare(technique);
+@@ -51,8 +51,8 @@
+ 				if (list->empty())
+ 					return;
+ 
+-				std::vector<T*>::iterator it;
+-				std::vector<T*>::iterator itEnd = list->end();
++				typename std::vector<T*>::iterator it;
++				typename std::vector<T*>::iterator itEnd = list->end();
+ 				for (it = list->begin(); it != itEnd; ++it)
+ 				{
+ 					(*it)->_notifyStart();
+@@ -66,8 +66,8 @@
+ 				if (list->empty())
+ 					return;
+ 
+-				std::vector<T*>::iterator it;
+-				std::vector<T*>::iterator itEnd = list->end();
++				typename std::vector<T*>::iterator it;
++				typename std::vector<T*>::iterator itEnd = list->end();
+ 				for (it = list->begin(); it != itEnd; ++it)
+ 				{
+ 					(*it)->_notifyStop();
+@@ -83,8 +83,8 @@
+ 				if (list->empty())
+ 					return;
+ 
+-				std::vector<T*>::iterator it;
+-				std::vector<T*>::iterator itEnd = list->end();
++				typename std::vector<T*>::iterator it;
++				typename std::vector<T*>::iterator itEnd = list->end();
+ 				for (it = list->begin(); it != itEnd; ++it)
+ 				{
+ 					(*it)->_preProcessParticles(technique, timeElapsed);
+@@ -102,8 +102,8 @@
+ 				if (list->empty())
+ 					return;
+ 
+-				std::vector<T*>::iterator it;
+-				std::vector<T*>::iterator itEnd = list->end();
++				typename std::vector<T*>::iterator it;
++				typename std::vector<T*>::iterator itEnd = list->end();
+ 				for (it = list->begin(); it != itEnd; ++it)
+ 				{
+ 					(*it)->_processParticle(particleTechnique, particle, timeElapsed, firstParticle);
+@@ -119,8 +119,8 @@
+ 				if (list->empty())
+ 					return;
+ 
+-				std::vector<T*>::iterator it;
+-				std::vector<T*>::iterator itEnd = list->end();
++				typename std::vector<T*>::iterator it;
++				typename std::vector<T*>::iterator itEnd = list->end();
+ 				for (it = list->begin(); it != itEnd; ++it)
+ 				{
+ 					(*it)->_postProcessParticles(technique, timeElapsed);
+--- a/ParticleUniverseIElement.h
++++ b/ParticleUniverseIElement.h
+@@ -28,12 +28,15 @@
+ 		object is created and must be set in the current section of the Context object. the
+ 		ParticleTechnique object must be of type IElement to be stored in the Context object.
+ 	*/
++#ifndef OTL_PU_IELEMENT_DEFINED
++#define OTL_PU_IELEMENT_DEFINED
+ 	class _ParticleUniverseExport IElement
+ 	{
+ 		public:
+ 			IElement(void) {};
+ 			virtual ~IElement(void) {};
+-	};
++	};
++#endif
+ 
+ }
+ #endif
+--- a/ParticleUniverseIToken.h
++++ b/ParticleUniverseIToken.h
+@@ -17,7 +17,8 @@
+ #ifndef __PU_I_TOKEN_H__
+ #define __PU_I_TOKEN_H__
+ 
+-#include "ParticleUniverseScriptParser.h"
++#include "ParticleUniversePrerequisites.h"
++namespace ParticleUniverse { class ParticleScriptParser; }
+ 
+ namespace ParticleUniverse
+ {
+--- a/ParticleUniverseParticle.h
++++ b/ParticleUniverseParticle.h
+@@ -21,9 +21,11 @@
+ #include "ParticleUniverseBehaviour.h"
+ #include "ParticleUniverseIVisualData.h"
+ #include "OgreUserDefinedObject.h"
++#include <map>
+ 
+ namespace ParticleUniverse
+ {
++	class DynamicAttribute;
+ 	/** Particle is the abstract/virtual class that represents the entity to be emitted.
+ 	@remarks
+ 		Several types of particles are distinguished, where the visual particle is the most obvious one.
+@@ -62,6 +64,7 @@
+ 				position(Ogre::Vector3::ZERO),
+ 				mDerivedPosition(Ogre::Vector3::ZERO),
+ 				direction(Ogre::Vector3::ZERO),
++				mRunicVector28(Ogre::Vector3::ZERO),
+ 				timeToLive(DEFAULT_TTL),
+ 				totalTimeToLive(DEFAULT_TTL),
+ 				timeFraction(0.0f),
+@@ -101,6 +104,10 @@
+ 			// Direction (and speed)
+ 			Ogre::Vector3 direction;
+ 
++			// Runic additions: native C1/copy use Vector3::ZERO; map type is in native D1.
++			Ogre::Vector3 mRunicVector28;
++			std::map<DynamicAttribute*, Ogre::Real> mDynamicPropertyValues;
++
+ 			/*  Mass of a particle.
+ 			@remarks
+ 				In case of simulations where mass of a particle is needed (i.e. exploding particles of different
+@@ -219,6 +226,7 @@
+ 			/** Returns the first occurence of the ParticleBehaviour specified by its type.
+ 			*/
+ 			ParticleBehaviour* getBehaviour(const Ogre::String& behaviourType);
++			Ogre::Real getDynamicPropertyValue(DynamicAttribute* attribute);
+ 
+ 			/** Calculates the velocity, based on the direction vector.
+ 			*/
+--- a/ParticleUniverseRenderer.h
++++ b/ParticleUniverseRenderer.h
+@@ -72,6 +72,10 @@
+ 				used. It is a derived value, so it has not get a get and set function.
+ 			*/
+ 			Ogre::Vector3 _mParticleSystemScale;
++			Ogre::Vector3 mRunicDirection58;
++			Ogre::Vector3 mCommonDirection;
++			Ogre::Vector3 mCommonUpVector;
++			Ogre::SceneManager* mRunicSceneManager;
+ 
+ 		public:
+ 			ParticleRenderer(void);
+@@ -119,10 +123,11 @@
+ 			virtual void _updateRenderQueue(Ogre::RenderQueue* queue, ParticlePool* pool) = 0;
+ 
+ 			/** Sets the material this renderer must use; called by ParticleTechnique. */
++			virtual void _releaseParticles(ParticlePool* pool);
+ 			virtual void _setMaterialName(const Ogre::String& materialName) = 0;
+ 
+ 			/** Delegated to by ParticleTechnique::_notifyCurrentCamera */
+-			virtual void _notifyCurrentCamera(Ogre::Camera* cam) = 0;
++			virtual void notifyCurrentCamera(Ogre::Camera* cam) = 0;
+ 	
+ 			/** Delegated to by ParticleTechnique::_notifyAttached */
+ 			virtual void _notifyAttached(Ogre::Node* parent, bool isTagPoint = false) = 0;
+@@ -134,6 +139,7 @@
+ 			virtual void _notifyDefaultDimensions(Ogre::Real width, Ogre::Real height, Ogre::Real depth) = 0;
+ 
+ 			/** Callback when particles are resized */
++			virtual void _notifyFlipbookWidthHeight(int width, int height);
+ 			virtual void _notifyParticleResized(void) = 0;
+ 
+ 			/** Callback when particles are rotated */
+--- a/ParticleUniverseScriptParser.h
++++ b/ParticleUniverseScriptParser.h
+@@ -33,6 +33,8 @@
+ namespace ParticleUniverse
+ {
+ 	// String representation of the Particle Universe contexts. Numeric values are used to keep the string small.
++#ifndef OTL_PU_CONTEXT_STRINGS_DEFINED
++#define OTL_PU_CONTEXT_STRINGS_DEFINED
+ 	const static Ogre::String ALIAS					= "1";
+ 	const static Ogre::String SYSTEM				= "2";
+ 	const static Ogre::String TECHNIQUE				= "3";
+@@ -44,7 +46,8 @@
+ 	const static Ogre::String BEHAVIOUR				= "9";
+ 	const static Ogre::String EXTERN				= "10";
+ 	const static Ogre::String DYNAMIC_ATTRIBUTE		= "11";
+-	const static Ogre::String DEPENDENCY			= "12";
++	const static Ogre::String DEPENDENCY			= "12";
++#endif
+ 
+ 	/*	The ParticleScriptParser forms a layer between Ogre's Compiler2Pass and the ParticleScriptTokeniser.
+ 	@remarks
+--- a/ParticleUniverseSpatialHashTable.h
++++ b/ParticleUniverseSpatialHashTable.h
+@@ -35,7 +35,7 @@
+ 			SpatialHashTable(void) :
+ 				mTableSize(50),
+ 				mCellDimension(15),
+-				mCellOverlap(5),
++				mCellOverlap(5)
+ 			{
+ 				_initialise();
+ 			};
+--- a/ParticleUniverseSystem.h
++++ b/ParticleUniverseSystem.h
+@@ -145,7 +145,7 @@
+ 			@see
+ 				MovableObject
+ 			*/
+-			virtual void _notifyCurrentCamera(Ogre::Camera* cam);
++			virtual void notifyCurrentCamera(Ogre::Camera* cam);
+ 
+ 			/** Overridden from MovableObject
+ 			@see
+@@ -219,6 +219,7 @@
+ 			/** Returns the state of the particle system.
+ 			*/
+ 			ParticleSystemState getState (void) const {return mState;};
++			void setManualUpdate(bool manualUpdate);
+ 
+ 			/** 
+ 			*/
+@@ -525,6 +526,11 @@
+ 			    is growing and never shrinks.
+ 	        */
+ 			bool mTightBoundingBox;
++
++			// Runic tail, native notifyCurrentCamera/_update/setManualUpdate.
++			Ogre::Camera* mRunicCurrentCamera;
++			Ogre::Real mRunicUpdateElapsed;
++			bool mManualUpdate;
+ 	};
+ 
+ }
+--- a/ParticleUniverseSystemManager.h
++++ b/ParticleUniverseSystemManager.h
+@@ -18,18 +18,6 @@
+ #define __PU_PARTICLE_SYSTEM_MANAGER_H__
+ 
+ #include "ParticleUniversePrerequisites.h"
+-#include "ParticleUniverseScriptTokeniser.h"
+-#include "ParticleUniverseRendererFactory.h"
+-#include "ParticleRenderers/ParticleUniverseBoxSet.h"
+-#include "ParticleRenderers/ParticleUniverseBox.h"
+-#include "ParticleRenderers/ParticleUniverseSphereSet.h"
+-#include "ParticleRenderers/ParticleUniverseSphere.h"
+-#include "ParticleUniverseEmitterFactory.h"
+-#include "ParticleUniverseAffectorFactory.h"
+-#include "ParticleUniverseObserverFactory.h"
+-#include "ParticleUniverseEventHandlerFactory.h"
+-#include "ParticleUniverseExternFactory.h"
+-#include "ParticleUniverseBehaviourFactory.h"
+ #include "ParticleUniverseITokenInitialiser.h"
+ #include "ParticleUniverseIAlias.h"
+ #include "ParticleUniverseCameraDependency.h"
+@@ -43,7 +31,6 @@
+ #include "ParticleUniverseDynamicAttributeTokens.h"
+ #include "ParticleUniverseSystemManagerTokens.h"
+ #include "ParticleUniverseCameraDependencyTokens.h"
+-#include "ParticleUniverseAttachable.h"
+ 
+ namespace ParticleUniverse
+ {
+@@ -51,6 +38,23 @@
+ 		responsible for actually creating techniques, emitters, observers, etc.
+ 	*/
+ 	class ParticleSystemFactory;
++    // Pointer-only dependencies keep this SDK owner independent of the script parser.
++    class Attachable;
++    class BoxSet;
++    class BoxSetFactory;
++    class SphereSet;
++    class SphereSetFactory;
++    class ParticleScriptTokeniser;
++    class ParticleRenderer;
++    class ParticleRendererFactory;
++    class ParticleEmitterFactory;
++    class ParticleAffectorFactory;
++    class ParticleObserverFactory;
++    class ParticleEventHandler;
++    class ParticleEventHandlerFactory;
++    class ExternFactory;
++    class ParticleBehaviour;
++    class ParticleBehaviourFactory;
+ 
+ 	class _ParticleUniverseExport ParticleSystemManager:
+ 		public Ogre::Singleton<ParticleSystemManager>, public Ogre::ScriptLoader, ITokenInitialiser
+@@ -59,7 +63,7 @@
+ 
+ 		public:
+ 			// Constructor
+-			ParticleSystemManager (void);
++			ParticleSystemManager (float falloff, unsigned int maxParticles);
+ 
+ 			// Destructor
+ 			~ParticleSystemManager (void);
+@@ -460,6 +464,32 @@
+ 
+ 			// CameraDependency object is used as a container to store data from a particle script.
+ 			CameraDependency mCameraDependency;
++
++        public:
++            // Runic additions after the genuine historical Particle Universe SDK prefix.
++            float m_particleFalloff;                       // +0x4d8
++            float m_timeScale;                             // +0x4dc
++            Ogre::Vector3 m_cameraPosition;                 // +0x4e0
++            unsigned int m_updatedSystemCount;              // +0x4ec
++            unsigned int m_updatedTechniqueCount;           // +0x4f0
++            unsigned int m_renderedParticleCount;           // +0x4f4
++            unsigned int m_processedAffectorCount;          // +0x4f8
++            unsigned int m_techniqueCount;                  // +0x4fc
++            unsigned int m_value500;                        // +0x500, original C1 leaves this untouched
++            unsigned int m_affectorCount;                   // +0x504
++            unsigned int m_systemCount;                     // +0x508
++            unsigned int m_maxParticles;                    // +0x50c
++            std::vector<VisualParticle*> m_availableParticles; // +0x510
++            // Never accessed as elements in the ELF; only native vector storage C1/D1 is known.
++            std::vector<void*> m_unusedVector528;           // +0x528
++            bool m_paused;                                  // +0x540, original C1 leaves this untouched
++
++            void setMaxNumberOfParticles(unsigned int);
++            static void setParticleFPS(float);
++            static float getParticleFPS();
++            static void setEmitterLoopingReleasePCT(float);
++            static float getEmitterLoopingReleasePCT();
++
+ 	};
+ 
+ 	/** Factory object for creating ParticleSystem instances */
+--- a/ParticleUniverseTechnique.h
++++ b/ParticleUniverseTechnique.h
+@@ -36,7 +36,11 @@
+ 
+ namespace ParticleUniverse
+ {
+-	static const Ogre::Vector3 HALFSCALE = Ogre::Vector3::UNIT_SCALE * 0.5;
++	class ParticleSystemManager;
++#ifndef OTL_PU_HALFSCALE_DEFINED
++#define OTL_PU_HALFSCALE_DEFINED
++	static const Ogre::Vector3 HALFSCALE = Ogre::Vector3::UNIT_SCALE * 0.5;
++#endif
+ 
+ 	/** In analogy of Ogre´s material system, the ParticleTechnique is introduced. It forms an extra layer 
+ 		between particle emitters, affectors, etc. on one side, and the particle system and the other side.
+@@ -65,7 +69,9 @@
+ 			typedef std::vector<TechniqueListener*>::iterator TechniqueListenerIterator;
+ 			typedef std::vector<TechniqueListener*> TechniqueListenerList;
+ 
+-			ParticleTechnique(void);
++			void removeEmitter(ParticleEmitter* emitter);
++			void removeAffector(ParticleAffector* affector);
++			ParticleTechnique(ParticleSystemManager* manager);
+ 	        virtual ~ParticleTechnique(void);
+ 
+ 			/** 
+@@ -473,6 +479,8 @@
+ 			/** Set the Lod index.
+ 			*/
+ 			void setLodIndex(unsigned short lodIndex) {mLodIndex = lodIndex;};
++			void setFlipbookWidthHeight(int width, int height);
++			void notifyCurrentCamera(Ogre::Camera* camera);
+ 
+ 			/** Determine which techniques, affectors, emitters will be emitted.
+ 			@remarks
+@@ -770,6 +778,7 @@
+ 
+ 			/** Parent Particle System of this technique.
+ 	        */
++			ParticleSystemManager* mRunicSystemManager; // native +0x110
+ 			ParticleSystem* mParentSystem;
+ 
+ 			/** Name of the technique (optional).
+@@ -875,6 +884,8 @@
+ 				Note, that mLodIndex only has a meaning if the lod distances are set by the ParticleSystem, otherwise
+ 				it is ignored (which enables all ParticleTechniques).
+ 	        */
++			int mFlipbookWidth; // native setFlipbookWidthHeight(int,int)
++			int mFlipbookHeight;
+ 			unsigned short mLodIndex;
+ 
+ 			/** Distance between the latest camera that updated the renderqueue and the particle system.
+@@ -999,6 +1010,12 @@
+ 			/** List of TechniqueListeners
+ 	        */
+ 			TechniqueListenerList mTechniqueListenerList;
++			Ogre::Camera* mRunicCurrentCamera; // native notifyCurrentCamera
++			unsigned int mRunicOwnershipFlags; // native bits1/2/4/8 select owning collections
++			int mRunicValue5ac;
++			bool mRunicFlag5b0;
++		public:
++			bool mRunicFlag5b1;
+ 	};
+ }
+ #endif

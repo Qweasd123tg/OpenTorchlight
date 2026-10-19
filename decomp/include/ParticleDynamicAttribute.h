@@ -23,51 +23,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #ifndef PARTICLE_DYNAMIC_ATTRIBUTE_H
 #define PARTICLE_DYNAMIC_ATTRIBUTE_H
-
-#include <vector>
-#include <OgreVector2.h>
-#include <OgreSimpleSpline.h>
-
-// ABI declarations for the version statically linked into Torchlight.
-// Upstream fa746774 is a reference, not a drop-in replacement: the original
-// getValue takes Particle*, and DynamicAttribute has no value-changed flag.
-namespace ParticleUniverse
-{
-class Particle;
-enum InterpolationType { IT_LINEAR = 0, IT_SPLINE = 1 };
-class IElement
-{
-public:
-    virtual ~IElement();
-};
-class DynamicAttribute : public IElement
-{
-public:
-    enum DynamicAttributeType { DAT_FIXED, DAT_RANDOM, DAT_CURVED };
-    DynamicAttribute();
-    virtual ~DynamicAttribute();
-    virtual float getValue(Particle*, float) = 0;
-    virtual void copyAttributesTo(DynamicAttribute*) = 0;
-protected:
-    DynamicAttributeType mType;
-};
-class DynamicAttributeCurved : public DynamicAttribute
-{
-public:
-    DynamicAttributeCurved(InterpolationType interpolationType);
-    virtual ~DynamicAttributeCurved();
-    virtual float getValue(Particle*, float);
-    virtual void copyAttributesTo(DynamicAttribute*);
-    virtual void addControlPoint(float x, float y);
-    void processControlPoints();
-    size_t getNumControlPoints() const;
-    void getControlPointValues(unsigned int, float&, float&);
-    void removeAllControlPoints();
-private:
-    float mRange;
-    Ogre::SimpleSpline mSpline;
-    InterpolationType mInterpolationType;
-    std::vector<Ogre::Vector2> mControlPoints;
-};
-}
+// The historical SDK declarations carry the verified Runic Particle* ABI.
+#include "ParticleUniverseDynamicAttribute.h"
 #endif

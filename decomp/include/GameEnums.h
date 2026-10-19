@@ -1,6 +1,9 @@
 #ifndef GAMEENUMS_H
 #define GAMEENUMS_H
 
+// Named in native signatures; enumerator names remain unknown.
+enum ELevelEntryType { ELevelEntryType_GEN_LAST = 0x7fffffff };
+
 enum EContextTip { CONTEXT_TIP_NONE = -1 };
 
 // Enums and typedefs named in symbols, promoted from the generated headers as recovered

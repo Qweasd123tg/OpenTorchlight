@@ -256,7 +256,7 @@ void CUnitSpawner::createAndFireMissile(const std::wstring& name,
         return;
     for (unsigned int i = 0; i < m_spawnListeners.size(); ++i)
         m_spawnListeners[i]->unitSpawnedFromUnitSpawner(this, missile);
-    missile->fireMissile(static_cast<CBaseUnit*>(missile->m_pRunicCore), position,
+    missile->fireMissile(missile->m_owner.getObject(), position,
         orientation, NULL, Ogre::Vector3::ZERO);
 }
 

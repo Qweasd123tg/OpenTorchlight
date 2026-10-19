@@ -87,3 +87,75 @@ void CCinematicMenu::update(float elapsed)
     else updateTextDisplay(elapsed);
     CDropdownMenu::update(elapsed);
 }
+
+#include "Cinematic.h"
+#include "Cinematics.h"
+#include "FileSystem.h"
+#include "SoundData.h"
+#include "SoundBankDataInformation.h"
+#include "StringUtilities.h"
+#include <CEGUIImagesetManager.h>
+#include <CEGUIImageset.h>
+#include <CEGUIWindowManager.h>
+#include <CEGUIPropertyHelper.h>
+#include <OgreResourceGroupManager.h>
+
+void CCinematicMenu::updateTextDisplay(float elapsed)
+{
+    if (m_textWindow->getText() != m_cinematicName)
+        m_textWindow->setText(CEGUI::String(reinterpret_cast<const CEGUI::utf8*>(m_cinematicName.c_str())));
+    if (m_textDuration > 0.0f && m_textIndex < m_textDuration) {
+        m_textIndex += elapsed;
+        float height = m_textWindow->getParent()->getHeight().asAbsolute(1.0f) + 50.0f;
+        m_textWindow->setPosition(CEGUI::UVector2(CEGUI::UDim(0,0), CEGUI::UDim(0,height-height*(m_textIndex/m_textDuration))));
+    } else {
+        m_textWindow->getParent()->getHeight();
+        m_textWindow->setPosition(CEGUI::UVector2(CEGUI::UDim(0,0),CEGUI::UDim(0,0)));
+    }
+}
+
+void CCinematicMenu::createMenus()
+{
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(L"media/ui/cinematicmenu.layout", info, false, true, false);
+    CEGUI::Window* layout = CEGUI::WindowManager::getSingleton().loadWindowLayout(CEGUI::String(info.m_sResourceName), true);
+    m_cinematicWindow = layout->recursiveChildSearch("Skip");
+    m_textWindow = layout->recursiveChildSearch("DialogText");
+    m_skipWindow = layout->recursiveChildSearch("Background");
+    m_pGameUI->convertToScreenScale(layout, false);
+    m_pGameUI->mapToFunctions(layout);
+    mapEventHandlers(layout);
+    static_cast<CEGUI::Window*>(m_pUnknown20)->addChildWindow(layout);
+}
+
+void CCinematicMenu::setText(std::wstring name)
+{
+    CCinematic* cinematic = CCinematics::getSingleton()->getCinematic(name.c_str());
+    if (!cinematic) return;
+    if (m_pSoundBank) {
+        delete m_pSoundBank;
+        m_pSoundBank = NULL;
+    }
+    CMasterResourceManager* master = CMasterResourceManager::getSingleton();
+    m_pSoundBank = new CSoundBank(*master->m_pSoundManager, false);
+    if (cinematic->m_sSound != EMPTY_WSTRING) {
+        CSoundData* sound = master->m_pSoundBankDataInformation->getSoundDataObject(STRINGS::StringUpper(cinematic->m_sSound));
+        if (sound) m_pSoundBank->addSample(38, sound->m_iGuid);
+        m_pSoundBank->playSample(38, NULL, 0.0f, 0.0f, false);
+    }
+    if (m_cinematicData)
+        CEGUI::ImagesetManager::getSingleton().destroyImageset(m_cinematicData);
+    std::string image = STRINGS::StringConvertToUTF8(std::wstring(cinematic->m_sImage.c_str()));
+    m_cinematicData = CEGUI::ImagesetManager::getSingleton().createImageset(
+        CEGUI::String(image), CEGUI::String(Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME));
+    m_cinematicData->setNativeResolution(CEGUI::Size(float(int(m_pGameUI->getAspectRatio()*768.0f)),768.0f));
+    m_skipWindow->setProperty("Image", CEGUI::PropertyHelper::imageToString(&m_cinematicData->getImage("image")));
+    m_displayedCharacters = 0;
+    std::wstring text = STRINGS::replaceWString(cinematic->m_sText, L"\\n", L"\n");
+    m_cinematicName = STRINGS::StringConvertToUTF8(std::wstring(text.c_str()));
+    m_textIndex = 0.0f;
+    float duration = float(m_cinematicName.size())*0.015f;
+    m_textDuration = duration > 10.0f ? duration : 10.0f;
+    updateTextDisplay(0.0f);
+    m_textWindow->setText("");
+}

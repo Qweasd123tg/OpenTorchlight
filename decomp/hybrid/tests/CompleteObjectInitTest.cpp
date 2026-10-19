@@ -1,0 +1,37 @@
+#include "AutoTest.h"
+#include "tests/NativeEditorControls.h"
+#include "tests/NativeMenuClient.h"
+#include "tests/MenuModelGpuBoundary.h"
+#include "tests/SystemsFixtureWorker.h"
+#include "GenericModel.h"
+#include "FileSystem.h"
+#include "UtilitiesMath.h"
+#include <OgreSubMesh.h>
+TL_ORIGINAL(void,icOld,(CObjectControl3D*),"_ZN16CObjectControl3D12InitControlsEv")
+extern "C" void icNew(CObjectControl3D*) __asm__("_ZN16CObjectControl3D12InitControlsEv");
+TL_ORIGINAL(void,icModelCtor,(CGenericModel*,CResourceManager*,Ogre::SceneManager*,OGRE_UTILITIES::EPRIMITIVES),"_ZN13CGenericModelC1EP16CResourceManagerPN4Ogre12SceneManagerEN14OGRE_UTILITIES11EPRIMITIVESE")
+TL_FUNCTION(icFiles,"_ZN11CFileSystem11getFileInfoERKSbIwSt11char_traitsIwESaIwEER9CFileInfobbb")
+TL_FUNCTION(icRay,"_ZN4MATH16screenToWorldRayEPN4Ogre6CameraEffff")
+namespace {
+nativeeditor::Controls*owners;nativegame::Services*services;Ogre::Camera*camera;Ogre::MeshPtr meshes[3];autotest::Capture*output;unsigned seed,entities;bool recording;
+void n(unsigned v){output->add(&v,4);}void vec(const Ogre::Vector3&v){output->add(v.ptr(),12);}void text(const std::string&s){n(s.size());if(s.size())output->add(s.data(),s.size());}
+void files(CFileSystem*p,const std::wstring&path,CFileInfo&info,bool a,bool b,bool c){if(p!=g_pFileSystem)std::abort();if(recording){n(11);output->addText(path);n(a);n(b);n(c);}info.m_bExists=path.find(L".animation")==std::wstring::npos;info.m_sResourceName=meshes[seed%3]->getName();}
+Ogre::Vector3 ray(Ogre::Camera*p,float x,float y,float width,float height){if(p!=camera)std::abort();n(12);output->add(&x,4);output->add(&y,4);output->add(&width,4);output->add(&height,4);return Ogre::Vector3(.25f,-1,.5f);}
+void side(void*raw,autotest::Capture&out,bool ours){seed=*static_cast<unsigned*>(raw);output=&out;recording=false;entities=0;CObjectControl3D*c=owners->control;unsigned initialCounts[]={0,1,5,20};unsigned initial=initialCounts[seed/4%4];
+ for(unsigned i=0;i<initial;++i){CGenericModel*p=static_cast<CGenericModel*>(Ogre::NedAllocImpl::allocBytes(sizeof(CGenericModel),0,0,0));icModelCtor(p,NULL,services->scene,OGRE_UTILITIES::PRIMITIVE_BOX);p->setResourceManager(owners->resources);char name[50];std::sprintf(name,"initial-control-%u",i);p->sceneNodeAttachEntity(services->scene->createEntity(name,meshes[seed%3]->getName()));p->setVisible(i%2);c->m_models.push_back(p);}
+ camera->setPosition(Ogre::Vector3(float(seed%5)-2,4,-7));owners->editor->m_iFlags=seed%2?512:0;owners->editor->m_pUnknown88=seed/2%2?camera:NULL;c->m_planeScale=.25f+float(seed%7)*.5f;c->m_workingHeight=float(int(seed%5)-2);c->m_selectedPivot=Ogre::Vector3(1,2,3);c->m_controlsNode->setScale(2,3,4);c->m_controlsNode->setPosition(-1,2,-3);
+ menugui::materialPreparationCalls()=menugui::materialLoadCalls()=menugui::texturePreparationCalls()=menugui::automaticHardwareChecks()=menugui::textureLoadCalls()=0;
+ detour::Set hooks;TL_REDIRECT(hooks,icFiles,&files);TL_REDIRECT(hooks,icRay,&ray);if(hooks.failed())std::abort();void(*fn)(CObjectControl3D*)=ours?icNew:icOld;recording=true;if(autotest::beginInvocation(out,fn)){fn(c);out.callCompleted=1;}recording=false;hooks.restore();
+ n(c->m_models.size());for(unsigned i=0;i<c->m_models.size();++i){CGenericModel*p=c->m_models[i];n(p->getVisible());vec(p->getPosition(false));vec(p->getScale());Ogre::Quaternion q=p->getOrientationQuaternion();out.add(&q,sizeof q);Ogre::SceneNode*node=p->getSceneNode();n(node!=NULL);if(node){n(node->getParent()==c->m_controlsNode);n(node->getParent()==services->scene->getRootSceneNode());vec(node->getPosition());vec(node->getScale());}Ogre::Entity*e=p->getEntity();n(e!=NULL);if(e){n(e->getCastShadows());n(e->getRenderQueueGroup());n(e->getQueryFlags());n(e->getVisibilityFlags());n(e->getNumSubEntities());for(unsigned j=0;j<e->getNumSubEntities();++j)text(e->getSubEntity(j)->getMaterialName());}}
+ n(c->m_controlsNode->getParent()==services->scene->getRootSceneNode());vec(c->m_controlsNode->getPosition());vec(c->m_controlsNode->getScale());out.add(&c->m_workingPlane,sizeof c->m_workingPlane);n(menugui::materialPreparationCalls());n(menugui::materialLoadCalls());n(menugui::texturePreparationCalls());n(menugui::textureLoadCalls());
+ for(unsigned i=0;i<c->m_models.size();++i)delete c->m_models[i];c->m_models.clear();
+}
+void original(void*p,autotest::Capture&o){side(p,o,false);}void candidate(void*p,autotest::Capture&o){side(p,o,true);}
+void initialized(uintptr_t address,bool wide,const wchar_t*value=L""){void*p=NULL;std::memcpy(&p,reinterpret_cast<void*>(address),8);if(!p){if(wide)new(reinterpret_cast<void*>(address))std::wstring(value);else new(reinterpret_cast<void*>(address))std::string;}}
+int worker(const tlhybrid_host*host){nativegame::Services native;services=&native;if(!native.ready())return 1;menugui::Audio audio(CMasterResourceManager::getSingleton());menugui::Client client(*CMasterResourceManager::getSingleton()->m_pSettings,CMasterResourceManager::getSingleton(),*CMasterResourceManager::getSingleton()->m_pSoundManager);camera=client.camera->m_cameras[0];nativeeditor::Controls actual(native);owners=&actual;actual.game.game->m_sceneManager=native.scene;menugui::ModelGpuBoundary gpu;
+ uintptr_t strings[]={0x1482e00,0x1528e40,0x14e6860,0x14e6900};for(unsigned i=0;i<4;++i){initialized(strings[i],false);initialized(strings[i]+8,true);}initialized(0x1469ba8,true);const wchar_t*names[]={L"SPHERE",L"BOX",L"PLANE",L"CYLINDER",L"CONE",L"ARROW"};for(unsigned i=0;i<6;++i)initialized(0x1482e20+i*8,true,names[i]);CFileSystem*previous=g_pFileSystem;void*storage=Ogre::NedAllocImpl::allocBytes(sizeof(CFileSystem),0,0,0);g_pFileSystem=static_cast<CFileSystem*>(storage);CFileSystem*fs=new(storage)CFileSystem(false);
+ const char*materials[]={"ControlBlue","ControlGreen","ControlRed","ControlWhite","ControlPurple","WireFrame","WireframeYellow","WireframeBlue"};for(unsigned i=0;i<8;++i){Ogre::MaterialPtr m=Ogre::MaterialManager::getSingleton().getByName(materials[i]);if(m.isNull())m=Ogre::MaterialManager::getSingleton().create(materials[i],"General");m->removeAllTechniques();m->createTechnique()->createPass();}
+ for(unsigned i=0;i<3;++i){char name[50];std::sprintf(name,"init-controls-mesh-%u",i);meshes[i]=Ogre::MeshManager::getSingleton().createManual(name,"General");meshes[i]->_setBounds(Ogre::AxisAlignedBox(-1,-2,-3,1,2,3),false);meshes[i]->_setBoundingSphereRadius(1.f+i*1.25f);meshes[i]->createSubMesh()->setMaterialName("ControlWhite");}
+ autotest::Coverage coverage("object_init",reinterpret_cast<uintptr_t>(icOld));for(unsigned seed=0;seed<48;++seed){autotest::Outcome a,b;autotest::runChild(original,&seed,a);autotest::runChild(candidate,&seed,b);if(coverage.observe(host,a,b)){host->log("    init seed%u issue%u/%u exit%d/%d bytes%lu/%lu\n",seed,a.capture.issue,b.capture.issue,a.childStatus,b.childStatus,(unsigned long)a.capture.length,(unsigned long)b.capture.length);if(a.capture.length==b.capture.length)for(unsigned i=0;i<a.capture.length;++i)if(a.capture.data[i]!=b.capture.data[i]){host->log("    byte%u %u/%u\n",i,(unsigned char)a.capture.data[i],(unsigned char)b.capture.data[i]);break;}coverage.report(host);return 1;}}coverage.report(host);for(unsigned i=0;i<3;++i)meshes[i].setNull();fs->~CFileSystem();Ogre::NedAllocImpl::deallocBytes(fs);g_pFileSystem=previous;return coverage.completed!=48||coverage.missing||coverage.different;}
+}
+TL_TEST(complete_object_init){return systems_fixture::isolated(&worker,host);}

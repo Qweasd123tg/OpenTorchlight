@@ -1,0 +1,2211 @@
+{
+  "baseline": "a60801cec1f1e0ce490a378fca1aeac3b970ca0e",
+  "last_clean_full_accepted": 4754,
+  "comparison_union_count": 4982,
+  "comparison_union_added": [
+    "0x556980",
+    "0x556990",
+    "0x5613f0",
+    "0x5621a0",
+    "0x563400",
+    "0x563410",
+    "0x563640",
+    "0x566c80",
+    "0x567ce0",
+    "0x56e3a0",
+    "0x56e710",
+    "0x579080",
+    "0x5791c0",
+    "0x5792a0",
+    "0x5792b0",
+    "0x579480",
+    "0x579490",
+    "0x579630",
+    "0x579b10",
+    "0x579e90",
+    "0x57a900",
+    "0x57a9f0",
+    "0x57b0b0",
+    "0x57b6a0",
+    "0x57cbb0",
+    "0x57ec60",
+    "0x57f650",
+    "0x57f660",
+    "0x57f670",
+    "0x57f680",
+    "0x57f690",
+    "0x582d00",
+    "0x582e80",
+    "0x583aa0",
+    "0x584460",
+    "0x584740",
+    "0x5848b0",
+    "0x584ad0",
+    "0x584b80",
+    "0x587ee0",
+    "0x587ef0",
+    "0x590f60",
+    "0x591690",
+    "0x5941f0",
+    "0x59c2e0",
+    "0x59d750",
+    "0x59da50",
+    "0x59da70",
+    "0x59e920",
+    "0x70d980",
+    "0x714ff0",
+    "0x715820",
+    "0x7163a0",
+    "0x716cb0",
+    "0x717020",
+    "0x717660",
+    "0x717b00",
+    "0x717b20",
+    "0x718560",
+    "0x7192b0",
+    "0x71a120",
+    "0x71ae10",
+    "0x71b8a0",
+    "0x71bd70",
+    "0x71c4a0",
+    "0x71c650",
+    "0x71d430",
+    "0x74b2c0",
+    "0x74bbf0",
+    "0x74c110",
+    "0x74c3b0",
+    "0x74e6f0",
+    "0x74f420",
+    "0x774770",
+    "0x774d60",
+    "0x7752e0",
+    "0x775840",
+    "0x775d60",
+    "0x7769a0",
+    "0x77fd60",
+    "0x7802f0",
+    "0x780b60",
+    "0x782860",
+    "0x783240",
+    "0x783900",
+    "0x7859e0",
+    "0x7869b0",
+    "0x786c80",
+    "0x788080",
+    "0x811bc0",
+    "0x814710",
+    "0x816540",
+    "0x816ea0",
+    "0x8267e0",
+    "0x827eb0",
+    "0x829940",
+    "0x82ac30",
+    "0x82b550",
+    "0x82c300",
+    "0x82d770",
+    "0x830f40",
+    "0x832ca0",
+    "0x8356e0",
+    "0x835d20",
+    "0x837230",
+    "0x838ed0",
+    "0x83a9b0",
+    "0x83b1a0",
+    "0x83dd50",
+    "0x83ead0",
+    "0x840470",
+    "0x840db0",
+    "0x841a80",
+    "0x843ed0",
+    "0x847280",
+    "0x848870",
+    "0x84ba00",
+    "0x84dd20",
+    "0x850560",
+    "0x850570",
+    "0x850ce0",
+    "0x850cf0",
+    "0x851590",
+    "0x8529a0",
+    "0x8559e0",
+    "0x8562b0",
+    "0x8562c0",
+    "0x8562d0",
+    "0x8562e0",
+    "0x8562f0",
+    "0x856310",
+    "0x89a050",
+    "0x89a250",
+    "0x89a640",
+    "0x89a900",
+    "0x89ac90",
+    "0x89ae20",
+    "0x8a1130",
+    "0x8a1200",
+    "0x8a17d0",
+    "0x8a2a60",
+    "0x8a36f0",
+    "0x8a4510",
+    "0x8a4680",
+    "0x8a4c00",
+    "0x8a7a00",
+    "0x8a7c90",
+    "0x8a80e0",
+    "0x8a8690",
+    "0x8aa4b0",
+    "0x8ac190",
+    "0x8aecd0",
+    "0x8b07a0",
+    "0x8b0b30",
+    "0x8d3d50",
+    "0x8d3e90",
+    "0x8d3eb0",
+    "0x8fc3f0",
+    "0x8fc4e0",
+    "0x8fc8e0",
+    "0x8fcc70",
+    "0x8fccd0",
+    "0x8fcda0",
+    "0x8fcdf0",
+    "0x8fcfb0",
+    "0x9073b0",
+    "0x908840",
+    "0x908bf0",
+    "0x908c10",
+    "0x9095c0",
+    "0x909a70",
+    "0x909d10",
+    "0x909ee0",
+    "0x90b0d0",
+    "0x9370c0",
+    "0x937c10",
+    "0x937ee0",
+    "0x938590",
+    "0x9385f0",
+    "0x9474f0",
+    "0x94ab00",
+    "0x94b440",
+    "0x94c730",
+    "0x94da90",
+    "0x94dec0",
+    "0x94e250",
+    "0x94ea30",
+    "0x94edb0",
+    "0x94f730",
+    "0x950660",
+    "0x952400",
+    "0x953000",
+    "0x953730",
+    "0x954560",
+    "0x954580",
+    "0x955210",
+    "0x957f00",
+    "0x95a0f0",
+    "0x95b100",
+    "0x95b420",
+    "0x95c7f0",
+    "0x95d220",
+    "0x95dc40",
+    "0x95e980",
+    "0x965f00",
+    "0x968d40",
+    "0xa3c620",
+    "0xa3cfb0",
+    "0xa3cfe0",
+    "0xa46910",
+    "0xa46990",
+    "0xa490b0",
+    "0xa497f0",
+    "0xa499f0",
+    "0xa49cf0",
+    "0xae19e0",
+    "0xaecce0",
+    "0xaee5e0",
+    "0xaeed30",
+    "0xaefbb0",
+    "0xaf05e0",
+    "0xaf1950",
+    "0xaf2060",
+    "0xaf2540",
+    "0xafa8e0",
+    "0xafbb70",
+    "0xafbee0",
+    "0xb04b00",
+    "0xb05390",
+    "0xb0dbd0",
+    "0xb0f540",
+    "0xb176b0",
+    "0xb179e0",
+    "0xb17e70",
+    "0xb18e50",
+    "0xb196f0",
+    "0xb1b6f0",
+    "0xb3beb0",
+    "0xb3c270",
+    "0xb3c8b0",
+    "0xb7e520",
+    "0xb7f580",
+    "0xb86f50",
+    "0xb87ff0",
+    "0xbae6f0",
+    "0xbafab0",
+    "0xbb0140",
+    "0xbb04c0",
+    "0xbb08f0",
+    "0xbb56d0",
+    "0xbb70b0",
+    "0xbc2020",
+    "0xbc2550",
+    "0xbc28c0",
+    "0xbc2d50",
+    "0xbc4430",
+    "0xbc6b90",
+    "0xbcc6d0",
+    "0xbd47e0",
+    "0xbd5560",
+    "0xbd6ea0",
+    "0xc2bd40",
+    "0xc2be40",
+    "0xc4a810",
+    "0xc52a10",
+    "0xc53b70",
+    "0xc5b950",
+    "0xc5c040",
+    "0xc5c2f0",
+    "0xc5c5a0",
+    "0xc5cc30",
+    "0xc5d730",
+    "0xc61550",
+    "0xc61ab0",
+    "0xcf8ee0",
+    "0xcf8ef0",
+    "0xcf8f00",
+    "0xcf8f90",
+    "0xcf91e0",
+    "0xcf9350",
+    "0xcf9450",
+    "0xcf9620",
+    "0xcf9840",
+    "0xd00580",
+    "0xd00650",
+    "0xd00c20",
+    "0xd01090",
+    "0xd014a0",
+    "0xd01580",
+    "0xd02720",
+    "0xd032b0",
+    "0xd034c0",
+    "0xd038a0",
+    "0xd04120",
+    "0xd04610",
+    "0xd05ad0",
+    "0xd05f90",
+    "0xd05fb0",
+    "0xd06250",
+    "0xe4b810",
+    "0xe4c800",
+    "0xe992f0",
+    "0xe9a5a0",
+    "0xe9b180",
+    "0xea45d0",
+    "0xea4970",
+    "0xea58b0",
+    "0xea62a0"
+  ],
+  "observations": {
+    "0x556980": [],
+    "0x556990": [
+      {
+        "fixture": "complete_game_pre_viewport",
+        "label": "complete_game_pre_viewport",
+        "completed": 96
+      }
+    ],
+    "0x5613f0": [
+      {
+        "fixture": "complete_game_camera",
+        "label": "complete_game_camera",
+        "completed": 30
+      }
+    ],
+    "0x5621a0": [
+      {
+        "fixture": "complete_game_asset",
+        "label": "complete_game_asset",
+        "completed": 48
+      }
+    ],
+    "0x563400": [],
+    "0x563410": [
+      {
+        "fixture": "complete_game_renderable",
+        "label": "complete_game_renderable",
+        "completed": 3156
+      }
+    ],
+    "0x563640": [
+      {
+        "fixture": "game_materials_native",
+        "label": "game_materials_native",
+        "completed": 48
+      }
+    ],
+    "0x566c80": [
+      {
+        "fixture": "game_setup_runtime",
+        "label": "game_setup_runtime",
+        "completed": 40
+      },
+      {
+        "fixture": "game_setup_runtime_dirty_parent",
+        "label": "game_setup_runtime",
+        "completed": 40
+      }
+    ],
+    "0x567ce0": [
+      {
+        "fixture": "game_window_runtime",
+        "label": "game_window_runtime",
+        "completed": 256
+      }
+    ],
+    "0x56e3a0": [
+      {
+        "fixture": "gameclient_gold",
+        "label": "gameclient_gold",
+        "completed": 128
+      }
+    ],
+    "0x56e710": [
+      {
+        "fixture": "gameclient_seed",
+        "label": "gameclient_seed",
+        "completed": 96
+      }
+    ],
+    "0x579080": [],
+    "0x5791c0": [],
+    "0x5792a0": [],
+    "0x5792b0": [],
+    "0x579480": [],
+    "0x579490": [],
+    "0x579630": [
+      {
+        "fixture": "gameclient_menu_frame",
+        "label": "gameclient_menu_frame",
+        "completed": 288
+      }
+    ],
+    "0x579b10": [
+      {
+        "fixture": "gameclient_unload",
+        "label": "gameclient_unload",
+        "completed": 128
+      }
+    ],
+    "0x579e90": [
+      {
+        "fixture": "gameclient_world",
+        "label": "gameclient_world",
+        "completed": 420
+      }
+    ],
+    "0x57a900": [
+      {
+        "fixture": "gameclient_move",
+        "label": "gameclient_move",
+        "completed": 150
+      }
+    ],
+    "0x57a9f0": [
+      {
+        "fixture": "gameclient_click_left",
+        "label": "gameclient_click_left",
+        "completed": 1024
+      }
+    ],
+    "0x57b0b0": [
+      {
+        "fixture": "gameclient_hover",
+        "label": "gameclient_hover",
+        "completed": 168
+      }
+    ],
+    "0x57b6a0": [
+      {
+        "fixture": "gameclient_click_right_audit",
+        "label": "gameclient_click_right_audit",
+        "completed": 32
+      },
+      {
+        "fixture": "gameclient_click_right",
+        "label": "gameclient_click_right",
+        "completed": 4096
+      }
+    ],
+    "0x57cbb0": [
+      {
+        "fixture": "gameclient_input",
+        "label": "gameclient_input",
+        "completed": 64
+      }
+    ],
+    "0x57ec60": [
+      {
+        "fixture": "gameclient_lifetime",
+        "label": "gameclient_lifetime",
+        "completed": 128
+      }
+    ],
+    "0x57f650": [],
+    "0x57f660": [],
+    "0x57f670": [],
+    "0x57f680": [],
+    "0x57f690": [],
+    "0x582d00": [],
+    "0x582e80": [
+      {
+        "fixture": "gameclient_lighting",
+        "label": "gameclient_lighting",
+        "completed": 192
+      }
+    ],
+    "0x583aa0": [
+      {
+        "fixture": "gameclient_shadows",
+        "label": "gameclient_shadows",
+        "completed": 192
+      }
+    ],
+    "0x584460": [
+      {
+        "fixture": "gameclient_apply_state",
+        "label": "gameclient_apply_state",
+        "completed": 160
+      }
+    ],
+    "0x584740": [],
+    "0x5848b0": [
+      {
+        "fixture": "gameclient_rank",
+        "label": "gameclient_rank",
+        "completed": 320
+      }
+    ],
+    "0x584ad0": [
+      {
+        "fixture": "gameclient_rank_name",
+        "label": "gameclient_rank_name",
+        "completed": 160
+      }
+    ],
+    "0x584b80": [
+      {
+        "fixture": "gameclient_load_menu",
+        "label": "gameclient_load_menu",
+        "completed": 256
+      }
+    ],
+    "0x587ee0": [],
+    "0x587ef0": [
+      {
+        "fixture": "gameclient_renderable",
+        "label": "gameclient_renderable",
+        "completed": 548
+      }
+    ],
+    "0x590f60": [
+      {
+        "fixture": "gameclient_create",
+        "label": "gameclient_create",
+        "completed": 96
+      }
+    ],
+    "0x591690": [
+      {
+        "fixture": "gameclient_frame",
+        "label": "gameclient_frame",
+        "completed": 384
+      }
+    ],
+    "0x5941f0": [
+      {
+        "fixture": "complete_path_lifecycle",
+        "label": "path_ctor",
+        "completed": 128
+      }
+    ],
+    "0x59c2e0": [
+      {
+        "fixture": "complete_path_enabled",
+        "label": "path_enabled",
+        "completed": 640
+      }
+    ],
+    "0x59d750": [
+      {
+        "fixture": "complete_path_lifecycle",
+        "label": "path_dtor",
+        "completed": 128
+      }
+    ],
+    "0x59da50": [],
+    "0x59da70": [
+      {
+        "fixture": "complete_path_name",
+        "label": "complete_path_name",
+        "completed": 48
+      }
+    ],
+    "0x59e920": [
+      {
+        "fixture": "complete_path_number",
+        "label": "path_number",
+        "completed": 252
+      }
+    ],
+    "0x70d980": [
+      {
+        "fixture": "editor_complete_input",
+        "label": "editor_complete_input",
+        "completed": 96
+      }
+    ],
+    "0x714ff0": [],
+    "0x715820": [
+      {
+        "fixture": "editor_complete_release",
+        "label": "editor_complete_release",
+        "completed": 32
+      }
+    ],
+    "0x7163a0": [
+      {
+        "fixture": "editor_complete_dump",
+        "label": "editor_complete_dump",
+        "completed": 32
+      }
+    ],
+    "0x716cb0": [
+      {
+        "fixture": "editor_complete_reinit",
+        "label": "editor_complete_reinit",
+        "completed": 32
+      }
+    ],
+    "0x717020": [
+      {
+        "fixture": "editor_complete_particles",
+        "label": "editor_complete_particles",
+        "completed": 32
+      }
+    ],
+    "0x717660": [
+      {
+        "fixture": "editor_complete_dtor",
+        "label": "editor_complete_dtor",
+        "completed": 32
+      }
+    ],
+    "0x717b00": [],
+    "0x717b20": [
+      {
+        "fixture": "editor_complete_recreate",
+        "label": "editor_complete_recreate",
+        "completed": 30
+      }
+    ],
+    "0x718560": [
+      {
+        "fixture": "editor_complete_completed",
+        "label": "editor_complete_completed",
+        "completed": 32
+      }
+    ],
+    "0x7192b0": [
+      {
+        "fixture": "editor_complete_copy",
+        "label": "editor_complete_copy",
+        "completed": 32
+      }
+    ],
+    "0x71a120": [
+      {
+        "fixture": "editor_complete_set",
+        "label": "editor_complete_set",
+        "completed": 88
+      }
+    ],
+    "0x71ae10": [
+      {
+        "fixture": "editor_complete_ctor",
+        "label": "editor_complete_ctor",
+        "completed": 32
+      }
+    ],
+    "0x71b8a0": [
+      {
+        "fixture": "editor_complete_update",
+        "label": "editor_complete_update",
+        "completed": 64
+      }
+    ],
+    "0x71bd70": [
+      {
+        "fixture": "editor_complete_remove",
+        "label": "editor_complete_remove",
+        "completed": 88
+      }
+    ],
+    "0x71c4a0": [
+      {
+        "fixture": "editor_complete_reset",
+        "label": "editor_complete_reset",
+        "completed": 32
+      }
+    ],
+    "0x71c650": [
+      {
+        "fixture": "editor_complete_init",
+        "label": "editor_complete_init",
+        "completed": 32
+      }
+    ],
+    "0x71d430": [
+      {
+        "fixture": "editor_complete_active",
+        "label": "editor_complete_active",
+        "completed": 32
+      }
+    ],
+    "0x74b2c0": [
+      {
+        "fixture": "complete_editor_scene_objects",
+        "label": "editor_scene_roll_native",
+        "completed": 64
+      }
+    ],
+    "0x74bbf0": [
+      {
+        "fixture": "complete_editor_scene_objects",
+        "label": "editor_scene_objects_native",
+        "completed": 64
+      }
+    ],
+    "0x74c110": [
+      {
+        "fixture": "complete_editor_scene_objects",
+        "label": "editor_scene_create_native",
+        "completed": 64
+      }
+    ],
+    "0x74c3b0": [
+      {
+        "fixture": "complete_editor_scene_objects",
+        "label": "editor_scene_delete_native",
+        "completed": 64
+      }
+    ],
+    "0x74e6f0": [
+      {
+        "fixture": "complete_editor_scene_objects",
+        "label": "editor_scene_save_native",
+        "completed": 64
+      }
+    ],
+    "0x74f420": [
+      {
+        "fixture": "complete_editor_scene_objects",
+        "label": "editor_scene_load_native",
+        "completed": 64
+      }
+    ],
+    "0x774770": [
+      {
+        "fixture": "complete_object_clone",
+        "label": "object_clone",
+        "completed": 2048
+      }
+    ],
+    "0x774d60": [
+      {
+        "fixture": "complete_object_controls",
+        "label": "object_show",
+        "completed": 384
+      }
+    ],
+    "0x7752e0": [],
+    "0x775840": [
+      {
+        "fixture": "complete_object_resnap",
+        "label": "object_resnap",
+        "completed": 768
+      }
+    ],
+    "0x775d60": [
+      {
+        "fixture": "complete_object_drag",
+        "label": "object_drag",
+        "completed": 1024
+      }
+    ],
+    "0x7769a0": [
+      {
+        "fixture": "complete_object_group",
+        "label": "object_group_point",
+        "completed": 1024
+      }
+    ],
+    "0x77fd60": [
+      {
+        "fixture": "complete_object_controls",
+        "label": "object_bounds",
+        "completed": 512
+      }
+    ],
+    "0x7802f0": [
+      {
+        "fixture": "complete_object_collision",
+        "label": "object_snap",
+        "completed": 512
+      }
+    ],
+    "0x780b60": [
+      {
+        "fixture": "complete_object_manipulate",
+        "label": "object_manipulate",
+        "completed": 4096
+      }
+    ],
+    "0x782860": [
+      {
+        "fixture": "complete_object_pick",
+        "label": "object_pick",
+        "completed": 1024
+      }
+    ],
+    "0x783240": [
+      {
+        "fixture": "complete_object_collision",
+        "label": "object_under_mouse",
+        "completed": 512
+      }
+    ],
+    "0x783900": [
+      {
+        "fixture": "complete_object_frame",
+        "label": "object_frame",
+        "completed": 1664
+      }
+    ],
+    "0x7859e0": [
+      {
+        "fixture": "complete_object_undo",
+        "label": "object_create_undo",
+        "completed": 1024
+      }
+    ],
+    "0x7869b0": [
+      {
+        "fixture": "complete_object_update",
+        "label": "object_update",
+        "completed": 2048
+      }
+    ],
+    "0x786c80": [
+      {
+        "fixture": "complete_object_init",
+        "label": "object_init",
+        "completed": 48
+      }
+    ],
+    "0x788080": [
+      {
+        "fixture": "complete_object_controls",
+        "label": "object_ctor",
+        "completed": 64
+      }
+    ],
+    "0x811bc0": [
+      {
+        "fixture": "character_selection_turn",
+        "label": "character_selection_turn",
+        "completed": 4096
+      }
+    ],
+    "0x814710": [
+      {
+        "fixture": "character_transform_display",
+        "label": "character_transform_display",
+        "completed": 4096
+      }
+    ],
+    "0x816540": [
+      {
+        "fixture": "character_selection_turn",
+        "label": "character_selection_turn",
+        "completed": 4096
+      }
+    ],
+    "0x816ea0": [
+      {
+        "fixture": "character_lifetime_storage",
+        "label": "character_lifetime_storage",
+        "completed": 64
+      }
+    ],
+    "0x8267e0": [
+      {
+        "fixture": "character_lifetime_storage",
+        "label": "character_lifetime_storage",
+        "completed": 32
+      }
+    ],
+    "0x827eb0": [
+      {
+        "fixture": "character_cast_runtime",
+        "label": "character_cast_runtime",
+        "completed": 1024
+      }
+    ],
+    "0x829940": [
+      {
+        "fixture": "character_path_runtime",
+        "label": "character_path_runtime",
+        "completed": 4096
+      }
+    ],
+    "0x82ac30": [
+      {
+        "fixture": "character_destination_runtime",
+        "label": "character_destination_runtime",
+        "completed": 768
+      }
+    ],
+    "0x82b550": [
+      {
+        "fixture": "character_visual_runtime",
+        "label": "character_visual_runtime",
+        "completed": 4096
+      }
+    ],
+    "0x82c300": [
+      {
+        "fixture": "character_path_runtime",
+        "label": "character_path_runtime",
+        "completed": 4096
+      }
+    ],
+    "0x82d770": [
+      {
+        "fixture": "character_jump_runtime",
+        "label": "character_jump_runtime",
+        "completed": 512
+      }
+    ],
+    "0x830f40": [
+      {
+        "fixture": "character_constructor_native",
+        "label": "character_constructor_native",
+        "completed": 64
+      }
+    ],
+    "0x832ca0": [
+      {
+        "fixture": "character_motion_runtime",
+        "label": "character_motion_runtime",
+        "completed": 512
+      }
+    ],
+    "0x8356e0": [
+      {
+        "fixture": "character_visual_runtime",
+        "label": "character_visual_runtime",
+        "completed": 4096
+      }
+    ],
+    "0x835d20": [
+      {
+        "fixture": "character_rimlight_runtime",
+        "label": "character_rimlight_runtime",
+        "completed": 768
+      }
+    ],
+    "0x837230": [
+      {
+        "fixture": "character_visual_runtime",
+        "label": "character_visual_runtime",
+        "completed": 4096
+      }
+    ],
+    "0x838ed0": [
+      {
+        "fixture": "character_die_runtime",
+        "label": "character_die_runtime",
+        "completed": 1024
+      }
+    ],
+    "0x83a9b0": [
+      {
+        "fixture": "character_town_runtime",
+        "label": "character_town_runtime",
+        "completed": 768
+      }
+    ],
+    "0x83b1a0": [
+      {
+        "fixture": "character_get_item_runtime",
+        "label": "character_get_item_runtime",
+        "completed": 768
+      }
+    ],
+    "0x83dd50": [
+      {
+        "fixture": "character_transform_display",
+        "label": "character_transform_display",
+        "completed": 4096
+      }
+    ],
+    "0x83ead0": [
+      {
+        "fixture": "character_set_level_runtime",
+        "label": "character_set_level_runtime",
+        "completed": 512
+      }
+    ],
+    "0x840470": [
+      {
+        "fixture": "character_visual_runtime",
+        "label": "character_visual_runtime",
+        "completed": 4096
+      }
+    ],
+    "0x840db0": [
+      {
+        "fixture": "character_apply_runtime",
+        "label": "character_apply_runtime",
+        "completed": 512
+      }
+    ],
+    "0x841a80": [
+      {
+        "fixture": "character_transform_display",
+        "label": "character_transform_display",
+        "completed": 4096
+      }
+    ],
+    "0x843ed0": [
+      {
+        "fixture": "character_roll_attack_runtime",
+        "label": "character_roll_attack_runtime",
+        "completed": 512
+      }
+    ],
+    "0x847280": [
+      {
+        "fixture": "character_perform_attack_runtime",
+        "label": "character_perform_attack_runtime",
+        "completed": 1024
+      }
+    ],
+    "0x848870": [
+      {
+        "fixture": "character_animation_runtime",
+        "label": "character_animation_runtime",
+        "completed": 1024
+      }
+    ],
+    "0x84ba00": [
+      {
+        "fixture": "character_update_effects_runtime",
+        "label": "character_update_effects_runtime",
+        "completed": 640
+      }
+    ],
+    "0x84dd20": [
+      {
+        "fixture": "character_update_runtime",
+        "label": "character_update_runtime",
+        "completed": 512
+      }
+    ],
+    "0x850560": [],
+    "0x850570": [
+      {
+        "fixture": "character_equipment_callbacks_runtime",
+        "label": "character_equipment_callbacks_runtime",
+        "completed": 512
+      }
+    ],
+    "0x850ce0": [],
+    "0x850cf0": [
+      {
+        "fixture": "character_equipment_callbacks_runtime",
+        "label": "character_equipment_callbacks_runtime",
+        "completed": 512
+      }
+    ],
+    "0x851590": [
+      {
+        "fixture": "character_make_champion_runtime",
+        "label": "character_make_champion_runtime",
+        "completed": 512
+      }
+    ],
+    "0x8529a0": [
+      {
+        "fixture": "character_unit_init_runtime",
+        "label": "character_unit_init_runtime",
+        "completed": 512
+      }
+    ],
+    "0x8559e0": [
+      {
+        "fixture": "character_lifetime_storage",
+        "label": "character_lifetime_storage",
+        "completed": 64
+      }
+    ],
+    "0x8562b0": [],
+    "0x8562c0": [],
+    "0x8562d0": [],
+    "0x8562e0": [],
+    "0x8562f0": [],
+    "0x856310": [
+      {
+        "fixture": "character_load_model_runtime",
+        "label": "character_load_model_runtime",
+        "completed": 512
+      }
+    ],
+    "0x89a050": [
+      {
+        "fixture": "complete_generic_state",
+        "label": "generic_casts",
+        "completed": 36
+      }
+    ],
+    "0x89a250": [
+      {
+        "fixture": "complete_generic_material",
+        "label": "generic_opacity",
+        "completed": 960
+      }
+    ],
+    "0x89a640": [
+      {
+        "fixture": "complete_generic_material",
+        "label": "generic_light_override",
+        "completed": 960
+      }
+    ],
+    "0x89a900": [
+      {
+        "fixture": "complete_generic_state",
+        "label": "generic_release",
+        "completed": 288
+      }
+    ],
+    "0x89ac90": [
+      {
+        "fixture": "complete_generic_texture",
+        "label": "generic_clear_projector",
+        "completed": 432
+      }
+    ],
+    "0x89ae20": [
+      {
+        "fixture": "complete_generic_state",
+        "label": "generic_lightmap",
+        "completed": 36
+      }
+    ],
+    "0x8a1130": [
+      {
+        "fixture": "complete_generic_unload",
+        "label": "generic_unload_model",
+        "completed": 432
+      }
+    ],
+    "0x8a1200": [
+      {
+        "fixture": "complete_generic_prefab",
+        "label": "generic_load_prefab",
+        "completed": 384
+      }
+    ],
+    "0x8a17d0": [
+      {
+        "fixture": "complete_generic_extremes",
+        "label": "generic_generate_extremes",
+        "completed": 160
+      }
+    ],
+    "0x8a2a60": [
+      {
+        "fixture": "complete_generic_constructors",
+        "label": "generic_primitive_ctor",
+        "completed": 432
+      }
+    ],
+    "0x8a36f0": [
+      {
+        "fixture": "complete_generic_projector",
+        "label": "generic_projector",
+        "completed": 864
+      }
+    ],
+    "0x8a4510": [],
+    "0x8a4680": [],
+    "0x8a4c00": [],
+    "0x8a7a00": [
+      {
+        "fixture": "complete_generic_texture",
+        "label": "generic_highlight_texture",
+        "completed": 432
+      }
+    ],
+    "0x8a7c90": [
+      {
+        "fixture": "complete_generic_texture",
+        "label": "generic_behind_texture",
+        "completed": 432
+      }
+    ],
+    "0x8a80e0": [
+      {
+        "fixture": "complete_generic_texture",
+        "label": "generic_rim_lighting",
+        "completed": 432
+      }
+    ],
+    "0x8a8690": [
+      {
+        "fixture": "complete_generic_load_animations",
+        "label": "generic_load_animations",
+        "completed": 432
+      }
+    ],
+    "0x8aa4b0": [
+      {
+        "fixture": "complete_generic_update_animation",
+        "label": "generic_update_animation",
+        "completed": 1728
+      }
+    ],
+    "0x8ac190": [
+      {
+        "fixture": "complete_generic_reinitialize",
+        "label": "generic_reinitialize",
+        "completed": 768
+      }
+    ],
+    "0x8aecd0": [
+      {
+        "fixture": "complete_generic_load_model",
+        "label": "generic_load_model",
+        "completed": 1152
+      }
+    ],
+    "0x8b07a0": [
+      {
+        "fixture": "complete_generic_reload",
+        "label": "generic_reload_animations",
+        "completed": 192
+      }
+    ],
+    "0x8b0b30": [
+      {
+        "fixture": "complete_generic_constructors",
+        "label": "generic_string_ctor",
+        "completed": 432
+      }
+    ],
+    "0x8d3d50": [],
+    "0x8d3e90": [],
+    "0x8d3eb0": [
+      {
+        "fixture": "keyframe_constructor_native",
+        "label": "keyframe_constructor_native",
+        "completed": 256
+      }
+    ],
+    "0x8fc3f0": [
+      {
+        "fixture": "complete_trigger_state",
+        "label": "trigger_active_native",
+        "completed": 256
+      }
+    ],
+    "0x8fc4e0": [
+      {
+        "fixture": "complete_trigger_state",
+        "label": "trigger_state_native",
+        "completed": 256
+      }
+    ],
+    "0x8fc8e0": [
+      {
+        "fixture": "complete_trigger_save",
+        "label": "trigger_apply_save_native",
+        "completed": 192
+      }
+    ],
+    "0x8fcc70": [
+      {
+        "fixture": "complete_trigger_state",
+        "label": "trigger_reset_native",
+        "completed": 256
+      }
+    ],
+    "0x8fccd0": [
+      {
+        "fixture": "complete_trigger_io",
+        "label": "trigger_treasure_native",
+        "completed": 192
+      }
+    ],
+    "0x8fcda0": [],
+    "0x8fcdf0": [
+      {
+        "fixture": "complete_trigger_state",
+        "label": "trigger_update_native",
+        "completed": 256
+      }
+    ],
+    "0x8fcfb0": [],
+    "0x9073b0": [
+      {
+        "fixture": "complete_trigger_save",
+        "label": "trigger_fill_save_native",
+        "completed": 192
+      }
+    ],
+    "0x908840": [
+      {
+        "fixture": "trigger_lifetime_native",
+        "label": "trigger_lifetime_native",
+        "completed": 192
+      }
+    ],
+    "0x908bf0": [],
+    "0x908c10": [
+      {
+        "fixture": "complete_trigger_action",
+        "label": "trigger_action_modes_native",
+        "completed": 384
+      },
+      {
+        "fixture": "complete_trigger_action",
+        "label": "trigger_action_skills_native",
+        "completed": 768
+      }
+    ],
+    "0x9095c0": [
+      {
+        "fixture": "complete_trigger_interaction",
+        "label": "trigger_interact_gates_native",
+        "completed": 192
+      },
+      {
+        "fixture": "complete_trigger_interaction",
+        "label": "trigger_interact_inventory_native",
+        "completed": 768
+      }
+    ],
+    "0x909a70": [
+      {
+        "fixture": "complete_trigger_io",
+        "label": "trigger_sound_native",
+        "completed": 192
+      }
+    ],
+    "0x909d10": [
+      {
+        "fixture": "complete_trigger_io",
+        "label": "trigger_model_name_native",
+        "completed": 192
+      }
+    ],
+    "0x909ee0": [
+      {
+        "fixture": "complete_trigger_state",
+        "label": "trigger_animations_native",
+        "completed": 256
+      }
+    ],
+    "0x90b0d0": [
+      {
+        "fixture": "complete_trigger_init",
+        "label": "trigger_unit_init_native",
+        "completed": 768
+      }
+    ],
+    "0x9370c0": [],
+    "0x937c10": [
+      {
+        "fixture": "level_map_collision",
+        "label": "level_map_collision",
+        "completed": 1024
+      }
+    ],
+    "0x937ee0": [
+      {
+        "fixture": "level_map_collision",
+        "label": "level_map_collision",
+        "completed": 1024
+      }
+    ],
+    "0x938590": [
+      {
+        "fixture": "complete_level_automap_visible",
+        "label": "level_automap_visible",
+        "completed": 64
+      }
+    ],
+    "0x9385f0": [],
+    "0x9474f0": [
+      {
+        "fixture": "level_visible_particles",
+        "label": "level_visible_particles",
+        "completed": 256
+      }
+    ],
+    "0x94ab00": [
+      {
+        "fixture": "level_constructor_native",
+        "label": "level_constructor_native",
+        "completed": 64
+      }
+    ],
+    "0x94b440": [
+      {
+        "fixture": "complete_level_screen",
+        "label": "level_screen_character",
+        "completed": 1024
+      }
+    ],
+    "0x94c730": [
+      {
+        "fixture": "complete_level_screen",
+        "label": "level_screen_item",
+        "completed": 1024
+      }
+    ],
+    "0x94da90": [
+      {
+        "fixture": "complete_level_collision_tree",
+        "label": "level_collision_tree_points",
+        "completed": 512
+      }
+    ],
+    "0x94dec0": [
+      {
+        "fixture": "complete_level_collision_tree",
+        "label": "level_collision_tree_sort",
+        "completed": 512
+      }
+    ],
+    "0x94e250": [
+      {
+        "fixture": "complete_level_collision_tree",
+        "label": "level_collision_tree_ray",
+        "completed": 512
+      }
+    ],
+    "0x94ea30": [
+      {
+        "fixture": "level_item_view",
+        "label": "level_item_view",
+        "completed": 2304
+      }
+    ],
+    "0x94edb0": [
+      {
+        "fixture": "complete_level_collision_tree",
+        "label": "level_collision_tree_sphere",
+        "completed": 512
+      }
+    ],
+    "0x94f730": [
+      {
+        "fixture": "complete_level_screen",
+        "label": "level_screen_onscreen",
+        "completed": 1024
+      }
+    ],
+    "0x950660": [
+      {
+        "fixture": "complete_level_find_particles",
+        "label": "level_find_particles",
+        "completed": 384
+      }
+    ],
+    "0x952400": [
+      {
+        "fixture": "level_character_view",
+        "label": "level_character_view",
+        "completed": 3072
+      }
+    ],
+    "0x953000": [
+      {
+        "fixture": "level_warp_placement",
+        "label": "level_warp_placement",
+        "completed": 1384
+      }
+    ],
+    "0x953730": [
+      {
+        "fixture": "complete_level_destructor",
+        "label": "level_destructor",
+        "completed": 256
+      }
+    ],
+    "0x954560": [],
+    "0x954580": [
+      {
+        "fixture": "complete_level_passability",
+        "label": "level_passability",
+        "completed": 1024
+      }
+    ],
+    "0x955210": [
+      {
+        "fixture": "complete_level_bake_collision",
+        "label": "level_bake_collision",
+        "completed": 512
+      }
+    ],
+    "0x957f00": [
+      {
+        "fixture": "complete_level_bake",
+        "label": "level_bake",
+        "completed": 384
+      }
+    ],
+    "0x95a0f0": [
+      {
+        "fixture": "level_clear_rooms",
+        "label": "level_clear_rooms",
+        "completed": 192
+      }
+    ],
+    "0x95b100": [
+      {
+        "fixture": "level_clear_projector",
+        "label": "level_clear_projector",
+        "completed": 1536
+      }
+    ],
+    "0x95b420": [
+      {
+        "fixture": "complete_level_projector",
+        "label": "level_projector",
+        "completed": 1536
+      }
+    ],
+    "0x95c7f0": [],
+    "0x95d220": [
+      {
+        "fixture": "complete_level_populate_section",
+        "label": "level_populate_section",
+        "completed": 768
+      }
+    ],
+    "0x95dc40": [
+      {
+        "fixture": "complete_level_formations",
+        "label": "level_formations",
+        "completed": 512
+      }
+    ],
+    "0x95e980": [
+      {
+        "fixture": "level_merge_layouts",
+        "label": "level_merge_layouts",
+        "completed": 336
+      }
+    ],
+    "0x965f00": [
+      {
+        "fixture": "complete_level_quickload",
+        "label": "level_quickload",
+        "completed": 512
+      }
+    ],
+    "0x968d40": [],
+    "0xa3c620": [],
+    "0xa3cfb0": [],
+    "0xa3cfe0": [],
+    "0xa46910": [],
+    "0xa46990": [],
+    "0xa490b0": [],
+    "0xa497f0": [
+      {
+        "fixture": "particle_wrapper_show",
+        "label": "particle_wrapper_show",
+        "completed": 32
+      }
+    ],
+    "0xa499f0": [
+      {
+        "fixture": "particle_wrapper_create",
+        "label": "particle_wrapper_create",
+        "completed": 32
+      }
+    ],
+    "0xa49cf0": [
+      {
+        "fixture": "particle_wrapper_ctor",
+        "label": "particle_wrapper_ctor",
+        "completed": 32
+      }
+    ],
+    "0xae19e0": [
+      {
+        "fixture": "complete_ui_console_spawnunit",
+        "label": "complete_ui_console_spawnunit",
+        "completed": 232
+      }
+    ],
+    "0xaecce0": [
+      {
+        "fixture": "complete_ui_console_update",
+        "label": "complete_ui_console_update",
+        "completed": 96
+      }
+    ],
+    "0xaee5e0": [
+      {
+        "fixture": "complete_ui_console_monster",
+        "label": "complete_ui_console_monster",
+        "completed": 116
+      }
+    ],
+    "0xaeed30": [
+      {
+        "fixture": "complete_ui_console_fixroom",
+        "label": "complete_ui_console_fixroom",
+        "completed": 256
+      }
+    ],
+    "0xaefbb0": [
+      {
+        "fixture": "complete_ui_console_key",
+        "label": "complete_ui_console_key",
+        "completed": 96
+      }
+    ],
+    "0xaf05e0": [
+      {
+        "fixture": "complete_ui_console_nohistory",
+        "label": "complete_ui_console_nohistory",
+        "completed": 96
+      }
+    ],
+    "0xaf1950": [
+      {
+        "fixture": "complete_ui_console_createobject",
+        "label": "complete_ui_console_createobject",
+        "completed": 184
+      }
+    ],
+    "0xaf2060": [
+      {
+        "fixture": "complete_ui_console_item",
+        "label": "complete_ui_console_item",
+        "completed": 224
+      }
+    ],
+    "0xaf2540": [
+      {
+        "fixture": "complete_ui_console_dispatch_resource",
+        "label": "complete_ui_console_dispatch_resource",
+        "completed": 142
+      },
+      {
+        "fixture": "complete_ui_console_dispatch_unit",
+        "label": "complete_ui_console_dispatch_unit",
+        "completed": 256
+      },
+      {
+        "fixture": "complete_ui_console_dispatch_control",
+        "label": "complete_ui_console_dispatch_control",
+        "completed": 336
+      },
+      {
+        "fixture": "complete_ui_console_dispatch_io",
+        "label": "complete_ui_console_dispatch_io",
+        "completed": 32
+      },
+      {
+        "fixture": "complete_ui_console_dispatch_owners",
+        "label": "complete_ui_console_dispatch_owners",
+        "completed": 112
+      },
+      {
+        "fixture": "complete_ui_console_dispatch_parameter",
+        "label": "complete_ui_console_dispatch_parameter",
+        "completed": 204
+      },
+      {
+        "fixture": "complete_ui_console_dispatch_quest",
+        "label": "complete_ui_console_dispatch_quest",
+        "completed": 248
+      }
+    ],
+    "0xafa8e0": [
+      {
+        "fixture": "complete_ui_console_addtext",
+        "label": "complete_ui_console_addtext",
+        "completed": 96
+      }
+    ],
+    "0xafbb70": [
+      {
+        "fixture": "complete_ui_console_submit",
+        "label": "complete_ui_console_submit",
+        "completed": 96
+      }
+    ],
+    "0xafbee0": [
+      {
+        "fixture": "complete_ui_console_ctor",
+        "label": "complete_ui_console_ctor",
+        "completed": 24
+      }
+    ],
+    "0xb04b00": [
+      {
+        "fixture": "complete_ui_dialog_npc",
+        "label": "complete_ui_dialog_npc",
+        "completed": 768
+      }
+    ],
+    "0xb05390": [
+      {
+        "fixture": "complete_ui_dialog_create",
+        "label": "complete_ui_dialog_create",
+        "completed": 24
+      }
+    ],
+    "0xb0dbd0": [
+      {
+        "fixture": "complete_ui_die_open",
+        "label": "complete_ui_die_open",
+        "completed": 384
+      }
+    ],
+    "0xb0f540": [
+      {
+        "fixture": "complete_ui_die_create",
+        "label": "complete_ui_die_create",
+        "completed": 24
+      }
+    ],
+    "0xb176b0": [
+      {
+        "fixture": "complete_ui_dropdown_update",
+        "label": "complete_ui_dropdown_update",
+        "completed": 96
+      }
+    ],
+    "0xb179e0": [
+      {
+        "fixture": "complete_ui_dropdown_map",
+        "label": "complete_ui_dropdown_map",
+        "completed": 32
+      }
+    ],
+    "0xb17e70": [
+      {
+        "fixture": "complete_ui_dropdown_title",
+        "label": "complete_ui_dropdown_title",
+        "completed": 24
+      }
+    ],
+    "0xb18e50": [
+      {
+        "fixture": "complete_ui_dropdown_open",
+        "label": "complete_ui_dropdown_open",
+        "completed": 64
+      }
+    ],
+    "0xb196f0": [
+      {
+        "fixture": "complete_ui_dropdown_create",
+        "label": "complete_ui_dropdown_create",
+        "completed": 24
+      }
+    ],
+    "0xb1b6f0": [
+      {
+        "fixture": "complete_ui_dropdown_ctor",
+        "label": "complete_ui_dropdown_ctor",
+        "completed": 32
+      }
+    ],
+    "0xb3beb0": [
+      {
+        "fixture": "complete_ui_fishing_map",
+        "label": "complete_ui_fishing_map",
+        "completed": 32
+      }
+    ],
+    "0xb3c270": [
+      {
+        "fixture": "complete_ui_fishing_create",
+        "label": "complete_ui_fishing_create",
+        "completed": 24
+      }
+    ],
+    "0xb3c8b0": [
+      {
+        "fixture": "complete_ui_fishing_update",
+        "label": "complete_ui_fishing_update",
+        "completed": 288
+      }
+    ],
+    "0xb7e520": [
+      {
+        "fixture": "complete_ui_modal_contents",
+        "label": "complete_ui_modal_contents",
+        "completed": 384
+      }
+    ],
+    "0xb7f580": [
+      {
+        "fixture": "complete_ui_modal_create",
+        "label": "complete_ui_modal_create",
+        "completed": 24
+      }
+    ],
+    "0xb86f50": [
+      {
+        "fixture": "complete_ui_options_open",
+        "label": "complete_ui_options_open",
+        "completed": 768
+      }
+    ],
+    "0xb87ff0": [
+      {
+        "fixture": "complete_ui_options_create",
+        "label": "complete_ui_options_create",
+        "completed": 24
+      }
+    ],
+    "0xbae6f0": [
+      {
+        "fixture": "complete_menu_text_real_cegui",
+        "label": "complete_menu_text_real_cegui",
+        "completed": 240
+      }
+    ],
+    "0xbafab0": [
+      {
+        "fixture": "complete_menu_dialog_click_real_graph",
+        "label": "complete_menu_dialog_click_real_graph",
+        "completed": 768
+      }
+    ],
+    "0xbb0140": [
+      {
+        "fixture": "complete_menu_dialog_update_real_owners",
+        "label": "complete_menu_dialog_update_real_owners",
+        "completed": 504
+      }
+    ],
+    "0xbb04c0": [
+      {
+        "fixture": "complete_menu_dialog_tags_real_owners",
+        "label": "complete_menu_dialog_tags_real_owners",
+        "completed": 160
+      }
+    ],
+    "0xbb08f0": [
+      {
+        "fixture": "complete_menu_dialog_create_real_cegui",
+        "label": "complete_menu_dialog_create_real_cegui",
+        "completed": 24
+      }
+    ],
+    "0xbb56d0": [
+      {
+        "fixture": "complete_menu_dialog_slots_real_cegui",
+        "label": "complete_menu_dialog_slots_real_cegui",
+        "completed": 102
+      }
+    ],
+    "0xbb70b0": [
+      {
+        "fixture": "complete_menu_dialog_npc_real_graph",
+        "label": "complete_menu_dialog_npc_real_graph",
+        "completed": 480
+      }
+    ],
+    "0xbc2020": [
+      {
+        "fixture": "complete_menu_quest_update_real_bones",
+        "label": "complete_menu_quest_update_real_bones",
+        "completed": 384
+      }
+    ],
+    "0xbc2550": [],
+    "0xbc28c0": [
+      {
+        "fixture": "complete_menu_map_real_cegui",
+        "label": "complete_menu_map_real_cegui",
+        "completed": 48
+      }
+    ],
+    "0xbc2d50": [
+      {
+        "fixture": "complete_menu_quest_slots_real_cegui",
+        "label": "complete_menu_quest_slots_real_cegui",
+        "completed": 102
+      }
+    ],
+    "0xbc4430": [
+      {
+        "fixture": "complete_menu_quest_layout_real_graph",
+        "label": "complete_menu_quest_layout_real_graph",
+        "completed": 405
+      }
+    ],
+    "0xbc6b90": [
+      {
+        "fixture": "complete_menu_quest_create_real_cegui",
+        "label": "complete_menu_quest_create_real_cegui",
+        "completed": 24
+      }
+    ],
+    "0xbcc6d0": [
+      {
+        "fixture": "complete_menu_quest_ctor_real_cegui",
+        "label": "complete_menu_quest_ctor_real_cegui",
+        "completed": 24
+      }
+    ],
+    "0xbd47e0": [
+      {
+        "fixture": "complete_ui_settings_update",
+        "label": "complete_ui_settings_update",
+        "completed": 512
+      }
+    ],
+    "0xbd5560": [
+      {
+        "fixture": "complete_ui_settings_open",
+        "label": "complete_ui_settings_open",
+        "completed": 192
+      }
+    ],
+    "0xbd6ea0": [
+      {
+        "fixture": "complete_ui_settings_create",
+        "label": "complete_ui_settings_create",
+        "completed": 32
+      }
+    ],
+    "0xc2bd40": [],
+    "0xc2be40": [],
+    "0xc4a810": [
+      {
+        "fixture": "complete_ui_difficulty_create",
+        "label": "complete_ui_difficulty_create",
+        "completed": 24
+      }
+    ],
+    "0xc52a10": [
+      {
+        "fixture": "complete_ui_main_create",
+        "label": "complete_ui_main_create",
+        "completed": 24
+      }
+    ],
+    "0xc53b70": [
+      {
+        "fixture": "complete_ui_main_update",
+        "label": "complete_ui_main_update",
+        "completed": 192
+      }
+    ],
+    "0xc5b950": [
+      {
+        "fixture": "complete_ui_newgame_save",
+        "label": "complete_ui_newgame_save",
+        "completed": 96
+      }
+    ],
+    "0xc5c040": [
+      {
+        "fixture": "complete_ui_newgame_click",
+        "label": "complete_ui_newgame_click",
+        "completed": 128
+      }
+    ],
+    "0xc5c2f0": [
+      {
+        "fixture": "complete_ui_newgame_submit",
+        "label": "complete_ui_newgame_submit",
+        "completed": 96
+      }
+    ],
+    "0xc5c5a0": [
+      {
+        "fixture": "complete_ui_newgame_open",
+        "label": "complete_ui_newgame_open",
+        "completed": 64
+      }
+    ],
+    "0xc5cc30": [
+      {
+        "fixture": "complete_ui_newgame_update",
+        "label": "complete_ui_newgame_update",
+        "completed": 96
+      }
+    ],
+    "0xc5d730": [
+      {
+        "fixture": "complete_ui_newgame_create",
+        "label": "complete_ui_newgame_create",
+        "completed": 24
+      }
+    ],
+    "0xc61550": [
+      {
+        "fixture": "data_group_destructor_native",
+        "label": "data_group_destructor_native",
+        "completed": 256
+      }
+    ],
+    "0xc61ab0": [],
+    "0xcf8ee0": [],
+    "0xcf8ef0": [],
+    "0xcf8f00": [
+      {
+        "fixture": "missile_reset_native",
+        "label": "missile_reset_native",
+        "completed": 192
+      }
+    ],
+    "0xcf8f90": [
+      {
+        "fixture": "missile_sphere_native",
+        "label": "missile_sphere_native",
+        "completed": 192
+      }
+    ],
+    "0xcf91e0": [],
+    "0xcf9350": [],
+    "0xcf9450": [
+      {
+        "fixture": "missile_arch_native",
+        "label": "missile_arch_native",
+        "completed": 192
+      }
+    ],
+    "0xcf9620": [
+      {
+        "fixture": "missile_damage_native",
+        "label": "missile_damage_native",
+        "completed": 512
+      }
+    ],
+    "0xcf9840": [
+      {
+        "fixture": "missile_death_native",
+        "label": "missile_death_native",
+        "completed": 192
+      }
+    ],
+    "0xd00580": [],
+    "0xd00650": [],
+    "0xd00c20": [
+      {
+        "fixture": "missile_aoe_native",
+        "label": "missile_aoe_native",
+        "completed": 512
+      }
+    ],
+    "0xd01090": [
+      {
+        "fixture": "missile_launch_native",
+        "label": "missile_launch_native",
+        "completed": 512
+      }
+    ],
+    "0xd014a0": [
+      {
+        "fixture": "missile_kill_native",
+        "label": "missile_kill_native",
+        "completed": 192
+      }
+    ],
+    "0xd01580": [
+      {
+        "fixture": "missile_ricochet_native",
+        "label": "missile_ricochet_native",
+        "completed": 512
+      }
+    ],
+    "0xd02720": [
+      {
+        "fixture": "missile_velocity_native",
+        "label": "missile_velocity_native",
+        "completed": 1024
+      }
+    ],
+    "0xd032b0": [
+      {
+        "fixture": "missile_particle_file_native",
+        "label": "missile_particle_file_native",
+        "completed": 768
+      }
+    ],
+    "0xd034c0": [
+      {
+        "fixture": "missile_hit_native",
+        "label": "missile_hit_native",
+        "completed": 1024
+      }
+    ],
+    "0xd038a0": [
+      {
+        "fixture": "missile_collision_native",
+        "label": "missile_collision_native",
+        "completed": 2048
+      }
+    ],
+    "0xd04120": [
+      {
+        "fixture": "missile_update_native",
+        "label": "missile_update_native",
+        "completed": 1024
+      }
+    ],
+    "0xd04610": [
+      {
+        "fixture": "missile_fire_native",
+        "label": "missile_fire_native",
+        "completed": 2048
+      }
+    ],
+    "0xd05ad0": [
+      {
+        "fixture": "missile_destructor_native",
+        "label": "missile_destructor_native",
+        "completed": 256
+      }
+    ],
+    "0xd05f90": [],
+    "0xd05fb0": [
+      {
+        "fixture": "missile_constructor_native",
+        "label": "missile_constructor_native",
+        "completed": 64
+      }
+    ],
+    "0xd06250": [
+      {
+        "fixture": "missile_copy_native",
+        "label": "missile_copy_native",
+        "completed": 256
+      }
+    ],
+    "0xe4b810": [
+      {
+        "fixture": "complete_ui_tip_contents",
+        "label": "complete_ui_tip_contents",
+        "completed": 48
+      }
+    ],
+    "0xe4c800": [
+      {
+        "fixture": "complete_ui_tip_create",
+        "label": "complete_ui_tip_create",
+        "completed": 24
+      }
+    ],
+    "0xe992f0": [
+      {
+        "fixture": "complete_ui_cinematic_display",
+        "label": "complete_ui_cinematic_display",
+        "completed": 240
+      }
+    ],
+    "0xe9a5a0": [
+      {
+        "fixture": "complete_ui_cinematic_text",
+        "label": "complete_ui_cinematic_text",
+        "completed": 64
+      }
+    ],
+    "0xe9b180": [
+      {
+        "fixture": "complete_ui_cinematic_create",
+        "label": "complete_ui_cinematic_create",
+        "completed": 24
+      }
+    ],
+    "0xea45d0": [
+      {
+        "fixture": "complete_ui_waypoint_click",
+        "label": "complete_ui_waypoint_click",
+        "completed": 560
+      }
+    ],
+    "0xea4970": [
+      {
+        "fixture": "complete_ui_waypoint_open",
+        "label": "complete_ui_waypoint_open",
+        "completed": 384
+      }
+    ],
+    "0xea58b0": [
+      {
+        "fixture": "complete_ui_waypoint_create",
+        "label": "complete_ui_waypoint_create",
+        "completed": 24
+      }
+    ],
+    "0xea62a0": [
+      {
+        "fixture": "complete_ui_waypoint_ctor",
+        "label": "complete_ui_waypoint_ctor",
+        "completed": 24
+      }
+    ]
+  },
+  "matched_functions": 2994,
+  "remaining_in_union": 265,
+  "lost_previous_accepted": [],
+  "full_run": {
+    "tests": 2277,
+    "failed": 5,
+    "seconds": 7998.402091421987,
+    "log_sha256": "da1524134d31ff7a4a4661fa89875455d4ed98d4d6e062b5231bbe2a020ec712",
+    "input_drift": []
+  },
+  "test_only_fixes": {
+    "changed_files": [
+      "decomp/README.md",
+      "decomp/hybrid/tests/GameClientRightTest.cpp",
+      "decomp/hybrid/tests/GameSetupNativeBootstrapTest.cpp",
+      "decomp/hybrid/tests/CharacterEmptyGlobals.h",
+      "decomp/hybrid/tests/CompleteObjectManipulateTest.cpp",
+      "decomp/hybrid/tests/CompleteObjectFrameTest.cpp",
+      "decomp/hybrid/tests/GameSetupRuntimeTest.cpp",
+      "decomp/hybrid/tests/CompleteEditorRuntimeTest.cpp"
+    ],
+    "focused_tests": 22,
+    "failed": 0,
+    "report_sha256": "cfdaf6d218a08aec3a5cf401d10211ff6ce3673ec92480bff8291e4cf70bcbf5"
+  },
+  "distinct_passed_tests_across_runs": 2278,
+  "production_inputs_unchanged": true,
+  "fresh_full_check_after_fixture_fixes": false,
+  "tool_tests_passed": 1094,
+  "scope": "Derived report of MATCH and >=20 completed zero-difference comparisons inside passing TL_TEST envelopes, restricted to compiled game addresses with unchanged production inputs; labels may differ from fixture names. No full-check receipt is minted."
+}

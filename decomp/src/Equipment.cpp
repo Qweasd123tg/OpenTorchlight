@@ -2099,7 +2099,7 @@ int CEquipment::getDamageBonus(EDAMAGE_TYPES type)
 bool CEquipment::missileApplyingEffects(CMissile* missile, CCharacter* target,
                                        const Ogre::Vector3*, float damageScale, float effectScale)
 {
-    CCharacter* owner = dynamic_cast<CCharacter*>(static_cast<CBaseUnit*>(missile->m_pRunicCore));
+    CCharacter* owner = dynamic_cast<CCharacter*>(missile->m_owner.getObject());
     if (owner && target && !target->isEnemy(owner)) return false;
     if (missile->m_bUnknown294) {
         if (owner) {

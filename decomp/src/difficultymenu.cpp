@@ -49,3 +49,19 @@ bool CDifficultyMenu::onClick(ELayoutFunction function, std::wstring)
     }
     return true;
 }
+
+#include "FileSystem.h"
+#include "EmptyStrings.h"
+#include <CEGUIWindowManager.h>
+void CDifficultyMenu::createMenus()
+{
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(L"media/ui/difficulty.layout",info,false,true,false);
+    CEGUI::Window* layout = CEGUI::WindowManager::getSingleton().loadWindowLayout(CEGUI::String(info.m_sResourceName),true);
+    m_pGameUI->convertToScreenScale(layout,false);
+    m_pGameUI->mapToFunctions(layout);
+    mapEventHandlers(layout);
+    static_cast<CEGUI::Window*>(m_pUnknown18)->addChildWindow(layout);
+    layout->setPosition(CEGUI::UVector2(CEGUI::UDim(0,0),CEGUI::UDim(0,0)));
+    m_hardcoreCheckbox = static_cast<CEGUI::Checkbox*>(layout->recursiveChildSearch("Hardcore"));
+}

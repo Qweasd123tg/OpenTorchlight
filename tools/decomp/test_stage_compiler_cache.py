@@ -226,6 +226,9 @@ extern "C" int line(){return __LINE__;}
         shutil.copy2(PINNED / "usr/bin/g++", gcc / "usr/bin/g++")
         (gcc / "usr/bin/as").symlink_to(PINNED / "usr/bin/as")
         (gcc / ".complete.json").write_text("{}")
+        mesh = Path("ogre-1.6.5/ogre/OgreMain/include/OgreMesh.h")
+        (gcc / mesh).parent.mkdir(parents=True)
+        shutil.copyfile(PINNED / mesh, gcc / mesh)
         source = self.source()
         with patch.object(toolchain, "cache_dir", return_value=base), \
                 patch.object(toolchain, "config", return_value={"cflags": ["-O2"], "include": []}):

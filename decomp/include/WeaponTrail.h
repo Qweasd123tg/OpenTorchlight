@@ -8,6 +8,7 @@
 #include <string>
 class CSceneNodeObject;
 class CWeaponTrail : public CRunicCore {
+    friend class CCharacter;
 public:
     CWeaponTrail(Ogre::SceneManager*, const std::string&, int, float);
     void update(float, Ogre::Vector3*, Ogre::Vector3*, bool, CSceneNodeObject*);

@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <iosfwd>
 
 #include "EditorDefines.h"
 #include "PositionableObject.h"
@@ -11,6 +12,18 @@
 class CDataGroup;
 class CResourceManager;
 class CDescriptorSaveConfiguration;
+class CFileInfo;
+class CRandomGroup;
+class COgreReader;
+class CEditorScene;
+class CDescriptorLoadConfiguration;
+
+void rollGroup(CRandomGroup*, TArrayList<CEditorBaseObject*>&, TArrayList<CRandomGroup*>&);
+bool loadObjectByCompressedFile(CEditorScene*, CDescriptorLoadConfiguration&, COgreReader&, CEditorBaseObject*, bool);
+void rollRandomGroups(CDescriptor*, TArrayList<CEditorBaseObject*>&, bool, CDescriptorLoadConfiguration&);
+void saveBinaryGroup(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >&, CRandomGroup*, CDescriptor*, CDescriptorSaveConfiguration*);
+void saveBinaryGroupChildren(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >&, CRandomGroup*, CDescriptor*, CDescriptorSaveConfiguration*);
+void saveBinaryObjects(CEditorScene*, std::basic_ofstream<char, std::char_traits<char> >&, TArrayList<CEditorBaseObject*>&, CDescriptorSaveConfiguration*);
 class CDescriptor;
 class CDescriptorManager;
 class CDynamicPropertyFile;
@@ -24,6 +37,9 @@ class CDescriptorSaveConfiguration;
 class CEditorScene : public CPositionableObject
 {
 public:
+    bool loadCompressedLayout(CFileInfo&, TArrayList<CEditorBaseObject*>*, long long);
+    void saveCompressedLayout(const std::wstring&);
+    void SaveDescriptionOfSceneAndDescriptors(CDataGroup*, unsigned int);
     unsigned int getNumberOfTimelinesThatDoLoop();
     unsigned int getNumberOfTimelinesUpdating(bool excludeLooping);
 

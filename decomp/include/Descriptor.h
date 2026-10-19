@@ -25,6 +25,8 @@ class COgreReader;
 class CDescriptor : public CEditorBaseObject
 {
     friend class CEditorScene;
+    friend class CConsole;
+    friend class CObjectControl3D;
     friend class CDescriptorController;
     friend class CDescriptorManager;
     friend class CDescriptorProp;

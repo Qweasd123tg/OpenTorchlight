@@ -12,7 +12,7 @@ inline unsigned long long milliseconds(){
  struct timespec now;if(clock_gettime(CLOCK_MONOTONIC,&now))return 0;
  return static_cast<unsigned long long>(now.tv_sec)*1000+now.tv_nsec/1000000;
 }
-inline int isolated(int(*body)(const tlhybrid_host*),const tlhybrid_host*host){
+inline int isolated(int(*body)(const tlhybrid_host*),const tlhybrid_host*host,unsigned timeoutSeconds=60){
  // A subreaper lets this process wait for grandchildren orphaned by an abnormal
  // worker. Restore the previous kernel setting; no SDK graph enters this parent.
  int previous=0;if(prctl(getChildSubreaper,&previous)||prctl(setChildSubreaper,1))return 1;
@@ -24,7 +24,7 @@ inline int isolated(int(*body)(const tlhybrid_host*),const tlhybrid_host*host){
   signal(SIGSEGV,autotest::crashed);signal(SIGBUS,autotest::crashed);signal(SIGFPE,autotest::crashed);
   signal(SIGILL,autotest::crashed);signal(SIGABRT,autotest::crashed);
   signal(SIGALRM,SIG_DFL);signal(SIGPROF,SIG_DFL);
-  struct itimerval limit;std::memset(&limit,0,sizeof(limit));limit.it_value.tv_sec=60;
+  struct itimerval limit;std::memset(&limit,0,sizeof(limit));limit.it_value.tv_sec=timeoutSeconds;
   if(setitimer(ITIMER_REAL,&limit,NULL))_exit(73);
   // Per-invocation CPU/wall limits are still set by the unchanged inner runChild.
   int failures=body(host);
@@ -50,7 +50,7 @@ inline int isolated(int(*body)(const tlhybrid_host*),const tlhybrid_host*host){
   if(waited==pid){reaped=true;break;}
   if(waited<0&&errno!=EINTR){bad=true;break;}
   unsigned long long now=milliseconds();
-  if(!now||now-start>=60000){bad=true;timedOut=true;break;}
+  if(!now||now-start>=static_cast<unsigned long long>(timeoutSeconds)*1000){bad=true;timedOut=true;break;}
   struct pollfd event={fd[0],POLLIN,0};
   if(poll(&event,1,100)<0&&errno!=EINTR){bad=true;break;}
  }

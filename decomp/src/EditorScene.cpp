@@ -393,3 +393,128 @@ unsigned int CEditorScene::merge(CEditorScene* scene, TArrayList<CEditorBaseObje
     m_sFileLoaded = oldFile;
     return result;
 }
+
+#include "Utilities.h"
+#include <OgreLogManager.h>
+
+void rollGroup(CRandomGroup* group, TArrayList<CEditorBaseObject*>& objects,
+               TArrayList<CRandomGroup*>& rejected)
+{
+    TArrayList<CRandomGroup*> children(objects.size());
+    TArrayList<CEditorBaseObject*> selected(objects.size());
+    for (unsigned int i=0; i<objects.size(); ++i)
+        if (objects[i]->getParentGuid()==group->getOriginalGuid())
+            children.add(static_cast<CRandomGroup*>(objects[i]));
+    group->chooseChildrenByRandomChoice(children, selected);
+    rejected.setGrowBy(children.size()+1);
+    for (unsigned int i=0; i<children.size(); ++i)
+        if (selected.find(children[i])==-1)
+            rejected.add(children[i]);
+}
+
+void CEditorScene::GetObjectsCreatedByADescriptor(const std::wstring& name,
+                                                 TArrayList<CEditorBaseObject*>* objects)
+{
+    CDescriptor* descriptor=m_pDescriptorManager->GetDescriptor(name.c_str(),false);
+    if (descriptor)
+        for (unsigned int i=0; i<descriptor->m_Objects.size(); ++i)
+            objects->add(descriptor->m_Objects[i]);
+    static std::wstring gLayoutLinkNames[3]={L"Layout Link",L"Layout Link Particle",L"Layout Link Timeline"};
+    for (unsigned int i=0; i<3; ++i)
+    {
+        descriptor=m_pDescriptorManager->GetDescriptor(gLayoutLinkNames[i].c_str(),false);
+        if (descriptor)
+            for (unsigned int j=0; j<descriptor->m_Objects.size(); ++j)
+                dynamic_cast<CEditorScene*>(descriptor->m_Objects[j])->GetObjectsCreatedByADescriptor(name,objects);
+    }
+}
+
+CEditorBaseObject* CEditorScene::CreateObjectByDescriptor(CDescriptor* descriptor,
+    CEditorBaseObject* source, CEditorBaseObject* parent, bool load)
+{
+    if (!descriptor) return NULL;
+    CEditorBaseObject* object=descriptor->CreateObject(this);
+    if (!object || m_Objects.find(object->m_iGuid)!=m_Objects.end()) return NULL;
+    object->m_pDescriptor=descriptor;
+    object->SetSceneOwner(this);
+    long long guid=object->m_iGuid;
+    while (m_Objects.find(guid)!=m_Objects.end())
+    {
+        Ogre::LogManager::getSingleton().logMessage("ERROR IN CREATING NEW OBJECT HAD THE SAME GUID!!",Ogre::LML_CRITICAL,false);
+        object->setGuid(UTILITIES::createUniqueGuid());
+        guid=object->m_iGuid;
+    }
+    m_Objects[guid]=object;
+    if (source) descriptor->Clone(object,source,parent);
+    descriptor->EditorSceneCreatedObject(object);
+    if (load) descriptor->DescriptorObjectHasBeenInited(object);
+    editorObjectCreated(object);
+    return object;
+}
+
+void CEditorScene::DeleteObjectInScene(CEditorBaseObject* object)
+{
+    if (!object || object->m_pSceneOwner!=this || !object->m_pDescriptor) return;
+    if (object->m_pDescriptor->m_iFlags & 0x20)
+    {
+        std::map<long long,CEditorBaseObject*>::iterator i=m_Objects.begin();
+        while (i!=m_Objects.end())
+        {
+            std::map<long long,CEditorBaseObject*>::iterator previous=i++;
+            CEditorBaseObject* child=previous->second;
+            if (!child->isChildOfObject(object->m_iGuid)) continue;
+            m_Objects.erase(previous);
+            m_ObjectList0.remove(child);
+            child->m_pDescriptor->EditorSceneRemovingObject(child);
+            child->m_pDescriptor->DescriptorObjectBeingDeleted(child);
+            editorObjectDelete(child);
+            delete child;
+        }
+    }
+    std::map<long long,CEditorBaseObject*>::iterator i=m_Objects.find(object->m_iGuid);
+    if (i==m_Objects.end()) return;
+    m_Objects.erase(i);
+    m_ObjectList0.remove(object);
+    object->m_pDescriptor->EditorSceneRemovingObject(object);
+    object->m_pDescriptor->DescriptorObjectBeingDeleted(object);
+    editorObjectDelete(object);
+    delete object;
+}
+
+void CEditorScene::SaveDescriptionOfSceneAndDescriptors(CDataGroup* data, unsigned int id)
+{
+    CDataGroup* scene=data->AddDataGroup(L"SCENE");
+    scene->AddDataValue(L"NAME",m_sName,false);
+    scene->AddDataValue(L"ID",id);
+    scene->AddDataValue(L"SAVEENABLED",(m_iUnknown188^1)&1);
+    if (m_pDescriptorManager) m_pDescriptorManager->SerializeDescriptors(scene);
+}
+
+#include "TimerStatics.h"
+
+int CEditorScene::loadObject(CDataGroup* data, CDescriptorLoadConfiguration* configuration)
+{
+    if (!configuration || !data || data->GetGroupName()!=L"BASEOBJECT") return 0;
+    CDataGroup* properties=data->GetDataGroupByName(L"PROPERTIES",false);
+    if (!properties) return 0;
+    std::wstring name(properties->GetDataValue(L"DESCRIPTOR",EMPTY_WSTRING));
+    if (name==EMPTY_WSTRING || !m_pDescriptorManager) return 0;
+    CDescriptor* descriptor=m_pDescriptorManager->GetDescriptor(name.c_str(),true);
+    if (!descriptor) return 0;
+    CEditorBaseObject* object;
+    if (!configuration->m_bFlag14)
+    {
+        if (configuration->m_timers)
+            configuration->m_timers->m_times.add(configuration->m_timers->m_timer.getMicroseconds());
+        object=descriptor->loadObject(properties,configuration);
+        if (configuration->m_timers)
+            configuration->m_timers->popTime(descriptor->m_sName.c_str());
+    }
+    else
+    {
+        object=descriptor->postProcessObject(properties,configuration);
+        editorObjectLoaded(object);
+        if (configuration->m_createdObjects) configuration->m_createdObjects->add(object);
+    }
+    return loadObjects(object,data,configuration)+1;
+}

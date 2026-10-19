@@ -1,0 +1,45 @@
+--- a/decomp/include/ParticleDynamicAttribute.h
++++ b/decomp/include/ParticleDynamicAttribute.h
+@@ -34,12 +34,18 @@
+ namespace ParticleUniverse
+ {
+ class Particle;
++#ifndef OTL_PU_INTERPOLATION_TYPE_DEFINED
++#define OTL_PU_INTERPOLATION_TYPE_DEFINED
+ enum InterpolationType { IT_LINEAR = 0, IT_SPLINE = 1 };
++#endif
++#ifndef OTL_PU_IELEMENT_DEFINED
++#define OTL_PU_IELEMENT_DEFINED
+ class IElement
+ {
+ public:
+     virtual ~IElement();
+ };
++#endif
+ class DynamicAttribute : public IElement
+ {
+ public:
+--- a/decomp/include/ParticleUniverseConstants.h
++++ b/decomp/include/ParticleUniverseConstants.h
+@@ -9,8 +9,13 @@
+ // with the matching ParticleUniverse release header once it is identified.
+ namespace ParticleUniverse
+ {
++#ifndef OTL_PU_HALFSCALE_DEFINED
++#define OTL_PU_HALFSCALE_DEFINED
+     static const Ogre::Vector3 HALFSCALE = Ogre::Vector3::UNIT_SCALE * 0.5;
++#endif
+ 
++#ifndef OTL_PU_CONTEXT_STRINGS_DEFINED
++#define OTL_PU_CONTEXT_STRINGS_DEFINED
+     static const Ogre::String ALIAS = "1";
+     static const Ogre::String SYSTEM = "2";
+     static const Ogre::String TECHNIQUE = "3";
+@@ -23,6 +28,7 @@
+     static const Ogre::String EXTERN = "10";
+     static const Ogre::String DYNAMIC_ATTRIBUTE = "11";
+     static const Ogre::String DEPENDENCY = "12";
++#endif
+ }
+ 
+ #endif

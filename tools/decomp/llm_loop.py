@@ -209,8 +209,49 @@ def _repair_progress(root, db):
     return data, hashlib.sha256(raw).hexdigest(), protected
 
 
+def _repair_deleting_destructor(row_address, owner, db, canonical_rows, compare_rows):
+    """Keep an already MATCH independent D0 wrapper protected during D1 repair."""
+    wrapper = db['functions'].get(row_address, {})
+    names = wrapper.get('names', [])
+    if (row_address == owner['address'] or wrapper.get('tu') != owner.get('tu')
+            or owner.get('kind') != 'dtor' or wrapper.get('kind') != 'dtor'
+            or len(names) != 1 or not names[0].endswith('D0Ev')
+            or set(owner.get('names', [])) != {names[0][:-4] + 'D1Ev', names[0][:-4] + 'D2Ev'}
+            or wrapper.get('scope') != owner.get('scope') or wrapper.get('size') != 18):
+        raise ValueError('repair target/alias is accepted or protected: ' + row_address)
+    # A pin is narrower than a body-repair permission: inspect the exact native
+    # GCC wrapper and its references, then require two fresh strong MATCH rows.
+    import elfimage
+    import struct
+    image = elfimage.load(elfdb.default_elf())
+    if image.sha256 != db.get('original_elf_sha256'):
+        raise ValueError('repair deleting destructor ELF input differs')
+    address = int(row_address, 16)
+    code = image.read(address, 18)
+    if (code[:5] != b'\x53\x48\x89\xfb\xe8'
+            or code[9:14] != b'\x48\x89\xdf\x5b\xe9'
+            or address + 9 + struct.unpack('<i', code[5:9])[0] != int(owner['address'], 16)
+            or image.plt.get(address + 18 + struct.unpack('<i', code[14:18])[0])
+                != '_ZN4Ogre12NedAllocImpl12deallocBytesEPv'):
+        raise ValueError('repair deleting destructor native references differ')
+    saved = []
+    for rows in (canonical_rows, compare_rows):
+        found = [row for row in rows if row.get('address') == row_address]
+        if (len(found) != 1 or found[0].get('status') != 'MATCH'
+                or found[0].get('weak') is not False or found[0].get('name') != names[0]
+                or found[0].get('size') != 18 or found[0].get('original_size') != 18
+                or not re.fullmatch(r'[0-9a-f]{16}', str(found[0].get('code', '')))):
+            raise ValueError('repair requires an unchanged strong MATCH deleting destructor: ' + row_address)
+        saved.append(found[0])
+    if saved[0]['code'] != saved[1]['code']:
+        raise ValueError('repair deleting destructor changed in fresh baseline: ' + row_address)
+    return {'address': row_address, 'name': names[0], 'code': saved[0]['code']}
+
+
 def _repair_thunk(row_address, owner, db, canonical_rows, compare_rows):
     """Pin only an independently emitted non-virtual adjustment thunk."""
+    if any(name.endswith('D0Ev') for name in db['functions'].get(row_address, {}).get('names', [])):
+        return _repair_deleting_destructor(row_address, owner, db, canonical_rows, compare_rows)
     thunk = db['functions'].get(row_address, {})
     names = thunk.get('names', [])
     mangled = [re.fullmatch(r'_ZThn?[0-9]+_(.+)', n) for n in names]

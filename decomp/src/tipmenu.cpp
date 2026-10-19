@@ -76,3 +76,29 @@ CTipMenu::CTipMenu(CGameUI& ui, CSettings& settings, Ogre::SceneManager* scene, 
         g_Tip = CStringTranslate::getSinglton()->getTranslateString(L"Tip");
     setTitle(g_Tip);
 }
+
+#include "FileSystem.h"
+#include "StringUtilities.h"
+#include <CEGUIWindowManager.h>
+void CTipMenu::setContents(std::wstring& text)
+{
+    if (!m_tipText) return;
+    std::string label = STRINGS::StringConvertToUTF8(text);
+    m_tipImage->setText(CEGUI::String(reinterpret_cast<const CEGUI::utf8*>(label.c_str())));
+}
+void CTipMenu::createMenus()
+{
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(L"media/ui/tipmenu.layout",info,false,true,false);
+    CEGUI::Window* layout = CEGUI::WindowManager::getSingleton().loadWindowLayout(CEGUI::String(info.m_sResourceName),true);
+    m_tipText = layout->recursiveChildSearch("Ok");
+    m_tipImage = layout->recursiveChildSearch("Dialog");
+    m_iUnknown50 = layout->recursiveChildSearch("Title");
+    m_showTipsCheckbox = static_cast<CEGUI::Checkbox*>(layout->recursiveChildSearch("ShowTips"));
+    m_showTipsCheckbox->setSelected(true);
+    m_pGameUI->convertToScreenScale(layout,false);
+    m_pGameUI->mapToFunctions(layout);
+    mapEventHandlers(layout);
+    static_cast<CEGUI::Window*>(m_pUnknown20)->addChildWindow(layout);
+    static_cast<CEGUI::Window*>(m_pUnknown20)->setAlwaysOnTop(true);
+}

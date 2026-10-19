@@ -1,0 +1,324 @@
+{
+  "revision": "5e21f1eca1f65327ce2cc588253be70d565560a0",
+  "files": {
+    "ParticleUniverseSystemManager.h": {
+      "sha256": "da7668ae8123eee19af9f17e455239eda5f901e0c5cc59a51d28fffe7e6f0349",
+      "bytes": 17890,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseSystemManager.h"
+    },
+    "ParticleRenderers/ParticleUniverseBox.h": {
+      "sha256": "6f0b4daff0834e4b7c493b1961a0f011e63447454bad7040969a6c02abf72008",
+      "bytes": 3319,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleRenderers/ParticleUniverseBox.h"
+    },
+    "ParticleRenderers/ParticleUniverseBoxSet.h": {
+      "sha256": "8b5c6ac609c1b3f1e892148a1395d97d29effd34cd9bb6e7a2507783f3342159",
+      "bytes": 7808,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleRenderers/ParticleUniverseBoxSet.h"
+    },
+    "ParticleRenderers/ParticleUniverseSphere.h": {
+      "sha256": "31ea46c9b7a1e2881681ba52765dd9bf642115924e1331ffd847d68963963a77",
+      "bytes": 2432,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleRenderers/ParticleUniverseSphere.h"
+    },
+    "ParticleRenderers/ParticleUniverseSphereSet.h": {
+      "sha256": "20425dff2cf7cd53840c7db75e51e56b7e151d433ebb0a262cdca29bf777bf28",
+      "bytes": 7633,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleRenderers/ParticleUniverseSphereSet.h"
+    },
+    "ParticleUniverseAffectorFactory.h": {
+      "sha256": "fe11bea36cdbceb1a6d35fc06fe79fcc8cbae7f729167d01b3fbfe4604be9d85",
+      "bytes": 1873,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseAffectorFactory.h"
+    },
+    "ParticleUniverseAffectorTokens.h": {
+      "sha256": "3d6d0d77e90f9d23c178df2095df5ae59c41a339230bdf631febf053f1cd25e9",
+      "bytes": 1905,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseAffectorTokens.h"
+    },
+    "ParticleUniverseAttachable.h": {
+      "sha256": "f9a5f444d7cfa458b2ddd1d40b7767a12c7c23ecf103d7b4baedc47ba7dfa020",
+      "bytes": 4055,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseAttachable.h"
+    },
+    "ParticleUniverseAttachableTokens.h": {
+      "sha256": "ead9be2f026dcf1a7694f1de7b04cbf25fabadfabe55f6eebdc01a0c73435ce6",
+      "bytes": 1458,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseAttachableTokens.h"
+    },
+    "ParticleUniverseBehaviourFactory.h": {
+      "sha256": "ddd37c2ce31fdf815b105362d20dcefad46a52b7f9125d9edb3aeda891d19e0f",
+      "bytes": 1848,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseBehaviourFactory.h"
+    },
+    "ParticleUniverseCameraDependency.h": {
+      "sha256": "6519cb9f0a68a6707cd5c7e4f822a6148dd0f8cba64934c75b2bd584bec8d566",
+      "bytes": 2221,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseCameraDependency.h"
+    },
+    "ParticleUniverseCameraDependencyTokens.h": {
+      "sha256": "7d129d8a78231f6e5b47eaa6dfe2436e63ba5fbf694c78d2dca0079091ae1ac1",
+      "bytes": 1588,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseCameraDependencyTokens.h"
+    },
+    "ParticleUniverseDynamicAttributeTokens.h": {
+      "sha256": "fe585cd32c28fe795b2b4ab7f78513ac4ba17b01285652be66d4956b5d48fdc2",
+      "bytes": 2220,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseDynamicAttributeTokens.h"
+    },
+    "ParticleUniverseEmitterFactory.h": {
+      "sha256": "5e34450e0922d1f0e1f15641b9c35749c9ced97e0a9f4e7cb60fc491a8a9ebec",
+      "bytes": 1849,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseEmitterFactory.h"
+    },
+    "ParticleUniverseEmitterTokens.h": {
+      "sha256": "663bdae643d4f1e2f934d2819df960b410f5cef5a53435f321b74026104fd9ea",
+      "bytes": 3463,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseEmitterTokens.h"
+    },
+    "ParticleUniverseEventHandlerFactory.h": {
+      "sha256": "3a852374061080a08fa1920db349e3e3447bc8393d4e3b6b53b29c79b2b38a55",
+      "bytes": 1969,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseEventHandlerFactory.h"
+    },
+    "ParticleUniverseExternFactory.h": {
+      "sha256": "02e730310b684a60af75eff192c6003f57afb587d7344771da03b1ef4dd40890",
+      "bytes": 1767,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseExternFactory.h"
+    },
+    "ParticleUniverseIAlias.h": {
+      "sha256": "978603a73bdae279df8b009bfc57816dcdc7e586973eee46d2401d4f4704a8ea",
+      "bytes": 1956,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseIAlias.h"
+    },
+    "ParticleUniverseITokenInitialiser.h": {
+      "sha256": "cb41de487263553fbeeecef425ce747c21dde49d65ba4392ee55a1556c143951",
+      "bytes": 1882,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseITokenInitialiser.h"
+    },
+    "ParticleUniverseObserverFactory.h": {
+      "sha256": "721a0891cf62c46cd52c4a3afbbe1370badaad9c0a12a64f7bc09f4d47fde9fd",
+      "bytes": 1873,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseObserverFactory.h"
+    },
+    "ParticleUniverseObserverTokens.h": {
+      "sha256": "a0e32c0d2d356a9e8150f05845db8679e461f83eaa045aa1fa86d58b4b540f93",
+      "bytes": 1720,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseObserverTokens.h"
+    },
+    "ParticleUniversePrerequisites.h": {
+      "sha256": "64fcf7cb2929216a10aa1b282ecccc5d62f190005366f6a935a136e304cc413f",
+      "bytes": 1529,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniversePrerequisites.h"
+    },
+    "ParticleUniverseRendererFactory.h": {
+      "sha256": "3ee568ed50dc05f8bb74fe765ff5a18770d164f12f20721abd835437bb637710",
+      "bytes": 1840,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseRendererFactory.h"
+    },
+    "ParticleUniverseRendererTokens.h": {
+      "sha256": "360f16accb0e14023c909f976ed4765ae170ad18d35d63f4cb123fbafe22ea24",
+      "bytes": 1585,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseRendererTokens.h"
+    },
+    "ParticleUniverseScriptTokeniser.h": {
+      "sha256": "6f5d523e7b3e33b57d38d44288ab9aa7d1b2b61bd6160481be47f1a3be3cb2c7",
+      "bytes": 4444,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseScriptTokeniser.h"
+    },
+    "ParticleUniverseSystemManagerTokens.h": {
+      "sha256": "bf42efd69385705fb972dca72ec33bd49438fd600658c77f74f048e6e3f5231f",
+      "bytes": 3241,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseSystemManagerTokens.h"
+    },
+    "ParticleUniverseSystemTokens.h": {
+      "sha256": "18aae03cc98416dded845400bb667d322399da264996f5bc65efee211efd9963",
+      "bytes": 2634,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseSystemTokens.h"
+    },
+    "ParticleUniverseTechniqueTokens.h": {
+      "sha256": "ee011d5387de38e49c24171b9653adf8602f4aec36ae3d7c73bad8e5e553b232",
+      "bytes": 3441,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseTechniqueTokens.h"
+    },
+    "ParticleRenderers/ParticleUniversePrimitiveShapeSet.h": {
+      "sha256": "f5ad99f1ac5404f7acae86933bb14aa5ea13ce72103eebd2d92a5ac91776a580",
+      "bytes": 5090,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleRenderers/ParticleUniversePrimitiveShapeSet.h"
+    },
+    "ParticleUniverseAffector.h": {
+      "sha256": "25269dc23e93b8a85a8a03c3f114f42fceccc24f923014038c59ee4dc78a326f",
+      "bytes": 8604,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseAffector.h"
+    },
+    "ParticleUniverseEmitter.h": {
+      "sha256": "11f2b9c2a25abd21060556a7d2f698b94c4b69e5cf2ec7d4c3ba689354941afb",
+      "bytes": 17154,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseEmitter.h"
+    },
+    "ParticleUniverseEventHandler.h": {
+      "sha256": "8cba7acea3280a27f2394e91938ca8727ec672a4c5c054ce2d59d7cc0dae9e63",
+      "bytes": 3183,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseEventHandler.h"
+    },
+    "ParticleUniverseExtern.h": {
+      "sha256": "7fca0164682218f041d839cf26c5b8b2146cc859cb167166918e9e791fb4ae6b",
+      "bytes": 5360,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseExtern.h"
+    },
+    "ParticleUniverseGrammar.h": {
+      "sha256": "bfaa6d43c5a03320c770c20b84d47b21fdb315d7c73f5238caa52f4555e8edc2",
+      "bytes": 3754,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseGrammar.h"
+    },
+    "ParticleUniverseIDependency.h": {
+      "sha256": "0bfb13289b66485eeb283b27caa334960cdb4c91c6540726ab7404e3da0f8285",
+      "bytes": 1369,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseIDependency.h"
+    },
+    "ParticleUniverseITokenRegister.h": {
+      "sha256": "ae8cd78670ada4da0b618f84ce55f037cb4472fe2624e4adede79dd68351a9da",
+      "bytes": 3283,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseITokenRegister.h"
+    },
+    "ParticleUniverseObserver.h": {
+      "sha256": "a6fd828168b1fff131b4d737cbdfe566666b93209bec58ccbf731d0a43535045",
+      "bytes": 8530,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseObserver.h"
+    },
+    "ParticleUniverseScriptParser.h": {
+      "sha256": "8d28b86b315c4f55c7fb8172e7eb6e55a6bfde9f6b1e97b2b8b84fb018063c4c",
+      "bytes": 4566,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseScriptParser.h"
+    },
+    "ParticleUniverseBehaviour.h": {
+      "sha256": "718c6afaf57d3eed3a9f51ab4ee2d755d1e52b6cfd88fec6b314dbdb7cb5e11e",
+      "bytes": 4165,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseBehaviour.h"
+    },
+    "ParticleUniverseCameraDependencyFactory.h": {
+      "sha256": "c8aa72712dcf7d968a76c8414394639bd957b26e3eaddadc406f028dcfcdfcd7",
+      "bytes": 1846,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseCameraDependencyFactory.h"
+    },
+    "ParticleUniverseContext.h": {
+      "sha256": "83d16b5d84e33531aaca72c553e50be234a9688ae6a3bac7742ac670bc8d63a1",
+      "bytes": 5809,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseContext.h"
+    },
+    "ParticleUniverseDynamicAttribute.h": {
+      "sha256": "068d1a8d7b1baa9ea08e9921eefffdd600cd2524088974ce1e5ced8784cfc139",
+      "bytes": 8244,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseDynamicAttribute.h"
+    },
+    "ParticleUniverseDynamicAttributeFactory.h": {
+      "sha256": "312a3a6b87a35769b8ae1ba7210724e43810c6164feb029a2d3922cd47280ef3",
+      "bytes": 2595,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseDynamicAttributeFactory.h"
+    },
+    "ParticleUniverseIElement.h": {
+      "sha256": "c09a3e597ccabfb63936b75dac40d14535bbc726fea0c95dd48153c6750a5b5a",
+      "bytes": 1345,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseIElement.h"
+    },
+    "ParticleUniverseIGrammar.h": {
+      "sha256": "491eb41e6f5dd540dd794ac3e3509b81656c4c9d3bd8458cbb0b0059b31af53f",
+      "bytes": 2985,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseIGrammar.h"
+    },
+    "ParticleUniverseIToken.h": {
+      "sha256": "8a28605e3c47fda22c3349da557446b6ec284684f045b055a029cdff3efa35ab",
+      "bytes": 2346,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseIToken.h"
+    },
+    "ParticleUniverseParticle.h": {
+      "sha256": "704e3714c8c32c6eaab07bfd42751e4de12853378798f8660582f9f9f0909df7",
+      "bytes": 10321,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseParticle.h"
+    },
+    "ParticleUniverseRenderer.h": {
+      "sha256": "e4a34098aea8dce62a76d3112372f22adc93495bd63aaab788a756212b4e3a83",
+      "bytes": 5045,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseRenderer.h"
+    },
+    "ParticleUniverseSystem.h": {
+      "sha256": "4a3634bb1759f7ab4e96992d5f3fd6e071f9ee768b176207147d0e61641cd6da",
+      "bytes": 17175,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseSystem.h"
+    },
+    "ParticleUniverseTechnique.h": {
+      "sha256": "696bb13faa7955cd1e3952f37722d0796a16c2df7464bd0b1a162cc0b9fb92ae",
+      "bytes": 36717,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseTechnique.h"
+    },
+    "ParticleUniverseCommon.h": {
+      "sha256": "f6c7458bad997217d65d187f25d4358d943c05bd9aad568ad15f7de179b75f47",
+      "bytes": 944,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseCommon.h"
+    },
+    "ParticleUniverseHook.h": {
+      "sha256": "73b31541d92bf4ff26fd26010cee1d176b8b58fa2a452e9de50aa0b65785e9eb",
+      "bytes": 3821,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseHook.h"
+    },
+    "ParticleUniverseIVisualData.h": {
+      "sha256": "23f45cbf8d06855dda84850e6b984ecc016ffc58363dc4d02415e3b4a9d0a4c1",
+      "bytes": 1151,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseIVisualData.h"
+    },
+    "ParticleUniverseParticlePool.h": {
+      "sha256": "b76f0d43212b023eedb48c487e692ea1f0223a0fa0028f096cc2ac4b74cd9f66",
+      "bytes": 4202,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseParticlePool.h"
+    },
+    "ParticleUniverseSection.h": {
+      "sha256": "48253aa5e1ee4f6c9dd179d5d9749866b3f53353071a18f91b58fdf1c0fb1e43",
+      "bytes": 1225,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseSection.h"
+    },
+    "ParticleUniverseSpatialHashTable.h": {
+      "sha256": "f5b4a93ad9001e56722fa6c0dda232ca5f6fe6b5376bf6da3a038f3f1bd0aca8",
+      "bytes": 6260,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseSpatialHashTable.h"
+    },
+    "ParticleUniverseTechniqueListener.h": {
+      "sha256": "f7f128569ed4c2c3b2fada81e44b8e9ec729a9e8fd7ac53ed7b939eacf9ad054",
+      "bytes": 1487,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseTechniqueListener.h"
+    },
+    "ParticleUniversePool.h": {
+      "sha256": "c2263097ef07e817cd8603f1cbd8d7d95641ff63e397bcbd0fc7055dd1edaece",
+      "bytes": 7611,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniversePool.h"
+    },
+    "ParticleUniversePoolMap.h": {
+      "sha256": "1db8d726f55c70238469fc7627c1eb57a50025345ec54ec32e01202148faf872",
+      "bytes": 5864,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniversePoolMap.h"
+    },
+    "ParticleUniverseVisualParticle.h": {
+      "sha256": "369c6f471233d090d611b2030d3215a741dc41e26268f4784ea50cdd9c6a1b59",
+      "bytes": 3280,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleUniverseVisualParticle.h"
+    },
+    "OgreCompiler2Pass.h": {
+      "sha256": "f0159cb870f8d3c5db2dd58744d3a82a75b57305b0b0ae243a64946b0071febc",
+      "bytes": 34224,
+      "url": "https://raw.githubusercontent.com/OGRECave/ogre/39c254402e53eea446f5f81e988154aedec1af79/OgreMain/include/OgreCompiler2Pass.h",
+      "revision": "39c254402e53eea446f5f81e988154aedec1af79",
+      "tag": "v1-6-0"
+    },
+    "ParticleRenderers/ParticleUniverseBillboardRenderer.h": {
+      "git_blob": "0df7e028c57f9a7fb0e87620e14a42ac55b81df2",
+      "sha256": "076d5da91af95cad88933423879faa444f06669ce42261df487cabd78c4e052f",
+      "bytes": 4087,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleRenderers/ParticleUniverseBillboardRenderer.h"
+    },
+    "ParticleRenderers/ParticleUniverseRibbonTrailRenderer.h": {
+      "git_blob": "21e567d6107c1d2b8ed870418a5587181e2d953a",
+      "sha256": "cb0ba2882ef0c3929a1c0d69bf250772e88ac071a77d0f6234431a749a4e160e",
+      "bytes": 4556,
+      "url": "https://raw.githubusercontent.com/alexribek/apeengine2/5e21f1eca1f65327ce2cc588253be70d565560a0/CleanProject/ParticleUniverse/include/ParticleRenderers/ParticleUniverseRibbonTrailRenderer.h"
+    }
+  }
+}

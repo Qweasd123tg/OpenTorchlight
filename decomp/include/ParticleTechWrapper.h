@@ -88,9 +88,9 @@ public:
         ParticleUniverse::RibbonTrailRenderer* m_ribbonRenderer;
     };
     CGenericModel* m_pUnknown1A8;
-    void* m_pTexturePath;
+    std::wstring m_pTexturePath;
     std::wstring m_pModelPath;
-    void* m_pUnknown1C0;
+    std::string m_pUnknown1C0;
     unsigned int m_iParticleRenderStyle;
     bool m_bDepthCheck;
     bool m_bIsLight;

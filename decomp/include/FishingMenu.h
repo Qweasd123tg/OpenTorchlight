@@ -10,6 +10,7 @@ namespace CEGUI { class Window; }
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CFishingMenu : public CRunicCore {
 public:
+    void mapEventHandlers(CEGUI::Window*);
     virtual ~CFishingMenu();
     virtual void update(float);
     virtual void setVisible(bool);
@@ -20,7 +21,7 @@ public:
     CFishingMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
     CEGUI::Window* m_parent; // +0x10
     CEGUI::Window* m_window; // +0x18
-    unsigned char m_Padding20[0x8];
+    CEGUI::Window* m_ring; // +0x20, FishingRing child
     CResourceManager* m_resources; // +0x28
     bool m_visible; // +0x30
     unsigned char m_Padding31[0x7];

@@ -15,6 +15,8 @@
 #include "ResourceManager.h"
 #include "RunicCore.h"
 #include "Settings.h"
+#include "KeyManager.h"
+#include "MouseManager.h"
 class CContinueGameMenu;
 class CGameUI;
 
@@ -45,10 +47,8 @@ public:
     long long m_iUnknown28;
     long long m_iUnknown30;
     CDynamicPropertyFile* m_pDynamicPropertyFile;
-    long long m_Unknown40;
-    unsigned char m_gap48[0xd10] __attribute__((aligned(8)));
-    long long m_UnknownD58;
-    unsigned char m_gapD60[0x48] __attribute__((aligned(8)));
+    CKeyManager m_Unknown40; // +0x40
+    CMouseManager m_UnknownD58; // +0xd58
     long long m_UnknownDA8;
     bool m_bUnknownDB0;
     unsigned char m_gapDB1[0xf];

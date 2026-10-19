@@ -23,6 +23,7 @@ std::wstring getRangeOfValues(float minimum, float maximum, bool percent);
 // Partial: full 0x138 allocation, original destructor slots and accessed fields.
 class CEffect : public CRunicCore
 {
+    friend class CTriggerUnit;
 public:
     std::wstring getDisplayStats(unsigned int level, bool value);
     std::wstring getDisplayStats(CEffectDisplayValues& values);

@@ -57,6 +57,10 @@ enum EAIState
 class CEquipment;
 class CCharacter : public CBaseUnit, public iInventoryListener, public iMissile
 {
+    friend class CTriggerUnit;
+    friend class CMissile;
+    friend class CPathController;
+    friend class CConsole;
     friend class CSpawnClassData;
     friend class CSkillEvent;
     friend class CLevel;
@@ -479,14 +483,17 @@ public:
     CGenericModel* m_pUnitModel;
     CGenericModel* m_pPaperdollModel;
 private:
-    unsigned char m_Padding210[0xc];
+    union { unsigned char m_Padding210[12]; float m_lastWorldPosition[3]; }; // +0x210
     Ogre::Vector3 m_pathDestination; // +0x21c
     Ogre::Vector3 m_targetPosition; // +0x228
     Ogre::Vector3 m_targetDirection; // +0x234
-    unsigned char m_Padding240[0xc];
+    union { unsigned char m_Padding240[12]; float m_impulse[3]; }; // +0x240
     Ogre::Vector3 m_movement; // +0x24c
     float m_moveSpeed; // +0x258
-    unsigned char m_Padding25C[0x8];
+    union {
+        unsigned char m_Padding25C[0x8];
+        struct { float m_animationSpeedMultiplier; float m_lastAnimationSpeed; };
+    };
     bool m_isPathing; // +0x264
     bool m_turnFlag265; // +0x265, turnToward angular-change flag
     bool m_moveInputHeld;
@@ -494,7 +501,7 @@ private:
     CAstarPathfinder* m_pathfinder; // +0x268
     CPath* m_movementPath; // +0x270
     float m_pathGraceTime; // +0x278
-    unsigned char m_Padding27C[4];
+    union { unsigned char m_Padding27C[4]; float m_movementTimer; }; // +0x27c
     float m_idleSoundTime; // +0x280
     float m_fidgetTime; // +0x284
     float m_turnRate288; // +0x288, turnToward rate
@@ -523,9 +530,21 @@ public:
     Ogre::SceneNode* m_pRightShoulderNode;
     Ogre::SceneNode* m_pHeadNode;
 private:
-    unsigned char m_Padding320[0x1];
-    bool m_returningToTown; // +0x321
-    unsigned char m_Padding322[0xe];
+    union {
+        struct {
+            unsigned char m_Padding320[1];
+            bool m_returningToTown; // +0x321
+            unsigned char m_Padding322[14];
+        };
+        struct {
+            unsigned char m_motionPadding320[2];
+            bool m_motionBlocked; // +0x322
+            unsigned char m_motionPadding323;
+            float m_motionBlockedTime; // +0x324
+            float m_walkAnimationMult; // +0x328, WALK_ANIM_MULT
+            float m_runAnimationMult; // +0x32c, RUN_ANIM_MULT
+        };
+    };
     EAIState m_eAIState;
     int m_aiType; // +0x334
     EAlignment m_alignment; // +0x338
@@ -535,7 +554,7 @@ private:
     float m_sightRange; // +0x360
     float m_nearWalkRadius; // +0x364, NEAR_WALK_RADIUS
     float m_viewAngle; // +0x368
-    unsigned char m_Padding36C[0x4];
+    union { unsigned char m_Padding36C[4]; float m_motionRadius; }; // +0x36c, MOTION_RADIUS
     float m_followRange; // +0x370
     float m_damageReactRange;
     float m_attackTime; // +0x378
@@ -597,11 +616,21 @@ private:
     friend class CStashMenu;
     friend class CMerchantMenu;
     bool m_bCharacterFlag4A0;
-    unsigned char m_Padding4A1[7];
+    union {
+        unsigned char m_Padding4A1[7];
+        struct { bool m_renderBehind; unsigned char m_RenderBehindPadding[6]; };
+    };
     TArrayList<CParticle*> m_equipmentParticles; // +0x4a8
     std::wstring m_characterDisplayName; // +0x4c0; original-owned display text
     CCollisionModel* m_collisionModel; // +0x4c8
-    unsigned char m_Padding4D0[12];
+    union {
+        unsigned char m_Padding4D0[12];
+        struct {
+            unsigned char m_attackPadding4D0[4];
+            float m_baseStrikeRange; // +0x4d4, STRIKE_RANGE
+            float m_baseAttackRange; // +0x4d8, ATTACK_RANGE
+        };
+    };
     float m_attackRangeScale; // +0x4dc
     float m_attackRadius; // +0x4e0
     unsigned char m_Padding4E4[4];
@@ -625,7 +654,10 @@ private:
     CCharacter* m_pMaster;
     std::vector<CCharacter*> m_Followers;
     float m_masterFollowDelay; // +0x660
-    unsigned char m_Padding664[4];
+    union {
+        unsigned char m_Padding664[4];
+        struct { bool m_canMatchSpeed; unsigned char m_CanMatchSpeedPadding[3]; };
+    };
     float m_bravery; // +0x668
     unsigned char m_Padding66C[4];
     CPath* m_deathPath; // +0x670
@@ -645,7 +677,14 @@ private:
     int m_merchantMinimum; // +0x6c8
     int m_merchantMaximum; // +0x6cc
     unsigned int m_value6D0; // +0x6d0
-    unsigned char m_Padding6D4[20];
+    union {
+        unsigned char m_Padding6D4[20];
+        struct {
+            unsigned char m_groundPadding6D4[4];
+            float m_groundNormal[3]; // +0x6d8
+            unsigned char m_groundPadding6E4[4];
+        };
+    };
     std::vector<std::wstring> m_additionalParticles; // +0x6e8
     bool m_flag700;
     bool m_experienceDisabled; // +0x701
@@ -667,7 +706,10 @@ private:
     float m_CharacterValue720;
     unsigned char m_Padding724[4];
     Ogre::Billboard* m_automapBillboard;
-    unsigned char m_Padding730[0x8];
+    union {
+        unsigned char m_Padding730[8];
+        struct { bool m_noOrientation; unsigned char m_orientationPadding731[7]; };
+    }; // +0x730, NO_ORIENTATION
     TArrayList<CParticleAnimationTrigger*> m_particleTriggers; // +0x738
     TSafePointer<CPathController> m_pathToFollow;
     std::wstring m_pathName;
@@ -676,7 +718,7 @@ private:
     unsigned char m_Padding770;
     bool m_keepPathWhenAIChanges; // +0x771
     bool m_alwaysActive; // +0x772
-    unsigned char m_Padding773;
+    union { unsigned char m_Padding773; bool m_flag773; }; // +0x773, RENDERALWAYS
     bool m_damageDisplayEnabled; // +0x774
     unsigned char m_Padding775[3];
 };

@@ -48,6 +48,8 @@ class CBaseUnit : public CPositionableObject
     friend class CItemDescriptor;
 
     friend class CLevel;
+    friend class CMissile;
+    friend class CConsole;
     friend class CResourceManager;
     friend struct SmallmatchPass7Probe;
     friend class CEquipment;
@@ -55,6 +57,7 @@ class CBaseUnit : public CPositionableObject
     friend class CSkillProperty;
     friend struct SmallmatchLayoutProbe;
 friend class CInventory;
+    friend class CGameClient;
 public:
     bool isPlayer();
     long long getQuestGuid() const { return m_iQuestGuid; }
