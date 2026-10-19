@@ -364,3 +364,48 @@ void CResourceManager::createUnitsBySpawnClass(const std::wstring& name, TArrayL
             createUnitsBySpawnClass(spawn, units, count, first, second, level, flags);
     }
 }
+
+#include "Breakable.h"
+#include "TriggerUnit.h"
+#include "ItemGold.h"
+
+CItem* CResourceManager::createNewItem(CDataGroup* data)
+{
+    std::wstring type = STRINGS::StringUpper(data->GetDataValue(L"CREATEAS", L""));
+    if (type == L"EQUIPMENT") return new CEquipment(this);
+    if (type == L"BREAKABLE") return new CBreakable(this);
+    if (type == L"TRIGGER") return new CTriggerUnit(this);
+    if (type == L"GOLD") return new CItemGold(this, 1);
+    return NULL;
+}
+
+void CResourceManager::createUnitsBySpawnClassAtPositionInLevel(CSpawnClass* spawn,
+    unsigned int count, const Ogre::Vector3& position, CLevel* level,
+    CCharacter* owner, CCharacter* source, int unitLevel)
+{
+    if (spawn == NULL || level == NULL) return;
+    TArrayList<CBaseUnit*> units(10);
+    if (unitLevel == -1) unitLevel = level->getDungeonDepth();
+    createUnitsBySpawnClass(spawn, units, count, owner, source, unitLevel, 0);
+    for (unsigned int i=0; i<units.size(); ++i) {
+        float radius = static_cast<float>(i) / 3.0f;
+        if (radius < 0.5f) radius = 0.5f;
+        Ogre::Vector3 point = level->randomOpenPosition(position, radius, false);
+        point.y = position.y + 0.5f;
+        if (units[i]->ISA(static_cast<UNITTYPES::EUNITTYPES>(31)) &&
+            !units[i]->ISA(static_cast<UNITTYPES::EUNITTYPES>(34))) point = position;
+        level->addUnit(units[i], point);
+        CCharacter* character = dynamic_cast<CCharacter*>(units[i]);
+        if (character != NULL) {
+            if (owner != NULL) {
+                Ogre::Vector3 origin = character->getPosition(true);
+                Ogre::Vector3 direction = owner->getPosition(true) - origin;
+                direction.normalise();
+                Ogre::Vector3 right = Ogre::Vector3::UNIT_Y.crossProduct(direction);
+                character->setForward(direction);
+                character->setRight(right);
+            }
+            character->spawn();
+        }
+    }
+}

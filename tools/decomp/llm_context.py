@@ -573,7 +573,7 @@ class ContextIndex:
 
     OGRE_HEADER_SHA256 = {'OgreResourceGroupManager.h': '1ff3bf682e6723128544d4f0d948fc7408b1179cb1bb42961f80e1967b107529', 'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf'}
     OGRE_VALUE_HEADER_SHA256 = {'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf', 'OgreVector3.h': '3eb0c292006d0d57cb4756169f0390fea22e4d14905be127d353be5d4b493051', 'OgreQuaternion.h': '58fee85f3032d4d0d1e5de279b5cf8e45734a8e40fbe5961a60fd4cbfeddb0b9', 'OgreString.h': '9cdc1263f53e0f5aa49e115e6e3dcaad4b90140a6b5c8ceeab5d95a5fd586ad7', 'OgreMatrix4.h': '9d379f1bd2be7be264de50fed7b6ddad034af06e30eb30a3c2ce752f36e8d416', 'OgreMath.h': '01516be146b17a6a3700f2001f2f33e89953b0f738b5c23ca4475075f33b88f1'}
-    OGRE_CONFIG_SHA256 = '0a11e5cd5b3dafe9f832362747afb8147f24f912c88a1e31a303dd466ca47317'
+    OGRE_CONFIG_SHA256 = '732795b1a2cc99aca3b539c4f6931210f026b8654c8b314858573d4f7883249d'
 
     OGRE_VALUE_HEADER_SHA256.update({
         'OgreColourValue.h': 'c0d1e6f49898e76c710af5ec486252123bd40b58533f08ad6295a33654587cbf',
@@ -743,6 +743,82 @@ class ContextIndex:
                 return None
             return "std::basic_string<%s>; pinned GNU-unique STT_OBJECT in both ELF tables, 32-byte BSS, reviewed basic_string.h/tcc" % ctype
         return None
+
+    def _fmod_error_switch_data(self, obj, f, asm, tu):
+        """Only the pinned compiler table of the verified ErrorString source.
+
+        This proves a specific header function, not the whole FMOD SDK/runtime
+        version, nor arbitrary FMOD/CSWTCH data. No synthetic extern is emitted.
+        """
+        original = "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b"
+        base = 0xfe38e0
+        pins = {10930304: ('_ZN13CSoundManager14getSoundLengthEP14CSoundInstance', 'CSoundManager::getSoundLength', 402, 'c074e2c1f09304da12317782b3b66c9636312ff62384ea7591068cadd46af5cc', [[10930554, 'mov', '0xfe38e0(,%rax,8),%rbp']]), 10930720: ('_ZN13CSoundManager9playSoundEP14CSoundInstancePN4Ogre9SceneNodeEif', 'CSoundManager::playSound', 2124, '8a750d2c351033c1357f3c0e9ed29c5e78563daaa2de82da852474d4afff95f9', [[10931306, 'mov', '0xfe38e0(,%rax,8),%rbp']]), 10933424: ('_ZN13CSoundManager11createSoundESbIwSt11char_traitsIwESaIwEE10SOUND_TYPEbff', 'CSoundManager::createSound', 1950, 'b00320700ac5213e340589919e63d0340cfc24ed71bc6eb17b7ef65dceaa0da8', [[10934199, 'mov', '0xfe38e0(,%r13,8),%rsi']]), 10938400: ('_ZN13CSoundManager10initializeEP9CSettings', 'CSoundManager::initialize', 1682, '63a64a1c5cb2db29dd049f44d54596add7d857db406e67b52e2f2941b4e14d47', [[10939058, 'mov', '0xfe38e0(,%rdx,8),%rbp'], [10939167, 'mov', '0xfe38e0(,%rdx,8),%rbx']])}
+        identity = pins.get(_address(f["address"]))
+        if (self.db.get("original_elf_sha256") != original or getattr(self.image, "sha256", None) != original
+                or not identity or tu != "SoundManager.cpp" or self._tu(f, None) != tu
+                or f.get("mangled") != identity[0] or f.get("names") != [identity[0]]
+                or f.get("qualified") != identity[1] or f.get("size") != identity[2]
+                or obj.get("name") != "CSWTCH.3054" or obj.get("demangled") != "CSWTCH.3054"
+                or _address(obj["address"]) != base or obj.get("size") != 768
+                or obj.get("file") != tu or obj.get("bind") != "local" or obj.get("section") != ".rodata"):
+            return None
+        found = [s for s in getattr(self.image,"symbols",()) if s.name == "CSWTCH.3054"]
+        if (len(found) != 1 or not found[0].defined or found[0].type != 1 or found[0].bind != 0
+                or found[0].value != base or found[0].size != 768 or found[0].file != tu):
+            return None
+        section = self.image.section_at(base)
+        if (not section or section.name != ".rodata" or section.type != 1 or section.flags & 7 != 2
+                or base+768 > section.addr+section.size or base in self.copy_data):
+            return None
+        sdk = self.root / "third_party/fmod-error-4.44.06/include"
+        expected_headers = {'fmod.h': '611f6cbaf273a609ee5cc99eec5b6a7d7b1c4a5cee8516f5312db8c47ba77a7c', 'fmod_errors.h': 'c8efee0ca405be7750bdd46686f4e5ef28f540cfcfe71a646877f3399ea3fe2d'}
+        try:
+            raw = {name:(sdk/name).read_bytes() for name in expected_headers}
+            if any(hashlib.sha256(raw[name]).hexdigest() != digest for name,digest in expected_headers.items()):
+                return None
+            if hashlib.sha256((self.root/"decomp/include/FmodErrors.h").read_bytes()).hexdigest() != '077f45aa8d8a1de4e2c488a75ca2ec9ddd4ecc5fbd72810f174925d9887e6d54':
+                return None
+            if (hashlib.sha256(self._read_bytes(base,768)).hexdigest()
+                    != "01cfdeac9d6d44a717d8f776fc39c28f4f2fccc8dfe602515decb1f9ac36c07b"
+                    or hashlib.sha256(self._read_bytes(_address(f["address"]),identity[2])).hexdigest() != identity[3]):
+                return None
+            # All 96 enum values and terminated strings are checked, including
+            # whitespace. Compiler-generated pointer bytes alone are not enough.
+            header = raw["fmod.h"].decode("utf-8")
+            end = header.index("} FMOD_RESULT;")
+            start = header.rfind("typedef enum",0,end)
+            enum = _mask(header[start:end]).split("{",1)[1]
+            values, value = {}, 0
+            for item in enum.split(","):
+                item=item.strip()
+                if not item: continue
+                if "=" in item:
+                    name,assigned=item.split("=",1);value=int(assigned.strip(),0)
+                else: name=item
+                values[name.strip()]=value;value+=1
+            errors = raw["fmod_errors.h"].decode("utf-8")
+            cases = re.findall(r'case\s+(FMOD_[A-Z0-9_]+)\s*:\s*return\s*"([^"\\]*)"\s*;',errors)
+            strings = {values[name]:text for name,text in cases}
+            if set(strings) != set(range(96)) or values.get("FMOD_RESULT_FORCEINT") != 65536:
+                return None
+            interface = (self.root/"decomp/include/FmodInterface.h").read_text()
+            if _mask(header[start:end+len("} FMOD_RESULT;")]) not in _mask(interface):
+                return None
+            for index in range(96):
+                address = int.from_bytes(self._read_bytes(base+index*8,8),"little")
+                expected = strings[index].encode("ascii")+b"\0"
+                target = self.image.section_at(address)
+                if (not target or target.name != ".rodata" or target.type != 1 or target.flags & 7 != 2
+                        or address+len(expected)>target.addr+target.size
+                        or self._read_bytes(address,len(expected)) != expected):
+                    return None
+        except (OSError,ValueError,KeyError,UnicodeError):
+            return None
+        actual = {address:(op,args.split("<",1)[0].split("#",1)[0].strip()) for address,op,args in _instructions(f,asm)}
+        if any(actual.get(address) != (op,args) for address,op,args in identity[4]):
+            return None
+        return ("compiler result table of authentic FMOD_ErrorString; all 96 enum-indexed strings byte-verified; "
+                "source header is 4.44.06, whole SDK/runtime pin is unchanged; use FmodErrors.h; no data declaration synthesized")
 
     def _quest_icon_switch_data(self, obj, f, asm, tu):
         """One pinned compiler-generated result table, not a game declaration.
@@ -1495,6 +1571,11 @@ class ContextIndex:
                     notes.append(f"{address:#x}: ELF-proven DSO destruction registration handle; "
                                  "all references are compiler __cxa_atexit argument triples; "
                                  "no game declaration required or synthesized.")
+                    continue
+                fmod = self._fmod_error_switch_data(obj, f, asm, tu)
+                if fmod:
+                    wanted.add("FmodErrors.h")
+                    notes.append(f"{address:#x}: {fmod}.")
                     continue
                 switch = self._quest_icon_switch_data(obj, f, asm, tu)
                 if switch:

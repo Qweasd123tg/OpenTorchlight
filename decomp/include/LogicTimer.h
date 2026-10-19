@@ -9,6 +9,7 @@
 // a set number of times or forever.
 class CLogicTimer : public CEditorBaseObject
 {
+    friend class CPlayer;
 public:
     CLogicTimer(CResourceManager* resourceManager);
     virtual ~CLogicTimer();

@@ -60,6 +60,7 @@ struct CLevelCreationRange { float minimum, maximum; };
 // Owning layout: 0x778 bytes. Some trivial members retain descriptive or offset names.
 class CLevelTemplateData : public CRunicCore
 {
+    friend class CQuestRequirements;
     friend class CLevel;
 public:
     CLevelTemplateData(wchar_t const* filename);
@@ -85,6 +86,7 @@ public:
     bool getUnitLightFade() const { return m_bUnitLightFade; }
 private:
     friend class CGameUI;
+    friend class CPlayer;
     friend class CMusicObject;
     friend class CDungeon;
     friend class CQuestUnitData;

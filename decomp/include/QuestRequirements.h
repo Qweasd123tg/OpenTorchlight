@@ -7,6 +7,8 @@
 
 #include "DataGroup.h"
 #include "RunicCore.h"
+#include <string>
+#include "TArrayList.h"
 class CQuest;
 
 class CQuestRequirements : public CRunicCore
@@ -24,8 +26,8 @@ public:
     int m_iUnknown24;
     int m_iUnknown28;
     int m_iUnknown2C;
-    void* m_pUnknown30;
-    unsigned char m_Unknown38[0x18] __attribute__((aligned(8)));
+    std::wstring m_pUnknown30; // +0x30, ruleset
+    TArrayList<TArrayList<std::wstring>*> m_Unknown38; // +0x38, three owning requirement lists
 };
 
 #endif

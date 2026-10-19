@@ -1,0 +1,1 @@
+#define HAVE_LIBC_ICONV 0

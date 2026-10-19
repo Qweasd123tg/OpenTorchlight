@@ -32,6 +32,7 @@ private:
     friend class CSpawnClassData;
     friend class CEquipment;
     friend class CCharacter;
+    friend class CPlayer;
     friend class CEnchantMenu;
     std::wstring m_globalsPath; // +0x10
     int m_normalItemWeight;

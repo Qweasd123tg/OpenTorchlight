@@ -34,6 +34,7 @@ import hybrid  # noqa: E402
 import mutate  # noqa: E402
 import objdiff  # noqa: E402
 import toolchain  # noqa: E402
+import source_libraries  # noqa: E402
 
 ROOT = elfdb.ROOT
 WRITTEN = ("function", "ctor", "dtor", "static")
@@ -155,6 +156,9 @@ def main():
     parser.add_argument("--json", type=Path, default=ROOT / "build-decomp" / "progress.json")
     parser.add_argument("--scores", action="store_true", help="also calculate slow DIFF similarity percentages (not acceptance)")
     args = parser.parse_args()
+    config_path = ROOT / "decomp/config.json"
+    if args.no_game and config_path.exists() and json.loads(config_path.read_text()).get("source_libraries"):
+        raise SystemExit("--no-game does not support source-library object identities yet; run the full check (no results written)")
 
     db = ensure_db()
     ensure_types()
@@ -162,8 +166,7 @@ def main():
     inputs_before = evidence.input_manifest(db) if not args.no_game or comparison_evidence else None
     if inputs_before is not None:
         save_input_manifest("before", inputs_before)
-    game_tus = {t["id"] for t in db["tus"] if t["kind"] == "game"}
-    total = [f for f in db["functions"].values() if f["tu"] in game_tus and f["kind"] in WRITTEN]
+    total = source_libraries.target_functions(ROOT, db)
     total_bytes = sum(f["size"] for f in total)
     counted = {f["address"] for f in total}
 
@@ -209,6 +212,10 @@ def main():
         test_files = len(list(hybrid.TESTS.glob("*.cpp"))) + len(generated)
         os.environ.setdefault("OTL_SELFTEST_TIMEOUT", str(120 + 20 * ((test_files + shards - 1) // shards)))
         blob, loader = hybrid.build()
+        library_units = source_libraries.comparison_units(ROOT, db, original.image, Path(blob).parent)
+        units.extend(library_units)
+        diff.update({row["address"]: row for unit in library_units for row in unit["functions"]
+                     if row["address"] in counted})
         selftest, report = hybrid.selftest(blob, loader)
         print("\n".join(report))
         print(f"hybrid self-test: {'PASS' if selftest == 0 else 'FAIL'}")

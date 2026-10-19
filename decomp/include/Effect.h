@@ -50,6 +50,7 @@ public:
     float calculateBaseValue(ECALCULATETYPES type);
 private:
     friend class CEffectManager;
+    friend class CCharacterSaveState;
     friend class CDamageShape;
     friend class CUnitSpawner;
     unsigned int m_iLevel;
@@ -63,7 +64,7 @@ private:
     int m_value2C;
     unsigned char m_flag30;
     unsigned char m_flag31;
-    unsigned char m_padding32;
+    union { unsigned char m_padding32; bool m_modifierFlag32; }; // +0x32
     bool m_flag33;
     bool m_bDead;
     bool m_showStats; // +0x35

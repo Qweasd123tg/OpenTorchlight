@@ -24,6 +24,7 @@ class CSkillEvent;
 class CSkill : public CRunicCore, public iUnitObserver
 {
     friend class CSkillEvent;
+    friend class CLevel;
     friend class CEffect;
     friend class CBreakable;
 public:
@@ -115,6 +116,7 @@ private:
     friend class CAffix;
     friend class CSkillProperty;
     friend class CCharacter;
+    friend class CPlayer;
     friend class CMonster;
     CResourceManager* m_resources;
     CSkillManager* m_pSkillManager;

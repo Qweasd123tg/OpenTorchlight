@@ -2,16 +2,22 @@
 #define OTL_QUESTDIALOGMENU_H
 #include "DropdownMenu.h"
 #include "SafePointer.h"
+#include "TArrayList.h"
+#include <utility>
 class CBaseUnit;
 class CQuestDialog;
 class CQuest;
-class CGameUI; class CSettings; class CResourceManager;
+class CGameUI; class CSettings; class CResourceManager; class CEquipment;
 namespace Ogre { class RenderWindow; class SceneManager; }
-namespace CEGUI { class Window; }
+namespace CEGUI { class Window; class Imageset; }
+void getTags(std::string&, TArrayList<std::pair<std::string, std::string> >&);
 // Partial: RTTI base and allocation size from the original GameUI create call.
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CQuestDialogMenu : public CDropdownMenu {
 public:
+    void updateTextDisplay(float);
+    void updateDialogTags();
+    void setSlotIcon(int, CEquipment*);
     void createMenus();
     void setNPC(CBaseUnit*, bool, CQuest*);
     bool handle_MouseOver(const CEGUI::EventArgs& event);
@@ -37,17 +43,26 @@ public:
     CEGUI::Window* m_declineWindow;
     CEGUI::Window* m_rewardWindow;
     CEGUI::Window* m_rewardTextWindow;
-    unsigned char m_PaddingF8[8];
+    CEGUI::Window* m_windowF8; // +0xf8
     CEGUI::Window* m_detailWindow;
     CEGUI::Window* m_iconWindow;
     CEGUI::Window* m_iconParent;
-    unsigned char m_Padding118[8];
+    CEGUI::Window* m_window118; // +0x118
     CQuestDialog* m_dialog; // +0x120
-    int m_textIndex;
-    int m_textLength;
+    float m_textIndex; // +0x128 elapsed
+    float m_textLength; // +0x12c duration
     std::string m_dialogName; // +0x130
     int m_displayedCharacters;
-    unsigned char m_Padding13C[0xa4];
+    unsigned char m_Padding13C[4];
+    CEGUI::Imageset* m_uiImages; // +0x140
+    int m_rewardIDs[4]; // +0x148
+    CEGUI::Window* m_rewardRarity[3]; // +0x158
+    CEGUI::Window* m_rewardIcons[3]; // +0x170
+    CEGUI::Window* m_rewardSlots[3]; // +0x188
+    CEGUI::Window* m_rewardBackgrounds[3]; // +0x1a0
+    CEGUI::Window* m_rewardCounts[3]; // +0x1b8
+    CEGUI::Window* m_rewardContainer; // +0x1d0
+    CEGUI::Window* m_overlayWindow; // +0x1d8
     CBaseUnit* m_hoveredReward; // +0x1e0
     bool m_mouseThrough; // +0x1e8
     bool m_dialogActive;

@@ -11,6 +11,7 @@
 class CCmdLineParser : public CRunicCore
 {
 public:
+    CCmdLineParser(const std::wstring&);
     virtual ~CCmdLineParser();
 
     bool HasCommand(const std::wstring& name);

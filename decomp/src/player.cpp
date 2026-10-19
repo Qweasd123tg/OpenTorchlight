@@ -857,3 +857,876 @@ void CPlayer::applySaveState(CCharacterSaveState& state)
     if (!getEnabled())
         setEnabled(true);
 }
+
+void CPlayer::update(Ogre::Camera* camera, const Ogre::Vector3& position, float elapsed)
+{
+    CCharacter::update(camera, position, elapsed);
+    if (m_questManager)
+        m_questManager->update(elapsed);
+    if (m_pathToFollow.getObject())
+        updatePathFollowing(true);
+    if (m_isPathing)
+        m_returningToTown = true;
+    else
+    {
+        m_returningToTown = false;
+        if ((m_eAIState == 0 || m_eAIState == 2) && !performingSkill() && !performingAttack() &&
+            m_fidgetTime > 10.0f && UTILITIES::randomIntegerBetweenVolatile(0, 1000) <= 2 &&
+            animationPlaying("IDLE") && m_pUnitModel->animationExistsSubstring("FIDGET"))
+        {
+            m_fidgetTime = 0.0f;
+            unsigned int animation = m_pUnitModel->findRandomAnimation("FIDGET");
+            m_pUnitModel->blendAnimation(animation, false, 0.2f, 1.0f, -1.0f);
+            queueBlendAnimation("IDLE", true, 0.2f, 1.0f);
+        }
+    }
+    if (m_pResourceManager->getGameClient()->getGameState() == 1 && m_pResourceManager->getGameUI())
+    {
+        int hp = HP();
+        if (static_cast<float>(maxHP()) * 0.35f >= static_cast<float>(hp))
+            m_pResourceManager->getGameUI()->queueTip(static_cast<EContextTip>(3));
+        int mp = mana();
+        if (static_cast<float>(maxMana()) * 0.2f >= static_cast<float>(mp))
+            m_pResourceManager->getGameUI()->queueTip(static_cast<EContextTip>(4));
+        if (m_Followers.size() && m_Followers[0]->isPetNearDeath())
+            m_pResourceManager->getGameUI()->queueTip(static_cast<EContextTip>(11));
+    }
+    if (HP() <= 0 && m_pResourceManager->getGameUI())
+    {
+        if (m_pResourceManager->getGameClient()->getGameState() == 1)
+        {
+            m_deathDelay -= elapsed;
+            if (m_deathDelay <= 0.0f)
+            {
+                m_pResourceManager->getGameUI()->toggleDeath();
+                m_deathDelay = 999999.0f;
+            }
+            return;
+        }
+        m_currentOpacity = 0.4f;
+        updateOpacity(0.0f, true);
+        return;
+    }
+    if (m_playerTranslucent)
+    {
+        m_currentOpacity = 0.4f;
+        updateOpacity(0.0f, true);
+    }
+}
+
+#include "DynamicLine.h"
+#include "Path.h"
+#include <OgreSceneManager.h>
+#include <cstring>
+
+CPlayer::CPlayer(CResourceManager* resources)
+    : CCharacter(resources), m_levelUpParticle(NULL), m_godMode(false), m_cheatMarker('N'),
+      m_hasPortal(false), m_portalDepth(1), m_portalDungeon(EMPTY_WSTRING), m_returnDepth(0),
+      m_returnDungeon(EMPTY_WSTRING), m_levelSaveSerial(0), m_playerTranslucent(false),
+      m_saveOnDeath(false), m_followersEnabled(false), m_dungeonTrackers(5), m_loadedModNames(10)
+{
+    typedef char PlayerOpaqueExtents[(sizeof(m_Padding864) == 4 && sizeof(m_Padding870) == 20 &&
+        sizeof(m_PaddingA10) == 4 && sizeof(m_PaddingA17) == 41 && sizeof(m_turnRate288) == 4) ? 1 : -1];
+    m_fishingPole = NULL;
+    m_fishingParticle = NULL;
+    m_fishingPath = NULL;
+    m_fishingLine = NULL;
+    m_fishingLineNode = NULL;
+    m_fishingTime = 2.0f;
+    m_fishingValue854 = 0.0f;
+    m_fishingDelay = 0.0f;
+    m_fishingFlag = false;
+    m_questManager = NULL;
+    m_deathDelay = 10.0f;
+    // These otherwise unused spans have exact zero stores in the original constructor.
+    std::memset(m_Padding864, 0, sizeof(m_Padding864));
+    std::memset(m_Padding870, 0, sizeof(m_Padding870));
+    std::memset(m_PaddingA10, 0, sizeof(m_PaddingA10));
+    std::memset(m_PaddingA17, 0, 34);
+    m_maxHPBase = 2000;
+    m_fHPFloat = 2000.0f;
+    m_turnRate288 = 20.0f;
+    m_iMeleeStat = 10;
+    m_rangedStat = 0;
+    m_magicStat = 3;
+    m_defenseStat = 10;
+    m_naturalArmor = 4;
+    clearItemLinkMap();
+    clearSkillMap();
+    clearSkillFunctionMap();
+    m_fishingPath = new CPath(EMPTY_STRING, false, Ogre::Vector3::ZERO);
+    m_fishingLine = new CDynamicLine(static_cast<Ogre::RenderOperation::OperationType>(2));
+    m_fishingPath->AddPoint(Ogre::Vector3::ZERO, -60.0f, 60.0f);
+    m_fishingPath->AddPoint(Ogre::Vector3::ZERO, -60.0f, 60.0f);
+    m_fishingPath->AddPoint(Ogre::Vector3::ZERO, -60.0f, 60.0f);
+    for (unsigned int i = 0; i < 16; ++i)
+        m_fishingLine->addPoint(0.0f, 0.0f, 0.0f);
+    m_fishingLineNode = m_pResourceManager->getSceneManager()->getRootSceneNode()->createChildSceneNode(STRINGS::uniqueName("line_"));
+    m_fishingLineNode->attachObject(m_fishingLine);
+    m_fishingLineNode->setVisible(false, true);
+    CCharacter::setAlignment(static_cast<EAlignment>(1));
+    for (unsigned int i = 0; i < 18; ++i)
+        m_journalPrefix[i] = 0;
+    CFileSystem::getSingleton()->getEnabledModNames(&m_loadedModNames);
+}
+
+void CPlayer::applyAchievementsForKilledCharacter(CCharacter* character)
+{
+    if (character->HP() > 0)
+        return;
+    int difficulty = 1;
+    if (m_pResourceManager && m_pResourceManager->getGameClientCount() && m_pResourceManager->getGameClient())
+        difficulty = m_pResourceManager->getGameClient()->m_startDifficulty;
+    bool hardcore = m_saveOnDeath;
+    int deaths = m_journalStats[5];
+    float played = m_playTime;
+    int achievement = -1;
+    if (STRINGS::StringUpper(character->getName()) == L"EMBERCOLOSSUS")
+        achievement = 10;
+    else if (STRINGS::StringUpper(character->getName()) == L"ALRIC_EVIL")
+        achievement = 13;
+    else if (STRINGS::StringUpper(character->getName()) != L"FIRSTHENCHMEN")
+    {
+        if (STRINGS::StringUpper(character->getName()) == L"LICH")
+            achievement = 8;
+        else if (STRINGS::StringUpper(character->getName()) == L"MEDEA")
+            achievement = 12;
+        else if (STRINGS::StringUpper(character->getName()) == L"BOSS1")
+            achievement = 7;
+        else if (STRINGS::StringUpper(character->getName()) == L"ROOTGOLEMBOSS")
+            achievement = 9;
+        else if (STRINGS::StringUpper(character->getName()) == L"LAVATROLLBOSS")
+            achievement = 11;
+    }
+    if (achievement >= 0 && CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(achievement)))
+    {
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(achievement))->forceComplete();
+        return;
+    }
+    if (STRINGS::StringUpper(character->getName()) != L"ORDRAK")
+        return;
+    if (!deaths)
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(34))->forceComplete();
+    switch (difficulty)
+    {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(14))->forceComplete();
+        if (difficulty >= 2)
+            CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(15))->forceComplete();
+        if (difficulty >= 3)
+            CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(16))->forceComplete();
+        if (hardcore)
+            CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(17 + difficulty))->forceComplete();
+        break;
+    }
+    float hours = played / 3600.0f;
+    if (hours <= 8.0f)
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(21))->forceComplete();
+    if (hours <= 5.0f)
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(22))->forceComplete();
+}
+
+#include "OgreUtilities.h"
+CPlayer::~CPlayer()
+{
+    if (m_fishingLineNode)
+    {
+        m_fishingLineNode->detachObject(m_fishingLine);
+        OGRE_UTILITIES::removeChildFromParentNode(m_fishingLineNode);
+    }
+    if (m_fishingLine)
+    {
+        delete m_fishingLine;
+        m_fishingLine = NULL;
+    }
+    if (m_fishingLineNode)
+    {
+        m_fishingLineNode->removeAllChildren();
+        m_pResourceManager->getSceneManager()->destroySceneNode(m_fishingLineNode);
+        m_fishingLineNode = NULL;
+    }
+    if (m_questManager)
+        m_questManager->setPlayer(NULL);
+    m_questManager = NULL;
+    if (m_fishingPole)
+    {
+        Ogre::SceneNode* parent = m_fishingPole->getSceneNode()->getParentSceneNode();
+        if (parent)
+            parent->removeChild(m_fishingPole->getSceneNode());
+    }
+    if (m_fishingParticle)
+        m_fishingParticle->setVisible(false);
+    for (unsigned int i = 0; i < m_savedLevels.size(); ++i)
+    {
+        if (m_savedLevels[i])
+        {
+            delete m_savedLevels[i];
+            m_savedLevels[i] = NULL;
+        }
+    }
+    m_savedLevels.clear();
+    m_dungeonTrackers.deleteAll();
+    m_loadedModNames.clear();
+    if (m_levelUpParticle)
+    {
+        delete m_levelUpParticle;
+        m_levelUpParticle = NULL;
+    }
+    if (m_fishingPole)
+    {
+        delete m_fishingPole;
+        m_fishingPole = NULL;
+    }
+    if (m_fishingParticle)
+    {
+        delete m_fishingParticle;
+        m_fishingParticle = NULL;
+    }
+    if (m_fishingPath)
+    {
+        delete m_fishingPath;
+        m_fishingPath = NULL;
+    }
+}
+
+#include "StringTranslate.h"
+void CPlayer::levelUp()
+{
+    CCharacter::levelUp();
+    if (m_levelUpParticle)
+    {
+        Ogre::SceneNode* node = m_levelUpParticle->getSceneNode();
+        Ogre::SceneNode* parent = node->getParentSceneNode();
+        if (parent)
+            parent->removeChild(m_levelUpParticle->getSceneNode());
+        getSceneNode()->addChild(m_levelUpParticle->getSceneNode());
+        m_levelUpParticle->setPosition(0.0f, -0.95f * m_fBaseUnitValue194, 0.0f);
+        if (m_levelSound && !m_levelSound->bankPlaying(25))
+            m_levelSound->playSample(25, getSceneNode(), 0.0f, 0.0f, false);
+        m_levelUpParticle->Start();
+        static std::wstring g_LevelUp;
+        static std::wstring g_Level;
+        static std::wstring g_Reached;
+        if (g_LevelUp.empty())
+            g_LevelUp = CStringTranslate::getSinglton()->getTranslateString(L"Level Up");
+        if (g_Level.empty())
+            g_Level = CStringTranslate::getSinglton()->getTranslateString(L"Level");
+        if (g_Reached.empty())
+            g_Reached = CStringTranslate::getSinglton()->getTranslateString(L"reached");
+        m_pResourceManager->getGameUI()->setBigText(g_LevelUp + L"!", 2.0f);
+        std::wstring level = STRINGS::GetValueAsWString(static_cast<int>(m_iUnitLevel));
+        m_pResourceManager->getGameUI()->setSmallText(g_Level + L" " + level + L" " + g_Reached, 2.0f);
+    }
+    if (m_levelSound)
+        m_levelSound->queueGlobalSample(60, 1.0f, 1.0f);
+    if (m_pInventory)
+        m_pInventory->refreshEquipped();
+    m_pResourceManager->getGameUI()->queueTip(static_cast<EContextTip>(6));
+    calculateMaxHP();
+    calculateMaxMana();
+    calculateNaturalArmor();
+    m_fHPFloat = static_cast<float>(maxHP());
+    m_fManaFloat = static_cast<float>(maxMana());
+    if (m_pInventory)
+        m_pInventory->forceRecalculationOfEquipmentStats();
+    if (m_iUnitLevel > 64)
+    {
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(24))->forceComplete();
+        if (m_iUnitLevel > 99)
+            CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(25))->forceComplete();
+    }
+}
+
+#include "GameGlobals.h"
+void CPlayer::updateStoredLevels(CLevel& level)
+{
+    if (static_cast<int>(m_savedLevels.size()) > CGameGlobals::getSingleton()->m_maxLevelMemory)
+    {
+        float oldestTime = 1000000.0f;
+        int oldest = -1;
+        for (unsigned int i = 0; i < m_savedLevels.size(); ++i)
+        {
+            bool questLevel = false;
+            if (m_questManager)
+            {
+                for (int q = 0; q < static_cast<int>(m_questManager->m_Unknown18.size()); ++q)
+                {
+                    if (m_questManager->m_Unknown18[q]->getQuestDetails() != EMPTY_WSTRING &&
+                        STRINGS::StringUpper(m_questManager->m_Unknown18[q]->m_pUnknown30) == m_savedLevels[i]->m_sLevelName &&
+                        m_questManager->m_Unknown18[q]->m_iUnknown20 == m_savedLevels[i]->m_iLevelId)
+                        questLevel = true;
+                }
+            }
+            CLevelState* state = m_savedLevels[i];
+            if (state->m_bUnknownB1 || questLevel || state->m_bUnknownB0)
+                continue;
+            if (state->m_iLevelId == level.getLevelDepth() && state->m_sLevelName == level.getDungeonName())
+                continue;
+            if (m_returnDepth == state->m_iLevelId && state->m_sLevelName == m_returnDungeon)
+                continue;
+            if (m_portalDepth == state->m_iLevelId && state->m_sLevelName == m_portalDungeon && m_hasPortal)
+                continue;
+            if (oldestTime > state->m_iStateVersion)
+            {
+                oldest = i;
+                oldestTime = state->m_iStateVersion;
+            }
+        }
+        if (oldest != -1)
+            removeLevelSavedState(oldest);
+    }
+    for (int i = 0; i < static_cast<int>(m_savedLevels.size()); ++i)
+    {
+        CLevelState* state = m_savedLevels[i];
+        bool returning = m_returnDepth == state->m_iLevelId && state->m_sLevelName == m_returnDungeon;
+        returning = returning && state->m_iStateVersion != -1.0f;
+        bool questLevel = false;
+        if (m_questManager)
+        {
+            for (int q = 0; q < static_cast<int>(m_questManager->m_Unknown18.size()); ++q)
+            {
+                if (m_questManager->m_Unknown18[q]->getQuestDetails() != EMPTY_WSTRING &&
+                    STRINGS::StringUpper(m_questManager->m_Unknown18[q]->m_pUnknown30) == m_savedLevels[i]->m_sLevelName &&
+                    m_questManager->m_Unknown18[q]->m_iUnknown20 == m_savedLevels[i]->m_iLevelId)
+                    questLevel = true;
+            }
+        }
+        state = m_savedLevels[i];
+        if (state->m_bUnknownB1)
+            continue;
+        if (!(m_playTime > state->m_iStateVersion + static_cast<float>(CGameGlobals::getSingleton()->m_levelRespawnTime)) &&
+            state->m_iStateVersion != -1.0f)
+            continue;
+        if (state->m_iLevelId == level.getLevelDepth() && state->m_sLevelName == level.getDungeonName())
+            continue;
+        if (returning)
+            continue;
+        if (m_portalDepth == state->m_iLevelId && state->m_sLevelName == m_portalDungeon && m_hasPortal)
+            continue;
+        if (questLevel || state->m_bUnknownB0)
+            continue;
+        removeLevelSavedState(i);
+        --i;
+    }
+}
+
+#include <OgreSkeletonInstance.h>
+#include <OgreBone.h>
+void CPlayer::updateFishingLine(float)
+{
+    m_fishingPath->Clear();
+    Ogre::SkeletonInstance* skeleton = m_pUnitModel->m_pSkeleton;
+    Ogre::Bone* bones[4];
+    bones[0] = skeleton->getBone("tag_zfishpoleend");
+    bones[1] = skeleton->getBone("tag_zfishcenter");
+    bones[2] = skeleton->getBone("tag_zfishlure");
+    bones[3] = skeleton->getBone("tag_zfishlureend");
+    Ogre::Vector3 points[4];
+    for (unsigned int i = 0; i < 4; ++i)
+    {
+        points[i] = m_pUnitModel->getPosition(false);
+        points[i] += bones[i]->_getDerivedPosition();
+        points[i] = getOrientation() * points[i];
+        points[i] += getPosition(true);
+    }
+    if (m_targetItem.getObject())
+        points[2].y = std::max(m_targetItem.getObject()->getPosition(true).y, points[2].y);
+    for (unsigned int i = 0; i < 4; ++i)
+        m_fishingPath->AddPoint(points[i], -60.0f, 60.0f);
+    float step = m_fishingPath->m_fPathLength * 0.125f;
+    for (unsigned int i = 0; i < 8; ++i)
+    {
+        m_fishingLine->setPoint(i * 2, m_fishingPath->GetSplinePositionAtDistance(static_cast<float>(i) * step));
+        m_fishingLine->setPoint(i * 2 + 1, m_fishingPath->GetSplinePositionAtDistance(static_cast<float>(i + 1) * step));
+    }
+    m_fishingLine->update();
+    m_fishingLineNode->needUpdate(false);
+    if (m_fishingFlag)
+    {
+        m_fishingParticle->setVisible(true);
+        m_fishingParticle->setPosition(points[3]);
+        Ogre::Vector3 end = m_fishingPath->GetSplinePositionAtDistance(m_fishingPath->m_fPathLength);
+        Ogre::Vector3 prior = m_fishingPath->GetSplinePositionAtDistance(m_fishingPath->m_fPathLength - 0.05f);
+        Ogre::Vector3 direction = prior - end;
+        direction.normalise();
+        Ogre::Vector3 forward = getForward();
+        Ogre::Vector3 right = forward.crossProduct(direction);
+        forward = direction.crossProduct(right);
+        m_fishingParticle->setOrientation(forward, direction);
+    }
+}
+
+#include "UnitResourceList.h"
+#include "SoundBankDataInformation.h"
+#include "SoundData.h"
+#include "SharedStash.h"
+void CPlayer::unitInit(CDataGroup* data, bool initialize)
+{
+    CCharacter::unitInit(data, initialize);
+    m_pInventory->addSection(static_cast<EINVENTORY_PANES>(1), 21);
+    m_pInventory->addSection(static_cast<EINVENTORY_PANES>(2), 21);
+    m_iMeleeStat = m_pDataGroup->GetDataValue(L"STRENGTH", 10);
+    m_rangedStat = m_pDataGroup->GetDataValue(L"DEXTERITY", 10);
+    m_magicStat = m_pDataGroup->GetDataValue(L"MAGIC", 10);
+    m_defenseStat = m_pDataGroup->GetDataValue(L"DEFENSE", 10);
+    m_manaGraph = m_pDataGroup->GetDataValue(L"MANA_GRAPH", L"MANA_PLAYER_DESTROYER");
+    m_hpGraph = m_pDataGroup->GetDataValue(L"HEALTH_GRAPH", L"HEALTH_PLAYER_DESTROYER");
+    m_statPointsGraph = m_pDataGroup->GetDataValue(L"STAT_POINTS_PER_LEVEL", L"STAT_POINTS_PER_LEVEL");
+    m_skillPointsGraph = m_pDataGroup->GetDataValue(L"SKILL_POINTS_PER_LEVEL", L"SKILL_POINTS_PER_LEVEL");
+    m_famePointsGraph = m_pDataGroup->GetDataValue(L"SKILL_POINTS_PER_FAME_LEVEL", L"SKILL_POINTS_PER_FAME_LEVEL");
+    calculateMaxHP();
+    m_fHPFloat = static_cast<float>(m_maxHPBase);
+    calculateMaxMana();
+    m_fManaFloat = static_cast<float>(m_maxManaBase);
+    calculateNaturalArmor();
+    m_levelUpParticle = m_pResourceManager->createParticle(L"PLAYER_LEVELUP");
+    if (m_levelUpParticle)
+    {
+        m_levelUpParticle->sceneNodeSetParent(getSceneNode(), false);
+        m_levelUpParticle->setPosition(Ogre::Vector3::ZERO);
+    }
+    if (m_pSkillManager)
+    {
+        m_activeSkill = m_pSkillManager->getSkillByIndex(0);
+        if (m_activeSkill)
+        {
+            m_activeSkillGuid = m_activeSkill->getGuid();
+            if (!m_activeSkill->getLevel() || m_activeSkill->getActivationType() == static_cast<ESKILL_ACTIVATION_TYPE>(4) ||
+                !m_activeSkill->enabledWithoutProperty())
+                cycleSkill(1);
+        }
+        else
+            m_activeSkillGuid = -1;
+        m_skillMap[2] = m_activeSkill ? m_activeSkill->getGuid() : -1;
+        if (m_skillMap[2] != -1)
+            m_leftSkillMap[2] = -1;
+        m_leftSkillGuid = m_activeSkillGuid;
+        for (int i = 0; i < m_pSkillManager->knownSkills(static_cast<ESKILL_ACTIVATION_TYPE>(0)); ++i)
+        {
+            CSkill* skill = m_pSkillManager->getSkillByIndex(i);
+            if (skill && skill != m_activeSkill && skill->getActivationType() != static_cast<ESKILL_ACTIVATION_TYPE>(4) &&
+                skill->enabledWithoutProperty() && skill->getLevel())
+                m_leftSkillGuid = skill->getGuid();
+        }
+    }
+    if (m_levelSound)
+    {
+        CSoundData* sound = CMasterResourceManager::getSingleton()->m_pSoundBankDataInformation->getSoundDataObject(L"LEVELUP");
+        if (sound)
+            m_levelSound->addSample(25, sound->m_iGuid);
+        CDataGroup* group = m_pResourceManager->getMasterResourceList()->getDataGroupByObjectName(L"ITEMS", L"Health Potion");
+        if (group)
+        {
+            m_itemLinks[0] = m_pResourceManager->getUnitGuidByDataGroup(group, L"UNIT_GUID");
+            m_leftSkillMap[0] = m_pResourceManager->getUnitGuidByDataGroup(group, L"UNIT_GUID");
+            if (m_leftSkillMap[0] != -1)
+                m_skillMap[0] = -1;
+        }
+        group = m_pResourceManager->getMasterResourceList()->getDataGroupByObjectName(L"ITEMS", L"Mana Potion");
+        if (group)
+        {
+            m_itemLinks[1] = m_pResourceManager->getUnitGuidByDataGroup(group, L"UNIT_GUID");
+            m_leftSkillMap[1] = m_pResourceManager->getUnitGuidByDataGroup(group, L"UNIT_GUID");
+            if (m_leftSkillMap[1] != -1)
+                m_skillMap[1] = -1;
+        }
+        group = m_pResourceManager->getMasterResourceList()->getDataGroupByObjectName(L"ITEMS", L"Town Portal Scroll");
+        if (group)
+        {
+            m_leftSkillMap[9] = m_pResourceManager->getUnitGuidByDataGroup(group, L"UNIT_GUID");
+            if (m_leftSkillMap[9] != -1)
+                m_skillMap[9] = -1;
+        }
+        group = m_pResourceManager->getMasterResourceList()->getDataGroupByObjectName(L"ITEMS", L"Identify Scroll");
+        if (group)
+        {
+            m_leftSkillMap[8] = m_pResourceManager->getUnitGuidByDataGroup(group, L"UNIT_GUID");
+            if (m_leftSkillMap[8] != -1)
+                m_skillMap[8] = -1;
+        }
+    }
+    if (getUnitModel())
+        static_cast<CGenericModel*>(getUnitModel())->m_animationStep = 0.01f;
+    setQuestManager(CQuestManager::getSingleton());
+    CSharedStash::getSingleton()->setPlayer(this);
+}
+
+void CPlayer::fishingAICatch(float, CLevel& level)
+{
+    if (m_pUnitModel->animationPlayingSubstring("FISHING_CATCH"))
+        return;
+    static std::wstring g_Fishing;
+    static std::wstring g_CaughtNothing;
+    static std::wstring g_Caught;
+    static std::wstring g_CaughtContaining;
+    if (g_Fishing.empty())
+        g_Fishing = CStringTranslate::getSinglton()->getTranslateString(L"Fishing");
+    if (g_CaughtNothing.empty())
+        g_CaughtNothing = CStringTranslate::getSinglton()->getTranslateString(L"You caught nothing");
+    if (g_Caught.empty())
+        g_Caught = CStringTranslate::getSinglton()->getTranslateString(L"You caught a");
+    if (g_CaughtContaining.empty())
+        g_CaughtContaining = CStringTranslate::getSinglton()->getTranslateString(L"You caught a fish containing");
+    if (m_fishingFlag)
+    {
+        std::wstring spawnName = level.getLevelTemplateData() ? level.getLevelTemplateData()->m_selectedUnitSpawners[6] : L"FISH_SPAWN";
+        CSpawnClass* spawn = m_pResourceManager->getSpawnClassByName(spawnName);
+        TArrayList<CBaseUnit*> units(10);
+        m_pResourceManager->createUnitsBySpawnClass(spawn, units, 1, this, this, -1, 0);
+        std::wstring name;
+        bool fish = false;
+        for (unsigned int i = 0; i < units.size(); ++i)
+        {
+            CEquipment* equipment = dynamic_cast<CEquipment*>(units[i]);
+            if (!equipment)
+                continue;
+            name = equipment->getItemName();
+            if (equipment->ISA(static_cast<UNITTYPES::EUNITTYPES>(124)))
+                fish = true;
+            if (m_pInventory && !m_pInventory->pickupEquipment(equipment, true))
+            {
+                level.addItem(equipment, m_vPosition, true);
+                equipment->setPosition(m_vPosition);
+                equipment->drop();
+            }
+        }
+        if (fish)
+            m_pResourceManager->getGameUI()->openModalDialog(g_Fishing, g_Caught + L" " + name + L"!", false);
+        else
+            m_pResourceManager->getGameUI()->openModalDialog(g_Fishing, g_CaughtContaining + L":\n" + name + L"!", false);
+        incrementJournalStatistic(static_cast<EJournalStatistic>(14), 1);
+    }
+    else
+        m_pResourceManager->getGameUI()->openModalDialog(g_Fishing, g_CaughtNothing + L"!", false);
+    setAIState(static_cast<EAIState>(2));
+    if (m_weaponsHidden)
+    {
+        m_weaponsHidden = false;
+        if (m_pRightHandNode)
+            m_pRightHandNode->setVisible(true, true);
+        if (m_pLeftHandNode)
+            m_pLeftHandNode->setVisible(true, true);
+    }
+}
+
+#include "LogicNodeState.h"
+#include "TriggerSphere.h"
+#include "TriggerBox.h"
+#include "PropertyNode.h"
+#include "RandomGroup.h"
+#include "Timeline.h"
+#include "Counter.h"
+#include "LogicTimer.h"
+#include "OutputIncrementor.h"
+#include "Teleport.h"
+#include "AnimationPlayer.h"
+#include "PuzzleRandomizer.h"
+#include "UnitSpawner.h"
+
+void CPlayer::storeLevelSavedState(CLevel& level)
+{
+    std::wstring name = level.m_sDungeonName;
+    updateDungeonTracking(name, level.m_iLevelDepth);
+    m_levelSaveSerial = std::max(m_levelSaveSerial, level.m_iLevelDepth);
+    m_journalStats[2] = std::max(m_journalStats[2], m_levelSaveSerial);
+    float previousTime = -1.0f;
+    if (hasLevelSavedState(name, level.m_iLevelDepth))
+        for (unsigned int i = 0; i < m_savedLevels.size(); ++i)
+            if (m_savedLevels[i]->m_iLevelId == level.m_iLevelDepth &&
+                m_savedLevels[i]->m_sLevelName == name)
+            {
+                previousTime = m_savedLevels[i]->m_iStateVersion;
+                removeLevelSavedState(i);
+                break;
+            }
+    CLevelState* saved = new CLevelState(level.m_iLevelDepth);
+    saved->m_sLevelName = level.m_sDungeonName;
+    saved->m_bUnknownB0 = level.m_pLevelTemplateData->isTown();
+    m_savedLevels.push_back(saved);
+    if (level.m_pLevelTemplateData && level.m_pLevelTemplateData->m_dontStore)
+        saved->m_iStateVersion = -1.0f;
+    else
+        saved->m_iStateVersion = previousTime == -1.0f ? m_playTime : previousTime;
+    saved->addFormations(&m_pResourceManager->getLevel()->m_formations, level);
+    for (TLinkedListNode<CItem*>* node = level.m_items->getHead(); node; node = node->m_pNext)
+    {
+        CItem* item = node->m_Data;
+        if (item->ISA(static_cast<UNITTYPES::EUNITTYPES>(29)) && item->m_bItemFlag218) continue;
+        if (item->m_bBaseUnitFlag190) continue;
+        if (item->getIsQuestUnit()) saved->m_bUnknownB1 = true;
+        saved->addItem(*item);
+    }
+    for (int pass = 0; pass < 2; ++pass)
+        for (TLinkedListNode<CCharacter*>* node = level.m_pCharacters->getHead(); node; node = node->m_pNext)
+        {
+            CCharacter* character = node->m_Data;
+            if (character == this || character->m_pMaster == this || !character->alive() ||
+                character->m_bBaseUnitFlag190) continue;
+            if ((character->m_pMaster != NULL) == (pass != 0))
+                saved->addCharacter(*character, level);
+        }
+    std::vector<CChunk*> chunks = level.m_chunks;
+    for (unsigned int i = 0; i < chunks.size(); ++i)
+        saved->m_lLevelStrings.push_back(chunks[i]->m_filename);
+    if (level.m_automap) saved->addAutomap(level.m_automap);
+    unsigned int roomCount = level.m_RoomScenes.size();
+    for (unsigned int roomIndex = 0; roomIndex < roomCount; ++roomIndex)
+    {
+        CEditorScene* scene = level.m_RoomScenes[roomIndex];
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Player Sphere Trigger", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                CTriggerSphere* object = dynamic_cast<CTriggerSphere*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_bActive = object->getEnabled();
+                state->m_bEnabled = object->m_bActive;
+                state->m_bFinished = object->m_bHasActivated;
+                state->m_bFailed = object->m_bHasDeactivated;
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_wstrName = L"Player Sphere Trigger";
+                state->m_position = object->getPosition(false);
+                state->m_nCurrentState = roomIndex;
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                saved->addLogicState(state, level);
+            }
+        }
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Player Box Trigger", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                CTriggerBox* object = dynamic_cast<CTriggerBox*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_bActive = object->getEnabled();
+                state->m_bEnabled = object->m_bActive;
+                state->m_bFinished = object->m_bHasActivated;
+                state->m_bFailed = object->m_bHasDeactivated;
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_wstrName = L"Player Box Trigger";
+                state->m_position = object->getPosition(false);
+                state->m_nCurrentState = roomIndex;
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                saved->addLogicState(state, level);
+            }
+        }
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Property Node", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                CPropertyNode* object = dynamic_cast<CPropertyNode*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_bActive = object->getEnabled();
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_wstrName = L"Property Node";
+                state->m_position = object->getPosition(false);
+                state->m_nCurrentState = roomIndex;
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                saved->addLogicState(state, level);
+            }
+        }
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Group", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                CRandomGroup* object = dynamic_cast<CRandomGroup*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_bActive = object->getEnabled();
+                state->m_bEnabled = object->getVisible();
+                state->m_position = object->getPosition(false);
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_wstrName = L"Group";
+                state->m_nCurrentState = roomIndex;
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                saved->addLogicState(state, level);
+            }
+        }
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Timeline", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                CTimeline* object = dynamic_cast<CTimeline*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_value20 = object->m_fSetTimelineDuration <= 0.0f ? 1.0f : object->m_fTimelinePosition / object->m_fSetTimelineDuration;
+                state->m_wstrName = L"Timeline";
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_bActive = object->m_bEnabled;
+                state->m_nCurrentState = roomIndex;
+                state->m_nStateFlags = object->m_bIsPlayingBackwards ? 0x3f800000u : 0;
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                state->m_bPersistent = !object->m_bTimelineWasStopped;
+                saved->addLogicState(state, level);
+            }
+        }
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Counter", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                CCounter* object = dynamic_cast<CCounter*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_value20 = static_cast<float>(object->m_iValue);
+                state->m_bActive = object->getEnabled();
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_wstrName = L"Counter";
+                state->m_nCurrentState = roomIndex;
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                saved->addLogicState(state, level);
+            }
+        }
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Timer", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                CLogicTimer* object = dynamic_cast<CLogicTimer*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_nNodeId = object->m_iRepeatsLeft;
+                state->m_value20 = object->getTimer();
+                state->m_bActive = object->getEnabled();
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_wstrName = L"Timer";
+                state->m_nCurrentState = roomIndex;
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                saved->addLogicState(state, level);
+            }
+        }
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Output Incrementor", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                COutputIncrementor* object = dynamic_cast<COutputIncrementor*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_nNodeId = object->m_iCount;
+                state->m_value20 = static_cast<float>(object->m_iRepeatsLeft);
+                state->m_bActive = object->getEnabled();
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_wstrName = L"Output Incrementor";
+                state->m_nCurrentState = roomIndex;
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                saved->addLogicState(state, level);
+            }
+        }
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Teleport", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                CTeleport* object = dynamic_cast<CTeleport*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_bActive = object->getEnabled();
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_wstrName = L"Teleport";
+                state->m_nCurrentState = roomIndex;
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                saved->addLogicState(state, level);
+            }
+        }
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Animation Controller", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                CAnimationPlayer* object = dynamic_cast<CAnimationPlayer*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_nCurrentState = roomIndex;
+                state->m_bActive = object->m_bAnimationPlaying;
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_wstrName = L"Animation Controller";
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                state->m_bPersistent = object->m_bLoop;
+                std::memcpy(&state->m_nStateVersion, &object->m_fForceDuration, sizeof(state->m_nStateVersion));
+                saved->addLogicState(state, level);
+            }
+        }
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Puzzle Input", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                CPuzzleRandomizer* object = dynamic_cast<CPuzzleRandomizer*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_bActive = object->getEnabled();
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_wstrName = L"Puzzle Input";
+                state->m_nCurrentState = roomIndex;
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                saved->addLogicState(state, level);
+            }
+        }
+        {
+            TArrayList<CEditorBaseObject*> objects(10);
+            scene->GetObjectsCreatedByADescriptor(L"Unit Spawner", &objects);
+            unsigned int count = objects.size();
+            for (unsigned int i = 0; i < count; ++i)
+            {
+                CUnitSpawner* object = dynamic_cast<CUnitSpawner*>(objects[i]);
+                if (!object) continue;
+                CLogicNodeState* state = new CLogicNodeState();
+                state->m_bActive = object->m_spawning;
+                state->m_value20 = static_cast<float>(static_cast<unsigned int>(object->m_reset18c));
+                state->m_nStateFlags = object->m_reset188;
+                state->m_parentHierarchyHash = object->getParentHierarchyHashCode();
+                state->m_wstrName = L"Unit Spawner";
+                state->m_nCurrentState = roomIndex;
+                state->m_guid = object->getOriginalGuid();
+                CPositionableObject* parent = object->getParentPositionableObject();
+                state->m_parentGuid = parent ? parent->getOriginalGuid() : -1;
+                saved->addLogicState(state, level);
+            }
+        }
+    }
+    updateStoredLevels(level);
+}

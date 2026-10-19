@@ -1345,6 +1345,7 @@ def main():
     parser.add_argument("--publish", action="store_true", help="validate the final Stage and explicitly publish")
     parser.add_argument("--no-autotest", action="store_true", help="MATCH diagnostics only; keep DIFF candidates out")
     parser.add_argument("--prepare-only", action="store_true", help="snapshot headers and prompts; no model/game calls")
+    parser.add_argument("--source-library", action="store_true", help="prepare immutable authentic C source artifacts, not recovered C++")
     parser.add_argument("--json", action="store_true", help="with --prepare-only: saved handoff on stdout, logs on stderr")
     parser.add_argument("--attempt", type=Path, help="resume this existing Stage; changed inputs fail closed")
     parser.add_argument("--model-timeout", type=int, default=180)
@@ -1353,6 +1354,8 @@ def main():
     parser.add_argument("--ignore-owner", action="store_true", help="work on a TU decomp/owners.json gives to "
                         "someone else than $OTL_OWNER")
     args = parser.parse_args()
+    if args.source_library and (not args.prepare_only or args.publish or args.repair_address or args.attempt):
+        parser.error("--source-library requires fresh --prepare-only without repair/publication")
     if args.json and not args.prepare_only:
         parser.error("--json requires --prepare-only")
     if args.repair_address and (not args.prepare_only or args.publish or args.address):
@@ -1374,7 +1377,12 @@ def main():
 
 def run_attempt(args, models):
     """Run the existing Stage pipeline; JSON output reuses its saved handoff."""
-    select_functions(elfdb.load_db(), args.tu, args.repair_address or args.address, args.limit, args.max_size)
+    if args.source_library:
+        import source_libraries, elfimage
+        source_libraries.select(ROOT, elfdb.load_db(), elfimage.load(elfdb.default_elf()),
+                                args.tu, args.address, args.limit, args.max_size)
+    else:
+        select_functions(elfdb.load_db(), args.tu, args.repair_address or args.address, args.limit, args.max_size)
     import parallel
     owner = parallel.owned_by_others(args.tu)
     if owner and not args.ignore_owner:
@@ -1408,13 +1416,21 @@ def run_attempt(args, models):
         print(f"isolated attempt: {stage.path}")
         with stage.activate():
             import llm_loop as engine
-            loop = engine.Loop(args.tu, models, args.rounds, args.switch_after, args.jobs, args.resume,
-                               addresses=args.address, limit=args.limit, max_size=args.max_size,
-                               prepare_only=args.prepare_only, no_autotest=args.no_autotest,
-                                model_timeout=args.model_timeout, model_retries=args.model_retries,
-                               attempt_resume=bool(args.attempt), max_prompt_chars=args.max_prompt_chars,
-                               repair_addresses=args.repair_address)
-            status = loop.run()
+            if args.source_library:
+                import source_libraries, elfimage
+                source_db = elfdb.load_db()
+                source_original = objdiff.Original(db=source_db)
+                loop = source_libraries.prepare(engine.ROOT, source_db, source_original.image,
+                    args, lambda f: "\n".join("%x: %s %s" % tuple(row) for row in source_original._instructions(f)))
+                status = loop.status
+            else:
+                loop = engine.Loop(args.tu, models, args.rounds, args.switch_after, args.jobs, args.resume,
+                                   addresses=args.address, limit=args.limit, max_size=args.max_size,
+                                   prepare_only=args.prepare_only, no_autotest=args.no_autotest,
+                                    model_timeout=args.model_timeout, model_retries=args.model_retries,
+                                   attempt_resume=bool(args.attempt), max_prompt_chars=args.max_prompt_chars,
+                                   repair_addresses=args.repair_address)
+                status = loop.run()
         if args.publish:
             if not loop.accepted:
                 raise RuntimeError("no accepted candidates to publish")

@@ -37,6 +37,7 @@ enum EBASEUNIT_TYPE
 // virtual methods that recovered code does not call are not verified yet.
 class CBaseUnit : public CPositionableObject
 {
+    friend class CQuestRequirements;
     friend class CSkillEvent;
     friend class CEffect;
     friend class CSkillController;
@@ -147,6 +148,7 @@ protected:
     friend class CGameUI;
     friend class CDieMenu;
     friend class CCharacter;
+    friend class CPlayer;
     unsigned int m_iUnitLevel;
     TArrayList<CUnitTheme*> m_ThemesToAdd;
     TArrayList<CUnitTheme*> m_ThemesToRemove;

@@ -54,7 +54,7 @@ void CLevel::removeListenerFromUnit(CBaseUnit* unit, iUnitObserver* observer)
     if (observer && unit) removeListenerFromUnit(unit->getGuid(), observer);
 }
 
-bool CLevel::addListenerToUnit(CBaseUnit* unit, iUnitObserver* observer)
+long long CLevel::addListenerToUnit(CBaseUnit* unit, iUnitObserver* observer)
 {
     if (unit) return addListenerToUnit(unit->getGuid(), observer);
     return false;
@@ -1036,4 +1036,302 @@ void CLevel::updateNPCIcons()
         else if (character->ISA(static_cast<UNITTYPES::EUNITTYPES>(0x29))) theme=L"MERCHANT";
         if (theme) character->addUnitTheme(std::wstring(theme));
     }
+}
+
+#include "SkillManager.h"
+#include "Skill.h"
+#include "MissilePreloader.h"
+#include "ItemGold.h"
+#include "iLevelUpdatedCharacter.h"
+
+void CLevel::notifyOfDeletion(CItem* item)
+{
+    m_resourceManager->getMissilePreloader()->notifyOfDeletion(NULL, item);
+    m_pGameClient->notifyOfDeletion(item);
+    for (TLinkedListNode<CCharacter*>* node = m_pCharacters->m_pHead; node; node = node->m_pNext)
+        node->m_Data->notifyOfDeletion(item);
+    CSkillManager* skills = item->m_pSkillManager;
+    if (skills) {
+        for (std::map<std::wstring,TArrayList<CSkill*>*>::iterator it = skills->m_SkillsByName.begin();
+             it != skills->m_SkillsByName.end(); ++it) {
+            TArrayList<CSkill*>* list = it->second;
+            if (list) for (unsigned int i = 0; i < list->size(); ++i)
+                // Native code passes the unadjusted skill address as an opaque
+                // missile observer identity; the callee only compares it.
+                m_resourceManager->getMissilePreloader()->notifyOfDeletion(reinterpret_cast<iMissile*>((*list)[i]), NULL);
+        }
+    }
+}
+
+void CLevel::notifyOfDeletion(CCharacter* character)
+{
+    m_resourceManager->getMissilePreloader()->notifyOfDeletion(NULL, character);
+    m_pGameClient->notifyOfDeletion(character);
+    for (TLinkedListNode<CCharacter*>* node = m_pCharacters->m_pHead; node; node = node->m_pNext)
+        node->m_Data->notifyOfDeletion(character);
+    CSkillManager* skills = character->m_pSkillManager;
+    if (skills) {
+        for (std::map<std::wstring,TArrayList<CSkill*>*>::iterator it = skills->m_SkillsByName.begin();
+             it != skills->m_SkillsByName.end(); ++it) {
+            TArrayList<CSkill*>* list = it->second;
+            if (list) for (unsigned int i = 0; i < list->size(); ++i)
+                m_resourceManager->getMissilePreloader()->notifyOfDeletion(reinterpret_cast<iMissile*>((*list)[i]), NULL);
+        }
+    }
+}
+
+void CLevel::updateNearUnitList(const Ogre::Vector3& position)
+{
+    while (m_activeCharacters->m_pHead) {
+        TLinkedListNode<CCharacter*>* node = m_activeCharacters->m_pHead;
+        m_activeCharacters->m_pHead = node->m_pNext;
+        node->m_pNext = NULL; node->m_pPrevious = NULL; delete node;
+    }
+    while (m_activeItems->m_pHead) {
+        TLinkedListNode<CItem*>* node = m_activeItems->m_pHead;
+        m_activeItems->m_pHead = node->m_pNext;
+        node->m_pNext = NULL; node->m_pPrevious = NULL; delete node;
+    }
+    for (TLinkedListNode<CCharacter*>* node = m_pCharacters->m_pHead; node; node = node->m_pNext) {
+        CCharacter* character = node->m_Data;
+        character->calculateActiveRange(position);
+        if (character->m_bInFadeRange) {
+            TLinkedListNode<CCharacter*>* active = new TLinkedListNode<CCharacter*>;
+            active->m_Data = character; active->m_pNext = m_activeCharacters->m_pHead; active->m_pPrevious = NULL;
+            if (active->m_pNext) active->m_pNext->m_pPrevious = active;
+            m_activeCharacters->m_pHead = active;
+        } else character->setVisible(false, true);
+    }
+    if (m_items) for (TLinkedListNode<CItem*>* node = m_items->m_pHead; node; node = node->m_pNext) {
+        CItem* item = node->m_Data;
+        item->calculateActiveRange(position);
+        if (item->m_bInFadeRange) {
+            TLinkedListNode<CItem*>* active = new TLinkedListNode<CItem*>;
+            active->m_Data = item; active->m_pNext = m_activeItems->m_pHead; active->m_pPrevious = NULL;
+            if (active->m_pNext) active->m_pNext->m_pPrevious = active;
+            m_activeItems->m_pHead = active;
+        } else { item->setVisible(false, true); item->hideItemText(); }
+    }
+}
+
+long long CLevel::addListenerToUnit(long long guid, iUnitObserver* observer)
+{
+    if (guid != -1) {
+        std::map<long long,TArrayList<iUnitObserver*>*>::iterator it = m_unitObservers.find(guid);
+        if (it == m_unitObservers.end()) {
+            TArrayList<iUnitObserver*>* list = new TArrayList<iUnitObserver*>(25);
+            m_unitObservers[guid] = list;
+            list->add(observer);
+        } else if (it->second->find(observer) == -1) it->second->add(observer);
+    }
+    return guid;
+}
+
+void CLevel::updateCharacters(Ogre::Camera* camera, const Ogre::Vector3& position, float elapsed, float speed)
+{
+    flushCharacterUpdateListeners();
+    m_updatedCharacterCount = 0;
+    float adjustedElapsed = elapsed * speed;
+    TLinkedListNode<CCharacter*>* node = m_activeCharacters->m_pHead;
+    while (node) {
+        CCharacter* character = node->m_Data;
+        node = node->m_pNext;
+        if (character->m_bBaseUnitFlag190) {
+            deleteCharacter(character);
+            flushCharacterUpdateListeners();
+            continue;
+        }
+        character->update(camera, position, character->ISA(UNITTYPES::PLAYER) ? elapsed : adjustedElapsed);
+        if (character->m_bInActiveRange) {
+            if (m_automap) {
+                if (character->ISA(UNITTYPES::PLAYER)) m_automap->setPlayerPosition(character->getPosition(true));
+                else if (character->m_pMaster && character->m_pMaster->ISA(UNITTYPES::PLAYER) &&
+                         (character->m_pMaster->m_Followers.empty() ? NULL : character->m_pMaster->m_Followers[0]) == character) {
+                    if (character->m_eAIState == static_cast<EAIState>(42)) m_automap->setPetVisible(false);
+                    else { m_automap->setPetVisible(true); m_automap->setPetPosition(character->getPosition(true)); }
+                }
+            }
+            flushCharacterUpdateListeners();
+            TLinkedListNode<iLevelUpdatedCharacter*>* observer = m_characterUpdateListeners->m_pHead;
+            while (observer) {
+                iLevelUpdatedCharacter* listener = observer->m_Data;
+                observer = observer->m_pNext;
+                listener->characterUpdatedInLevel(elapsed, character);
+            }
+            ++m_updatedCharacterCount;
+        }
+    }
+    flushCharacterUpdateListeners();
+}
+
+void CLevel::rollMoney(CCharacter* first, CCharacter* second, const Ogre::Vector3& position, bool always)
+{
+    if (second && second->m_spawnFlag703) return;
+    for (unsigned int i = 0; i < 3; ++i) {
+        if (!always && !(UTILITIES::randomBetweenVolatile(0.0f, 1.0f) < 0.1f)) continue;
+        CCharacter* character = second ? second : first;
+        int amount;
+        if (character) {
+            float scale = static_cast<float>(character->getLevel()->m_dungeonDepth) * 0.25f + 1.0f;
+            amount = UTILITIES::randomIntegerBetweenVolatile(static_cast<int>(scale * 2.0f), static_cast<int>(scale * 12.0f));
+        } else amount = UTILITIES::randomIntegerBetweenVolatile(2, 12);
+        if (first) amount += static_cast<int>(static_cast<float>(amount) * first->getEffectValue(static_cast<EEFFECT_TYPE>(51), static_cast<EDAMAGE_TYPES>(7)) / 100.0f);
+        CItemGold* gold = new CItemGold(m_resourceManager, amount);
+        Ogre::Vector3 point = randomOpenItemPosition(position, 1.0f, false);
+        addItem(gold, point, true);
+        gold->playDropSound(gold->getSceneNode());
+    }
+}
+
+void CLevel::rollTreasure(CCharacter* first, CCharacter* second, const Ogre::Vector3& position)
+{
+    TArrayList<CBaseUnit*> units(1);
+    m_resourceManager->createUnitsBySpawnClass(L"BARREL_TREASURE", units, 1, NULL, first, m_dungeonDepth, 0);
+    for (unsigned int i = 0; i < units.size(); ++i) addUnit(units[i], position);
+    rollMoney(first, second, position, false);
+}
+
+#include "SkillProperty.h"
+#include "SkillEvent.h"
+#include "SkillEffectAndAffixes.h"
+#include "EffectManager.h"
+
+void CLevel::deleteTemporaryDungeonPortals(std::wstring dungeon)
+{
+    if (!m_items) return;
+    for (TLinkedListNode<CItem*>* node = m_items->m_pHead; node; node = node->m_pNext) {
+        CItem* item = node->m_Data;
+        if (item->ISA(static_cast<UNITTYPES::EUNITTYPES>(173))) {
+            if (item->m_pEffectManager && item->m_pEffectManager->hasEffect(static_cast<EEFFECT_TYPE>(113), dungeon)) {
+                item->m_bBaseUnitFlag190 = true;
+                if (m_pGameClient && m_pGameClient->getPlayer())
+                    m_pGameClient->getPlayer()->clearDungeonHistory(dungeon);
+            }
+        }
+        if (item->ISA(static_cast<UNITTYPES::EUNITTYPES>(165))) {
+            CSkillManager* manager = item->m_pSkillManager;
+            if (!manager || static_cast<int>(manager->m_OtherSkills.size()) <= 0 || !manager->m_OtherSkills[0]) continue;
+            CSkill* skill = manager->m_OtherSkills[0];
+            CSkillProperty* property = skill->m_property;
+            if (!property && skill->m_iSkillLevelCount && skill->m_levelPropertyData[0]) property = skill->m_levelPropertyData[0];
+            if (!property) continue;
+            TArrayList<CSkillEvent*>* events = property->m_eventLists[0];
+            if (!events) continue;
+            for (unsigned int i = 0; i < events->size(); ++i) {
+                CSkillEffectAndAffixes* effects = (*events)[i]->m_pSkillEffectAndAffixes;
+                if (effects && effects->getPortalSkillName() == dungeon) item->m_bBaseUnitFlag190 = true;
+            }
+        }
+    }
+}
+
+Ogre::Vector3 CLevel::findTemporaryDungeonPortal(std::wstring dungeon)
+{
+    if (m_items) for (TLinkedListNode<CItem*>* node = m_items->m_pHead; node; node = node->m_pNext) {
+        CItem* item = node->m_Data;
+        if (item->ISA(static_cast<UNITTYPES::EUNITTYPES>(173))) {
+            if (item->m_pEffectManager && item->m_pEffectManager->hasEffect(static_cast<EEFFECT_TYPE>(113), dungeon))
+                return item->getPosition(true);
+        } else if (item->ISA(static_cast<UNITTYPES::EUNITTYPES>(165))) {
+            CSkillManager* manager = item->m_pSkillManager;
+            if (!manager || static_cast<int>(manager->m_OtherSkills.size()) <= 0 || !manager->m_OtherSkills[0]) continue;
+            CSkill* skill = manager->m_OtherSkills[0];
+            CSkillProperty* property = skill->m_property;
+            if (!property && skill->m_iSkillLevelCount && skill->m_levelPropertyData[0]) property = skill->m_levelPropertyData[0];
+            if (!property) continue;
+            TArrayList<CSkillEvent*>* events = property->m_eventLists[0];
+            if (!events) continue;
+            for (unsigned int i = 0; i < events->size(); ++i) {
+                CSkillEffectAndAffixes* effects = (*events)[i]->m_pSkillEffectAndAffixes;
+                if (effects && effects->getPortalSkillName() == dungeon) return item->getPosition(true);
+            }
+        }
+    }
+    return Ogre::Vector3(-999.0f, -999.0f, -999.0f);
+}
+
+CCharacter* CLevel::addCharacter(CCharacter* character, const Ogre::Vector3& position, bool alreadyActive)
+{
+    if (!character) return NULL;
+    TLinkedList<CCharacter*>* lists[2] = {m_pCharacters, m_activeCharacters};
+    for (unsigned int i = 0; i < 2; ++i) {
+        TLinkedListNode<CCharacter*>* node = new TLinkedListNode<CCharacter*>;
+        node->m_Data = character;
+        node->m_pNext = lists[i]->m_pHead;
+        node->m_pPrevious = NULL;
+        if (node->m_pNext) node->m_pNext->m_pPrevious = node;
+        lists[i]->m_pHead = node;
+    }
+    if (!alreadyActive && !m_resourceManager->m_bFlag3) {
+        character->activateUnitInLevel();
+        character->setPosition(position);
+        character->m_iRoomIndex = getRoomIndexThatPositionIsIn(position);
+        character->createPathfinder(*this);
+        character->dropToGround(*this, 4.0f, false);
+        character->addToAvoidanceMap(*this);
+        character->m_currentOpacity = 1.0f;
+        character->updateOpacity(0.0f, true);
+        character->setRimlight(m_pLevelTemplateData ? m_pLevelTemplateData->m_sRimlightTexture : L"media/sharedtextures/rimlight.dds");
+    }
+    return character;
+}
+
+#include "CameraControl.h"
+#include "Settings.h"
+#include <OgreColourValue.h>
+
+CItem* CLevel::addItem(CItem* item, const Ogre::Vector3& position, bool drop)
+{
+    TLinkedListNode<CItem*>* itemNode = new TLinkedListNode<CItem*>;
+    itemNode->m_Data = item;
+    itemNode->m_pNext = m_items->m_pHead;
+    itemNode->m_pPrevious = NULL;
+    if (itemNode->m_pNext) itemNode->m_pNext->m_pPrevious = itemNode;
+    m_items->m_pHead = itemNode;
+    TLinkedListNode<CItem*>* activeNode = new TLinkedListNode<CItem*>;
+    activeNode->m_Data = item;
+    activeNode->m_pNext = m_activeItems->m_pHead;
+    activeNode->m_pPrevious = NULL;
+    if (activeNode->m_pNext) activeNode->m_pNext->m_pPrevious = activeNode;
+    m_activeItems->m_pHead = activeNode;
+    if (m_resourceManager->m_bFlag3) return item;
+    item->setPosition(position);
+    item->activateUnitInLevel();
+    item->m_fOpacity = 1.0f;
+    item->updateOpacity(0.0f, true);
+    item->m_iRoomIndex = getRoomIndexThatPositionIsIn(position);
+    CEquipment* equipment = dynamic_cast<CEquipment*>(item);
+    if (equipment) {
+        if (drop) equipment->drop();
+        else equipment->activateDropParticles();
+    }
+    if (drop && item->ISA(static_cast<UNITTYPES::EUNITTYPES>(34)))
+        static_cast<CItemGold*>(item)->playDropSound(item->getSceneNode());
+    if (!item->m_bLevelLighting) {
+        item->setRimlight(m_pLevelTemplateData ? m_pLevelTemplateData->m_sRimlightTexture : L"media/sharedtextures/rimlight.dds");
+        if (!item->m_bLevelLighting) return item;
+    }
+    if (CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_LIGHTING_ENABLED) == 1) {
+        CCameraControl* camera = m_pGameClient->m_cameraControl;
+        static_cast<CGenericModel*>(item->getUnitModel())->setProjectorPass(
+            camera->m_pUnknown30, camera->m_pUnknown28,
+            m_pGameClient->m_projectorTexture, m_pGameClient->m_projectorFalloffTexture);
+    }
+    Ogre::ColourValue ambient;
+    if (CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_OVERRIDE_LIGHTING) > 0) {
+        int blue = CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_MATERIAL_AMBIENT_LIGHT_BLUE);
+        int green = CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_MATERIAL_AMBIENT_LIGHT_GREEN);
+        int red = CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_MATERIAL_AMBIENT_LIGHT_RED);
+        ambient = Ogre::ColourValue(static_cast<float>(red) / 255.0f,
+                                   static_cast<float>(green) / 255.0f,
+                                   static_cast<float>(blue) / 255.0f, 1.0f);
+    } else {
+        if (!m_pLevelTemplateData) return item;
+        ambient = Ogre::ColourValue(m_pLevelTemplateData->m_materialAmbientColorR,
+                                   m_pLevelTemplateData->m_materialAmbientColorG,
+                                   m_pLevelTemplateData->m_materialAmbientColorB,
+                                   m_pLevelTemplateData->m_materialAmbientColorA);
+    }
+    static_cast<CGenericModel*>(item->getUnitModel())->setAmbient(ambient);
+    return item;
 }

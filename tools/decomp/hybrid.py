@@ -378,7 +378,7 @@ def hooks_assembly(hooks, section=".tlhybrid.hooks", prefix="hook"):
     return "\n".join(out + names) + "\n"
 
 
-def comparison_entries(ctx, defined, hooks):
+def comparison_entries(ctx, defined, hooks, production_aliases=None):
     """Callable emitted definitions outside their historical TU are testable too.
 
     These entries never patch the original executable. They bind real linked
@@ -390,6 +390,15 @@ def comparison_entries(ctx, defined, hooks):
     rows = []
     for name in sorted(defined):
         f = by_name.get(name)
+        if not f and name in (production_aliases or {}):
+            tu_id, local_name = production_aliases[name]
+            expected_alias = "__tlhybrid_local_%s_%s" % (tu_id, local_name)
+            matches = [f for f in ctx.functions.values()
+                       if f["tu"] == tu_id and f["kind"] != "compiler"
+                       and dict(zip(f["names"], f.get("bind", []))).get(local_name) == "local"]
+            if name != expected_alias or len(matches) != 1:
+                raise ValueError("invalid production local function alias: " + name)
+            f = matches[0]
         if not f:
             continue
         address = int(f["address"], 16)
@@ -469,10 +478,10 @@ def imports_assembly(names, objects=None):
     return "\n".join(out + data + table + copies + strings) + "\n"
 
 
-def build(out=OUT, verbose=True, src=SRC, tests=None):
+def build(out=OUT, verbose=True, src=SRC, tests=None, library_sources=None):
     import publication
     with publication.tree_lock():
-        return _build(out, verbose, src, tests)
+        return _build(out, verbose, src, tests, library_sources)
 
 
 def _write_build_timings(timing, out, status):
@@ -502,10 +511,10 @@ def _independent_unit_outputs(out, stems):
     return True
 
 
-def _build(out=OUT, verbose=True, src=SRC, tests=None):
+def _build(out=OUT, verbose=True, src=SRC, tests=None, library_sources=None):
     timing = _BuildTimings()
     try:
-        result = _build_impl(out, verbose, src, tests, timing)
+        result = _build_impl(out, verbose, src, tests, timing, library_sources)
     except BaseException:
         _write_build_timings(timing, out, "failed")
         raise
@@ -513,7 +522,7 @@ def _build(out=OUT, verbose=True, src=SRC, tests=None):
     return result
 
 
-def _build_impl(out, verbose, src, tests, timing):
+def _build_impl(out, verbose, src, tests, timing, library_sources=None):
     """src: decompiled sources (a mutated copy for tools/decomp/mutate.py);
     tests: test sources, by default decomp/hybrid/tests plus generated
     autotests when OTL_AUTOTEST=1."""
@@ -522,18 +531,35 @@ def _build_impl(out, verbose, src, tests, timing):
     out.mkdir(parents=True, exist_ok=True)
     objects, hooks, notes = [], [], []
     production_undefined, production_defined = set(), set()
+    production_aliases = {}
+    production_objects = {}
     data_redirects, omitted_initializers, source_versions = {}, {}, {}
     if tests is None:
         tests = sorted(TESTS.glob("*.cpp"))
         if os.environ.get("OTL_AUTOTEST"):
             # Generated differential tests (tools/decomp/autotest.py).
             tests += sorted((ROOT / "build-decomp" / "hybrid" / "autotests").glob("*.cpp"))
-    units = [(p, False) for p in sorted(Path(src).rglob("*.cpp"))] + [(p, True) for p in tests]
+    # A library entry is (actual upstream source Path, explicit compiler flags).
+    # It participates as production code and contributes source/object identity;
+    # it never patches the native executable or borrows its data definitions.
+    if library_sources is None:
+        import source_libraries
+        library_sources = source_libraries.production_sources(ROOT, ctx.db, ctx.image)
+    libraries = {}
+    for source, flags in library_sources:
+        source = Path(source)
+        if (source.suffix != ".c" or source != source.absolute()
+                or not source.is_file() or source in libraries
+                or not source.is_relative_to(ROOT)):
+            raise ValueError("invalid or duplicate C library source: " + str(source))
+        libraries[source] = tuple(flags)
+    units = ([(p, False) for p in sorted(Path(src).rglob("*.cpp"))]
+             + [(p, False) for p in libraries] + [(p, True) for p in tests])
 
     def compile_unit(unit):
         source, is_test = unit
         asm = out / f"{'test_' if is_test else ''}{source.stem}.s"
-        extra = ["-I", str(HYBRID)] if is_test else []
+        extra = ["-I", str(HYBRID)] if is_test else list(libraries.get(source, ()))
         toolchain.compile_source(source, asm, extra, assembly=True)
     timing.phase("compile")
     toolchain.parallel_map(compile_unit, units, phase="build")
@@ -554,8 +580,8 @@ def _build_impl(out, verbose, src, tests, timing):
             raise SystemExit(f"{source}: no unique original TU named {source.name}")
         stem = ("test_" if is_test else "") + source.stem
         asm = out / f"{stem}.s"
-        redirect = dict(ctx.global_data)
-        if tu:
+        redirect = {} if source in libraries else dict(ctx.global_data)
+        if tu and source not in libraries:
             redirect.update(ctx.local_data.get(tu["name"], {}))
         text, redirected = rewrite_assembly(asm.read_text(), redirect, drop_ctors=not is_test)
         local_aliases = {}
@@ -603,13 +629,20 @@ def _build_impl(out, verbose, src, tests, timing):
         final_symbols[obj] = symbols
         if not is_test:
             relative = str(source.relative_to(ROOT))
+            production_objects[relative] = hashlib.sha256(obj.read_bytes()).hexdigest()
             source_versions[relative] = result["source_sha256"]
             data_redirects[relative] = sorted(redirected)
             omitted_initializers[relative] = result["omitted"]
+            if source in libraries:
+                for name, alias in result["local_aliases"].items():
+                    identity = (tu["id"], name)
+                    if alias in production_aliases and production_aliases[alias] != identity:
+                        raise ValueError("ambiguous production local function alias")
+                    production_aliases[alias] = identity
             production_defined |= symbols.defined
             production_undefined |= symbols.undefined
         unit_hooks = 0
-        if tu:
+        if tu and source not in libraries:
             owned = ctx.tu_functions(tu)
             for name, bind in symbols.functions:
                 f = owned.get(name)
@@ -630,7 +663,7 @@ def _build_impl(out, verbose, src, tests, timing):
 
     timing.phase("hooks_imports")
     hooks_s = out / "hooks.s"
-    comparisons = comparison_entries(ctx, production_defined, hooks)
+    comparisons = comparison_entries(ctx, production_defined, hooks, production_aliases)
     hooks_s.write_text(hooks_assembly(hooks) + hooks_assembly(comparisons, ".tlhybrid.comparisons", "comparison"))
     toolchain.assemble(hooks_s, out / "hooks.o")
     script, provided = originals_script(ctx, [])
@@ -677,6 +710,9 @@ def _build_impl(out, verbose, src, tests, timing):
                 "runtime_copies": sorted(copies), "notes": notes}
     manifest["standalone_residual"] = {
         "schema": 1, "source_sha256": source_versions,
+        "production_object_sha256": production_objects,
+        "library_source_compile_flags": {str(source.relative_to(ROOT)): list(flags)
+                                          for source, flags in libraries.items()},
         "original_imports": sorted((production_undefined - production_defined) & provided),
         "runtime_library_imports": sorted((production_undefined - production_defined) & set(missing)),
         "original_data_redirects": {k: v for k, v in data_redirects.items() if v},

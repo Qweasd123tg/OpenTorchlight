@@ -6,7 +6,7 @@
 // and return types are placeholders until the class's own TU is recovered.
 
 #include "RunicCore.h"
-class CSoundInstance;
+namespace Ogre { class SceneNode; }
 
 class CChannelInstance : public CRunicCore
 {
@@ -16,7 +16,7 @@ public:
     void clear();
 
     // fields
-    CSoundInstance* m_iUnknown10;
+    Ogre::SceneNode* m_iUnknown10; // +0x10, native playSound stores its node argument
 };
 
 #endif

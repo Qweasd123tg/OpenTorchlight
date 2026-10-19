@@ -179,6 +179,21 @@ class BuildTests(unittest.TestCase):
                 self.assertGreaterEqual(phase[key], 0)
         self.assertIsNone(timing['compiler_slot_wait_seconds'])
 
+    def test_cpp_compiler_local_alias_is_not_library_comparison(self):
+        self.ctx.functions[80] = dict(names=['__tcf_0'], bind=['local'], tu='A',
+                                     address='0x50', kind='compiler', demangled='__tcf_0')
+        self.rows['A'] += [symbol('__tcf_0', bind=0), symbol('__tlhybrid_local_A___tcf_0')]
+        def compile(source, target, flags, assembly):
+            self.compile(source, target, flags, assembly)
+            if source.stem == 'A':
+                with target.open('a') as stream:
+                    stream.write('\n.text\n.type __tcf_0,@function\n__tcf_0:\nret\n.size __tcf_0,.-__tcf_0\n')
+        with patch.object(toolchain, 'compile_source', side_effect=compile):
+            self.build()
+        manifest = json.loads((self.out/'manifest.json').read_text())
+        self.assertFalse(any(row['original'] == '0x50' for row in manifest['comparison_only']))
+        self.assertFalse(any(row['original'] == '0x50' for row in manifest['hooks']))
+
     def test_failure_replays_prior_diagnostics_and_raises_first_in_source_order(self):
         first = subprocess.CalledProcessError(2, ['as','A.hybrid.s'], output=b'A output\n', stderr=b'A error\n')
         second = SystemExit('B failed')

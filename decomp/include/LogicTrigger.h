@@ -6,6 +6,7 @@ class CEditorScene;
 
 class CLogicTrigger : public CPositionableObject
 {
+    friend class CPlayer;
 public:
     CLogicTrigger(CResourceManager* resourceManager);
     virtual ~CLogicTrigger();

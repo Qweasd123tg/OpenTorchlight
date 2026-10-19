@@ -18,6 +18,9 @@ namespace FMOD
 class CSoundInstance : public CRunicCore
 {
 public:
+    CSoundInstance() : CRunicCore(), m_soundName(), m_stream(), m_loop(false),
+        m_pSound(NULL), m_referenceCount(0), m_volume(0), m_volumeVariance(0),
+        m_pSoundData(NULL) { clear(); }
     virtual ~CSoundInstance();
 
     void clear();

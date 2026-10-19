@@ -674,3 +674,347 @@ void CQuest::save(_IO_FILE* file)
             (*m_Unknown160[i])[j]->save(file);
     }
 }
+
+int CQuest::getDungeonMaxFloor()
+{
+    int floor = m_iUnknown20;
+    for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+        {
+            int depth = (*m_Unknown130[i])[j]->getDeepestFloor();
+            if (depth > floor) floor = depth;
+        }
+    for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+        {
+            int depth = (*m_Unknown148[i])[j]->getDeepestFloor();
+            if (depth > floor) floor = depth;
+        }
+    return floor;
+}
+
+long long CQuest::getQuestHasRandomPieces()
+{
+    for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+            if ((*m_Unknown130[i])[j]->getIsRandom()) return true;
+    for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+            if ((*m_Unknown148[i])[j]->getIsRandom()) return true;
+    return false;
+}
+
+int CQuest::getQuestRewardXP()
+{
+    CQuestRewards* rewards = m_pQuestRewards;
+    if (rewards) { rewards->calculateRewards(); return static_cast<int>(rewards->m_fExperience); }
+    return 0;
+}
+
+int CQuest::getQuestRewardGold()
+{
+    CQuestRewards* rewards = m_pQuestRewards;
+    if (rewards) { rewards->calculateRewards(); return static_cast<int>(rewards->m_fGold); }
+    return 0;
+}
+
+void CQuest::setQuestAccepted(bool accepted)
+{
+    if (m_questAccepted != accepted)
+    {
+        m_questAccepted = accepted;
+        if (accepted)
+            m_pQuestManager->questEventUpdate(static_cast<EQUEST_EVENTS>(3), NULL, NULL);
+        else
+            setQuestAcceptDialogInteracted(false);
+    }
+}
+
+void CQuest::cleanUpDialog(TArrayList<CQuestDialog*>& dialogs)
+{
+    for (unsigned int i = 0; i < dialogs.size(); ++i)
+        dialogs[i]->cleanUp();
+}
+
+void CQuest::populate(CLevel* level)
+{
+    if (level == NULL) return;
+    for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+            (*m_Unknown130[i])[j]->populate(level);
+    for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+            (*m_Unknown148[i])[j]->populate(level);
+    for (unsigned int i = 0; i < m_Unknown160.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown160[i]->size(); ++j)
+            (*m_Unknown160[i])[j]->populate(level);
+    for (unsigned int i = 0; i < m_acceptDialogs.size(); ++i) m_acceptDialogs[i]->populate();
+    for (unsigned int i = 0; i < m_Unknown78.size(); ++i) m_Unknown78[i]->populate();
+    for (unsigned int i = 0; i < m_Unknown90.size(); ++i) m_Unknown90[i]->populate();
+    for (unsigned int i = 0; i < m_UnknownA8.size(); ++i) m_UnknownA8[i]->populate();
+    m_bUnknown2D = true;
+}
+
+long long CQuest::getQuestDialog(CBaseUnit* npc)
+{
+    if (npc == NULL) return 0;
+    TArrayList<CQuestDialog*>* dialogs = NULL;
+    for (unsigned int i = 0; i < m_Unknown78.size(); ++i)
+        if (m_Unknown78[i]->dialogIsForNPC(npc)) { dialogs = &m_Unknown78; break; }
+    TArrayList<CQuestDialog*>* preferred = &m_Unknown90;
+    if (!isComplete(false))
+    {
+        bool useAcceptance = !m_questAccepted;
+        if (!useAcceptance)
+        {
+            if (dialogIsForNPC(npc, m_acceptDialogs))
+            {
+                useAcceptance = true;
+                for (unsigned int i = 0; i < m_acceptDialogs.size(); ++i)
+                    if (m_acceptDialogs[i]->dialogIsForNPC(npc) && m_acceptDialogs[i]->m_bDialogInitialized)
+                    { useAcceptance = false; break; }
+            }
+            if (!useAcceptance && !m_questAccepted) useAcceptance = true;
+        }
+        preferred = useAcceptance ? &m_acceptDialogs : NULL;
+    }
+    if (preferred != NULL && dialogIsForNPC(npc, *preferred)) dialogs = preferred;
+    if (dialogs == NULL && m_questAccepted && dialogIsForNPC(npc, m_UnknownA8)) dialogs = &m_UnknownA8;
+    if (dialogs != NULL)
+        for (unsigned int i = 0; i < dialogs->size(); ++i)
+            if ((*dialogs)[i]->dialogIsForNPC(npc)) return reinterpret_cast<long long>((*dialogs)[i]);
+    return 0;
+}
+
+int CQuest::getQuestIsValidForNPC(CBaseUnit* npc)
+{
+    if (npc == NULL || m_bUnknown210) return false;
+    int valid = m_pQuestRequirements ? m_pQuestRequirements->questRequirmentsHaveBeenMet() : true;
+    if (valid && getQuestDialog(npc) == 0 && !m_bUnknown20B) return false;
+    return valid;
+}
+
+void CQuest::getQuestStrings(CDataGroup* data, const std::wstring& name, TArrayList<CQuestDialog*>& dialogs)
+{
+    if (data == NULL) return;
+    std::vector<CDataGroup*> groups;
+    data->GetDataGroupsMatchingName(name, &groups);
+    for (unsigned int i = 0; i < groups.size(); ++i)
+    {
+        CQuestDialog* dialog = new CQuestDialog(this);
+        if (dialog->parseDialogTag(data->GetDataValue(L"UNITNAME", EMPTY_WSTRING), groups[i]))
+            dialogs.add(dialog);
+        else
+            delete dialog;
+    }
+}
+
+void CQuest::initializeQuestWithNPC(CBaseUnit* npc)
+{
+    if (npc != NULL && m_iUnknown1E8 == reinterpret_cast<long long>(npc->getDataGroup())) return;
+    if (m_pQuestManager->getPlayerHasQuest(this) && npc != NULL) return;
+    CDungeon* dungeon = m_pResourceManager->getDungeonByName(m_pUnknown30);
+    if (dungeon != NULL && m_pResourceManager != NULL && m_pResourceManager->getGameClient() != NULL)
+    {
+        if (m_bUnknown20A && getPlayer() != NULL)
+        {
+            getPlayer()->clearDungeonHistory(m_pUnknown30);
+            CResourceManager* resources = getPlayer()->getResourceManager();
+            getPlayer()->updateStoredLevels(*(resources ? resources->getLevel() : NULL));
+        }
+        int floor = getDungeonMaxFloor();
+        m_iUnknown20C = m_pResourceManager->getGameClient()->getRankOfMonstersOnFloor(floor > 0 ? floor : 1, dungeon, true);
+    }
+    if (npc != NULL)
+    {
+        m_iUnknown1C = UTILITIES::randomIntegerBetweenVolatile(0, 2147483647);
+        reinitializeQuest(true, false);
+        m_iUnknown1E8 = reinterpret_cast<long long>(npc->getDataGroup());
+        if (m_pQuestRewards != NULL && m_bUnknown2D)
+        {
+            m_bUnknown2D = false;
+            m_pQuestRewards->reInitializeRewards();
+        }
+    }
+    else
+        reinitializeQuest(false, false);
+}
+
+unsigned int CQuest::calculateUnitsFromTag(CDataGroup* data,
+    TArrayList<TArrayList<CQuestUnitData*>*>* alternatives,
+    TArrayList<CQuestUnitData*>* units, unsigned int searchMode)
+{
+    if (data == NULL || (alternatives == NULL && units == NULL)) return 0;
+    unsigned int minimum = data->GetDataValue(L"MINCREATE", 0);
+    unsigned int maximum = data->GetDataValue(L"MAXCREATE", 0);
+    if (static_cast<int>(minimum) <= 0) minimum = 1;
+    if (maximum < minimum) maximum = minimum;
+    m_gap27 = minimum == 0 && maximum == 0;
+    std::vector<CDataGroup*> groups;
+    data->GetDataGroupsMatchingName(L"UNIT", &groups);
+    if (groups.empty()) return 0;
+    if (m_gap27) minimum = groups.size();
+    for (unsigned int i = 0; i < groups.size(); ++i)
+    {
+        CQuestUnitData* unit = new CQuestUnitData(this);
+        if (!unit->parseDataGroup(groups[i], NULL)) { delete unit; continue; }
+        unit->m_unitSearchMode = searchMode;
+        unit->m_pBaseUnitDataGroup = unit->getBaseUnitDataGroup();
+        if (alternatives != NULL)
+        {
+            unsigned int index = alternatives->size();
+            alternatives->add(new TArrayList<CQuestUnitData*>(1));
+            (*alternatives)[index]->add(unit);
+            calculateUnitsFromTag(groups[i]->GetDataGroupByName(L"ACQUIRE", false), NULL, &unit->m_children, 1);
+            for (unsigned int j = 1; j < static_cast<unsigned int>(unit->m_requiredUnitCount); ++j)
+            {
+                CQuestUnitData* extra = new CQuestUnitData(this);
+                extra->parseDataGroup(groups[i], unit->m_pBaseUnitDataGroup);
+                extra->m_unitSearchMode = 1;
+                extra->m_pBaseUnitDataGroup = extra->getBaseUnitDataGroup();
+                extra->m_requiredUnitCount = unit->m_requiredUnitCount;
+                (*alternatives)[index]->add(extra);
+                calculateUnitsFromTag(groups[i]->GetDataGroupByName(L"ACQUIRE", false), NULL, &extra->m_children, 1);
+            }
+        }
+        else if (units != NULL)
+        {
+            units->add(unit);
+            calculateUnitsFromTag(groups[i]->GetDataGroupByName(L"ACQUIRE", false), NULL, &unit->m_children, 1);
+        }
+    }
+    return minimum;
+}
+
+void CQuest::cleanUp(bool removeAll)
+{
+    if (getPlayer() == NULL) return;
+    if (m_bUnknown20A)
+    {
+        getPlayer()->clearDungeonHistory(m_pUnknown30);
+        CResourceManager* resources = getPlayer()->getResourceManager();
+        getPlayer()->updateStoredLevels(*(resources ? resources->getLevel() : NULL));
+    }
+    for (unsigned int i = 0; i < m_Unknown130.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown130[i]->size(); ++j)
+            (*m_Unknown130[i])[j]->cleanUpForQuestRemoveall(removeAll);
+    for (unsigned int i = 0; i < m_Unknown148.size(); ++i)
+        for (unsigned int j = 0; j < m_Unknown148[i]->size(); ++j)
+            (*m_Unknown148[i])[j]->cleanUpForQuestRemoveall(removeAll);
+    cleanUpDialog(m_acceptDialogs);
+    cleanUpDialog(m_Unknown78);
+    cleanUpDialog(m_Unknown90);
+    cleanUpDialog(m_UnknownA8);
+    getPlayer()->removeQuestItemFromInventoryOrPetsInventoryByGuid(m_iUnknown1C8, -1, false, true, static_cast<UNITTYPES::EUNITTYPES>(103));
+    CResourceManager* resources = getPlayer()->getResourceManager();
+    if (resources != NULL && resources->getLevel() != NULL)
+        resources->getLevel()->makeQuestUnitsUncool(m_iUnknown1C8, true);
+    reinitializeQuest(false, false);
+}
+
+void CQuest::giveRewardForQuest()
+{
+    if (getPlayer() == NULL) return;
+    getPlayer()->incrementJournalStatistic(static_cast<EJournalStatistic>(4), 1);
+    if (m_pQuestRewards != NULL)
+    {
+        m_pQuestRewards->rewardPlayer();
+        m_bUnknown2D = true;
+    }
+    for (unsigned int i = 0; i < m_Unknown1F0.size(); ++i)
+    {
+        CQuest* next = reinterpret_cast<CQuest*>(m_pQuestManager->getQuestByName(STRINGS::StringUpper(m_Unknown1F0[i])));
+        if (next != NULL)
+        {
+            m_pQuestManager->giveQuest(next, NULL, false);
+            next->setQuestAccepted(true);
+        }
+    }
+    cleanUp(true);
+}
+
+long long CQuest::loadQuestData(const std::wstring& filename)
+{
+    m_complete = false;
+    if (m_pQuestManager == NULL || !m_pUnknown48.empty()) return false;
+    m_pUnknown48 = filename;
+    CDataGroup data(L"ERROR", NULL, 20, 10, NULL);
+    data.LoadFile(m_pUnknown48, NULL);
+    if (data.GetGroupName() == L"ERROR") return false;
+    m_bUnknown2B = data.GetDataValue(L"COMPLETESONACCEPT", false);
+    m_bUnknown28 = data.GetDataValue(L"FORCEACCEPT", false);
+    m_bUnknown29 = data.GetDataValue(L"SHOWQUESTCOMPLETE", true);
+    m_bUnknown2A = data.GetDataValue(L"QUESTCONTROLLERCOMPLETES", false);
+    m_gap25 = data.GetDataValue(L"NO_NOTIFICATION", false);
+    m_bUnknown20A = data.GetDataValue(L"CLEAR_DUNGEON_HISTORY", false);
+    m_bUnknown20B = data.GetDataValue(L"REPEATABLE", false);
+    m_iUnknown1C8 = data.GetDataValue(L"QUEST_GUID", -1LL);
+    if (m_iUnknown1C8 == -1)
+    {
+        do { m_iUnknown1C8 = UTILITIES::createUniqueGuid(); } while (m_iUnknown1C8 == -1);
+        data.SetDataValue(L"QUEST_GUID", m_iUnknown1C8);
+        data.SaveToFile(filename);
+    }
+    m_bUnknown208 = data.GetDataValue(L"CANABANDON", false);
+    m_bUnknown2C = data.GetDataValue(L"SHOWTIPS", m_bUnknown208);
+    m_pUnknown30 = STRINGS::StringUpper(data.GetDataValue(L"DUNGEON", m_pUnknown30));
+    m_iUnknown18 = STRINGS::getStringIndex(STRINGS::StringUpper(data.GetDataValue(L"QUESTTYPE", EMPTY_WSTRING)), gQUEST_TYPE_NAMES, 4, 0, false);
+    CDataGroup* giveQuests = data.GetDataGroupByName(L"GIVE_QUESTS_ON_COMPLETE", false);
+    if (giveQuests != NULL)
+        for (unsigned int i = 0; i < giveQuests->GetNumberOfDataValues(); ++i)
+        {
+            CDataValue::EDATAVALUETYPES type = giveQuests->GetDataValue(i)->GetValueType();
+            if (type == CDataValue::DATAVALUE_STRING || type == CDataValue::DATAVALUE_TRANSLATE)
+                m_Unknown1F0.add(giveQuests->GetDataValue(i)->GetValueString(true));
+        }
+    m_sUnknown50 = STRINGS::StringUpper(data.GetDataValue(L"NAME", EMPTY_WSTRING));
+    m_sUnknown58 = data.GetDataValue(L"DISPLAYNAME", EMPTY_WSTRING);
+    m_pUnknown38 = data.GetDataValue(L"ALTERNATIVECOMPLETETEXT", EMPTY_WSTRING);
+    m_pUnknown40 = data.GetDataValue(L"ALTERNATIVECOMPLETETEXTSMALL", EMPTY_WSTRING);
+    m_iUnknown1C = -1;
+    m_iUnknown1A8 = calculateUnitsFromTag(data.GetDataGroupByName(L"DEFEAT", false), &m_Unknown190, NULL, 0);
+    m_iUnknown1AC = calculateUnitsFromTag(data.GetDataGroupByName(L"ACQUIRE", false), &m_Unknown178, NULL, 1);
+    calculateUnitsFromTag(data.GetDataGroupByName(L"POPULATE", false), &m_Unknown160, NULL, 0);
+    TArrayList<std::wstring>* names[2] = {&m_UnknownC8, &m_UnknownE0};
+    for (unsigned int i = 0; i < 2; ++i)
+    {
+        CDataGroup* group = data.GetDataGroupByName(g_QUEST_COMPLETE_TYPE_NAMES[i], false);
+        if (group != NULL)
+        {
+            names[i]->setGrowBy(2);
+            m_UnknownF8[i].setGrowBy(2);
+            for (unsigned int j = 0; j < group->GetNumberOfDataValues(); ++j)
+            {
+                CDataValue::EDATAVALUETYPES type = group->GetDataValue(j)->GetValueType();
+                if (type == CDataValue::DATAVALUE_STRING || type == CDataValue::DATAVALUE_TRANSLATE)
+                {
+                    names[i]->add(STRINGS::StringUpper(group->GetDataValue(j)->GetValueString(true)));
+                    m_UnknownF8[i].add(false);
+                }
+            }
+        }
+    }
+    m_pQuestRequirements->parseRequirementTag(data.GetDataGroupByName(L"REQUIREMENTS", false));
+    if (m_pQuestRewards == NULL) m_pQuestRewards = new CQuestRewards(this);
+    CDataGroup* reward = data.GetDataGroupByName(L"REWARD", false);
+    if (reward != NULL) m_pQuestRewards->parseRewardTag(reward);
+    CDataGroup* dialog = data.GetDataGroupByName(L"DIALOG", false);
+    if (dialog != NULL)
+    {
+        getQuestStrings(dialog, gQUEST_DIALOG_TYPE_NAMES[1], m_acceptDialogs);
+        getQuestStrings(dialog, gQUEST_DIALOG_TYPE_NAMES[2], m_Unknown78);
+        getQuestStrings(dialog, gQUEST_DIALOG_TYPE_NAMES[3], m_Unknown90);
+        getQuestStrings(dialog, gQUEST_DIALOG_TYPE_NAMES[4], m_UnknownA8);
+        CDataGroup* details = dialog->GetDataGroupByName(gQUEST_DIALOG_TYPE_NAMES[5], false);
+        if (details != NULL)
+        {
+            m_pQuestDialog = new CQuestDialog(this);
+            if (!m_pQuestDialog->parseDialogTag(dialog->GetDataValue(L"UNITNAME", EMPTY_WSTRING), details))
+            {
+                delete m_pQuestDialog;
+                m_pQuestDialog = NULL;
+            }
+        }
+    }
+    return true;
+}

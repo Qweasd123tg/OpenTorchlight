@@ -110,6 +110,10 @@ extern unsigned int KSETTINGS_WIN_HEIGHT;
 extern unsigned int KSETTINGS_XRATIO;
 extern unsigned int KSETTINGS_SHOW_DAMAGE_SHAPES;
 extern unsigned int KSETTINGS_COMBAT_LOG;
-#endif
-
 extern unsigned int KSETTINGS_DISPLAY_COLLISION;
+
+static const float KParticleFPSDetail[3] = {20.0f, 30.0f, 40.0f};
+
+static const float KParticlePCTDetail[3] = {10.0f, 50.0f, 100.0f};
+
+#endif

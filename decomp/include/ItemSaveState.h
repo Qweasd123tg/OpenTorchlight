@@ -16,6 +16,7 @@ public:
     CItemSaveState();
     virtual ~CItemSaveState();
     void save(FILE* file);
+    void load(FILE* file, unsigned int version);
     std::wstring m_sItemName;
     std::wstring m_sStateString18;
     std::wstring m_sStateString20;

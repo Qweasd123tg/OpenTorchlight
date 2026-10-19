@@ -34,6 +34,7 @@ public:
 
 protected:
     friend class CEnchantMenu;
+    friend class CPlayer;
     friend class CDamageShape;
     friend class CResourceManager;
     CSoundBank* m_pSoundBank;
