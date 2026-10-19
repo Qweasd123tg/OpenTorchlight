@@ -13,7 +13,8 @@ public:
     unsigned char m_AttackData19[0x24-0x19];
     unsigned int m_DamageMaximums[7];
     unsigned int m_DamageMinimums[7];
-    unsigned char m_AttackData5C[0x68-0x5c];
+    unsigned char m_AttackData5C[8];
+    int m_animationIndex; // +0x64, findRandomAnimation result
     float m_fRange;
     float m_fStrikeRange;
     float m_fAttackSpeed;

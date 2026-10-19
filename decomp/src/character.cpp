@@ -3575,3 +3575,1195 @@ void CCharacter::getBones()
         }
     updateBonePositions();
 }
+
+void CCharacter::displayDamageAbsorbed(float elapsed)
+{
+    if (!m_damageDisplayEnabled) return;
+    m_damageDisplayTime -= elapsed;
+    if (m_damageOverTimeTaken == 0.0f || m_damageDisplayTime >= 0.0f) return;
+    m_damageDisplayTime = 0.5f;
+    bool friendly = ISA(static_cast<UNITTYPES::EUNITTYPES>(28)) ||
+        (m_pMaster && m_pMaster->ISA(static_cast<UNITTYPES::EUNITTYPES>(28))) || alignment() == static_cast<EAlignment>(1);
+    CEGUI::colour first(1.0f, friendly ? 0.2f : 0.77f, friendly ? 0.2f : 0.0f, 1.0f);
+    CEGUI::colour second(1.0f, friendly ? 0.2f : 0.77f, friendly ? 0.2f : 0.0f, 1.0f);
+    std::string text = STRINGS::GetValueAsString(static_cast<int>(std::ceil(m_damageOverTimeTaken)));
+    m_pResourceManager->getLevel()->m_pGameClient->getGameUI()->addTextEvent(getPosition(true) + Ogre::Vector3::UNIT_Y, text, 1.0f, 255.0f, second, first);
+    m_damageOverTimeTaken = 0.0f;
+}
+
+bool CCharacter::isEffectValidForUnit(CCharacter*, CBaseUnit* target, CEffect* effect)
+{
+    if (!effect) return false;
+    int type = static_cast<int>(effect->m_eType);
+    if (!m_characterFlag52F && (type == 52 || type == 7 || type == 124)) return false;
+    switch (type)
+    {
+    case 65:
+        return canLearnSpell(effect->m_sName, static_cast<int>(effect->value(static_cast<EEFFECT_VALUES>(0))));
+    case 110:
+        return true;
+    case 6:
+    case 123:
+    case 7:
+    case 124:
+        if (effect->value(static_cast<EEFFECT_VALUES>(0)) < 0.0f || !target ||
+            !target->ISA(static_cast<UNITTYPES::EUNITTYPES>(33)) || !target->dontUseOnFull()) return true;
+        if (type == 6 || type == 123)
+        {
+            int current = mana();
+            if (current == maxMana()) return false;
+        }
+        else
+        {
+            int current = HP();
+            if (current == maxHP()) return false;
+        }
+        return !m_pEffectManager || !m_pEffectManager->hasEffect(effect->m_sName);
+    case 45:
+    {
+        CLevel* level = m_pResourceManager->getLevel();
+        if (!level) return false;
+        CLevelTemplateData* data = level->getLevelTemplateData();
+        if (data && data->permitsPortal())
+        {
+            incrementJournalStatistic(static_cast<EJournalStatistic>(13), 1);
+            return true;
+        }
+        if (m_levelSound) m_levelSound->queueGlobalSample(51, 0.0f, 0.1f);
+        return false;
+    }
+    case 52:
+        return m_eAIState != static_cast<EAIState>(5) && m_eAIState != static_cast<EAIState>(6);
+    case 64:
+        return !hasUnitTheme(L"STUNNED");
+    case 80:
+        return m_eAIState != static_cast<EAIState>(5) && m_eAIState != static_cast<EAIState>(6) &&
+            m_alignment == static_cast<EAlignment>(2) && !isPlayer() && (!m_pMaster || !m_pMaster->isPlayer());
+    case 141:
+    {
+        CLevel* level = m_pResourceManager->getLevel();
+        if (!level) return false;
+        CLevelTemplateData* data = level->getLevelTemplateData();
+        return data && (data->permitsPortal() || data->isTown());
+    }
+    }
+    if (target && target->ISA(static_cast<UNITTYPES::EUNITTYPES>(33)) && target->dontUseOnFull())
+    {
+        if (!ISA(static_cast<UNITTYPES::EUNITTYPES>(28))) return false;
+        if (m_pEffectManager && m_pEffectManager->hasEffect(effect->m_sName)) return false;
+    }
+    return effect->m_activation == EFFECT_ACTIVATION_PASSIVE ||
+        effect->m_activation == EFFECT_ACTIVATION_DYNAMIC || effect->m_activation == EFFECT_ACTIVATION_TRANSFER;
+}
+
+void CCharacter::modifyHP(float change)
+{
+    if (!m_characterFlag52F && change < 0.0f) return;
+    if (ISA(static_cast<UNITTYPES::EUNITTYPES>(167)) && hasUnitTheme(L"MIMICIDLE")) return;
+    float oldHP = m_fHPFloat;
+    float currentHP = oldHP;
+    if (oldHP <= 0.0f && change > 0.0f)
+    {
+        if (static_cast<float>(maxHP()) > change) return;
+        currentHP = m_fHPFloat;
+    }
+    if (currentHP == 0.0f && change >= static_cast<float>(maxHP())) m_experienceReward = 0;
+    if (getIsInGodMode())
+    {
+        m_fHPFloat = static_cast<float>(maxHP());
+        return;
+    }
+    if (!ISA(static_cast<UNITTYPES::EUNITTYPES>(28)))
+        broadcastHPThreshholdEvents(static_cast<float>(m_maxHPBase), m_fHPFloat, m_previousThresholdHP, change);
+    m_fHPFloat += change;
+    if (m_fHPFloat > static_cast<float>(maxHP())) m_fHPFloat = static_cast<float>(maxHP());
+    if (m_bInvulnerable && m_fHPFloat < 1.0f)
+    {
+        if (m_pEffectManager) m_pEffectManager->removeEffect(L"POISON", true);
+        m_fHPFloat = 1.0f;
+    }
+    else if (m_fHPFloat < 0.0f)
+    {
+        m_fHPFloat = 0.0f;
+        forceDisplayOfDamageAbsorbed();
+    }
+    if (m_previousThresholdHP > m_fHPFloat) m_previousThresholdHP = m_fHPFloat;
+    if (ISA(static_cast<UNITTYPES::EUNITTYPES>(28)))
+    {
+        if (m_fHPFloat <= static_cast<float>(maxHP()) * 0.2f &&
+            oldHP > static_cast<float>(maxHP()) * 0.2f && m_levelSound)
+            m_levelSound->queueGlobalSample(52, 0.0f, 0.1f);
+    }
+    else if (m_pMaster && m_pMaster->isPlayer() && m_bInvulnerable && oldHP > 1.0f &&
+        m_fHPFloat <= 1.0f && m_pMaster->getFollower(0) == this && m_pMaster->m_levelSound)
+        m_pMaster->m_levelSound->queueGlobalSample(45, 1.0f, 1.0f);
+}
+
+#include "Affix.h"
+void CCharacter::executeProcs(EEFFECT_TYPE type, CBaseUnit* target)
+{
+    if (hasEffect(type) && m_pSkillManager)
+        for (int group = 0; group < 2; ++group)
+        {
+            TArrayList<CEffect*>& effects = m_pEffectManager->getActiveEffects(group);
+            for (unsigned int i = 0; i < effects.size(); ++i)
+            {
+                if (effects[i]->m_eType != type) continue;
+                int roll = UTILITIES::randomIntegerBetweenVolatile(0, 100);
+                if (!(effects[i]->value(static_cast<EEFFECT_VALUES>(0)) >= static_cast<float>(roll))) continue;
+                CSkill* skill = m_pSkillManager->getSkill(effects[i]->m_sName, effects[i]->m_iLevel);
+                if (!skill) continue;
+                switch (static_cast<int>(type))
+                {
+                case 74: case 75: case 81: case 105:
+                {
+                    m_procTime = 1.0f;
+                    Ogre::Vector3 destination = target ? target->getPosition(true) : getPosition(true);
+                    const Ogre::Quaternion& orientation = m_pSceneNode->getOrientation();
+                    Ogre::Vector3 source = getPosition(true);
+                    m_pSkillManager->executeSkill(skill, this, static_cast<ESKILL_ACTIVATION_TYPE>(1), source, orientation, destination, target);
+                    break;
+                }
+                case 76:
+                {
+                    Ogre::Vector3 destination = target ? target->getPosition(true) : getPosition(true);
+                    const Ogre::Quaternion& orientation = m_pSceneNode->getOrientation();
+                    Ogre::Vector3 source = target ? target->getPosition(true) : getPosition(true);
+                    m_pSkillManager->executeSkill(skill, this, static_cast<ESKILL_ACTIVATION_TYPE>(1), source, orientation, destination, target);
+                    break;
+                }
+                }
+            }
+        }
+    if (m_pInventory) m_pInventory->executeProcs(type, target);
+}
+
+void CCharacter::applyDamageEffects(CCharacter* target, float amount, int (*damages)[2], unsigned int count, bool force)
+{
+    if (amount <= 0.0f || !target || (count == 1 && damages[0][0] == 0)) return;
+    int sums[7] = {0,0,0,0,0,0,0};
+    for (unsigned int i = 0; i < count; ++i)
+        if (damages[i][0] != 0)
+            sums[damages[i][0]] = static_cast<int>(static_cast<float>(sums[damages[i][0]]) + static_cast<float>(damages[i][1]));
+    for (unsigned int type = 0; type < 7; ++type)
+    {
+        int damage = sums[type];
+        if (damage <= 0) continue;
+        int defense = m_damageDefense[type];
+        if (!force)
+        {
+            float roll = UTILITIES::randomBetweenVolatile(0.0f, 1.0f);
+            float chance = static_cast<float>(damage) / ((static_cast<float>(defense) + static_cast<float>(damage)) * 5.0f);
+            if (!(chance >= roll)) continue;
+        }
+        const wchar_t* normal;
+        const wchar_t* player;
+        switch (type)
+        {
+        case 2: normal=L"DAMAGEEFFECTONFIRE"; player=L"DAMAGEEFFECTONFIREPLAYER"; break;
+        case 3: normal=L"DAMAGEEFFECTFROZEN"; player=L"DAMAGEEFFECTFROZENPLAYER"; break;
+        case 4: normal=L"DAMAGEEFFECTELECTRICITY"; player=L"DAMAGEEFFECTELECTRICITYPLAYER"; break;
+        case 5: normal=L"DAMAGEEFFECTPOISONED"; player=L"DAMAGEEFFECTPOISONEDPLAYER"; break;
+        default: return;
+        }
+        CAffix* affix = NULL;
+        if (m_pEffectManager)
+            affix = m_pEffectManager->getAffix(isPlayer() ? player : normal);
+        if (!affix)
+        {
+            unsigned int level = target->m_iUnitLevel;
+            affix = addAffix(isPlayer() ? player : normal, level, target, 1.0f);
+        }
+        if (affix)
+        {
+            if (type == 2) affix->m_fDuration = UTILITIES::randomBetweenVolatile(3.0f, 7.0f);
+            else if (type == 3)
+            {
+                if (ISA(static_cast<UNITTYPES::EUNITTYPES>(28))) affix->m_fDuration = UTILITIES::randomBetweenVolatile(1.5f, 2.0f);
+                else affix->m_fDuration = UTILITIES::randomBetweenVolatile(3.0f, 4.0f);
+            }
+            else affix->m_fDuration = UTILITIES::randomBetweenVolatile(3.0f, 5.0f);
+        }
+        return;
+    }
+}
+
+#include "Console.h"
+int CCharacter::modifyDamage(int damage, EDAMAGE_TYPES type, int totalDamage, float scale)
+{
+    int armor;
+    if (type == static_cast<EDAMAGE_TYPES>(0))
+    {
+        int maximum = AC();
+        armor = UTILITIES::randomIntegerBetweenVolatile(minimumAC(), maximum);
+    }
+    else
+    {
+        int maximum = std::max(0, static_cast<int>(static_cast<float>(damageDefense(type))));
+        armor = UTILITIES::randomIntegerBetweenVolatile(static_cast<int>(std::ceil(static_cast<float>(maximum) * 0.5f)), maximum);
+    }
+    if (totalDamage >= 0 && damage >= 0)
+        damage -= static_cast<int>((static_cast<float>(armor) * scale) * (static_cast<float>(damage) / static_cast<float>(totalDamage)));
+    float currentDamage = static_cast<float>(damage);
+    damage = static_cast<int>(currentDamage + (static_cast<float>(damageDefensePercent(type)) / 100.0f) * currentDamage);
+    if (!hasEffect(static_cast<EEFFECT_TYPE>(122)))
+        return damage <= 0 && type == static_cast<EDAMAGE_TYPES>(0) ? 1 : std::max(0, damage);
+    bool absorbed = false;
+    for (int group = 0; group < 2; ++group)
+    {
+        TArrayList<CEffect*>& effects = m_pEffectManager->getActiveEffects(group);
+        for (unsigned int i = 0; i < effects.size(); ++i)
+        {
+            if (effects[i]->m_eType == static_cast<EEFFECT_TYPE>(122) &&
+                (effects[i]->m_fValue24 == -900.0f || effects[i]->m_fValue24 == -1000.0f ||
+                 !(effects[i]->m_fRemainingDuration >= effects[i]->m_fValue24)) &&
+                !effects[i]->m_bDead && (effects[i]->m_eDamageType == type || effects[i]->m_eDamageType == static_cast<EDAMAGE_TYPES>(6)))
+            {
+                float value = effects[i]->value(static_cast<EEFFECT_VALUES>(0));
+                if (value >= static_cast<float>(damage))
+                {
+                    effects[i]->m_fValueC4 = effects[i]->value(static_cast<EEFFECT_VALUES>(0)) - static_cast<float>(damage);
+                    effects[i]->calculateBaseValue(static_cast<CEffect::ECALCULATETYPES>(0));
+                    absorbed = true;
+                    break;
+                }
+                effects[i]->m_fValueC4 = 0.0f;
+                effects[i]->calculateBaseValue(static_cast<CEffect::ECALCULATETYPES>(0));
+                if (effects[i]->m_fValue24 != -900.0f && effects[i]->m_fValue24 != -1000.0f)
+                    effects[i]->m_fRemainingDuration = effects[i]->m_fValue24;
+                effects[i]->m_bDead = true;
+                damage -= static_cast<int>(value);
+            }
+            if (damage <= 0) break;
+        }
+        if (absorbed || damage <= 0)
+        {
+            absorbed = true;
+            break;
+        }
+    }
+    if (!absorbed) return std::max(0, damage);
+    static std::wstring g_Absorbed;
+    if (g_Absorbed.empty()) g_Absorbed = CStringTranslate::getSinglton()->getTranslateString(L"Absorbed");
+    CEGUI::colour first(1.0f, 0.67f, 0.16f, 1.0f);
+    CEGUI::colour second(1.0f, 0.67f, 0.16f, 1.0f);
+    std::string text = STRINGS::StringConvertToUTF8(g_Absorbed + L"!");
+    m_pResourceManager->getLevel()->m_pGameClient->getGameUI()->addTextEvent(getPosition(true) + Ogre::Vector3::UNIT_Y * 1.2f, text, 1.0f, 255.0f, second, first);
+    if (m_levelSound) m_levelSound->playSample(7, m_pSceneNode, 0.0f, 0.0f, false);
+    CDynamicPropertyFile* settings = m_pResourceManager ? CMasterResourceManager::getSingleton()->m_pSettings : NULL;
+    if (settings->GetInt(KSETTINGS_COMBAT_LOG) > 0)
+        m_pResourceManager->getLevel()->m_pGameClient->getGameUI()->m_console->addTextNoHistory(L" Absorbed!");
+    return 0;
+}
+
+void CCharacter::applyInstantEffect(CEffect* effect)
+{
+    m_attack = NULL;
+    float amount = effect->m_fValueC0;
+    CBaseUnit* owner = effect->m_Owner.getObject();
+    CCharacter* character = owner ? dynamic_cast<CCharacter*>(owner) : NULL;
+    switch (static_cast<int>(effect->m_eType))
+    {
+    case 7: case 124: case 52:
+    {
+        if (effect->m_eType == static_cast<EEFFECT_TYPE>(52) && amount > 0.0f) amount = -amount;
+        if (!(amount < 0.0f)) { modifyHP(amount); return; }
+        if (blocked())
+        {
+            static std::wstring g_Blocked;
+            if (g_Blocked.empty()) g_Blocked = CStringTranslate::getSinglton()->getTranslateString(L"Blocked");
+            CEGUI::colour first(1.0f,0.67f,0.16f,1.0f), second(1.0f,0.67f,0.16f,1.0f);
+            std::string text = STRINGS::StringConvertToUTF8(g_Blocked + L"!");
+            m_pResourceManager->getLevel()->m_pGameClient->getGameUI()->addTextEvent(getPosition(true)+Ogre::Vector3::UNIT_Y*1.2f,text,1.0f,255.0f,second,first);
+            if (m_levelSound) m_levelSound->playSample(7,m_pSceneNode,0.0f,0.0f,false);
+            CDynamicPropertyFile* settings=m_pResourceManager?CMasterResourceManager::getSingleton()->m_pSettings:NULL;
+            if (settings->GetInt(KSETTINGS_COMBAT_LOG)>0)
+                m_pResourceManager->getLevel()->m_pGameClient->getGameUI()->m_console->addTextNoHistory(L" Blocked!");
+            return;
+        }
+        if (character)
+        {
+            float specific=character->getEffectValue(static_cast<EEFFECT_TYPE>(25),effect->m_eDamageType)/100.0f;
+            float all=character->getEffectValue(static_cast<EEFFECT_TYPE>(25),static_cast<EDAMAGE_TYPES>(6))/100.0f;
+            amount+=static_cast<float>(static_cast<int>(std::ceil((all+specific)*amount)));
+            if (character->rollCritical(this))
+            {
+                int half=static_cast<int>(amount*0.5f);
+                float bonus=character->getEffectValue(static_cast<EEFFECT_TYPE>(89),static_cast<EDAMAGE_TYPES>(7))/100.0f;
+                amount+=static_cast<float>(static_cast<int>(static_cast<float>(half)*bonus)+half);
+                int roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+                if (static_cast<float>(roll)>getEffectValue(static_cast<EEFFECT_TYPE>(136),static_cast<EDAMAGE_TYPES>(7))) interrupt(true);
+            }
+        }
+        int rawDamage=static_cast<int>(std::fabs(amount));
+        int damage=modifyDamage(rawDamage,effect->m_eDamageType,rawDamage,1.0f);
+        if (!damage) damage=1;
+        float maximum=effect->value(static_cast<EEFFECT_VALUES>(3));
+        float minimum=effect->value(static_cast<EEFFECT_VALUES>(2));
+        float force=UTILITIES::randomBetweenVolatile(minimum,maximum);
+        Ogre::Vector3 from=character?character->getPosition(true):getPosition(true);
+        applyDamage(*getLevel(),from,static_cast<float>(damage),effect->m_direction,force,character,false,true,true,false,0);
+        int damages[1][2]={{static_cast<int>(effect->m_eDamageType),damage}};
+        applyDamageEffects(this,static_cast<float>(damage),damages,1,false);
+        float radius=m_fBaseUnitValue194;
+        Ogre::Vector3 targetPosition=getPosition(true);
+        Ogre::Vector3 sourcePosition=character?character->getPosition(true):getPosition(true);
+        (character?character:this)->playStrikeParticle(sourcePosition,targetPosition,radius,false,false);
+        if (m_levelSound)
+        {
+            int sample=2;
+            switch (static_cast<int>(effect->m_eDamageType)) {case 2:sample=4;break;case 3:sample=3;break;case 4:sample=5;break;case 5:sample=6;break;}
+            m_levelSound->playSample(sample,m_pSceneNode,0.0f,0.0f,false);
+        }
+        if (m_fHPFloat<=0.0f)
+        {
+            if (effect->m_pSkillOwner.getObject())
+            {
+                const Ogre::Quaternion& orientation=m_pSceneNode->getOrientation();
+                Ogre::Vector3 position=getPosition(true);
+                effect->m_pSkillOwner.getObject()->triggerEvent(static_cast<ESKILL_EVENT_TYPE>(8),position,orientation,this,NULL);
+            }
+            BroadcastEvent(4);
+        }
+        return;
+    }
+    case 45: openPortal(*getLevel()); break;
+    case 56:
+    {
+        float chance=effect->value(static_cast<EEFFECT_VALUES>(0));
+        if (m_alwaysActive) chance=0.0f;
+        else if (m_champion) chance/=3.0f;
+        int roll=UTILITIES::randomIntegerBetweenVolatile(1,100);
+        if (chance>=static_cast<float>(roll))
+        {
+            roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+            if (static_cast<float>(roll)>getEffectValue(static_cast<EEFFECT_TYPE>(136),static_cast<EDAMAGE_TYPES>(7)))
+            { interrupt(true); reactToDamage(character,true); }
+        }
+        break;
+    }
+    case 57: {float duration=effect->value(static_cast<EEFFECT_VALUES>(0));transformCharacter(effect->m_sName,duration);break;}
+    case 65:
+    {
+        int level=static_cast<int>(effect->value(static_cast<EEFFECT_VALUES>(0)));
+        if (canLearnSpell(effect->m_sName,level))
+        {
+            if (isPlayer()&&m_levelSound) m_levelSound->queueGlobalSample(65,0.0f,0.1f);
+            level=static_cast<int>(effect->value(static_cast<EEFFECT_VALUES>(0)));
+            learnSpell(effect->m_sName,level);
+            m_pResourceManager->getGameUI()->queueTip(static_cast<EContextTip>(8));
+        }
+        break;
+    }
+    case 67: removePet(effect->m_sName); break;
+    case 73: transformCharacter(effect->m_sName,-999.0f); break;
+    case 74:
+        if (owner->ISA(static_cast<UNITTYPES::EUNITTYPES>(2))&&effect->m_Owner.getObject())
+            static_cast<CEquipment*>(effect->m_Owner.getObject())->executeProcs(this,static_cast<EEFFECT_TYPE>(74),this);
+        else executeProcs(static_cast<EEFFECT_TYPE>(74),this);
+        break;
+    case 110: die(character,NULL,0.0f,false); break;
+    case 111:
+        if (effect->value(static_cast<EEFFECT_VALUES>(0))==1.0f) {setVisible(false,false);m_forcedHidden=true;}
+        else {m_forcedHidden=false;setVisible(true,false);}
+        break;
+    case 112:
+        if (effect->value(static_cast<EEFFECT_VALUES>(0))==1.0f) {m_forcedHidden=false;setVisible(true,true);}
+        else {setVisible(false,true);m_forcedHidden=true;}
+        break;
+    case 113:
+        if (isPlayer())
+        {
+            std::wstring warpName=EMPTY_WSTRING;
+            int depth=static_cast<int>(effect->value(static_cast<EEFFECT_VALUES>(0)));
+            m_pResourceManager->getGameClient()->warpLevels(effect->m_sName,0,depth,false,warpName,false);
+        }
+        break;
+    case 114: if(isPlayer()){int old=m_iMeleeStat;float value=effect->value(static_cast<EEFFECT_VALUES>(0));m_iMeleeStat=static_cast<int>(static_cast<float>(old)+value);}break;
+    case 115: if(isPlayer()){int old=m_rangedStat;float value=effect->value(static_cast<EEFFECT_VALUES>(0));m_rangedStat=static_cast<int>(static_cast<float>(old)+value);}break;
+    case 116: if(isPlayer()){int old=m_magicStat;float value=effect->value(static_cast<EEFFECT_VALUES>(0));m_magicStat=static_cast<int>(static_cast<float>(old)+value);}break;
+    case 117: if(isPlayer()){int old=m_maxHPBonus;float value=effect->value(static_cast<EEFFECT_VALUES>(0));m_maxHPBonus=static_cast<int>(static_cast<float>(old)+value);}break;
+    case 118: if(isPlayer()){int old=m_defenseStat;float value=effect->value(static_cast<EEFFECT_VALUES>(0));m_defenseStat=static_cast<int>(static_cast<float>(old)+value);}break;
+    case 119: if(isPlayer()){float old=m_maxManaBonus;float value=effect->value(static_cast<EEFFECT_VALUES>(0));m_maxManaBonus=old+value;}break;
+    case 120: if(isPlayer()){int old=m_iUnusedStatPoints;float value=effect->value(static_cast<EEFFECT_VALUES>(0));m_iUnusedStatPoints=static_cast<int>(static_cast<float>(old)+value);}break;
+    case 127:
+        if (m_pSkillManager)
+        {
+            int roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+            if (effect->value(static_cast<EEFFECT_VALUES>(0))>=static_cast<float>(roll)) m_pSkillManager->stopSkillsByName(effect->m_sName,true);
+        }
+        break;
+    case 141: openMapPortal(effect->m_sName,*getLevel()); break;
+    case 142:
+        if (!m_Followers.empty())
+        {
+            unsigned int index=UTILITIES::randomIntegerBetweenVolatile(0,static_cast<int>(m_Followers.size())-1);
+            CCharacter* follower=getFollower(index);
+            if (follower)
+            {
+                Ogre::Quaternion orientation=getOrientationQuaternion();
+                Ogre::Vector3 position=getPosition(false);
+                setOrientation(follower->getOrientationQuaternion());
+                setPosition(follower->getPosition(false));
+                follower->setOrientation(orientation);
+                follower->setPosition(position);
+            }
+        }
+        break;
+    case 143:
+        if (isPlayer()) {CPlayer* player=dynamic_cast<CPlayer*>(this);if(player)player->resetSkills();}
+        break;
+    }
+}
+
+bool CCharacter::applyEffectOnUnit(CCharacter* source, CBaseUnit* target, CEffect* effect)
+{
+    if (!effect || !isEffectValidForUnit(source,target,effect)) return false;
+    if (effect->m_fValue24==-900.0f) {applyInstantEffect(effect);return true;}
+    int type=static_cast<int>(effect->m_eType);
+    if (type==47 && effect->m_fValue24!=-1000.0f) effect->m_fValue24=effect->m_fValueC0;
+    CEffect* copied=NULL;
+    bool react=false;
+    switch(type)
+    {
+    case 7: case 124: copied=copyEffect(target,effect);break;
+    case 56:
+    {
+        float chance=effect->value(static_cast<EEFFECT_VALUES>(0));
+        if(m_alwaysActive)chance=0.0f;else if(m_champion)chance/=3.0f;
+        int roll=UTILITIES::randomIntegerBetweenVolatile(1,100);
+        if(chance>=static_cast<float>(roll))
+        {
+            roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+            if(static_cast<float>(roll)>getEffectValue(static_cast<EEFFECT_TYPE>(136),static_cast<EDAMAGE_TYPES>(7)))interrupt(true);
+            react=true;
+        }
+        break;
+    }
+    case 63: copied=copyEffect(target,effect);m_movement=Ogre::Vector3::ZERO;break;
+    case 64:
+    {
+        react=true;
+        if(m_eAIState==static_cast<EAIState>(5)||m_eAIState==static_cast<EAIState>(6))break;
+        int roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+        if(!(effect->m_fValueC0>=static_cast<float>(roll)))break;
+        roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+        if(!(static_cast<float>(roll)>getEffectValue(static_cast<EEFFECT_TYPE>(139),static_cast<EDAMAGE_TYPES>(7))))break;
+        roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+        if(!(static_cast<float>(roll)>getEffectValue(static_cast<EEFFECT_TYPE>(53),static_cast<EDAMAGE_TYPES>(7))))break;
+        interrupt(true);copied=copyEffect(target,effect);break;
+    }
+    case 79:
+    {
+        if(m_eAIState==static_cast<EAIState>(5)||m_eAIState==static_cast<EAIState>(6)||isPlayer()||m_eAIState==static_cast<EAIState>(40))break;
+        int roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+        if(!(effect->m_fValueC0>=static_cast<float>(roll)))break;
+        roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+        if(!(static_cast<float>(roll)>getEffectValue(static_cast<EEFFECT_TYPE>(121),static_cast<EDAMAGE_TYPES>(7))))break;
+        if(m_eAIState!=static_cast<EAIState>(10))
+        {
+            if(m_levelSound)m_levelSound->playSample(14,m_pSceneNode,0.0f,0.0f,false);
+        }
+        if(m_eAIState!=static_cast<EAIState>(10)||m_pathGraceTime>0.5f)
+        {
+            interrupt(true);setAIState(static_cast<EAIState>(10));
+            if(effect->m_Owner.getObject()&&m_pResourceManager&&m_pResourceManager->getLevel())
+            {
+                Ogre::Vector3 ownerPosition=effect->m_Owner.getObject()->getPosition(true);
+                Ogre::Vector3 direction=getPosition(true)-ownerPosition;
+                direction.normalise();
+                direction*=UTILITIES::randomBetweenVolatile(3.0f,5.0f);
+                direction+=getPosition(true);
+                setDestination(*getLevel(),direction.x,direction.z);
+            }
+        }
+        copied=copyEffect(target,effect);break;
+    }
+    case 80: case 128:
+    {
+        if(m_eAIState==static_cast<EAIState>(5)||m_eAIState==static_cast<EAIState>(6))return false;
+        if(type==80&&isPlayer())return false;
+        int roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+        if(!(effect->m_fValueC0>=static_cast<float>(roll)))return false;
+        roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+        if(!(static_cast<float>(roll)>getEffectValue(static_cast<EEFFECT_TYPE>(type==80?137:138),static_cast<EDAMAGE_TYPES>(7))))return false;
+        copied=copyEffect(target,effect);break;
+    }
+    case 106: case 107: case 108: case 109:
+    {
+        react=true;
+        if(m_eAIState==static_cast<EAIState>(5)||m_eAIState==static_cast<EAIState>(6))break;
+        int roll=UTILITIES::randomIntegerBetweenVolatile(0,100);
+        if(!(effect->m_fValueC0>=static_cast<float>(roll)))break;
+        if(type!=106)
+        {
+            int defense=type==107?m_damageDefense[2]:type==108?m_damageDefense[5]:m_damageDefense[4];
+            float power=static_cast<float>(m_value6D0);
+            float chance=power/(static_cast<float>(defense)+power);
+            float random=UTILITIES::randomBetweenVolatile(0.0f,1.0f);
+            if(!(chance>=random))break;
+        }
+        interrupt(true);copied=copyEffect(target,effect);break;
+    }
+    case 110: die(reinterpret_cast<CCharacter*>(target),NULL,0.0f,false);break;
+    default:
+        if(effect->m_activation==EFFECT_ACTIVATION_PASSIVE||effect->m_activation==EFFECT_ACTIVATION_DYNAMIC||effect->m_activation==EFFECT_ACTIVATION_TRANSFER)
+            copied=copyEffect(target,effect);
+        break;
+    }
+    if(react)reactToDamage(reinterpret_cast<CCharacter*>(target),true);
+    if(target)
+    {
+        if(isEnemy(reinterpret_cast<CCharacter*>(target))&&(m_eAIState==static_cast<EAIState>(2)||m_eAIState==static_cast<EAIState>(0))&&effect->m_eType!=static_cast<EEFFECT_TYPE>(144))
+        {
+            getLevel()->reactToAreaDamage(reinterpret_cast<CCharacter*>(target),this);
+            reactToDamage(reinterpret_cast<CCharacter*>(target),true);
+        }
+        if(target->ISA(static_cast<UNITTYPES::EUNITTYPES>(33))&&copied)
+        {
+            float percent=getEffectValue(static_cast<EEFFECT_TYPE>(90),static_cast<EDAMAGE_TYPES>(7))/100.0f;
+            if(percent!=0.0f)
+            {
+                for(unsigned int i=0;i<4;++i)
+                {
+                    copied->m_values[i]=copied->m_values[i]*percent+copied->m_values[i];
+                    copied->calculateBaseValue(static_cast<CEffect::ECALCULATETYPES>(0));
+                }
+                float flag=static_cast<float>(copied->m_modifierFlag32);
+                copied->m_modifierFlag32=(flag*percent+flag)!=0.0f;
+                copied->m_fValueC0=copied->m_fValueC0*percent+copied->m_fValueC0;
+            }
+        }
+    }
+    return true;
+}
+
+#include "CameraShake.h"
+#include "CameraControl.h"
+int CCharacter::maxDamage(CAttackDescription* attack, CCharacter* target)
+{
+    if (!attack) {
+        attack = m_attack;
+        if (!attack) {
+            selectAttack(static_cast<EATTACK_RANGE_TYPE>(0));
+            attack = m_attack;
+            if (!attack) return 0;
+        }
+    }
+    if (target && target->ISA(static_cast<UNITTYPES::EUNITTYPES>(27))) alignment();
+    int baseDamage = 0;
+    EDAMAGE_TYPES damageType;
+    if (m_bCharacterFlag4A0) {
+        baseDamage = static_cast<int>(attack->m_DamageMaximums[0]);
+        damageType = static_cast<EDAMAGE_TYPES>(attack->m_iUnknown78);
+    } else if (!m_attacks.empty()) {
+        baseDamage = static_cast<int>(m_attacks[0]->m_DamageMaximums[0]);
+        damageType = static_cast<EDAMAGE_TYPES>(m_attacks[0]->m_iUnknown78);
+    }
+    EEQUIP_LOCATIONS location = static_cast<EEQUIP_LOCATIONS>(1);
+    if (m_attackItem && m_attackItem == m_pInventory->getEquipmentEquippedAt(static_cast<EEQUIP_LOCATIONS>(1)))
+        location = static_cast<EEQUIP_LOCATIONS>(0);
+    bool ranged = m_attackItem && m_attackItem->ISA(static_cast<UNITTYPES::EUNITTYPES>(35));
+    float bonus = getEffectValue(static_cast<EEFFECT_TYPE>(ranged ? 16 : 15), static_cast<EDAMAGE_TYPES>(7)) / 100.0f;
+    bonus += static_cast<float>(ranged ? dexterity() : strength()) / 100.0f;
+    if (m_pInventory->getEquipmentEquippedAt(static_cast<EEQUIP_LOCATIONS>(1)) &&
+        m_pInventory->getEquipmentEquippedAt(static_cast<EEQUIP_LOCATIONS>(0)) &&
+        !m_pInventory->getEquipmentEquippedAt(static_cast<EEQUIP_LOCATIONS>(1))->ISA(static_cast<UNITTYPES::EUNITTYPES>(21)))
+        bonus += getEffectValue(static_cast<EEFFECT_TYPE>(88), static_cast<EDAMAGE_TYPES>(7)) / 100.0f;
+    if (ranged) {
+        if (m_attackItem->ISA(static_cast<UNITTYPES::EUNITTYPES>(163)))
+            bonus += getEffectValue(static_cast<EEFFECT_TYPE>(102), static_cast<EDAMAGE_TYPES>(7)) / 100.0f;
+        if (m_attackItem->ISA(static_cast<UNITTYPES::EUNITTYPES>(164)))
+            bonus += getEffectValue(static_cast<EEFFECT_TYPE>(103), static_cast<EDAMAGE_TYPES>(7)) / 100.0f;
+    } else if (m_attackItem) {
+        if (m_attackItem->ISA(static_cast<UNITTYPES::EUNITTYPES>(162)))
+            bonus += getEffectValue(static_cast<EEFFECT_TYPE>(99), static_cast<EDAMAGE_TYPES>(7)) / 100.0f;
+        if (m_attackItem->ISA(static_cast<UNITTYPES::EUNITTYPES>(164)))
+            bonus += getEffectValue(static_cast<EEFFECT_TYPE>(103), static_cast<EDAMAGE_TYPES>(7)) / 100.0f;
+    }
+    bonus += getEffectValue(static_cast<EEFFECT_TYPE>(25), location, damageType) / 100.0f;
+    bonus += getEffectValue(static_cast<EEFFECT_TYPE>(25), static_cast<EDAMAGE_TYPES>(6)) / 100.0f;
+    if (m_pMaster) bonus += m_pMaster->getEffectValue(static_cast<EEFFECT_TYPE>(91), static_cast<EDAMAGE_TYPES>(7)) / 100.0f;
+    int extra = static_cast<int>(ceilf(static_cast<float>(baseDamage) * bonus));
+    int flat = static_cast<int>(ceilf(getEffectValue(static_cast<EEFFECT_TYPE>(ranged ? 1 : 0), static_cast<EDAMAGE_TYPES>(7))));
+    baseDamage += extra + flat;
+    baseDamage += static_cast<int>(getEffectValue(static_cast<EEFFECT_TYPE>(10), location, damageType));
+    return static_cast<int>(static_cast<float>(baseDamage) * m_CharacterValue720);
+}
+
+bool CCharacter::rollCritical(CCharacter* target)
+{
+    float roll = UTILITIES::randomBetweenVolatile(1.0f, 100.0f);
+    float chance = getEffectValue(static_cast<EEFFECT_TYPE>(55), static_cast<EDAMAGE_TYPES>(7)) + roll;
+    if (chance < 97.0f && static_cast<int>(ceilf(chance)) != 97 && !m_flag700) return false;
+    static std::wstring g_CriticalStrike;
+    if (g_CriticalStrike.empty()) g_CriticalStrike = CStringTranslate::getSinglton()->getTranslateString(L"Critical Strike");
+    CEGUI::colour first(0.196f, 0.745f, 1.0f, 1.0f), second(0.196f, 0.745f, 1.0f, 1.0f);
+    std::string text = STRINGS::StringConvertToUTF8(g_CriticalStrike + L"!");
+    m_pResourceManager->getLevel()->m_pGameClient->getGameUI()->addTextEvent(target->getPosition(true) + Ogre::Vector3::UNIT_Y * 1.2f, text, 1.0f, 255.0f, second, first);
+    if (m_levelSound) m_levelSound->playSample(9, m_pSceneNode, 0.0f, 0.0f, false);
+    if (ISA(static_cast<UNITTYPES::EUNITTYPES>(28))) {
+        CCameraShake* shake = new CCameraShake(L"CRITICAL", m_vForward, 0.2f);
+        shake->m_fMagnitudeMultiplier = 0.7f;
+        Ogre::Vector3 position = getPosition(true);
+        shake->m_fCameraPositionX = position.x;
+        shake->m_fCameraPositionY = position.y;
+        shake->m_fCameraPositionZ = position.z;
+        shake->m_bCameraShakeActive = true;
+        CCameraControl* control = m_pResourceManager->getCameraControl();
+        TSafePointer<CCameraShake>* pointer = OGRE_NEW_T(TSafePointer<CCameraShake>, Ogre::MEMCATEGORY_GENERAL)();
+        pointer->setObject(shake);
+        control->m_cameraShakes.add(pointer);
+    }
+    return true;
+}
+
+void CCharacter::awardFame(CLevel& level, CCharacter* source, int amount, bool bonus)
+{
+    if (!amount) return;
+    if (!ISA(static_cast<UNITTYPES::EUNITTYPES>(28)) &&
+        (!m_pMaster || !m_pMaster->ISA(static_cast<UNITTYPES::EUNITTYPES>(28))) &&
+        (!m_pMaster || !m_pMaster->m_pMaster || !m_pMaster->m_pMaster->ISA(static_cast<UNITTYPES::EUNITTYPES>(28)))) return;
+    if (!bonus) {
+        float extra = getEffectValue(static_cast<EEFFECT_TYPE>(77), static_cast<EDAMAGE_TYPES>(7)) / 100.0f;
+        amount += static_cast<int>(ceilf(static_cast<float>(amount) * extra));
+    }
+    if (m_pMaster && !bonus) m_pMaster->awardFame(level, source, amount, false);
+    else {
+        static std::wstring g_Fame;
+        if (g_Fame.empty()) g_Fame = CStringTranslate::getSinglton()->getTranslateString(L"Fame");
+        CEGUI::colour first(1.0f, 0.77f, 1.0f, 1.0f), second(1.0f, 0.77f, 1.0f, 1.0f);
+        std::string text = STRINGS::StringConvertToUTF8(STRINGS::GetValueAsWString(amount) + L" " + g_Fame);
+        m_pResourceManager->getLevel()->m_pGameClient->getGameUI()->addTextEvent(getPosition(true) + Ogre::Vector3::UNIT_Y, text, 1.0f, 255.0f, second, first);
+        int oldFame = static_cast<int>(m_fame);
+        int sum = static_cast<int>(m_fame + static_cast<unsigned int>(amount));
+        m_fame = amount > 0 && oldFame > sum ? 0x7fffffffU : static_cast<unsigned int>(std::max(0, sum));
+        ISA(static_cast<UNITTYPES::EUNITTYPES>(28));
+    }
+    int fame = static_cast<int>(m_fame), currentLevel = m_fameLevel;
+    int gate = CMasterResourceManager::getSingleton()->fameGate(currentLevel);
+    if (fame >= gate && static_cast<unsigned int>(CMasterResourceManager::getSingleton()->getMaxFameLevel()) > static_cast<unsigned int>(m_fameLevel)) {
+        for (;;) {
+            fame = static_cast<int>(m_fame); currentLevel = m_fameLevel;
+            if (fame < CMasterResourceManager::getSingleton()->fameGate(currentLevel)) return;
+            currentLevel = m_fameLevel;
+            if (static_cast<unsigned int>(CMasterResourceManager::getSingleton()->getMaxFameLevel()) <= static_cast<unsigned int>(currentLevel)) return;
+            fameUp();
+        }
+    }
+    fame = static_cast<int>(m_fame); currentLevel = m_fameLevel;
+    if (fame >= CMasterResourceManager::getSingleton()->fameGate(currentLevel)) {
+        currentLevel = m_fameLevel;
+        m_fame = CMasterResourceManager::getSingleton()->fameGate(currentLevel);
+    }
+}
+
+#include "SteamStats.h"
+void CCharacter::applyDamage(CLevel& level, const Ogre::Vector3& from, float amount,
+                            const Ogre::Vector3& direction, float force, CCharacter* attacker,
+                            bool glancing, bool react, bool hitParticle, bool silent, unsigned int flags)
+{
+    if (amount == 0.0f || m_eAIState == static_cast<EAIState>(5) || m_eAIState == static_cast<EAIState>(6) || !m_characterFlag52F) return;
+    if (m_eAIState >= static_cast<EAIState>(32) && m_eAIState <= static_cast<EAIState>(34)) {
+        setAIState(static_cast<EAIState>(2));
+        setTargetItem(NULL);
+    }
+    if (hitParticle) {
+        float radius = m_fBaseUnitValue194;
+        Ogre::Vector3 position = getPosition(true);
+        playHitParticle(from, position, radius);
+    }
+    static std::wstring g_GlancingBlow;
+    if (g_GlancingBlow.empty()) g_GlancingBlow = CStringTranslate::getSinglton()->getTranslateString(L"Glancing Blow");
+    if (glancing) {
+        bool friendly = ISA(static_cast<UNITTYPES::EUNITTYPES>(28)) ||
+            (m_pMaster && m_pMaster->ISA(static_cast<UNITTYPES::EUNITTYPES>(28)));
+        CEGUI::colour first(1.0f, friendly ? 0.2f : 0.77f, friendly ? 0.2f : 0.0f, 1.0f);
+        CEGUI::colour second(1.0f, friendly ? 0.2f : 0.77f, friendly ? 0.2f : 0.0f, 1.0f);
+        std::string text = STRINGS::StringConvertToUTF8(g_GlancingBlow + L"!");
+        level.m_pGameClient->getGameUI()->addTextEvent(getPosition(true) + Ogre::Vector3::UNIT_Y * 1.2f, text, 1.0f, 255.0f, second, first);
+    } else if (attacker != this || !attacker) m_damageOverTimeTaken += amount;
+    if (react && m_procTime <= 0.0f) executeProcs(static_cast<EEFFECT_TYPE>(81), attacker);
+    if (attacker && attacker->ISA(static_cast<UNITTYPES::EUNITTYPES>(28))) {
+        int current = CSteamStats::getSingleton()->getStatInt(static_cast<ESTATS>(3));
+        int damage = static_cast<int>(amount);
+        if (current < damage) CSteamStats::getSingleton()->setStatInt(static_cast<ESTATS>(3), static_cast<unsigned int>(damage));
+    }
+    modifyHP(-amount);
+    if (m_fHPFloat <= 0.0f) {
+        float threshold = static_cast<float>(maxHP()) * 1.75f;
+        die(attacker, &direction, force, silent || amount >= threshold);
+        if (attacker) {
+            attacker->awardExperience(level, this, m_experienceReward, false);
+            attacker->awardFame(level, this, m_fameReward, false);
+            m_experienceReward = 0;
+            m_fameReward = 0;
+        }
+    }
+    if (attacker && react) {
+        level.reactToAreaDamage(attacker, this);
+        if (m_fHPFloat > 0.0f) reactToDamage(attacker, true);
+    }
+    if (react && !(flags & 0x300) && attacker && m_fHPFloat > 0.0f &&
+        attacker->m_eAIState != static_cast<EAIState>(5) && attacker->m_eAIState != static_cast<EAIState>(6) &&
+        (getEffectValue(static_cast<EEFFECT_TYPE>(48), static_cast<EDAMAGE_TYPES>(7)) != 0.0f ||
+         getEffectValue(static_cast<EEFFECT_TYPE>(32), static_cast<EDAMAGE_TYPES>(7)) != 0.0f)) {
+        float percent = getEffectValue(static_cast<EEFFECT_TYPE>(32), static_cast<EDAMAGE_TYPES>(7)) / 100.0f;
+        int reflected = attacker->modifyDamage(static_cast<int>(amount * percent), static_cast<EDAMAGE_TYPES>(0), static_cast<int>(amount), percent);
+        float flat = getEffectValue(static_cast<EEFFECT_TYPE>(48), static_cast<EDAMAGE_TYPES>(7));
+        attacker->HP();
+        Ogre::Vector3 position = getPosition(false);
+        attacker->applyDamage(level, position, flat + static_cast<float>(reflected), direction, 0.0f, this, false, false, flags != 0, false, 0);
+    }
+    if (m_pAIManager && !m_targetCharacter.getObject()) m_pAIManager->addAIFlag(static_cast<EAIFLAG_TYPES>(0), 3.0f);
+}
+
+
+bool CCharacter::canCastCurrentSkill(CBaseUnit* target, bool testCast, bool skipChance)
+{
+    if (!m_pSkillManager || !getEnabled() || !m_activeSkill) return false;
+    if (!skipChance && !m_activeSkill->rollCastChance()) return false;
+    int available = mana();
+    int cost = m_activeSkill->getManaCost();
+    bool sufficient = available >= cost;
+    if (sufficient) {
+        available = mana();
+        cost = m_activeSkill->getManaCostOT();
+        sufficient = available >= cost;
+    }
+    if (!sufficient) {
+        if (isPlayer()) {
+            m_pResourceManager->getGameUI()->queueTip(static_cast<EContextTip>(4));
+            if (m_levelSound) m_levelSound->queueGlobalSample(53, 0.0f, 0.1f);
+        }
+        return false;
+    }
+    if (m_pSkillManager->getSkillIsCooling(m_activeSkill)) return false;
+    if (!target) {
+        target = m_targetCharacter.getObject();
+        if (!target) target = m_targetItem.getObject();
+    }
+    if (target && !isPlayer() && dynamic_cast<CCharacter*>(target) &&
+        m_activeSkill->getTargetType() != 3 && m_activeSkill->getTargetType() != 10 &&
+        m_activeSkill->getTargetType() != 1 && m_activeSkill->getTargetType() != 11 &&
+        m_activeSkill->getTargetType() != 6 && m_activeSkill->getTargetType() != 5) {
+        EAlignment targetAlignment = getTargetAlignment();
+        if (m_activeSkill->getTargetType() == 2 && m_activeSkill->m_iTargetAlignment == 1 && targetAlignment == static_cast<EAlignment>(6))
+            targetAlignment = static_cast<EAlignment>(2);
+        Ogre::Vector3 position = getPosition(true);
+        CCharacter* character = dynamic_cast<CCharacter*>(target);
+        if (!m_activeSkill->getTargetIsValid(character, this, &position, false)) {
+            Ogre::Vector3 right = Ogre::Vector3::UNIT_Y.crossProduct(m_targetDirection);
+            Ogre::Quaternion orientation;
+            orientation.FromAxes(right, Ogre::Vector3::UNIT_Y, m_targetDirection);
+            Ogre::Matrix4 view(orientation);
+            view.setTrans(m_vPosition);
+            float skillRange = m_activeSkill->getRange();
+            float radius = m_attackRadius;
+            float scale = m_vScale.z;
+            float rangeScale = m_attackRangeScale;
+            float angle = m_activeSkill->getFindTargetAngle();
+            CCharacter* found = getLevel()->findCharacterWithinView(view, targetAlignment, 0.0f, angle,
+                ((radius * scale + 0.2f) + skillRange) * rangeScale + 1.0f, true, this, m_activeSkill);
+            if (!found) return false;
+            target = found;
+            setTarget(found);
+        }
+    }
+    return m_pSkillManager->getSkillCanBeExecuted(m_activeSkill, this, static_cast<ESKILL_ACTIVATION_TYPE>(3), m_targetPosition, target, testCast);
+}
+
+#include "QuestManager.h"
+
+void CCharacter::approachAI(float, CLevel&)
+{
+    CPositionableObject* target = m_targetCharacter.getObject();
+    if (!target) target = m_targetItem.getObject();
+    if (!target) {
+        setAIState(static_cast<EAIState>(0));
+        return;
+    }
+    Ogre::Vector3 position = getPosition(true);
+    Ogre::Vector3 destination = target->getPosition(true);
+    Ogre::Vector3 difference = destination - position;
+    difference.y = 0.0f;
+    float distance = difference.length();
+    m_returningToTown = distance >= m_nearWalkRadius;
+    if (distance <= 2.0f || (!m_isPathing && distance <= 2.75f)) {
+        stopPathing();
+        CCharacter* character = m_targetCharacter.getObject();
+        EAIState state;
+        bool stopTarget = true;
+        if (CQuestManager::getSingleton()->getQuestForNPC(character)) state = static_cast<EAIState>(30);
+        else if (character->ISA(static_cast<UNITTYPES::EUNITTYPES>(130))) state = static_cast<EAIState>(21);
+        else if (character->ISA(static_cast<UNITTYPES::EUNITTYPES>(175))) state = static_cast<EAIState>(27);
+        else if (character->ISA(static_cast<UNITTYPES::EUNITTYPES>(132))) state = static_cast<EAIState>(25);
+        else if (character->ISA(static_cast<UNITTYPES::EUNITTYPES>(133))) state = static_cast<EAIState>(26);
+        else if (character->ISA(static_cast<UNITTYPES::EUNITTYPES>(134))) state = static_cast<EAIState>(17);
+        else if (character->ISA(static_cast<UNITTYPES::EUNITTYPES>(41))) state = static_cast<EAIState>(19);
+        else if (character->ISA(static_cast<UNITTYPES::EUNITTYPES>(128))) {
+            state = static_cast<EAIState>(36);
+            stopTarget = false;
+        } else if (character->ISA(static_cast<UNITTYPES::EUNITTYPES>(170))) {
+            if (m_pResourceManager->getGameClient()->getPlayerIsCheat()) return;
+            state = static_cast<EAIState>(37);
+            stopTarget = false;
+        } else if (character->ISA(static_cast<UNITTYPES::EUNITTYPES>(104))) state = static_cast<EAIState>(30);
+        else {
+            if (!m_isPathing) {
+                setTarget(NULL);
+                setAIState(static_cast<EAIState>(2));
+            }
+            return;
+        }
+        setAIState(state);
+        if (stopTarget) {
+            m_targetCharacter.getObject()->setTarget(this);
+            m_targetCharacter.getObject()->stopPathing();
+        }
+    } else if (!m_isPathing) {
+        setTarget(NULL);
+        setAIState(static_cast<EAIState>(2));
+    }
+}
+
+void CCharacter::attackAI(float elapsed, CLevel& level)
+{
+    CCharacter* character = m_targetCharacter.getObject();
+    if ((character && (character->m_eAIState == static_cast<EAIState>(5) ||
+         character->m_eAIState == static_cast<EAIState>(6) || isPetNearDeath() ||
+         m_targetCharacter.getObject()->isPetNearDeath() || !m_targetCharacter.getObject()->availableForCommand())) ||
+        (!m_targetCharacter.getObject() && (!m_targetItem.getObject() ||
+         !m_targetItem.getObject()->ISA(static_cast<UNITTYPES::EUNITTYPES>(29))))) {
+        setAIState(static_cast<EAIState>(0));
+        setTarget(NULL);
+        setTargetItem(NULL);
+        return;
+    }
+    if (!m_attack) selectAttack(ATTACK_RANGE_DEFAULT);
+    if (!m_attack) {
+        setAIState(static_cast<EAIState>(0));
+        setTarget(NULL);
+        return;
+    }
+    Ogre::Vector3 position = getPosition(true);
+    CPositionableObject* target = m_targetCharacter.getObject();
+    if (!target) target = m_targetItem.getObject();
+    Ogre::Vector3 destination = target->getPosition(true);
+    Ogre::Vector3 difference = destination - position;
+    difference.y = 0.0f;
+    float distance = difference.length();
+    if (distance >= m_followRange && !m_pMaster) {
+        stopPathing();
+        setAIState(static_cast<EAIState>(2));
+        setTarget(NULL);
+        return;
+    }
+    if ((inAttackRange(ATTACK_RANGE_DEFAULT) && validLineOfSight(level, false)) || m_moveInputHeld) {
+        stopPathing();
+        CPositionableObject* current = m_targetCharacter.getObject();
+        if (!current) current = m_targetItem.getObject();
+        Ogre::Vector3 targetPosition = current->getPosition(true);
+        turnTowardPosition(targetPosition, elapsed);
+        if (facingTarget()) {
+            attack();
+            setAIState(static_cast<EAIState>(0));
+        }
+        if (m_pMaster && !ISA(static_cast<UNITTYPES::EUNITTYPES>(169))) {
+            Ogre::Vector3 own = getPosition(true);
+            Ogre::Vector3 master = m_pMaster->getPosition(true);
+            Ogre::Vector3 delta = master - own;
+            delta.y = 0.0f;
+            if (delta.length() > 35.0f) {
+                setTarget(NULL);
+                setAIState(static_cast<EAIState>(2));
+            }
+        }
+    } else {
+        if (m_attack && m_attackTime > 0.2f) return;
+        if (m_activeSkill && (m_skillLooping || (m_skillTime > 0.0f && !m_skillInterrupted))) return;
+        setAIState(static_cast<EAIState>(4));
+    }
+}
+
+void CCharacter::skillAI(float elapsed, CLevel& level)
+{
+    CCharacter* character = m_targetCharacter.getObject();
+    if ((character && (character->m_eAIState == static_cast<EAIState>(5) ||
+         character->m_eAIState == static_cast<EAIState>(6) || isPetNearDeath() ||
+         m_targetCharacter.getObject()->isPetNearDeath() || !m_targetCharacter.getObject()->availableForCommand())) ||
+        (!m_targetCharacter.getObject() && (!m_targetItem.getObject() ||
+         !m_targetItem.getObject()->ISA(static_cast<UNITTYPES::EUNITTYPES>(29))))) {
+        setAIState(static_cast<EAIState>(0));
+        setTarget(NULL);
+        setTargetItem(NULL);
+        return;
+    }
+    if (!m_activeSkill) {
+        setAIState(static_cast<EAIState>(0));
+        setTarget(NULL);
+        return;
+    }
+    Ogre::Vector3 position = getPosition(true);
+    CPositionableObject* target = m_targetCharacter.getObject();
+    if (!target) target = m_targetItem.getObject();
+    Ogre::Vector3 destination = target->getPosition(true);
+    Ogre::Vector3 difference = destination - position;
+    difference.y = 0.0f;
+    float distance = difference.length();
+    if (!ISA(static_cast<UNITTYPES::EUNITTYPES>(28)) && distance >= m_followRange && !m_pMaster) {
+        stopPathing();
+        setAIState(static_cast<EAIState>(2));
+        setTarget(NULL);
+        return;
+    }
+    int range = inSkillRange(-1, false);
+    if (range == 1) {
+        if (!ISA(static_cast<UNITTYPES::EUNITTYPES>(28))) {
+            stopPathing();
+            setAIState(static_cast<EAIState>(2));
+            setTarget(NULL);
+            return;
+        }
+        range = 0;
+    }
+    bool needsSight = m_activeSkill->getTargetType() != 3 && m_activeSkill->getTargetType() != 10 &&
+        m_activeSkill->getTargetType() != 9;
+    if ((range == 0 && (!needsSight || validLineOfSight(level, false))) || m_moveInputHeld) {
+        stopPathing();
+        CPositionableObject* current = m_targetCharacter.getObject();
+        if (!current) current = m_targetItem.getObject();
+        Ogre::Vector3 targetPosition = current->getPosition(true);
+        turnTowardPosition(targetPosition, elapsed);
+        if (facingTarget() && !castSkill(-1)) setAIState(static_cast<EAIState>(2));
+        if (m_pMaster && !ISA(static_cast<UNITTYPES::EUNITTYPES>(169))) {
+            Ogre::Vector3 own = getPosition(true);
+            Ogre::Vector3 master = m_pMaster->getPosition(true);
+            Ogre::Vector3 delta = master - own;
+            delta.y = 0.0f;
+            if (delta.length() > 35.0f) {
+                setTarget(NULL);
+                setAIState(static_cast<EAIState>(2));
+            }
+        }
+    } else {
+        if (m_activeSkill && (m_skillLooping || (m_skillTime > 0.0f && !m_skillInterrupted))) return;
+        if (canCastCurrentSkill(m_targetCharacter.getObject(), true, true))
+            setAIState(static_cast<EAIState>(15));
+        else {
+            m_activeSkill = NULL;
+            setAIState(static_cast<EAIState>(2));
+            updateAI(0.0f, true);
+        }
+    }
+}
+
+void CCharacter::huntAI(float elapsed, CLevel& level)
+{
+    CCharacter* character = m_targetCharacter.getObject();
+    if ((character && (character->m_eAIState == static_cast<EAIState>(5) ||
+         character->m_eAIState == static_cast<EAIState>(6) || isPetNearDeath() ||
+         m_targetCharacter.getObject()->isPetNearDeath())) ||
+        (!m_targetCharacter.getObject() && (!m_targetItem.getObject() ||
+         !m_targetItem.getObject()->ISA(static_cast<UNITTYPES::EUNITTYPES>(29)))) ||
+        (m_targetCharacter.getObject() && isFriend(m_targetCharacter.getObject()))) {
+        setAIState(static_cast<EAIState>(0));
+        setTarget(NULL);
+        setTargetItem(NULL);
+        return;
+    }
+    Ogre::Vector3 position = getPosition(true);
+    CPositionableObject* target = m_targetCharacter.getObject();
+    if (!target) target = m_targetItem.getObject();
+    Ogre::Vector3 destination = target->getPosition(true);
+    Ogre::Vector3 difference = destination - position;
+    difference.y = 0.0f;
+    float distance = difference.length();
+    if (!ISA(static_cast<UNITTYPES::EUNITTYPES>(28)) && distance >= m_followRange &&
+        (!m_pMaster || !m_pMaster->isPlayer()) && !m_moveInputHeld) {
+        stopPathing();
+        setAIState(static_cast<EAIState>(0));
+        setTarget(NULL);
+        setTargetItem(NULL);
+        return;
+    }
+    bool sight = validLineOfSight(level, false);
+    bool range = inAttackRange(ATTACK_RANGE_DEFAULT);
+    if ((!range || !sight) && !m_moveInputHeld && m_pathGraceTime > 0.5f) {
+        bool follow = !m_isPathing;
+        if (m_isPathing && m_targetCharacter.getObject()) {
+            Ogre::Vector3 current = m_targetCharacter.getObject()->getPosition(true);
+            Ogre::Vector3 delta = current - m_targetPosition;
+            delta.y = 0.0f;
+            follow = delta.length() >= 1.0f;
+        }
+        if (follow) {
+            if (m_targetCharacter.getObject()) followCharacter(m_targetCharacter.getObject(), level);
+            else {
+                float z = m_targetItem.getObject()->getPosition(true).z;
+                float x = m_targetItem.getObject()->getPosition(true).x;
+                setDestination(level, x, z);
+            }
+        }
+        if (!m_isPathing) {
+            setTarget(NULL);
+            setTargetItem(NULL);
+            setAIState(static_cast<EAIState>(0));
+            return;
+        }
+    }
+    if ((inAttackRange(ATTACK_RANGE_DEFAULT) && sight && canAttackWithCurrentWeapon()) || m_moveInputHeld) {
+        setAIState(static_cast<EAIState>(3));
+        stopPathing();
+        updateAI(elapsed, true);
+    }
+}
+
+void CCharacter::getItemAI(float, CLevel& level)
+{
+    if (!m_targetItem.getObject()) {
+        setAIState(static_cast<EAIState>(0));
+        return;
+    }
+    if (m_pMaster) m_returningToTown = true;
+    Ogre::Vector3 position = getPosition(true);
+    Ogre::Vector3 destination = m_targetItem.getObject()->getPosition(true);
+    Ogre::Vector3 difference = destination - position;
+    difference.y = 0.0f;
+    float distance = difference.length();
+    if (m_targetItem.getObject()->ISA(static_cast<UNITTYPES::EUNITTYPES>(30))) {
+        if (m_targetItem.getObject()->ISA(static_cast<UNITTYPES::EUNITTYPES>(29))) {
+            bool sight = validLineOfSight(level, false);
+            if (inAttackRange(ATTACK_RANGE_DEFAULT) && sight) {
+                stopPathing();
+                if (facingTarget()) {
+                    attack();
+                    setAIState(static_cast<EAIState>(0));
+                }
+                return;
+            }
+        }
+    } else if (m_targetItem.getObject()->ISA(static_cast<UNITTYPES::EUNITTYPES>(32))) {
+        bool sight = validLineOfSight(level, true);
+        if (inInteractionRange() && sight) {
+            stopPathing();
+            if (!facingTarget()) return;
+            if (m_targetItem.getObject()->ISA(static_cast<UNITTYPES::EUNITTYPES>(122))) startFishing();
+            else if (m_targetItem.getObject()->ISA(static_cast<UNITTYPES::EUNITTYPES>(157))) setAIState(static_cast<EAIState>(22));
+            else if (m_targetItem.getObject()->ISA(static_cast<UNITTYPES::EUNITTYPES>(158))) setAIState(static_cast<EAIState>(23));
+            else if (m_targetItem.getObject()->ISA(static_cast<UNITTYPES::EUNITTYPES>(159))) setAIState(static_cast<EAIState>(24));
+            else {
+                setAIState(static_cast<EAIState>(0));
+                m_targetItem.getObject()->interact(this);
+            }
+            return;
+        }
+    } else if (inInteractionRange()) {
+        setAIState(static_cast<EAIState>(0));
+        getItem(m_targetItem.getObject(), level);
+        return;
+    }
+    if (distance > m_fBaseUnitValue194) {
+        if (m_isPathing) return;
+        float z = m_targetItem.getObject()->getPosition(true).z;
+        float x = m_targetItem.getObject()->getPosition(true).x;
+        setDestination(level, x, z);
+        removeFromAvoidanceMap(level);
+    }
+    if (!m_isPathing) {
+        setTargetItem(NULL);
+        setAIState(static_cast<EAIState>(2));
+    }
+}
+
+void CCharacter::skillApproachAI(float elapsed, CLevel& level, long long guid)
+{
+    CCharacter* character = m_targetCharacter.getObject();
+    if ((character && (character->m_eAIState == static_cast<EAIState>(5) ||
+         character->m_eAIState == static_cast<EAIState>(6) || isPetNearDeath() ||
+         m_targetCharacter.getObject()->isPetNearDeath())) ||
+        (!m_targetCharacter.getObject() && !m_targetItem.getObject())) {
+        setAIState(static_cast<EAIState>(0));
+        setTarget(NULL);
+        return;
+    }
+    if ((!m_targetCharacter.getObject() && !m_targetItem.getObject()->ISA(static_cast<UNITTYPES::EUNITTYPES>(29))) ||
+        (m_targetCharacter.getObject() && isFriend(m_targetCharacter.getObject()))) {
+        setAIState(static_cast<EAIState>(0));
+        setTarget(NULL);
+        setTargetItem(NULL);
+        return;
+    }
+    if (guid == -1 && m_activeSkill) guid = m_activeSkill->getGuid();
+    if (!m_pSkillManager || !m_pSkillManager->knownSkills(static_cast<ESKILL_ACTIVATION_TYPE>(0))) return;
+    if (m_activeSkill != m_pSkillManager->getSkillByGuid(guid)) m_activeSkill = m_pSkillManager->getSkillByGuid(guid);
+    if (!m_activeSkill) return;
+    if (!canCastCurrentSkill(m_targetCharacter.getObject(), true, true)) {
+        setAIState(static_cast<EAIState>(2));
+        updateAI(0.0f, true);
+        return;
+    }
+    Ogre::Vector3 position = getPosition(true);
+    CPositionableObject* target = m_targetCharacter.getObject();
+    if (!target) target = m_targetItem.getObject();
+    Ogre::Vector3 destination = target->getPosition(true);
+    Ogre::Vector3 difference = destination - position;
+    difference.y = 0.0f;
+    float distance = difference.length();
+    m_returningToTown = distance >= m_nearWalkRadius;
+    if (!ISA(static_cast<UNITTYPES::EUNITTYPES>(28)) && (!m_pMaster || !m_pMaster->isPlayer()) &&
+        distance >= m_followRange && !m_moveInputHeld) {
+        stopPathing();
+        setAIState(static_cast<EAIState>(0));
+        setTarget(NULL);
+        setTargetItem(NULL);
+        return;
+    }
+    bool sight = m_activeSkill->getTargetType() == 3 || m_activeSkill->getTargetType() == 10 ||
+        m_activeSkill->getTargetType() == 9;
+    if (!sight) sight = validLineOfSight(level, false);
+    int range = inSkillRange(guid, false);
+    if (range == 1) {
+        if (!ISA(static_cast<UNITTYPES::EUNITTYPES>(28))) {
+            m_activeSkill = NULL;
+            stopPathing();
+            setAIState(static_cast<EAIState>(2));
+            setTarget(NULL);
+            return;
+        }
+        range = 0;
+    }
+    if ((range != 0 || !sight) && !m_moveInputHeld && m_pathGraceTime > 1.0f) {
+        bool follow = !m_isPathing;
+        if (m_isPathing && m_targetCharacter.getObject()) {
+            Ogre::Vector3 current = m_targetCharacter.getObject()->getPosition(true);
+            Ogre::Vector3 delta = current - m_targetPosition;
+            delta.y = 0.0f;
+            follow = delta.length() >= 4.0f;
+        }
+        if (follow) {
+            if (m_activeSkill && m_activeSkill->rollCancelChance() && elapsed != 0.0f) {
+                setAIState(static_cast<EAIState>(2));
+                updateAI(0.0f, true);
+                return;
+            }
+            if (m_targetCharacter.getObject()) followCharacter(m_targetCharacter.getObject(), level);
+            else {
+                float z = m_targetItem.getObject()->getPosition(true).z;
+                float x = m_targetItem.getObject()->getPosition(true).x;
+                setDestination(level, x, z);
+            }
+        }
+        if (!m_isPathing) {
+            setTarget(NULL);
+            setTargetItem(NULL);
+            setAIState(static_cast<EAIState>(0));
+            return;
+        }
+    }
+    if ((inSkillRange(guid, false) == 0 && sight) || m_moveInputHeld) {
+        setAIState(static_cast<EAIState>(13));
+        stopPathing();
+        updateAI(elapsed, true);
+    }
+}

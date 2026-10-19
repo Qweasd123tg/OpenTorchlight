@@ -22,25 +22,10 @@ void CSoundManager::incrementSoundBank()
     ++m_iUnknown10;
 }
 
-long long CSoundManager::fmodFileCloseCallback(void*, void*)
+FMOD_RESULT CSoundManager::fmodFileCloseCallback(void* handle, void*)
 {
-    struct Releaseable
-    {
-        virtual ~Releaseable() {}
-        virtual void release() {}
-    };
-
-    if (m_pUnknown20 != 0)
-    {
-        if (m_pUnknown28 != 0)
-        {
-            if (--*static_cast<int *>(m_pUnknown28) == 0)
-                reinterpret_cast<Releaseable *>(&m_iUnknown18)->release();
-        }
-        m_pUnknown20 = 0;
-        m_pUnknown28 = 0;
-    }
-    return 0;
+    static_cast<CSoundInstance*>(handle)->m_stream.setNull();
+    return FMOD_OK;
 }
 
 unsigned int CSoundManager::soundLoops(CSoundInstance* sound)
@@ -416,4 +401,164 @@ float CSoundManager::playMusic(std::wstring& name,bool loop)
         updateAudioLevels(sound,music,soundMute,musicMute);
     }
     return getSoundLength(m_iUnknown6D0);
+}
+
+#include "FmodErrors.h"
+
+float CSoundManager::getSoundLength(CSoundInstance* instance)
+{
+    if (instance && instance->m_pSound) {
+        unsigned int milliseconds;
+        FMOD_RESULT result = instance->m_pSound->getLength(&milliseconds, 1);
+        if (result == FMOD_OK)
+            return static_cast<float>(milliseconds) / 1000.0f;
+        const char* error = FMOD_ErrorString(result);
+        std::string prefix("SoundManager::GetSoundLength could not get length  FMOD Error:");
+        Ogre::LogManager::getSingleton().logMessage(prefix + error);
+    }
+    return 0.0f;
+}
+
+#include "MasterResourceManager.h"
+#include "Console.h"
+#include "Utilities.h"
+#include <algorithm>
+#include <OgreException.h>
+
+int CSoundManager::playSound(CSoundInstance* instance, Ogre::SceneNode* node,
+                            int requestedChannel, float volume)
+{
+    if (!(m_bUnknown6A9 && m_bUnknown6A8) && instance) {
+        int type = static_cast<int>(instance->m_soundType);
+        if (type != 4 && type != 2 && type != 6 && type != 5)
+            return -1;
+    }
+    if (volume <= 0.0f) {
+        if (CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_SOUND_DEBUG))
+            CMasterResourceManager::getSingleton()->m_console->addTextNoHistory(
+                L"CULLED ZERO VOLUME SOUND : " + instance->m_soundName);
+        return -1;
+    }
+    if (!instance)
+        return -1;
+    FMOD::Channel* channel;
+    if (requestedChannel != -1 && requestedChannel <= 63 && m_channels[requestedChannel].m_iUnknown10 &&
+        (static_cast<int>(instance->m_soundType) == 4 || static_cast<int>(instance->m_soundType) == 2 ||
+         static_cast<int>(instance->m_soundType) == 6)) {
+        if (m_iUnknown18->getChannel(requestedChannel, &channel) == FMOD_OK) {
+            bool playing;
+            FMOD_RESULT state = channel->isPlaying(&playing);
+            ++m_iUnknown14;
+            if (state == FMOD_OK && playing && m_channels[requestedChannel].m_iUnknown10 == node)
+                return requestedChannel;
+            stopSound(requestedChannel);
+        }
+    }
+    FMOD_RESULT result = m_iUnknown18->playSound(FMOD_CHANNEL_FREE, instance->m_pSound, true, &channel);
+    if (result != FMOD_OK) {
+        const char* error = FMOD_ErrorString(result);
+        std::string prefix("SoundManager::PlaySound could not play sound  FMOD Error:");
+        Ogre::LogManager::getSingleton().logMessage(prefix + error);
+        return -1;
+    }
+    ++m_iUnknown14;
+    int channelIndex;
+    channel->getIndex(&channelIndex);
+    if (requestedChannel > 63) {
+        channel->stop();
+        return -1;
+    }
+    m_channels[channelIndex].m_iUnknown10 = node;
+    channel->setVolume(std::min(volume + UTILITIES::randomBetweenVolatile(0.0f, instance->m_volume), 1.0f));
+    channel->setPaused(false);
+    if (CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_SOUND_DEBUG)) {
+        Ogre::UTFString text(L"PLAYING SOUND : " + instance->m_soundName + L" on channel ");
+        text = text + Ogre::UTFString(STRINGS::GetValueAsString(channelIndex));
+        CMasterResourceManager::getSingleton()->m_console->addTextNoHistory(text.asWStr());
+    }
+    return channelIndex;
+}
+
+CSoundInstance* CSoundManager::createSound(std::wstring name, SOUND_TYPE type, bool,
+                                         float volume, float variance)
+{
+    if (!m_bUnknown6A8)
+        return NULL;
+    if (static_cast<int>(type) != 5 && static_cast<int>(type) != 6) {
+        CSoundInstance* existing = findSound(name, type, false, volume, variance);
+        if (existing) {
+            ++existing->m_referenceCount;
+            return existing;
+        }
+    }
+    CSoundInstance* instance = new CSoundInstance;
+    instance->m_soundName = name;
+    instance->m_soundType = type;
+    instance->m_loop = false;
+    instance->m_volume = volume;
+    instance->m_volumeVariance = 0;
+    unsigned int flags = STRINGS::StringUpper(name).find(L".OGG") == std::wstring::npos ? 0x20 : 0x40;
+    FMOD::Sound* sound;
+    FMOD_RESULT result;
+    switch (static_cast<int>(type)) {
+    case 1: flags |= 0x1000010; break;
+    case 2: flags |= 0x1000012; break;
+    case 3: flags |= 0x1000009; break;
+    case 4: flags |= 0x100000a; break;
+    case 5: flags |= 0x1000008; break;
+    case 6: flags |= 0x100000a; break;
+    default:
+        delete instance;
+        Ogre::LogManager::getSingleton().logMessage(static_cast<std::string>(
+            Ogre::UTFString("SoundManager::CreateSound could not load sound '") +
+            Ogre::UTFString(name) + Ogre::UTFString("' (invalid soundType)")));
+        return NULL;
+    }
+    if (static_cast<int>(type) == 5 || static_cast<int>(type) == 6)
+        result = m_iUnknown18->createStream(reinterpret_cast<const char*>(instance), flags, NULL, &sound);
+    else
+        result = m_iUnknown18->createSound(reinterpret_cast<const char*>(instance), flags, NULL, &sound);
+    if (result != FMOD_OK) {
+        delete instance;
+        Ogre::LogManager::getSingleton().logMessage(static_cast<std::string>(
+            Ogre::UTFString("SoundManager::CreateSound could not load sound '") +
+            Ogre::UTFString(name) + Ogre::UTFString("'  FMOD Error:") + Ogre::UTFString(FMOD_ErrorString(result))));
+        return NULL;
+    }
+    instance->m_pSound = sound;
+    ++instance->m_referenceCount;
+    m_pendingSounds.add(instance);
+    Ogre::LogManager::getSingleton().logMessage("Total sounds loaded: " + Ogre::StringConverter::toString(m_pendingSounds.size()));
+    return instance;
+}
+
+void CSoundManager::initialize(CSettings* settings)
+{
+    m_pDynamicPropertyFile = settings;
+    const char* sourceFile = "/builddir/Torchlight/TorchlightMacPort_09b/Projects_9156/Delvers/Delvers/sound/SoundManager.cpp";
+    if (m_bUnknown6C8) {
+        FMOD_RESULT result = FMOD::System_Create(&m_iUnknown18);
+        if (result != FMOD_OK)
+            throw Ogre::InternalErrorException(7, "FMOD error! (" + Ogre::StringConverter::toString(static_cast<int>(result)) + "): " + FMOD_ErrorString(result),
+                "SoundManager::Initialize", sourceFile, 291);
+        if (m_iUnknown18->init(64, 0, NULL) != FMOD_OK)
+            return;
+        result = m_iUnknown18->setFileSystem(&CSoundManager::fmodFileOpenCallback,
+            &CSoundManager::fmodFileCloseCallback, &CSoundManager::fmodFileReadCallback,
+            &CSoundManager::fmodFileSeekCallback, NULL, NULL, 2048);
+        if (result != FMOD_OK)
+            throw Ogre::InternalErrorException(7, "FMOD error! (" + Ogre::StringConverter::toString(static_cast<int>(result)) + "): " + FMOD_ErrorString(result),
+                "SoundManager::Initialize", sourceFile, 310);
+        m_iUnknown18->createSoundGroup("Music", &m_iUnknown6E0);
+        m_iUnknown18->createChannelGroup("MusicChannel", &m_iUnknown6E8);
+        m_bUnknown6A8 = true;
+    }
+    if (m_pDynamicPropertyFile) {
+        int musicMuted = m_pDynamicPropertyFile->GetInt(KSETTINGS_MUSICMUTE);
+        int soundMuted = m_pDynamicPropertyFile->GetInt(KSETTINGS_SOUNDMUTE);
+        float musicVolume = m_pDynamicPropertyFile->GetFloat(KSETTINGS_F_MUSICVOLUME);
+        float soundVolume = m_pDynamicPropertyFile->GetFloat(KSETTINGS_F_SOUNDVOLUME);
+        updateAudioLevels(soundVolume, musicVolume, soundMuted != 0, musicMuted != 0);
+    }
+    Ogre::LogManager::getSingleton().logMessage("SoundManager Initialized");
 }

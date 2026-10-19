@@ -27,6 +27,7 @@ class CPath;
 class CAstarPathfinder;
 class CAttackDescription;
 class CSoundBank;
+class CCollisionModel;
 class CWeaponTrail;
 
 // Default range selection used by selectAttack in the original.
@@ -470,7 +471,7 @@ private:
     friend class CMonster;
     float m_pathTime; // +0x1e8
     float m_damageOverTimeTaken; // +0x1ec
-    unsigned char m_Padding1F0[4];
+    float m_damageDisplayTime; // +0x1f0
     bool m_groundFlag; // +0x1f4
     bool m_attackFlag1F5;
     unsigned char m_Padding1F6[0xa];
@@ -487,7 +488,7 @@ private:
     float m_moveSpeed; // +0x258
     unsigned char m_Padding25C[0x8];
     bool m_isPathing; // +0x264
-    unsigned char m_Padding265;
+    bool m_turnFlag265; // +0x265, turnToward angular-change flag
     bool m_moveInputHeld;
     bool m_skillLooping; // +0x267
     CAstarPathfinder* m_pathfinder; // +0x268
@@ -496,12 +497,12 @@ private:
     unsigned char m_Padding27C[4];
     float m_idleSoundTime; // +0x280
     float m_fidgetTime; // +0x284
-    unsigned char m_Padding288[4];
+    float m_turnRate288; // +0x288, turnToward rate
     float m_walkingSpeed; // +0x28c
     float m_runningSpeed; // +0x290
     unsigned char m_Padding294[4];
     CSoundBank* m_levelSound; // +0x298
-    unsigned char m_Padding2A0[8];
+    CSoundBank* m_secondarySound; // +0x2a0
     unsigned int m_aiAnimation; // +0x2a8
     unsigned char m_Padding2AC[4];
     Ogre::Bone* m_rightHandBone; // +0x2b0
@@ -540,7 +541,8 @@ private:
     float m_attackTime; // +0x378
     bool m_attackEvent; // +0x37c
     bool m_skillInterrupted; // +0x37d
-    unsigned char m_Padding37E[0x2];
+    bool m_attackFlag37E; // +0x37e, selectAttack alternate-hand selector
+    unsigned char m_Padding37F;
     float m_skillTime; // +0x380
     bool m_skillEventTriggered; // +0x384
     unsigned char m_Padding385[3];
@@ -562,7 +564,7 @@ private:
     float m_fHPFloat;
     int m_maxHPBase; // +0x418
     int m_maxHPBonus; // +0x41c
-    unsigned char m_Padding420[0x4];
+    float m_previousThresholdHP; // +0x420
     int m_naturalArmor; // +0x424
     int m_rangedStat; // +0x428
     int m_iMeleeStat;
@@ -598,7 +600,8 @@ private:
     unsigned char m_Padding4A1[7];
     TArrayList<CParticle*> m_equipmentParticles; // +0x4a8
     std::wstring m_characterDisplayName; // +0x4c0; original-owned display text
-    unsigned char m_Padding4C8[0x14];
+    CCollisionModel* m_collisionModel; // +0x4c8
+    unsigned char m_Padding4D0[12];
     float m_attackRangeScale; // +0x4dc
     float m_attackRadius; // +0x4e0
     unsigned char m_Padding4E4[4];
@@ -611,7 +614,7 @@ private:
     unsigned char m_Padding52D[0x1];
     bool m_bInvulnerable;
     friend class CEquipment;
-    unsigned char m_Padding52F;
+    bool m_characterFlag52F; // +0x52f
     bool m_castsDynamicShadow; // +0x530
     bool m_damageShapeEnabled; // +0x531, checked by CDamageShape callback
     unsigned char m_Padding532[0x6];
@@ -641,7 +644,8 @@ private:
     CSpawnClass* m_merchantSpawnClass; // +0x6c0
     int m_merchantMinimum; // +0x6c8
     int m_merchantMaximum; // +0x6cc
-    unsigned char m_Padding6D0[0x18];
+    unsigned int m_value6D0; // +0x6d0
+    unsigned char m_Padding6D4[20];
     std::vector<std::wstring> m_additionalParticles; // +0x6e8
     bool m_flag700;
     bool m_experienceDisabled; // +0x701
@@ -651,7 +655,8 @@ private:
         struct { bool m_spawnFlag703; bool m_spawnFlag704; };
     };
     bool m_weaponsHidden; // +0x705
-    unsigned char m_Padding706[0x6];
+    unsigned char m_Padding706[2];
+    float m_procTime; // +0x708
     bool m_targetLocked; // +0x70c
     bool m_forcedHidden; // +0x70d
     bool m_bSecondaryWeaponSet;
@@ -671,7 +676,9 @@ private:
     unsigned char m_Padding770;
     bool m_keepPathWhenAIChanges; // +0x771
     bool m_alwaysActive; // +0x772
-    unsigned char m_Padding773[5];
+    unsigned char m_Padding773;
+    bool m_damageDisplayEnabled; // +0x774
+    unsigned char m_Padding775[3];
 };
 
 #endif

@@ -881,3 +881,159 @@ void CSkill::assignSkillAnimations(CBaseUnit* unit)
             m_animationIndexDWLoopInto=model->findRandomAnimation(animation);
     }
 }
+
+std::wstring CSkill::getDescription(CBaseUnit* unit,unsigned int level,bool includeName)
+{
+    if(!m_property)
+        return EMPTY_WSTRING;
+    CBaseUnit* owner=m_pOwner;
+    TSafePointer<CBaseUnit>* reference=reinterpret_cast<TSafePointer<CBaseUnit>*>(&m_pOwner);
+    reference->setObject(unit);
+    static std::wstring g_ManaCost;
+    if(g_ManaCost.empty())
+        g_ManaCost=CStringTranslate::getSinglton()->getTranslateString(L"Mana Cost");
+    unsigned int index=level-1;
+    if(index>static_cast<unsigned int>(-3))
+        index=m_iEffectiveSkillLevel-1;
+    CSkillProperty* property=m_iSkillLevelCount?m_levelPropertyData[0]:m_property;
+    unsigned int maximum=m_iSkillLevelCount?m_iSkillLevelCount:1;
+    if(index<=maximum && index<m_iSkillLevelCount) {
+        unsigned int slot=index<m_levelPropertyCapacity?index:0;
+        if(m_levelPropertyData[slot])property=m_levelPropertyData[slot];
+    }
+    if(property) {
+        std::wstring description;
+        if(includeName) {
+            description=property->m_sDisplayName+L"\n";
+            if(property->m_iManaCost>0.0f) {
+                std::wstring mana=STRINGS::GetValueAsWString(property->m_iManaCost);
+                std::wstring text=property->getSkillDescription();
+                description=description+text+L"\n"+g_ManaCost+L":"+mana+L"\n";
+            }
+        } else if(property->m_iManaCost>0.0f) {
+            std::wstring mana=STRINGS::GetValueAsWString(property->m_iManaCost);
+            description=g_ManaCost+L":"+mana+L"\n";
+        }
+        description+=property->getSkillStats();
+        if(description.empty() || description[description.size()-1]!=L'\n')
+            description+=L"\n";
+        reference->setObject(owner);
+        return description;
+    }
+    reference->setObject(owner);
+    return EMPTY_WSTRING;
+}
+
+std::wstring CSkill::getDescriptionRequirments(CBaseUnit* unit)
+{
+    if(!unit || !m_property)
+        return EMPTY_WSTRING;
+    CCharacter* character=dynamic_cast<CCharacter*>(unit);
+    if(!character)
+        return EMPTY_WSTRING;
+    weaponRequirementsMet(character);
+    bool dual=m_property->m_bDuelWeaponRequired;
+    static std::wstring g_Weapon;
+    if(g_Weapon.empty())
+        g_Weapon=CStringTranslate::getSinglton()->getTranslateString(L"Weapon");
+    static std::wstring g_Weapons;
+    if(g_Weapons.empty())
+        g_Weapons=CStringTranslate::getSinglton()->getTranslateString(L"Weapons");
+    std::wstring description;
+    if(dual) {
+        static std::wstring g_DuelWieldOnly;
+        if(g_DuelWieldOnly.empty())
+            g_DuelWieldOnly=CStringTranslate::getSinglton()->getTranslateString(L"Duel wield only");
+        description=g_DuelWieldOnly+L".\n";
+        if(m_property->m_iRequirementRight!=0 && m_property->m_iRequirementRight==m_property->m_iRequirementLeft) {
+            static std::wstring g_RightAndLeftReq;
+            if(g_RightAndLeftReq.empty())
+                g_RightAndLeftReq=CStringTranslate::getSinglton()->getTranslateString(L"Right and left hands require");
+            std::wstring weapon=getWeaponString(static_cast<UNITTYPES::EUNITTYPES>(m_property->m_iRequirementRight));
+            description+=g_RightAndLeftReq+L" "+weapon+L" "+g_Weapons;
+            return description;
+        }
+    }
+    if(!dual && m_property->m_iRequirementRight==0 && m_property->m_iRequirementLeft==0)
+        return description;
+    static std::wstring g_RightReq;
+    if(g_RightReq.empty())
+        g_RightReq=CStringTranslate::getSinglton()->getTranslateString(L"Right hand require");
+    std::wstring weapon=getWeaponString(static_cast<UNITTYPES::EUNITTYPES>(m_property->m_iRequirementRight));
+    description+=g_RightReq+L" "+weapon+L" "+g_Weapon;
+    if(m_property->m_bHasAnimation && m_property->m_iRequirementLeft!=0) {
+        static std::wstring g_LeftReq;
+        if(g_LeftReq.empty())
+            g_LeftReq=CStringTranslate::getSinglton()->getTranslateString(L"Left hand require");
+        std::wstring weapon=getWeaponString(static_cast<UNITTYPES::EUNITTYPES>(m_property->m_iRequirementLeft));
+        description+=L"\n"+g_LeftReq+L" "+weapon+L" "+g_Weapon;
+    }
+    return description;
+}
+
+#include "DataGroup.h"
+#include "DataValue.h"
+#include "UnitResourceList.h"
+#include "Constants.h"
+#include "SkillDefines.h"
+
+CSkill::CSkill(CResourceManager* resources,CDataGroup* data)
+    :m_resources(resources),m_pSkillManager(NULL),m_pDataGroup(data),m_pOwner(NULL),m_iOwnerSafePointerId(~0u),
+     m_skillType(0),m_eActivationType(SKILL_ACTIVATION_ANY),m_interruptible(false),m_pendingStop(false),m_allowsTurning(true),
+     m_suppressNormalStop(0),m_stopsPathingOnCompletion(false),m_requiresLineOfSight(false),m_requiresPathable(false),
+     m_SkillData6C(0),m_bEnabled(true),m_SkillData6F(0),m_checksSilence(true),m_allowedTargetData(2),m_property(NULL),m_baseProperty(NULL),
+     m_levelPropertyData(NULL),m_iSkillLevelCount(0),m_levelPropertyCapacity(0),m_levelPropertyGrow(10),m_activeEvents(10),m_sRequiredSkill(EMPTY_WSTRING),
+     m_iRequiredLevel(1),m_skillLevel(0),m_iEffectiveSkillLevel(0),m_animationIndex(~0u),m_animationIndexDW(~0u),m_animationIndexLoopInto(~0u),
+     m_animationIndexDWLoopInto(~0u),m_animationIndexLoopEnd(~0u),m_animationSpeed(1),m_coolingTime(0),m_animationLength(0),m_animationTimeRemaining(0),
+     m_elapsedSkillTime(0),m_iColumn(-1),m_iRow(-1),m_iPane(-1),m_iChance(100),m_iCancelChance(0),m_iTargetAlignment(2),m_iCharges(-1),
+     m_sAnimationOverride(EMPTY_WSTRING),m_sAnimationOverrideDW(EMPTY_WSTRING),m_sLoopAnimationOverride(EMPTY_WSTRING),
+     m_sLoopAnimationOverrideDW(EMPTY_WSTRING),m_sAnimationOverrideLoopEnd(EMPTY_WSTRING),m_Guid(-1),m_iDisplayedMaxRank(0)
+{
+    if(data) {
+        m_baseProperty=new CSkillProperty(this,m_resources,NULL,m_pDataGroup,0);
+        for(unsigned int i=1;m_pDataGroup;++i) {
+            CDataGroup* group=m_pDataGroup->GetDataGroupByName(L"LEVEL"+STRINGS::GetValueAsWString(i),false);
+            if(!group)break;
+            CSkillProperty* parent=m_iSkillLevelCount?reinterpret_cast<TArrayList<CSkillProperty*>*>(&m_levelPropertyData)->operator[](m_iSkillLevelCount-1):m_baseProperty;
+            CSkillProperty* property=new CSkillProperty(this,m_resources,parent,group,i);
+            reinterpret_cast<TArrayList<CSkillProperty*>*>(&m_levelPropertyData)->add(property);
+        }
+        std::wstring value=STRINGS::StringUpper(m_pDataGroup->GetDataValue(L"ACTIVATION_TYPE",EMPTY_WSTRING));
+        if(value!=EMPTY_WSTRING)
+            for(unsigned int i=0;i<5;++i)if(value==gSKILL_ACTIVATION_TYPE_NAMES[i]){m_eActivationType=static_cast<ESKILL_ACTIVATION_TYPE>(i);break;}
+        value=STRINGS::StringUpper(m_pDataGroup->GetDataValue(L"SKILL_TYPE",EMPTY_WSTRING));
+        if(value!=EMPTY_WSTRING)
+            for(unsigned int i=0;i<4;++i)if(value==gSKILL_TYPE_NAMES[i]){m_skillType=i;break;}
+        std::wstring alignment=m_pDataGroup->GetDataValue(L"TARGET_ALIGNMENT",EMPTY_WSTRING);
+        if(alignment!=EMPTY_WSTRING)
+            for(unsigned int i=0;i<7;++i)if(alignment==KALIGNMENT_STRINGS[i]){m_iTargetAlignment=i;break;}
+        CDataGroup* units=m_pDataGroup->GetDataGroupByName(L"TARGET_SPECIFIC_UNITS",false);
+        if(units)
+            for(unsigned int i=0;i<units->GetNumberOfDataValues();++i) {
+                CDataValue* value=units->GetDataValue(i);
+                if(value->GetValueType()==CDataValue::DATAVALUE_TRANSLATE || value->GetValueType()==CDataValue::DATAVALUE_STRING) {
+                    const std::wstring& name=value->GetValueString(true);
+                    CDataGroup* group=CUnitResourceList::getSingleton()->getDataGroupByObjectName(name);
+                    if(group)m_allowedTargetData.add(group);
+                }
+            }
+        m_targetsDead=m_pDataGroup->GetDataValue(L"TARGET_CORPSES",false);
+        m_iRequiredLevel=m_pDataGroup->GetDataValue(L"LEVEL_REQUIRED",1);
+        m_iDisplayedMaxRank=m_pDataGroup->GetDataValue(L"MAX_INVEST_LEVEL",0);
+        m_iColumn=m_pDataGroup->GetDataValue(L"COLUMN",~0u);
+        m_iRow=m_pDataGroup->GetDataValue(L"ROW",~0u);
+        m_iPane=m_pDataGroup->GetDataValue(L"PANE",0);
+        m_iCharges=m_pDataGroup->GetDataValue(L"CHARGES",~0u);
+        m_bExecutedByProperty=m_pDataGroup->GetDataValue(L"HIDDEN",false);
+        m_allowsTurning=m_pDataGroup->GetDataValue(L"ALLOWS_TURNING",true);
+        m_stopsPathingOnCompletion=m_pDataGroup->GetDataValue(L"MOVES_TO_TARGET",false);
+        m_suppressNormalStop=m_pDataGroup->GetDataValue(L"DONT_STOP_ON_DEATH",false);
+        m_checksSilence=m_pDataGroup->GetDataValue(L"CAN_BE_SILENCED",true);
+        m_SkillData6F=m_pDataGroup->GetDataValue(L"CAN_LEFT_MAP",false);
+        m_SkillData6C=m_pDataGroup->GetDataValue(L"USEWEAPONANIMATION",false);
+        m_requiresLineOfSight=m_pDataGroup->GetDataValue(L"REQUIRES_PASSABLE_LOS",false);
+        m_requiresPathable=m_pDataGroup->GetDataValue(L"REQUIRES_PATHABLE",false);
+        m_Guid=m_pDataGroup->GetDataValue(L"UNIQUE_GUID",static_cast<long long>(-1));
+    }
+    _setLevelOfSkillFromSkillManager(m_skillLevel);
+}

@@ -1,5 +1,6 @@
 #ifndef MASTERRESOURCEMANAGER_H
 #define MASTERRESOURCEMANAGER_H
+class CConsole;
 
 #include "RunicCore.h"
 #include <vector>
@@ -91,7 +92,10 @@ public:
     CSettings* m_pSettings;
     CSoundManager* m_pSoundManager;
 private:
-    unsigned char m_UnrecoveredA0[0x10];
+public:
+    CConsole* m_console; // +0xa0, native playSound addTextNoHistory receiver
+private:
+    unsigned char m_UnrecoveredA8[8];
 public:
     Ogre::RenderTarget* m_renderTarget; // +0xb0; add/removeViewport calls
 private:

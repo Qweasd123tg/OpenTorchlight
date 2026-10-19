@@ -141,7 +141,7 @@ public:
     bool isInNoSpawnRegion(const Ogre::Vector3& position, float radius);
     void removeListenerFromUnit(long long guid, iUnitObserver* observer);
     void removeListenerFromUnit(CBaseUnit* unit, iUnitObserver* observer);
-    bool addListenerToUnit(CBaseUnit* unit, iUnitObserver* observer);
+    long long addListenerToUnit(CBaseUnit* unit, iUnitObserver* observer);
     void removeListenerFromUnits(iUnitObserver* observer);
     bool getAutomapVisible();
     void setAutomapVisible(bool visible);
@@ -162,7 +162,7 @@ public:
     bool sightUnobstructed(const Ogre::Vector3& start, const Ogre::Vector3& end, bool flag);
     bool snapToValidGround(Ogre::Vector3& position, float height);
     void killAll();
-    bool addListenerToUnit(long long,iUnitObserver*);
+    long long addListenerToUnit(long long,iUnitObserver*);
     Ogre::Vector3 randomOpenItemPositionRange(const Ogre::Vector3&,float,float,bool);
     Ogre::Vector3 randomOpenPositionRange(const Ogre::Vector3&,float,float,bool);
     bool sphereCollision(const Ogre::Vector3&,const Ogre::Vector3&,float,Ogre::Vector3&,Ogre::Vector3&,Ogre::Vector3&,unsigned int&,Ogre::Vector3&);
@@ -275,7 +275,7 @@ private:
     char m_LevelData218[8]; // +0x218: loader state, type deferred
     CGameClient* m_pGameClient;
     unsigned int m_levelSeed; // +0x228
-    char m_LevelData22C[4];
+    union { char m_LevelData22C[4]; unsigned int m_updatedCharacterCount; };
     float m_topLeftX; // +0x230
     float m_topLeftY; // +0x234
     char m_LevelData238[8];

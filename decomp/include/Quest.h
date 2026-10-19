@@ -22,6 +22,8 @@
 class CQuestRequirements;
 class CQuestRewards;
 
+bool dialogIsForNPC(CBaseUnit*, TArrayList<CQuestDialog*>&);
+
 class CQuest : public CRunicCore
 {
 public:

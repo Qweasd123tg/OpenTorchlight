@@ -35,7 +35,7 @@ public:
     virtual Ogre::Camera* getGameCamera();
     virtual CGameClient* getGameClient();
     virtual void updateAspectRatio(float, float);
-    virtual int begin(void*);
+    virtual long begin(void*);
     virtual void editorUpdateSceneOnce(int);
     virtual bool setup(bool);
     virtual bool configure(bool);

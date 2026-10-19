@@ -25,6 +25,7 @@ class CGenericModel : public CPositionableObject, public iRandomWeight, public i
     friend class CLevel;
 friend class CEquipment;
 friend class CCharacter;
+friend class CPlayer;
 friend class CMonster;
 friend void EditorSetActiveAnimationPaused(long long, bool);
 friend class CStatsMenu;
@@ -32,6 +33,7 @@ friend class CPetMenu;
 friend class CInventoryMenu;
 friend class CSkillMenu;
 friend class CJournalMenu;
+    friend class CQuestMenu;
 public:
     std::string getTexureName();
     void releaseUniqueMaterials();

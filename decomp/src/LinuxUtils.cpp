@@ -11,9 +11,6 @@ extern std::wstring gameDataPath __asm__("_ZN10LinuxUtilsL12gameDataPathE");
 extern std::wstring gameHomePath __asm__("_ZN10LinuxUtilsL12gameHomePathE");
 extern std::wstring gameTempPath __asm__("_ZN10LinuxUtilsL12gameTempPathE");
 }
-extern long MouseX __asm__("_ZL6MouseX");
-extern long MouseY __asm__("_ZL6MouseY");
-extern bool keyStates[256] __asm__("_ZL9keyStates") __attribute__((aligned(32)));
 #include "LinuxUtils.h"
 
 
@@ -52,43 +49,19 @@ unsigned int GetTickCount()
     return tv.tv_sec*1000 + tv.tv_usec/1000;
 }
 
-void UpdateCursorPos(long x, long y)
-{
-    MouseX=x;
-    MouseY=y;
-}
 
-int GetCursorPos(POINT* point)
-{
-    point->x=MouseX;
-    point->y=MouseY;
-    return 0;
-}
 
-int SetCursorPos(int x, int y)
-{
-    return 0;
-}
 
-void UpdateKeyState(unsigned int key, bool pressed)
-{
-    keyStates[key]=pressed;
-}
 
-short GetAsyncKeyState(unsigned int key)
-{
-    return keyStates[key] ? static_cast<short>(0x8000) : 0;
-}
 
-short GetKeyState(unsigned int key)
-{
-    return keyStates[key] ? static_cast<short>(0x8000) : 0;
-}
 
-void ClearKeyState()
-{
-    std::memset(keyStates,0,sizeof(keyStates));
-}
+
+
+
+
+
+
+
 
 int LinuxUtils::GetIntLine(const std::string& path, const std::string& key)
 {
@@ -109,4 +82,117 @@ int LinuxUtils::GetIntLine(const std::string& path, const std::string& key)
 int LinuxUtils::GetPhysicalRAMSize()
 {
     return GetIntLine("/proc/meminfo", "MemTotal") * 1024;
+}
+
+#include <sys/stat.h>
+extern std::string UTF32ToUTF8(const std::wstring&);
+
+int _wfopen_s(FILE** file, const wchar_t* filename, const wchar_t* mode)
+{
+    std::string path = UTF32ToUTF8(std::wstring(filename));
+    std::string flags = UTF32ToUTF8(std::wstring(mode));
+    *file = fopen(path.c_str(), flags.c_str());
+    return 0;
+}
+
+int LinuxUtils::GetCPUFrequency()
+{
+    struct stat information;
+    if (stat("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq", &information) == 0)
+    {
+        std::ifstream input("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq");
+        std::string line;
+        if (std::getline(input, line).good())
+            return std::atoi(line.c_str()) / 1000;
+    }
+    return GetIntLine("/proc/cpuinfo", "cpu MHz");
+}
+
+
+int MessageBox(void*, const wchar_t* text, const wchar_t* title, int type)
+{
+    std::string message = UTF32ToUTF8(std::wstring(text));
+    std::string caption = UTF32ToUTF8(std::wstring(title));
+    return MessageBoxA(NULL,message.c_str(),caption.c_str(),type);
+}
+
+#include <execinfo.h>
+#include <signal.h>
+void LinuxUtils::crash_handler(int signal)
+{
+    void* trace[40];
+    int size = backtrace(trace,40);
+    fprintf(stderr,"Error: signal: %d\n\n",signal);
+    backtrace_symbols_fd(trace,size,2);
+    if (signal != SIGTRAP) exit(2);
+}
+
+#include "SDL.h"
+void* LinuxUtils::GetSDLWindowHandle(SDL_Window* window)
+{
+    SDL_SysWMinfo info;
+    info.version.major=2;
+    info.version.minor=0;
+    info.version.patch=0;
+    SDL_GetWindowWMInfo(window,&info);
+    return reinterpret_cast<void*>(info.info.x11.window);
+}
+
+#include <FL/Fl.H>
+#include <FL/fl_ask.H>
+int MessageBoxA(void*,const char* text,const char* title,int type)
+{
+    Fl::lock();
+    fl_message_title(title);
+    int result=1;
+    switch (type&15) {
+    case 0: result=fl_choice("%s",fl_ok,NULL,NULL,text)+1;break;
+    case 1: result=fl_choice("%s",fl_ok,"Cancel",NULL,text)+1;break;
+    case 5: result=fl_choice("%s","Retry","Cancel",NULL,text)+1;break;
+    }
+    Fl::wait(0.0);
+    Fl::unlock();
+    fprintf(stderr,"MessageBox: %s :: %s\n",text,title);
+    return result;
+}
+
+#include <binreloc.h>
+#include <clocale>
+extern std::wstring UTF8ToUTF32(const std::string&);
+
+void LinuxUtils::Init()
+{
+    BrInitError error;
+    if (!br_init(&error)) {
+        MessageBoxA(NULL,"Could not locate game binary","Initialization Error",0);
+        exit(1);
+    }
+    char* executable = br_find_exe_dir(NULL);
+    if (!executable) {
+        MessageBoxA(NULL,"Could not locate game binary","Initialization Error",0);
+        exit(1);
+    }
+    gameDataPath = UTF8ToUTF32(std::string(executable));
+    if (gameDataPath[gameDataPath.size()-1] != L'/')
+        gameDataPath += L"/";
+    free(executable);
+    if (!setlocale(LC_CTYPE,"")) {
+        MessageBoxA(NULL,"Could not set LC_CTYPE locale","Initialization Error",0);
+        exit(1);
+    }
+    char* home = getenv("HOME");
+    if (!home) {
+        MessageBoxA(NULL,"Could not find home directory.  Is HOME set?","Initialization Error",0);
+        exit(1);
+    }
+    gameHomePath = UTF8ToUTF32(std::string(home));
+    if (gameHomePath[gameHomePath.size()-1] != L'/')
+        gameHomePath += L"/";
+    char* temporary = getenv("TMPDIR");
+    gameTempPath = UTF8ToUTF32(std::string(temporary ? temporary : "/tmp"));
+    if (gameTempPath[gameTempPath.size()-1] != L'/')
+        gameTempPath += L"/";
+    signal(SIGSEGV,crash_handler);
+    signal(SIGABRT,crash_handler);
+    signal(SIGTRAP,crash_handler);
 }

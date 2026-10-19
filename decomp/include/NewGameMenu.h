@@ -26,7 +26,7 @@ public:
     bool handle_Submit(const CEGUI::EventArgs&);
     bool handle_ExitButton(const CEGUI::EventArgs&);
     bool handle_CloseButton(const CEGUI::EventArgs&);
-    CNewGameMenu* getEmptySave(std::wstring);
+    std::wstring getEmptySave(std::wstring);
     bool handle_SubmitPet(const CEGUI::EventArgs&);
     void createMenus();
     CNewGameMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);

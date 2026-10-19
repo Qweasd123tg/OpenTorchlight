@@ -9,6 +9,7 @@
 // numbered increment events, and resets after reaching its target count.
 class COutputIncrementor : public CEditorBaseObject
 {
+    friend class CPlayer;
 public:
     COutputIncrementor(CResourceManager* resourceManager);
     virtual ~COutputIncrementor();

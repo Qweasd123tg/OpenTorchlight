@@ -27,7 +27,7 @@ public:
     void releaseSound(CSoundInstance*);
     int getNumberOfChannelsPlaying();
     void incrementSoundBank();
-    long long fmodFileCloseCallback(void*, void*);
+    static FMOD_RESULT fmodFileCloseCallback(void*, void*);
     unsigned int soundLoops(CSoundInstance*);
     CSoundInstance* findSound(std::wstring&, SOUND_TYPE, bool, float, float);
     void stopSound(int);

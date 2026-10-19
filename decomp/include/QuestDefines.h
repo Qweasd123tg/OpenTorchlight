@@ -26,4 +26,10 @@ static const std::wstring gQUEST_DIALOG_TYPE_NAMES[] =
     L"DETAILS",
 };
 
+static const std::wstring g_QUEST_COMPLETE_TYPE_NAMES[2] =
+{
+    L"COMPLETE_ON_QUEST_ACCEPT",
+    L"COMPLETE_ON_QUEST_COMPLETE",
+};
+
 #endif

@@ -537,14 +537,14 @@ void PopulateSDLResolutions(CSettings* settings)
         settings->addResolutionCombo(it->width,it->height,true,true,true);
 }
 
-int CGame::begin(void* editorWindow)
+long CGame::begin(void* editorWindow)
 {
     m_editorWindow=editorWindow;
     bool runGame=getSettings()->m_pCmdLineParser->GetStringParam(L"COMPRESS",EMPTY_WSTRING)==EMPTY_WSTRING;
     bool createWindow=m_settings->m_pCmdLineParser->GetStringParam(L"NOWINDOW",EMPTY_WSTRING)==EMPTY_WSTRING;
     if (!setup(createWindow)) {
         if (gUseSplash) m_gSplash.Hide();
-        return static_cast<int>(0x80004005u);
+        return 0x80004005u;
     }
     if (!runGame) {
         convertAssetsToBinary();

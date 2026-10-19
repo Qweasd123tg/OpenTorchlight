@@ -1,0 +1,60 @@
+#include <climits>
+#include <string>
+#include <vector>
+#include "tests/FinishLevelFixture.h"
+#include "tests/NativeGameServices.h"
+#include "tests/SmallMassCompare.h"
+#define private public
+#define protected public
+#include "QuestRequirements.h"
+#include "Quest.h"
+#include "QuestManager.h"
+#include "Dungeon.h"
+#include "LevelTemplateData.h"
+#undef protected
+#undef private
+#define QR_PAIR(R,N,A,S) TL_ORIGINAL(R,qrOld##N,A,S) extern "C" R qrNew##N A __asm__(S);
+QR_PAIR(void,C1,(CQuestRequirements*,CQuest*),"_ZN18CQuestRequirementsC1EP6CQuest")
+QR_PAIR(void,D1,(CQuestRequirements*),"_ZN18CQuestRequirementsD1Ev")
+QR_PAIR(void,D0,(CQuestRequirements*),"_ZN18CQuestRequirementsD0Ev")
+QR_PAIR(long long,Parse,(CQuestRequirements*,CDataGroup*),"_ZN18CQuestRequirements19parseRequirementTagEP10CDataGroup")
+QR_PAIR(char,Check,(CQuestRequirements*),"_ZN18CQuestRequirements27questRequirmentsHaveBeenMetEv")
+#undef QR_PAIR
+TL_FUNCTION(qrComplete,"_ZN13CQuestManager16getQuestCompleteERKSbIwSt11char_traitsIwESaIwEE")
+TL_FUNCTION(qrActive,"_ZN13CQuestManager16getQuestIsActiveERKSbIwSt11char_traitsIwESaIwEE")
+TL_FUNCTION(qrPlayer,"_ZN6CQuest9getPlayerEv")
+TL_FUNCTION(qrDungeon,"_ZN16CResourceManager16getDungeonByNameERKSbIwSt11char_traitsIwESaIwEE")
+TL_FUNCTION(qrDepth,"_ZN7CPlayer11getMaxDepthESbIwSt11char_traitsIwESaIwEE")
+TL_FUNCTION(qrTemplate,"_ZN8CDungeon28getLevelTemplateDataForDepthEP11CGameClientj")
+TL_FUNCTION(qrLoad,"_ZN18CLevelTemplateData4loadEPKw")
+TL_FUNCTION(qrValue,"_ZN10CDataValue16GetValueAsStringEv")
+extern "C" char qrFree[] __asm__("_ZN4Ogre12NedAllocImpl12deallocBytesEPv");
+namespace {
+using namespace smallmass;
+unsigned seed;CQuestRequirements*self;CQuest*quest;CPlayer*player;CResourceManager*resources,*alternate;CDungeon*dungeon;CLevelTemplateData*levelTemplate;CQuestManager*manager,*otherManager;Ogre::SceneManager*scene;CGameClient*client;
+void init(){new(reinterpret_cast<void*>(0x151d408))std::wstring;const wchar_t*names[]={L"QUESTSCOMPLETE",L"QUESTSNOTCOMPLETE",L"QUESTSACTIVE"};for(unsigned i=0;i<3;++i)new(reinterpret_cast<void*>(0x151d470+8*i))std::wstring(names[i]);}
+void state(CQuestRequirements*p){number(p->m_pDataGroup!=NULL);number(p->m_pQuest==quest);number(p->m_iUnknown20);number(p->m_iUnknown24);number(p->m_iUnknown28);number(p->m_iUnknown2C);text(p->m_pUnknown30);number(p->m_Unknown38.size());number(field<unsigned>(&p->m_Unknown38,12));number(field<unsigned>(&p->m_Unknown38,16));for(unsigned i=0;i<p->m_Unknown38.size();++i){TArrayList<std::wstring>*v=p->m_Unknown38[i];number(v!=NULL);if(v){number(v->size());number(field<unsigned>(v,12));number(field<unsigned>(v,16));for(unsigned j=0;j<v->size();++j)text((*v)[j]);}}}
+void ctorSide(Case&c,bool ours,autotest::Capture&out){output=&out;seed=c.index;init();unsigned token=0;quest=seed&1?reinterpret_cast<CQuest*>(&token):NULL;self=static_cast<CQuestRequirements*>(Ogre::NedAllocImpl::allocBytes(sizeof(CQuestRequirements),0,0,0));std::memset(self,seed&2?0xa5:0x5a,sizeof(*self));int before=g_iTotalCountOfObjects;typedef void(*Fn)(CQuestRequirements*,CQuest*);Fn fn=ours?qrNewC1:qrOldC1;if(!autotest::beginInvocation(out,fn))return;fn(self,quest);out.callCompleted=1;state(self);number(g_iTotalCountOfObjects-before);for(unsigned i=0;i<3;++i)for(unsigned j=0;j<i;++j)number(self->m_Unknown38[i]!=self->m_Unknown38[j]);TSafePointer<CQuestRequirements>weak;weak.setObject(self);number(weak.getObject()==self);qrOldD1(self);number(weak.getObject()==NULL);Ogre::NedAllocImpl::deallocBytes(self);}
+void*owned[4];unsigned released[4];detour::Set*freePatch;
+void release(void*p){for(unsigned i=0;i<4;++i)if(p==owned[i])++released[i];freePatch->restore();reinterpret_cast<void(*)(void*)>(qrFree)(p);freePatch->redirect(qrFree,qrFree,&release);}
+int refs(const std::wstring&s){return *reinterpret_cast<const int*>(reinterpret_cast<const char*>(s.c_str())-8);}
+void dtorSide(Case&c,bool ours,autotest::Capture&out){output=&out;seed=c.index;init();unsigned token=0;quest=reinterpret_cast<CQuest*>(&token);self=static_cast<CQuestRequirements*>(Ogre::NedAllocImpl::allocBytes(sizeof(*self),0,0,0));qrOldC1(self,quest);self->m_pDataGroup=reinterpret_cast<CDataGroup*>(&token);std::wstring keep[3]={L"completed original owned long string",L"not completed original owned long string",L"active original owned long string"};std::memset(released,0,sizeof released);for(unsigned i=0;i<3;++i){owned[i]=self->m_Unknown38[i];if((seed/2)%4==i){delete self->m_Unknown38[i];self->m_Unknown38[i]=NULL;owned[i]=NULL;}else for(unsigned j=0;j<seed%5;++j)self->m_Unknown38[i]->add(keep[i]);}owned[3]=self;TSafePointer<CQuestRequirements>weak;weak.setObject(self);detour::Set frees;freePatch=&frees;frees.redirect(qrFree,qrFree,&release);if(frees.failed()){out.issue=autotest::Capture::InvalidReport;return;}typedef void(*Fn)(CQuestRequirements*);Fn fn=ours?(c.op?qrNewD0:qrNewD1):(c.op?qrOldD0:qrOldD1);if(!autotest::beginInvocation(out,fn))return;fn(self);out.callCompleted=1;frees.restore();number(weak.getObject()==NULL);for(unsigned i=0;i<4;++i)number(released[i]);for(unsigned i=0;i<3;++i)number(refs(keep[i]));if(!c.op){number(self->m_pDataGroup==NULL);number(self->m_pQuest==quest);number(field<unsigned>(&self->m_Unknown38,8));number(field<unsigned>(&self->m_Unknown38,12));number(field<void*>(&self->m_Unknown38,0)==NULL);Ogre::NedAllocImpl::deallocBytes(self);}for(unsigned i=0;i<3;++i)if(owned[i]&&!released[i])delete static_cast<TArrayList<std::wstring>*>(owned[i]);}
+std::vector<CDataValue*>values;
+std::wstring value(CDataValue*p){number(80);for(unsigned i=0;i<values.size();++i)if(p==values[i]){number(i);const wchar_t*texts[]={L"quest_a",L"QueST_B",L"\u03b1\u03b2",L"",L"first\0second"};return std::wstring(texts[i%5],i%5==4?12:std::wcslen(texts[i%5]));}number(~0u);return L"unexpected";}
+void parseSide(Case&c,bool ours,autotest::Capture&out){output=&out;seed=c.index;init();quest=NULL;CQuestRequirements req(NULL);self=&req;values.clear();CDataGroup root(L"REQUIREMENTS",NULL,1,1,NULL);const wchar_t*keys[]={L"MINPLAYERLEVEL",L"MAXPLAYERLEVEL",L"MINDUNGEONDEPTH",L"MAXDUNGEONDEPTH"};unsigned nums[]={0u,1u,47u,0x7fffffffu,0x80000000u,0xffffffffu};for(unsigned i=0;i<4;++i)if((seed+i)%4)root.AddDataValue(keys[i],nums[(seed/3+i)%6]);if(seed&1)root.AddDataValue(L"RULESET",seed&2?L"modded_ruleset":L"",false);const wchar_t*groups[]={L"QUESTSCOMPLETE",L"QUESTSNOTCOMPLETE",L"QUESTSACTIVE"};for(unsigned i=0;i<3;++i){if((seed/7)%4==i)continue;CDataGroup*g=root.AddDataGroup(groups[i]);for(unsigned j=0;j<(seed/4+i)%6;++j){std::wstring key(1,L'A'+j);CDataValue*v=(j%3==0)?g->AddDataValue(key,int(j)) :g->AddDataValue(key,L"contents",j%3==2);values.push_back(v);}}for(unsigned i=0;i<3;++i){if((seed/13)%4==i){delete req.m_Unknown38[i];req.m_Unknown38[i]=NULL;}else if(seed&4)req.m_Unknown38[i]->add(std::wstring(1,L'0'+i));}req.m_pUnknown30=L"seeded";detour::Set hooks;TL_REDIRECT(hooks,qrValue,&value);if(hooks.failed()){out.issue=autotest::Capture::InvalidReport;return;}typedef long long(*Fn)(CQuestRequirements*,CDataGroup*);Fn fn=ours?qrNewParse:qrOldParse;if(!autotest::beginInvocation(out,fn))return;for(unsigned frame=0;frame<3;++frame){long long result=fn(&req,(seed%11==0||frame==1)?NULL:&root);out.add(&result,8);state(&req);}out.callCompleted=1;hooks.restore();}
+char complete(CQuestManager*p,const std::wstring&name){number(1);number(p==manager?1:p==otherManager?2:0);text(name);bool result=name==L"SELF"?(seed%31==0):name==L"DONE";if(seed&1024&&name!=L"SELF"){quest->m_sUnknown50=L"CHANGED";if(self->m_Unknown38[0]->size()==1)self->m_Unknown38[0]->add(L"DONE");}return result;}
+bool active(CQuestManager*p,const std::wstring&name){number(2);number(p==manager?1:p==otherManager?2:0);text(name);return name==L"ACTIVE";}
+CPlayer*getPlayer(CQuest*p){number(3);number(p==quest);if(seed%37==0)p->m_pQuestManager=NULL;else if(seed&512)p->m_pQuestManager=otherManager;return seed%41==0?NULL:player;}
+CDungeon*getDungeon(CResourceManager*p,const std::wstring&name){number(4);number(p==resources?1:p==alternate?2:0);text(name);return seed%43==0?NULL:dungeon;}
+int maxDepth(CPlayer*p,std::wstring name){number(5);number(p==player);text(name);if(seed&256)quest->m_pResourceManager=alternate;int depths[]={INT_MIN,-4,-1,0,1,6,INT_MAX};return depths[(seed/8)%7];}
+CLevelTemplateData*getTemplate(CDungeon*p,CGameClient*c,unsigned depth){number(6);number(p==dungeon);number(c==client?1:c?2:0);number(depth);return seed%47==0?NULL:levelTemplate;}
+void load(CLevelTemplateData*,const wchar_t*){}
+void checkSide(Case&c,bool ours,autotest::Capture&out){output=&out;seed=c.index;init();finishlevel::Fixture fixture;resources=&fixture.resources;resources->m_pSceneManager=scene;CResourceManager other(NULL);alternate=&other;other.m_pLevel=NULL;player=nativegame::createPlayer(resources);unsigned token[3]={0,0,0};manager=reinterpret_cast<CQuestManager*>(&token[0]);otherManager=reinterpret_cast<CQuestManager*>(&token[1]);client=reinterpret_cast<CGameClient*>(&token[2]);CQuest q(resources,manager);quest=&q;q.m_sUnknown50=L"SELF";q.m_pUnknown30=seed&1?L"DUNGEON":L"";CDungeon d;dungeon=&d;detour::Set loads;TL_REDIRECT(loads,qrLoad,&load);CLevelTemplateData t(NULL);loads.restore();levelTemplate=&t;t.m_name=seed&2?L"RULES":L"OTHER";CQuestRequirements req(quest);self=&req;CDataGroup data(L"REQ",NULL,1,1,NULL);req.m_pDataGroup=seed%17?&data:NULL;if(seed%19==0)req.m_pQuest=NULL;unsigned levels[]={0u,1u,10u,0x7fffffffu,0x80000000u,0xffffffffu};player->m_iUnitLevel=levels[(seed/4)%6];req.m_iUnknown20=seed%3?-1:int(levels[(seed/24)%6]);req.m_iUnknown24=int(levels[(seed/144)%6]);req.m_iUnknown28=seed%5?-1:int((seed/2)%8);req.m_iUnknown2C=int((seed/7)%9)-1;req.m_pUnknown30=seed%3==0?L"":seed&4?L"RULES":L"OTHER";
+ const wchar_t*done[]={L"DONE",L"SELF",L"MISSING"};const wchar_t*notdone[]={L"MISSING",L"SELF",L"DONE"};const wchar_t*act[]={L"ACTIVE",L"SELF",L"MISSING"};if(seed%4){req.m_Unknown38[0]->add(done[(seed/16)%3]);req.m_Unknown38[1]->add(notdone[(seed/48)%3]);req.m_Unknown38[2]->add(act[(seed/144)%3]);if(seed&128){req.m_Unknown38[0]->add(L"DONE");req.m_Unknown38[1]->add(L"MISSING");req.m_Unknown38[2]->add(L"ACTIVE");}}
+ if(seed%53==0)player->m_pResourceManager=NULL;else if(seed%59==0)resources->m_pLevel=NULL;if(seed&8)field<TArrayList<CGameClient*> >(resources,0x28).add(client);if(seed&16)field<TArrayList<CGameClient*> >(&other,0x28).add(client);detour::Set hooks;TL_REDIRECT(hooks,qrComplete,&complete);TL_REDIRECT(hooks,qrActive,&active);TL_REDIRECT(hooks,qrPlayer,&getPlayer);TL_REDIRECT(hooks,qrDungeon,&getDungeon);TL_REDIRECT(hooks,qrDepth,&maxDepth);TL_REDIRECT(hooks,qrTemplate,&getTemplate);if(hooks.failed()){out.issue=autotest::Capture::InvalidReport;return;}typedef char(*Fn)(CQuestRequirements*);Fn fn=ours?qrNewCheck:qrOldCheck;if(!autotest::beginInvocation(out,fn))return;number(fn(&req));out.callCompleted=1;number(q.m_pQuestManager==otherManager?2:q.m_pQuestManager?1:0);number(q.m_pResourceManager==alternate?2:1);text(q.m_sUnknown50);hooks.restore();req.m_pQuest=NULL;q.m_pQuestManager=NULL;field<TArrayList<CGameClient*> >(resources,0x28).clear();field<TArrayList<CGameClient*> >(&other,0x28).clear();player->m_pResourceManager=resources;resources->m_pLevel=&fixture.level;nativegame::destroyPlayer(player);other.m_pLevel=NULL;}
+}
+TL_TEST(complete_quest_requirements_ctor){return smallmass::run(host,0,"complete_quest_requirements_ctor",0xdf6750,&ctorSide,8);}
+TL_TEST(complete_quest_requirements_lifetime){return smallmass::run(host,0,"complete_quest_requirements_lifetime",0xdfe3e0,&dtorSide,40);}
+TL_TEST(complete_quest_requirements_deleting){return smallmass::run(host,1,"complete_quest_requirements_deleting",0xdfe5b0,&dtorSide,40);}
+TL_TEST(complete_quest_requirements_parse){return smallmass::run(host,0,"complete_quest_requirements_parse",0xdfe5d0,&parseSide,256);}
+TL_TEST(complete_quest_requirements_runtime){nativegame::Services services;if(!services.ready())return 1;scene=services.scene;return smallmass::run(host,0,"complete_quest_requirements_runtime",0xdfec90,&checkSide,2048);}

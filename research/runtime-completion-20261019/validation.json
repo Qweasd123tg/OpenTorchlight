@@ -1,0 +1,2819 @@
+{
+  "baseline": "503c254ab97f6b13adbfb4430ff8d6b1228f3c8d",
+  "before": 4538,
+  "accepted": 4674,
+  "added": [
+    "0x810370",
+    "0x810730",
+    "0x810b30",
+    "0x813f20",
+    "0x815d40",
+    "0x8254b0",
+    "0x8258a0",
+    "0x8292f0",
+    "0x82bd80",
+    "0x82ca40",
+    "0x82d1f0",
+    "0x837c00",
+    "0x838410",
+    "0x838a50",
+    "0x83b8d0",
+    "0x83c9c0",
+    "0x83cfe0",
+    "0x8424a0",
+    "0x8435c0",
+    "0x862130",
+    "0x862eb0",
+    "0x8e48a0",
+    "0x8efbc0",
+    "0x8f3450",
+    "0x8f3ba0",
+    "0x8f6080",
+    "0x8f8a50",
+    "0x8f9ad0",
+    "0x8fa300",
+    "0x8fb050",
+    "0x8fb700",
+    "0x8fbf00",
+    "0x8fbf10",
+    "0x8fbf20",
+    "0x8fbf30",
+    "0x8fbf40",
+    "0x936d70",
+    "0x936f20",
+    "0x9451d0",
+    "0x949c90",
+    "0x94b130",
+    "0x952af0",
+    "0x95abb0",
+    "0x95aeb0",
+    "0x95c970",
+    "0x95ce70",
+    "0x95d0b0",
+    "0xa6c880",
+    "0xa6ca20",
+    "0xa6d4b0",
+    "0xa6e820",
+    "0xca7b10",
+    "0xca92e0",
+    "0xca9bd0",
+    "0xcabbc0",
+    "0xcac040",
+    "0xcb47f0",
+    "0xce3fb0",
+    "0xce5f90",
+    "0xd0c780",
+    "0xd0c910",
+    "0xd0cae0",
+    "0xd0cb10",
+    "0xd0cb70",
+    "0xd0d7b0",
+    "0xd14510",
+    "0xd14f60",
+    "0xd15180",
+    "0xd167a0",
+    "0xd197d0",
+    "0xd19a10",
+    "0xd1b5e0",
+    "0xd1cf40",
+    "0xd1d270",
+    "0xd34b30",
+    "0xd34f10",
+    "0xd3b3d0",
+    "0xd3b550",
+    "0xd3caf0",
+    "0xd3db90",
+    "0xd6a0b0",
+    "0xd6b1c0",
+    "0xd6caf0",
+    "0xd6ddc0",
+    "0xd6e2a0",
+    "0xd78290",
+    "0xd79290",
+    "0xd7fd30",
+    "0xd80cf0",
+    "0xdf5fd0",
+    "0xdf6750",
+    "0xdfe3e0",
+    "0xdfe5b0",
+    "0xdfe5d0",
+    "0xdfec90",
+    "0xf61c70",
+    "0xf61da0",
+    "0xf61e30",
+    "0xf61eb0",
+    "0xf620d0",
+    "0xf62c80",
+    "0xf632a0",
+    "0xf92800",
+    "0xf928a0",
+    "0xf92b90",
+    "0xf92c80",
+    "0xf92da0",
+    "0xf92e50",
+    "0xf92fb0",
+    "0xf930f0",
+    "0xf931d0",
+    "0xf93410",
+    "0xf93590",
+    "0xf937a0",
+    "0xf938a0",
+    "0xf938c0",
+    "0xf93910",
+    "0xf93a20",
+    "0xf93c50",
+    "0xf93c60",
+    "0xf93e10",
+    "0xf93e90",
+    "0xf93f10",
+    "0xf93f40",
+    "0xf94000",
+    "0xf94090",
+    "0xf94200",
+    "0xf94300",
+    "0xf94410",
+    "0xf945b0",
+    "0xf94680",
+    "0xf94700",
+    "0xf94810",
+    "0xf94850",
+    "0xf948f0",
+    "0xf94a30"
+  ],
+  "lost": [],
+  "remaining": 573,
+  "matched_functions": 2923,
+  "behavioral": 1751,
+  "selftest_tests": 2051,
+  "selftest_failed": 0,
+  "selftest_seconds": 3077.6224901749956,
+  "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+  "progress_sha256": "99354cf2a4811782d04d88e2e8579b47b600f0bfe7cdf50d4406890e795a175c",
+  "target_ledger_sha256": "0d5b90c5169bd9db5af0b818685d39e3f9bb4b49a27f531d3fa1fbb05c50fd94",
+  "scope": "Original C++98 recovery; headless native comparisons, no window or gameplay acceptance.",
+  "added_details": [
+    {
+      "address": "0x810370",
+      "name": "CCharacter::displayDamageAbsorbed(float)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_combat_damage_display"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x810730",
+      "name": "CCharacter::executeProcs(EEFFECT_TYPE, CBaseUnit*)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_combat_procs"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x810b30",
+      "name": "CCharacter::applyDamageEffects(CCharacter*, float, int (*) [2], unsigned int, bool)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_combat_damage_effects"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x813f20",
+      "name": "CCharacter::isEffectValidForUnit(CCharacter*, CBaseUnit*, CEffect*)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_combat_valid_effect"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x815d40",
+      "name": "CCharacter::maxDamage(CAttackDescription*, CCharacter*)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_attack_max_damage"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8254b0",
+      "name": "CCharacter::approachAI(float, CLevel&)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_ai_runtime"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8258a0",
+      "name": "CCharacter::canCastCurrentSkill(CBaseUnit*, bool, bool)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_ai_runtime"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8292f0",
+      "name": "CCharacter::skillAI(float, CLevel&)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_ai_runtime"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x82bd80",
+      "name": "CCharacter::attackAI(float, CLevel&)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_ai_runtime"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x82ca40",
+      "name": "CCharacter::skillApproachAI(float, CLevel&, long long)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_ai_runtime"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x82d1f0",
+      "name": "CCharacter::huntAI(float, CLevel&)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_ai_runtime"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x837c00",
+      "name": "CCharacter::modifyDamage(int, EDAMAGE_TYPES, int, float)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_combat_modify_damage"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x838410",
+      "name": "CCharacter::rollCritical(CCharacter*)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_attack_critical"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x838a50",
+      "name": "CCharacter::modifyHP(float)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_combat_modify_hp"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x83b8d0",
+      "name": "CCharacter::getItemAI(float, CLevel&)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_ai_runtime"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x83c9c0",
+      "name": "CCharacter::awardFame(CLevel&, CCharacter*, int, bool)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_attack_fame"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x83cfe0",
+      "name": "CCharacter::applyDamage(CLevel&, Ogre::Vector3 const&, float, Ogre::Vector3 const&, float, CCharacter*, bool, bool, bool, bool, unsigned int)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_attack_apply_damage"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8424a0",
+      "name": "CCharacter::applyInstantEffect(CEffect*)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_combat_instant_effect"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8435c0",
+      "name": "CCharacter::applyEffectOnUnit(CCharacter*, CBaseUnit*, CEffect*)",
+      "tu": "character.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "e77df3b35b0f6bf63779ab040a2f1a645570cbdebce79a5f743fd686fdb1c5d0",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_combat_apply_effect"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x862130",
+      "name": "CCharacterSaveState::save(_IO_FILE*)",
+      "tu": "charactersavestate.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "931d26e6f44f46699fa0193f4378c84dc7dac0d63b3f5cf1d0c6c4b360a56234",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_save_storage"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x862eb0",
+      "name": "CCharacterSaveState::load(_IO_FILE*, unsigned int)",
+      "tu": "charactersavestate.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "931d26e6f44f46699fa0193f4378c84dc7dac0d63b3f5cf1d0c6c4b360a56234",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "character_save_storage"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8e48a0",
+      "name": "CPlayer::update(Ogre::Camera*, Ogre::Vector3 const&, float)",
+      "tu": "player.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "3271e964c69349bd4dd313505bb32ce92a44102a5955dfdd6aad4b467474db9d",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_player_update"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8efbc0",
+      "name": "CPlayer::updateFishingLine(float)",
+      "tu": "player.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "3271e964c69349bd4dd313505bb32ce92a44102a5955dfdd6aad4b467474db9d",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_player_fishing_line"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8f3450",
+      "name": "CPlayer::CPlayer(CResourceManager*)",
+      "tu": "player.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "3271e964c69349bd4dd313505bb32ce92a44102a5955dfdd6aad4b467474db9d",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_player_ctor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8f3ba0",
+      "name": "CPlayer::updateStoredLevels(CLevel&)",
+      "tu": "player.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "3271e964c69349bd4dd313505bb32ce92a44102a5955dfdd6aad4b467474db9d",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_player_stored_levels"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8f6080",
+      "name": "CPlayer::storeLevelSavedState(CLevel&)",
+      "tu": "player.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "3271e964c69349bd4dd313505bb32ce92a44102a5955dfdd6aad4b467474db9d",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_player_store_level"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8f8a50",
+      "name": "CPlayer::unitInit(CDataGroup*, bool)",
+      "tu": "player.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "3271e964c69349bd4dd313505bb32ce92a44102a5955dfdd6aad4b467474db9d",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_player_unit_init"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8f9ad0",
+      "name": "CPlayer::levelUp()",
+      "tu": "player.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "3271e964c69349bd4dd313505bb32ce92a44102a5955dfdd6aad4b467474db9d",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_player_level_up"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8fa300",
+      "name": "CPlayer::fishingAICatch(float, CLevel&)",
+      "tu": "player.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "3271e964c69349bd4dd313505bb32ce92a44102a5955dfdd6aad4b467474db9d",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_player_fishing_catch"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8fb050",
+      "name": "CPlayer::applyAchievementsForKilledCharacter(CCharacter*)",
+      "tu": "player.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "3271e964c69349bd4dd313505bb32ce92a44102a5955dfdd6aad4b467474db9d",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_player_achievements"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8fb700",
+      "name": "CPlayer::~CPlayer()",
+      "tu": "player.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "3271e964c69349bd4dd313505bb32ce92a44102a5955dfdd6aad4b467474db9d",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_player_destroy"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x8fbf00",
+      "name": "non-virtual thunk to CPlayer::~CPlayer()",
+      "tu": "player.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0x8fbf10",
+      "name": "non-virtual thunk to CPlayer::~CPlayer()",
+      "tu": "player.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0x8fbf20",
+      "name": "non-virtual thunk to CPlayer::~CPlayer()",
+      "tu": "player.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0x8fbf30",
+      "name": "non-virtual thunk to CPlayer::~CPlayer()",
+      "tu": "player.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0x8fbf40",
+      "name": "CPlayer::~CPlayer()",
+      "tu": "player.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0x936d70",
+      "name": "CLevel::notifyOfDeletion(CItem*)",
+      "tu": "level.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a850a32579d53d4fff319be60223b57abdfbc7fabad08ff9fa621f88ea327dbb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_level_notify_item"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x936f20",
+      "name": "CLevel::notifyOfDeletion(CCharacter*)",
+      "tu": "level.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a850a32579d53d4fff319be60223b57abdfbc7fabad08ff9fa621f88ea327dbb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_level_notify_character"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x9451d0",
+      "name": "CLevel::updateNearUnitList(Ogre::Vector3 const&)",
+      "tu": "level.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a850a32579d53d4fff319be60223b57abdfbc7fabad08ff9fa621f88ea327dbb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_level_near"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x949c90",
+      "name": "CLevel::updateCharacters(Ogre::Camera*, Ogre::Vector3 const&, float, float)",
+      "tu": "level.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a850a32579d53d4fff319be60223b57abdfbc7fabad08ff9fa621f88ea327dbb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_level_update_characters"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x94b130",
+      "name": "CLevel::addListenerToUnit(long long, iUnitObserver*)",
+      "tu": "level.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a850a32579d53d4fff319be60223b57abdfbc7fabad08ff9fa621f88ea327dbb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_level_listener_guid"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x952af0",
+      "name": "CLevel::deleteTemporaryDungeonPortals(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "tu": "level.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a850a32579d53d4fff319be60223b57abdfbc7fabad08ff9fa621f88ea327dbb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_level_delete_portals"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x95abb0",
+      "name": "CLevel::findTemporaryDungeonPortal(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "tu": "level.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a850a32579d53d4fff319be60223b57abdfbc7fabad08ff9fa621f88ea327dbb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_level_find_portal"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x95aeb0",
+      "name": "CLevel::addCharacter(CCharacter*, Ogre::Vector3 const&, bool)",
+      "tu": "level.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a850a32579d53d4fff319be60223b57abdfbc7fabad08ff9fa621f88ea327dbb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_level_add_character"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x95c970",
+      "name": "CLevel::addItem(CItem*, Ogre::Vector3 const&, bool)",
+      "tu": "level.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a850a32579d53d4fff319be60223b57abdfbc7fabad08ff9fa621f88ea327dbb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_level_add_item"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x95ce70",
+      "name": "CLevel::rollMoney(CCharacter*, CCharacter*, Ogre::Vector3 const&, bool)",
+      "tu": "level.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a850a32579d53d4fff319be60223b57abdfbc7fabad08ff9fa621f88ea327dbb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_level_roll_money"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0x95d0b0",
+      "name": "CLevel::rollTreasure(CCharacter*, CCharacter*, Ogre::Vector3 const&)",
+      "tu": "level.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a850a32579d53d4fff319be60223b57abdfbc7fabad08ff9fa621f88ea327dbb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_level_roll_treasure"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xa6c880",
+      "name": "CSoundManager::getSoundLength(CSoundInstance*)",
+      "tu": "SoundManager.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "4600aa2a52380166263b9ac514abae67e6b78fe8c151135faa47005dfceb246b",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_sound_length"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xa6ca20",
+      "name": "CSoundManager::playSound(CSoundInstance*, Ogre::SceneNode*, int, float)",
+      "tu": "SoundManager.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "4600aa2a52380166263b9ac514abae67e6b78fe8c151135faa47005dfceb246b",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_sound_play"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xa6d4b0",
+      "name": "CSoundManager::createSound(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, SOUND_TYPE, bool, float, float)",
+      "tu": "SoundManager.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "4600aa2a52380166263b9ac514abae67e6b78fe8c151135faa47005dfceb246b",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_sound_create"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xa6e820",
+      "name": "CSoundManager::initialize(CSettings*)",
+      "tu": "SoundManager.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "4600aa2a52380166263b9ac514abae67e6b78fe8c151135faa47005dfceb246b",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_sound_initialize"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xca7b10",
+      "name": "CSkill::CSkill(CResourceManager*, CDataGroup*)",
+      "tu": "Skill.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "5d6ca8e88636407ef2ed61c5e71359c33960baf59f9d413e67e167a35afc6319",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_ctor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xca92e0",
+      "name": "CSkill::getDescription(CBaseUnit*, unsigned int, bool)",
+      "tu": "Skill.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "5d6ca8e88636407ef2ed61c5e71359c33960baf59f9d413e67e167a35afc6319",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_description"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xca9bd0",
+      "name": "CSkill::getDescriptionRequirments(CBaseUnit*)",
+      "tu": "Skill.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "5d6ca8e88636407ef2ed61c5e71359c33960baf59f9d413e67e167a35afc6319",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_requirements_description"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xcabbc0",
+      "name": "CSkillEffectAndAffixes::canAffixesAndEffectsBeAppliedToUnit(CBaseUnit*, CCharacter*)",
+      "tu": "SkillEffectAndAffixes.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "d014648f996411180fb62547e7edfa02fcad67aec85f58ded59b0bb0221f1559",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_affixes_can"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xcac040",
+      "name": "CSkillEffectAndAffixes::applyAffixesAndEffects(CBaseUnit*, CCharacter*, Ogre::Vector3 const*, bool)",
+      "tu": "SkillEffectAndAffixes.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "d014648f996411180fb62547e7edfa02fcad67aec85f58ded59b0bb0221f1559",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_affixes_apply"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xcb47f0",
+      "name": "CSkillEffectAndAffixes::CSkillEffectAndAffixes(CSkill*, CDataGroup*, CSkillEffectAndAffixes*)",
+      "tu": "SkillEffectAndAffixes.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "d014648f996411180fb62547e7edfa02fcad67aec85f58ded59b0bb0221f1559",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_affixes_ctor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xce3fb0",
+      "name": "CSkillProperty::getSkillStats()",
+      "tu": "SkillProperty.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "ba663f3c3ac9377c7bb961070e7da30345126b5331e3f1f18de9c46f035415eb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_property_stats"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xce5f90",
+      "name": "CSkillProperty::CSkillProperty(CSkill*, CResourceManager*, CSkillProperty*, CDataGroup*, unsigned int)",
+      "tu": "SkillProperty.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "ba663f3c3ac9377c7bb961070e7da30345126b5331e3f1f18de9c46f035415eb",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_skill_property_ctor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd0c780",
+      "name": "CQuest::getDungeonMaxFloor()",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_floor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd0c910",
+      "name": "CQuest::getQuestHasRandomPieces()",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_random"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd0cae0",
+      "name": "CQuest::getQuestRewardXP()",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_xp"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd0cb10",
+      "name": "CQuest::getQuestRewardGold()",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_gold"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd0cb70",
+      "name": "CQuest::setQuestAccepted(bool)",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_accept"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd0d7b0",
+      "name": "CQuest::cleanUpDialog(TArrayList<CQuestDialog*>&)",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_dialog_cleanup"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd14510",
+      "name": "CQuest::populate(CLevel*)",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_populate"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd14f60",
+      "name": "CQuest::getQuestDialog(CBaseUnit*)",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_dialog_selection"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd15180",
+      "name": "CQuest::getQuestIsValidForNPC(CBaseUnit*)",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_valid"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd167a0",
+      "name": "CQuest::getQuestStrings(CDataGroup*, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&, TArrayList<CQuestDialog*>&)",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_strings"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd197d0",
+      "name": "CQuest::initializeQuestWithNPC(CBaseUnit*)",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_initialize"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd19a10",
+      "name": "CQuest::calculateUnitsFromTag(CDataGroup*, TArrayList<TArrayList<CQuestUnitData*>*>*, TArrayList<CQuestUnitData*>*, unsigned int)",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_units"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd1b5e0",
+      "name": "CQuest::loadQuestData(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > const&)",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_load"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd1cf40",
+      "name": "CQuest::cleanUp(bool)",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_cleanup"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd1d270",
+      "name": "CQuest::giveRewardForQuest()",
+      "tu": "Quest.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "93886daee3fa4b43d04e13dbb9ddff1625a5d9397d8f29ed79bf5839afaabab2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_reward"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd34b30",
+      "name": "CQuestRewards::rewardPlayer()",
+      "tu": "QuestRewards.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a9ab849b6df127b79120965e6bb3e4256f820c0e9d01aaafd14979679e35acd5",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_quest_rewards_reward"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd34f10",
+      "name": "CQuestRewards::CQuestRewards(CQuest*)",
+      "tu": "QuestRewards.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0xd3b3d0",
+      "name": "CQuestRewards::~CQuestRewards()",
+      "tu": "QuestRewards.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0xd3b550",
+      "name": "CQuestRewards::~CQuestRewards()",
+      "tu": "QuestRewards.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0xd3caf0",
+      "name": "CQuestRewards::calculateRewards()",
+      "tu": "QuestRewards.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a9ab849b6df127b79120965e6bb3e4256f820c0e9d01aaafd14979679e35acd5",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_quest_rewards_calculate"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd3db90",
+      "name": "CQuestRewards::reInitializeRewards()",
+      "tu": "QuestRewards.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "a9ab849b6df127b79120965e6bb3e4256f820c0e9d01aaafd14979679e35acd5",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_quest_rewards_reset"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd6a0b0",
+      "name": "uncompressFiles(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",
+      "tu": "main.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "ef9aa029c979af065d160b4b1b28ca6aec0f23643d7d1128ed04d43d4a4f4dcd",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_main_uncompress_files"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd6b1c0",
+      "name": "backupOldSavesToTmp(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "tu": "main.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "ef9aa029c979af065d160b4b1b28ca6aec0f23643d7d1128ed04d43d4a4f4dcd",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_main_backup_saves"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd6caf0",
+      "name": "compressFiles(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, bool)",
+      "tu": "main.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "ef9aa029c979af065d160b4b1b28ca6aec0f23643d7d1128ed04d43d4a4f4dcd",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_main_compress_files"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd6ddc0",
+      "name": "main",
+      "tu": "main.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "ef9aa029c979af065d160b4b1b28ca6aec0f23643d7d1128ed04d43d4a4f4dcd",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_main_entry"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd6e2a0",
+      "name": "confirmbackups()",
+      "tu": "main.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "ef9aa029c979af065d160b4b1b28ca6aec0f23643d7d1128ed04d43d4a4f4dcd",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_main_confirm_backups"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd78290",
+      "name": "CResourceManager::createNewItem(CDataGroup*)",
+      "tu": "ResourceManager.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "c0d2a38719f34987f219e842afa6efd35481ed8835f94584057b2b257573fd2a",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_resource_creation_item"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd79290",
+      "name": "CResourceManager::createUnitsBySpawnClassAtPositionInLevel(CSpawnClass*, unsigned int, Ogre::Vector3 const&, CLevel*, CCharacter*, CCharacter*, int)",
+      "tu": "ResourceManager.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "c0d2a38719f34987f219e842afa6efd35481ed8835f94584057b2b257573fd2a",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_resource_creation_units"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd7fd30",
+      "name": "CSettings::assignDefault(int, int, std::basic_string<char, std::char_traits<char>, std::allocator<char> >)",
+      "tu": "Settings.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "110b53a1266622ad759e05c0b6b886f1929156d1fc1e94b9a59df7cc4527b2ff",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_settings_defaults"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xd80cf0",
+      "name": "CSettings::CSettings(std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >, std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >)",
+      "tu": "Settings.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "110b53a1266622ad759e05c0b6b886f1929156d1fc1e94b9a59df7cc4527b2ff",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "all_settings_constructor"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xdf5fd0",
+      "name": "CQuestDialogItem::dialogComplete(CPlayer*)",
+      "tu": "QuestDialogItem.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "c6a0dc74476d9d093d6c51e71943c72d4767f2b86c7402015f6ed71cb2ed005d",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_dialog_item"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xdf6750",
+      "name": "CQuestRequirements::CQuestRequirements(CQuest*)",
+      "tu": "QuestRequirements.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0xdfe3e0",
+      "name": "CQuestRequirements::~CQuestRequirements()",
+      "tu": "QuestRequirements.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "762acdabd5fc1e2751f091c081ba04e4bd089f4d03ede5e829597f7695f7573e",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_requirements_lifetime"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xdfe5b0",
+      "name": "CQuestRequirements::~CQuestRequirements()",
+      "tu": "QuestRequirements.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "762acdabd5fc1e2751f091c081ba04e4bd089f4d03ede5e829597f7695f7573e",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_requirements_deleting"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xdfe5d0",
+      "name": "CQuestRequirements::parseRequirementTag(CDataGroup*)",
+      "tu": "QuestRequirements.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "762acdabd5fc1e2751f091c081ba04e4bd089f4d03ede5e829597f7695f7573e",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_requirements_parse"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xdfec90",
+      "name": "CQuestRequirements::questRequirmentsHaveBeenMet()",
+      "tu": "QuestRequirements.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "762acdabd5fc1e2751f091c081ba04e4bd089f4d03ede5e829597f7695f7573e",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_quest_requirements_runtime"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf61c70",
+      "name": "MessageBoxA(void*, char const*, char const*, int)",
+      "tu": "LinuxUtils.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "0be82733fe88f95b2da741af3a824510391a54d9d5d0344626591f60384f08c8",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_linux_message_box"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf61da0",
+      "name": "LinuxUtils::GetSDLWindowHandle(SDL_Window*)",
+      "tu": "LinuxUtils.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0xf61e30",
+      "name": "LinuxUtils::crash_handler(int)",
+      "tu": "LinuxUtils.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0xf61eb0",
+      "name": "MessageBox(void*, wchar_t const*, wchar_t const*, int)",
+      "tu": "LinuxUtils.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0xf620d0",
+      "name": "_wfopen_s(_IO_FILE**, wchar_t const*, wchar_t const*)",
+      "tu": "LinuxUtils.cpp",
+      "evidence": null
+    },
+    {
+      "address": "0xf62c80",
+      "name": "LinuxUtils::GetCPUFrequency()",
+      "tu": "LinuxUtils.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "0be82733fe88f95b2da741af3a824510391a54d9d5d0344626591f60384f08c8",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_linux_cpu_frequency"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf632a0",
+      "name": "LinuxMapVirtual2Scancode(unsigned int)",
+      "tu": "WinMouseAndKeys.cpp",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2fa48967a748c9ae1b5ac55f2538c7ef3be350ec244caf33785e9bf7cf7c77bd",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_win_mouse_scan_map"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf92800",
+      "name": "gb2312_mbtowc",
+      "tu": "utf8Input.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "87a6cc0279c24a69b69ca46374f295b7975255eaa627c425ddbf7c96808d16b2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_0"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf928a0",
+      "name": "XConvertEucJpToUtf8",
+      "tu": "utf8Input.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "87a6cc0279c24a69b69ca46374f295b7975255eaa627c425ddbf7c96808d16b2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_1"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf92b90",
+      "name": "XConvertEucCnToUtf8",
+      "tu": "utf8Input.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "87a6cc0279c24a69b69ca46374f295b7975255eaa627c425ddbf7c96808d16b2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_2"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf92c80",
+      "name": "XConvertGb2312ToUtf8",
+      "tu": "utf8Input.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "87a6cc0279c24a69b69ca46374f295b7975255eaa627c425ddbf7c96808d16b2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_3"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf92da0",
+      "name": "XConvertCp936extToUtf8",
+      "tu": "utf8Input.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "87a6cc0279c24a69b69ca46374f295b7975255eaa627c425ddbf7c96808d16b2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_4"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf92e50",
+      "name": "XConvertBig5ToUtf8",
+      "tu": "utf8Input.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "87a6cc0279c24a69b69ca46374f295b7975255eaa627c425ddbf7c96808d16b2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_5"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf92fb0",
+      "name": "XConvertEucKrToUtf8",
+      "tu": "utf8Input.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "87a6cc0279c24a69b69ca46374f295b7975255eaa627c425ddbf7c96808d16b2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_6"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf930f0",
+      "name": "XConvertEucTwToUtf8",
+      "tu": "utf8Input.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "87a6cc0279c24a69b69ca46374f295b7975255eaa627c425ddbf7c96808d16b2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_7"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf931d0",
+      "name": "XConvertEucToUtf8",
+      "tu": "utf8Input.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "87a6cc0279c24a69b69ca46374f295b7975255eaa627c425ddbf7c96808d16b2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_8"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf93410",
+      "name": "XUtf8LookupString",
+      "tu": "utf8Input.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "87a6cc0279c24a69b69ca46374f295b7975255eaa627c425ddbf7c96808d16b2",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_lookup"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf93590",
+      "name": "XConvertUtf8ToUcs",
+      "tu": "utf8Utils.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6a89ad4278b21c5b3bb6a54c0cc36db55f474edc31655b8693dff2843db205b7",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_10"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf937a0",
+      "name": "XConvertUcsToUtf8",
+      "tu": "utf8Utils.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6a89ad4278b21c5b3bb6a54c0cc36db55f474edc31655b8693dff2843db205b7",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_11"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf938a0",
+      "name": "XUtf8CharByteLen",
+      "tu": "utf8Utils.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6a89ad4278b21c5b3bb6a54c0cc36db55f474edc31655b8693dff2843db205b7",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_12"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf938c0",
+      "name": "XCountUtf8Char",
+      "tu": "utf8Utils.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6a89ad4278b21c5b3bb6a54c0cc36db55f474edc31655b8693dff2843db205b7",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_13"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf93910",
+      "name": "XFastConvertUtf8ToUcs",
+      "tu": "utf8Utils.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "6a89ad4278b21c5b3bb6a54c0cc36db55f474edc31655b8693dff2843db205b7",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_14"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf93a20",
+      "name": "KeySymToUcs4",
+      "tu": "keysym2Ucs.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "1c2e030e870f9299ec962df934e3559ddabb5697b5f46937c6fc142e07d9c418",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_15"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf93c50",
+      "name": "XKeysymToUcs",
+      "tu": "keysym2Ucs.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "1c2e030e870f9299ec962df934e3559ddabb5697b5f46937c6fc142e07d9c418",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_16"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf93c60",
+      "name": "fl_utf8decode",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_17"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf93e10",
+      "name": "fl_utf8fwd",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_18"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf93e90",
+      "name": "fl_utf8back",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_19"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf93f10",
+      "name": "fl_utf8bytes",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_20"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf93f40",
+      "name": "fl_utf8encode",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_21"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf94000",
+      "name": "fl_ucs_to_Utf16",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_22"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf94090",
+      "name": "fl_utf8toUtf16",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_23"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf94200",
+      "name": "fl_utf8towc",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_24"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf94300",
+      "name": "fl_utf8toa",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_25"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf94410",
+      "name": "fl_utf8fromwc",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_26"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf945b0",
+      "name": "fl_utf8froma",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_27"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf94680",
+      "name": "fl_utf8test",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_28"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf94700",
+      "name": "fl_wcwidth_",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_29"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf94810",
+      "name": "fl_wcwidth",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_30"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf94850",
+      "name": "fl_utf8locale",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_31"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf948f0",
+      "name": "fl_utf8from_mb",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_from_mb_large",
+              "complete_fltk_source_32"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    },
+    {
+      "address": "0xf94a30",
+      "name": "fl_utf8to_mb",
+      "tu": "fl_utf.c",
+      "evidence": {
+        "policy": 1,
+        "method": "executed-call-pair",
+        "original_elf_sha256": "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b",
+        "evidence": {
+          "schema": 1,
+          "object_digest": "2858e4f3d8ce0664a0cb542c379a76fd076a194709b740ac6a59a722a10b8421",
+          "inputs_digest": "5e4bf2fc69d733ffafc74d28a0bd158c847f0d7121dda2dad3d6667ef7c6f54e",
+          "parameters": {
+            "fixtures": [
+              "complete_fltk_source_33",
+              "complete_fltk_to_mb_large"
+            ],
+            "runtime_abi": 2
+          }
+        }
+      }
+    }
+  ]
+}

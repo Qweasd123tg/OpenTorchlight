@@ -1,0 +1,19 @@
+{
+  "repo": "https://github.com/OutOfOrder/MonoKickstart",
+  "commit": "290303cd5bedfdc802582a7cb324de1f0619ab08",
+  "files": {
+    "binreloc.h": {
+      "url": "https://raw.githubusercontent.com/OutOfOrder/MonoKickstart/290303cd5bedfdc802582a7cb324de1f0619ab08/binreloc.h",
+      "sha256": "5f4388dfc2e379bbc4b82a770d23bf250a3db2c5b7578223e34ea723da2ce780"
+    },
+    "binreloc.c": {
+      "url": "https://raw.githubusercontent.com/OutOfOrder/MonoKickstart/290303cd5bedfdc802582a7cb324de1f0619ab08/binreloc.c",
+      "sha256": "bae70277554b318a1475c2f89d21254f4d34693b192888201ce64d258c21583c"
+    },
+    "binreloc.LICENSE": {
+      "url": "https://raw.githubusercontent.com/OutOfOrder/MonoKickstart/290303cd5bedfdc802582a7cb324de1f0619ab08/binreloc.LICENSE",
+      "sha256": "ee820ff0db4ce628569e0975ac27dc926052a9f85d102b101edb104311ef4d90"
+    }
+  },
+  "scope": "Authentic C API header provenance; runtime version not inferred solely from names"
+}

@@ -7,6 +7,7 @@
 #include "FileSystem.h"
 #include "SettingsVariables.h"
 #include "SystemsNativeMaster.h"
+#include "SystemsFixtureWorker.h"
 TL_ORIGINAL(void,musicCtor,(CSoundManager*,bool),"_ZN13CSoundManagerC1Eb")
 TL_ORIGINAL(void,musicDtor,(CSoundManager*),"_ZN13CSoundManagerD1Ev")
 TL_ORIGINAL(float,musicOriginal,(CSoundManager*,std::wstring&,bool),"_ZN13CSoundManager9playMusicERSbIwSt11char_traitsIwESaIwEEb")
@@ -21,7 +22,7 @@ extern "C" FMOD_RESULT musicGroup(FMOD::Sound*,FMOD::SoundGroup*) __asm__("_ZN4F
 extern "C" FMOD_RESULT musicChannel(FMOD::System*,int,FMOD::Channel**) __asm__("_ZN4FMOD6System10getChannelEiPPNS_7ChannelE");
 extern "C" FMOD_RESULT musicChannelGroup(FMOD::Channel*,FMOD::ChannelGroup*) __asm__("_ZN4FMOD7Channel15setChannelGroupEPNS_12ChannelGroupE");
 namespace {
-struct Case{unsigned path,scenario,loop;};const Case*current;autotest::Capture*cap;CSoundInstance*returned;
+struct Case{unsigned path,scenario,loop;};const Case*current;autotest::Capture*cap;CSoundInstance*returned;SystemsNativeMaster*sharedNative;
 void word(unsigned x){cap->add(&x,sizeof(x));}void real(float x){cap->add(&x,sizeof(x));}
 void info(CFileSystem*,const std::wstring&path,CFileInfo&f,bool compiled,bool binary,bool mods){word(1);cap->addText(path);word(compiled);word(binary);word(mods);f.m_sPath=L"resolved/"+path;}
 void stop(CSoundManager*){word(2);}
@@ -33,7 +34,7 @@ FMOD_RESULT group(FMOD::Sound*s,FMOD::SoundGroup*g){word(7);word(s==reinterpret_
 FMOD_RESULT channel(FMOD::System*s,int c,FMOD::Channel**p){word(8);word(s==reinterpret_cast<FMOD::System*>(0x333));word(c);*p=reinterpret_cast<FMOD::Channel*>(0x444);return current->scenario==2?static_cast<FMOD_RESULT>(1):FMOD_OK;}
 FMOD_RESULT channelGroup(FMOD::Channel*c,FMOD::ChannelGroup*g){word(9);word(c==reinterpret_cast<FMOD::Channel*>(0x444));word(g==reinterpret_cast<FMOD::ChannelGroup*>(0x555));return FMOD_OK;}
 void side(void*raw,autotest::Capture&out,bool ours){
- Case c=*static_cast<Case*>(raw);current=&c;cap=&out;SystemsNativeMaster native;
+ Case c=*static_cast<Case*>(raw);current=&c;cap=&out;SystemsNativeMaster&native=*sharedNative;
  union S{long double a;unsigned char bytes[sizeof(CSoundManager)];} storage;std::memset(&storage,0,sizeof(storage));CSoundManager*s=reinterpret_cast<CSoundManager*>(storage.bytes);musicCtor(s,false);
  returned=new CSoundInstance;returned->m_pSound=reinterpret_cast<FMOD::Sound*>(0x111);returned->m_referenceCount=5;
  s->m_iUnknown6E0=reinterpret_cast<FMOD::SoundGroup*>(0x222);s->m_iUnknown18=reinterpret_cast<FMOD::System*>(0x333);s->m_iUnknown6E8=reinterpret_cast<FMOD::ChannelGroup*>(0x555);s->m_pDynamicPropertyFile=c.scenario==3?NULL:native.settings;
@@ -47,4 +48,6 @@ void side(void*raw,autotest::Capture&out,bool ours){
 }
 void original(void*p,autotest::Capture&o){side(p,o,false);}void candidate(void*p,autotest::Capture&o){side(p,o,true);}
 }
-TL_TEST(complete_sound_music){autotest::Stats stats={0,0,0};int failures=0;unsigned cases=0;autotest::Coverage coverage("complete_sound_music",reinterpret_cast<uintptr_t>(&musicOriginal));for(unsigned p=0;p<6;++p)for(unsigned s=0;s<5;++s)for(unsigned loop=0;loop<2;++loop){Case c={p,s,loop};autotest::Outcome a,b;autotest::runChild(original,&c,a,1500,10000);autotest::runChild(candidate,&c,b,1500,10000);++cases;bool ok=coverage.observe(host,a,b)==0;TL_CHECK(failures,ok);}coverage.report(host);return failures+stats.incomplete+(coverage.completed!=cases);}
+static int complete_sound_music_worker(const tlhybrid_host*host){SystemsNativeMaster native;sharedNative=&native;autotest::Stats stats={0,0,0};int failures=0;unsigned cases=0;autotest::Coverage coverage("complete_sound_music",reinterpret_cast<uintptr_t>(&musicOriginal));for(unsigned p=0;p<6;++p)for(unsigned s=0;s<5;++s)for(unsigned loop=0;loop<2;++loop){Case c={p,s,loop};autotest::Outcome a,b;autotest::runChild(original,&c,a,1500,10000);autotest::runChild(candidate,&c,b,1500,10000);++cases;bool ok=coverage.observe(host,a,b)==0;TL_CHECK(failures,ok);}coverage.report(host);return failures+stats.incomplete+(coverage.completed!=cases);}
+
+TL_TEST(complete_sound_music){return systems_fixture::isolated(&complete_sound_music_worker,host);}

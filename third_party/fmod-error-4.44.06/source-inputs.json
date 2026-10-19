@@ -1,0 +1,26 @@
+{
+  "url": "https://github.com/neuroprod/omniBotProto/blob/5abf1b5a9846ba093325af7a86ee2d7b8cbe12e6/OmnibotGame/blocks/FMOD/include/fmod_errors.h",
+  "path": "OmnibotGame/blocks/FMOD/include/fmod_errors.h",
+  "raw_url": "https://raw.githubusercontent.com/neuroprod/omniBotProto/5abf1b5a9846ba093325af7a86ee2d7b8cbe12e6/OmnibotGame/blocks/FMOD/include/fmod.h",
+  "version": "0x00044406",
+  "header_sha256": {
+    "fmod.h": "611f6cbaf273a609ee5cc99eec5b6a7d7b1c4a5cee8516f5312db8c47ba77a7c",
+    "fmod_errors.h": "c8efee0ca405be7750bdd46686f4e5ef28f540cfcfe71a646877f3399ea3fe2d"
+  },
+  "bridge_sha256": "077f45aa8d8a1de4e2c488a75ca2ec9ddd4ecc5fbd72810f174925d9887e6d54",
+  "bridge_change": "Only include fmod.h changed to include FmodInterface.h; function body untouched",
+  "proof_scope": "ErrorString source only; no SDK/runtime version pin change",
+  "enum_scope": "All 96 integer result codes plus FORCEINT=65536; same signed-32 ABI",
+  "files": {
+    "fmod.h": {
+      "sha256": "611f6cbaf273a609ee5cc99eec5b6a7d7b1c4a5cee8516f5312db8c47ba77a7c",
+      "url": "https://github.com/neuroprod/omniBotProto/blob/5abf1b5a9846ba093325af7a86ee2d7b8cbe12e6/OmnibotGame/blocks/FMOD/include/fmod.h"
+    },
+    "fmod_errors.h": {
+      "sha256": "c8efee0ca405be7750bdd46686f4e5ef28f540cfcfe71a646877f3399ea3fe2d",
+      "url": "https://github.com/neuroprod/omniBotProto/blob/5abf1b5a9846ba093325af7a86ee2d7b8cbe12e6/OmnibotGame/blocks/FMOD/include/fmod_errors.h"
+    }
+  },
+  "commit": "5abf1b5a9846ba093325af7a86ee2d7b8cbe12e6",
+  "copyright": "Firelight Technologies Pty, Ltd. 2004-2011; original header copyright notices retained verbatim. No separate license file was present in this source directory."
+}

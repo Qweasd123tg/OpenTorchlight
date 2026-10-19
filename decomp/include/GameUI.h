@@ -66,6 +66,8 @@ class CGameUI : public CRunicCore
 {
     friend class CGameClient;
     friend class CGame;
+    friend class CQuestRewards;
+    friend class CQuestDialogMenu;
 public:
     CGameUI(CSettings&, CGameClient&, void*, Ogre::RenderWindow*, Ogre::Camera*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CResourceManager*);
     bool processInput(CGameClient*,void*,float,bool);
@@ -211,6 +213,7 @@ public:
     void setCinematicOpen(std::wstring cinematic);
 private:
     friend class CPlayer;
+    friend class CCharacter;
     friend class CDamageShape;
     friend class CDropdownMenu;
     friend class CDieMenu;

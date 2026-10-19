@@ -35,7 +35,9 @@ class CGameClient : public CRunicCore, public Ogre::RenderTargetListener,
                     public Ogre::RenderQueue::RenderableListener
 {
 friend class CLevel;
+    friend class CPlayer;
     friend class CGame;
+    friend class CQuestRewards;
     friend class CMonster;
 friend class CDropdownMenu;
     friend class CWaypointMenu;
@@ -47,6 +49,7 @@ friend class CDifficultyMenu;
     friend class CCameraController;
     friend class CRandomGroup;
 public:
+    int getRankOfMonstersOnFloor(int, CDungeon*, bool);
     bool findWorldLocation(Ogre::Vector3&, bool);
     CGameClient(CSettings&, CMasterResourceManager*, Ogre::RenderWindow*, Ogre::Root*, CCameraControl*, Ogre::SceneManager*, Ogre::SceneManager*, Ogre::SceneManager*, CSoundManager&);
     void create();
@@ -168,7 +171,9 @@ private:
     CDungeon* m_currentDungeon; // +0x38d8
     Ogre::Vector3 m_cameraPosition;
     int m_startDifficulty; // +0x38ec
-    unsigned char m_gap38F0[0x1c];
+    std::string m_projectorTexture; // +0x38f0
+    std::string m_projectorFalloffTexture; // +0x38f8
+    unsigned char m_gap3900[0xc];
     int m_cameraState;
 };
 #endif

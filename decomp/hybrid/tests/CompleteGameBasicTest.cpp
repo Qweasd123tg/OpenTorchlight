@@ -12,8 +12,8 @@ TL_ORIGINAL(void,aspectOriginal,(CGame*,float,float),"_ZN5CGame17updateAspectRat
 extern "C" void aspectCandidate(CGame*,float,float) __asm__("_ZN5CGame17updateAspectRatioEff");
 TL_ORIGINAL(void,viewportsOriginal,(CGame*),"_ZN5CGame15createViewportsEv")
 extern "C" void viewportsCandidate(CGame*) __asm__("_ZN5CGame15createViewportsEv");
-TL_ORIGINAL(int,beginOriginal,(CGame*,void*),"_ZN5CGame5beginEPv")
-extern "C" int beginCandidate(CGame*,void*) __asm__("_ZN5CGame5beginEPv");
+TL_ORIGINAL(long,beginOriginal,(CGame*,void*),"_ZN5CGame5beginEPv")
+extern "C" long beginCandidate(CGame*,void*) __asm__("_ZN5CGame5beginEPv");
 TL_FUNCTION(basicCreate,"_ZN5CGame12createWindowEb")
 TL_FUNCTION(basicCameraAspect,"_ZN14CCameraControl14setAspectRatioE8ECAMERASff")
 TL_FUNCTION(basicScreen,"_ZN11CGameClient16updateScreenInfoEPvii")
@@ -59,7 +59,7 @@ void side(void*raw,autotest::Capture&out,bool ours){Case c=*static_cast<Case*>(r
  if(c.target==0){bool(*fn)(CGame*,bool)=ours?configCandidate:configOriginal;if(autotest::beginInvocation(out,fn)){bool r=fn(g,c.size&1);out.callCompleted=1;word(r);}word(g->m_renderWindow==returned);word(native.settings->GetInt(KSETTINGS_RES_WIDTH));word(native.settings->GetInt(KSETTINGS_RES_HEIGHT));word(native.settings->GetInt(KSETTINGS_FULLSCREEN));word(native.settings->GetInt(KSETTINGS_FSAA));word(*reinterpret_cast<bool*>(0x1426408));out.add(reinterpret_cast<void*>(0x14263d8),8);}
  else if(c.target==1){void(*fn)(CGame*,float,float)=ours?aspectCandidate:aspectOriginal;if(autotest::beginInvocation(out,fn)){fn(g,widths[c.size],heights[c.size]);out.callCompleted=1;}}
  else if(c.target==2){if(c.mode&2)g->m_renderWindow=NULL;void(*fn)(CGame*)=ours?viewportsCandidate:viewportsOriginal;if(autotest::beginInvocation(out,fn)){fn(g);out.callCompleted=1;}word(window.getNumViewports());for(unsigned i=0;i<window.getNumViewports();++i){Ogre::Viewport*v=window.getViewport(i);word(v->getZOrder());word(v->getActualWidth());word(v->getActualHeight());word(v->getClearEveryFrame());word(v->getClearBuffers());out.add(&v->getBackgroundColour(),sizeof(Ogre::ColourValue));}}
- else{g->m_cameraControl=NULL;int(*fn)(CGame*,void*)=ours?beginCandidate:beginOriginal;if(autotest::beginInvocation(out,fn)){int r=fn(g,reinterpret_cast<void*>(0x852));out.callCompleted=1;word(r);}word(g->m_editorWindow==reinterpret_cast<void*>(0x852));}
+ else{g->m_cameraControl=NULL;long(*fn)(CGame*,void*)=ours?beginCandidate:beginOriginal;if(autotest::beginInvocation(out,fn)){long r=fn(g,reinterpret_cast<void*>(0x852));out.callCompleted=1;out.add(&r,sizeof(r));}word(g->m_editorWindow==reinterpret_cast<void*>(0x852));}
  d.restore();g->m_cameraControl=NULL;delete control;
 }
 void original(void*p,autotest::Capture&o){side(p,o,false);}void candidate(void*p,autotest::Capture&o){side(p,o,true);}

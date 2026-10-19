@@ -31,6 +31,7 @@ static const std::wstring gCOUNTER_TYPE_NAMES[] =
 // OUTPUT_EVENT_ACTIVATED on reaching the target or on each change, by type.
 class CCounter : public CEditorBaseObject
 {
+    friend class CPlayer;
 public:
     CCounter();
     virtual ~CCounter();
