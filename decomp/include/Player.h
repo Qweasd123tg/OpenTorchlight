@@ -17,8 +17,13 @@ class CDynamicLine;
 class CPlayer : public CCharacter
 {
     friend class CSpawnClassData;
+    friend class CConsole;
+    friend class CMainMenu;
+    friend class CWaypointMenu;
+    friend class CDieMenu;
 friend class CGameClient;
 public:
+    void setCheater();
     void storeLevelSavedState(CLevel& level);
     bool removeItemFromInventoryOrPetsInventoryByGuid(long long guid, bool wholeStack, bool destroy, UNITTYPES::EUNITTYPES type);
     bool removeQuestItemFromInventoryOrPetsInventoryByGuid(long long quest, long long guid, bool wholeStack, bool destroy, UNITTYPES::EUNITTYPES type);
@@ -86,6 +91,7 @@ public:
     void updateDungeonTracking(std::wstring name, int depth);
 
 private:
+    friend class CFishingMenu;
     friend class CSteamStats;
     CParticle* m_levelUpParticle; // +0x778
     long long m_itemLinks[2]; // +0x780

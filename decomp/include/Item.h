@@ -8,6 +8,7 @@ class CSoundBank;
 class CItem : public CBaseUnit
 {
     friend class CLevel;
+    friend class CCharacter;
 public:
     CItem(CResourceManager* resourceManager);
     virtual ~CItem();

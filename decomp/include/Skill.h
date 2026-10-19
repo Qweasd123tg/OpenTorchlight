@@ -23,6 +23,7 @@ class CSkillEvent;
 // Skill.cpp is recovered.
 class CSkill : public CRunicCore, public iUnitObserver
 {
+    friend class CTriggerUnit;
     friend class CSkillEvent;
     friend class CLevel;
     friend class CEffect;

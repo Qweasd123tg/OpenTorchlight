@@ -16,7 +16,8 @@ public:
     {
         virtual ~CRoomPieceCoreData();
         std::wstring m_name;                      // 0x10
-        unsigned char m_unknown18[0x18];
+        long long m_guid;                         // 0x18
+        unsigned char m_unknown20[0x10];
         bool m_scalable;                         // 0x30
         unsigned char m_padding31[7];
         TArrayList<float> m_snapRotation;         // 0x38

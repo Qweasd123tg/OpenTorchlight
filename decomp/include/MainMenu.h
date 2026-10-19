@@ -31,10 +31,10 @@ public:
     bool m_bUnknownC0;
     bool m_bUnknownC1;
     unsigned char m_gapC2[0x6];
-    long long m_iUnknownC8;
-    long long m_iUnknownD0;
-    long long m_iUnknownD8;
-    long long m_iUnknownE0;
+    CEGUI::Window* m_iUnknownC8;
+    CEGUI::Window* m_iUnknownD0;
+    CEGUI::Window* m_iUnknownD8;
+    CEGUI::Window* m_iUnknownE0;
     CEGUI::Window* m_creditsWindow;
     CEGUI::Window* m_extraWindow;
 };

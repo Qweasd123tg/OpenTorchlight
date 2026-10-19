@@ -1,0 +1,40 @@
+#include "AutoTest.h"
+#include <Ogre.h>
+#include <deque>
+#define private public
+#define protected public
+#include "GenericModel.h"
+#include "ResourceManager.h"
+#include "GameClient.h"
+#undef protected
+#undef private
+#include "SettingsVariables.h"
+#include "tests/NativeGameServices.h"
+#include "tests/NativeMenuClient.h"
+#include "tests/SystemsFixtureWorker.h"
+TL_ORIGINAL(void,gjOld,(CGenericModel*,Ogre::Frustum*,Ogre::Frustum*,const std::string&,const std::string&),"_ZN13CGenericModel16setProjectorPassEPN4Ogre7FrustumES2_RKSsS4_")
+extern "C" void gjNew(CGenericModel*,Ogre::Frustum*,Ogre::Frustum*,const std::string&,const std::string&) __asm__("_ZN13CGenericModel16setProjectorPassEPN4Ogre7FrustumES2_RKSsS4_");
+TL_ORIGINAL(void,gjCtor,(CGenericModel*,CResourceManager*,Ogre::SceneManager*,OGRE_UTILITIES::EPRIMITIVES),"_ZN13CGenericModelC1EP16CResourceManagerPN4Ogre12SceneManagerEN14OGRE_UTILITIES11EPRIMITIVESE")
+TL_ORIGINAL(void,gjDtor,(CGenericModel*),"_ZN13CGenericModelD1Ev")
+TL_ORIGINAL(void,gjResourceCtor,(CResourceManager*,Ogre::SceneManager*),"_ZN16CResourceManagerC1EPN4Ogre12SceneManagerE")
+TL_ORIGINAL(void,gjResourceDtor,(CResourceManager*),"_ZN16CResourceManagerD1Ev")
+extern "C" char gjBest[] __asm__("_ZN4Ogre8Material16getBestTechniqueEtPKNS_10RenderableE");
+extern "C" char gjProjective[] __asm__("_ZN4Ogre16TextureUnitState22setProjectiveTexturingEbPKNS_7FrustumE");
+namespace {
+nativegame::Services*services;CGameClient*client;Ogre::Frustum*cameras[2];std::vector<Ogre::MaterialPtr>*known;autotest::Capture*output;void(*nativeProjective)(Ogre::TextureUnitState*,bool,const Ogre::Frustum*);
+void number(unsigned n){output->add(&n,4);}void scalar(float v){output->add(&v,4);}void text(const std::string&s){number(s.size());if(s.size())output->add(s.data(),s.size());}void colour(const Ogre::ColourValue&c){scalar(c.r);scalar(c.g);scalar(c.b);scalar(c.a);}
+Ogre::Technique*best(Ogre::Material*p,unsigned short lod,const Ogre::Renderable*r){if(lod||r)std::abort();for(unsigned i=0;i<known->size();++i)if((*known)[i].getPointer()==p)return p->getTechnique(0);std::abort();return NULL;}
+void projective(Ogre::TextureUnitState*p,bool enabled,const Ogre::Frustum*f){unsigned material=~0u,index=~0u;for(unsigned i=0;i<known->size();++i){Ogre::Pass*pass=(*known)[i]->getTechnique(0)->getPass(0);for(unsigned j=0;j<pass->getNumTextureUnitStates();++j)if(pass->getTextureUnitState(j)==p){material=i;index=j;}}if(material==~0u)std::abort();number(1);number(material);number(index);number(enabled);number(f==NULL?0:f==cameras[0]?1:f==cameras[1]?2:99);nativeProjective(p,enabled,f);}
+void blend(const Ogre::LayerBlendModeEx&b){number(b.blendType);number(b.operation);number(b.source1);number(b.source2);if(b.blendType==Ogre::LBT_COLOUR){colour(b.colourArg1);colour(b.colourArg2);}else{scalar(b.alphaArg1);scalar(b.alphaArg2);}scalar(b.factor);}
+void side(void*raw,autotest::Capture&out,bool ours){unsigned seed=*static_cast<unsigned*>(raw);output=&out;services->settings->SetInt(KSETTINGS_SHADOWS_ENABLED,seed%3);CResourceManager*resources=static_cast<CResourceManager*>(Ogre::NedAllocImpl::allocBytes(sizeof(CResourceManager),0,0,0));gjResourceCtor(resources,services->scene);unsigned mode=seed/3%3;if(mode==2)resources->m_GameClients.add(client);client->m_pendingPassClear=false;CGenericModel*model=static_cast<CGenericModel*>(Ogre::NedAllocImpl::allocBytes(sizeof(CGenericModel),0,0,0));gjCtor(model,NULL,NULL,OGRE_UTILITIES::PRIMITIVE_SPHERE);if(mode)model->setResourceManager(resources);std::vector<Ogre::MaterialPtr>materials;known=&materials;unsigned count=seed/9%5;
+ for(unsigned i=0;i<count;++i){CRenderableStates state=CRenderableStates();state.projectorTechnique=(seed/11+i)%3?short(-1):short(7);state.m_flag31=(seed/7+i)%2;state.m_flag30=(seed+i)%2;for(unsigned k=0;k<2;++k){Ogre::MaterialPtr material=Ogre::MaterialManager::getSingleton().create("generic-projector-"+Ogre::StringConverter::toString(i*2+k),"General");materials.push_back(material);Ogre::Pass*pass=material->getTechnique(0)->getPass(0);unsigned units=k?(seed/13+i)%3:(1+(seed/3+i)%5);for(unsigned u=0;u<units;++u){Ogre::TextureUnitState*t=pass->createTextureUnitState();t->setTextureName("original-"+Ogre::StringConverter::toString(u)+".png");t->setName("unit-"+Ogre::StringConverter::toString(u));t->setTextureCoordSet(u%3);}if(k)state.material18=(seed/17+i)%3?material.getPointer():NULL;else{state.material=material.getPointer();state.projectorPass=short(int(units)-int(seed/5%3));}}model->m_renderableStates.push_back(state);}
+ detour::Set hooks;hooks.redirect(gjBest,gjBest,&best);hooks.redirect(gjProjective,gjProjective,&projective);if(hooks.failed()){out.issue=autotest::Capture::InvalidReport;return;}const char*names[]={"","shadow.png","path with spaces/light.png","tex/\xce\xa9.png"};std::string a=names[seed/4%4],b=names[seed/16%4];Ogre::Frustum*first=seed%4?cameras[0]:NULL,*second=seed/4%4?cameras[1]:NULL;typedef void(*Fn)(CGenericModel*,Ogre::Frustum*,Ogre::Frustum*,const std::string&,const std::string&);Fn fn=ours?gjNew:gjOld;if(autotest::beginInvocation(out,fn)){fn(model,first,second,a,seed/64%2?a:b);out.callCompleted=1;}number(client->m_pendingPassClear);number(model->m_renderableStates.size());for(unsigned i=0;i<count;++i){CRenderableStates&s=model->m_renderableStates[i];number(s.projectorTechnique);number(s.projectorPass);number(s.m_flag30);number(s.m_flag31);}
+ for(unsigned i=0;i<materials.size();++i){Ogre::Pass*p=materials[i]->getTechnique(0)->getPass(0);number(p->getLightingEnabled());number(p->getNumTextureUnitStates());for(unsigned j=0;j<p->getNumTextureUnitStates();++j){Ogre::TextureUnitState*t=p->getTextureUnitState(j);text(t->getName());text(t->getTextureName());number(t->getTextureType());number(t->getTextureCoordSet());number(t->isBlank());const Ogre::TextureUnitState::UVWAddressingMode&a=t->getTextureAddressingMode();number(a.u);number(a.v);number(a.w);number(t->getTextureFiltering(Ogre::FT_MIN));number(t->getTextureFiltering(Ogre::FT_MAG));number(t->getTextureFiltering(Ogre::FT_MIP));blend(t->getColourBlendMode());blend(t->getAlphaBlendMode());number(t->getEffects().size());}}
+ hooks.restore();gjDtor(model);Ogre::NedAllocImpl::deallocBytes(model);resources->m_GameClients.clear();gjResourceDtor(resources);Ogre::NedAllocImpl::deallocBytes(resources);for(unsigned i=0;i<materials.size();++i)Ogre::MaterialManager::getSingleton().remove(materials[i]->getHandle());
+}
+void original(void*p,autotest::Capture&o){side(p,o,false);}void candidate(void*p,autotest::Capture&o){side(p,o,true);}
+int worker(const tlhybrid_host*host){nativegame::Services native;services=&native;if(!native.ready())return 1;menugui::Audio audio(native.master);menugui::Client actualClient(*native.settings,native.master,*native.master->m_pSoundManager);client=actualClient.client;for(unsigned i=0;i<2;++i)cameras[i]=actualClient.scenes[2]->getCamera("menu-bootstrap-camera-"+Ogre::StringConverter::toString(i));void*lib=dlopen("libOgreMain-1.6.5.so",RTLD_NOW|RTLD_NOLOAD);if(!lib)return 1;nativeProjective=reinterpret_cast<void(*)(Ogre::TextureUnitState*,bool,const Ogre::Frustum*)>(dlsym(lib,"_ZN4Ogre16TextureUnitState22setProjectiveTexturingEbPKNS_7FrustumE"));dlclose(lib);if(!nativeProjective)return 1;
+ autotest::Coverage coverage("generic_projector",reinterpret_cast<uintptr_t>(gjOld));for(unsigned seed=0;seed<864;++seed){autotest::Outcome a,b;autotest::runChild(original,&seed,a);autotest::runChild(candidate,&seed,b);if(coverage.observe(host,a,b)){host->log("    projector seed%u issue%u/%u exit%d/%d bytes%lu/%lu\n",seed,a.capture.issue,b.capture.issue,a.childStatus,b.childStatus,(unsigned long)a.capture.length,(unsigned long)b.capture.length);for(unsigned z=0;z<a.capture.length&&z<b.capture.length;++z)if(a.capture.data[z]!=b.capture.data[z]){host->log("    firstdiff%u old%02x new%02x\n",z,(unsigned char)a.capture.data[z],(unsigned char)b.capture.data[z]);break;}coverage.report(host);return 1;}}coverage.report(host);return coverage.completed!=864||coverage.missing||coverage.different;
+}
+}
+TL_TEST(complete_generic_projector){return systems_fixture::isolated(&worker,host);}

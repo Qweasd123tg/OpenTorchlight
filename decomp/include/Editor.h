@@ -17,6 +17,9 @@ class CEditorScene;
 class CResourceManager;
 class CSettings;
 namespace Ogre { class Camera; class Viewport; }
+class CMouseHandler;
+class CLevel;
+namespace Ogre { class SceneNode; class Entity; }
 class CUndo;
 class CPOV;
 class CGameClient;
@@ -27,6 +30,7 @@ class iEditorResourceManager;
 class CEditor : public CRunicCore
 {
     friend class CUndo;
+    friend class CObjectControl3D;
 public:
     friend wchar_t* EditorGetDebugOutput();
     friend unsigned int EditorUpdate(int);
@@ -37,6 +41,12 @@ public:
 
     void InitEditor(iEditorResourceManager*, Ogre::Viewport*);
     void releaseResources();
+    void UpdatePlayerInput(float);
+    bool EditorDumpDescriptionOfObjectsToFile(const std::wstring&);
+    void reinitScene();
+    void updateParticleSystems(float, float);
+    void recreateScene(unsigned int);
+    void update(float);
     void addUndo(CUndo* undo, bool clearRedo);
     void addRedo(CUndo* redo);
     CEditorScene* GetEditorScene(std::wstring name);
@@ -110,7 +120,7 @@ private:
     friend void EditorSetCommandAutoRun(wchar_t* name);
     friend bool EditorGetMuted();
     friend void EditorSetMuted(bool muted);
-    char m_Unknown10[0x38];
+    unsigned int m_keyPropertyIndices[14];
     bool m_bRenderWindowHasFocus;
     // Checked by the editor API, never set in the shipped build.
     bool m_bDisabled;
@@ -122,24 +132,24 @@ private:
     int m_iFlags;
     int m_iUnknown68;
     CPOV* m_pCameraController;
-    int m_iUnknown78[3];
+    float m_iUnknown78[3];
     Ogre::Camera* m_pUnknown88;
-    void* m_pUnknown90;
-    int m_iUnknown98[6];
-    void* m_pUnknownB0;
+    Ogre::Viewport* m_pUnknown90;
+    float m_iUnknown98[6];
+    CMouseHandler* m_pUnknownB0;
     int m_iMouseWheelDelta;
     TArrayList<CEditorScene*> m_EditorScenes;
     std::map<std::wstring, unsigned int> m_EditorSceneIDs;
     Ogre::Timer m_Timer;
     CEditorObjectManager* m_pObjectManager;
     CResourceManager* m_pUnknown128;
-    void* m_pUnknown130;
-    void* m_pUnknown138;
+    Ogre::SceneNode* m_pUnknown130;
+    Ogre::Entity* m_pUnknown138;
     std::list<CUndo*> m_Undos;
     std::list<CUndo*> m_Redos;
     unsigned int m_iMaxUndos;
     bool m_bUnknown164;
-    void* m_pUnknown168;
+    CLevel* m_pUnknown168;
     int m_iCharacterLevel;
     int m_iLevelDepth;
     bool m_bLevelPopulate;
@@ -164,6 +174,8 @@ private:
     TArrayList<std::wstring> m_ActiveQuests;
     TArrayList<std::wstring> m_CompletedQuests;
 };
+
+void copyFileTo(const std::wstring&, const std::wstring&);
 
 extern CEditor* gEditor;
 

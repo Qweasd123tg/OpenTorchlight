@@ -42,6 +42,9 @@ class CGameUI;
 class CCameraControl;
 class CResourceManager : public CRunicCore
 {
+    friend class CGameClient;
+    friend class CEditor;
+    friend class CGenericModel;
     friend class CLevel;
 public:
     CBaseUnit* createUnit(const wchar_t* category, const wchar_t* name, int level, bool flag);

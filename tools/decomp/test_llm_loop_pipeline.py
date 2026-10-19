@@ -1069,5 +1069,85 @@ class RepairWorkflow(unittest.TestCase):
                 llm_loop.main()
 
 
+
+class ProtectedDeletingDestructor(unittest.TestCase):
+    """D1 repair preserves its independently accepted native D0 wrapper."""
+    def setUp(self):
+        import elfimage
+        import struct
+        self.owner = dict(address="0x200", kind="dtor", tu=1, scope="CProbe",
+                          names=["_ZN6CProbeD1Ev", "_ZN6CProbeD2Ev"])
+        self.wrapper = dict(address="0x300", kind="dtor", tu=1, scope="CProbe", size=18,
+                            names=["_ZN6CProbeD0Ev"])
+        self.db = dict(original_elf_sha256="a" * 64,
+                       functions={"0x200": self.owner, "0x300": self.wrapper})
+        self.row = dict(address="0x300", name="_ZN6CProbeD0Ev", status="MATCH", weak=False,
+                        size=18, original_size=18, code="0" * 16)
+        self.raw = (b"\x53\x48\x89\xfb\xe8" + struct.pack("<i", 0x200 - 0x309)
+                    + b"\x48\x89\xdf\x5b\xe9" + struct.pack("<i", 0x500 - 0x312))
+        self.image = SimpleNamespace(sha256="a" * 64, read=lambda a, n: self.raw,
+                                     plt={0x500: "_ZN4Ogre12NedAllocImpl12deallocBytesEPv"})
+        self.loader = patch.object(elfimage, "load", return_value=self.image)
+        self.loader.start()
+        self.addCleanup(self.loader.stop)
+        original = patch.object(llm_loop.elfdb, "default_elf", return_value=Path("/not-read"))
+        original.start()
+        self.addCleanup(original.stop)
+
+    def pin(self, **kwargs):
+        return llm_loop._repair_deleting_destructor("0x300", kwargs.get("owner", self.owner),
+            kwargs.get("db", self.db), kwargs.get("before", [self.row]), kwargs.get("after", [self.row]))
+
+    def test_native_baseline_and_final_wrapper_preserved(self):
+        pin = self.pin()
+        self.assertEqual(pin["code"], self.row["code"])
+        llm_loop.validate_repair_thunks({"protected_thunks": [pin]}, [self.row])
+
+    def test_no_unreviewed_wrapper_alias_or_class(self):
+        for delta in [{"kind": "function"}, {"size": 19}, {"scope": "Other"},
+                      {"tu": 2}, {"names": ["_ZN6CProbeD0Ev", "alias"]}]:
+            db = dict(self.db, functions=dict(self.db["functions"], **{"0x300": dict(self.wrapper, **delta)}))
+            with self.subTest(delta=delta), self.assertRaises(ValueError):
+                self.pin(db=db)
+
+    def test_owner_must_be_original_d1_d2(self):
+        for delta in [{"kind": "function"}, {"names": ["_ZN6CProbeD1Ev"]}, {"address": "0x201"}]:
+            with self.subTest(delta=delta), self.assertRaises(ValueError):
+                self.pin(owner=dict(self.owner, **delta))
+
+    def test_unique_strong_current_match_required(self):
+        for delta in [{"status": "DIFF"}, {"weak": True}, {"size": 17}, {"original_size": 17},
+                      {"code": "f" * 16}, {"name": "other"}, {"code": None}]:
+            with self.subTest(delta=delta), self.assertRaises(ValueError):
+                self.pin(after=[dict(self.row, **delta)])
+        for rows in [[], [self.row, self.row]]:
+            with self.assertRaises(ValueError):
+                self.pin(after=rows)
+
+    def test_exact_native_instructions_and_call_targets_required(self):
+        original = self.raw
+        for offset in [0, 4, 5, 9, 13, 14]:
+            changed = bytearray(original)
+            changed[offset] ^= 1
+            self.raw = bytes(changed)
+            with self.subTest(offset=offset), self.assertRaises(ValueError):
+                self.pin()
+        self.raw = original
+        self.image.plt = {0x500: "another_deallocator"}
+        with self.assertRaises(ValueError):
+            self.pin()
+
+    def test_native_elf_digest_required(self):
+        self.image.sha256 = "b" * 64
+        with self.assertRaises(ValueError):
+            self.pin()
+
+    def test_final_missing_changed_diff_or_weak_wrapper_rejected(self):
+        pin = self.pin()
+        for rows in [[], [self.row, self.row], [dict(self.row, code="f" * 16)],
+                     [dict(self.row, status="DIFF")], [dict(self.row, weak=True)]]:
+            with self.assertRaises(RuntimeError):
+                llm_loop.validate_repair_thunks({"protected_thunks": [pin]}, rows)
+
 if __name__ == "__main__":
     unittest.main()

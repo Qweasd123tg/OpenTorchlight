@@ -300,7 +300,7 @@ bool CSkillEvent::getCharacterCanBeAffectedByDamageShape(CDamageShape* shape,CCh
 bool CSkillEvent::getCharacterCanBeHarmedByMissile(CMissile* missile,CCharacter* character)
 {
     CCharacter* owner=m_pSkill->getMasterOwnerCharacter();
-    if(!owner && missile->m_pRunicCore)owner=dynamic_cast<CCharacter*>(static_cast<CBaseUnit*>(missile->m_pRunicCore));
+    if(!owner && missile->m_owner.getObject())owner=dynamic_cast<CCharacter*>(missile->m_owner.getObject());
     if(m_missileTargetSelf && character==owner)return character!=NULL;
     if(!character || !m_pSkillProperty)return false;
     if(m_targetCorpses) {
@@ -404,13 +404,7 @@ void CSkillEvent::unitSpawnedFromUnitSpawner(CUnitSpawner*,CPositionableObject* 
     if(!object)return;
     CMissile* missile=dynamic_cast<CMissile*>(object);
     if(missile) {
-        CRunicCore* owner=m_ownerCharacter.getObject();
-        if(missile->m_pRunicCore!=owner) {
-            if(missile->m_pRunicCore)missile->m_pRunicCore->removeSafePointer(reinterpret_cast<TSafePointer<void*>*>(&missile->m_pRunicCore),missile->m_iUnknown228);
-            missile->m_pRunicCore=NULL;
-            if(owner)missile->m_iUnknown228=owner->addSafePointer(reinterpret_cast<TSafePointer<void*>*>(&missile->m_pRunicCore));
-            missile->m_pRunicCore=owner;
-        }
+        missile->m_owner.setObject(m_ownerCharacter.getObject());
         if(missile->m_Listeners.find(static_cast<iMissile*>(this))==-1)missile->m_Listeners.add(static_cast<iMissile*>(this));
         return;
     }

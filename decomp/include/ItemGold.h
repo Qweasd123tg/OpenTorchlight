@@ -21,6 +21,7 @@ public:
     void playDropSound(Ogre::SceneNode* node);
     void playTakeSound(Ogre::SceneNode* node);
 private:
+    friend class CCharacter;
     int m_goldAmount;
     float m_goldScale;
     float m_scaleTime;

@@ -6,6 +6,10 @@
 
 #include "RunicCore.h"
 
+class CEditorBaseObject;
+class CTimerStatics;
+template<class T> class TArrayList;
+
 // Partial: DescriptorLoadConfiguration.cpp. Options and the guid remapping
 // table passed through the descriptor load routines.
 class CDescriptorLoadConfiguration : public CRunicCore
@@ -23,8 +27,8 @@ public:
     std::wstring m_sFilePath;
     std::wstring m_sFileName;
     long long m_iParentGuid;
-    long long m_iValue38;
-    void* m_pValue40;
+    union { long long m_iValue38; TArrayList<CEditorBaseObject*>* m_createdObjects; };
+    union { void* m_pValue40; CTimerStatics* m_timers; };
     std::map<long long, long long> m_Remaps;
 };
 

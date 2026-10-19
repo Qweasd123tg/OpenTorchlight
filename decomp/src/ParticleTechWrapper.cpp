@@ -11,24 +11,9 @@
 #include "SphereColliderWrapper.h"
 #include "UtilitiesMath.h"
 
-// Call-only declarations; object layouts remain opaque in the shared headers.
-namespace ParticleUniverse {
-class ParticleRenderer { public: void setSorted(bool); };
-class ParticleTechnique {
-public:
-    void setFlipbookWidthHeight(int, int);
-    void setKeepLocal(bool);
-    ParticleRenderer* getRenderer() const;
-};
-class RibbonTrailRenderer {
-public:
-    void setTrailLocal(bool);
-    void setMaxChainElements(unsigned long);
-    void setTrailLength(float);
-    void setTrailWidth(float);
-};
-class ParticleEmitter { public: void setKeepLocal(bool); };
-}
+#include <ParticleUniverseTechnique.h>
+#include <ParticleRenderers/ParticleUniverseRibbonTrailRenderer.h>
+#include <ParticleRenderers/ParticleUniverseBillboardRenderer.h>
 
 void CParticleTechWrapper::setParentGuid(long long guid)
 {
@@ -182,4 +167,22 @@ void CParticleTechWrapper::setSorts(bool sorted)
     m_bSorts = sorted;
     if (m_technique->getRenderer())
         m_technique->getRenderer()->setSorted(m_bSorts);
+}
+
+void CParticleTechWrapper::setBillboardOrigin(unsigned int origin)
+{
+    m_billboardOrigin=origin;
+    if(m_pUnknown180)m_pUnknown180->setBillboardOrigin(static_cast<Ogre::BillboardOrigin>(origin));
+}
+
+void CParticleTechWrapper::setBillboardRotationType(unsigned int rotation)
+{
+    m_billboardRotation=rotation;
+    if(m_pUnknown180)m_pUnknown180->setBillboardRotationType(static_cast<Ogre::BillboardRotationType>(rotation));
+}
+
+void CParticleTechWrapper::setRenderQueue(unsigned int queue)
+{
+    m_renderQueue=queue>100?100:queue;
+    if(m_technique->getRenderer())m_technique->getRenderer()->setRenderQueueGroup(m_renderQueue);
 }

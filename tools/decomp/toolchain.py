@@ -100,6 +100,49 @@ def fetch(url, target, digest):
     return target
 
 
+# The shipped Runic library exports this nonvirtual method in addition to the
+# upstream 1.6.5 SDK. Keep the extension reproducible for both cached and newly
+# extracted headers; neither the Mesh layout nor its virtual table changes.
+RUNIC_MESH_HEADER_ORIGINAL = "eeebf168d8332b9b9d8e2de944cef9695e69005c052be78e55dd2d8b5e7f1eeb"
+RUNIC_MESH_HEADER_EXTENDED = "091b5c8761a77c1880b6441677f76c0a973e73328a7aef3fdbe41cf091614a77"
+
+
+def prepare_runic_ogre_headers(root):
+    header = root / "ogre-1.6.5" / "ogre" / "OgreMain" / "include" / "OgreMesh.h"
+    # A prepared SDK can be read-only. Only installation needs a write lock;
+    # still verify the complete header on every compile, including this path.
+    digest = hashlib.sha256(header.read_bytes()).hexdigest()
+    if digest == RUNIC_MESH_HEADER_EXTENDED:
+        return
+    if digest != RUNIC_MESH_HEADER_ORIGINAL:
+        raise SystemExit("unexpected OgreMesh.h digest: " + digest)
+    with (root / ".runic-sdk.lock").open("a") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        data = header.read_bytes()
+        digest = hashlib.sha256(data).hexdigest()
+        if digest == RUNIC_MESH_HEADER_EXTENDED:
+            return
+        if digest != RUNIC_MESH_HEADER_ORIGINAL:
+            raise SystemExit("unexpected OgreMesh.h digest: " + digest)
+        before = b"        const SkeletonPtr& getSkeleton(void) const;\n"
+        after = before + (b"\n        // Exported by the pinned Runic OGRE 1.6.5 runtime.\n"
+                          b"        unsigned short getMaxBoneAssignments(void) const;\n")
+        if data.count(before) != 1:
+            raise SystemExit("Runic OgreMesh.h declaration anchor is not unique")
+        data = data.replace(before, after)
+        if hashlib.sha256(data).hexdigest() != RUNIC_MESH_HEADER_EXTENDED:
+            raise SystemExit("unexpected extended OgreMesh.h digest")
+        with tempfile.NamedTemporaryFile(dir=header.parent, prefix=".runic-mesh-", delete=False) as stream:
+            temporary = Path(stream.name)
+            try:
+                stream.write(data)
+                stream.flush()
+                os.fchmod(stream.fileno(), header.stat().st_mode & 0o777)
+                os.replace(temporary, header)
+            finally:
+                temporary.unlink(missing_ok=True)
+
+
 def setup():
     cache = cache_dir()
     downloads = cache / "downloads"
@@ -107,6 +150,7 @@ def setup():
     stamp = root / ".complete.json"
     expected = {"rpms": RPMS, "ogre": OGRE[2]}
     if stamp.exists() and json.loads(stamp.read_text()) == expected:
+        prepare_runic_ogre_headers(root)
         print(f"toolchain ready: {root}")
         return
     if root.exists():
@@ -124,6 +168,7 @@ def setup():
                    if m.name.startswith(("ogre/OgreMain/include/", "ogre/COPYING"))
                    and ".." not in m.name]
         tar.extractall(ogre, members=members, filter="data")
+    prepare_runic_ogre_headers(root)
     stamp.write_text(json.dumps(expected, sort_keys=True))
     check = compile_source(None, None, probe=True)
     print(f"toolchain ready: {root}\n  {check}")
@@ -597,6 +642,7 @@ def compile_source(source, output, extra=(), assembly=False, probe=False, quiet=
     root = cache_dir() / "gcc447"
     if not (root / ".complete.json").exists():
         raise SystemExit("toolchain missing; run: python3 tools/decomp/toolchain.py setup")
+    prepare_runic_ogre_headers(root)
     cfg = config()
     gxx = root / "usr" / "bin" / "g++"
     base = [str(gxx), f"-B{root}/usr/libexec/gcc/{GCC_TRIPLE}/{GCC_VERSION}/", f"-B{root}/usr/bin/"]

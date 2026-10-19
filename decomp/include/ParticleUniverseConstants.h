@@ -9,8 +9,13 @@
 // with the matching ParticleUniverse release header once it is identified.
 namespace ParticleUniverse
 {
+#ifndef OTL_PU_HALFSCALE_DEFINED
+#define OTL_PU_HALFSCALE_DEFINED
     static const Ogre::Vector3 HALFSCALE = Ogre::Vector3::UNIT_SCALE * 0.5;
+#endif
 
+#ifndef OTL_PU_CONTEXT_STRINGS_DEFINED
+#define OTL_PU_CONTEXT_STRINGS_DEFINED
     static const Ogre::String ALIAS = "1";
     static const Ogre::String SYSTEM = "2";
     static const Ogre::String TECHNIQUE = "3";
@@ -23,6 +28,7 @@ namespace ParticleUniverse
     static const Ogre::String EXTERN = "10";
     static const Ogre::String DYNAMIC_ATTRIBUTE = "11";
     static const Ogre::String DEPENDENCY = "12";
+#endif
 }
 
 #endif

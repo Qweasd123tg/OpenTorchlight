@@ -44,19 +44,20 @@ class CGenericModel;
 class CRandomizer;
 class CLayout;
 class CChunk;
+class CLevelLayout;
 class CFormationNode;
 class CTimerStatics;
 class CCollisionList;
 template<class T> class CQuadtree;
 
-// Named in native signatures; enumerator names remain unknown.
-enum ELevelEntryType { ELevelEntryType_GEN_LAST = 0x7fffffff };
 
 // Partial: members used by recovered TUs; unnamed regions are padding until
 // level.cpp is recovered. Size 0x2f0 follows CGameClient::loadMenuLevel allocation.
 class CLevel : public CRunicCore
 {
+    friend class CTriggerUnit;
     friend class CSpawnClassData;
+    friend class CConsole;
     friend class CGameClient;
 public:
     void setNonLightStaticGeometryVisible(bool); // 0x935e60
@@ -119,7 +120,7 @@ public:
     void update(Ogre::Camera*, Ogre::Vector3 const&, float, float, CPlayer*); // 0x95c7f0
     void rollMoney(CCharacter*, CCharacter*, Ogre::Vector3 const&, bool); // 0x95ce70
     void rollTreasure(CCharacter*, CCharacter*, Ogre::Vector3 const&); // 0x95d0b0
-    void populateSectionOfLevel(Ogre::Vector3 const&, Ogre::Vector3 const&, std::wstring const&, bool, bool); // 0x95d220
+    int populateSectionOfLevel(Ogre::Vector3 const&, Ogre::Vector3 const&, std::wstring const&, bool, bool); // 0x95d220
     unsigned int populateFormations(CRandomizer&, TArrayList<Ogre::AxisAlignedBox>&); // 0x95dc40
     void setInited(bool); // 0x95e8b0
     void mergeLayoutsForRoomPiece(std::wstring const&, CLayout*); // 0x95e980
@@ -232,7 +233,10 @@ private:
     short** m_objectPassability;
     unsigned int m_passWidth;
     unsigned int m_passHeight;
-    char m_LevelData58[0x60-0x58];
+    union {
+        char m_LevelData58[0x60-0x58];
+        struct { unsigned int m_openCellCount; unsigned char m_cellPadding5C[4]; };
+    };
     CQuadtree<unsigned int>* m_collisionTree; // +0x60; class API deferred
     CCollisionList* m_collisionList; // +0x68
     std::vector<unsigned int> m_collisionIndices; // +0x70
@@ -255,7 +259,8 @@ private:
     Ogre::Vector3 m_startDirection; // +0x164
     Ogre::Vector3 m_secondaryStart; // +0x170
     Ogre::Vector3 m_secondaryStartDirection; // +0x17c
-    char m_LevelData188[0x1a0-0x188];
+    Ogre::Vector3 m_auxiliaryPosition188; // +0x188
+    Ogre::Vector3 m_auxiliaryPosition194; // +0x194
     bool m_automapRoomPieces;
     bool m_flag1A1;
     bool m_npcIconsDirty; // +0x1a2
@@ -272,13 +277,13 @@ private:
     CAutomap* m_automap;
     std::vector<CChunk*> m_chunks; // +0x1e8
     TArrayList<CFormationNode*> m_formations; // +0x200
-    char m_LevelData218[8]; // +0x218: loader state, type deferred
+    union { char m_LevelData218[8]; CLevelLayout* m_selectedLayout; }; // +0x218, borrowed
     CGameClient* m_pGameClient;
     unsigned int m_levelSeed; // +0x228
     union { char m_LevelData22C[4]; unsigned int m_updatedCharacterCount; };
     float m_topLeftX; // +0x230
     float m_topLeftY; // +0x234
-    char m_LevelData238[8];
+    union { char m_LevelData238[8]; struct { float m_bottomRightX; float m_bottomRightZ; }; }; // +0x238/+0x23c
     Ogre::Timer m_timer; // +0x240, size 0x18 in pinned Linux SDK
     bool m_flag258;
     char m_LevelData259[7];

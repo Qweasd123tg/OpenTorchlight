@@ -552,3 +552,45 @@ void CDataGroup::LoadFile(const std::wstring& file, CTimerStatics* timers)
         }
     }
 }
+
+CDataGroup::~CDataGroup()
+{
+    if (!m_b59) {
+        if (m_iNameID != -1) {
+            unsigned int id = m_iNameID;
+            const std::wstring* stored = &m_pRepository->m_DefaultValue;
+            if (!m_pRepository->m_Values.empty()) {
+                std::map<unsigned int, std::wstring>::iterator value = m_pRepository->m_Values.find(id);
+                if (value != m_pRepository->m_Values.end())
+                    stored = &value->second;
+            }
+            std::wstring text = *stored;
+            if (text != m_pRepository->m_DefaultValue) {
+                std::map<unsigned int, unsigned short>::iterator count = m_pRepository->m_RefCounts.find(id);
+                if (count != m_pRepository->m_RefCounts.end()) {
+                    --count->second;
+                    if (count->second == 0) {
+                        m_pRepository->m_RefCounts.erase(count);
+                        std::map<std::wstring, unsigned int>::iterator name = m_pRepository->m_IDs.find(text);
+                        std::map<unsigned int, std::wstring>::iterator value = m_pRepository->m_Values.find(id);
+                        if (name != m_pRepository->m_IDs.end() && value != m_pRepository->m_Values.end()) {
+                            m_pRepository->m_IDs.erase(name);
+                            m_pRepository->m_Values.erase(value);
+                        }
+                    }
+                }
+            }
+        }
+        for (unsigned int i = 0; i < m_DataGroups.size(); ++i)
+            delete m_DataGroups[i];
+        for (unsigned int i = 0; i < m_DataValues.size(); ++i)
+            delete m_DataValues[i];
+    }
+    m_DataGroups.clear();
+    m_DataValues.clear();
+    m_iNameID = -1;
+    if (!m_pParent && m_pRepository != &g_GlobalRepository) {
+        delete m_pRepository;
+        m_pRepository = NULL;
+    }
+}

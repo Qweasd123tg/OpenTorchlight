@@ -48,3 +48,59 @@ bool CMainMenu::onClick(ELayoutFunction function, std::wstring)
     }
     return true;
 }
+
+#include "FileSystem.h"
+#include "MainMenuData.h"
+#include "StringUtilities.h"
+#include <CEGUIWindowManager.h>
+void CMainMenu::createMenus()
+{
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(L"media/ui/mainmenuframe.layout", info, false, true, false);
+    CEGUI::Window* layout = CEGUI::WindowManager::getSingleton().loadWindowLayout(CEGUI::String(info.m_sResourceName), true);
+    m_pGameUI->convertToScreenScale(layout, false);
+    m_pGameUI->mapToFunctions(layout);
+    mapEventHandlers(layout);
+    static_cast<CEGUI::Window*>(m_pUnknown18)->addChildWindow(layout);
+    layout->setPosition(CEGUI::UVector2(CEGUI::UDim(0,0), CEGUI::UDim(0,0)));
+    m_iUnknownC8 = layout->recursiveChildSearch("ContinueLast");
+    m_iUnknownD0 = layout->recursiveChildSearch("DemoVersion");
+    m_iUnknownD0->setVisible(false);
+    m_iUnknownD8 = layout->recursiveChildSearch("CharacterModsWarning");
+    if (m_iUnknownD8) m_iUnknownD8->setVisible(false);
+    m_iUnknownE0 = layout->recursiveChildSearch("Credits");
+    m_creditsWindow = layout->recursiveChildSearch("CreditFrame");
+    m_iUnknownE0->setText(CEGUI::String(reinterpret_cast<const CEGUI::utf8*>("|cFFFFBA00Designed by Runic Games|u\n\nAdam Perin\nBen Evans\nBrock Jones\nErich Schaefer\nGreg Brown\nIan Welke\nJamus Thayn\nJason Beck\nJason Lamb\nJeff Mianowski\nJeremy Huxley\nJohn Dunbar\nKevin Green\nKyle Cornelius\nLeo Miller\nMarsh Lefler\nMatt Lefferts\nMatt Tanwanteng\nMatt Uelmen\nMax Schaefer\nMike Fisher\nPatrick Blank\nPeter Hu\nSirio Brozzi\nTravis Baldree\nWonder Russell\n\n|cFFFFBA00Voice Talents|u\n\nLani Minella - Sam Mowry\nEric Newsome - Tim Simmons\nMarc Biagi - Bill Corkery\nMark Rose - Dave Rivas\n\n|cFFFFBA00Additional QA|u\n\nNichole Wright - Jeremy Powers\n\n|cFFFFBA00Additional Artwork|u\nArtCoding - Interserv\n\n|cFFFFBA00Built with Ogre3d, CEGUI, ParticleUniverse, and FMOD|u")));
+    m_creditsWindow->setVisible(false);
+    m_extraWindow = layout->recursiveChildSearch("CreditFrameB");
+    if (m_extraWindow) m_extraWindow->setVisible(false);
+    CEGUI::Window* copyright = layout->recursiveChildSearch("CopyrightInfo");
+    if (copyright) {
+        std::string text = STRINGS::StringConvertToUTF8(CopyrightInfo);
+        copyright->setText(CEGUI::String(reinterpret_cast<const CEGUI::utf8*>(text.c_str())));
+    }
+}
+
+#include "Player.h"
+#include "GameClient.h"
+void CMainMenu::update(float elapsed)
+{
+    CDropdownMenu::update(elapsed);
+    bool canContinue = m_pGameUI->canContinue();
+    if (canContinue != m_iUnknownC8->isVisible(false))
+        m_iUnknownC8->setVisible(canContinue);
+    CPlayer* player = m_pGameUI->m_gameClient->getPlayer();
+    if (!player) return;
+    TArrayList<std::wstring> mods(10);
+    CFileSystem::getSingleton()->getEnabledModNames(&mods);
+    bool mismatch = mods.size() != player->m_loadedModNames.size();
+    if (!mismatch) {
+        for (unsigned int i = 0; i < mods.size(); ++i) {
+            if (STRINGS::StringUpper(mods[i]) != STRINGS::StringUpper(player->m_loadedModNames[i])) {
+                mismatch = true;
+                break;
+            }
+        }
+    }
+    if (m_iUnknownD8) m_iUnknownD8->setVisible(mismatch);
+}

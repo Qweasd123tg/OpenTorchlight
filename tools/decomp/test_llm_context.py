@@ -656,6 +656,14 @@ class PacketContextTests(TestCase):
                "1019: mov $0x7020,%esi\n101e: mov $0x3200,%edi\n1023: call 3000")
         self.index().build(self.target, asm).require_complete()
 
+    def test_dso_registration_handle_null_object_xor_esi(self):
+        asm = self.dso_handle().replace("mov $0x7010,%esi", "xor %esi,%esi")
+        self.index().build(self.target, asm).require_complete()
+        for invalid in ("xor %edi,%esi", "xor %edx,%edx", "xor %rsi,%rsi"):
+            with self.subTest(invalid=invalid):
+                with self.assertRaises(ContextError):
+                    self.index().build(self.target, asm.replace("xor %esi,%esi", invalid)).require_complete()
+
     def test_dso_handle_does_not_exempt_additional_nonregistration_reference(self):
         asm = self.dso_handle() + "\n1015: mov $0x5000,%eax"
         with self.assertRaises(ContextError):
@@ -768,6 +776,61 @@ class PacketContextTests(TestCase):
         result = self.index().build(self.target, "1000: mov $0x6000,%rax").require_complete()
         self.assertIn("extern int other;", result.text)
         self.assertNotIn('icons[]', result.text)
+
+    def integer_scalar(self, declaration="static unsigned int version = 23;", value=23, signed=False):
+        self.write_header("IntegerScalar.h", declaration)
+        raw="_ZL7version"
+        self.db["globals"]=[dict(object_symbol(0x5000,raw,size=4,bind="local",file="Achievement.cpp"),demangled="version")]
+        self.image=FakeImage(section(".data",0x5000,value.to_bytes(4,"little",signed=signed),flags=3))
+        self.image.symbols=[SimpleNamespace(name=raw,value=0x5000,size=4,bind=0,type=1,defined=True,file="Achievement.cpp")]
+        return declaration
+
+    def test_gameclient_integer_scalar_exact_initial_bytes_and_boundaries(self):
+        for typ,value in (("int",-2147483648),("int",2147483647),("unsigned int",23),("unsigned int",4294967295)):
+            with self.subTest(typ=typ,value=value):
+                declaration=self.integer_scalar("static "+typ+" version = "+str(value)+";",value,typ=="int")
+                result=self.index().build(self.target,"1000: mov $0x5000,%rax").require_complete()
+                self.assertIn(declaration,result.text)
+                self.assertNotIn("extern unsigned int",result.text)
+
+    def test_gameclient_integer_scalar_rejects_nonliteral_or_out_of_range(self):
+        for declaration in ("static unsigned int version = 23u;","static unsigned int version = 0x17;",
+                "static unsigned int version = 023;","static unsigned int version = 22+1;",
+                "static unsigned int version = VALUE;","static unsigned int version = -1;",
+                "static unsigned int version = 4294967296;","static int version = 2147483648;",
+                "static int version = -2147483649;","static int version = 23, other;",
+                "static long version = 23;","static unsigned int version = "+"9"*5000+";"):
+            with self.subTest(declaration=declaration[:100]):
+                self.integer_scalar(declaration)
+                self.assertTrue(self.index().build(self.target,"1000: mov $0x5000,%rax").gaps)
+
+    def test_gameclient_integer_scalar_requires_exact_native_identity_and_initial_value(self):
+        for change in ("bytes","db_size","elf_size","db_binding","elf_binding","elf_type","undefined",
+                       "missing_symbol","elf_name","elf_address","elf_owner","db_owner","missing_owner","bss","executable","truncated"):
+            with self.subTest(change=change):
+                self.integer_scalar();symbol,obj,sec=self.image.symbols[0],self.db["globals"][0],self.image.sections[0]
+                if change=="bytes":sec.contents=b"\0"*4
+                elif change=="db_size":obj["size"]=8
+                elif change=="elf_size":symbol.size=8
+                elif change=="db_binding":obj["bind"]="global"
+                elif change=="elf_binding":symbol.bind=1
+                elif change=="elf_type":symbol.type=2
+                elif change=="undefined":symbol.defined=False
+                elif change=="missing_symbol":self.image.symbols=[]
+                elif change=="elf_name":symbol.name="_other"
+                elif change=="elf_address":symbol.value+=4
+                elif change=="elf_owner":symbol.file="Other.cpp"
+                elif change=="db_owner":obj["file"]="Other.cpp"
+                elif change=="missing_owner":obj["file"]=None
+                elif change=="bss":sec.type=8
+                elif change=="executable":sec.flags=6
+                elif change=="truncated":sec.size=3
+                self.assertTrue(self.index().build(self.target,"1000: mov $0x5000,%rax").gaps)
+
+    def test_gameclient_integer_scalar_does_not_hide_an_unrelated_gap(self):
+        self.integer_scalar();self.add_function(function(0x3000,"CUnrelated","missing",tu=2))
+        result=self.index().build(self.target,"1000: mov $0x5000,%rax\n1005: call 3000")
+        self.assertTrue(result.gaps);self.assertIn("CUnrelated", ";".join(result.gaps))
 
     def integer_array(self, declaration=None, *, namespace=False):
         declaration = declaration or "static const int slots[5] = {4, 2, 6, 3, 5};"
@@ -1155,25 +1218,32 @@ class PacketContextTests(TestCase):
     def ogre_value_setup(self, kind="Vector3"):
         sdk, configuration = self.ogre_data_setup()
         values = {
-            "OgreMath.h": "namespace Ogre { class _OgreExport Math { public: static const Real POS_INFINITY; static const Real fRad2Deg; static const Real fDeg2Rad; }; }",
+            "OgreMath.h": "namespace Ogre { class _OgreExport Math { public: static const Real PI; static const Real TWO_PI; static const Real POS_INFINITY; static const Real fRad2Deg; static const Real fDeg2Rad; }; }",
             "OgrePrerequisites.h": "namespace Ogre { typedef float Real; typedef std::string _StringBase; typedef _StringBase String; }",
             "OgrePlatform.h": "// pinned platform\n",
             "OgreConfig.h": "#define OGRE_DOUBLE_PRECISION 0\n",
-            "OgreVector3.h": "namespace Ogre { class _OgreExport Vector3 { public: Real x,y,z; static const Vector3 ZERO; static const Vector3 UNIT_Y; static const Vector3 UNIT_Z; static const Vector3 NEGATIVE_UNIT_Y; }; }",
+            "OgreVector3.h": "namespace Ogre { class _OgreExport Vector3 { public: Real x,y,z; static const Vector3 ZERO; static const Vector3 UNIT_Y; static const Vector3 UNIT_X; static const Vector3 UNIT_SCALE; static const Vector3 UNIT_Z; static const Vector3 NEGATIVE_UNIT_Y; }; }",
             "OgreMatrix4.h": "namespace Ogre { class _OgreExport Matrix4 { public: Real m[4][4]; static const Matrix4 IDENTITY; }; }",
             "OgreQuaternion.h": "namespace Ogre { class _OgreExport Quaternion { public: Real w,x,y,z; static const Quaternion IDENTITY; }; }",
             "OgreString.h": "namespace Ogre { class _OgreExport StringUtil { public: static const String BLANK; }; }",
-            "OgreColourValue.h": "namespace Ogre { class _OgreExport ColourValue { public: Real r,g,b,a; static const ColourValue White; }; }",
+            "OgreColourValue.h": "namespace Ogre { class _OgreExport ColourValue { public: Real r,g,b,a; static const ColourValue White; static const ColourValue Black; static const ColourValue ZERO; }; }",
             "OgreMovableObject.h": "namespace Ogre { class _OgreExport MovableObject { protected: static uint32 msDefaultVisibilityFlags; }; }",
+            "OgreSceneManager.h": "namespace Ogre { class _OgreExport SceneManager { public: static uint32 WORLD_GEOMETRY_TYPE_MASK; }; }",
         }
         for name, value in values.items(): (sdk / name).write_text(value)
         pins = {name: hashlib.sha256(value.encode()).hexdigest() for name, value in values.items()}
         patch = mock.patch.dict(ContextIndex.OGRE_VALUE_HEADER_SHA256, pins, clear=True)
         patch.start(); self.addCleanup(patch.stop)
         identities = {
+            "PI": ("Ogre::Math::PI", "_ZN4Ogre4Math2PIE", 4),
+            "TwoPI": ("Ogre::Math::TWO_PI", "_ZN4Ogre4Math6TWO_PIE", 4),
+            "WorldMask": ("Ogre::SceneManager::WORLD_GEOMETRY_TYPE_MASK", "_ZN4Ogre12SceneManager24WORLD_GEOMETRY_TYPE_MASKE", 4),
             "UnitZ": ("Ogre::Vector3::UNIT_Z", "_ZN4Ogre7Vector36UNIT_ZE", 12),
             "Rad2Deg": ("Ogre::Math::fRad2Deg", "_ZN4Ogre4Math8fRad2DegE", 4),
             "Deg2Rad": ("Ogre::Math::fDeg2Rad", "_ZN4Ogre4Math8fDeg2RadE", 4),
+            "UnitX": ("Ogre::Vector3::UNIT_X", "_ZN4Ogre7Vector36UNIT_XE", 12),
+            "UnitScale": ("Ogre::Vector3::UNIT_SCALE", "_ZN4Ogre7Vector310UNIT_SCALEE", 12),
+            "ColourZero": ("Ogre::ColourValue::ZERO", "_ZN4Ogre11ColourValue4ZEROE", 16),
             "UnitY": ("Ogre::Vector3::UNIT_Y", "_ZN4Ogre7Vector36UNIT_YE", 12),
             "NegativeUnitY": ("Ogre::Vector3::NEGATIVE_UNIT_Y", "_ZN4Ogre7Vector315NEGATIVE_UNIT_YE", 12),
             "Infinity": ("Ogre::Math::POS_INFINITY", "_ZN4Ogre4Math12POS_INFINITYE", 4),
@@ -1182,13 +1252,14 @@ class PacketContextTests(TestCase):
             "Quaternion": ("Ogre::Quaternion::IDENTITY", "_ZN4Ogre10Quaternion8IDENTITYE", 16),
             "StringUtil": ("Ogre::StringUtil::BLANK", "_ZN4Ogre10StringUtil5BLANKE", 8),
             "White": ("Ogre::ColourValue::White", "_ZN4Ogre11ColourValue5WhiteE", 16),
+            "Black": ("Ogre::ColourValue::Black", "_ZN4Ogre11ColourValue5BlackE", 16),
             "Visibility": ("Ogre::MovableObject::msDefaultVisibilityFlags", "_ZN4Ogre13MovableObject24msDefaultVisibilityFlagsE", 4),
         }
         self.sdk_object(*identities[kind])
         return sdk, configuration
 
     def test_ogre_values_exact_constants_and_interior_references(self):
-        for kind, size in (("Vector3",12),("Quaternion",16),("StringUtil",8),("Matrix4",64),("UnitY",12),("Infinity",4),("UnitZ",12),("Rad2Deg",4),("Deg2Rad",4),("White",16),("Visibility",4),("NegativeUnitY",12)):
+        for kind, size in (("PI",4),("TwoPI",4),("WorldMask",4),("Vector3",12),("Quaternion",16),("StringUtil",8),("Matrix4",64),("UnitY",12),("UnitX",12),("UnitScale",12),("ColourZero",16),("Infinity",4),("UnitZ",12),("Rad2Deg",4),("Deg2Rad",4),("White",16),("Black",16),("Visibility",4),("NegativeUnitY",12)):
             with self.subTest(kind=kind):
                 self.ogre_value_setup(kind)
                 for offset in range(0,size,4):
@@ -1198,7 +1269,7 @@ class PacketContextTests(TestCase):
                     self.assertNotIn("Referenced data declaration",result.text)
 
     def test_missile_constants_reject_metadata_mismatches(self):
-        for kind in ("UnitY", "Infinity", "UnitZ", "Rad2Deg", "Deg2Rad", "White", "Visibility", "NegativeUnitY"):
+        for kind in ("PI", "TwoPI", "WorldMask", "UnitY", "Infinity", "UnitZ", "Rad2Deg", "Deg2Rad", "White", "Black", "Visibility", "NegativeUnitY", "UnitX", "UnitScale", "ColourZero"):
             for change in ("no_copy", "wrong_copy", "no_symbol", "wrong_size", "wrong_db_size", "wrong_type", "wrong_label", "readonly", "short"):
                 with self.subTest(kind=kind,change=change):
                     self.ogre_value_setup(kind)
@@ -1214,13 +1285,21 @@ class PacketContextTests(TestCase):
                     with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
 
     def test_missile_constants_reject_declaration_mismatches(self):
-        for kind,header,owner,typ,member in (("NegativeUnitY","OgreVector3.h","Vector3","Vector3","NEGATIVE_UNIT_Y"),("UnitY","OgreVector3.h","Vector3","Vector3","UNIT_Y"),("Infinity","OgreMath.h","Math","Real","POS_INFINITY"),("UnitZ","OgreVector3.h","Vector3","Vector3","UNIT_Z"),("Rad2Deg","OgreMath.h","Math","Real","fRad2Deg"),("Deg2Rad","OgreMath.h","Math","Real","fDeg2Rad")):
+        for kind,header,owner,typ,member in (("UnitX","OgreVector3.h","Vector3","Vector3","UNIT_X"),("UnitScale","OgreVector3.h","Vector3","Vector3","UNIT_SCALE"),("ColourZero","OgreColourValue.h","ColourValue","ColourValue","ZERO"),("PI","OgreMath.h","Math","Real","PI"),("TwoPI","OgreMath.h","Math","Real","TWO_PI"),("Black","OgreColourValue.h","ColourValue","ColourValue","Black"),("NegativeUnitY","OgreVector3.h","Vector3","Vector3","NEGATIVE_UNIT_Y"),("UnitY","OgreVector3.h","Vector3","Vector3","UNIT_Y"),("Infinity","OgreMath.h","Math","Real","POS_INFINITY"),("UnitZ","OgreVector3.h","Vector3","Vector3","UNIT_Z"),("Rad2Deg","OgreMath.h","Math","Real","fRad2Deg"),("Deg2Rad","OgreMath.h","Math","Real","fDeg2Rad")):
             for declaration in ("static {typ} {member};", "static const int {member};", "static const {typ} WRONG;", "static const {typ} {member}; static const {typ} {member};"):
                 with self.subTest(kind=kind,declaration=declaration):
                     sdk,_=self.ogre_value_setup(kind)
                     source="namespace Ogre { class "+owner+" { public: "+declaration.format(typ=typ,member=member)+" }; }"
                     (sdk/header).write_text(source);ContextIndex.OGRE_VALUE_HEADER_SHA256[header]=hashlib.sha256(source.encode()).hexdigest()
                     with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
+
+    def test_world_mask_rejects_declaration_mismatches(self):
+        for declaration in ("static const uint32 WORLD_GEOMETRY_TYPE_MASK;", "static float WORLD_GEOMETRY_TYPE_MASK;", "static uint32 WRONG;", "static uint32 WORLD_GEOMETRY_TYPE_MASK; static uint32 WORLD_GEOMETRY_TYPE_MASK;"):
+            with self.subTest(declaration=declaration):
+                sdk,_=self.ogre_value_setup("WorldMask")
+                source="namespace Ogre { class SceneManager { public: "+declaration+" }; }"
+                (sdk/"OgreSceneManager.h").write_text(source);ContextIndex.OGRE_VALUE_HEADER_SHA256["OgreSceneManager.h"]=hashlib.sha256(source.encode()).hexdigest()
+                with self.assertRaises(ContextError):self.index().build(self.target,"1000: mov $0x7000,%rax").require_complete()
 
     def test_ogre_values_reject_abi_and_identity_mismatches(self):
         for change in ("no_copy","wrong_copy","no_symbol","undefined","local_symbol","wrong_symbol_type","wrong_symbol_size","wrong_both_sizes","db_local","db_raw","db_label","wrong_section","readonly","short_section"):
@@ -1487,10 +1566,12 @@ class PacketContextTests(TestCase):
             scope = "TArrayList<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >"
             address, size = 0x5f8e90, 155
             prefix, method = "_ZN10TArrayListISbIwSt11char_traitsIwESaIwEEE", "~TArrayList"
-        elif variant in ("float", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group"):
+        elif variant in ("float", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref"):
             f = self.window_array()
             scope, address, prefix = {
                 "float": ("TArrayList<float>", 0x59fb40, "_ZN10TArrayListIfE"),
+                "unsigned_int": ("TArrayList<unsigned int>", 0x90da70, "_ZN10TArrayListIjE"),
+                "equipment_ref": ("TArrayList<CEquipmentRef*>", 0x90da50, "_ZN10TArrayListIP13CEquipmentRefE"),
                 "effect_stat": ("TArrayList<EEFFECT_STAT_MODIFIERS>", 0x7e4740, "_ZN10TArrayListI22EEFFECT_STAT_MODIFIERSE"),
                 "data_group": ("TArrayList<CDataGroup*>", 0x85acd0, "_ZN10TArrayListIP10CDataGroupE"),
                 "chunk": ("TArrayList<CChunk*>", 0x97cb30, "_ZN10TArrayListIP6CChunkE"),
@@ -1502,11 +1583,14 @@ class PacketContextTests(TestCase):
                 "quest_dialog_item": ("TArrayList<CQuestDialogItem*>", 0xd26480, "_ZN10TArrayListIP16CQuestDialogItemE"),
                 "quest_unit_arrays": ("TArrayList<TArrayList<CQuestUnitData*>*>", 0xd1d3d0, "_ZN10TArrayListIPS_IP14CQuestUnitDataEE"),
             }[variant]
+            if variant == "equipment_ref":
+                self.write_header("EquipmentRef.h", "class CEquipmentRef {};\n")
+                self.mapping["CEquipmentRef"] = "EquipmentRef.h"
             size, method = 26, "~TArrayList"
         else:
             f = self.safe_pointer(variant)
             scope = "TSafePointer<" + variant + ">"
-            address, size = {"CCharacter": (0x591b50, 47), "CEquipment": (0xacbc90, 47), "CGraph": (0xcf8e70, 47), "CSkill": (0x7d5f90, 47), "CBaseUnit": (0x7d5fc0, 47), "CEffectManager": (0x7d5ff0, 47)}[variant]
+            address, size = {"CCharacter": (0x591b50, 47), "CPositionableObject": (0xd06790, 47), "CEquipment": (0xacbc90, 47), "CGraph": (0xcf8e70, 47), "CSkill": (0x7d5f90, 47), "CBaseUnit": (0x7d5fc0, 47), "CItem": (0x591be0, 47), "CEffectManager": (0x7d5ff0, 47)}[variant]
             prefix, method = "_ZN12TSafePointerI" + str(len(variant)) + variant + "E", "~TSafePointer"
         self.db["functions"].pop("0x2000")
         names = [prefix + "D1Ev", prefix + "D2Ev"]
@@ -1517,13 +1601,72 @@ class PacketContextTests(TestCase):
         return f
 
     def test_pinned_destructors_supply_existing_headers(self):
-        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group"):
+        for variant in ("wstring", "float", "CCharacter", "CPositionableObject", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "CItem", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 result = self.index().build(self.target, "1000: call " + f["address"]).require_complete()
-                expected = ("TArrayList.h",) if variant in ("wstring", "float", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group") else ("Node.h", "SafePointer.h")
+                expected = ("TArrayList.h",) if variant in ("wstring", "float", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref") else ("Node.h", "SafePointer.h")
+                if variant == "equipment_ref":
+                    expected = ("EquipmentRef.h", "TArrayList.h")
                 self.assertEqual(result.headers, expected)
                 self.assertIn("No specialization or prototype synthesized", result.text)
+
+    def test_gameclient_item_destructor_rejects_identity_drift(self):
+        for delta in ({"address": "0x591be1"}, {"size": 48}, {"kind": "function"},
+                      {"bind": ["global"]}, {"params": "int"}, {"cv": "const"},
+                      {"names": ["_ZN12TSafePointerI5CItemED0Ev"]}):
+            with self.subTest(delta=delta):
+                f=self.pinned_destructor("CItem")
+                self.db["functions"].pop(f["address"])
+                f.update(delta);self.add_function(f)
+                self.assertTrue(self.index().build(self.target,"1000: call "+f["address"]).gaps)
+
+    def test_gameclient_item_destructor_requires_both_native_aliases_and_header(self):
+        for change in ("alias", "header", "pointee"):
+            with self.subTest(change=change):
+                f=self.pinned_destructor("CItem")
+                if change=="alias":self.image.symbols.pop()
+                elif change=="header":(self.include/"SafePointer.h").write_text("template<class T> class TSafePointer {};\n")
+                else:(self.include/"Node.h").write_text("class CItem;\n")
+                self.assertTrue(self.index().build(self.target,"1000: call "+f["address"]).gaps)
+
+    def repository_destructor(self):
+        header = Path(__file__).resolve().parents[2] / "decomp/include/TRepository.h"
+        self.write_header("TRepository.h", header.read_text())
+        scope = "TRepository<std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> > >"
+        prefix = "_ZN11TRepositoryISbIwSt11char_traitsIwESaIwEEE"
+        names = [prefix + "D1Ev", prefix + "D2Ev"]
+        f = function(0xc629f0, scope, "~TRepository", size=178, tu=2)
+        f.update(kind="inline_or_template", bind=["weak", "weak"], names=names,
+                 mangled=names[0], params="", cv="")
+        self.add_function(f)
+        self.image.symbols = [SimpleNamespace(type=2, bind=2, defined=True,
+                                             value=0xc629f0, name=n, size=178) for n in names]
+        return f
+
+    def test_repository_implicit_destructor_supplies_unchanged_whole_header(self):
+        f = self.repository_destructor()
+        result = self.index().build(self.target, "1000: call " + f["address"]).require_complete()
+        self.assertEqual(result.headers, ("TRepository.h",))
+        self.assertIn(ContextIndex.REPOSITORY_HEADER_SHA256, result.text)
+        self.assertIn("No specialization or prototype synthesized", result.text)
+
+    def test_repository_destructor_rejects_identity_and_header_drift(self):
+        for delta in ({"address": "0xc629f1"}, {"size": 179}, {"kind": "function"},
+                      {"bind": ["global"]}, {"method": "other"}, {"params": "int"},
+                      {"names": ["_ZN11TRepositoryISbIwSt11char_traitsIwESaIwEEED0Ev"]}):
+            with self.subTest(delta=delta):
+                f = self.repository_destructor()
+                self.add_function(dict(f, **delta))
+                self.assertTrue(self.index().build(self.target, "1000: call " + delta.get("address", f["address"])).gaps)
+        f = self.repository_destructor()
+        (self.include / "TRepository.h").write_text("template<class T> class TRepository {};\n")
+        self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
+
+    def test_repository_destructor_requires_both_native_aliases(self):
+        f = self.repository_destructor()
+        self.image.symbols.pop()
+        self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_base_unit_destructor_uses_real_pinned_header(self):
         f = self.pinned_destructor("base_unit")
@@ -1553,13 +1696,14 @@ class PacketContextTests(TestCase):
         body = (Path(__file__).resolve().parents[2] / "decomp/include/TArrayList.h").read_bytes()
         digest = "d91f88adac805622a3e58081386a6b121b6b8f0d57bc4621886b9e5af591519f"
         self.assertEqual(hashlib.sha256(body).hexdigest(), digest)
-        for variant in ("chunk", "level_layout", "chunk_type", "effect_stat", "data_group"):
+        for variant in ("chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 (self.include / "TArrayList.h").write_bytes(body)
                 with mock.patch.object(ContextIndex, "WINDOW_ARRAY_HEADER_SHA256", digest):
                     result = self.index().build(self.target, "1000: call " + f["address"]).require_complete()
-                self.assertEqual(result.headers, ("TArrayList.h",))
+                expected = ("EquipmentRef.h", "TArrayList.h") if variant == "equipment_ref" else ("TArrayList.h",)
+                self.assertEqual(result.headers, expected)
                 self.assertIn(body.decode(), result.text)
                 self.assertIn("No specialization or prototype synthesized", result.text)
 
@@ -1581,7 +1725,7 @@ class PacketContextTests(TestCase):
         mutations = {"kind": "function", "bind": ["global"], "method": "clear", "params": "int",
                      "cv": "const", "mangled": "_fake", "names": ["_fake"], "qualified": "Other::~Other",
                      "scope": "TArrayList<CNode*>", "size": 99, "address": "0x2222"}
-        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group"):
+        for variant in ("wstring", "float", "CCharacter", "CPositionableObject", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "CItem", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref"):
             for field, value in mutations.items():
                 with self.subTest(variant=variant, field=field):
                     f = self.pinned_destructor(variant); address = f["address"]
@@ -1589,7 +1733,7 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + address).gaps)
 
     def test_pinned_destructors_require_both_weak_elf_aliases(self):
-        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group"):
+        for variant in ("wstring", "float", "CCharacter", "CPositionableObject", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "CItem", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref"):
             for change in ("absent", "name", "size", "address", "binding", "type", "undefined", "D0"):
                 with self.subTest(variant=variant, change=change):
                     f = self.pinned_destructor(variant); symbol = self.image.symbols[1]
@@ -1606,12 +1750,12 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_reject_coherent_unreviewed_instantiations(self):
-        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group"):
+        for variant in ("wstring", "float", "CCharacter", "CPositionableObject", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "CItem", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 if variant == "wstring":
                     scope, prefix = "TArrayList<std::basic_string<char, std::char_traits<char>, std::allocator<char> > >", "_ZN10TArrayListISsE"
-                elif variant in ("float", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group"):
+                elif variant in ("float", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref"):
                     scope, prefix = "TArrayList<CQuestUnitData*>", "_ZN10TArrayListIP14CQuestUnitDataE"
                 else:
                     scope, prefix = "TSafePointer<CNode>", "_ZN12TSafePointerI5CNodeE"
@@ -1623,15 +1767,15 @@ class PacketContextTests(TestCase):
                 self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_reject_changed_template(self):
-        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group"):
+        for variant in ("wstring", "float", "CCharacter", "CPositionableObject", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "CItem", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
-                header = "TArrayList.h" if variant in ("wstring", "float", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group") else "SafePointer.h"
+                header = "TArrayList.h" if variant in ("wstring", "float", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref") else "SafePointer.h"
                 with (self.include/header).open("a") as out: out.write("// changed\n")
                 self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_safe_destructors_require_unique_complete_type(self):
-        for variant in ("CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager"):
+        for variant in ("CCharacter", "CPositionableObject", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager"):
             for change in ("unmapped", "forward", "ambiguous"):
                 with self.subTest(variant=variant, change=change):
                     f = self.pinned_destructor(variant)
@@ -1643,7 +1787,7 @@ class PacketContextTests(TestCase):
                     self.assertTrue(self.index().build(self.target, "1000: call " + f["address"]).gaps)
 
     def test_pinned_destructors_do_not_hide_unknown_callee(self):
-        for variant in ("wstring", "float", "CCharacter", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group"):
+        for variant in ("wstring", "float", "CCharacter", "CPositionableObject", "CEquipment", "CGraph", "CSkill", "CBaseUnit", "CEffectManager", "CItem", "quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref"):
             with self.subTest(variant=variant):
                 f = self.pinned_destructor(variant)
                 self.add_function(function(0x3000, "CUnrelated", "missing", tu=2))
@@ -1652,7 +1796,7 @@ class PacketContextTests(TestCase):
                 self.assertIn("CUnrelated::missing", result.gaps[0])
 
     def test_quest_array_destructors_require_exact_header_and_snapshot(self):
-        for variant in ("quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group"):
+        for variant in ("quest_dialog", "quest_dialog_item", "quest_unit_arrays", "base_unit", "editor_object", "chunk", "level_layout", "chunk_type", "effect_stat", "data_group", "unsigned_int", "equipment_ref"):
             for change in ("missing", "renamed", "body", "hash", "snapshot"):
                 with self.subTest(variant=variant, change=change):
                     f = self.pinned_destructor(variant)
@@ -2241,6 +2385,221 @@ class PacketContextTests(TestCase):
         self.assertIn("mandatory prompt", feedback)
         provider.assert_not_called()
 
+
+    def level_template_destructor(self, variant):
+        f = self.pinned_destructor("base_unit")
+        self.db["functions"].pop(f["address"])
+        scope, address, size, prefix = {
+            "layout": ("TArrayList<CLayout*>", 0x967160, 26, "_ZN10TArrayListIP7CLayoutE"),
+            "property": ("TArrayList<CPropertyNode*>", 0x967140, 26, "_ZN10TArrayListIP13CPropertyNodeE"),
+            "box": ("TArrayList<Ogre::AxisAlignedBox>", 0x967520, 91, "_ZN10TArrayListIN4Ogre14AxisAlignedBoxEE"),
+        }[variant]
+        names = [prefix + "D1Ev", prefix + "D2Ev"]
+        f.update(address=hex(address), size=size, scope=scope, qualified=scope+"::~TArrayList", names=names, mangled=names[0])
+        self.add_function(f)
+        self.image.symbols = [SimpleNamespace(type=2, bind=2, defined=True, value=address, name=n, size=size) for n in names]
+        if variant == "box":
+            cache = self.root / "sdk-cache"
+            sdk = cache / "gcc447/ogre-1.6.5/ogre/OgreMain/include"
+            sdk.mkdir(parents=True, exist_ok=True)
+            pins = {}
+            for name in ContextIndex.AXIS_BOX_ARRAY_SDK_SHA256:
+                source = ("synthetic SDK guard input " + name + "\n").encode()
+                (sdk/name).write_bytes(source)
+                pins[name] = hashlib.sha256(source).hexdigest()
+            config = b"synthetic pinned compiler profile\n"
+            (self.root/"decomp/config.json").write_bytes(config)
+            for p in (mock.patch.object(ContextIndex,"AXIS_BOX_ARRAY_SDK_SHA256",pins),
+                      mock.patch.object(ContextIndex,"OGRE_CONFIG_SHA256",hashlib.sha256(config).hexdigest()),
+                      mock.patch.dict(os.environ,{"OTL_DECOMP_CACHE":str(cache)})):
+                p.start(); self.addCleanup(p.stop)
+            self.level_box_sdk = sdk
+        return f
+
+    def test_level_template_destructors_exact_existing_instantiations(self):
+        for variant in ("layout","property","box"):
+            with self.subTest(variant=variant):
+                f=self.level_template_destructor(variant)
+                result=self.index().build(self.target,"1000: call "+f["address"]).require_complete()
+                self.assertEqual(result.headers,("TArrayList.h",))
+
+    def test_level_template_destructors_reject_metadata_drift(self):
+        for variant in ("layout","property","box"):
+            for change in ("address","size","method","params","cv","strong","alias","elf_size","elf_alias"):
+                with self.subTest(variant=variant,change=change):
+                    f=self.level_template_destructor(variant)
+                    if change=="address":
+                        self.db["functions"].pop(f["address"]);f["address"]=hex(int(f["address"],16)+16);self.add_function(f)
+                    elif change=="size":f["size"]+=1
+                    elif change=="method":f["method"]="clear"
+                    elif change=="params":f["params"]="int"
+                    elif change=="cv":f["cv"]="const"
+                    elif change=="strong":f["bind"]=["global"]
+                    elif change=="alias":f["names"]=f["names"][:1]
+                    elif change=="elf_size":self.image.symbols[0].size+=1
+                    else:self.image.symbols.pop()
+                    self.assertTrue(self.index().build(self.target,"1000: call "+f["address"]).gaps)
+
+    def test_level_template_destructors_reject_changed_template(self):
+        for variant in ("layout","property","box"):
+            with self.subTest(variant=variant):
+                f=self.level_template_destructor(variant)
+                with (self.include/"TArrayList.h").open("a") as out:out.write("// modified\n")
+                self.assertTrue(self.index().build(self.target,"1000: call "+f["address"]).gaps)
+
+    def test_level_box_destructor_requires_all_sdk_inputs(self):
+        for name in ContextIndex.AXIS_BOX_ARRAY_SDK_SHA256:
+            for change in ("missing","changed","outside"):
+                with self.subTest(header=name,change=change):
+                    f=self.level_template_destructor("box");path=self.level_box_sdk/name
+                    if change=="missing":path.unlink()
+                    elif change=="changed":path.write_bytes(path.read_bytes()+b" ")
+                    else:
+                        outside=self.root/"outside-sdk-header";outside.write_bytes(path.read_bytes());path.unlink();path.symlink_to(outside)
+                    self.assertTrue(self.index().build(self.target,"1000: call "+f["address"]).gaps)
+                    if path.is_symlink():path.unlink()
+
+    def test_level_box_destructor_rejects_compiler_profile_change(self):
+        f=self.level_template_destructor("box")
+        (self.root/"decomp/config.json").write_text("different flags\n")
+        self.assertTrue(self.index().build(self.target,"1000: call "+f["address"]).gaps)
+
+    def test_level_template_destructors_do_not_hide_another_gap(self):
+        f=self.level_template_destructor("box");self.add_function(function(0x3000,"CUnrelated","missing",tu=2))
+        result=self.index().build(self.target,"1000: call "+f["address"]+"\n1005: call 3000")
+        self.assertEqual(len(result.gaps),1)
+        self.assertIn("CUnrelated::missing",result.gaps[0])
+
+
+class UIExactContextPins(TestCase):
+    """Exact UI additions remain closed when any identity input changes."""
+    def setUp(self):
+        temp = TemporaryDirectory(prefix="otl-ui-context-")
+        self.addCleanup(temp.cleanup)
+        self.index = ContextIndex.__new__(ContextIndex)
+        index = self.index
+        index.root = Path(temp.name).resolve()
+        index.cegui_headers = {}
+        index.sources = {"TArrayList.h": "template<class T> class TArrayList {};\n",
+                         "iMenuListener.h": "class iMenuListener {};\n"}
+        index.mapping = {"iMenuListener": ["iMenuListener.h"]}
+        index.header_classes = {"iMenuListener.h": {"iMenuListener"}}
+        include = index.root / "decomp/include"
+        include.mkdir(parents=True)
+        for name, source in index.sources.items():
+            (include / name).write_text(source)
+        array_pin = mock.patch.object(ContextIndex, "WINDOW_ARRAY_HEADER_SHA256",
+            hashlib.sha256(index.sources["TArrayList.h"].encode()).hexdigest())
+        array_pin.start()
+        self.addCleanup(array_pin.stop)
+        strings = mock.patch.object(ContextIndex, "_string_template_headers", return_value=True)
+        strings.start()
+        self.addCleanup(strings.stop)
+        self.objects = []
+        digests = {}
+        for owner, event, address, name in [
+                ("Editbox", "EventTextAccepted", 0x1424940, "CEGUIEditbox.h"),
+                ("FrameWindow", "EventCloseClicked", 0x1423c60, "CEGUIFrameWindow.h"),
+                ("Window", "EventMouseMove", 0x7000, "CEGUIWindow.h")]:
+            source = "namespace CEGUI { class " + owner + " { public: static const String " + event + "; }; }\n"
+            folder = index.root / "third_party/cegui-0.6.2/include"
+            if owner != "Window":
+                folder /= "elements"
+            folder.mkdir(parents=True, exist_ok=True)
+            (folder / name).write_text(source)
+            digests[name] = hashlib.sha256(source.encode()).hexdigest()
+            raw = "_ZN5CEGUI" + str(len(owner)) + owner + str(len(event)) + event + "E"
+            self.objects.append(dict(address=hex(address), size=176, bind="global", name=raw,
+                                     demangled="CEGUI::" + owner + "::" + event))
+        pins = mock.patch.dict(ContextIndex.CEGUI_HEADER_SHA256, digests)
+        pins.start()
+        self.addCleanup(pins.stop)
+        index.copy_data = {int(o["address"], 16): o["name"] for o in self.objects}
+        index.elf_object_names = {(int(o["address"], 16), o["name"]): {o["name"]} for o in self.objects}
+        index.elf_object_sizes = {key: {176} for key in index.elf_object_names}
+        index.image = SimpleNamespace(section_at=lambda a: SimpleNamespace(type=8, flags=3, addr=a, size=176))
+        wide = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
+        self.add = function(0xafca50, "TArrayList<" + wide + " >", "add", size=439,
+                            kind="inline_or_template", bind=["weak"], params=wide)
+        self.add["mangled"] = "_ZN10TArrayListISbIwSt11char_traitsIwESaIwEEE3addES3_"
+        self.add["names"] = [self.add["mangled"]]
+        self.dtor = function(0xb1ba10, "TArrayList<iMenuListener*>", "~TArrayList", size=26,
+                             kind="inline_or_template", bind=["weak"])
+        self.dtor["names"] = ["_ZN10TArrayListIP13iMenuListenerED1Ev", "_ZN10TArrayListIP13iMenuListenerED2Ev"]
+        self.dtor["mangled"] = self.dtor["names"][0]
+        index.elf_weak_functions = {(int(row["address"], 16), name, row["size"])
+                                    for row in [self.add, self.dtor] for name in row["names"]}
+
+    def test_two_exact_element_copy_declarations(self):
+        for obj in self.objects[:2]:
+            self.assertIn("SDK declaration static const String Event", self.index._cegui_data(obj))
+
+    def test_wrong_element_identity_rejected(self):
+        for obj in self.objects[:2]:
+            for delta in [{"size": 8}, {"bind": "local"}, {"name": obj["name"] + "x"},
+                          {"address": hex(int(obj["address"], 16) + 8)},
+                          {"demangled": obj["demangled"].replace("CEGUI::", "Other::")}]:
+                with self.subTest(delta=delta):
+                    self.assertIsNone(self.index._cegui_data(dict(obj, **delta)))
+
+    def test_copy_relocation_required(self):
+        self.index.copy_data.clear()
+        for obj in self.objects[:2]:
+            self.assertIsNone(self.index._cegui_data(obj))
+
+    def test_unknown_element_event_is_not_exempt(self):
+        for obj in self.objects[:2]:
+            self.assertIsNone(self.index._cegui_data(dict(obj, demangled="CEGUI::Editbox::EventTextChanged")))
+
+    def test_changed_sdk_header_bytes_rejected(self):
+        folder = self.index.root / "third_party/cegui-0.6.2/include/elements"
+        for path in folder.iterdir():
+            path.write_bytes(path.read_bytes() + b"// changed\n")
+        for obj in self.objects[:2]:
+            self.assertIsNone(self.index._cegui_data(obj))
+
+    def test_existing_window_event_keeps_its_header_path(self):
+        self.assertIsNotNone(self.index._cegui_data(self.objects[2]))
+
+    def test_reviewed_existing_template_headers(self):
+        self.assertEqual(self.index._pinned_insert_headers(self.add, self.add["scope"]), {"TArrayList.h"})
+        self.assertEqual(self.index._pinned_destructor_headers(self.dtor, self.dtor["scope"]),
+                         {"TArrayList.h", "iMenuListener.h"})
+
+    def test_template_identity_and_header_digest_are_required(self):
+        for row, method in [(self.add, self.index._pinned_insert_headers),
+                            (self.dtor, self.index._pinned_destructor_headers)]:
+            for delta in [{"size": 1}, {"bind": ["global"]}, {"kind": "function"},
+                          {"address": "0x1"}, {"method": "other"}, {"params": "const std::wstring&"}]:
+                with self.subTest(delta=delta):
+                    self.assertEqual(method(dict(row, **delta), row["scope"]), set())
+        self.index._path("include", "TArrayList.h").write_text("changed\n")
+        self.assertEqual(self.index._pinned_insert_headers(self.add, self.add["scope"]), set())
+        self.assertEqual(self.index._pinned_destructor_headers(self.dtor, self.dtor["scope"]), set())
+
+
+class UIScalarInitializers(TestCase):
+ def scan(self,text):
+  from llm_context import _scan
+  return _scan(text)[0]
+ def test_verbatim_wide_literal_with_escapes(self):
+  text=r'static const std::wstring Help = L"line\n\t\"Текст\"";';rows=self.scan(text);self.assertEqual(len(rows),1);self.assertEqual((rows[0].qualified,rows[0].kind,rows[0].text),('Help','data',text))
+ def test_mutable_boolean_and_float_tokens(self):
+  for typ,value in [('bool','true'),('bool','false'),('float','1.0f'),('float','-0.0f'),('float','1.25e-3f')]:
+   rows=self.scan('static '+typ+' Last = '+value+';');self.assertEqual([r.qualified for r in rows],['Last'])
+ def test_expressions_constructors_macros_and_compound_rejected(self):
+  for text in ['static const std::wstring Help = make();','static const std::wstring Help = MACRO;', 'static const std::wstring Help = std::wstring(L"text");', 'static bool Last = !false;', 'static float Last = 1.0f + 2.0f;', 'static bool First = false, Last = true;', 'static float Last = nanf("");']:
+   self.assertEqual(self.scan(text),[],text)
+ def test_unreviewed_wide_literal_forms_rejected(self):
+  for value in ['"narrow"','L"one" L"two"',r'L"bad\q"','L"unescaped\nnewline"']:
+   self.assertEqual(self.scan('static const std::wstring Help = '+value+';'),[],value)
+  self.assertEqual(self.scan('static std::wstring Help = L"mutable";'),[])
+ def test_non_top_level_and_nonstatic_initializers_rejected(self):
+  for text in ['const std::wstring Help = L"x";', 'namespace NS { static const std::wstring Help = L"x"; }', 'class C { static const std::wstring Help = L"x"; };', 'void fn() { static bool Last = false; }']:
+   self.assertEqual(self.scan(text),[],text)
+ def test_existing_ui_headers_keep_exact_initializers(self):
+  expected={'MainMenuData.h':{'CopyrightInfo'},'NewGameMenuData.h':{'m_gFileVersionExtension'},'SettingsMenuData.h':{'LastMusicMute','LastSoundMute','LastMusicVolume','LastSoundVolume','KShadowSettingNames','KParticleSettingNames'},'ConsoleData.h':{'SetPetsEnabled','fixRoomPieces','gTEXT_HELP'}}
+  for name,names in expected.items():self.assertEqual({d.qualified for d in self.scan((HERE.parent/'decomp/include'/name).read_text())},names,name)
 
 if __name__ == "__main__":
     main()

@@ -21,6 +21,7 @@ namespace Ogre {class SkeletonInstance;}
 // Partial: size and all vtable groups preserved; expose only Item collaborators.
 class CGenericModel : public CPositionableObject, public iRandomWeight, public iHighlight
 {
+    friend class CTriggerUnit;
     friend class CSkillEvent;
     friend class CLevel;
 friend class CEquipment;
@@ -34,6 +35,7 @@ friend class CInventoryMenu;
 friend class CSkillMenu;
 friend class CJournalMenu;
     friend class CQuestMenu;
+    friend class CDropdownMenu;
 public:
     std::string getTexureName();
     void releaseUniqueMaterials();
@@ -136,7 +138,9 @@ private:
     CAnimationSet* m_animationSet;
     bool m_animationPaused;
     bool m_flag1e9;
-    unsigned char m_gap1ea[0x204-0x1ea];
+    unsigned char m_gap1ea[2];
+    Ogre::Vector3 m_boundsMinimum; // +0x1ec
+    Ogre::Vector3 m_boundsMaximum; // +0x1f8
     OGRE_UTILITIES::EQUERYMASK m_queryMask; // +0x204
     std::vector<CRenderableStates> m_renderableStates;
     unsigned int m_randomWeight; // +0x220

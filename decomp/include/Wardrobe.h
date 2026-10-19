@@ -9,6 +9,7 @@ class CCharacter;
 class CGenericModel;
 namespace Ogre { class SceneManager; class Entity; class Mesh; class Image; }
 class CWardrobe : public CRunicCore {
+    friend class CCharacter;
     Ogre::SceneManager* m_sceneManager;
     CGenericModel* m_model;
     CGenericModel* m_paperdollModel;

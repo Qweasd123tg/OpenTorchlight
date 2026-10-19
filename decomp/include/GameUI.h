@@ -65,6 +65,8 @@ class iMenuListener;
 class CGameUI : public CRunicCore
 {
     friend class CGameClient;
+    friend class CLevel;
+    friend class CSettingsMenu;
     friend class CGame;
     friend class CQuestRewards;
     friend class CQuestDialogMenu;
@@ -216,6 +218,7 @@ private:
     friend class CCharacter;
     friend class CDamageShape;
     friend class CDropdownMenu;
+    friend class CConsole;
     friend class CDieMenu;
     friend class COptionsMenu;
     friend class CContinueGameMenu;

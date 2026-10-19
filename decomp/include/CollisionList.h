@@ -13,6 +13,7 @@ namespace Ogre { class Matrix4; }
 // indices, materials, normals and face bounds. Size 0x108.
 class CCollisionList : public CRunicCore
 {
+    friend class CTriggerUnit;
 public:
     CCollisionList();
     virtual ~CCollisionList();
@@ -73,6 +74,8 @@ public:
     void calculateNormals();
 
 private:
+    friend class CCharacter;
+    friend class CLevel;
     Ogre::Vector3 m_vBoundsMin;
     Ogre::Vector3 m_vBoundsMax;
     std::vector<Ogre::Vector3> m_FaceMaxBounds;

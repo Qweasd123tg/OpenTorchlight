@@ -28,7 +28,7 @@ public:
     virtual void scaleUpdated(const Ogre::Vector3&);
     virtual TArrayList<float>* getSnapValues(ESNAP_TYPES);
     virtual void setHighlighted(bool);
-    virtual void getCollisionMesh();
+    virtual CCollisionModel* getCollisionMesh();
     char getRoomPieceIsScalable();
     int getVisualMeshCountInRoomPiece();
     void clearCollisionData();

@@ -3,7 +3,7 @@
 #include "DropdownMenu.h"
 class CGameUI; class CSettings; class CResourceManager;
 namespace Ogre { class RenderWindow; class SceneManager; }
-namespace CEGUI { class Window; }
+namespace CEGUI { class Window; class Imageset; }
 // Partial: RTTI base and allocation size from the original GameUI create call.
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CCinematicMenu : public CDropdownMenu {
@@ -20,12 +20,12 @@ public:
     CEGUI::Window* m_cinematicWindow;
     CEGUI::Window* m_textWindow;
     CEGUI::Window* m_skipWindow;
-    int m_textIndex;
+    float m_textIndex;
     float m_textDuration;
     std::string m_cinematicName; // +0xe0
     int m_displayedCharacters;
     unsigned char m_PaddingEC[4];
-    void* m_cinematicData;
+    CEGUI::Imageset* m_cinematicData;
     float m_textSpeed;
     unsigned char m_PaddingFC[4];
 };

@@ -6,11 +6,13 @@
 // and return types are placeholders until the class's own TU is recovered.
 
 
+class CCollisionModel;
+
 class iCollision
 {
 public:
     virtual ~iCollision();
-    virtual void getCollisionMesh() = 0;
+    virtual CCollisionModel* getCollisionMesh() = 0;
 
     // fields
 };

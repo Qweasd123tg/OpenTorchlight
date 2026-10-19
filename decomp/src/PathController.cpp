@@ -246,3 +246,109 @@ void CPathController::setArrayOfVectors(const float* values, unsigned int count)
         setVisible(m_bVisible);
     }
 }
+
+#include "StringUtilities.h"
+#include <OgreUTFString.h>
+void CPathController::setPathName(const std::wstring& name)
+{
+    m_pathName=name;
+    for (unsigned int i=0;i<m_pathNodes.size();++i) {
+        if (m_pathName.empty())
+            m_pathNodes[i]->setText(L"Node _ "+STRINGS::GetValueAsWString(i));
+        else
+            m_pathNodes[i]->setText(Ogre::UTFString(m_pathName)+Ogre::UTFString(" _ ")+Ogre::UTFString(STRINGS::GetValueAsWString(i)));
+    }
+}
+
+
+CPathController::CPathController(CResourceManager* resources)
+    : CPositionableObject(resources,NULL), m_pUnitInteractDataGroup(NULL), m_units(5),
+      m_pCategory(gRESOURCE_GROUP_NAMES[1]), m_bVisible(false), m_bUnknown131(false),
+      m_bUnknown132(false), m_bEnabled(true), m_bUnitRunsOnPath(true),
+      m_bWalkToPlayer(false), m_bUnknown136(false), m_bUnknown137(false),
+      m_pathNodes(10), m_pathCoordinates(21), m_pathDistances(10), m_fUnknown180(0),
+      m_pathName(EMPTY_WSTRING), m_iNumberOfPathPoints(0), m_bEnableUnitOnStart(false)
+{
+}
+
+CPathController::~CPathController()
+{
+    m_pathNodes.clear();
+    m_units.deleteAll();
+    m_pUnitInteractDataGroup=NULL;
+}
+
+
+#include "Editor.h"
+#include "EditorObjectManager.h"
+void CPathController::setNumberOfPathPoints(unsigned int count)
+{
+    if (count>100) count=100;
+    if (static_cast<unsigned int>(m_iNumberOfPathPoints)==count) return;
+    m_iNumberOfPathPoints=count;
+    if (!m_pResourceManager->getEditorIsRunning()) return;
+    while (count<m_pathNodes.size()) {
+        gEditor->getObjectManager()->EditorObjectDeleted(m_pathNodes[0]);
+        delete m_pathNodes[0];
+        m_pathNodes[0]=NULL;
+        m_pathNodes.removeAt(0);
+    }
+    while (count>m_pathNodes.size()) {
+        CPathNode* node=dynamic_cast<CPathNode*>(getSceneOwner()->CreateObjectByDescriptor(L"Path Node",true));
+        if (node) {
+            m_pathNodes.add(node);
+            gEditor->getObjectManager()->EditorObjectCreated(node);
+            gEditor->getObjectManager()->EditorObjectSelected(node);
+            node->setPosition(getPosition(false));
+            node->m_pPathController=this;
+        }
+    }
+    setPathName(m_pathName);
+}
+
+
+#include "Level.h"
+void CPathController::setEnabled(bool enabled)
+{
+    if (enabled==m_bEnabled) return;
+    m_bEnabled=enabled;
+    BroadcastEvent(enabled?6:7);
+    if (!m_units.size()) {
+        if (m_bUnknown137) {
+            CPlayer*player=m_pResourceManager->getGameClient()->getPlayer();
+            if (!player) return;
+            player->setAIState(AISTATE_IDLE);
+            TSafePointer<CCharacter>*safe=new TSafePointer<CCharacter>;
+            safe->setObject(player);
+            m_units.add(safe);
+        } else {
+            TArrayList<CBaseUnit*>units(100);
+            m_pResourceManager->getLevel()->getBaseUnitsByDataGroup(m_pUnitInteractDataGroup,units);
+            for (unsigned int i=0;i<units.size();++i) {
+                CCharacter*unit=dynamic_cast<CCharacter*>(units[i]);
+                if (unit) {
+                    TSafePointer<CCharacter>*safe=new TSafePointer<CCharacter>;
+                    safe->setObject(unit);
+                    m_units.add(safe);
+                }
+            }
+        }
+    }
+    for (unsigned int i=0;i<m_units.size();++i) {
+        TSafePointer<CCharacter>*safe=m_units[i];
+        if (enabled) {
+            caculateSpline();
+            m_bUnknown136=false;
+            if (m_bWalkToPlayer) {
+                setPosition(safe->getObject()->getPosition(true));
+                safe->getObject()->setTarget(m_pResourceManager->getGameClient()->getPlayer());
+            } else safe->getObject()->setTarget(NULL);
+            safe->getObject()->stopPathing();
+            safe->getObject()->setTargetItem(NULL);
+            safe->getObject()->setPathToFollow(this);
+            safe->getObject()->setAIState(AISTATE_IDLE);
+        } else if (safe->getObject() && safe->getObject()->m_pathToFollow.getObject()==this)
+            safe->getObject()->setPathToFollow(NULL);
+        if (m_bEnableUnitOnStart) safe->getObject()->setEnabled(true);
+    }
+}

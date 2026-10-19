@@ -5,6 +5,7 @@
 // Partial: original allocation is 0xb8; Item reads the world-space bounds.
 class CCullingBounds : public CRunicCore
 {
+    friend class CTriggerUnit;
 public:
     CCullingBounds()
     {
@@ -21,6 +22,7 @@ public:
     const Ogre::Vector3& getWorldMinimum() const { return m_vWorldMinimum; }
     const Ogre::Vector3& getWorldMaximum() const { return m_vWorldMaximum; }
 private:
+    friend class CCharacter;
     Ogre::Vector3 m_vMinimum;
     Ogre::Vector3 m_vMaximum;
     Ogre::Vector3 m_vLocalMinimum;

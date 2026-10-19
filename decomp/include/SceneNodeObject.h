@@ -17,6 +17,7 @@ namespace Ogre
 // scene root) while it is visible.
 class CSceneNodeObject : public CEditorBaseObject
 {
+    friend class CLevel;
 public:
     Ogre::Entity* getEntity() const { return m_pEntity; }
     CSceneNodeObject(CResourceManager* resourceManager, Ogre::SceneManager* sceneManager);

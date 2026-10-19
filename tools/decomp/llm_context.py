@@ -44,6 +44,7 @@ class Declaration:
     whole_header: bool = False
     scalar_array_bytes: bytes | None = None
     asm_symbol: str | None = None
+    scalar_literal_bytes: bytes | None = None
 
 
 @dataclass(frozen=True)
@@ -227,6 +228,27 @@ def _scan(text, *, typedefs=False):
                 list_object = re.fullmatch(r"(?:static\s+)?TArrayList\s*<\s*std::(?:w?string)\s*>\s+(\w+)\s*\(\s*[1-9][0-9]*\s*\)", clean)
                 zero_scalar = re.fullmatch(r"static\s+long\s+long\s+(\w+)\s*=\s*0", clean)
                 repository = re.fullmatch(r"static\s+TRepository\s*<\s*std::wstring\s*>\s+(g_GlobalRepository)\s*\(\s*EMPTY_WSTRING\s*\)", clean)
+                # Reviewed TU-local scalar initializers stay verbatim. Only a
+                # single wide literal, bool token or finite float32 literal;
+                # expressions, constructors, macros and compound declarations
+                # cannot create declaration context through this path.
+                scalar = re.fullmatch(r"static\s+(?:(const)\s+)?(std::wstring|bool|float)\s+(\w+)\s*=\s*(.*?)\s*;", original, re.S)
+                integer_scalar = re.fullmatch(r"static\s+(?:const\s+)?(int|unsigned\s+int)\s+(\w+)\s*=\s*(-?(?:0|[1-9][0-9]{0,9}))\s*;", original)
+                integer_bytes = None
+                if integer_scalar and not scopes:
+                    value = int(integer_scalar[3])
+                    signed = integer_scalar[1] == "int"
+                    in_range = -(1 << 31) <= value < (1 << 31) if signed else 0 <= value < (1 << 32)
+                    if in_range:
+                        integer_bytes = value.to_bytes(4, "little", signed=signed)
+                literal_scalar = None
+                if scalar and not scopes:
+                    typ, value = scalar[2], scalar[4]
+                    wide_literal = r'L"(?:\\(?:[\'"?\\abfnrtv]|[0-7]{1,3}|x[0-9a-fA-F]+|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8})|[^"\\\r\n])*"'
+                    if ((typ == "std::wstring" and scalar[1] == "const" and re.fullmatch(wide_literal, value))
+                            or (typ == "bool" and value in ("true", "false"))
+                            or (typ == "float" and _float32_literal_bytes(value) is not None)):
+                        literal_scalar = scalar[3]
                 callback = re.fullmatch(r"typedef\s+([^;{}]+?)\s*\(\s*\*\s*(\w+)\s*\)\s*\(([^;{}]*)\)", clean)
                 typedef = re.fullmatch(r"typedef\s+[^;{}()]+?\s+(\w+)", clean)
                 whole_header = False
@@ -239,6 +261,10 @@ def _scan(text, *, typedefs=False):
                     name, kind, width = callback[2], "callback", 0
                 elif typedef and typedefs:
                     name, kind, width = typedef[1], "typedef", 0
+                elif integer_bytes is not None:
+                    name, kind, width = integer_scalar[2], "data", 0
+                elif literal_scalar is not None:
+                    name, kind, width = literal_scalar, "data", 0
                 elif (zero_scalar or repository) and not scopes:
                     name, kind, width = (zero_scalar or repository)[1], "data", 0
                     whole_header = bool(repository)
@@ -272,7 +298,8 @@ def _scan(text, *, typedefs=False):
                         width = 4 if re.search(r"\bwchar_t\b", typ) else 1
                 qualified = "::".join([n for _, n in scopes] + [name])
                 declarations.append(Declaration(qualified, kind, original, scopes, width,
-                                                whole_header=whole_header, asm_symbol=asm_symbol))
+                                                whole_header=whole_header, asm_symbol=asm_symbol,
+                                                scalar_literal_bytes=integer_bytes))
             start = i + 1
     return declarations, types
 
@@ -562,6 +589,8 @@ class ContextIndex:
     # Reviewed SDK files for the pinned x86-64 profile; changed/unlisted inputs
     # remain gaps until explicitly reviewed. These are not namespace exemptions.
     CEGUI_HEADER_SHA256 = {
+        'CEGUIEditbox.h': 'a4b38f64e44c225193eb203aecd272609e7e7b6715f4502749dee6fc747f8d83',
+        'CEGUIFrameWindow.h': '61cc9094b8a3d55ea15846892a4ff9a6f2a35d22fc5cd4e5ddf1281b075d97fa',
         'CEGUIWindow.h': '37f12e0e538df1cb67271ced354dae55d2be7a1d35830f00d77bae819d09b792',
         'CEGUIString.h': '0f6b99906ae55d7d8f35e4a50e249d76baaa7ec21d5ecd3b068822364429e6fe',
         'CEGUISingleton.h': 'ad721b29935815b6e943f1963732b63e62440760eea8e1f60a80f602fa942319',
@@ -573,11 +602,12 @@ class ContextIndex:
 
     OGRE_HEADER_SHA256 = {'OgreResourceGroupManager.h': '1ff3bf682e6723128544d4f0d948fc7408b1179cb1bb42961f80e1967b107529', 'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf'}
     OGRE_VALUE_HEADER_SHA256 = {'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf', 'OgreVector3.h': '3eb0c292006d0d57cb4756169f0390fea22e4d14905be127d353be5d4b493051', 'OgreQuaternion.h': '58fee85f3032d4d0d1e5de279b5cf8e45734a8e40fbe5961a60fd4cbfeddb0b9', 'OgreString.h': '9cdc1263f53e0f5aa49e115e6e3dcaad4b90140a6b5c8ceeab5d95a5fd586ad7', 'OgreMatrix4.h': '9d379f1bd2be7be264de50fed7b6ddad034af06e30eb30a3c2ce752f36e8d416', 'OgreMath.h': '01516be146b17a6a3700f2001f2f33e89953b0f738b5c23ca4475075f33b88f1'}
-    OGRE_CONFIG_SHA256 = '732795b1a2cc99aca3b539c4f6931210f026b8654c8b314858573d4f7883249d'
+    OGRE_CONFIG_SHA256 = '870183a4fc081077262dbf2a950d0f325038abecae12fac39c797f29503e92f3'
 
     OGRE_VALUE_HEADER_SHA256.update({
         'OgreColourValue.h': 'c0d1e6f49898e76c710af5ec486252123bd40b58533f08ad6295a33654587cbf',
         'OgreMovableObject.h': '05f263df5d38820f92812185506ed9cbb285ab49f1af01eb8a948b26006fe88c',
+        'OgreSceneManager.h': '3f3eecf9737adf236491b60d994411482fd048b462748c44ba134454a1c380e3',
     })
 
     SAFE_POINTER_HEADER_SHA256 = "f9b4be018fdd063427743f5035c9b297f883475e373a3610b7fdeb2450d9bb47"
@@ -920,9 +950,15 @@ class ContextIndex:
                 for _, op, args in insns[start:start + 3]:
                     args = args.split("#", 1)[0].split(";", 1)[0].strip()
                     value = re.fullmatch(r"\$0x([0-9a-f]+),%(edi|esi|edx)", args)
-                    if op != "mov" or not value or value[2] in assigned:
+                    if op == "xor" and args == "%esi,%esi":
+                        register, immediate = "esi", 0
+                    elif op == "mov" and value:
+                        register, immediate = value[2], int(value[1], 16)
+                    else:
                         break
-                    assigned[value[2]] = int(value[1], 16)
+                    if register in assigned:
+                        break
+                    assigned[register] = immediate
                 else:
                     _, op, args = insns[start + 3]
                     target = re.match(r"^(?:0x)?([0-9a-fA-F]+)(?:\s|$)", args)
@@ -944,9 +980,11 @@ class ContextIndex:
         if name in self.cegui_headers:
             return self.cegui_headers[name]
         sdk = (self.root / "third_party/cegui-0.6.2/include").resolve()
-        path = sdk / _basename(name)
+        element = name in {"CEGUIEditbox.h", "CEGUIFrameWindow.h"}
+        directory = sdk / "elements" if element else sdk
+        path = directory / _basename(name)
         value = None
-        if (name in self.CEGUI_HEADER_SHA256 and path.resolve().parent == sdk
+        if (name in self.CEGUI_HEADER_SHA256 and path.resolve().parent == directory
                 and path.is_file()):
             try:
                 raw_source = path.read_bytes()
@@ -966,10 +1004,16 @@ class ContextIndex:
     def _ogre_value_data(self, obj):
         """Only reviewed COPY-imported constants in the pinned default ABI."""
         identities = {
+            "_ZN4Ogre4Math2PIE": ("Ogre::Math::PI", 4, "OgreMath.h", "Real", "PI"),
+            "_ZN4Ogre4Math6TWO_PIE": ("Ogre::Math::TWO_PI", 4, "OgreMath.h", "Real", "TWO_PI"),
+            "_ZN4Ogre12SceneManager24WORLD_GEOMETRY_TYPE_MASKE": ("Ogre::SceneManager::WORLD_GEOMETRY_TYPE_MASK", 4, "OgreSceneManager.h", "uint32", "WORLD_GEOMETRY_TYPE_MASK"),
             "_ZN4Ogre4Math8fRad2DegE": ("Ogre::Math::fRad2Deg", 4, "OgreMath.h", "Real", "fRad2Deg"),
             "_ZN4Ogre4Math8fDeg2RadE": ("Ogre::Math::fDeg2Rad", 4, "OgreMath.h", "Real", "fDeg2Rad"),
             "_ZN4Ogre7Vector36UNIT_ZE": ("Ogre::Vector3::UNIT_Z", 12, "OgreVector3.h", "Vector3", "UNIT_Z"),
             "_ZN4Ogre4Math12POS_INFINITYE": ("Ogre::Math::POS_INFINITY", 4, "OgreMath.h", "Real", "POS_INFINITY"),
+            "_ZN4Ogre7Vector36UNIT_XE": ("Ogre::Vector3::UNIT_X", 12, "OgreVector3.h", "Vector3", "UNIT_X"),
+            "_ZN4Ogre7Vector310UNIT_SCALEE": ("Ogre::Vector3::UNIT_SCALE", 12, "OgreVector3.h", "Vector3", "UNIT_SCALE"),
+            "_ZN4Ogre11ColourValue4ZEROE": ("Ogre::ColourValue::ZERO", 16, "OgreColourValue.h", "ColourValue", "ZERO"),
             "_ZN4Ogre7Vector36UNIT_YE": ("Ogre::Vector3::UNIT_Y", 12, "OgreVector3.h", "Vector3", "UNIT_Y"),
             "_ZN4Ogre7Vector315NEGATIVE_UNIT_YE": ("Ogre::Vector3::NEGATIVE_UNIT_Y", 12, "OgreVector3.h", "Vector3", "NEGATIVE_UNIT_Y"),
             "_ZN4Ogre7Matrix48IDENTITYE": ("Ogre::Matrix4::IDENTITY", 64, "OgreMatrix4.h", "Matrix4", "IDENTITY"),
@@ -977,6 +1021,7 @@ class ContextIndex:
             "_ZN4Ogre10Quaternion8IDENTITYE": ("Ogre::Quaternion::IDENTITY", 16, "OgreQuaternion.h", "Quaternion", "IDENTITY"),
             "_ZN4Ogre10StringUtil5BLANKE": ("Ogre::StringUtil::BLANK", 8, "OgreString.h", "String", "BLANK"),
             "_ZN4Ogre11ColourValue5WhiteE": ("Ogre::ColourValue::White", 16, "OgreColourValue.h", "ColourValue", "White"),
+            "_ZN4Ogre11ColourValue5BlackE": ("Ogre::ColourValue::Black", 16, "OgreColourValue.h", "ColourValue", "Black"),
             "_ZN4Ogre13MovableObject24msDefaultVisibilityFlagsE": ("Ogre::MovableObject::msDefaultVisibilityFlags", 4, "OgreMovableObject.h", "uint32", "msDefaultVisibilityFlags"),
         }
         raw = obj.get("name", "")
@@ -1018,7 +1063,7 @@ class ContextIndex:
             declarations, _ = _scan(re.sub(r"\b_OgreExport\b", "", sources[header]))
         except (OSError, UnicodeError, KeyError):
             return None
-        qualifier = "" if raw == "_ZN4Ogre13MovableObject24msDefaultVisibilityFlagsE" else r"const\s+"
+        qualifier = "" if raw in ("_ZN4Ogre13MovableObject24msDefaultVisibilityFlagsE", "_ZN4Ogre12SceneManager24WORLD_GEOMETRY_TYPE_MASKE") else r"const\s+"
         expected = r"static\s+" + qualifier + typ + r"\s+" + member + r"\s*;"
         matches = [d for d in declarations if d.kind == "data" and d.qualified == label
                    and re.fullmatch(expected, _mask(d.text).strip())]
@@ -1095,12 +1140,23 @@ class ContextIndex:
         if (not sec or sec.type != 8 or not sec.flags & 2 or not sec.flags & 1
                 or obj.get("size", 0) <= 0 or base + obj["size"] > sec.addr + sec.size):
             return None
-        event = re.fullmatch(r"CEGUI::Window::(Event\w+)", label)
-        if event:
-            name = event[1]
-            if raw != f"_ZN5CEGUI6Window{len(name)}{name}E" or obj["size"] != 176:
+        event = re.fullmatch(r"CEGUI::(Window)::(Event\w+)", label)
+        element_events = {
+            "CEGUI::Editbox::EventTextAccepted": ("Editbox", "EventTextAccepted", 0x1424940),
+            "CEGUI::FrameWindow::EventCloseClicked": ("FrameWindow", "EventCloseClicked", 0x1423c60),
+        }
+        element = element_events.get(label)
+        if event or element:
+            if event:
+                owner, name = event[1], event[2]
+                header = "CEGUIWindow.h"
+            else:
+                owner, name, address = element
+                if base != address:
+                    return None
+                header = "CEGUI" + owner + ".h"
+            if raw != f"_ZN5CEGUI{len(owner)}{owner}{len(name)}{name}E" or obj["size"] != 176:
                 return None
-            header = "CEGUIWindow.h"
             expected = r"static\s+const\s+String\s+" + re.escape(name) + r"\s*;"
         elif label == "CEGUI::String::npos":
             if raw != "_ZN5CEGUI6String4nposE" or obj["size"] != 8:
@@ -1198,6 +1254,8 @@ class ContextIndex:
             return set()
         return {header}
 
+    AXIS_BOX_ARRAY_SDK_SHA256 = {'OgreAxisAlignedBox.h': '3371a8579af08a86687eaec523643759cfa807e3491b5fde8d8bccaa58095401', 'OgrePrerequisites.h': '50f2942df14c86e7b94ff7bebd3e69582b9f9a255952250a2f42c24e1129b32a', 'OgrePlatform.h': '2a985daab37135a00251daae5973e7be8ce0a64e1fb12bb1d5a0280627ecf0e5', 'OgreConfig.h': 'a4252bb5b0f6cf860f335c4d34f29946225c79e3c8392ef7e8ce6107c7c36aaf', 'OgreVector3.h': '3eb0c292006d0d57cb4756169f0390fea22e4d14905be127d353be5d4b493051', 'OgreMatrix4.h': '9d379f1bd2be7be264de50fed7b6ddad034af06e30eb30a3c2ce752f36e8d416', 'OgreMemoryAllocatorConfig.h': '80fe5786bde1ca7148d410e24f6a5aa2f81c11e39108020cf1f0307bcabb0bc6', 'OgreMemoryAllocatedObject.h': '769489c2d7260a4ab919338728a71e51cfb2f0131020924854b7fbf3016ff311', 'OgreMemorySTLAllocator.h': 'cd83b553ec3df877b8d460898303140afc233f5d471e2434ad35cdc484d38a9e', 'OgreMemoryNedAlloc.h': '0b4e3e35618cb6902090ebc5d52a3952b2357389b87a7d467e95dc460a24c099', 'OgreMemoryStdAlloc.h': '45f99d554796d62db295b8cc2c44fe3760996ad47b808469ffa7ef2665bfb975', 'OgreAlignedAllocator.h': 'b33d3f164d8e3bdc0f3a2e31b926d12ba39852292df51773b0ea7e3424b00bd5'}
+
     def _pinned_destructor_headers(self, callee, scope):
         """Reviewed existing template bodies, never a generic exemption.
 
@@ -1208,9 +1266,18 @@ class ContextIndex:
         """
         wide = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
         reviewed = {
+            "TRepository<" + wide + " >":
+                (0xc629f0, 178, "_ZN11TRepositoryISbIwSt11char_traitsIwESaIwEEE",
+                 "~TRepository", "TRepository.h", self.REPOSITORY_HEADER_SHA256, None),
             "TArrayList<float>":
                 (0x59fb40, 26, "_ZN10TArrayListIfE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<unsigned int>":
+                (0x90da70, 26, "_ZN10TArrayListIjE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<CEquipmentRef*>":
+                (0x90da50, 26, "_ZN10TArrayListIP13CEquipmentRefE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CEquipmentRef"),
             "TArrayList<EEFFECT_STAT_MODIFIERS>":
                 (0x7e4740, 26, "_ZN10TArrayListI22EEFFECT_STAT_MODIFIERSE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
@@ -1223,6 +1290,15 @@ class ContextIndex:
             "TArrayList<CSkill*>":
                 (0xcd57a0, 26, "_ZN10TArrayListIP6CSkillE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CSkill"),
+            "TArrayList<Ogre::AxisAlignedBox>":
+                (0x967520, 91, "_ZN10TArrayListIN4Ogre14AxisAlignedBoxEE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<CLayout*>":
+                (0x967160, 26, "_ZN10TArrayListIP7CLayoutE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<CPropertyNode*>":
+                (0x967140, 26, "_ZN10TArrayListIP13CPropertyNodeE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<CChunk*>":
                 (0x97cb30, 26, "_ZN10TArrayListIP6CChunkE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
@@ -1238,6 +1314,9 @@ class ContextIndex:
             "TArrayList<CBaseUnit*>":
                 (0xd49940, 26, "_ZN10TArrayListIP9CBaseUnitE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<iMenuListener*>":
+                (0xb1ba10, 26, "_ZN10TArrayListIP13iMenuListenerE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "iMenuListener"),
             "TArrayList<CQuestDialogItem*>":
                 (0xd26480, 26, "_ZN10TArrayListIP16CQuestDialogItemE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
@@ -1250,9 +1329,15 @@ class ContextIndex:
             "TArrayList<" + wide + " >":
                 (0x5f8e90, 155, "_ZN10TArrayListISbIwSt11char_traitsIwESaIwEEE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TSafePointer<CItem>":
+                (0x591be0, 47, "_ZN12TSafePointerI5CItemE",
+                 "~TSafePointer", "SafePointer.h", self.SAFE_POINTER_HEADER_SHA256, "CItem"),
             "TSafePointer<CCharacter>":
                 (0x591b50, 47, "_ZN12TSafePointerI10CCharacterE",
                  "~TSafePointer", "SafePointer.h", self.SAFE_POINTER_HEADER_SHA256, "CCharacter"),
+            "TSafePointer<CPositionableObject>":
+                (0xd06790, 47, "_ZN12TSafePointerI19CPositionableObjectE",
+                 "~TSafePointer", "SafePointer.h", self.SAFE_POINTER_HEADER_SHA256, "CPositionableObject"),
             "TSafePointer<CEquipment>":
                 (0xacbc90, 47, "_ZN12TSafePointerI10CEquipmentE",
                  "~TSafePointer", "SafePointer.h", self.SAFE_POINTER_HEADER_SHA256, "CEquipment"),
@@ -1289,6 +1374,22 @@ class ContextIndex:
         if hashlib.sha256(raw).hexdigest() != digest or raw.decode("utf-8") != self.sources[header]:
             return set()
         headers = {header}
+        if scope == "TArrayList<Ogre::AxisAlignedBox>":
+            # Native 0x967520 destroys each 40-byte AABB, including its owned
+            # corner buffer, then frees the cookie-bearing array. The exact
+            # existing template instantiation MATCHes under this SDK/profile.
+            try:
+                configuration = (self.root / "decomp/config.json").read_bytes()
+                if hashlib.sha256(configuration).hexdigest() != self.OGRE_CONFIG_SHA256:
+                    return set()
+                cache = Path(os.environ.get("OTL_DECOMP_CACHE", Path.home() / ".cache/opentorchlight/decomp"))
+                sdk = (cache / "gcc447/ogre-1.6.5/ogre/OgreMain/include").resolve()
+                for name, expected in self.AXIS_BOX_ARRAY_SDK_SHA256.items():
+                    path = sdk / name
+                    if path.resolve().parent != sdk or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+                        return set()
+            except OSError:
+                return set()
         if scope in ("TArrayList<UNIONDATA32BIT>", "TArrayList<CSkill*>"):
             owner = "DescriptorProp.cpp" if scope == "TArrayList<UNIONDATA32BIT>" else "SkillManager.cpp"
             if self._tu(callee, None) != owner:
@@ -1336,6 +1437,9 @@ class ContextIndex:
             "TArrayList<CDataGroup*>":
                 (0xa7e5e0, 180, "_ZN10TArrayListIP10CDataGroupE3addES1_", "add", "CDataGroup*",
                  "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CDataGroup"),
+            "TArrayList<" + wide + " >":
+                (0xafca50, 439, "_ZN10TArrayListISbIwSt11char_traitsIwESaIwEEE3addES3_",
+                 "add", wide, "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<int>":
                 (0xa69ec0, 180, "_ZN10TArrayListIiE3addEi", "add", "int",
                  "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
@@ -1378,6 +1482,74 @@ class ContextIndex:
         elif scope not in ("TArrayList<int>", "TArrayList<bool>") and not self._string_template_headers():
             return set()
         return headers
+
+    QUADTREE_HEADER_SHA256 = "8379f5116bc6783f18f65ab09f6f4192aca7f728ade2bb9c62196678d4618172"
+
+    def _quadtree_headers(self, callee, scope):
+        """Two reviewed native instantiations, with the real complete template.
+
+        Quadtree.h layout is backed by native RTTI, allocations, stores and
+        owning destructors. The shallow scanner intentionally omits templates.
+        Never synthesize a specialization or accept arbitrary instantiations.
+        """
+        reviewed = {
+            "sort": (0x9689b0, 905,
+                     "_ZN13CQuadtreeNodeIjE4sortERKN4Ogre7Vector3ES4_bRSt6vectorIjSaIjEE",
+                     "Ogre::Vector3 const&, Ogre::Vector3 const&, bool, std::vector<unsigned int, std::allocator<unsigned int> >&"),
+            "addData": (0x967af0, 1586,
+                        "_ZN13CQuadtreeNodeIjE7addDataEjRKN4Ogre7Vector3ES4_f",
+                        "unsigned int, Ogre::Vector3 const&, Ogre::Vector3 const&, float"),
+        }
+        entry = reviewed.get(callee.get("method"))
+        if entry is None or scope != "CQuadtreeNode<unsigned int>":
+            return set()
+        address, size, name, params = entry
+        if (callee.get("kind") != "inline_or_template"
+                or set(callee.get("bind", ())) != {"weak"}
+                or _address(callee["address"]) != address or callee.get("size") != size
+                or callee.get("qualified") != scope + "::" + callee["method"]
+                or callee.get("params") != params or callee.get("cv", "")
+                or callee.get("mangled") != name or set(callee.get("names", ())) != {name}
+                or (address, name, size) not in self.elf_weak_functions):
+            return set()
+        header = "Quadtree.h"
+        source = self.sources.get(header)
+        if source is None:
+            return set()
+        raw = self._path("include", header).read_bytes()
+        if (hashlib.sha256(raw).hexdigest() != self.QUADTREE_HEADER_SHA256
+                or raw.decode("utf-8") != source):
+            return set()
+        return {header}
+
+    def _level_update_timer_data(self, obj, f, tu, address):
+        """Exact original initialized function-local float storage, not an extern.
+
+        Its 100.0f initializer is file-backed .data, unlike the generic .bss
+        route. ASM determines the C++ type separately; include complete bytes.
+        """
+        raw = "_ZZN6CLevel6updateEPN4Ogre6CameraERKNS0_7Vector3EffP7CPlayerE11UpdateTimer"
+        fn = "_ZN6CLevel6updateEPN4Ogre6CameraERKNS0_7Vector3EffP7CPlayer"
+        original = "91b41ae9dfea30aab6bc14dbbfcceaee096d600f39635b8507f5a88b5d41724b"
+        if (self.db.get("original_elf_sha256") != original
+                or getattr(self.image, "sha256", None) != original
+                or tu != "level.cpp" or _address(f["address"]) != 0x95c7f0
+                or f.get("size") != 376 or f.get("mangled") != fn
+                or set(f.get("names", ())) != {fn}
+                or obj.get("bind") != "local" or obj.get("file") != tu
+                or _address(obj["address"]) != 0x14210b4 or address != 0x14210b4
+                or obj.get("size") != 4 or obj.get("name") != raw
+                or obj.get("demangled") != f.get("demangled", "") + "::UpdateTimer"
+                or (address, raw, 4, tu) not in self.local_object_names):
+            return False
+        section = self.image.section_at(address)
+        if (section is None or section.type != 1 or section.name != ".data"
+                or section.flags != 3 or address + 4 > section.addr + section.size):
+            return False
+        try:
+            return self.image.read(address, 4) == bytes.fromhex("0000c842")
+        except ValueError:
+            return False
 
     def _implicit_destructor_headers(self, callee, scope, candidates):
         """C++98 implicitly declares complete/base D1/D2 destructors.
@@ -1512,6 +1684,7 @@ class ContextIndex:
             window_array_headers = self._window_array_headers(callee, scope)
             pinned_destructor_headers = self._pinned_destructor_headers(callee, scope)
             pinned_insert_headers = self._pinned_insert_headers(callee, scope)
+            quadtree_headers = self._quadtree_headers(callee, scope)
             if matched_headers:
                 wanted.update(matched_headers | matched_dependencies)
             elif implicit_headers:
@@ -1529,15 +1702,23 @@ class ContextIndex:
                              "No specialization or prototype synthesized.")
             elif pinned_destructor_headers:
                 wanted.update(pinned_destructor_headers)
+                digest = (self.REPOSITORY_HEADER_SHA256 if scope.startswith('TRepository<') else
+                          self.SAFE_POINTER_HEADER_SHA256 if scope.startswith('TSafePointer<') else
+                          self.WINDOW_ARRAY_HEADER_SHA256)
                 notes.append(f"{address:#x}: existing pinned {scope} D1/D2 destructor body; "
                              "exact reviewed address/size and both weak ELF/DB identities; "
-                             f"template source SHA256 {self.SAFE_POINTER_HEADER_SHA256 if scope.startswith('TSafePointer<') else self.WINDOW_ARRAY_HEADER_SHA256}. "
+                             f"template source SHA256 {digest}. "
                              "No specialization or prototype synthesized.")
             elif pinned_insert_headers:
                 wanted.update(pinned_insert_headers)
                 notes.append(f"{address:#x}: existing pinned {scope} insertion template declaration; "
                              "exact reviewed address/size and weak ELF/DB identity; "
                              f"template source SHA256 {self.REPOSITORY_HEADER_SHA256 if scope.startswith('TRepository<') else self.WINDOW_ARRAY_HEADER_SHA256}. "
+                             "No specialization or prototype synthesized.")
+            elif quadtree_headers:
+                wanted.update(quadtree_headers)
+                notes.append(f"{address:#x}: exact reviewed native Quadtree<unsigned> method identity; "
+                             f"complete existing template declaration; Quadtree.h SHA256 {self.QUADTREE_HEADER_SHA256}. "
                              "No specialization or prototype synthesized.")
             elif scope in local_types and ("::" in scope or self._tu(callee, None) == tu):
                 local_names.add(scope)
@@ -1592,6 +1773,14 @@ class ContextIndex:
                 raw = obj.get("name", "")
                 section = self.image.section_at(_address(obj["address"]))
                 local_identity = (_address(obj["address"]), raw, obj.get("size", 0), owner)
+                if raw == "_ZZN6CLevel6updateEPN4Ogre6CameraERKNS0_7Vector3EffP7CPlayerE11UpdateTimer":
+                    if self._level_update_timer_data(obj, f, tu, address):
+                        notes.append(f"{address:#x}: exact ELF/STT_FILE target-local initialized storage; "
+                                     "all 4 initializer bytes 00 00 c8 42; C++ type is not inferred; "
+                                     "no external header declaration required.")
+                    else:
+                        gaps.append(f"Level UpdateTimer {address:#x} lacks exact ELF identity/initializer")
+                    continue
                 if (obj.get("bind") == "local" and owner == tu
                         and local_identity in self.local_object_names
                         and name.startswith(f.get("demangled", "") + "::")
@@ -1619,6 +1808,16 @@ class ContextIndex:
                                 or section is None or section.type != 8 or section.flags != 3
                                 or identity[0] + 8 > section.addr + section.size):
                             gaps.append(f"Asm-labelled wstring {name} lacks exact local ELF identity/storage")
+                            continue
+                    if declaration.scalar_literal_bytes is not None:
+                        base = _address(obj["address"])
+                        section = self.image.section_at(base)
+                        identity = (base, obj.get("name", ""), obj.get("size"), owner)
+                        if (obj.get("bind") != "local" or identity not in self.local_object_names
+                                or obj.get("size") != 4 or section is None or section.type != 1
+                                or section.flags not in (2, 3) or base + 4 > section.addr + section.size
+                                or self._read_bytes(base, 4) != declaration.scalar_literal_bytes):
+                            gaps.append(f"Literal int scalar {name} lacks exact local ELF identity/size/initial bytes")
                             continue
                     if declaration.int_array_values is not None or declaration.scalar_array_bytes is not None:
                         expected = (b"".join(n.to_bytes(4, "little", signed=True)

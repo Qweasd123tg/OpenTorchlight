@@ -20,13 +20,13 @@ public:
 
     virtual ~CModalMenu();
     CModalMenu(CGameUI&, CSettings&, Ogre::SceneManager*, CEGUI::Window*, CResourceManager*);
-    void* m_callbackData; // +0xc0
+    CBaseUnit* m_callbackData; // +0xc0
     CEGUI::Window* m_promptWindow;
     CEGUI::Window* m_acceptWindow;
     CEGUI::Window* m_declineWindow;
     CEGUI::Window* m_extraWindow;
-    void (*m_acceptCallback)(CCharacter*, void*); // +0xe8
-    void (*m_declineCallback)(CCharacter*, void*); // +0xf0
+    bool (*m_acceptCallback)(CBaseUnit*, CBaseUnit*); // +0xe8
+    bool (*m_declineCallback)(CBaseUnit*, CBaseUnit*); // +0xf0
 };
 typedef char check_CModalMenu_size[sizeof(CModalMenu)==0xf8?1:-1];
 #endif

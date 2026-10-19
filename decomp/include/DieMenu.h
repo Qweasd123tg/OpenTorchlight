@@ -8,6 +8,7 @@ namespace CEGUI { class Window; }
 // Opaque bytes are initialized by the original out-of-line constructor.
 class CDieMenu : public CDropdownMenu {
 public:
+    virtual void setOpen(bool);
     void createMenus();
     virtual void update(float elapsed);
     virtual bool onClick(ELayoutFunction function, std::wstring text);
@@ -20,7 +21,12 @@ public:
     bool m_returnToTown;
     unsigned char m_PaddingC2[2];
     int m_returnToTownOption; // +0xc4
-    unsigned char m_PaddingC8[0x30];
+    CEGUI::Window* m_windowC8; // +0xc8
+    CEGUI::Window* m_windowD0; // +0xd0
+    CEGUI::Window* m_windowD8; // +0xd8
+    CEGUI::Window* m_windowE0; // +0xe0
+    CEGUI::Window* m_windowE8; // +0xe8
+    CEGUI::Window* m_windowF0; // +0xf0
     int m_famePenalty; // +0xf8
     int m_experiencePenalty; // +0xfc
     int m_goldPenalty; // +0x100

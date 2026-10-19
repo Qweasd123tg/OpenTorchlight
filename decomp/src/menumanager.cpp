@@ -143,8 +143,6 @@ CMenuManager::~CMenuManager()
         m_pContinueGameMenu = NULL;
     }
 
-    reinterpret_cast<CMouseManager*>(&m_UnknownD58)->CMouseManager::~CMouseManager();
-    reinterpret_cast<CKeyManager*>(&m_Unknown40)->CKeyManager::~CKeyManager();
 }
 
 bool CMenuManager::canLoad()
@@ -225,4 +223,17 @@ void CMenuManager::setActiveMenu(EMenu menu)
         break;
     }
     m_UnknownDF0 = menu;
+}
+
+#include "MasterResourceManager.h"
+
+CMenuManager::CMenuManager(CGameUI& ui, CSettings& settings, Ogre::Camera* camera, Ogre::SceneManager* scene, CEGUI::Window* parent, CResourceManager* resources)
+    : CRunicCore(), m_pUnknown10(camera), m_pUnknown18(scene),
+      m_iUnknown20(reinterpret_cast<long long>(CMasterResourceManager::getSingleton()->m_pSoundManager)),
+      m_iUnknown28(0), m_iUnknown30(0), m_pDynamicPropertyFile(&settings),
+      m_Unknown40(), m_UnknownD58(), m_UnknownDA8(reinterpret_cast<long long>(&ui)),
+      m_bUnknownDB0(false), m_iUnknownDC0(reinterpret_cast<long long>(resources)),
+      m_pUnknownDC8(parent), m_pUnknownDD0(NULL), m_pUnknownDD8(NULL), m_pUnknownDE0(NULL), m_pContinueGameMenu(NULL), m_UnknownDF0(static_cast<int>(6))
+{
+    create();
 }

@@ -60,7 +60,10 @@ struct CLevelCreationRange { float minimum, maximum; };
 // Owning layout: 0x778 bytes. Some trivial members retain descriptive or offset names.
 class CLevelTemplateData : public CRunicCore
 {
+    friend class CTriggerUnit;
+    friend class CGameClient;
     friend class CQuestRequirements;
+    friend class CWaypointMenu;
     friend class CLevel;
 public:
     CLevelTemplateData(wchar_t const* filename);
@@ -79,6 +82,7 @@ public:
     bool intersectsChunks(CChunkInstance* chunk, std::vector<CChunkInstance*>& chunks);
     bool exitsMatch(CChunkInstance* chunk, std::vector<CChunkInstance*>& chunks);
     void resetOdds();
+    void deleteLayouts();
     void chooseUnitSpawners(CResourceManager* resourceManager);
     unsigned int getNumberOfUnitsToCreate(ELEVELLAYOUT_CREATION creation,unsigned int area);
 
@@ -87,6 +91,7 @@ public:
 private:
     friend class CGameUI;
     friend class CPlayer;
+    friend class CCharacter;
     friend class CMusicObject;
     friend class CDungeon;
     friend class CQuestUnitData;

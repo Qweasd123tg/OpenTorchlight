@@ -35,12 +35,12 @@ public:
     bool m_bUnknownC0;
     bool m_bUnknownC1;
     unsigned char m_gapC2[0x6];
-    long long m_iUnknownC8;
+    CEGUI::Window* m_iUnknownC8;
     CEGUI::Window* m_pUnknownD0;
     CEGUI::Window* m_pUnknownD8;
-    long long m_iUnknownE0;
-    long long m_iUnknownE8;
-    long long m_iUnknownF0;
+    CEGUI::Window* m_iUnknownE0;
+    CEGUI::Window* m_iUnknownE8;
+    CEGUI::Window* m_iUnknownF0;
     bool m_bUnknownF8;
 };
 

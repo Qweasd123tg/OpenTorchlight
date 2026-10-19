@@ -53,7 +53,7 @@ public:
     CDynamicPropertyFile* m_pDynamicPropertyFile;
     CGameUI* m_pGameUI;
     void* m_pUnknown48;
-    long long m_iUnknown50;
+    CEGUI::Window* m_iUnknown50; // +0x50, title label
     unsigned char m_gap58[0x18] __attribute__((aligned(8)));
     CGenericModel* m_pGenericModel;
     CResourceManager* m_pResourceManager;

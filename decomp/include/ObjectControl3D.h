@@ -19,6 +19,14 @@ namespace Ogre { class SceneManager; class SceneNode; }
 class CObjectControl3D : public CRunicCore
 {
 public:
+    void cloneObjectsIfNeedBe(TArrayList<CEditorBaseObject*>& objects);
+    void showControls(bool show);
+    int configureDragType();
+    Ogre::Vector3 getGroupRotationPoint(TArrayList<CEditorBaseObject*>& objects);
+    void updateBoundingBox(TArrayList<CEditorBaseObject*>& objects);
+    void manipulateSelectedItems(float elapsed, TArrayList<CEditorBaseObject*>& objects);
+    void doObjectPick();
+    void InitControls();
     CEditorBaseObject* getObjectUnderMouse();
     Ogre::Vector3 getMousePlaneInstersect(POINT point, Ogre::Plane plane);
     Ogre::Vector3 getCameraPlaneIntersect(Ogre::Plane plane);
@@ -56,11 +64,27 @@ private:
     CGenericModel* m_boxModel; // +0x20
     Ogre::SceneManager* m_sceneManager; // +0x28
     CResourceManager* m_resources; // +0x30
-    unsigned char m_unrecovered38[0x74];
+    unsigned int m_selectionCount; // +0x38
+    bool m_boxSelecting; // +0x3c
+    unsigned char m_gap3d[3];
+    Ogre::Vector3 m_boxStart; // +0x40
+    Ogre::Vector3 m_boxEnd; // +0x4c
+    bool m_flag58;
+    bool m_flag59;
+    bool m_previousLeftDown; // +0x5a
+    bool m_flag5b;
+    unsigned char m_gap5c[4];
+    POINT m_previousMouse; // +0x60
+    POINT m_dragMouse; // +0x70
+    Ogre::Vector3 m_dragPivot; // +0x80
+    unsigned int m_dragType; // +0x8c
+    Ogre::Vector3 m_dragDirection; // +0x90
+    Ogre::Plane m_dragPlane; // +0x9c
     Ogre::Vector3 m_selectedPivot; // +0xac
-    unsigned char m_unrecoveredB8[0x10];
+    Ogre::Vector3 m_controlOffset; // +0xb8
+    unsigned char m_gapc4[4];
     std::vector<CGenericModel*> m_models; // +0xc8
-    unsigned char m_unrecoveredE0[0xc];
+    Ogre::Vector3 m_viewDelta; // +0xe0
     float m_planeScale; // +0xec
     float m_positionVerticalSnap; // +0xf0
     float m_orientationSnap; // +0xf4
