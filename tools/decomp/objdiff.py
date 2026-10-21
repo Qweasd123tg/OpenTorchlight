@@ -412,6 +412,7 @@ class Normalizer:
 
     def normalize(self, insns, start, end):
         self.unverified = []
+        self.literal_proofs = []
         offsets = [i[0] for i in insns]
         # Branch labels count kept instructions only: alignment padding differs
         # between the original and our object and must not shift the indices.
@@ -453,7 +454,60 @@ class OriginalSide(Normalizer):
         self.rodata = [image.section(n) for n in (".rodata",) if n]
         self.low, self.high = 0x400000, max(s.addr + s.size for s in image.sections if s.addr)
 
-    def name_at(self, address, mnemonic, address_operand=False):
+    WSTRING_CTOR = "_ZNSbIwSt11char_traitsIwESaIwEEC1EPKwRKS1_"
+
+    def wide_literal_use(self, k, insns):
+        """Prove one immediate's width from an original imported consumer.
+
+        Deliberately tiny straight-line SysV idiom, never candidate types or a
+        global address override. No earlier call means no exceptional entry into
+        this prefix; any branch anywhere or interior function entry is refused.
+        """
+        address, op, args = insns[k]
+        match = re.fullmatch(r"\$0x([0-9a-f]+),%(?:esi|rsi)", args)
+        if op not in ("mov", "movl", "movq", "movabs") or not match:
+            return None
+        if any(m.startswith(("j", "loop")) for _, m, _ in insns):
+            return None
+        # Only explicitly understood setup instructions are admitted. In
+        # particular partial writes, pointer copies, string ops and unknown
+        # implicit-register instructions cannot silently cross this proof.
+        for i, (pc, mnemonic, operands) in enumerate(insns):
+            if i != 0 and pc in self.func_start:
+                return None
+            if i == k:
+                continue
+            if mnemonic in ("call", "callq"):
+                if i <= k:
+                    return None
+                target = self.direct_target(operands)
+                callee = self.image.plt.get(target, "").split("@")[0]
+                if callee != self.WSTRING_CTOR:
+                    return None
+                return {"load": address, "call": pc, "callee": callee,
+                        "argument": "rsi", "width": 4,
+                        "literal": int(match.group(1), 16)}
+            if self.padding(mnemonic, operands):
+                continue
+            if i > k and any(self.register(r) == ("si", bits)
+                             for r in re.findall(r"%\w+", operands)
+                             for bits in (8, 16, 32, 64)):
+                return None
+            registers = operands.split(",")
+            if (mnemonic == "push" and len(registers) == 1
+                    and self.register(registers[0]) is not None):
+                continue
+            if (mnemonic in ("mov", "movl", "movq") and len(registers) == 2
+                    and all(self.register(r) is not None for r in registers)):
+                continue
+            if mnemonic == "sub" and re.fullmatch(r"\$0x[0-9a-f]+,%rsp", operands):
+                continue
+            if mnemonic == "lea" and re.fullmatch(r"0x[0-9a-f]+\(%rsp\),%rdx", operands):
+                continue
+            return None
+        return None
+
+    def name_at(self, address, mnemonic, address_operand=False, literal_proof=None):
         if address in self.func_start:
             return self.func_start[address]
         if address in self.image.plt:
@@ -473,7 +527,21 @@ class OriginalSide(Normalizer):
                 raw = self.image.read(address, available if address_operand else min(available, const_size(mnemonic)))
             except ValueError:
                 raw = b""
-            return self.data_token(raw, mnemonic, address_operand, string_width(section))
+            width = string_width(section)
+            if literal_proof is not None and address_operand:
+                try:
+                    token = literal_token(raw, 4)
+                except UnverifiedData:
+                    pass  # Preserve the ordinary fail-closed diagnostic below.
+                else:
+                    length = int(token.split(":n", 1)[1].split(":", 1)[0]) * 4 + 4
+                    proof = dict(literal_proof, size=length,
+                                 end=address + length,
+                                 sha256=hashlib.sha256(raw[:length]).hexdigest())
+                    self.literal_proofs.append(proof)
+                    return token
+                width = 4
+            return self.data_token(raw, mnemonic, address_operand, width)
         if section:
             return f"{section.name}:{address:#x}"
         return f"{address:#x}"
@@ -512,10 +580,12 @@ class OriginalSide(Normalizer):
             return f"[{self.name_at(target, memory_mnemonic(mnemonic, operands), mnemonic.startswith('lea'))}](%rip)"
         operands = re.sub(r"-?0x([0-9a-f]+)\(%rip\)", rip, operands)
 
+        literal_proof = self.wide_literal_use(k, insns)
+
         def absolute(mm):
             value = int(mm.group(2), 16)
             if self.low <= value < self.high:
-                return f"{mm.group(1)}[{self.name_at(value, memory_mnemonic(mnemonic, operands), mm.group(1) == '$' or mnemonic.startswith('lea'))}]"
+                return f"{mm.group(1)}[{self.name_at(value, memory_mnemonic(mnemonic, operands), mm.group(1) == '$' or mnemonic.startswith('lea'), literal_proof=literal_proof)}]"
             return mm.group(0)
         operands = re.sub(r"(\$|(?<![\w%]))0x([0-9a-f]+)(?=\b)", absolute, operands)
         return f"{mnemonic} {operands}".strip()
@@ -794,7 +864,8 @@ class Original:
                 end = start + f["size"]
                 insns = self._instructions(f)
                 norm = self.side.normalize(insns, start, end)
-                cache[key] = {"norm": norm, "metadata_reasons": list(dict.fromkeys(self.side.unverified))}
+                cache[key] = {"norm": norm, "metadata_reasons": list(dict.fromkeys(self.side.unverified)),
+                              "literal_proofs": list(self.side.literal_proofs)}
                 _NORM_DIRTY.add(key)
             return cache[key]["norm"]
 
