@@ -35,13 +35,23 @@ float CGraph::getValue(float x, unsigned int line) const
 {
     if (m_bInferPastEnd && x > m_fLastX)
     {
-        if (line != 0)
-            return (x - m_fLastX) * m_fOtherSlope + m_fOtherMax;
-        return (x - m_fLastX) * m_fFirstSlope + m_fFirstMax;
+        float slope;
+        float maximum;
+        if (line == 0)
+        {
+            slope = m_fFirstSlope;
+            maximum = m_fFirstMax;
+        }
+        else
+        {
+            slope = m_fOtherSlope;
+            maximum = m_fOtherMax;
+        }
+        return (x - m_fLastX) * slope + maximum;
     }
-    if (line < m_Lines.size() && m_Lines[line] != NULL)
-        return m_Lines[line]->getValue(NULL, x);
-    return 0;
+    if (line >= m_Lines.size() || m_Lines[line] == NULL)
+        return 0;
+    return m_Lines[line]->getValue(NULL, x);
 }
 
 void CGraph::processPoints()
