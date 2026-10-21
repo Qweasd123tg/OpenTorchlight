@@ -177,9 +177,9 @@ void CAstarPathfinder::freeNodes()
         CAstarNode* pNode = m_pOpen->m_pNext;
         while (pNode)
         {
-            CAstarNode* pNext = pNode->m_pNext;
-            free(pNode);
-            pNode = pNext;
+            CAstarNode* pPrevious = pNode;
+            pNode = pNode->m_pNext;
+            free(pPrevious);
         }
     }
     if (m_pClosed)
@@ -187,9 +187,9 @@ void CAstarPathfinder::freeNodes()
         CAstarNode* pNode = m_pClosed->m_pNext;
         while (pNode)
         {
-            CAstarNode* pNext = pNode->m_pNext;
-            free(pNode);
-            pNode = pNext;
+            CAstarNode* pPrevious = pNode;
+            pNode = pNode->m_pNext;
+            free(pPrevious);
         }
     }
 }

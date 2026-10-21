@@ -172,5 +172,10 @@ void CSceneNodeObject::SetSceneOwner(CEditorScene* scene)
 void CSceneNodeObject::setParentPositionableObject(CPositionableObject* parent)
 {
     CEditorBaseObject::setParentPositionableObject(parent);
-    sceneNodeSetParent(parent ? parent->getSceneNode() : NULL, false);
+    if (parent == NULL)
+    {
+        sceneNodeSetParent(NULL, false);
+        return;
+    }
+    sceneNodeSetParent(parent->getSceneNode(), false);
 }
