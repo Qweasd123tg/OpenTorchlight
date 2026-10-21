@@ -205,9 +205,11 @@ void CAstarPathfinder::push(CAstarNode* pNode)
 void CAstarPathfinder::propagateDown(CAstarNode* pNode)
 {
     float fCost = pNode->m_fPathCost;
-    for (unsigned int i = 0; i < 8 && pNode->m_pChildren[i]; ++i)
+    for (unsigned int i = 0; i < 8; ++i)
     {
         CAstarNode* pChild = pNode->m_pChildren[i];
+        if (!pChild)
+            break;
         float fNewCost = fCost + 1.0f;
         if (pChild->m_fPathCost > fNewCost)
         {
@@ -220,9 +222,11 @@ void CAstarPathfinder::propagateDown(CAstarNode* pNode)
     while (m_pStack->m_pNext)
     {
         pNode = pop();
-        for (unsigned int i = 0; i < 8 && pNode->m_pChildren[i]; ++i)
+        for (unsigned int i = 0; i < 8; ++i)
         {
             CAstarNode* pChild = pNode->m_pChildren[i];
+            if (!pChild)
+                break;
             float fNewCost = pNode->m_fPathCost + 1.0f;
             if (pChild->m_fPathCost > fNewCost)
             {
