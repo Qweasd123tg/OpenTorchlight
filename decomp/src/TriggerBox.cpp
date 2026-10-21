@@ -35,25 +35,34 @@ void CTriggerBox::scaleUpdated(const Ogre::Vector3& scale)
 
 void CTriggerBox::updateTrigger(float elapsed, CEditorScene* scene)
 {
-    if (getResourceManager() == NULL || !canUpdate())
-        return;
-    CResourceManager* resourceManager = getResourceManager();
-    for (unsigned int i = 0; i < resourceManager->getGameClientCount(); ++i)
+    if (getResourceManager() != NULL && canUpdate())
     {
-        CPlayer* player = resourceManager->getGameClient(i)->getPlayer();
-        if (player != NULL)
+        CResourceManager* resourceManager = getResourceManager();
+        if (resourceManager->getGameClientCount() == 0)
+            return;
+        for (unsigned int i = 0; i < resourceManager->getGameClientCount(); ++i)
         {
-            Ogre::Vector3 playerPosition = player->getPosition(true);
-            Ogre::Vector3 position = getPosition(true);
-            if (playerPosition.x > position.x - m_vHalfDimensions.x &&
-                playerPosition.x < position.x + m_vHalfDimensions.x &&
-                playerPosition.y > position.y - m_vHalfDimensions.y &&
-                playerPosition.y < position.y + m_vHalfDimensions.y &&
-                playerPosition.z > position.z - m_vHalfDimensions.z &&
-                playerPosition.z < position.z + m_vHalfDimensions.z)
-                TriggerActivated(player);
-            else
-                TriggerDeactivated(player);
+            CPlayer* player = resourceManager->getGameClient(i)->getPlayer();
+            if (player != NULL)
+            {
+                Ogre::Vector3 playerPosition = player->getPosition(true);
+                Ogre::Vector3 position = getPosition(true);
+                float centerX = position.x;
+                float halfWidth = m_vHalfDimensions.x;
+                float centerY = position.y;
+                float halfHeight = m_vHalfDimensions.y;
+                float centerZ = position.z;
+                float halfDepth = m_vHalfDimensions.z;
+                if (playerPosition.x > centerX - halfWidth &&
+                    playerPosition.x < centerX + halfWidth &&
+                    playerPosition.y > centerY - halfHeight &&
+                    playerPosition.y < halfHeight + centerY &&
+                    playerPosition.z > centerZ - halfDepth &&
+                    playerPosition.z < halfDepth + centerZ)
+                    TriggerActivated(player);
+                else
+                    TriggerDeactivated(player);
+            }
         }
     }
 }
