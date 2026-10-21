@@ -376,21 +376,25 @@ void CAstarPathfinder::findNearestWideOpen(unsigned int iFallbackX, unsigned int
     float fTargetX = float(iX) * m_fTileSize + m_fOriginX;
     float fTargetY = float(iY) * m_fTileSize + m_fOriginY;
     float fBest = 9999.0f;
-    for (int iTestX = int(iX - 16); iTestX <= int(iX + 16); ++iTestX)
-        for (int iTestY = int(iY - 16); iTestY <= int(iY + 16); ++iTestY)
+    for (int iTestX = int(iX) - 16; iTestX <= int(iX) + 16; ++iTestX)
+        for (int iTestY = int(iY) - 16; iTestY <= int(iY) + 16; ++iTestY)
         {
-            if (iTestY < 0 || iTestX < 0 || !tileFree(iTestX, iTestY, NODE_ANY) ||
-                !tileFree(iTestX, iTestY - 1, NODE_ANY) || !tileFree(iTestX, iTestY + 1, NODE_ANY) ||
-                !tileFree(iTestX - 1, iTestY, NODE_ANY) || !tileFree(iTestX + 1, iTestY, NODE_ANY))
-                continue;
-            float fDX = float(iTestX) * m_fTileSize + m_fOriginX - fTargetX;
-            float fDY = float(iTestY) * m_fTileSize + m_fOriginY - fTargetY;
-            float fDistance = sqrtf(fDX * fDX + 0.0f + fDY * fDY);
-            if (fDistance < fBest)
+            if (iTestY >= 0 && iTestX >= 0)
             {
-                iResultX = iTestX;
-                iResultY = iTestY;
-                fBest = fDistance;
+                if (tileFree(iTestX, iTestY, NODE_ANY) &&
+                    tileFree(iTestX, iTestY - 1u, NODE_ANY) && tileFree(iTestX, iTestY + 1u, NODE_ANY) &&
+                    tileFree(iTestX - 1u, iTestY, NODE_ANY) && tileFree(iTestX + 1u, iTestY, NODE_ANY))
+                {
+                    float fDX = float(iTestX) * m_fTileSize + m_fOriginX - fTargetX;
+                    float fDY = float(iTestY) * m_fTileSize + m_fOriginY - fTargetY;
+                    float fDistance = sqrtf(fDX * fDX + 0.0f + fDY * fDY);
+                    if (fDistance < fBest)
+                    {
+                        iResultX = iTestX;
+                        iResultY = iTestY;
+                        fBest = fDistance;
+                    }
+                }
             }
         }
     if (fBest == 9999.0f)
@@ -406,19 +410,23 @@ void CAstarPathfinder::findNearestOpen(unsigned int iFallbackX, unsigned int iFa
     float fTargetX = float(iX) * m_fTileSize + m_fOriginX;
     float fTargetY = float(iY) * m_fTileSize + m_fOriginY;
     float fBest = 9999.0f;
-    for (int iTestX = int(iX - 16); iTestX <= int(iX + 16); ++iTestX)
-        for (int iTestY = int(iY - 16); iTestY <= int(iY + 16); ++iTestY)
+    for (int iTestX = int(iX) - 16; iTestX <= int(iX) + 16; ++iTestX)
+        for (int iTestY = int(iY) - 16; iTestY <= int(iY) + 16; ++iTestY)
         {
-            if (iTestY < 0 || iTestX < 0 || !tileFree(iTestX, iTestY, NODE_ANY))
-                continue;
-            float fDX = float(iTestX) * m_fTileSize + m_fOriginX - fTargetX;
-            float fDY = float(iTestY) * m_fTileSize + m_fOriginY - fTargetY;
-            float fDistance = sqrtf(fDX * fDX + 0.0f + fDY * fDY);
-            if (fDistance < fBest)
+            if (iTestY >= 0 && iTestX >= 0)
             {
-                iResultX = iTestX;
-                iResultY = iTestY;
-                fBest = fDistance;
+                if (tileFree(iTestX, iTestY, NODE_ANY))
+                {
+                    float fDX = float(iTestX) * m_fTileSize + m_fOriginX - fTargetX;
+                    float fDY = float(iTestY) * m_fTileSize + m_fOriginY - fTargetY;
+                    float fDistance = sqrtf(fDX * fDX + 0.0f + fDY * fDY);
+                    if (fDistance < fBest)
+                    {
+                        iResultX = iTestX;
+                        iResultY = iTestY;
+                        fBest = fDistance;
+                    }
+                }
             }
         }
     if (fBest == 9999.0f)
