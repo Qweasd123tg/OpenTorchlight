@@ -33,21 +33,23 @@ void CLogicTimer::setEnabled(bool enabled)
 
 void CLogicTimer::update(float elapsed)
 {
-    if (m_pResourceManager != NULL && !m_pResourceManager->getEditorIsRunning() &&
-        (m_bRepeatForever || m_iRepeatsLeft > 0) && m_pResourceManager != NULL && m_bEnabled)
+    if (m_pResourceManager == NULL)
+        return;
+    if (m_pResourceManager->getEditorIsRunning())
+        return;
+    if (!m_bRepeatForever && m_iRepeatsLeft <= 0)
+        return;
+
+    if (m_pResourceManager != NULL && m_bEnabled && (m_fTimeRemaining -= elapsed) <= 0.0f)
     {
-        m_fTimeRemaining -= elapsed;
-        if (m_fTimeRemaining <= 0.0f)
+        BroadcastEvent(OUTPUT_EVENT_ACTIVATED);
+        if (!m_bRepeatForever)
         {
-            BroadcastEvent(OUTPUT_EVENT_ACTIVATED);
-            if (!m_bRepeatForever)
-            {
-                m_iRepeatsLeft--;
-                if (m_iRepeatsLeft <= 0)
-                    return;
-            }
-            resetTimer();
+            m_iRepeatsLeft--;
+            if (m_iRepeatsLeft <= 0)
+                return;
         }
+        resetTimer();
     }
 }
 
