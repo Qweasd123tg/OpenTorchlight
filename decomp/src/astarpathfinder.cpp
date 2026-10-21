@@ -335,9 +335,9 @@ void CAstarPathfinder::createPath(int iGoalX, int iGoalY, int iStartX, int iStar
     float fDY = float(iStartY - iGoalY);
     pNode->m_fGoalCost = fDX * fDX + fDY * fDY;
     pNode->m_fTotalCost = pNode->m_fGoalCost + 0.0f;
+    pNode->m_iTile = tileIndex(iStartX, iStartY);
     pNode->m_iX = iStartX;
     pNode->m_iY = iStartY;
-    pNode->m_iTile = tileIndex(iStartX, iStartY);
     m_pOpen->m_pNext = pNode;
     int iIterations = 0;
     while (true)
@@ -472,15 +472,23 @@ bool CAstarPathfinder::findPath(float fStartX, float fStartY, float fGoalX, floa
     fStartY -= m_fOriginY;
     fGoalX -= m_fOriginX;
     fGoalY -= m_fOriginY;
-    unsigned int iStartX = (unsigned int)(long)floorf((fStartX < 0.0f ? 0.0f : fStartX) / m_fTileSize);
-    unsigned int iStartY = (unsigned int)(long)floorf((fStartY < 0.0f ? 0.0f : fStartY) / m_fTileSize);
-    unsigned int iGoalX = (unsigned int)(long)floorf((fGoalX < 0.0f ? 0.0f : fGoalX) / m_fTileSize);
-    unsigned int iGoalY = (unsigned int)(long)floorf((fGoalY < 0.0f ? 0.0f : fGoalY) / m_fTileSize);
+    if (fGoalY < 0.0f)
+        fGoalY = 0.0f;
+    if (fStartY < 0.0f)
+        fStartY = 0.0f;
+    if (fGoalX < 0.0f)
+        fGoalX = 0.0f;
+    if (fStartX < 0.0f)
+        fStartX = 0.0f;
+    unsigned int iStartX = (unsigned int)(long)floorf(fStartX / m_fTileSize);
+    unsigned int iStartY = (unsigned int)(long)floorf(fStartY / m_fTileSize);
+    unsigned int iGoalX = (unsigned int)(long)floorf(fGoalX / m_fTileSize);
+    unsigned int iGoalY = (unsigned int)(long)floorf(fGoalY / m_fTileSize);
+    unsigned int iNewX = iGoalX;
+    unsigned int iNewY = iGoalY;
     if (!tileFree(iGoalX, iGoalY, NODE_ANY))
     {
         m_bGoalBlocked = true;
-        unsigned int iNewX = iGoalX;
-        unsigned int iNewY = iGoalY;
         findNearestOpen(iStartX, iStartY, iGoalX, iGoalY, iNewX, iNewY);
         iGoalX = iNewX;
         iGoalY = iNewY;
@@ -490,13 +498,9 @@ bool CAstarPathfinder::findPath(float fStartX, float fStartY, float fGoalX, floa
         !tileFree(iStartX + 1, iStartY, NODE_ANY) || !tileFree(iStartX - 1, iStartY, NODE_ANY))
     {
         findNearestWideOpen(iGoalX, iGoalY, iStartX, iStartY, iStartX, iStartY);
-        if (!tileFree(iStartX, iStartY, NODE_ANY))
-        {
-            m_bPathFound = false;
-            return false;
-        }
     }
-    if (tileIndex(iStartX, iStartY) != tileIndex(iGoalX, iGoalY))
+    if (tileFree(iStartX, iStartY, NODE_ANY) &&
+        tileIndex(iStartX, iStartY) != tileIndex(iGoalX, iGoalY))
     {
         m_bPathFound = true;
         freeNodes();
