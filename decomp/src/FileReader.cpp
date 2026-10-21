@@ -50,9 +50,14 @@ std::wstring CFileReader::ReadLine(wchar_t ignore)
 {
     std::wstring line;
     wchar_t character = ReadWChar();
-    while (character != L'\n' && character != 0 && !EndOfFile())
+    while (character != 0 && character != L'\n' && !EndOfFile())
     {
-        if (character > L'\r' && character != ignore)
+        if (character == ignore)
+        {
+            character = ReadWChar();
+            continue;
+        }
+        if (character > L'\r')
             line += character;
         character = ReadWChar();
     }
