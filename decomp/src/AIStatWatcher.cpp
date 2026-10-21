@@ -134,9 +134,8 @@ void CAIStatWatcher::getTargets(TArrayList<CCharacter*>& targets)
             CCharacter* unit = m_pCharacter->getLevel()->getCharacterByGuid(formation[i]);
             if (unit == NULL)
                 continue;
-            if (m_eTarget == AISTAT_TARGET_FORMATION)
-                targets.add(unit);
-            else if (unit->getPosition(true).distance(m_pCharacter->getPosition(true)) <= m_fTargetArea)
+            if (m_eTarget == AISTAT_TARGET_FORMATION ||
+                unit->getPosition(true).distance(m_pCharacter->getPosition(true)) <= m_fTargetArea)
                 targets.add(unit);
         }
     }
@@ -145,9 +144,11 @@ void CAIStatWatcher::getTargets(TArrayList<CCharacter*>& targets)
         for (TLinkedListNode<CCharacter*>* node = m_pCharacter->getLevel()->getCharacters()->getHead(); node != NULL;
              node = node->m_pNext)
         {
-            if (node->m_Data->getPosition(true).distance(m_pCharacter->getPosition(true)) <= m_fTargetArea &&
-                (m_eTarget == AISTAT_TARGET_AREA || node->m_Data->ISA(m_eTargetUnitType)))
-                targets.add(node->m_Data);
+            if (node->m_Data->getPosition(true).distance(m_pCharacter->getPosition(true)) <= m_fTargetArea)
+            {
+                if (m_eTarget == AISTAT_TARGET_AREA || node->m_Data->ISA(m_eTargetUnitType))
+                    targets.add(node->m_Data);
+            }
         }
     }
 }
