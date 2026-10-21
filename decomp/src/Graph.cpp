@@ -68,10 +68,19 @@ void CGraph::clear(unsigned int line)
 
 void CGraph::addGraphLine(EGRAPH_TYPES type)
 {
-    if (type == GRAPH_CURVED)
-        m_Lines.add(new ParticleUniverse::DynamicAttributeCurved(ParticleUniverse::IT_SPLINE));
-    else
-        m_Lines.add(new ParticleUniverse::DynamicAttributeCurved(ParticleUniverse::IT_LINEAR));
+    switch (type)
+    {
+        default:
+        {
+            m_Lines.add(new ParticleUniverse::DynamicAttributeCurved(ParticleUniverse::IT_LINEAR));
+            break;
+        }
+        case GRAPH_CURVED:
+        {
+            m_Lines.add(new ParticleUniverse::DynamicAttributeCurved(ParticleUniverse::IT_SPLINE));
+            break;
+        }
+    }
     m_iLineCount = m_Lines.size();
 }
 
