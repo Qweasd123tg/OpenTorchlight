@@ -73,6 +73,59 @@ class PairedTest(unittest.TestCase):
                 self.assertIsNone(self.proof(s))
         s=self.side();s.image.dynsyms.append(s.image.dynsyms[0]);self.assertIsNone(self.proof(s))
 
+    def test_same_name_dynsym_aliases_reject_public_paired_use(self):
+        aliases = [(False, 2, 2),  # weak FUNC
+                   (False, 1, 1),  # global OBJECT
+                   (True, 1, 2),   # defined global FUNC
+                   (False, 0, 0),  # local NOTYPE
+                   (False, 1, 2)]  # another eligible global FUNC
+        for name, version in [('wcslen', 3), (pair.APPEND, 2)]:
+            for defined, bind, typ in aliases:
+                for alias_version in (version, 5 - version):
+                    for prepend in (False, True):
+                        with self.subTest(name=name, defined=defined, bind=bind,
+                                          typ=typ, version=alias_version, prepend=prepend):
+                            s = self.side(); r = self.rows(); im = s.image
+                            # A distinct dynsym index with its own same/conflicting
+                            # version entry; keep the payload and existing entries intact.
+                            versions = im.sections['.gnu.version']
+                            versions.offset = len(im.data); versions.size = 8
+                            im.data += struct.pack('<HHHH', 0, 3, 2, alias_version)
+                            im.sha256 = hashlib.sha256(im.data).hexdigest()
+                            valid = [s.wide_literal_use(k, r, 0x100, 0x200) for k in (0, 2)]
+                            self.assertTrue(all(p is not None for p in valid))
+                            alias = NS(name=name, defined=defined, bind=bind, type=typ,
+                                       index=3, value=0, size=0)
+                            im.dynsyms.insert(0 if prepend else len(im.dynsyms), alias)
+                            for k in (0, 2):
+                                self.assertIsNone(s.wide_literal_use(k, r, 0x100, 0x200))
+                            self.assertIsNone(pair.import_identity(im, name))
+                            normalized = s.normalize(r, 0x100, 0x200)
+                            self.assertFalse(s.literal_proofs)
+                            self.assertNotIn('lit:w4:', normalized[0])
+                            self.assertNotIn('lit:w4:', normalized[2])
+                            im.dynsyms.remove(alias)
+                            self.assertEqual(valid, [s.wide_literal_use(k, r, 0x100, 0x200)
+                                                     for k in (0, 2)])
+
+    def test_single_import_eligibility_and_expected_identity_unchanged(self):
+        for name, expected in pair.CONTRACTS.items():
+            for field, value in [('defined', True), ('bind', 2), ('type', 1)]:
+                s = self.side(); symbol = next(x for x in s.image.dynsyms if x.name == name)
+                setattr(symbol, field, value)
+                self.assertIsNone(pair.import_identity(s.image, name))
+            s = self.side()
+            identity = {'symbol': name, 'soname': expected[0], 'version': expected[1],
+                        'evidence': 'original dynamic version tables; explicit nonretaining ABI contract'}
+            self.assertEqual(pair.import_identity(s.image, name), identity)
+            self.assertEqual(pair.import_identity(s.image, name, expected), identity)
+            self.assertIsNone(pair.import_identity(s.image, name, ('other.so', expected[1])))
+        s = self.side(); s.image.dynsyms[0].name = 'swscanf'
+        self.assertIsNone(pair.import_identity(s.image, 'swscanf'))
+        self.assertEqual(pair.import_identity(s.image, 'swscanf', ('libc.so.6', 'GLIBC_2.2.5')),
+                         {'symbol': 'swscanf', 'soname': 'libc.so.6', 'version': 'GLIBC_2.2.5',
+                          'evidence': 'original dynamic version tables; explicit nonretaining ABI contract'})
+
     def test_mutations_reject_both_operands(self):
         edits=[(0,'mov','$0xff0000,%di'),(0,'mov','$0x100ff0000,%edi'),
                (2,'mov','$0xff0004,%esi'),(2,'mov','%edi,%esi'),
