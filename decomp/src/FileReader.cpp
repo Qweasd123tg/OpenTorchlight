@@ -71,7 +71,8 @@ void CFileReader::ReadLineTokenize(std::queue<std::wstring>* tokens, const wchar
         while (start != std::wstring::npos)
         {
             end = line.find_first_of(separators, start);
-            tokens->push(line.substr(start, end - start));
+            std::wstring token = line.substr(start, end - start);
+            tokens->push(token);
             start = line.find_first_not_of(separators, end);
         }
     }
