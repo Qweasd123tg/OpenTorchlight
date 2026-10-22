@@ -58,10 +58,12 @@ def immutable_loaded_range(side, address, size, executable=False):
 def import_identity(image, name, expected=None):
     """Bind the explicit semantics to unique original dynamic version metadata."""
     try:
-        syms = [s for s in image.dynsyms if s.name == name and not s.defined
-                and s.bind == 1 and s.type == 2]
+        # Reloc retains only a name, not the dynsym index: even an ineligible
+        # same-name alias makes its binding ambiguous. Check uniqueness first.
+        syms = [s for s in image.dynsyms if s.name == name]
         expected = CONTRACTS.get(name) if expected is None else expected
-        if len(syms) != 1 or expected is None:
+        if (len(syms) != 1 or expected is None or syms[0].defined
+                or syms[0].bind != 1 or syms[0].type != 2):
             return None
         def data(name):
             s = image.section(name)
