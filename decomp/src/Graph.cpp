@@ -107,29 +107,39 @@ void CGraph::loadGraphLine(CDataGroup* data)
     for (unsigned int i = 0; i < data->GetNumberOfDataGroups(); ++i)
     {
         CDataGroup* point = data->GetDataGroup(i);
-        float x = point->GetDataValue(L"X", 0.0f);
-        float first, other;
         if (m_Lines.size() == 1)
         {
-            first = other = point->GetDataValue(L"Y", 0.0f);
-            addValue(x, first, 0);
+            float x = point->GetDataValue(L"X", 0.0f);
+            float y = point->GetDataValue(L"Y", 0.0f);
+            addValue(x, y, 0);
+            if (i == data->GetNumberOfDataGroups() - 1)
+            {
+                m_fFirstSlope = y - lastFirst;
+                m_fOtherSlope = y - lastOther;
+            }
+            else
+            {
+                lastFirst = y;
+                lastOther = y;
+            }
         }
         else
         {
-            first = point->GetDataValue(L"MINY", 0.0f);
-            other = point->GetDataValue(L"MAXY", 0.0f);
+            float x = point->GetDataValue(L"X", 0.0f);
+            float first = point->GetDataValue(L"MINY", 0.0f);
+            float other = point->GetDataValue(L"MAXY", 0.0f);
             addValue(x, first, 0);
             addValue(x, other, 1);
-        }
-        if (i == data->GetNumberOfDataGroups() - 1)
-        {
-            m_fFirstSlope = first - lastFirst;
-            m_fOtherSlope = other - lastOther;
-        }
-        else
-        {
-            lastFirst = first;
-            lastOther = other;
+            if (i == data->GetNumberOfDataGroups() - 1)
+            {
+                m_fFirstSlope = first - lastFirst;
+                m_fOtherSlope = other - lastOther;
+            }
+            else
+            {
+                lastFirst = first;
+                lastOther = other;
+            }
         }
     }
 }
