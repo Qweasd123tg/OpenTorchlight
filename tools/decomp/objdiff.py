@@ -471,6 +471,7 @@ class OriginalSide(Normalizer):
 
     WSTRING_CTOR = "_ZNSbIwSt11char_traitsIwESaIwEEC1EPKwRKS1_"
 
+    STRING_DTOR = "_ZNSsD1Ev"
     WSTRING_DTOR = "_ZNSbIwSt11char_traitsIwESaIwEED1Ev"
     WSTRING_COMPARE = "_ZNKSbIwSt11char_traitsIwESaIwEE7compareEPKw"
 
@@ -545,11 +546,12 @@ class OriginalSide(Normalizer):
         return mnemonic in ("xor", "xorl", "xorq") and source == dest
 
     @classmethod
-    def _literal_independent_instruction(cls, mnemonic, operands):
+    def _literal_independent_instruction(cls, mnemonic, operands, blocked=("si",)):
         """Small explicit-effect whitelist; no implicit RSI or string ops."""
         if cls.padding(mnemonic, operands):
             return True
-        if cls._mentions_rsi(operands):
+        if any(cls.register(r) and cls.register(r)[0] in blocked
+               for r in re.findall(r"%\w+", operands)):
             return False
         if mnemonic in ("mov", "movb", "movw", "movl", "movq", "movabs", "lea",
                         "xor", "xorl", "xorq", "or", "orl", "orq", "test", "testl", "testq", "cmp", "cmpl", "cmpq",
@@ -559,6 +561,25 @@ class OriginalSide(Normalizer):
             return (
                 len(operands.split(",")) >= 2 and ":" not in operands
                 and not any(x in operands for x in ("*", "#")))
+        if mnemonic in ("movslq", "movzbl", "movss"):
+            # Exact extension/scalar-float forms have only explicit operands;
+            # no implicit integer-register reads and no flags inputs/outputs.
+            source, comma, dest = operands.rpartition(",")
+            if not comma:
+                return False
+            def base_memory(value):
+                match = re.fullmatch(r"(?:-?0x[0-9a-f]+)?\((%[a-z0-9]+)\)", value)
+                reg = cls.register(match.group(1)) if match else None
+                return bool(reg and reg[1] == 64)
+            src, dst = cls.register(source), cls.register(dest)
+            if mnemonic == "movslq":
+                return bool(src and src[1] == 32 and dst and dst[1] == 64)
+            if mnemonic == "movzbl":
+                return bool(dst and dst[1] == 32
+                            and ((src and src[1] == 8) or base_memory(source)))
+            xmm = lambda operand: bool(re.fullmatch(r"%xmm(?:[0-9]|1[0-5])", operand))
+            return ((xmm(source) and (xmm(dest) or base_memory(dest)))
+                    or (base_memory(source) and xmm(dest)))
         if mnemonic == "xorps":
             # Register-only SSE bitwise XOR reads/writes only named XMM regs;
             # no integer-register or flags input/output, no memory addressing.
@@ -647,12 +668,13 @@ class OriginalSide(Normalizer):
         if depth > 4 or target is None:
             return None
         name = image.plt.get(target, "").split("@")[0]
-        if name == self.WSTRING_DTOR:
+        if name in (self.WSTRING_DTOR, self.STRING_DTOR):
             # Explicit standard-library ABI contract, NOT a claim to have the
-            # original libstdc++ DSO. Complete wchar basic_string destruction
+            # original libstdc++ DSO. Complete char/wchar basic_string destruction
             # has only `this` in RDI; the incoming volatile RSI is not an input.
             return {"kind": "standard-library-abi-no-rsi-input", "callee": name,
-                    "contract": "wstring-D1-this-only-v1",
+                    "contract": ("wstring-D1-this-only-v1" if name == self.WSTRING_DTOR
+                                 else "string-D1-this-only-v1"),
                     "effect": "may-preserve-not-observe"}
         if name in ("_ZdlPv", "_ZdaPv", "_Unwind_Resume"):
             return {"kind": "known-import-no-rsi-argument", "callee": name,
@@ -898,7 +920,11 @@ class OriginalSide(Normalizer):
         proof = self._prefix_wide_literal_use(k, insns, start, end)
         if proof is not None or start is None or end is None:
             return proof
-        return self._forward_wide_literal_use(k, insns, start, end)
+        proof = self._forward_wide_literal_use(k, insns, start, end)
+        if proof is not None:
+            return proof
+        import objdiff_literal_flow
+        return objdiff_literal_flow.wide_literal_use(self, k, insns, start, end)
 
     def name_at(self, address, mnemonic, address_operand=False, literal_proof=None):
         if address in self.func_start:
@@ -1315,7 +1341,7 @@ def _norm_key():
     # Normalization depends on this file, the database and the ELF image reader.
     here = Path(__file__).resolve().parent
     return [NORMALIZER_VERSION, literal_library_identity()] + [hashlib.sha256(p.read_bytes()).hexdigest()
-                                   for p in (here / "objdiff.py", here / "elfimage.py", here / "objdiff_eh.py", here / "objdiff_disasm.py",
+                                   for p in (here / "objdiff.py", here / "elfimage.py", here / "objdiff_eh.py", here / "objdiff_disasm.py", here / "objdiff_literal_flow.py",
                                              NORM_CACHE.parent / "elfdb.json") if p.exists()]
 
 
