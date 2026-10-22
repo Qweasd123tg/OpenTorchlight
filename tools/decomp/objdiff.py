@@ -609,12 +609,12 @@ class OriginalSide(Normalizer):
             return None
         return {"rows": signature[3], "kind": signature[0]}
 
-    def _callee_body(self, image, target):
+    def _callee_body(self, image, target, max_bytes=1024):
         """Exact original STT_FUNC bounds, never reconstructed declarations."""
         symbols = [s for s in list(image.symbols) + list(image.dynsyms)
                    if s.defined and s.type == elfimage.STT_FUNC and s.value == target and s.size]
         sizes = {s.size for s in symbols}
-        if len(sizes) != 1 or not 0 < next(iter(sizes)) <= 1024:
+        if len(sizes) != 1 or not 0 < next(iter(sizes)) <= max_bytes:
             return None
         size = next(iter(sizes))
         section = image.section_at(target)
@@ -916,6 +916,65 @@ class OriginalSide(Normalizer):
                 "model": "original-operand-forward-lifetime-v1",
                 "normal_kill": kill, "normal": normal, "cleanup": cleanups, "eh_kind": eh["kind"]}
 
+    def _saved_argument_wide_literal_use(self, k, insns, start, end):
+        """Conditional original RDX operand, bounded saved-alias copy closure.
+
+        The explicit C++/SysV object/import model forbids reading uninitialized
+        abandoned callee stack bytes. Normal and exceptional aliases are checked
+        separately; no callee address/name admits a local body without evidence.
+        """
+        if start is None or end is None or not insns or insns[0][0] != start:
+            return None
+        address, op, args = insns[k]
+        match = re.fullmatch(r"\$0x([0-9a-f]+),%(?:edx|rdx)", args)
+        if op not in ("mov", "movl", "movq", "movabs") or not match or not start <= address < end:
+            return None
+        eh = self._literal_eh(insns, start, end)
+        if eh is None:
+            return None
+        for i in range(k + 1, len(insns)):
+            pc, mnemonic, operands = insns[i]
+            if mnemonic in ("call", "callq"):
+                target = self.direct_target(operands)
+                if target is None or target in self.image.plt:
+                    return None
+                import objdiff_saved_argument
+                cached = getattr(self, "_saved_argument_engine", None)
+                if cached is None or cached[0] != self.image.sha256:
+                    cached = (self.image.sha256, objdiff_saved_argument.Engine(self))
+                    self._saved_argument_engine = cached
+                proof = cached[1].run(target, frozenset({"d"}), wrapper=True)
+                if proof is None:
+                    return None
+                break
+            if not self._literal_independent_instruction(mnemonic, operands, blocked={"d"}):
+                return None
+        else:
+            return None
+        normal_aliases = set(proof["normal_aliases"])
+        exception_aliases = set(proof["exception_aliases"])
+        if not (normal_aliases | exception_aliases) <= {"si"} or i + 1 >= len(insns):
+            return None
+        normal = {"aliases": []}
+        if normal_aliases:
+            normal = self._rsi_normal_dead(insns, insns[i + 1][0], start, eh)
+            if normal is None:
+                return None
+        cleanups = []
+        if exception_aliases:
+            for begin, count, pad, _ in eh["rows"]:
+                if begin <= pc - start < begin + count and pad:
+                    cleanup = self._rsi_cleanup_dead(insns, start + pad, start, eh)
+                    if cleanup is None:
+                        import objdiff_null_field
+                        cleanup = objdiff_null_field.certify(self, insns, k, i, start, end, eh, start + pad, cached[1])
+                    if cleanup is None:
+                        return None
+                    cleanups.append(cleanup)
+        return {"load": address, "call": pc, "argument": "rdx", "width": 4,
+                "literal": int(match.group(1), 16), "model": "original-saved-wide-argument-v1",
+                "consumer": proof, "normal": normal, "cleanup": cleanups, "eh_kind": eh["kind"]}
+
     def wide_literal_use(self, k, insns, start=None, end=None):
         proof = self._prefix_wide_literal_use(k, insns, start, end)
         if proof is not None or start is None or end is None:
@@ -924,7 +983,10 @@ class OriginalSide(Normalizer):
         if proof is not None:
             return proof
         import objdiff_literal_flow
-        return objdiff_literal_flow.wide_literal_use(self, k, insns, start, end)
+        proof = objdiff_literal_flow.wide_literal_use(self, k, insns, start, end)
+        if proof is not None:
+            return proof
+        return self._saved_argument_wide_literal_use(k, insns, start, end)
 
     def name_at(self, address, mnemonic, address_operand=False, literal_proof=None):
         if address in self.func_start:
@@ -1342,6 +1404,8 @@ def _norm_key():
     here = Path(__file__).resolve().parent
     return [NORMALIZER_VERSION, literal_library_identity()] + [hashlib.sha256(p.read_bytes()).hexdigest()
                                    for p in (here / "objdiff.py", here / "elfimage.py", here / "objdiff_eh.py", here / "objdiff_disasm.py", here / "objdiff_literal_flow.py",
+                                             here / "objdiff_saved_argument.py", here / "objdiff_literal_frames.py",
+                                             here / "objdiff_null_field.py",
                                              NORM_CACHE.parent / "elfdb.json") if p.exists()]
 
 
