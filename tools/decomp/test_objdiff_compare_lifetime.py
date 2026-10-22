@@ -104,8 +104,8 @@ class CompareLifetimeTest(unittest.TestCase):
     def test_missing_return_and_unknown_import_not_inferred(self):
         rows=self.rows();rows[-1][1:]=['nop','']
         self.assertIsNone(self.proof(rows))
-        self.side.image.plt[0x555300]='_ZNSbIwSt11char_traitsIwESaIwEED1Ev'
-        rows=self.rows();rows[2][1:]=['call','555300 <wstring dtor not yet supported>']
+        self.side.image.plt[0x555300]='_ZNSbIwSt11char_traitsIwESaIwEED1EvX'
+        rows=self.rows();rows[2][1:]=['call','555300 <unknown dtor-like import>']
         self.assertIsNone(self.proof(rows))
 
 

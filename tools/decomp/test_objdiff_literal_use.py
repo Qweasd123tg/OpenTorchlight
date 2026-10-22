@@ -11,6 +11,7 @@ class WideUseTest(unittest.TestCase):
         sec = SimpleNamespace(name='.rodata', addr=0xff0000, size=len(raw))
         side = objdiff.OriginalSide.__new__(objdiff.OriginalSide)
         side.func_start = {}; side.obj_starts = []; side.objects = []; side.exact = {}
+        side.frames = objdiff_eh.Frames([])
         side.low = 0x400000; side.high = 0x1000000
         side.image = SimpleNamespace(plt={0x555000: side.WSTRING_CTOR},
             section_at=lambda a: sec if sec.addr <= a < sec.addr + sec.size else None,
