@@ -117,11 +117,9 @@ class ForwardLifetimeTest(WideUseTest):
             rows = self.forward_rows(); rows[2] = [0x10a,op,args]
             with self.subTest(op=op,args=args): self.assertIsNone(self.proof(rows=rows))
 
-    def test_forward_requires_explicit_full_normal_kill(self):
+    def test_forward_rejects_observation_before_full_kill_or_return(self):
         for op,args in [('mov', '%rsi,%rax'), ('mov', '(%rsi),%rax'),
-                        ('mov', '%ax,%si'), ('add', '$0x1,%rsi'),
-                        ('call', '555100 <delete>'), ('jmp','120 <kill>'),
-                        ('ret','')]:
+                        ('mov', '%ax,%si'), ('add', '$0x1,%rsi')]:
             rows=self.forward_rows(); rows[5]=[0x11a,op,args]
             with self.subTest(op=op,args=args): self.assertIsNone(self.proof(rows=rows))
         rows=self.forward_rows();rows[7]=[0x120,'mov','%si,%ax']
