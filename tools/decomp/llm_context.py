@@ -1569,6 +1569,48 @@ class ContextIndex:
         found = {h for h in candidates if scope in self.header_classes.get(h, ())}
         return found if len(found) == 1 else set()
 
+    def _target_local_initializer(self, obj, f, tu):
+        """Expose complete original bytes, not an inferred source declaration/type.
+
+        A named local static has no external header dependency. Require exact
+        target/function/file identity and reject storage whose bytes are not a
+        complete immutable initializer. This is packet evidence, never acceptance.
+        """
+        raw, name = obj.get("name", ""), obj.get("demangled", "")
+        prefix = f.get("demangled", "") + "::"
+        if not name.startswith(prefix):
+            return None
+        local = name[len(prefix):]
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z_0-9]*", local):
+            return None
+        symbols = f.get("names", [f.get("mangled", "")])
+        if not any(raw == "_ZZ" + symbol[2:] + "E" + str(len(local)) + local
+                   for symbol in symbols if symbol.startswith("_Z")):
+            return None
+        base, size = _address(obj["address"]), obj.get("size", 0)
+        identity = (base, raw, size, obj.get("file"))
+        if (obj.get("bind") != "local" or obj.get("file") != tu
+                or identity not in self.local_object_names or not 0 < size <= 8192):
+            return None
+        section, available = self._available(base, [obj])
+        if section is None or section.flags != 2 or available < size:
+            return None
+        # Do not present relocation-dependent pointers as final initialized bytes.
+        if any(base - 7 <= offset < base + size
+               for offset in getattr(self.image, "relocs", {})):
+            return None
+        if any(other is not obj and _address(other["address"]) < base + size
+               and _address(other["address"]) + other.get("size", 0) > base
+               for other in self.objects):
+            return None
+        payload = self._read_bytes(base, size)
+        return (f"{base:#x}: target function-local readonly initialized storage; "
+                f"exact ELF local STT_OBJECT, matching mangled function identity and STT_FILE. "
+                f"Complete initializer ({size} bytes): {payload.hex(' ')}; "
+                f"SHA256 {hashlib.sha256(payload).hexdigest()}. "
+                "No external header declaration needed; C++ type is not inferred; "
+                "initializer bytes are context, not behavior acceptance.")
+
     def _available(self, address, objects):
         section = self.image.section_at(address)
         # ELF section flags, not names or a guessed memory map. No bss, text, GOT, RELRO.
@@ -1792,6 +1834,10 @@ class ContextIndex:
                     notes.append(f"{address:#x}: target function-local static storage; exact ELF local STT_OBJECT, "
                                  "matching mangled function identity and STT_FILE; SHT_NOBITS zero initialization. "
                                  "No external header declaration needed; C++ type is not inferred.")
+                    continue
+                initializer = self._target_local_initializer(obj, f, tu)
+                if initializer:
+                    notes.append(initializer)
                     continue
                 matches = self._matching(name, "data")
                 if not matches:

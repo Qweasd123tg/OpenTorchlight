@@ -402,6 +402,73 @@ class PacketContextTests(TestCase):
                 elif change == 'missing_elf': image.symbols = []
                 self.assertTrue(self.index(db=db, image=image).build(self.target, '1000: mov $0x7000,%rax').gaps)
 
+    def local_initializer_case(self):
+        mangled = '_ZN12CAchievement6updateEv'
+        self.target['names'] = [mangled]
+        raw = '_ZZ' + mangled[2:] + 'E6values'
+        payload = bytes(range(36))
+        data = object_symbol(0x5000, self.target['demangled'] + '::values', size=36,
+                             bind='local', file='Achievement.cpp')
+        data['name'] = raw
+        self.db['globals'] = [data]
+        self.image.sections[0].contents = payload + bytes(92)
+        self.image.symbols = [SimpleNamespace(name=raw, value=0x5000, size=36, type=1,
+                                             bind=0, defined=True, file='Achievement.cpp')]
+        return payload
+
+    def test_target_local_readonly_initializer_is_complete_not_a_type_guess(self):
+        payload = self.local_initializer_case()
+        result = self.index().build(self.target, '1000: mov $0x5004,%rax')
+        self.assertFalse(result.gaps)
+        self.assertIn('Complete initializer (36 bytes): ' + payload.hex(' '), result.text)
+        self.assertIn(hashlib.sha256(payload).hexdigest(), result.text)
+        self.assertIn('C++ type is not inferred', result.text)
+        self.assertIn('not behavior acceptance', result.text)
+        self.assertEqual(result.headers, ())
+        self.assertIn((0x5000, 36), self.image.reads)
+
+    def test_target_local_initialized_storage_requires_exact_identity_and_bounds(self):
+        self.local_initializer_case()
+        changes = ('symbol_name', 'elf_size', 'elf_owner', 'elf_bind', 'elf_type',
+                   'elf_undefined', 'function', 'mangled_function', 'suffix_length',
+                   'owner', 'global', 'missing_elf', 'writable', 'executable',
+                   'nobits', 'section_truncated', 'file_truncated', 'relocation',
+                   'overlap', 'zero_size', 'oversize')
+        for change in changes:
+            with self.subTest(change=change):
+                db, image = copy.deepcopy(self.db), copy.deepcopy(self.image)
+                obj, sym, sec = db['globals'][0], image.symbols[0], image.sections[0]
+                if change == 'symbol_name': sym.name = '_ZZotherE6values'
+                elif change == 'elf_size': sym.size = 40
+                elif change == 'elf_owner': sym.file = 'Other.cpp'
+                elif change == 'elf_bind': sym.bind = 1
+                elif change == 'elf_type': sym.type = 2
+                elif change == 'elf_undefined': sym.defined = False
+                elif change == 'function': obj['demangled'] = 'COther::update()::values'
+                elif change == 'mangled_function': obj['name'] = sym.name = '_ZZN6COther6updateEvE6values'
+                elif change == 'suffix_length': obj['name'] = sym.name = sym.name.replace('E6values', 'E7values')
+                elif change == 'owner': obj['file'] = 'Other.cpp'
+                elif change == 'global': obj['bind'] = 'global'
+                elif change == 'missing_elf': image.symbols = []
+                elif change == 'writable': sec.flags = 3
+                elif change == 'executable': sec.flags = 6
+                elif change == 'nobits': sec.type = 8
+                elif change == 'section_truncated': sec.size = 32
+                elif change == 'file_truncated': image.segments[0] = (*image.segments[0][:5], 32, *image.segments[0][6:])
+                elif change == 'relocation': image.relocs[0x5010] = SimpleNamespace(offset=0x5010, symbol='ptr', type=1)
+                elif change == 'overlap': db['globals'].append(object_symbol(0x5010, 'other', size=4))
+                elif change == 'zero_size': obj['size'] = sym.size = 0
+                elif change == 'oversize': obj['size'] = sym.size = 8193
+                result = self.index(db=db, image=image).build(self.target, '1000: mov $0x5000,%rax')
+                self.assertNotIn('Complete initializer', result.text)
+                if change != 'nobits':
+                    self.assertTrue(result.gaps)
+
+    def test_local_initializer_mandatory_context_is_not_truncated(self):
+        self.local_initializer_case()
+        with self.assertRaises(ContextError):
+            self.index().build(self.target, '1000: mov $0x5000,%rax', max_chars=32)
+
     def imported_data(self, raw, readable, *, address=0x7000, version="GLIBCXX_3.4"):
         # Version comes from the borrowed ELF symbol, not just the DB label.
         data = object_symbol(address, readable, size=32)
