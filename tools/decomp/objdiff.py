@@ -469,6 +469,7 @@ class OriginalSide(Normalizer):
         self.rodata = [image.section(n) for n in (".rodata",) if n]
         self.low, self.high = 0x400000, max(s.addr + s.size for s in image.sections if s.addr)
 
+    STRING_CTOR = "_ZNSsC1EPKcRKSaIcE"
     WSTRING_CTOR = "_ZNSbIwSt11char_traitsIwESaIwEEC1EPKwRKS1_"
 
     STRING_DTOR = "_ZNSsD1Ev"
@@ -550,6 +551,11 @@ class OriginalSide(Normalizer):
         """Small explicit-effect whitelist; no implicit RSI or string ops."""
         if cls.padding(mnemonic, operands):
             return True
+        if mnemonic in ("movss", "mulss") and "(%rip)" in operands:
+            # objdump appends a symbolic target to RIP-relative operands. Only
+            # its exact trailing annotation is non-instruction text; arbitrary
+            # comments, prefixes and operand suffixes still fail the grammar.
+            operands = re.sub(r"\s+# [0-9a-f]+ <[^<>\n]+>$", "", operands)
         if any(cls.register(r) and cls.register(r)[0] in blocked
                for r in re.findall(r"%\w+", operands)):
             return False
@@ -570,7 +576,8 @@ class OriginalSide(Normalizer):
             def base_memory(value):
                 match = re.fullmatch(r"(?:-?0x[0-9a-f]+)?\((%[a-z0-9]+)\)", value)
                 reg = cls.register(match.group(1)) if match else None
-                return bool(reg and reg[1] == 64)
+                return bool((reg and reg[1] == 64)
+                            or (mnemonic == "movss" and match and match.group(1) == "%rip"))
             src, dst = cls.register(source), cls.register(dest)
             if mnemonic == "movslq":
                 return bool(src and src[1] == 32 and dst and dst[1] == 64)
@@ -580,6 +587,20 @@ class OriginalSide(Normalizer):
             xmm = lambda operand: bool(re.fullmatch(r"%xmm(?:[0-9]|1[0-5])", operand))
             return ((xmm(source) and (xmm(dest) or base_memory(dest)))
                     or (base_memory(source) and xmm(dest)))
+        if mnemonic == "mulss":
+            # Legacy scalar SSE: only XMM destination and XMM/base-memory
+            # source. No implicit GPR input; reject raw argument addressing,
+            # unknown prefixes, index/segment forms and invalid operand widths.
+            xmm = r"%xmm(?:[0-9]|1[0-5])"
+            source, comma, dest = operands.rpartition(",")
+            if not comma or not re.fullmatch(xmm, dest):
+                return False
+            if re.fullmatch(xmm, source):
+                return True
+            match = re.fullmatch(r"(?:-?0x[0-9a-f]+)?\((%[a-z0-9]+)\)", source)
+            reg = cls.register(match.group(1)) if match else None
+            return bool((reg and reg[1] == 64 and reg[0] not in ("si", "d"))
+                        or (match and match.group(1) == "%rip"))
         if mnemonic == "xorps":
             # Register-only SSE bitwise XOR reads/writes only named XMM regs;
             # no integer-register or flags input/output, no memory addressing.
@@ -871,8 +892,8 @@ class OriginalSide(Normalizer):
         """Classify this executed load, not all possible entries to its consumer.
 
         Under the existing symbol/ABI-normalized comparator contract, the exact
-        imported wstring constructor/compare consumes a NUL-terminated wchar_t
-        sequence without retaining its source pointer. From this load there must be no alias,
+        imported string/wstring constructor or wstring compare consumes a
+        NUL-terminated character sequence without retaining its source pointer. From this load there must be no alias,
         escape, address observation or alternative consumer. The normal return
         must not observe RSI before a full kill or ABI return; cleanups are also
         checked. Incoming edges which skip the load do not execute this operand.
@@ -891,7 +912,7 @@ class OriginalSide(Normalizer):
             if mnemonic in ("call", "callq"):
                 target = self.direct_target(operands)
                 callee = self.image.plt.get(target, "").split("@")[0]
-                if callee not in (self.WSTRING_CTOR, self.WSTRING_COMPARE):
+                if callee not in (self.STRING_CTOR, self.WSTRING_CTOR, self.WSTRING_COMPARE):
                     return None
                 break
             if not self._literal_independent_instruction(mnemonic, operands):
@@ -912,11 +933,13 @@ class OriginalSide(Normalizer):
                     return None
                 cleanups.append(proof)
         return {"load": address, "call": pc, "callee": callee,
-                "argument": "rsi", "width": 4, "literal": int(match.group(1), 16),
+                "argument": "rsi", "width": 1 if callee == self.STRING_CTOR else 4,
+                "literal": int(match.group(1), 16),
                 "model": "original-operand-forward-lifetime-v1",
                 "normal_kill": kill, "normal": normal, "cleanup": cleanups, "eh_kind": eh["kind"]}
 
     def wide_literal_use(self, k, insns, start=None, end=None):
+        # Historical entrypoint name; proofs now carry their consumer width.
         proof = self._prefix_wide_literal_use(k, insns, start, end)
         if proof is not None or start is None or end is None:
             return proof
@@ -949,17 +972,24 @@ class OriginalSide(Normalizer):
             width = string_width(section)
             if literal_proof is not None and address_operand:
                 try:
-                    token = literal_token(raw, 4)
+                    proof_width = literal_proof.get("width")
+                    if (type(proof_width) is not int or proof_width not in (1, 4)
+                            or literal_proof.get("literal") != address):
+                        raise UnverifiedData("invalid use-site literal width/address")
+                    token = literal_token(raw, proof_width)
                 except UnverifiedData:
-                    pass  # Preserve the ordinary fail-closed diagnostic below.
+                    pass  # Preserve a fail-closed diagnostic; never guess another width.
                 else:
-                    length = int(token.split(":n", 1)[1].split(":", 1)[0]) * 4 + 4
+                    length = int(token.split(":n", 1)[1].split(":", 1)[0]) * proof_width + proof_width
                     proof = dict(literal_proof, size=length,
                                  end=address + length,
                                  sha256=hashlib.sha256(raw[:length]).hexdigest())
                     self.literal_proofs.append(proof)
                     return token
-                width = 4
+                # A malformed/unterminated proven use cannot fall back to a
+                # different width guessed from adjacent bytes.
+                self.unverified.append("invalid use-site literal payload")
+                return "unverified-data:invalid-use-site-literal"
             return self.data_token(raw, mnemonic, address_operand, width)
         if section:
             return f"{section.name}:{address:#x}"
