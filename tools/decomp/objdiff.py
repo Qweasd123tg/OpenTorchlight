@@ -875,6 +875,21 @@ class OriginalSide(Normalizer):
                 "kills": sorted(kills), "returns": sorted(returns),
                 "calls": calls, "cleanup": cleanups, "cfg": "acyclic-dfs-v1"}
 
+    @classmethod
+    def _forward_independent_and(cls, mnemonic, operands):
+        """Exact scalar AND only before the selected imported consumer.
+
+        No earlier RSI copy/spill/use crosses the forward scan, so this
+        register-only effect cannot observe or create an alias of that load.
+        This supplies no value/provenance facts or branch predicate, and does
+        not extend the normal, cleanup, or callee instruction whitelist.
+        """
+        if mnemonic != "and":
+            return False
+        match = re.fullmatch(r"\$0x([0-9a-f]{1,8}),(%[a-z0-9]+)", operands)
+        reg = cls.register(match.group(2)) if match else None
+        return bool(reg and reg[1] == 32 and reg[0] not in ("si", "sp", "bp"))
+
     def _forward_wide_literal_use(self, k, insns, start, end):
         """Classify this executed load, not all possible entries to its consumer.
 
@@ -902,7 +917,8 @@ class OriginalSide(Normalizer):
                 if callee not in (self.WSTRING_CTOR, self.WSTRING_COMPARE):
                     return None
                 break
-            if not self._literal_independent_instruction(mnemonic, operands):
+            if not (self._literal_independent_instruction(mnemonic, operands)
+                    or self._forward_independent_and(mnemonic, operands)):
                 return None
         else:
             return None
