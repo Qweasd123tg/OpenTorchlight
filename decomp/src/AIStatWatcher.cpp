@@ -164,18 +164,20 @@ void CAIStatWatcher::addFlag()
         bool added = false;
         for (unsigned int j = 0; j < m_Flags.size(); j++)
         {
-            if (targets[i]->getAIManager() != NULL && !targets[i]->getAIManager()->hasAIFlag(m_Flags[j]))
-            {
-                targets[i]->getAIManager()->addAIFlag(m_Flags[j], m_fDuration);
-                added = true;
-            }
+            if (targets[i]->getAIManager() != NULL)
+                if (!targets[i]->getAIManager()->hasAIFlag(m_Flags[j]))
+                {
+                    targets[i]->getAIManager()->addAIFlag(m_Flags[j], m_fDuration);
+                    added = true;
+                }
         }
         if (added)
         {
             m_FlaggedUnits.add(targets[i]->getGuid());
-            if (m_sAnimation != EMPTY_STRING)
-                targets[i]->setAIPlayAnimation(m_sAnimation, false, 0.1f, 1.0f);
         }
+        if (added)
+            if (m_sAnimation.size() == EMPTY_STRING.size() ? m_sAnimation != EMPTY_STRING : true)
+                targets[i]->setAIPlayAnimation(m_sAnimation, false, 0.1f, 1.0f);
     }
     m_bTriggered = true;
 }
