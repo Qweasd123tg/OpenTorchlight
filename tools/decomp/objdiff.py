@@ -432,6 +432,21 @@ class Normalizer:
         return result
 
 
+OGRE_LITERAL_SHA256 = "bef109bfdc1210ede92731ead4a2b3fae76a8905f10bac14d5fdb54ae5474c31"
+
+
+def literal_library_path():
+    game = Path(os.environ.get("TORCHLIGHT_GAME_DIR", Path(elfdb.default_elf()).parent))
+    return game / "lib64" / "libOgreMain-1.6.5.so"
+
+
+def literal_library_identity():
+    try:
+        return hashlib.sha256(literal_library_path().read_bytes()).hexdigest()
+    except OSError:
+        return "missing"
+
+
 class OriginalSide(Normalizer):
     def __init__(self, image, db):
         self.image = image
@@ -554,6 +569,144 @@ class OriginalSide(Normalizer):
             return None
         return {"rows": signature[3], "kind": signature[0]}
 
+    def _callee_body(self, image, target):
+        """Exact original STT_FUNC bounds, never reconstructed declarations."""
+        symbols = [s for s in list(image.symbols) + list(image.dynsyms)
+                   if s.defined and s.type == elfimage.STT_FUNC and s.value == target and s.size]
+        sizes = {s.size for s in symbols}
+        if len(sizes) != 1 or not 0 < next(iter(sizes)) <= 1024:
+            return None
+        size = next(iter(sizes))
+        section = image.section_at(target)
+        if not section or not section.flags & 4 or target + size > section.addr + section.size:
+            return None
+        try:
+            if hashlib.sha256(image.data).hexdigest() != image.sha256:
+                return None
+            raw = image.read(target, size)
+            # Decode the exact immutable snapshot whose bytes are hashed. Two
+            # hashes around a mutable path would not prevent replace-and-restore.
+            with tempfile.NamedTemporaryFile(prefix="otl-literal-body-", suffix=".elf") as snapshot:
+                snapshot.write(image.data)
+                snapshot.flush()
+                rows = parse_insns(run_objdump([snapshot.name, f"--start-address={target}",
+                                               f"--stop-address={target + size}"]))
+        except (OSError, ValueError, subprocess.CalledProcessError):
+            return None
+        pcs = [r[0] for r in rows]
+        if not pcs or pcs[0] != target or pcs != sorted(set(pcs)) or pcs[-1] >= target + size:
+            return None
+        return {"start": target, "size": size, "rows": rows,
+                "names": sorted({x.name for x in symbols}),
+                "body_sha256": hashlib.sha256(raw).hexdigest()}
+
+    def _pinned_literal_library(self):
+        # Each comparison session pins one read-only snapshot. A changed/missing
+        # backing input must not silently reuse a proof under a new cache key.
+        identity = getattr(self, "library_identity", None)
+        if identity != OGRE_LITERAL_SHA256 or literal_library_identity() != identity:
+            return None
+        if not hasattr(self, "_literal_library"):
+            try:
+                image = elfimage.load(literal_library_path(), require_original=False)
+            except (OSError, ValueError):
+                return None
+            if image.sha256 != identity:
+                return None
+            self._literal_library = image
+        return self._literal_library
+
+    def _nonobserving_callee(self, image, target, depth=0, active=()):
+        """May preserve RSI, but cannot observe its incoming value.
+
+        This is deliberately NOT a kill summary. Callers continue checking RSI
+        after the call, including a nullable wrapper's preserve-and-return path.
+        Only original bodies, supported cleanup EH and pinned library bytes are
+        evidence; a C++ signature or callee name is never enough for a local call.
+        """
+        if depth > 4 or target is None:
+            return None
+        name = image.plt.get(target, "").split("@")[0]
+        if name in ("_ZdlPv", "_ZdaPv", "_Unwind_Resume"):
+            return {"kind": "known-import-no-rsi-argument", "callee": name,
+                    "effect": "may-preserve-not-observe"}
+        if name:
+            library = self._pinned_literal_library()
+            if library is None:
+                return None
+            candidates = {s.value for s in library.dynsyms
+                          if s.defined and s.type == elfimage.STT_FUNC and s.name.split("@")[0] == name}
+            if len(candidates) != 1:
+                return None
+            proof = self._nonobserving_callee(library, candidates.pop(), depth + 1, active)
+            if proof is None:
+                return None
+            return {"kind": "pinned-library-import", "callee": name,
+                    "library_sha256": library.sha256, "body": proof,
+                    "effect": "may-preserve-not-observe"}
+        if not getattr(image, "sha256", None) or (image.sha256, target) in active:
+            return None
+        body = self._callee_body(image, target)
+        if body is None:
+            return None
+        frames = objdiff_eh.inspect(image)
+        proxy = OriginalSide.__new__(OriginalSide)
+        proxy.image = image; proxy.frames = frames
+        eh = proxy._literal_eh(body["rows"], target, target + body["size"])
+        if eh is None:
+            return None
+        rows = body["rows"]; positions = {r[0]: i for i, r in enumerate(rows)}
+        pending, seen, calls, kills, returns = [0], set(), [], [], []
+        active = active + ((image.sha256, target),)
+        while pending:
+            i = pending.pop()
+            if i in seen:
+                continue
+            if not 0 <= i < len(rows):
+                return None
+            seen.add(i)
+            pc, op, args = rows[i]
+            args = args.split("#", 1)[0].strip()
+            if self._rsi_kill(op, args):
+                kills.append(pc)
+                continue
+            if op in ("ret", "retq", "repz ret", "repz retq") and not args:
+                returns.append(pc)
+                continue
+            if op in ("call", "callq") or op == "jmp" and self.direct_target(args) not in positions:
+                callee = self.direct_target(args)
+                proof = self._nonobserving_callee(image, callee, depth + 1, active)
+                if proof is None:
+                    return None
+                calls.append({"pc": pc, "target": callee, "proof": proof})
+                if op == "jmp" or proof.get("callee") == "_Unwind_Resume":
+                    continue
+                # Recursive summaries can preserve RSI, so never stop here.
+                pending.append(i + 1)
+                for begin, count, pad, _ in eh["rows"]:
+                    if begin <= pc - target < begin + count and pad:
+                        if target + pad not in positions:
+                            return None
+                        pending.append(positions[target + pad])
+            elif op.startswith("j"):
+                if op not in ("jmp", "je", "jne", "ja", "jae", "jb", "jbe", "jg", "jge", "jl", "jle", "js", "jns"):
+                    return None
+                dest = self.direct_target(args)
+                if dest not in positions:
+                    return None
+                pending.append(positions[dest])
+                if op != "jmp":
+                    pending.append(i + 1)
+            elif self._literal_independent_instruction(op, args):
+                pending.append(i + 1)
+            else:
+                return None
+        return {"kind": "original-body-no-rsi-observation", "effect": "may-preserve-not-observe",
+                "image_sha256": image.sha256, "start": target, "size": body["size"],
+                "body_sha256": body["body_sha256"], "names": body["names"],
+                "visited": sorted(rows[i][0] for i in seen), "kills": kills,
+                "preserving_returns": returns, "calls": calls, "eh": eh}
+
     def _rsi_cleanup_dead(self, insns, entry, start, eh):
         """No observation of old volatile RSI in supported cleanup-only code.
 
@@ -577,9 +730,10 @@ class OriginalSide(Normalizer):
             if op in ("call", "callq"):
                 target = self.direct_target(args)
                 callee = self.image.plt.get(target, "").split("@")[0]
-                if callee not in ("_ZdlPv", "_ZdaPv", "_Unwind_Resume"):
+                proof = self._nonobserving_callee(self.image, target)
+                if proof is None:
                     return None
-                calls.append((pc, callee))
+                calls.append({"pc": pc, "callee": callee, "proof": proof})
                 if callee == "_Unwind_Resume":
                     continue
                 # A cleanup delete may unwind too; follow its supported pad.
@@ -935,6 +1089,9 @@ class Original:
         self.side = OriginalSide(self.image, self.db)
         self.frames = objdiff_eh.inspect(self.image)
         self.side.frames = self.frames
+        self._normalization_key = _norm_key()
+        self._literal_library_identity = self._normalization_key[1]
+        self.side.library_identity = self._literal_library_identity
         self._lock = threading.RLock()  # the normalizer keeps per-function state
         self.by_name = {}
         for address, f in self.db["functions"].items():
@@ -1014,8 +1171,17 @@ class Original:
         """Normalized original function; cached on disk (the original never changes)."""
         with self._lock:
             cache = self.__dict__.get("_norm_cache")
+            # Do not adopt disk proofs made with a different library snapshot.
+            if (hasattr(self, "_literal_library_identity")
+                    and self._literal_library_identity != literal_library_identity()):
+                cache = self.__dict__["_norm_cache"] = {}
+                self.side.library_identity = None
             if cache is None:
-                cache = self.__dict__["_norm_cache"] = _load_norm_cache()
+                if hasattr(self, "_normalization_key"):
+                    cache = _load_norm_cache(self._normalization_key)
+                else:
+                    cache = _load_norm_cache()
+                self._norm_cache = cache
             key = self.image.sha256 + ":" + f["address"]
             if key not in cache:
                 start = int(f["address"], 16)
@@ -1066,16 +1232,16 @@ NORMALIZER_VERSION = 3
 def _norm_key():
     # Normalization depends on this file, the database and the ELF image reader.
     here = Path(__file__).resolve().parent
-    return [NORMALIZER_VERSION] + [hashlib.sha256(p.read_bytes()).hexdigest()
+    return [NORMALIZER_VERSION, literal_library_identity()] + [hashlib.sha256(p.read_bytes()).hexdigest()
                                    for p in (here / "objdiff.py", here / "elfimage.py", here / "objdiff_eh.py", here / "objdiff_disasm.py",
                                              NORM_CACHE.parent / "elfdb.json") if p.exists()]
 
 
-def _load_norm_cache():
+def _load_norm_cache(expected_key=None):
     import pickle
     try:
         data = pickle.loads(NORM_CACHE.read_bytes())
-        if data.get("key") == _norm_key():
+        if data.get("key") == (expected_key if expected_key is not None else _norm_key()):
             return data["functions"]
     except (OSError, ValueError, EOFError, pickle.UnpicklingError, AttributeError):
         pass
@@ -1083,10 +1249,22 @@ def _load_norm_cache():
 
 
 def save_norm_cache(original):
+    # A mid-session library change cannot relabel old proofs with the new key.
+    if (hasattr(original, "_literal_library_identity")
+            and original._literal_library_identity != literal_library_identity()):
+        return
     import pickle
     cache = original.__dict__.get("_norm_cache")
     if cache and _NORM_DIRTY:
-        payload = pickle.dumps({"key": _norm_key(), "functions": cache})
+        # Freeze the label with the session, rather than hashing a dependency
+        # again after checking it (which could relabel A proofs with a B key).
+        key = getattr(original, "_normalization_key", None)
+        if key is None:
+            key = _norm_key()
+        if (hasattr(original, "_literal_library_identity")
+                and key[1] != original._literal_library_identity):
+            return
+        payload = pickle.dumps({"key": key, "functions": cache})
         temporary = None
         try:
             with tempfile.NamedTemporaryFile(dir=NORM_CACHE.parent,
