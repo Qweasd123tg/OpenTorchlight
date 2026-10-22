@@ -471,6 +471,8 @@ class OriginalSide(Normalizer):
 
     WSTRING_CTOR = "_ZNSbIwSt11char_traitsIwESaIwEEC1EPKwRKS1_"
 
+    WSTRING_COMPARE = "_ZNKSbIwSt11char_traitsIwESaIwEE7compareEPKw"
+
     def _prefix_wide_literal_use(self, k, insns):
         """Prove one immediate's width from an original imported consumer.
 
@@ -758,14 +760,70 @@ class OriginalSide(Normalizer):
                 return None
         return {"entry": entry, "visited": sorted(insns[i][0] for i in seen), "calls": calls}
 
+    def _rsi_normal_dead(self, insns, entry, start, eh):
+        """Finite forward CFG: incoming RSI is never observed before kill/return.
+
+        RSI is not a SysV return register. A normal return ends this function's
+        obligation under the existing ABI-normalized comparator contract. Calls
+        may preserve RSI: their summaries never replace checking the continuation.
+        Backedges are deliberately rejected, even when a loop could be harmless.
+        """
+        positions = {row[0]: i for i, row in enumerate(insns)}
+        if entry not in positions:
+            return None
+        pending, seen, kills, returns, calls, cleanups = [positions[entry]], set(), [], [], [], []
+        while pending:
+            i = pending.pop()
+            if i in seen:
+                continue
+            if not 0 <= i < len(insns):
+                return None
+            seen.add(i)
+            pc, op, args = insns[i]
+            args = args.split("#", 1)[0].strip()
+            if self._rsi_kill(op, args):
+                kills.append(pc)
+            elif op in ("ret", "retq") and not args:
+                returns.append(pc)
+            elif op in ("call", "callq"):
+                target = self.direct_target(args)
+                proof = self._nonobserving_callee(self.image, target)
+                if proof is None:
+                    return None
+                calls.append({"pc": pc, "proof": proof})
+                for begin, count, pad, _ in eh["rows"]:
+                    if begin <= pc - start < begin + count and pad:
+                        cleanup = self._rsi_cleanup_dead(insns, start + pad, start, eh)
+                        if cleanup is None:
+                            return None
+                        cleanups.append(cleanup)
+                if self.image.plt.get(target, "").split("@")[0] != "_Unwind_Resume":
+                    pending.append(i + 1)
+            elif op.startswith("j"):
+                if op not in ("jmp", "je", "jne", "ja", "jae", "jb", "jbe", "jg", "jge", "jl", "jle", "js", "jns"):
+                    return None
+                target = self.direct_target(args)
+                if target not in positions or positions[target] <= i:
+                    return None
+                pending.append(positions[target])
+                if op != "jmp":
+                    pending.append(i + 1)
+            elif self._literal_independent_instruction(op, args):
+                pending.append(i + 1)
+            else:
+                return None
+        return {"entry": entry, "visited": sorted(insns[i][0] for i in seen),
+                "kills": sorted(kills), "returns": sorted(returns),
+                "calls": calls, "cleanup": cleanups, "cfg": "forward-only-v1"}
+
     def _forward_wide_literal_use(self, k, insns, start, end):
         """Classify this executed load, not all possible entries to its consumer.
 
         Under the existing symbol/ABI-normalized comparator contract, the exact
-        imported wstring constructor copies a NUL-terminated wchar_t sequence and
-        does not retain its source pointer. From this load there must be no alias,
+        imported wstring constructor/compare consumes a NUL-terminated wchar_t
+        sequence without retaining its source pointer. From this load there must be no alias,
         escape, address observation or alternative consumer. The normal return
-        must kill RSI before another observation; cleanup continuations are also
+        must not observe RSI before a full kill or ABI return; cleanups are also
         checked. Incoming edges which skip the load do not execute this operand.
         """
         address, op, args = insns[k]
@@ -782,24 +840,19 @@ class OriginalSide(Normalizer):
             if mnemonic in ("call", "callq"):
                 target = self.direct_target(operands)
                 callee = self.image.plt.get(target, "").split("@")[0]
-                if callee != self.WSTRING_CTOR:
+                if callee not in (self.WSTRING_CTOR, self.WSTRING_COMPARE):
                     return None
                 break
             if not self._literal_independent_instruction(mnemonic, operands):
                 return None
         else:
             return None
-        kill = None
-        for j in range(i + 1, len(insns)):
-            nextpc, nextop, nextargs = insns[j]
-            nextargs = nextargs.split("#", 1)[0].strip()
-            if self._rsi_kill(nextop, nextargs):
-                kill = nextpc
-                break
-            if not self._literal_independent_instruction(nextop, nextargs):
-                return None
-        if kill is None:
+        if i + 1 >= len(insns):
             return None
+        normal = self._rsi_normal_dead(insns, insns[i + 1][0], start, eh)
+        if normal is None:
+            return None
+        kill = normal["kills"][0] if len(normal["kills"]) == 1 else None
         cleanups = []
         for begin, count, pad, _ in eh["rows"]:
             if begin <= pc - start < begin + count and pad:
@@ -810,7 +863,7 @@ class OriginalSide(Normalizer):
         return {"load": address, "call": pc, "callee": callee,
                 "argument": "rsi", "width": 4, "literal": int(match.group(1), 16),
                 "model": "original-operand-forward-lifetime-v1",
-                "normal_kill": kill, "cleanup": cleanups, "eh_kind": eh["kind"]}
+                "normal_kill": kill, "normal": normal, "cleanup": cleanups, "eh_kind": eh["kind"]}
 
     def wide_literal_use(self, k, insns, start=None, end=None):
         proof = self._prefix_wide_literal_use(k, insns)
