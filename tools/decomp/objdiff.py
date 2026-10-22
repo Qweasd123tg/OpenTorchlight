@@ -456,12 +456,13 @@ class OriginalSide(Normalizer):
 
     WSTRING_CTOR = "_ZNSbIwSt11char_traitsIwESaIwEEC1EPKwRKS1_"
 
-    def wide_literal_use(self, k, insns):
+    def _prefix_wide_literal_use(self, k, insns):
         """Prove one immediate's width from an original imported consumer.
 
-        Deliberately tiny straight-line SysV idiom, never candidate types or a
-        global address override. No earlier call means no exceptional entry into
-        this prefix; any branch anywhere or interior function entry is refused.
+        Legacy, deliberately tiny straight-line SysV idiom, never candidate
+        types or a global address override. Its conservative prefix recognizer
+        rejects prior calls, branches and known interior function entries; this
+        is not a claim to enumerate arbitrary whole-program machine-code entries.
         """
         address, op, args = insns[k]
         match = re.fullmatch(r"\$0x([0-9a-f]+),%(?:esi|rsi)", args)
@@ -506,6 +507,162 @@ class OriginalSide(Normalizer):
                 continue
             return None
         return None
+
+    @classmethod
+    def _mentions_rsi(cls, operands):
+        return any(cls.register(r) and cls.register(r)[0] == "si"
+                   for r in re.findall(r"%\w+", operands))
+
+    @classmethod
+    def _rsi_kill(cls, mnemonic, operands):
+        # 32-bit writes zero the high half. Partial writes are never kills.
+        source, comma, dest = operands.rpartition(",")
+        if not comma or cls.register(dest) not in (("si", 32), ("si", 64)):
+            return False
+        if mnemonic in ("mov", "movl", "movq", "movabs", "lea"):
+            return not cls._mentions_rsi(source)
+        return mnemonic in ("xor", "xorl", "xorq") and source == dest
+
+    @classmethod
+    def _literal_independent_instruction(cls, mnemonic, operands):
+        """Small explicit-effect whitelist; no implicit RSI or string ops."""
+        if cls.padding(mnemonic, operands):
+            return True
+        if cls._mentions_rsi(operands):
+            return False
+        if mnemonic in ("mov", "movb", "movw", "movl", "movq", "movabs", "lea",
+                        "xor", "xorl", "xorq", "test", "testl", "testq", "cmp", "cmpl", "cmpq",
+                        "add", "addl", "addq", "sub", "subl", "subq", "shl", "shr", "sar"):
+            # Only ordinary AT&T operands. Reject segments, unsupported prefixes,
+            # and implicit-register forms even if disassembly was unfamiliar.
+            return (
+                len(operands.split(",")) >= 2 and ":" not in operands
+                and not any(x in operands for x in ("*", "#")))
+        return mnemonic in ("push", "pop") and cls.register(operands) is not None
+
+    def _literal_eh(self, insns, start, end):
+        frames = getattr(self, "frames", None)
+        if frames is None or frames.error:
+            return None
+        reason = frames.reason(start, end - start)
+        if reason is None:
+            return {"rows": [], "kind": "no-lsda"}
+        if reason != "EH LSDA equivalence unverified":
+            return None
+        signature = objdiff_eh.cleanup_signature(self.image, frames, start, end - start, insns)
+        if signature is None:
+            return None
+        return {"rows": signature[3], "kind": signature[0]}
+
+    def _rsi_cleanup_dead(self, insns, entry, start, eh):
+        """No observation of old volatile RSI in supported cleanup-only code.
+
+        This is not a whole-program entry certificate. Traverse only continuations
+        of this call. Unknown calls/implicit effects are refused, not guessed.
+        """
+        positions = {row[0]: i for i, row in enumerate(insns)}
+        if entry not in positions:
+            return None
+        pending, seen, calls = [positions[entry]], set(), []
+        while pending:
+            i = pending.pop()
+            if i in seen:
+                continue
+            if not 0 <= i < len(insns):
+                return None
+            seen.add(i)
+            pc, op, args = insns[i]
+            if self._rsi_kill(op, args):
+                continue
+            if op in ("call", "callq"):
+                target = self.direct_target(args)
+                callee = self.image.plt.get(target, "").split("@")[0]
+                if callee not in ("_ZdlPv", "_ZdaPv", "_Unwind_Resume"):
+                    return None
+                calls.append((pc, callee))
+                if callee == "_Unwind_Resume":
+                    continue
+                # A cleanup delete may unwind too; follow its supported pad.
+                for begin, count, pad, _ in eh["rows"]:
+                    if begin <= pc - start < begin + count and pad:
+                        if start + pad not in positions:
+                            return None
+                        pending.append(positions[start + pad])
+                pending.append(i + 1)
+            elif op.startswith("j"):
+                if op not in ("jmp", "je", "jne", "ja", "jae", "jb", "jbe", "jg", "jge", "jl", "jle", "js", "jns"):
+                    return None
+                target = self.direct_target(args)
+                if target not in positions:
+                    return None
+                pending.append(positions[target])
+                if op != "jmp":
+                    pending.append(i + 1)
+            elif self._literal_independent_instruction(op, args):
+                pending.append(i + 1)
+            else:
+                return None
+        return {"entry": entry, "visited": sorted(insns[i][0] for i in seen), "calls": calls}
+
+    def _forward_wide_literal_use(self, k, insns, start, end):
+        """Classify this executed load, not all possible entries to its consumer.
+
+        Under the existing symbol/ABI-normalized comparator contract, the exact
+        imported wstring constructor copies a NUL-terminated wchar_t sequence and
+        does not retain its source pointer. From this load there must be no alias,
+        escape, address observation or alternative consumer. The normal return
+        must kill RSI before another observation; cleanup continuations are also
+        checked. Incoming edges which skip the load do not execute this operand.
+        """
+        address, op, args = insns[k]
+        match = re.fullmatch(r"\$0x([0-9a-f]+),%(?:esi|rsi)", args)
+        if op not in ("mov", "movl", "movq", "movabs") or not match:
+            return None
+        if not insns or insns[0][0] != start or not start <= address < end:
+            return None
+        eh = self._literal_eh(insns, start, end)
+        if eh is None:
+            return None
+        for i in range(k + 1, len(insns)):
+            pc, mnemonic, operands = insns[i]
+            if mnemonic in ("call", "callq"):
+                target = self.direct_target(operands)
+                callee = self.image.plt.get(target, "").split("@")[0]
+                if callee != self.WSTRING_CTOR:
+                    return None
+                break
+            if not self._literal_independent_instruction(mnemonic, operands):
+                return None
+        else:
+            return None
+        kill = None
+        for j in range(i + 1, len(insns)):
+            nextpc, nextop, nextargs = insns[j]
+            nextargs = nextargs.split("#", 1)[0].strip()
+            if self._rsi_kill(nextop, nextargs):
+                kill = nextpc
+                break
+            if not self._literal_independent_instruction(nextop, nextargs):
+                return None
+        if kill is None:
+            return None
+        cleanups = []
+        for begin, count, pad, _ in eh["rows"]:
+            if begin <= pc - start < begin + count and pad:
+                proof = self._rsi_cleanup_dead(insns, start + pad, start, eh)
+                if proof is None:
+                    return None
+                cleanups.append(proof)
+        return {"load": address, "call": pc, "callee": callee,
+                "argument": "rsi", "width": 4, "literal": int(match.group(1), 16),
+                "model": "original-operand-forward-lifetime-v1",
+                "normal_kill": kill, "cleanup": cleanups, "eh_kind": eh["kind"]}
+
+    def wide_literal_use(self, k, insns, start=None, end=None):
+        proof = self._prefix_wide_literal_use(k, insns)
+        if proof is not None or start is None or end is None:
+            return proof
+        return self._forward_wide_literal_use(k, insns, start, end)
 
     def name_at(self, address, mnemonic, address_operand=False, literal_proof=None):
         if address in self.func_start:
@@ -580,7 +737,7 @@ class OriginalSide(Normalizer):
             return f"[{self.name_at(target, memory_mnemonic(mnemonic, operands), mnemonic.startswith('lea'))}](%rip)"
         operands = re.sub(r"-?0x([0-9a-f]+)\(%rip\)", rip, operands)
 
-        literal_proof = self.wide_literal_use(k, insns)
+        literal_proof = self.wide_literal_use(k, insns, start, end)
 
         def absolute(mm):
             value = int(mm.group(2), 16)
@@ -777,6 +934,7 @@ class Original:
         self.image = elfimage.load(elf or elfdb.default_elf())
         self.side = OriginalSide(self.image, self.db)
         self.frames = objdiff_eh.inspect(self.image)
+        self.side.frames = self.frames
         self._lock = threading.RLock()  # the normalizer keeps per-function state
         self.by_name = {}
         for address, f in self.db["functions"].items():
