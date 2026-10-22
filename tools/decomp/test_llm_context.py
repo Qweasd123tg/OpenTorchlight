@@ -174,6 +174,74 @@ class PacketContextTests(TestCase):
         self.assertFalse(self.overload_case("void createUnit(const std::string&);", full + " const&").gaps)
         self.assertFalse(self.overload_case("void createUnit(const " + full + "&);", "std::string const&").gaps)
 
+    def test_standard_queue_deque_defaults_both_directions(self):
+        for short, full in (
+            ('std::deque<int>', 'std::deque<int, std::allocator<int> >'),
+            ('std::queue<int>', 'std::queue<int, std::deque<int> >'),
+            ('std::queue<int>', 'std::queue<int, std::deque<int, std::allocator<int> > >'),
+            ('std::queue<std::queue<int> >',
+             'std::queue<std::queue<int, std::deque<int> >, std::deque<std::queue<int>, std::allocator<std::queue<int> > > >')):
+            for a, b in ((short, full), (full, short)):
+                with self.subTest(declared=a, expected=b):
+                    self.assertFalse(self.overload_case('void createUnit(' + a + '*);', b + '*').gaps)
+
+    def test_standard_queue_real_reader_signature(self):
+        wide = 'std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'
+        params = 'std::queue<' + wide + ', std::deque<' + wide + ', std::allocator<' + wide + '> > >*, wchar_t const*, wchar_t'
+        declaration = 'void ReadLineTokenize(std::queue<std::wstring>* tokens, const wchar_t* separators, wchar_t comment);'
+        self.write_header('FileReader.h', '#include <queue>\n#include <string>\nclass CFileReader { public: ' + declaration + ' };')
+        self.mapping['CFileReader'] = 'FileReader.h'
+        self.add_function(function(0xc72c40, 'CFileReader', 'ReadLineTokenize', tu=1, params=params))
+        result = self.index().build(self.target, '1000: call c72c40').require_complete()
+        self.assertIn(declaration, result.text)
+        self.assertIn('FileReader.h', result.headers)
+
+    def test_standard_queue_nondefaults_are_not_erased(self):
+        bad = ('std::queue<int, std::vector<int> >',
+               'std::queue<int, CustomDeque<int> >',
+               'std::queue<int, std::deque<int, CustomAllocator<int> > >',
+               'std::queue<int, std::deque<int, std::allocator<const int> > >',
+               'std::queue<int, std::deque<const int> >',
+               'std::queue<int, std::deque<int*> >',
+               'std::queue<int, other::deque<int> >',
+               'std::queue<int, std::__debug::deque<int> >',
+               'other::std::queue<int, std::deque<int> >',
+               'std::__debug::queue<int, std::deque<int> >',
+               'std::queue<int, std::deque<int> const>',
+               'std::queue<int, std::deque<int>*>',
+               'std::queue<int, std::deque<int, other::allocator<int> > >')
+        for full in bad:
+            with self.subTest(full=full):
+                self.assertTrue(self.overload_case('void createUnit(std::queue<int>*);', full + '*').gaps)
+
+    def test_standard_queue_preserves_cv_refs_extra_arguments(self):
+        full = 'std::queue<int, std::deque<int, std::allocator<int> > >'
+        for params, cv in ((full + ' const*', ''), (full + '&', ''),
+                           (full + '**', ''), (full + '*, int', ''), (full + '*', 'const')):
+            with self.subTest(params=params, cv=cv):
+                self.assertTrue(self.overload_case('void createUnit(std::queue<int>*);', params, cv).gaps)
+
+    def test_standard_sequence_malformed_args_fail_closed(self):
+        for full in ('std::queue<>', 'std::queue<int,>', 'std::queue<int, std::deque<int>, int>',
+                     'std::queue<int, std::deque<int>', 'std::queue<int, ALLOC(int)>',
+                     'std::deque<int, std::allocator<int>, int>', 'std::deque<int,,>'):
+            with self.subTest(full=full):
+                self.assertTrue(self.overload_case('void createUnit(std::queue<int>*);', full + '*').gaps)
+
+    def test_standard_sequence_word_boundaries_are_preserved(self):
+        for kind in ('queue', 'deque'):
+            for spaced, joined in (('unsigned int', 'unsignedint'), ('Foo const*', 'Fooconst*')):
+                full = 'std::' + kind + '<' + joined + ', std::' + ('deque' if kind == 'queue' else 'allocator') + '<' + joined + '> >'
+                self.assertTrue(self.overload_case('void createUnit(std::' + kind + '<' + spaced + '>*);', full + '*').gaps)
+
+    def test_standard_queue_scoped_element_not_short_name_matched(self):
+        self.write_header('ResourceManager.h', 'class CResourceManager { public: struct Item {}; void createUnit(std::queue<Item>*); };')
+        self.mapping['CResourceManager'] = 'ResourceManager.h'
+        for element, expected in (('Item', True), ('Other::Item', True), ('CResourceManager::Item', False)):
+            self.add_function(function(0x2000, 'CResourceManager', 'createUnit', tu=1,
+                                       params='std::queue<' + element + ', std::deque<' + element + '> >*'))
+            self.assertEqual(bool(self.index().build(self.target, '1000: call 2000').gaps), expected)
+
     def test_standard_vector_default_allocator_both_directions(self):
         full = "std::vector<CDataGroup*, std::allocator<CDataGroup*> >*"
         self.assertFalse(self.overload_case("void createUnit(std::vector<CDataGroup*>* groups);", full).gaps)

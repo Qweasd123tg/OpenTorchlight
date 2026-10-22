@@ -880,6 +880,32 @@ class RepairWorkflow(unittest.TestCase):
         cp['tree'] = publication.tree_state(self.stage.path)
         return cp
 
+    def test_repair_queue_defaults_allow_only_body_change(self):
+        wide = 'std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'
+        full = 'std::queue<' + wide + ', std::deque<' + wide + ', std::allocator<' + wide + '> > >*'
+        cp = self.signature_checkpoint(full, 'std::queue<std::wstring>* tokens',
+            header='#include <queue>\n#include <string>\nclass CProbe { public: int work(std::queue<std::wstring>*); };\n')
+        text = cp['existing']
+        self.loop.source.write_text(text.replace('return 1', 'return 3'))
+        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        for changed in (text.replace('tokens', 'renamed'), text.replace('return 2', 'return 8'),
+                        text.replace('std::queue<std::wstring>', 'std::queue<std::wstring, std::deque<std::wstring> >')):
+            self.loop.source.write_text(changed)
+            with self.assertRaisesRegex(RuntimeError, 'outside assigned bodies'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_queue_custom_container_and_qualifiers_rejected(self):
+        cp = self.signature_checkpoint('std::queue<int, std::deque<int, std::allocator<int> > >*',
+            'std::queue<int>* tokens', header='class CProbe { public: int work(std::queue<int>*); };\n')
+        for params in ('std::queue<int, std::vector<int> >*',
+                       'std::queue<int, std::deque<int, OtherAllocator<int> > >*',
+                       'std::queue<int, std::deque<int> > const*',
+                       'std::queue<int, std::deque<int> >&',
+                       'std::queue<int, std::deque<int> >*, int'):
+            self.loop.funcs[0].update(params=params)
+            with self.subTest(params=params), self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
     def test_repair_nested_scope_uses_nearest_complete_type_not_outer_short_name(self):
         cp = self.signature_checkpoint('CProbe::Inner::Node*', scope='CProbe::Inner',
             header='class CProbe { public: class Node {}; class Inner { public: class Node {}; int work(Node*); }; };\n')

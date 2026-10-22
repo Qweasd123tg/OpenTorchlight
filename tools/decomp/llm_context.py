@@ -317,19 +317,20 @@ def _standard_string_aliases(text):
     return re.sub(pattern, lambda m: "std::wstring" if m[1] == "wchar_t" else "std::string", text)
 
 
-def _standard_vector_defaults(text, depth=0):
-    """Erase only the pinned std::vector<T, std::allocator<T> > default.
+def _standard_sequence_defaults(text, depth=0):
+    """Erase only pinned vector/deque allocator and queue container defaults.
 
     Balanced arguments and token identities preserve nested types and word
     boundaries. Custom allocators/namespaces and element qualifiers stay distinct.
     This is lookup text only; no declaration or general signature parser changes.
     """
     if depth > 32:
-        raise ValueError("vector template nesting exceeds lookup limit")
-    pattern = re.compile(r"(?<![\w:])std\s*::\s*vector\s*<")
+        raise ValueError("sequence template nesting exceeds lookup limit")
+    pattern = re.compile(r"(?<![\w:])std\s*::\s*(vector|deque|queue)\s*<")
     out, cursor = [], 0
     for_match = pattern.search(text, cursor)
     while for_match:
+        kind = for_match[1]
         start, opening = for_match.start(), for_match.end() - 1
         if re.search(r"::\s*$", text[:start]):
             cursor = for_match.end()
@@ -350,20 +351,21 @@ def _standard_vector_defaults(text, depth=0):
                 args.append(text[part:i].strip())
                 part = i + 1
         if end is None or len(args) not in (1, 2) or any(not a for a in args):
-            raise ValueError("malformed vector template arguments")
-        args = [_standard_vector_defaults(a, depth + 1) for a in args]
+            raise ValueError("malformed sequence template arguments")
+        args = [_standard_sequence_defaults(a, depth + 1) for a in args]
         def tokens(value):
             # Do not equate 'unsigned int' with 'unsignedint' or accept expressions.
             token = r"[A-Za-z_]\w*|::|[<>,*&]|[0-9]+"
             if re.sub(token + r"|\s+", "", value):
-                raise ValueError("unsupported vector template argument")
+                raise ValueError("unsupported sequence template argument")
             return re.findall(token, value)
         element = tokens(args[0])
-        if len(args) == 2 and tokens(args[1]) == ['std', '::', 'allocator', '<', *element, '>']:
+        default = 'deque' if kind == 'queue' else 'allocator'
+        if len(args) == 2 and tokens(args[1]) == ['std', '::', default, '<', *element, '>']:
             args.pop()
         # Preserve everything before this occurrence, including skipped namespaces.
         out.append(text[:start])
-        spelling = 'std::vector<' + ', '.join(args) + '>'
+        spelling = 'std::' + kind + '<' + ', '.join(args) + '>'
         if depth == 0:
             # parameter_key later removes whitespace. Keep element word boundaries
             # in this lookup-only spelling: unsigned int must not become unsignedint.
@@ -374,6 +376,11 @@ def _standard_vector_defaults(text, depth=0):
         for_match = pattern.search(text)
     out.append(text)
     return ''.join(out)
+
+
+def _standard_vector_defaults(text, depth=0):
+    # Historical entry point shared with smallmatch; keep one canonicalizer.
+    return _standard_sequence_defaults(text, depth)
 
 
 def _callback_aliases(sources):
