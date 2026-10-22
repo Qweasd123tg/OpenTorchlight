@@ -3,6 +3,7 @@
 #include "Graph.h"
 #include "DataGroup.h"
 #include "StringUtilities.h"
+#include "ParticleUniverseTechnique.h"
 #include <algorithm>
 
 CGraph::CGraph(const std::wstring& filename)
