@@ -998,7 +998,11 @@ class OriginalSide(Normalizer):
         if proof is not None:
             return proof
         import objdiff_wcslen_append
-        return objdiff_wcslen_append.certify(self, k, insns, start, end)
+        proof = objdiff_wcslen_append.certify(self, k, insns, start, end)
+        if proof is not None:
+            return proof
+        import objdiff_scanf_literal
+        return objdiff_scanf_literal.certify(self, k, insns, start, end)
 
     def name_at(self, address, mnemonic, address_operand=False, literal_proof=None):
         if address in self.func_start:
@@ -1418,6 +1422,7 @@ def _norm_key():
                                    for p in (here / "objdiff.py", here / "elfimage.py", here / "objdiff_eh.py", here / "objdiff_disasm.py", here / "objdiff_literal_flow.py",
                                              here / "objdiff_saved_argument.py", here / "objdiff_literal_frames.py",
                                              here / "objdiff_null_field.py", here / "objdiff_wcslen_append.py",
+                                             here / "objdiff_scanf_literal.py",
                                              NORM_CACHE.parent / "elfdb.json") if p.exists()]
 
 

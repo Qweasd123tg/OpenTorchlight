@@ -55,12 +55,13 @@ def immutable_loaded_range(side, address, size, executable=False):
     return covered
 
 
-def import_identity(image, name):
+def import_identity(image, name, expected=None):
     """Bind the explicit semantics to unique original dynamic version metadata."""
     try:
         syms = [s for s in image.dynsyms if s.name == name and not s.defined
                 and s.bind == 1 and s.type == 2]
-        if len(syms) != 1 or name not in CONTRACTS:
+        expected = CONTRACTS.get(name) if expected is None else expected
+        if len(syms) != 1 or expected is None:
             return None
         def data(name):
             s = image.section(name)
@@ -94,7 +95,7 @@ def import_identity(image, name):
             if not nxt:
                 break
             off += nxt
-        if found != [(*CONTRACTS[name], 0)]:
+        if found != [(*expected, 0)]:
             return None
         return {'symbol': name, 'soname': found[0][0], 'version': found[0][1],
                 'evidence': 'original dynamic version tables; explicit nonretaining ABI contract'}
