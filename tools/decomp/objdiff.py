@@ -471,9 +471,10 @@ class OriginalSide(Normalizer):
 
     WSTRING_CTOR = "_ZNSbIwSt11char_traitsIwESaIwEEC1EPKwRKS1_"
 
+    WSTRING_DTOR = "_ZNSbIwSt11char_traitsIwESaIwEED1Ev"
     WSTRING_COMPARE = "_ZNKSbIwSt11char_traitsIwESaIwEE7compareEPKw"
 
-    def _prefix_wide_literal_use(self, k, insns):
+    def _prefix_wide_literal_use(self, k, insns, start=None, end=None):
         """Prove one immediate's width from an original imported consumer.
 
         Legacy, deliberately tiny straight-line SysV idiom, never candidate
@@ -502,9 +503,12 @@ class OriginalSide(Normalizer):
                 callee = self.image.plt.get(target, "").split("@")[0]
                 if callee != self.WSTRING_CTOR:
                     return None
-                return {"load": address, "call": pc, "callee": callee,
-                        "argument": "rsi", "width": 4,
-                        "literal": int(match.group(1), 16)}
+                # A proven consumer establishes width, but not that pointer
+                # identity is unobservable afterwards. The old prefix shape is
+                # never sufficient to bypass normal/EH lifetime validation.
+                if start is None or end is None:
+                    return None
+                return self._forward_wide_literal_use(k, insns, start, end)
             if self.padding(mnemonic, operands):
                 continue
             if i > k and any(self.register(r) == ("si", bits)
@@ -548,13 +552,26 @@ class OriginalSide(Normalizer):
         if cls._mentions_rsi(operands):
             return False
         if mnemonic in ("mov", "movb", "movw", "movl", "movq", "movabs", "lea",
-                        "xor", "xorl", "xorq", "test", "testl", "testq", "cmp", "cmpl", "cmpq",
+                        "xor", "xorl", "xorq", "or", "orl", "orq", "test", "testl", "testq", "cmp", "cmpl", "cmpq",
                         "add", "addl", "addq", "sub", "subl", "subq", "shl", "shr", "sar"):
             # Only ordinary AT&T operands. Reject segments, unsupported prefixes,
             # and implicit-register forms even if disassembly was unfamiliar.
             return (
                 len(operands.split(",")) >= 2 and ":" not in operands
                 and not any(x in operands for x in ("*", "#")))
+        if mnemonic == "xorps":
+            # Register-only SSE bitwise XOR reads/writes only named XMM regs;
+            # no integer-register or flags input/output, no memory addressing.
+            return bool(re.fullmatch(r"%xmm(?:[0-9]|1[0-5]),%xmm(?:[0-9]|1[0-5])", operands))
+        if mnemonic in ("lock xadd", "lock xaddl", "lock xaddq"):
+            # Exact ordinary XADD register -> base+displacement memory form.
+            # Both explicit operands exclude RSI above; XADD has no implicit
+            # integer-register inputs (flags are outputs, not inputs).
+            match = re.fullmatch(r"(%[a-z0-9]+),(-?0x[0-9a-f]+)?\((%[a-z0-9]+)\)", operands)
+            if match:
+                source, base = cls.register(match.group(1)), cls.register(match.group(3))
+                return bool(source and source[1] in (32, 64) and base and base[1] == 64)
+            return False
         return mnemonic in ("push", "pop") and cls.register(operands) is not None
 
     def _literal_eh(self, insns, start, end):
@@ -623,12 +640,20 @@ class OriginalSide(Normalizer):
 
         This is deliberately NOT a kill summary. Callers continue checking RSI
         after the call, including a nullable wrapper's preserve-and-return path.
-        Only original bodies, supported cleanup EH and pinned library bytes are
-        evidence; a C++ signature or callee name is never enough for a local call.
+        Apart from explicit standard/import ABI contracts, only original bodies,
+        supported cleanup EH and pinned library bytes are evidence. A callee name
+        alone is never sufficient for a local call.
         """
         if depth > 4 or target is None:
             return None
         name = image.plt.get(target, "").split("@")[0]
+        if name == self.WSTRING_DTOR:
+            # Explicit standard-library ABI contract, NOT a claim to have the
+            # original libstdc++ DSO. Complete wchar basic_string destruction
+            # has only `this` in RDI; the incoming volatile RSI is not an input.
+            return {"kind": "standard-library-abi-no-rsi-input", "callee": name,
+                    "contract": "wstring-D1-this-only-v1",
+                    "effect": "may-preserve-not-observe"}
         if name in ("_ZdlPv", "_ZdaPv", "_Unwind_Resume"):
             return {"kind": "known-import-no-rsi-argument", "callee": name,
                     "effect": "may-preserve-not-observe"}
@@ -761,24 +786,28 @@ class OriginalSide(Normalizer):
         return {"entry": entry, "visited": sorted(insns[i][0] for i in seen), "calls": calls}
 
     def _rsi_normal_dead(self, insns, entry, start, eh):
-        """Finite forward CFG: incoming RSI is never observed before kill/return.
+        """Finite acyclic CFG: incoming RSI is never observed before kill/return.
 
         RSI is not a SysV return register. A normal return ends this function's
         obligation under the existing ABI-normalized comparator contract. Calls
         may preserve RSI: their summaries never replace checking the continuation.
-        Backedges are deliberately rejected, even when a loop could be harmless.
+        Backward layout edges are allowed; DFS gray-state edges reject actual cycles.
         """
         positions = {row[0]: i for i, row in enumerate(insns)}
         if entry not in positions:
             return None
-        pending, seen, kills, returns, calls, cleanups = [positions[entry]], set(), [], [], [], []
+        pending, state, kills, returns, calls, cleanups = [(positions[entry], False)], {}, [], [], [], []
         while pending:
-            i = pending.pop()
-            if i in seen:
+            i, leaving = pending.pop()
+            if leaving:
+                state[i] = 2
                 continue
-            if not 0 <= i < len(insns):
+            if state.get(i) == 2:
+                continue
+            if state.get(i) == 1 or not 0 <= i < len(insns):
                 return None
-            seen.add(i)
+            state[i] = 1
+            pending.append((i, True))
             pc, op, args = insns[i]
             args = args.split("#", 1)[0].strip()
             if self._rsi_kill(op, args):
@@ -798,23 +827,23 @@ class OriginalSide(Normalizer):
                             return None
                         cleanups.append(cleanup)
                 if self.image.plt.get(target, "").split("@")[0] != "_Unwind_Resume":
-                    pending.append(i + 1)
+                    pending.append((i + 1, False))
             elif op.startswith("j"):
                 if op not in ("jmp", "je", "jne", "ja", "jae", "jb", "jbe", "jg", "jge", "jl", "jle", "js", "jns"):
                     return None
                 target = self.direct_target(args)
-                if target not in positions or positions[target] <= i:
+                if target not in positions:
                     return None
-                pending.append(positions[target])
+                pending.append((positions[target], False))
                 if op != "jmp":
-                    pending.append(i + 1)
+                    pending.append((i + 1, False))
             elif self._literal_independent_instruction(op, args):
-                pending.append(i + 1)
+                pending.append((i + 1, False))
             else:
                 return None
-        return {"entry": entry, "visited": sorted(insns[i][0] for i in seen),
+        return {"entry": entry, "visited": sorted(insns[i][0] for i in state),
                 "kills": sorted(kills), "returns": sorted(returns),
-                "calls": calls, "cleanup": cleanups, "cfg": "forward-only-v1"}
+                "calls": calls, "cleanup": cleanups, "cfg": "acyclic-dfs-v1"}
 
     def _forward_wide_literal_use(self, k, insns, start, end):
         """Classify this executed load, not all possible entries to its consumer.
@@ -866,7 +895,7 @@ class OriginalSide(Normalizer):
                 "normal_kill": kill, "normal": normal, "cleanup": cleanups, "eh_kind": eh["kind"]}
 
     def wide_literal_use(self, k, insns, start=None, end=None):
-        proof = self._prefix_wide_literal_use(k, insns)
+        proof = self._prefix_wide_literal_use(k, insns, start, end)
         if proof is not None or start is None or end is None:
             return proof
         return self._forward_wide_literal_use(k, insns, start, end)
