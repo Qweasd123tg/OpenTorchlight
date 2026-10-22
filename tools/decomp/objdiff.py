@@ -249,7 +249,30 @@ class Normalizer:
         return False
 
     @classmethod
-    def table_size(cls, k, insns, register=None):
+    def guard_store(cls, mnemonic, operands):
+        """A narrow GPR-to-memory MOV: neither EFLAGS nor any GPR is written.
+
+        Only unprefixed 32/64-bit moves to a simple 64-bit base+displacement
+        cell are admitted. This is NOT an alias proof; the table caller must
+        separately establish immutable code and table storage.
+        """
+        match = re.fullmatch(r"(%\w+),(-?0x[0-9a-f]+)?\((%\w+)\)", operands)
+        if not match:
+            return False
+        source, base = cls.register(match[1]), cls.register(match[3])
+        if not source or source[1] not in (32, 64) or not base or base[1] != 64:
+            return False
+        return mnemonic == "mov" or mnemonic == {32: "movl", 64: "movq"}[source[1]]
+
+    @staticmethod
+    def readonly_section(section, offset, size, executable=False):
+        """Complete SHF_ALLOC range with no SHF_WRITE (and executable code)."""
+        return bool(section and size > 0 and 0 <= offset and offset + size <= section.size
+                    and section.flags & 2 and not section.flags & 1
+                    and (not executable or section.flags & 4))
+
+    @classmethod
+    def table_size(cls, k, insns, register=None, allow_guard_stores=False):
         """Prove an unsigned guard of this index, rather than use a nearby cmp.
 
         Supported guards dominate the dispatch and their in-range edge follows
@@ -269,7 +292,8 @@ class Normalizer:
             if not bound or bound[1] not in (32, 64):
                 continue
             guard = compare + 1
-            while guard < k and cls.padding(insns[guard][1], insns[guard][2]):
+            while guard < k and (cls.padding(insns[guard][1], insns[guard][2])
+                                 or allow_guard_stores and cls.guard_store(insns[guard][1], insns[guard][2])):
                 guard += 1
             if guard >= k:
                 continue
@@ -376,9 +400,13 @@ class Normalizer:
                 return count
         return None
 
-    def jump_table(self, k, entries, register, start, end, offsets, insns):
+    def jump_table(self, k, entries, register, start, end, offsets, insns, guard_store_safe=None):
         """Compare every entry of a proved range; missing targets forbid MATCH."""
         count = self.table_size(k, insns, register)
+        if count is None and guard_store_safe is not None:
+            candidate = self.table_size(k, insns, register, allow_guard_stores=True)
+            if candidate is not None and guard_store_safe(candidate):
+                count = candidate
         if count is None:
             count = self.memory_table_size(k, insns, register)
         if count is None:
@@ -910,6 +938,38 @@ class OriginalSide(Normalizer):
             return f"{section.name}:{address:#x}"
         return f"{address:#x}"
 
+    def immutable_loaded_range(self, address, size, executable=False):
+        """Both section attributes and actual ELF PT_LOAD permissions agree.
+
+        The existing static-image contract excludes runtime remapping or
+        self-modifying code. A successful ordinary store cannot alter a
+        non-writable mapped code/table range. Reject overlapping writable
+        mappings and incomplete or non-file-backed ranges.
+        """
+        section = self.image.section_at(address)
+        if not section or not self.readonly_section(section, address - section.addr, size, executable):
+            return False
+        covered = False
+        for kind, flags, offset, vaddr, paddr, filesz, memsz, align in self.image.segments:
+            if kind != 1:
+                continue
+            if (offset < 0 or filesz < 0 or memsz < filesz
+                    or offset + filesz > len(self.image.data)
+                    or (offset - vaddr) & 0xfff):
+                return False
+            if memsz <= 0:
+                continue
+            # x86-64 Linux maps PT_LOAD at 4 KiB page granularity. An
+            # overlapping writable page invalidates protection even when
+            # the declared segment byte intervals themselves are disjoint.
+            page_start = vaddr & ~0xfff
+            page_end = (vaddr + memsz + 0xfff) & ~0xfff
+            if flags & 2 and address < page_end and address + size > page_start:
+                return False
+            if vaddr <= address and address + size <= vaddr + filesz and flags & 4:
+                covered = covered or not executable or bool(flags & 1)
+        return covered
+
     def token(self, k, address, nxt, mnemonic, operands, start, end, offsets, insns):
         m = re.match(r"^([0-9a-f]+) <([^>]+)>$", operands)
         if m and (mnemonic.startswith(("j", "call", "loop"))):
@@ -937,7 +997,9 @@ class OriginalSide(Normalizer):
                         yield "external:" + name.split("@")[0] if name else target
                     else:
                         yield target
-            return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns)
+            return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns,
+                                   guard_store_safe=lambda count: self.immutable_loaded_range(base, count * 8)
+                                   and self.immutable_loaded_range(start, end - start, executable=True))
 
         def rip(mm):
             target = nxt + int(mm.group(1), 16) * (-1 if mm.group(0).startswith("-") else 1)
@@ -1032,7 +1094,11 @@ class ObjectSide(Normalizer):
                         yield "external:" + token
                     else:
                         yield None
-            return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns)
+            return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns,
+                                   guard_store_safe=lambda count: self.readonly_section(
+                                       self.obj.sections[symbol.shndx], base, count * 8)
+                                   and self.readonly_section(self.obj.sections[self.section_index],
+                                                             start, end - start, executable=True))
         m = re.match(r"^([0-9a-f]+) <([^>]+)>$", operands)
         if m and mnemonic.startswith(("j", "call", "loop")):
             if relocs:
