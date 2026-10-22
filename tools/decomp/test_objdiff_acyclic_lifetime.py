@@ -116,7 +116,7 @@ class AcyclicLifetimeTest(unittest.TestCase):
         self.assertNotIn('body_sha256',proof)
 
     def test_destructor_other_specialization_and_local_name_reject(self):
-        for name in [self.side.WSTRING_DTOR+'X',self.side.WSTRING_DTOR.replace('D1','D2'),'_ZNSsD1Ev']:
+        for name in [self.side.WSTRING_DTOR+'X',self.side.WSTRING_DTOR.replace('D1','D2'),'_ZNSsD0Ev']:
             self.side.image.plt[0x555300]=name
             self.assertIsNone(self.side._nonobserving_callee(self.side.image,0x555300))
         del self.side.image.plt[0x555300]
