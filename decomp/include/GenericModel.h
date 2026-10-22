@@ -24,6 +24,7 @@ class CGenericModel : public CPositionableObject, public iRandomWeight, public i
     friend class CTriggerUnit;
     friend class CSkillEvent;
     friend class CLevel;
+    friend class CRoomPiece;
 friend class CEquipment;
 friend class CCharacter;
 friend class CPlayer;

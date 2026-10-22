@@ -2577,6 +2577,41 @@ class UIExactContextPins(TestCase):
         self.assertEqual(self.index._pinned_insert_headers(self.add, self.add["scope"]), set())
         self.assertEqual(self.index._pinned_destructor_headers(self.dtor, self.dtor["scope"]), set())
 
+    def test_missing_owner_pointer_arrays_have_exact_existing_destructors(self):
+        wide = "std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >"
+        for scope, address, prefix, pointee in [
+                ("TArrayList<CMod*>", 0xc86b30, "_ZN10TArrayListIP4CModE", "CMod"),
+                ("TArrayList<CAchievement*>", 0xecdf30, "_ZN10TArrayListIP12CAchievementE", "CAchievement"),
+                ("TArrayList<TArrayList<" + wide + " >*>", 0x935e40,
+                 "_ZN10TArrayListIPS_ISbIwSt11char_traitsIwESaIwEEEE", None)]:
+            with self.subTest(scope=scope):
+                expected = {"TArrayList.h"}
+                if pointee:
+                    name = pointee + ".h"
+                    source = "class " + pointee + " {};\n"
+                    self.index.sources[name] = source
+                    self.index.mapping[pointee] = [name]
+                    self.index.header_classes[name] = {pointee}
+                    self.index._path("include", name).write_text(source)
+                    expected.add(name)
+                row = function(address, scope, "~TArrayList", size=26,
+                               kind="inline_or_template", bind=["weak"])
+                row["names"] = [prefix + "D1Ev", prefix + "D2Ev"]
+                row["mangled"] = row["names"][0]
+                self.index.elf_weak_functions.update((address, name, 26) for name in row["names"])
+                method = self.index._pinned_destructor_headers
+                self.assertEqual(method(row, scope), expected)
+                for delta in [{"address": hex(address + 16)}, {"size": 27},
+                              {"bind": ["global"]}, {"names": row["names"][:1]},
+                              {"params": "int"}, {"cv": "const"}]:
+                    self.assertEqual(method(dict(row, **delta), scope), set())
+                self.index.elf_weak_functions.remove((address, row["names"][1], 26))
+                self.assertEqual(method(row, scope), set())
+                self.index.elf_weak_functions.add((address, row["names"][1], 26))
+                if pointee:
+                    del self.index.header_classes[pointee + ".h"]
+                    self.assertEqual(method(row, scope), set())
+
 
 class UIScalarInitializers(TestCase):
  def scan(self,text):

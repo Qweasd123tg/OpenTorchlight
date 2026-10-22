@@ -10,6 +10,43 @@
 #include "ResourceManager.h"
 #include "SceneNodeObject.h"
 #include "UtilitiesMath.h"
+#include "MasterResourceManager.h"
+#include <OgreSceneManager.h>
+#include <OgreSceneNode.h>
+
+namespace ParticleUniverse {
+class ParticleSystem {
+public:
+    virtual ~ParticleSystem();
+    void stop();
+};
+class ParticleSystemManager {
+public:
+    void destroyParticleSystem(ParticleSystem*, Ogre::SceneManager*);
+};
+}
+
+CParticleCache::~CParticleCache()
+{
+    mCameraShakeSystems.deleteAll();
+    for (unsigned int i = 0; i < mParticleSceneNodes.size(); ++i) {
+        if (mParticleSceneNodes[i]) {
+            OGRE_UTILITIES::removeChildFromParentNode(mParticleSceneNodes[i]);
+            mParticleSceneNodes[i]->detachAllObjects();
+            m_pSceneManager->destroySceneNode(mParticleSceneNodes[i]);
+            mParticleSceneNodes[i] = NULL;
+        }
+    }
+    for (unsigned int i = 0; i < mActiveParticleSystems.size(); ++i) {
+        mActiveParticleSystems[i]->stop();
+        CMasterResourceManager::getSingleton()->m_pParticleSystemManager->destroyParticleSystem(
+            mActiveParticleSystems[i], m_pSceneManager);
+    }
+    mActiveParticleSystems.clear();
+    for (unsigned int i = 0; i < mSoundSampleIDs.size(); ++i)
+        m_pSoundBank->stop(mSoundSampleIDs[i]);
+    mSoundSampleIDs.clear();
+}
 
 void CParticleCache::playSounds(Ogre::SceneNode* sceneNode)
 {

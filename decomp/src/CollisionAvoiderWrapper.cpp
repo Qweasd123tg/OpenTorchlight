@@ -23,6 +23,6 @@ class CollisionAvoidanceAffector { public: void setRadius(float radius); };
 CCollisionAvoiderWrapper::CCollisionAvoiderWrapper(CResourceManager* resources)
     : CColliderWrapper(resources, "CollisionAvoidance")
 {
-    m_padding11A[0] = 0; // This wrapper's initial flag occupies the base tail at +0x11a.
+    m_bCollider11A = false;
     reinterpret_cast<ParticleUniverse::CollisionAvoidanceAffector*>(m_pAffector)->setRadius(1.0f);
 }

@@ -9084,7 +9084,7 @@ void CCharacter::updateAnimation(float elapsed)
                     if (bone) m_weaponTrails[trail]->setWeaponNode(bone);
                     m_weaponTrails[trail]->setActive(true);
                     key = m_pUnitModel->m_AnimationEvents[event];
-                    std::memcpy(m_weaponTrails[trail]->m_Unrecovered89 + 7, &key->m_offset, 12);
+                    std::memcpy(&m_weaponTrails[trail]->m_positionOffset, &key->m_offset, 12);
                 }
                 key = m_pUnitModel->m_AnimationEvents[event];
             } else if (m_pInventory) {
@@ -9110,7 +9110,7 @@ void CCharacter::updateAnimation(float elapsed)
                         active = m_weaponTrails[1];
                     }
                 }
-                if (active) std::memset(active->m_Unrecovered89 + 7, 0, 12);
+                if (active) std::memset(&active->m_positionOffset, 0, 12);
                 key = m_pUnitModel->m_AnimationEvents[event];
             }
             std::string material = STRINGS::StringConvertToNarrow(key->m_text.c_str());

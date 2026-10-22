@@ -1,6 +1,7 @@
 #include "EmptyStrings.h"
 #include "GameVariables.h"
 #include "ModFileFilter.h"
+#include "DataGroup.h"
 
 unsigned int CModFileFilter::getNumberOfActiveMods()
 {
@@ -24,6 +25,13 @@ unsigned int CModFileFilter::getNumberOfActiveMods()
 
 #include "Mod.h"
 #include "FileSystem.h"
+
+CModFileFilter::~CModFileFilter()
+{
+    g_pModFileFilter = NULL;
+    saveModFile(false);
+    m_Mods.deleteAll();
+}
 
 CModFileFilter* CModFileFilter::getSingleton()
 {
@@ -118,4 +126,31 @@ void CModFileFilter::getFiles(const std::wstring& directory, TArrayList<std::wst
     for (unsigned int i = 0; i < found.size(); ++i)
         if (files.find(found[i]) == -1)
             files.add(found[i]);
+}
+
+bool CModFileFilter::saveModFile(bool force)
+{
+    if (!m_b30 && !force)
+        return false;
+    CDataGroup data(L"MODS", NULL, 20, 10, NULL);
+    data.AddDataValue(L"CHECKFORNEW", m_b30);
+    for (unsigned int i = 0; i < m_Mods.size(); ++i) {
+        if (m_Mods[i]->m_iUnknown74 >= 0) {
+            CDataGroup* group = data.AddDataGroup(L"MOD");
+            group->SetDataValue(L"DIRECTORY", m_Mods[i]->m_wUnknown68, false);
+            group->SetDataValue(L"PRIORITY", int(i));
+            group->SetDataValue(L"COMPRESSED", true);
+        }
+    }
+    for (unsigned int i = 0; i < m_Mods.size(); ++i) {
+        if (m_Mods[i]->m_iUnknown74 < 0) {
+            CDataGroup* group = data.AddDataGroup(L"MOD");
+            group->SetDataValue(L"DIRECTORY", m_Mods[i]->m_wUnknown68, false);
+            group->SetDataValue(L"PRIORITY", -1);
+            group->SetDataValue(L"COMPRESSED", false);
+        }
+    }
+    FILESYSTEM::CreateAppDataDirectory(m_sModsFile);
+    data.SaveToFile(m_sModsFile + L"mods.dat");
+    return true;
 }

@@ -145,6 +145,8 @@ namespace ParticleUniverse
 			void setMin (Ogre::Real min);
 			void setMax (Ogre::Real max);
 			void setMinMax (Ogre::Real min, Ogre::Real max);
+			Ogre::Real getMin (void);
+			Ogre::Real getMax (void);
 
 			/** 
 			*/

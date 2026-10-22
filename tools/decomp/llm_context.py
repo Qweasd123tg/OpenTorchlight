@@ -1284,6 +1284,12 @@ class ContextIndex:
             "TArrayList<CDataGroup*>":
                 (0x85acd0, 26, "_ZN10TArrayListIP10CDataGroupE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<CMod*>":
+                (0xc86b30, 26, "_ZN10TArrayListIP4CModE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CMod"),
+            "TArrayList<CAchievement*>":
+                (0xecdf30, 26, "_ZN10TArrayListIP12CAchievementE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, "CAchievement"),
             "TArrayList<UNIONDATA32BIT>":
                 (0x70ca90, 26, "_ZN10TArrayListI14UNIONDATA32BITE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
@@ -1325,6 +1331,9 @@ class ContextIndex:
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<TArrayList<CQuestUnitData*>*>":
                 (0xd1d3d0, 26, "_ZN10TArrayListIPS_IP14CQuestUnitDataEE",
+                 "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
+            "TArrayList<TArrayList<" + wide + " >*>":
+                (0x935e40, 26, "_ZN10TArrayListIPS_ISbIwSt11char_traitsIwESaIwEEEE",
                  "~TArrayList", "TArrayList.h", self.WINDOW_ARRAY_HEADER_SHA256, None),
             "TArrayList<" + wide + " >":
                 (0x5f8e90, 155, "_ZN10TArrayListISbIwSt11char_traitsIwESaIwEEE",

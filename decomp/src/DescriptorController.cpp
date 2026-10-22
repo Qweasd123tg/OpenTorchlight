@@ -1,6 +1,8 @@
 #include "DescriptorController.h"
 #include "DescriptorRegistry.h"
 #include "DescriptorControllerState.h"
+#include "DescriptorProp.h"
+#include "EditorBaseObject.h"
 #include "AlignDescriptor.h"
 #include "AnimationPlayerDescriptor.h"
 #include "BoxColliderDescriptor.h"
@@ -58,6 +60,39 @@
 #include "VortexAffectorDescriptor.h"
 #include "WarperDescriptor.h"
 #include "WaypointActivatorDescriptor.h"
+
+CDescriptorController::~CDescriptorController()
+{
+    for (std::map<std::wstring, TArrayList<CDescriptorProp*>*>::iterator i = m_Properties.begin();
+         i != m_Properties.end(); ++i) {
+        i->second->deleteAll();
+        if (i->second) {
+            delete i->second;
+            i->second = NULL;
+        }
+    }
+    m_Properties.clear();
+    for (std::map<std::wstring, TArrayList<CDescriptorProp*>*>::iterator i = m_DefaultProperties.begin();
+         i != m_DefaultProperties.end(); ++i) {
+        i->second->deleteAll();
+        if (i->second) {
+            delete i->second;
+            i->second = NULL;
+        }
+    }
+    m_DefaultProperties.clear();
+    if (g_CachedObjects.size()) {
+        for (std::map<std::wstring, TArrayList<CEditorBaseObject*>*>::iterator i = g_CachedObjects.begin();
+             i != g_CachedObjects.end(); ++i) {
+            i->second->deleteAll();
+            if (i->second) {
+                delete i->second;
+                i->second = NULL;
+            }
+        }
+        g_CachedObjects.clear();
+    }
+}
 
 static void* Set_CWaypointActivatorDescriptorParam1()
 {

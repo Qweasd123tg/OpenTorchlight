@@ -1,4 +1,6 @@
 #include "RoomPiece.h"
+#include "CameraControl.h"
+#include <OgreAxisAlignedBox.h>
 
 void CRoomPiece::setHighlighted(bool highlighted)
 {
@@ -11,6 +13,17 @@ bool CRoomPiece::getRoomPieceIsAnimated()
     if (m_pGenericModel)
         return m_pGenericModel->getAnimationCount() != 0;
     return false;
+}
+
+void CRoomPiece::updateAnimation(float elapsed)
+{
+    if (getRoomPieceIsAnimated()) {
+        Ogre::Vector3 position = getPosition(true);
+        Ogre::AxisAlignedBox bounds(m_pGenericModel->m_boundsMinimum + position,
+                                   m_pGenericModel->m_boundsMaximum + position);
+        if (m_pResourceManager->getCameraControl()->m_cameras[0]->isVisible(bounds, NULL))
+            m_pGenericModel->updateAnimation(elapsed, false);
+    }
 }
 
 #include "EditorScene.h"

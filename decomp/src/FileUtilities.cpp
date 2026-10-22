@@ -7,6 +7,65 @@
 #include "LinuxUtils.h"
 #include <sys/stat.h>
 #include "StringUtilities.h"
+#include "Utilities.h"
+#include <OgreUTFString.h>
+#include <queue>
+
+struct _FILETIME
+{
+    unsigned long dwLowDateTime;
+    unsigned long dwHighDateTime;
+};
+
+bool SetFileTime(void*, const _FILETIME*, const _FILETIME*, const _FILETIME*);
+int CreateDirectory(const wchar_t*, void*);
+
+namespace FILESYSTEM
+{
+void setFileTime(const std::wstring& path, long long creation, long long access, long long write)
+{
+    Ogre::UTFString name(path);
+    _WIN32_FIND_DATA data;
+    void* handle = FindFirstFile(name.asUTF8_c_str(), &data);
+    if (handle) {
+        if (!access)
+            access = creation;
+        if (!write)
+            write = creation;
+        _FILETIME creationTime;
+        _FILETIME accessTime;
+        _FILETIME writeTime;
+        creationTime.dwLowDateTime = creation & 0xffffffffULL;
+        creationTime.dwHighDateTime = creation & 0xffffffff00000000ULL;
+        accessTime.dwLowDateTime = access & 0xffffffffULL;
+        accessTime.dwHighDateTime = access & 0xffffffff00000000ULL;
+        writeTime.dwLowDateTime = write & 0xffffffffULL;
+        writeTime.dwHighDateTime = write & 0xffffffff00000000ULL;
+        SetFileTime(handle, &creationTime, &accessTime, &writeTime);
+    }
+}
+}
+
+bool FILESYSTEM::CreateAppDataDirectory(const std::wstring& path)
+{
+    std::wstring directory = STRINGS::replaceWString(path, L"\\", L"/");
+    std::wstring::size_type dot = directory.find_first_of(L".");
+    if (dot != std::wstring::npos && dot != 0)
+        directory = directory.substr(0, directory.length() - GetFileName(path).length());
+    std::wstring current = UTILITIES::GetEnvironmentVar(L"APPDATA");
+    std::wstring relative = STRINGS::replaceWString(directory, current, EMPTY_WSTRING);
+    std::queue<std::wstring> parts;
+    STRINGS::TokenizeString(&parts, relative, L"/");
+    while (parts.size()) {
+        std::wstring part = parts.front();
+        if (!part.empty()) {
+            current = current + L"/" + part;
+            CreateDirectory(current.c_str(), NULL);
+        }
+        parts.pop();
+    }
+    return true;
+}
 
 short FILESYSTEM::ReadShort(FILE* file)
 {

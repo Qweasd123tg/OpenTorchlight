@@ -4,7 +4,20 @@
 #include "GameVariables.h"
 #include "Dungeon.h"
 #include "LevelTemplateData.h"
+#include "DataGroup.h"
 #include "RunicCore.h"
+
+CDungeon::~CDungeon()
+{
+    m_strataData.clear();
+    if (m_pDungeonData) {
+        delete m_pDungeonData;
+        m_pDungeonData = NULL;
+    }
+    m_mustBeCompleted.deleteAll();
+    m_mustBeCompletedOrActive.deleteAll();
+    m_levelTemplateData.deleteAll();
+}
 
 CDungeon::CDungeon()
     : CRunicCore(),

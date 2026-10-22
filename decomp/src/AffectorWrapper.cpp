@@ -69,8 +69,29 @@ CAffectorWrapper::~CAffectorWrapper()
 
 #include "EditorScene.h"
 #include "MasterResourceManager.h"
+#include "ParticleUniverseAffector.h"
 namespace ParticleUniverse {
-class ParticleSystemManager { public: void destroyAffector(ParticleAffector*); };
+class ParticleSystemManager {
+public:
+    ParticleAffector* createAffector(const std::string& name);
+    void destroyAffector(ParticleAffector*);
+};
+}
+
+namespace {
+struct AffectorAccess : ParticleUniverse::ParticleAffector
+{
+    void clearRunicFlag() { mRunicFlag110 = false; }
+};
+}
+
+CAffectorWrapper::CAffectorWrapper(CResourceManager* resources, std::string name)
+    : CPositionableObject(resources, NULL), m_pParticleTechWrapper(NULL),
+      m_pAffector(NULL), m_bPositioningEnabled(true), m_bEnabled(true)
+{
+    m_pAffector = CMasterResourceManager::getSingleton()->m_pParticleSystemManager->createAffector(name);
+    m_bEnabled = true;
+    reinterpret_cast<AffectorAccess*>(m_pAffector)->clearRunicFlag();
 }
 
 void CAffectorWrapper::setParentGuid(long long guid)
