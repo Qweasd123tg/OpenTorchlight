@@ -32,7 +32,7 @@ CRunicCore::~CRunicCore()
 {
     if (m_pSafePointers)
     {
-        for (unsigned int i = 0; i < m_pSafePointers->size(); i++)
+        for (unsigned int i = 0; __builtin_expect(i < m_pSafePointers->size(), 1); i++)
             (*m_pSafePointers)[i]->invalidate();
 
         delete m_pSafePointers;
