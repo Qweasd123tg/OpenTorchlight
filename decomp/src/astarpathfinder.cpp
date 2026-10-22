@@ -292,33 +292,24 @@ void CAstarPathfinder::generateSuccessor(CAstarNode* pParent, unsigned int iX,
 
 void CAstarPathfinder::generateSuccessors(CAstarNode* pNode, unsigned int iGoalX, unsigned int iGoalY)
 {
-    unsigned int iX = pNode->m_iX;
-    unsigned int iY = pNode->m_iY;
-    if (tileFree(iX, iY - 1, NODE_NORTH))
-    {
-        if (tileFree(iX - 1, iY, NODE_WEST) && tileFree(iX - 1, iY - 1, NODE_NORTHWEST))
-            generateSuccessor(pNode, iX - 1, iY - 1, iGoalX, iGoalY);
-        if (tileFree(iX - 1, iY - 1, NODE_NORTH) || tileFree(iX + 1, iY - 1, NODE_NORTH))
-            generateSuccessor(pNode, iX, iY - 1, iGoalX, iGoalY);
-        if (tileFree(iX + 1, iY, NODE_EAST) && tileFree(iX + 1, iY - 1, NODE_NORTHEAST))
-            generateSuccessor(pNode, iX + 1, iY - 1, iGoalX, iGoalY);
-    }
-    if ((tileFree(iX + 1, iY - 1, NODE_NORTH) || tileFree(iX + 1, iY + 1, NODE_NORTH)) &&
-        tileFree(iX + 1, iY, NODE_EAST))
-        generateSuccessor(pNode, iX + 1, iY, iGoalX, iGoalY);
-    if (tileFree(iX, iY + 1, NODE_SOUTH))
-    {
-        if (tileFree(iX + 1, iY, NODE_EAST) && tileFree(iX + 1, iY + 1, NODE_SOUTHEAST))
-            generateSuccessor(pNode, iX + 1, iY + 1, iGoalX, iGoalY);
-        if (tileFree(iX - 1, iY + 1, NODE_NORTH) || tileFree(iX + 1, iY + 1, NODE_NORTH))
-            generateSuccessor(pNode, iX, iY + 1, iGoalX, iGoalY);
-        if (tileFree(iX - 1, iY, NODE_WEST) && tileFree(iX - 1, iY + 1, NODE_SOUTHWEST))
-            generateSuccessor(pNode, iX - 1, iY + 1, iGoalX, iGoalY);
-    }
-    if ((tileFree(iX - 1, iY - 1, NODE_NORTH) || tileFree(iX - 1, iY + 1, NODE_NORTH)) &&
-        tileFree(iX - 1, iY, NODE_WEST))
-        generateSuccessor(pNode, iX - 1, iY, iGoalX, iGoalY);
+    if (tileFree(pNode->m_iX, pNode->m_iY - 1, NODE_NORTH) && tileFree(pNode->m_iX - 1, pNode->m_iY, NODE_WEST) && tileFree(pNode->m_iX - 1, pNode->m_iY - 1, NODE_NORTHWEST))
+        generateSuccessor(pNode, pNode->m_iX - 1, pNode->m_iY - 1, iGoalX, iGoalY);
+    if ((tileFree(pNode->m_iX - 1, pNode->m_iY - 1, NODE_NORTH) || tileFree(pNode->m_iX + 1, pNode->m_iY - 1, NODE_NORTH)) && tileFree(pNode->m_iX, pNode->m_iY - 1, NODE_NORTH))
+        generateSuccessor(pNode, pNode->m_iX, pNode->m_iY - 1, iGoalX, iGoalY);
+    if (tileFree(pNode->m_iX, pNode->m_iY - 1, NODE_NORTH) && tileFree(pNode->m_iX + 1, pNode->m_iY, NODE_EAST) && tileFree(pNode->m_iX + 1, pNode->m_iY - 1, NODE_NORTHEAST))
+        generateSuccessor(pNode, pNode->m_iX + 1, pNode->m_iY - 1, iGoalX, iGoalY);
+    if ((tileFree(pNode->m_iX + 1, pNode->m_iY - 1, NODE_NORTH) || tileFree(pNode->m_iX + 1, pNode->m_iY + 1, NODE_NORTH)) && tileFree(pNode->m_iX + 1, pNode->m_iY, NODE_EAST))
+        generateSuccessor(pNode, pNode->m_iX + 1, pNode->m_iY, iGoalX, iGoalY);
+    if (tileFree(pNode->m_iX, pNode->m_iY + 1, NODE_SOUTH) && tileFree(pNode->m_iX + 1, pNode->m_iY, NODE_EAST) && tileFree(pNode->m_iX + 1, pNode->m_iY + 1, NODE_SOUTHEAST))
+        generateSuccessor(pNode, pNode->m_iX + 1, pNode->m_iY + 1, iGoalX, iGoalY);
+    if ((tileFree(pNode->m_iX - 1, pNode->m_iY + 1, NODE_NORTH) || tileFree(pNode->m_iX + 1, pNode->m_iY + 1, NODE_NORTH)) && tileFree(pNode->m_iX, pNode->m_iY + 1, NODE_SOUTH))
+        generateSuccessor(pNode, pNode->m_iX, pNode->m_iY + 1, iGoalX, iGoalY);
+    if (tileFree(pNode->m_iX, pNode->m_iY + 1, NODE_SOUTH) && tileFree(pNode->m_iX - 1, pNode->m_iY, NODE_WEST) && tileFree(pNode->m_iX - 1, pNode->m_iY + 1, NODE_SOUTHWEST))
+        generateSuccessor(pNode, pNode->m_iX - 1, pNode->m_iY + 1, iGoalX, iGoalY);
+    if ((tileFree(pNode->m_iX - 1, pNode->m_iY - 1, NODE_NORTH) || tileFree(pNode->m_iX - 1, pNode->m_iY + 1, NODE_NORTH)) && tileFree(pNode->m_iX - 1, pNode->m_iY, NODE_WEST))
+        generateSuccessor(pNode, pNode->m_iX - 1, pNode->m_iY, iGoalX, iGoalY);
 }
+
 
 void CAstarPathfinder::createPath(int iGoalX, int iGoalY, int iStartX, int iStartY, bool bReverse)
 {
