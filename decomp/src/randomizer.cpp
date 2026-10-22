@@ -29,7 +29,7 @@ void CRandomizer::removeChoice(unsigned int choice)
 {
     for (unsigned int i = 0; i < m_Choices.size(); i++)
     {
-        if (m_Choices[i] == (int)choice)
+        if (choice == (unsigned int)m_Choices[i])
         {
             m_Odds.removeAt(i);
             m_Choices.removeAt(i);
@@ -92,27 +92,39 @@ int CRandomizer::getRandom(int& index)
         computeOdds();
 
     float roll = UTILITIES::randomBetween(0.0f, 1.0f);
+    unsigned int i = 0;
     float sum = 0.0f;
-    int picked = -1;
-    for (unsigned int i = 0; i < m_ComputedOdds.size(); i++)
+    for (; i < m_ComputedOdds.size(); i++)
     {
         sum += m_ComputedOdds[i];
-        if (sum > roll)
+        if (roll < sum)
         {
-            picked = i;
-            break;
+            switch (m_eType)
+            {
+            case RANDOMIZER_DECAY:
+                m_Odds[i] *= m_fDecay;
+                m_bOddsDirty = true;
+                break;
+            default:
+                break;
+            }
+            index = i;
+            return m_Choices[i];
         }
     }
 
-    if (m_eType == RANDOMIZER_DECAY)
+    // The original still decays slot zero when no choice is selected.
+    switch (m_eType)
     {
-        m_Odds[picked] *= m_fDecay;
+    case RANDOMIZER_DECAY:
+        m_Odds[-1] *= m_fDecay;
         m_bOddsDirty = true;
+        break;
+    default:
+        break;
     }
-    index = picked;
-    if (picked == -1)
-        return 0;
-    return m_Choices[picked];
+    index = -1;
+    return 0;
 }
 
 int CRandomizer::getRandom()
@@ -122,25 +134,36 @@ int CRandomizer::getRandom()
 
     float roll = UTILITIES::randomBetween(0.0f, 1.0f);
     float sum = 0.0f;
-    int picked = -1;
-    for (unsigned int i = 0; i < m_ComputedOdds.size(); i++)
+    unsigned int i = 0;
+    for (; i < m_ComputedOdds.size(); i++)
     {
         sum += m_ComputedOdds[i];
-        if (sum > roll)
+        if (roll < sum)
         {
-            picked = i;
-            break;
+            switch (m_eType)
+            {
+            case RANDOMIZER_DECAY:
+                m_Odds[i] *= m_fDecay;
+                m_bOddsDirty = true;
+                break;
+            default:
+                break;
+            }
+            return m_Choices[i];
         }
     }
 
-    if (m_eType == RANDOMIZER_DECAY)
+    // The original still decays slot zero when no choice is selected.
+    switch (m_eType)
     {
-        m_Odds[picked] *= m_fDecay;
+    case RANDOMIZER_DECAY:
+        m_Odds[0] *= m_fDecay;
         m_bOddsDirty = true;
+        break;
+    default:
+        break;
     }
-    if (picked == -1)
-        return 0;
-    return m_Choices[picked];
+    return 0;
 }
 
 bool CRandomizer::hasValidChoices()

@@ -35,8 +35,8 @@ void CWarper::activate()
 
         if (m_bWaypoint)
         {
-            CLevel* pLevel = pPlayer->getLevel();
-            pPlayer->addWaypoint(pLevel->getDungeonName(), pLevel->getLevelDepth());
+            pPlayer->addWaypoint(pPlayer->getLevel()->getDungeonName(),
+                                 pPlayer->getLevel()->getLevelDepth());
         }
 
         pResourceManager->getGameClient(iClient)->warpLevels(m_sDungeon,

@@ -1,3 +1,4 @@
+#define OTL_AISTATWATCHER_OMIT_QUEST_COMPLETE_NAMES
 #include "EmptyStrings.h"
 #include "AIStatWatcher.h"
 #include "AIManager.h"
@@ -11,6 +12,7 @@
 #include "Level.h"
 #include "MasterResourceManager.h"
 #include "StringUtilities.h"
+#undef OTL_AISTATWATCHER_OMIT_QUEST_COMPLETE_NAMES
 
 CAIStatWatcher::CAIStatWatcher(CDataGroup* dataGroup, CAIManager* aiManager)
     : m_pAIManager(aiManager), m_pCharacter(NULL), m_eStat(AISTAT_NONE), m_eLogic(AISTAT_LOGIC_BELOW),
@@ -134,9 +136,8 @@ void CAIStatWatcher::getTargets(TArrayList<CCharacter*>& targets)
             CCharacter* unit = m_pCharacter->getLevel()->getCharacterByGuid(formation[i]);
             if (unit == NULL)
                 continue;
-            if (m_eTarget == AISTAT_TARGET_FORMATION)
-                targets.add(unit);
-            else if (unit->getPosition(true).distance(m_pCharacter->getPosition(true)) <= m_fTargetArea)
+            if (m_eTarget == AISTAT_TARGET_FORMATION ||
+                unit->getPosition(true).distance(m_pCharacter->getPosition(true)) <= m_fTargetArea)
                 targets.add(unit);
         }
     }
@@ -145,9 +146,11 @@ void CAIStatWatcher::getTargets(TArrayList<CCharacter*>& targets)
         for (TLinkedListNode<CCharacter*>* node = m_pCharacter->getLevel()->getCharacters()->getHead(); node != NULL;
              node = node->m_pNext)
         {
-            if (node->m_Data->getPosition(true).distance(m_pCharacter->getPosition(true)) <= m_fTargetArea &&
-                (m_eTarget == AISTAT_TARGET_AREA || node->m_Data->ISA(m_eTargetUnitType)))
-                targets.add(node->m_Data);
+            if (node->m_Data->getPosition(true).distance(m_pCharacter->getPosition(true)) <= m_fTargetArea)
+            {
+                if (m_eTarget == AISTAT_TARGET_AREA || node->m_Data->ISA(m_eTargetUnitType))
+                    targets.add(node->m_Data);
+            }
         }
     }
 }
@@ -164,18 +167,20 @@ void CAIStatWatcher::addFlag()
         bool added = false;
         for (unsigned int j = 0; j < m_Flags.size(); j++)
         {
-            if (targets[i]->getAIManager() != NULL && !targets[i]->getAIManager()->hasAIFlag(m_Flags[j]))
-            {
-                targets[i]->getAIManager()->addAIFlag(m_Flags[j], m_fDuration);
-                added = true;
-            }
+            if (targets[i]->getAIManager() != NULL)
+                if (!targets[i]->getAIManager()->hasAIFlag(m_Flags[j]))
+                {
+                    targets[i]->getAIManager()->addAIFlag(m_Flags[j], m_fDuration);
+                    added = true;
+                }
         }
         if (added)
         {
             m_FlaggedUnits.add(targets[i]->getGuid());
-            if (m_sAnimation != EMPTY_STRING)
-                targets[i]->setAIPlayAnimation(m_sAnimation, false, 0.1f, 1.0f);
         }
+        if (added)
+            if (m_sAnimation.size() == EMPTY_STRING.size() ? m_sAnimation != EMPTY_STRING : true)
+                targets[i]->setAIPlayAnimation(m_sAnimation, false, 0.1f, 1.0f);
     }
     m_bTriggered = true;
 }

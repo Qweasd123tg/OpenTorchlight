@@ -174,6 +174,74 @@ class PacketContextTests(TestCase):
         self.assertFalse(self.overload_case("void createUnit(const std::string&);", full + " const&").gaps)
         self.assertFalse(self.overload_case("void createUnit(const " + full + "&);", "std::string const&").gaps)
 
+    def test_standard_queue_deque_defaults_both_directions(self):
+        for short, full in (
+            ('std::deque<int>', 'std::deque<int, std::allocator<int> >'),
+            ('std::queue<int>', 'std::queue<int, std::deque<int> >'),
+            ('std::queue<int>', 'std::queue<int, std::deque<int, std::allocator<int> > >'),
+            ('std::queue<std::queue<int> >',
+             'std::queue<std::queue<int, std::deque<int> >, std::deque<std::queue<int>, std::allocator<std::queue<int> > > >')):
+            for a, b in ((short, full), (full, short)):
+                with self.subTest(declared=a, expected=b):
+                    self.assertFalse(self.overload_case('void createUnit(' + a + '*);', b + '*').gaps)
+
+    def test_standard_queue_real_reader_signature(self):
+        wide = 'std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'
+        params = 'std::queue<' + wide + ', std::deque<' + wide + ', std::allocator<' + wide + '> > >*, wchar_t const*, wchar_t'
+        declaration = 'void ReadLineTokenize(std::queue<std::wstring>* tokens, const wchar_t* separators, wchar_t comment);'
+        self.write_header('FileReader.h', '#include <queue>\n#include <string>\nclass CFileReader { public: ' + declaration + ' };')
+        self.mapping['CFileReader'] = 'FileReader.h'
+        self.add_function(function(0xc72c40, 'CFileReader', 'ReadLineTokenize', tu=1, params=params))
+        result = self.index().build(self.target, '1000: call c72c40').require_complete()
+        self.assertIn(declaration, result.text)
+        self.assertIn('FileReader.h', result.headers)
+
+    def test_standard_queue_nondefaults_are_not_erased(self):
+        bad = ('std::queue<int, std::vector<int> >',
+               'std::queue<int, CustomDeque<int> >',
+               'std::queue<int, std::deque<int, CustomAllocator<int> > >',
+               'std::queue<int, std::deque<int, std::allocator<const int> > >',
+               'std::queue<int, std::deque<const int> >',
+               'std::queue<int, std::deque<int*> >',
+               'std::queue<int, other::deque<int> >',
+               'std::queue<int, std::__debug::deque<int> >',
+               'other::std::queue<int, std::deque<int> >',
+               'std::__debug::queue<int, std::deque<int> >',
+               'std::queue<int, std::deque<int> const>',
+               'std::queue<int, std::deque<int>*>',
+               'std::queue<int, std::deque<int, other::allocator<int> > >')
+        for full in bad:
+            with self.subTest(full=full):
+                self.assertTrue(self.overload_case('void createUnit(std::queue<int>*);', full + '*').gaps)
+
+    def test_standard_queue_preserves_cv_refs_extra_arguments(self):
+        full = 'std::queue<int, std::deque<int, std::allocator<int> > >'
+        for params, cv in ((full + ' const*', ''), (full + '&', ''),
+                           (full + '**', ''), (full + '*, int', ''), (full + '*', 'const')):
+            with self.subTest(params=params, cv=cv):
+                self.assertTrue(self.overload_case('void createUnit(std::queue<int>*);', params, cv).gaps)
+
+    def test_standard_sequence_malformed_args_fail_closed(self):
+        for full in ('std::queue<>', 'std::queue<int,>', 'std::queue<int, std::deque<int>, int>',
+                     'std::queue<int, std::deque<int>', 'std::queue<int, ALLOC(int)>',
+                     'std::deque<int, std::allocator<int>, int>', 'std::deque<int,,>'):
+            with self.subTest(full=full):
+                self.assertTrue(self.overload_case('void createUnit(std::queue<int>*);', full + '*').gaps)
+
+    def test_standard_sequence_word_boundaries_are_preserved(self):
+        for kind in ('queue', 'deque'):
+            for spaced, joined in (('unsigned int', 'unsignedint'), ('Foo const*', 'Fooconst*')):
+                full = 'std::' + kind + '<' + joined + ', std::' + ('deque' if kind == 'queue' else 'allocator') + '<' + joined + '> >'
+                self.assertTrue(self.overload_case('void createUnit(std::' + kind + '<' + spaced + '>*);', full + '*').gaps)
+
+    def test_standard_queue_scoped_element_not_short_name_matched(self):
+        self.write_header('ResourceManager.h', 'class CResourceManager { public: struct Item {}; void createUnit(std::queue<Item>*); };')
+        self.mapping['CResourceManager'] = 'ResourceManager.h'
+        for element, expected in (('Item', True), ('Other::Item', True), ('CResourceManager::Item', False)):
+            self.add_function(function(0x2000, 'CResourceManager', 'createUnit', tu=1,
+                                       params='std::queue<' + element + ', std::deque<' + element + '> >*'))
+            self.assertEqual(bool(self.index().build(self.target, '1000: call 2000').gaps), expected)
+
     def test_standard_vector_default_allocator_both_directions(self):
         full = "std::vector<CDataGroup*, std::allocator<CDataGroup*> >*"
         self.assertFalse(self.overload_case("void createUnit(std::vector<CDataGroup*>* groups);", full).gaps)
@@ -401,6 +469,73 @@ class PacketContextTests(TestCase):
                 elif change == 'initialized': image.sections[-1].type = 1
                 elif change == 'missing_elf': image.symbols = []
                 self.assertTrue(self.index(db=db, image=image).build(self.target, '1000: mov $0x7000,%rax').gaps)
+
+    def local_initializer_case(self):
+        mangled = '_ZN12CAchievement6updateEv'
+        self.target['names'] = [mangled]
+        raw = '_ZZ' + mangled[2:] + 'E6values'
+        payload = bytes(range(36))
+        data = object_symbol(0x5000, self.target['demangled'] + '::values', size=36,
+                             bind='local', file='Achievement.cpp')
+        data['name'] = raw
+        self.db['globals'] = [data]
+        self.image.sections[0].contents = payload + bytes(92)
+        self.image.symbols = [SimpleNamespace(name=raw, value=0x5000, size=36, type=1,
+                                             bind=0, defined=True, file='Achievement.cpp')]
+        return payload
+
+    def test_target_local_readonly_initializer_is_complete_not_a_type_guess(self):
+        payload = self.local_initializer_case()
+        result = self.index().build(self.target, '1000: mov $0x5004,%rax')
+        self.assertFalse(result.gaps)
+        self.assertIn('Complete initializer (36 bytes): ' + payload.hex(' '), result.text)
+        self.assertIn(hashlib.sha256(payload).hexdigest(), result.text)
+        self.assertIn('C++ type is not inferred', result.text)
+        self.assertIn('not behavior acceptance', result.text)
+        self.assertEqual(result.headers, ())
+        self.assertIn((0x5000, 36), self.image.reads)
+
+    def test_target_local_initialized_storage_requires_exact_identity_and_bounds(self):
+        self.local_initializer_case()
+        changes = ('symbol_name', 'elf_size', 'elf_owner', 'elf_bind', 'elf_type',
+                   'elf_undefined', 'function', 'mangled_function', 'suffix_length',
+                   'owner', 'global', 'missing_elf', 'writable', 'executable',
+                   'nobits', 'section_truncated', 'file_truncated', 'relocation',
+                   'overlap', 'zero_size', 'oversize')
+        for change in changes:
+            with self.subTest(change=change):
+                db, image = copy.deepcopy(self.db), copy.deepcopy(self.image)
+                obj, sym, sec = db['globals'][0], image.symbols[0], image.sections[0]
+                if change == 'symbol_name': sym.name = '_ZZotherE6values'
+                elif change == 'elf_size': sym.size = 40
+                elif change == 'elf_owner': sym.file = 'Other.cpp'
+                elif change == 'elf_bind': sym.bind = 1
+                elif change == 'elf_type': sym.type = 2
+                elif change == 'elf_undefined': sym.defined = False
+                elif change == 'function': obj['demangled'] = 'COther::update()::values'
+                elif change == 'mangled_function': obj['name'] = sym.name = '_ZZN6COther6updateEvE6values'
+                elif change == 'suffix_length': obj['name'] = sym.name = sym.name.replace('E6values', 'E7values')
+                elif change == 'owner': obj['file'] = 'Other.cpp'
+                elif change == 'global': obj['bind'] = 'global'
+                elif change == 'missing_elf': image.symbols = []
+                elif change == 'writable': sec.flags = 3
+                elif change == 'executable': sec.flags = 6
+                elif change == 'nobits': sec.type = 8
+                elif change == 'section_truncated': sec.size = 32
+                elif change == 'file_truncated': image.segments[0] = (*image.segments[0][:5], 32, *image.segments[0][6:])
+                elif change == 'relocation': image.relocs[0x5010] = SimpleNamespace(offset=0x5010, symbol='ptr', type=1)
+                elif change == 'overlap': db['globals'].append(object_symbol(0x5010, 'other', size=4))
+                elif change == 'zero_size': obj['size'] = sym.size = 0
+                elif change == 'oversize': obj['size'] = sym.size = 8193
+                result = self.index(db=db, image=image).build(self.target, '1000: mov $0x5000,%rax')
+                self.assertNotIn('Complete initializer', result.text)
+                if change != 'nobits':
+                    self.assertTrue(result.gaps)
+
+    def test_local_initializer_mandatory_context_is_not_truncated(self):
+        self.local_initializer_case()
+        with self.assertRaises(ContextError):
+            self.index().build(self.target, '1000: mov $0x5000,%rax', max_chars=32)
 
     def imported_data(self, raw, readable, *, address=0x7000, version="GLIBCXX_3.4"):
         # Version comes from the borrowed ELF symbol, not just the DB label.

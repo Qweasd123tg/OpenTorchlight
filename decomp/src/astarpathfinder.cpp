@@ -88,23 +88,20 @@ float CAstarPathfinder::getNextNodeY()
 
 CAstarPathfinder::CAstarNode* CAstarPathfinder::reverseNodes(CAstarNode* pNode)
 {
-    if (pNode)
+    if (!pNode)
+        return pNode;
+    CAstarNode* pCurrent = pNode;
+    CAstarNode* pPrevious = NULL;
+    CAstarNode* pNext;
+    while (pCurrent->m_pParent)
     {
-        CAstarNode* pPrevious = NULL;
-        CAstarNode* pNext = pNode->m_pParent;
-        if (pNext)
-        {
-            do
-            {
-                pNode->m_pParent = pPrevious;
-                pPrevious = pNode;
-                pNode = pNext;
-                pNext = pNode->m_pParent;
-            } while (pNext);
-        }
-        pNode->m_pParent = pPrevious;
+        pNext = pCurrent->m_pParent;
+        pCurrent->m_pParent = pPrevious;
+        pPrevious = pCurrent;
+        pCurrent = pNext;
     }
-    return pNode;
+    pCurrent->m_pParent = pPrevious;
+    return pCurrent;
 }
 
 CAstarPathfinder::CAstarNode* CAstarPathfinder::returnBestNode()
@@ -177,9 +174,9 @@ void CAstarPathfinder::freeNodes()
         CAstarNode* pNode = m_pOpen->m_pNext;
         while (pNode)
         {
-            CAstarNode* pNext = pNode->m_pNext;
-            free(pNode);
-            pNode = pNext;
+            CAstarNode* pPrevious = pNode;
+            pNode = pNode->m_pNext;
+            free(pPrevious);
         }
     }
     if (m_pClosed)
@@ -187,9 +184,9 @@ void CAstarPathfinder::freeNodes()
         CAstarNode* pNode = m_pClosed->m_pNext;
         while (pNode)
         {
-            CAstarNode* pNext = pNode->m_pNext;
-            free(pNode);
-            pNode = pNext;
+            CAstarNode* pPrevious = pNode;
+            pNode = pNode->m_pNext;
+            free(pPrevious);
         }
     }
 }
@@ -205,9 +202,11 @@ void CAstarPathfinder::push(CAstarNode* pNode)
 void CAstarPathfinder::propagateDown(CAstarNode* pNode)
 {
     float fCost = pNode->m_fPathCost;
-    for (unsigned int i = 0; i < 8 && pNode->m_pChildren[i]; ++i)
+    for (unsigned int i = 0; i < 8; ++i)
     {
         CAstarNode* pChild = pNode->m_pChildren[i];
+        if (!pChild)
+            break;
         float fNewCost = fCost + 1.0f;
         if (pChild->m_fPathCost > fNewCost)
         {
@@ -220,9 +219,11 @@ void CAstarPathfinder::propagateDown(CAstarNode* pNode)
     while (m_pStack->m_pNext)
     {
         pNode = pop();
-        for (unsigned int i = 0; i < 8 && pNode->m_pChildren[i]; ++i)
+        for (unsigned int i = 0; i < 8; ++i)
         {
             CAstarNode* pChild = pNode->m_pChildren[i];
+            if (!pChild)
+                break;
             float fNewCost = pNode->m_fPathCost + 1.0f;
             if (pChild->m_fPathCost > fNewCost)
             {
@@ -292,33 +293,24 @@ void CAstarPathfinder::generateSuccessor(CAstarNode* pParent, unsigned int iX,
 
 void CAstarPathfinder::generateSuccessors(CAstarNode* pNode, unsigned int iGoalX, unsigned int iGoalY)
 {
-    unsigned int iX = pNode->m_iX;
-    unsigned int iY = pNode->m_iY;
-    if (tileFree(iX, iY - 1, NODE_NORTH))
-    {
-        if (tileFree(iX - 1, iY, NODE_WEST) && tileFree(iX - 1, iY - 1, NODE_NORTHWEST))
-            generateSuccessor(pNode, iX - 1, iY - 1, iGoalX, iGoalY);
-        if (tileFree(iX - 1, iY - 1, NODE_NORTH) || tileFree(iX + 1, iY - 1, NODE_NORTH))
-            generateSuccessor(pNode, iX, iY - 1, iGoalX, iGoalY);
-        if (tileFree(iX + 1, iY, NODE_EAST) && tileFree(iX + 1, iY - 1, NODE_NORTHEAST))
-            generateSuccessor(pNode, iX + 1, iY - 1, iGoalX, iGoalY);
-    }
-    if ((tileFree(iX + 1, iY - 1, NODE_NORTH) || tileFree(iX + 1, iY + 1, NODE_NORTH)) &&
-        tileFree(iX + 1, iY, NODE_EAST))
-        generateSuccessor(pNode, iX + 1, iY, iGoalX, iGoalY);
-    if (tileFree(iX, iY + 1, NODE_SOUTH))
-    {
-        if (tileFree(iX + 1, iY, NODE_EAST) && tileFree(iX + 1, iY + 1, NODE_SOUTHEAST))
-            generateSuccessor(pNode, iX + 1, iY + 1, iGoalX, iGoalY);
-        if (tileFree(iX - 1, iY + 1, NODE_NORTH) || tileFree(iX + 1, iY + 1, NODE_NORTH))
-            generateSuccessor(pNode, iX, iY + 1, iGoalX, iGoalY);
-        if (tileFree(iX - 1, iY, NODE_WEST) && tileFree(iX - 1, iY + 1, NODE_SOUTHWEST))
-            generateSuccessor(pNode, iX - 1, iY + 1, iGoalX, iGoalY);
-    }
-    if ((tileFree(iX - 1, iY - 1, NODE_NORTH) || tileFree(iX - 1, iY + 1, NODE_NORTH)) &&
-        tileFree(iX - 1, iY, NODE_WEST))
-        generateSuccessor(pNode, iX - 1, iY, iGoalX, iGoalY);
+    if (tileFree(pNode->m_iX, pNode->m_iY - 1, NODE_NORTH) && tileFree(pNode->m_iX - 1, pNode->m_iY, NODE_WEST) && tileFree(pNode->m_iX - 1, pNode->m_iY - 1, NODE_NORTHWEST))
+        generateSuccessor(pNode, pNode->m_iX - 1, pNode->m_iY - 1, iGoalX, iGoalY);
+    if ((tileFree(pNode->m_iX - 1, pNode->m_iY - 1, NODE_NORTH) || tileFree(pNode->m_iX + 1, pNode->m_iY - 1, NODE_NORTH)) && tileFree(pNode->m_iX, pNode->m_iY - 1, NODE_NORTH))
+        generateSuccessor(pNode, pNode->m_iX, pNode->m_iY - 1, iGoalX, iGoalY);
+    if (tileFree(pNode->m_iX, pNode->m_iY - 1, NODE_NORTH) && tileFree(pNode->m_iX + 1, pNode->m_iY, NODE_EAST) && tileFree(pNode->m_iX + 1, pNode->m_iY - 1, NODE_NORTHEAST))
+        generateSuccessor(pNode, pNode->m_iX + 1, pNode->m_iY - 1, iGoalX, iGoalY);
+    if ((tileFree(pNode->m_iX + 1, pNode->m_iY - 1, NODE_NORTH) || tileFree(pNode->m_iX + 1, pNode->m_iY + 1, NODE_NORTH)) && tileFree(pNode->m_iX + 1, pNode->m_iY, NODE_EAST))
+        generateSuccessor(pNode, pNode->m_iX + 1, pNode->m_iY, iGoalX, iGoalY);
+    if (tileFree(pNode->m_iX, pNode->m_iY + 1, NODE_SOUTH) && tileFree(pNode->m_iX + 1, pNode->m_iY, NODE_EAST) && tileFree(pNode->m_iX + 1, pNode->m_iY + 1, NODE_SOUTHEAST))
+        generateSuccessor(pNode, pNode->m_iX + 1, pNode->m_iY + 1, iGoalX, iGoalY);
+    if ((tileFree(pNode->m_iX - 1, pNode->m_iY + 1, NODE_NORTH) || tileFree(pNode->m_iX + 1, pNode->m_iY + 1, NODE_NORTH)) && tileFree(pNode->m_iX, pNode->m_iY + 1, NODE_SOUTH))
+        generateSuccessor(pNode, pNode->m_iX, pNode->m_iY + 1, iGoalX, iGoalY);
+    if (tileFree(pNode->m_iX, pNode->m_iY + 1, NODE_SOUTH) && tileFree(pNode->m_iX - 1, pNode->m_iY, NODE_WEST) && tileFree(pNode->m_iX - 1, pNode->m_iY + 1, NODE_SOUTHWEST))
+        generateSuccessor(pNode, pNode->m_iX - 1, pNode->m_iY + 1, iGoalX, iGoalY);
+    if ((tileFree(pNode->m_iX - 1, pNode->m_iY - 1, NODE_NORTH) || tileFree(pNode->m_iX - 1, pNode->m_iY + 1, NODE_NORTH)) && tileFree(pNode->m_iX - 1, pNode->m_iY, NODE_WEST))
+        generateSuccessor(pNode, pNode->m_iX - 1, pNode->m_iY, iGoalX, iGoalY);
 }
+
 
 void CAstarPathfinder::createPath(int iGoalX, int iGoalY, int iStartX, int iStartY, bool bReverse)
 {
@@ -335,9 +327,9 @@ void CAstarPathfinder::createPath(int iGoalX, int iGoalY, int iStartX, int iStar
     float fDY = float(iStartY - iGoalY);
     pNode->m_fGoalCost = fDX * fDX + fDY * fDY;
     pNode->m_fTotalCost = pNode->m_fGoalCost + 0.0f;
+    pNode->m_iTile = tileIndex(iStartX, iStartY);
     pNode->m_iX = iStartX;
     pNode->m_iY = iStartY;
-    pNode->m_iTile = tileIndex(iStartX, iStartY);
     m_pOpen->m_pNext = pNode;
     int iIterations = 0;
     while (true)
@@ -376,21 +368,25 @@ void CAstarPathfinder::findNearestWideOpen(unsigned int iFallbackX, unsigned int
     float fTargetX = float(iX) * m_fTileSize + m_fOriginX;
     float fTargetY = float(iY) * m_fTileSize + m_fOriginY;
     float fBest = 9999.0f;
-    for (int iTestX = int(iX - 16); iTestX <= int(iX + 16); ++iTestX)
-        for (int iTestY = int(iY - 16); iTestY <= int(iY + 16); ++iTestY)
+    for (int iTestX = int(iX) - 16; iTestX <= int(iX) + 16; ++iTestX)
+        for (int iTestY = int(iY) - 16; iTestY <= int(iY) + 16; ++iTestY)
         {
-            if (iTestY < 0 || iTestX < 0 || !tileFree(iTestX, iTestY, NODE_ANY) ||
-                !tileFree(iTestX, iTestY - 1, NODE_ANY) || !tileFree(iTestX, iTestY + 1, NODE_ANY) ||
-                !tileFree(iTestX - 1, iTestY, NODE_ANY) || !tileFree(iTestX + 1, iTestY, NODE_ANY))
-                continue;
-            float fDX = float(iTestX) * m_fTileSize + m_fOriginX - fTargetX;
-            float fDY = float(iTestY) * m_fTileSize + m_fOriginY - fTargetY;
-            float fDistance = sqrtf(fDX * fDX + 0.0f + fDY * fDY);
-            if (fDistance < fBest)
+            if (iTestY >= 0 && iTestX >= 0)
             {
-                iResultX = iTestX;
-                iResultY = iTestY;
-                fBest = fDistance;
+                if (tileFree(iTestX, iTestY, NODE_ANY) &&
+                    tileFree(iTestX, iTestY - 1u, NODE_ANY) && tileFree(iTestX, iTestY + 1u, NODE_ANY) &&
+                    tileFree(iTestX - 1u, iTestY, NODE_ANY) && tileFree(iTestX + 1u, iTestY, NODE_ANY))
+                {
+                    float fDX = float(iTestX) * m_fTileSize + m_fOriginX - fTargetX;
+                    float fDY = float(iTestY) * m_fTileSize + m_fOriginY - fTargetY;
+                    float fDistance = sqrtf(fDX * fDX + 0.0f + fDY * fDY);
+                    if (fDistance < fBest)
+                    {
+                        iResultX = iTestX;
+                        iResultY = iTestY;
+                        fBest = fDistance;
+                    }
+                }
             }
         }
     if (fBest == 9999.0f)
@@ -406,19 +402,23 @@ void CAstarPathfinder::findNearestOpen(unsigned int iFallbackX, unsigned int iFa
     float fTargetX = float(iX) * m_fTileSize + m_fOriginX;
     float fTargetY = float(iY) * m_fTileSize + m_fOriginY;
     float fBest = 9999.0f;
-    for (int iTestX = int(iX - 16); iTestX <= int(iX + 16); ++iTestX)
-        for (int iTestY = int(iY - 16); iTestY <= int(iY + 16); ++iTestY)
+    for (int iTestX = int(iX) - 16; iTestX <= int(iX) + 16; ++iTestX)
+        for (int iTestY = int(iY) - 16; iTestY <= int(iY) + 16; ++iTestY)
         {
-            if (iTestY < 0 || iTestX < 0 || !tileFree(iTestX, iTestY, NODE_ANY))
-                continue;
-            float fDX = float(iTestX) * m_fTileSize + m_fOriginX - fTargetX;
-            float fDY = float(iTestY) * m_fTileSize + m_fOriginY - fTargetY;
-            float fDistance = sqrtf(fDX * fDX + 0.0f + fDY * fDY);
-            if (fDistance < fBest)
+            if (iTestY >= 0 && iTestX >= 0)
             {
-                iResultX = iTestX;
-                iResultY = iTestY;
-                fBest = fDistance;
+                if (tileFree(iTestX, iTestY, NODE_ANY))
+                {
+                    float fDX = float(iTestX) * m_fTileSize + m_fOriginX - fTargetX;
+                    float fDY = float(iTestY) * m_fTileSize + m_fOriginY - fTargetY;
+                    float fDistance = sqrtf(fDX * fDX + 0.0f + fDY * fDY);
+                    if (fDistance < fBest)
+                    {
+                        iResultX = iTestX;
+                        iResultY = iTestY;
+                        fBest = fDistance;
+                    }
+                }
             }
         }
     if (fBest == 9999.0f)
@@ -472,15 +472,23 @@ bool CAstarPathfinder::findPath(float fStartX, float fStartY, float fGoalX, floa
     fStartY -= m_fOriginY;
     fGoalX -= m_fOriginX;
     fGoalY -= m_fOriginY;
-    unsigned int iStartX = (unsigned int)(long)floorf((fStartX < 0.0f ? 0.0f : fStartX) / m_fTileSize);
-    unsigned int iStartY = (unsigned int)(long)floorf((fStartY < 0.0f ? 0.0f : fStartY) / m_fTileSize);
-    unsigned int iGoalX = (unsigned int)(long)floorf((fGoalX < 0.0f ? 0.0f : fGoalX) / m_fTileSize);
-    unsigned int iGoalY = (unsigned int)(long)floorf((fGoalY < 0.0f ? 0.0f : fGoalY) / m_fTileSize);
+    if (fGoalY < 0.0f)
+        fGoalY = 0.0f;
+    if (fStartY < 0.0f)
+        fStartY = 0.0f;
+    if (fGoalX < 0.0f)
+        fGoalX = 0.0f;
+    if (fStartX < 0.0f)
+        fStartX = 0.0f;
+    unsigned int iStartX = (unsigned int)(long)floorf(fStartX / m_fTileSize);
+    unsigned int iStartY = (unsigned int)(long)floorf(fStartY / m_fTileSize);
+    unsigned int iGoalX = (unsigned int)(long)floorf(fGoalX / m_fTileSize);
+    unsigned int iGoalY = (unsigned int)(long)floorf(fGoalY / m_fTileSize);
+    unsigned int iNewX = iGoalX;
+    unsigned int iNewY = iGoalY;
     if (!tileFree(iGoalX, iGoalY, NODE_ANY))
     {
         m_bGoalBlocked = true;
-        unsigned int iNewX = iGoalX;
-        unsigned int iNewY = iGoalY;
         findNearestOpen(iStartX, iStartY, iGoalX, iGoalY, iNewX, iNewY);
         iGoalX = iNewX;
         iGoalY = iNewY;
@@ -490,13 +498,9 @@ bool CAstarPathfinder::findPath(float fStartX, float fStartY, float fGoalX, floa
         !tileFree(iStartX + 1, iStartY, NODE_ANY) || !tileFree(iStartX - 1, iStartY, NODE_ANY))
     {
         findNearestWideOpen(iGoalX, iGoalY, iStartX, iStartY, iStartX, iStartY);
-        if (!tileFree(iStartX, iStartY, NODE_ANY))
-        {
-            m_bPathFound = false;
-            return false;
-        }
     }
-    if (tileIndex(iStartX, iStartY) != tileIndex(iGoalX, iGoalY))
+    if (tileFree(iStartX, iStartY, NODE_ANY) &&
+        tileIndex(iStartX, iStartY) != tileIndex(iGoalX, iGoalY))
     {
         m_bPathFound = true;
         freeNodes();

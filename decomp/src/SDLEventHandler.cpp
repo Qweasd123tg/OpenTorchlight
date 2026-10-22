@@ -125,56 +125,62 @@ void SDLEventHandler::ProcessEvent(const SDL_Event& event)
 {
     if (!m_gameClient) return;
     switch (event.type) {
-    case 0x400:
-        UpdateCursorPos(event.motion.x,event.motion.y);
-        return;
-    case 0x401:
-    case 0x402: {
-        unsigned key=0, message=0;
-        switch (event.button.button) {
-        case 1: key=1; message=0x201; break;
-        case 2: key=4; message=0x207; break;
-        case 3: key=2; message=0x204; break;
-        }
-        if (key) {
-            m_gameClient->mouseEvent(message+(event.button.state==1?0:1),0);
-            UpdateKeyState(key,event.button.state==1);
-        }
-        UpdateCursorPos(event.button.x,event.button.y);
-        return;
-    }
     case 0x303:
-        m_gameClient->keyEvent(0x102,event.text.text[0],0);
+        m_gameClient->keyEvent(0x102, event.text.text[0], 0);
         return;
     case 0x403:
-        if (event.wheel.x) m_gameClient->mouseEvent(0x20a,event.wheel.x<<16);
+        switch (event.wheel.x) {
+        case 0:
+            break;
+        default:
+            m_gameClient->mouseEvent(0x20a, event.wheel.x << 16);
+        }
         // The original also processes the shared keyboard fields for wheel events.
     case 0x300:
-    case 0x301:
-        break;
-    default:
+    case 0x301: {
+        unsigned message = event.key.state == 1 ? 0x100 : 0x101;
+        std::map<SDL_Scancode, unsigned short>::iterator scan =
+            m_scanCodes.find(event.key.keysym.scancode);
+        if (scan != m_scanCodes.end()) {
+            unsigned key = scan->second;
+            m_gameClient->keyEvent(message, key, 0);
+            UpdateKeyState(key, event.key.state == 1);
+        }
+        unsigned int modifiers = SDL_GetModState();
+        bool newShift = (modifiers & 3) != 0, oldShift = (m_modifiers & 3) != 0;
+        if (oldShift != newShift) {
+            bool pressed = (modifiers & 3) != 0;
+            m_gameClient->keyEvent(pressed ? 0x100 : 0x101, 0x10, 0);
+            UpdateKeyState(0x10, pressed);
+        }
+        if (((modifiers & 0xc0) != 0) != ((m_modifiers & 0xc0) != 0)) {
+            bool pressed = (modifiers & 0xc0) != 0;
+            m_gameClient->keyEvent(pressed ? 0x100 : 0x101, 0x11, 0);
+            UpdateKeyState(0x11, pressed);
+        }
+        if (((modifiers & 0x300) != 0) != ((m_modifiers & 0x300) != 0)) {
+            bool pressed = (modifiers & 0x300) != 0;
+            m_gameClient->keyEvent(pressed ? 0x100 : 0x101, 0x12, 0);
+            UpdateKeyState(0x12, pressed);
+        }
+        m_modifiers = modifiers;
         return;
     }
-    std::map<SDL_Scancode,unsigned short>::iterator scan=m_scanCodes.find(event.key.keysym.scancode);
-    if (scan!=m_scanCodes.end()) {
-        m_gameClient->keyEvent(event.key.state==1?0x100:0x101,scan->second,0);
-        UpdateKeyState(scan->second,event.key.state==1);
+    case 0x401:
+    case 0x402: {
+        unsigned key = 0, message = 0;
+        switch (event.button.button) {
+        case 1: key = 1; message = event.button.state == 1 ? 0x201 : 0x202; break;
+        case 2: key = 4; message = event.button.state == 1 ? 0x207 : 0x208; break;
+        case 3: key = 2; message = event.button.state == 1 ? 0x204 : 0x205; break;
+        }
+        if (key) {
+            m_gameClient->mouseEvent(message, 0);
+            UpdateKeyState(key, event.button.state == 1);
+        }
     }
-    unsigned short modifiers=SDL_GetModState();
-    if (((m_modifiers&3)!=0) != ((modifiers&3)!=0)) {
-        bool pressed=(modifiers&3)!=0;
-        m_gameClient->keyEvent(pressed?0x100:0x101,0x10,0);
-        UpdateKeyState(0x10,pressed);
+    case 0x400:
+        UpdateCursorPos(event.motion.x, event.motion.y);
+        return;
     }
-    if (((m_modifiers&0xc0)!=0) != ((modifiers&0xc0)!=0)) {
-        bool pressed=(modifiers&0xc0)!=0;
-        m_gameClient->keyEvent(pressed?0x100:0x101,0x11,0);
-        UpdateKeyState(0x11,pressed);
-    }
-    if (((m_modifiers&0x300)!=0) != ((modifiers&0x300)!=0)) {
-        bool pressed=(modifiers&0x300)!=0;
-        m_gameClient->keyEvent(pressed?0x100:0x101,0x12,0);
-        UpdateKeyState(0x12,pressed);
-    }
-    m_modifiers=modifiers;
 }

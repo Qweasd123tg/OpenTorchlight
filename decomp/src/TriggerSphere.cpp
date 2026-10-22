@@ -27,21 +27,21 @@ void CTriggerSphere::scaleUpdated(const Ogre::Vector3& scale)
 
 void CTriggerSphere::updateTrigger(float elapsed, CEditorScene* scene)
 {
-    if (getResourceManager() == NULL || !canUpdate())
-        return;
-    CResourceManager* resourceManager = getResourceManager();
-    if (resourceManager->getGameClientCount() == 0)
-        return;
-    for (unsigned int i = 0; i < resourceManager->getGameClientCount(); ++i)
+    if (getResourceManager() != NULL && canUpdate())
     {
-        CPlayer* player = resourceManager->getGameClient(i)->getPlayer();
-        if (player != NULL)
+        CResourceManager* resourceManager = getResourceManager();
+        if (resourceManager->getGameClientCount() == 0)
+            return;
+        for (unsigned int i = 0; i < resourceManager->getGameClientCount(); ++i)
         {
-            Ogre::Vector3 playerPosition = player->getPosition(true);
-            if (getPosition(true).distance(playerPosition) <= m_fRadius)
-                TriggerActivated(player);
-            else
-                TriggerDeactivated(player);
+            CPlayer* player = resourceManager->getGameClient(i)->getPlayer();
+            if (player != NULL)
+            {
+                if (getPosition(true).distance(player->getPosition(true)) <= m_fRadius)
+                    TriggerActivated(player);
+                else
+                    TriggerDeactivated(player);
+            }
         }
     }
 }

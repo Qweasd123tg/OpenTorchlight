@@ -249,7 +249,30 @@ class Normalizer:
         return False
 
     @classmethod
-    def table_size(cls, k, insns, register=None):
+    def guard_store(cls, mnemonic, operands):
+        """A narrow GPR-to-memory MOV: neither EFLAGS nor any GPR is written.
+
+        Only unprefixed 32/64-bit moves to a simple 64-bit base+displacement
+        cell are admitted. This is NOT an alias proof; the table caller must
+        separately establish immutable code and table storage.
+        """
+        match = re.fullmatch(r"(%\w+),(-?0x[0-9a-f]+)?\((%\w+)\)", operands)
+        if not match:
+            return False
+        source, base = cls.register(match[1]), cls.register(match[3])
+        if not source or source[1] not in (32, 64) or not base or base[1] != 64:
+            return False
+        return mnemonic == "mov" or mnemonic == {32: "movl", 64: "movq"}[source[1]]
+
+    @staticmethod
+    def readonly_section(section, offset, size, executable=False):
+        """Complete SHF_ALLOC range with no SHF_WRITE (and executable code)."""
+        return bool(section and size > 0 and 0 <= offset and offset + size <= section.size
+                    and section.flags & 2 and not section.flags & 1
+                    and (not executable or section.flags & 4))
+
+    @classmethod
+    def table_size(cls, k, insns, register=None, allow_guard_stores=False):
         """Prove an unsigned guard of this index, rather than use a nearby cmp.
 
         Supported guards dominate the dispatch and their in-range edge follows
@@ -269,7 +292,8 @@ class Normalizer:
             if not bound or bound[1] not in (32, 64):
                 continue
             guard = compare + 1
-            while guard < k and cls.padding(insns[guard][1], insns[guard][2]):
+            while guard < k and (cls.padding(insns[guard][1], insns[guard][2])
+                                 or allow_guard_stores and cls.guard_store(insns[guard][1], insns[guard][2])):
                 guard += 1
             if guard >= k:
                 continue
@@ -376,9 +400,13 @@ class Normalizer:
                 return count
         return None
 
-    def jump_table(self, k, entries, register, start, end, offsets, insns):
+    def jump_table(self, k, entries, register, start, end, offsets, insns, guard_store_safe=None):
         """Compare every entry of a proved range; missing targets forbid MATCH."""
         count = self.table_size(k, insns, register)
+        if count is None and guard_store_safe is not None:
+            candidate = self.table_size(k, insns, register, allow_guard_stores=True)
+            if candidate is not None and guard_store_safe(candidate):
+                count = candidate
         if count is None:
             count = self.memory_table_size(k, insns, register)
         if count is None:
@@ -412,6 +440,7 @@ class Normalizer:
 
     def normalize(self, insns, start, end):
         self.unverified = []
+        self.literal_proofs = []
         offsets = [i[0] for i in insns]
         # Branch labels count kept instructions only: alignment padding differs
         # between the original and our object and must not shift the indices.
@@ -429,6 +458,21 @@ class Normalizer:
             operands = operands.split("#", 1)[0].strip() if "#" in operands and "(%rip)" in operands else operands
             result.append(self.token(k, address, nxt, mnemonic, operands, start, end, offsets, insns))
         return result
+
+
+OGRE_LITERAL_SHA256 = "bef109bfdc1210ede92731ead4a2b3fae76a8905f10bac14d5fdb54ae5474c31"
+
+
+def literal_library_path():
+    game = Path(os.environ.get("TORCHLIGHT_GAME_DIR", Path(elfdb.default_elf()).parent))
+    return game / "lib64" / "libOgreMain-1.6.5.so"
+
+
+def literal_library_identity():
+    try:
+        return hashlib.sha256(literal_library_path().read_bytes()).hexdigest()
+    except OSError:
+        return "missing"
 
 
 class OriginalSide(Normalizer):
@@ -453,7 +497,581 @@ class OriginalSide(Normalizer):
         self.rodata = [image.section(n) for n in (".rodata",) if n]
         self.low, self.high = 0x400000, max(s.addr + s.size for s in image.sections if s.addr)
 
-    def name_at(self, address, mnemonic, address_operand=False):
+    STRING_CTOR = "_ZNSsC1EPKcRKSaIcE"
+    WSTRING_CTOR = "_ZNSbIwSt11char_traitsIwESaIwEEC1EPKwRKS1_"
+
+    STRING_DTOR = "_ZNSsD1Ev"
+    WSTRING_DTOR = "_ZNSbIwSt11char_traitsIwESaIwEED1Ev"
+    WSTRING_COMPARE = "_ZNKSbIwSt11char_traitsIwESaIwEE7compareEPKw"
+
+    def _prefix_wide_literal_use(self, k, insns, start=None, end=None):
+        """Prove one immediate's width from an original imported consumer.
+
+        Legacy, deliberately tiny straight-line SysV idiom, never candidate
+        types or a global address override. Its conservative prefix recognizer
+        rejects prior calls, branches and known interior function entries; this
+        is not a claim to enumerate arbitrary whole-program machine-code entries.
+        """
+        address, op, args = insns[k]
+        match = re.fullmatch(r"\$0x([0-9a-f]+),%(?:esi|rsi)", args)
+        if op not in ("mov", "movl", "movq", "movabs") or not match:
+            return None
+        if any(m.startswith(("j", "loop")) for _, m, _ in insns):
+            return None
+        # Only explicitly understood setup instructions are admitted. In
+        # particular partial writes, pointer copies, string ops and unknown
+        # implicit-register instructions cannot silently cross this proof.
+        for i, (pc, mnemonic, operands) in enumerate(insns):
+            if i != 0 and pc in self.func_start:
+                return None
+            if i == k:
+                continue
+            if mnemonic in ("call", "callq"):
+                if i <= k:
+                    return None
+                target = self.direct_target(operands)
+                callee = self.image.plt.get(target, "").split("@")[0]
+                if callee != self.WSTRING_CTOR:
+                    return None
+                # A proven consumer establishes width, but not that pointer
+                # identity is unobservable afterwards. The old prefix shape is
+                # never sufficient to bypass normal/EH lifetime validation.
+                if start is None or end is None:
+                    return None
+                return self._forward_wide_literal_use(k, insns, start, end)
+            if self.padding(mnemonic, operands):
+                continue
+            if i > k and any(self.register(r) == ("si", bits)
+                             for r in re.findall(r"%\w+", operands)
+                             for bits in (8, 16, 32, 64)):
+                return None
+            registers = operands.split(",")
+            if (mnemonic == "push" and len(registers) == 1
+                    and self.register(registers[0]) is not None):
+                continue
+            if (mnemonic in ("mov", "movl", "movq") and len(registers) == 2
+                    and all(self.register(r) is not None for r in registers)):
+                continue
+            if mnemonic == "sub" and re.fullmatch(r"\$0x[0-9a-f]+,%rsp", operands):
+                continue
+            if mnemonic == "lea" and re.fullmatch(r"0x[0-9a-f]+\(%rsp\),%rdx", operands):
+                continue
+            return None
+        return None
+
+    @classmethod
+    def _mentions_rsi(cls, operands):
+        return any(cls.register(r) and cls.register(r)[0] == "si"
+                   for r in re.findall(r"%\w+", operands))
+
+    @classmethod
+    def _rsi_kill(cls, mnemonic, operands):
+        # 32-bit writes zero the high half. Partial writes are never kills.
+        source, comma, dest = operands.rpartition(",")
+        if not comma or cls.register(dest) not in (("si", 32), ("si", 64)):
+            return False
+        if mnemonic in ("mov", "movl", "movq", "movabs", "lea"):
+            return not cls._mentions_rsi(source)
+        return mnemonic in ("xor", "xorl", "xorq") and source == dest
+
+    @classmethod
+    def _literal_independent_instruction(cls, mnemonic, operands, blocked=("si",)):
+        """Small explicit-effect whitelist; no implicit RSI or string ops."""
+        if cls.padding(mnemonic, operands):
+            return True
+        if mnemonic in ("movss", "mulss") and "(%rip)" in operands:
+            # objdump appends a symbolic target to RIP-relative operands. Only
+            # its exact trailing annotation is non-instruction text; arbitrary
+            # comments, prefixes and operand suffixes still fail the grammar.
+            operands = re.sub(r"\s+# [0-9a-f]+ <[^<>\n]+>$", "", operands)
+        if any(cls.register(r) and cls.register(r)[0] in blocked
+               for r in re.findall(r"%\w+", operands)):
+            return False
+        if mnemonic in ("seta", "setae", "setb", "setbe", "setc", "sete", "setg", "setge",
+                        "setl", "setle", "setna", "setnae", "setnb", "setnbe", "setnc",
+                        "setne", "setng", "setnge", "setnl", "setnle", "setno", "setnp",
+                        "setns", "setnz", "seto", "setp", "setpe", "setpo", "sets", "setz"):
+            # Exact legacy SETcc reads flags and writes one byte, not a full GPR.
+            # Blocked register families were excluded above; this never kills
+            # a raw alias or supplies a branch predicate. No memory/prefix/SP.
+            return bool(re.fullmatch(r"%(?:[abcd][lh]|[sd]il|bpl|r(?:[89]|1[0-5])b)", operands))
+        if mnemonic in ("mov", "movb", "movw", "movl", "movq", "movabs", "lea",
+                        "xor", "xorl", "xorq", "or", "orl", "orq", "test", "testl", "testq", "cmp", "cmpl", "cmpq",
+                        "add", "addl", "addq", "sub", "subl", "subq", "shl", "shr", "sar"):
+            # Only ordinary AT&T operands. Reject segments, unsupported prefixes,
+            # and implicit-register forms even if disassembly was unfamiliar.
+            return (
+                len(operands.split(",")) >= 2 and ":" not in operands
+                and not any(x in operands for x in ("*", "#")))
+        if mnemonic in ("movslq", "movzbl", "movss"):
+            # Exact extension/scalar-float forms have only explicit operands;
+            # no implicit integer-register reads and no flags inputs/outputs.
+            source, comma, dest = operands.rpartition(",")
+            if not comma:
+                return False
+            def base_memory(value):
+                match = re.fullmatch(r"(?:-?0x[0-9a-f]+)?\((%[a-z0-9]+)\)", value)
+                reg = cls.register(match.group(1)) if match else None
+                return bool((reg and reg[1] == 64)
+                            or (mnemonic == "movss" and match and match.group(1) == "%rip"))
+            src, dst = cls.register(source), cls.register(dest)
+            if mnemonic == "movslq":
+                return bool(src and src[1] == 32 and dst and dst[1] == 64)
+            if mnemonic == "movzbl":
+                return bool(dst and dst[1] == 32
+                            and ((src and src[1] == 8) or base_memory(source)))
+            xmm = lambda operand: bool(re.fullmatch(r"%xmm(?:[0-9]|1[0-5])", operand))
+            return ((xmm(source) and (xmm(dest) or base_memory(dest)))
+                    or (base_memory(source) and xmm(dest)))
+        if mnemonic == "mulss":
+            # Legacy scalar SSE: only XMM destination and XMM/base-memory
+            # source. No implicit GPR input; reject raw argument addressing,
+            # unknown prefixes, index/segment forms and invalid operand widths.
+            xmm = r"%xmm(?:[0-9]|1[0-5])"
+            source, comma, dest = operands.rpartition(",")
+            if not comma or not re.fullmatch(xmm, dest):
+                return False
+            if re.fullmatch(xmm, source):
+                return True
+            match = re.fullmatch(r"(?:-?0x[0-9a-f]+)?\((%[a-z0-9]+)\)", source)
+            reg = cls.register(match.group(1)) if match else None
+            return bool((reg and reg[1] == 64 and reg[0] not in ("si", "d"))
+                        or (match and match.group(1) == "%rip"))
+        if mnemonic == "xorps":
+            # Register-only SSE bitwise XOR reads/writes only named XMM regs;
+            # no integer-register or flags input/output, no memory addressing.
+            return bool(re.fullmatch(r"%xmm(?:[0-9]|1[0-5]),%xmm(?:[0-9]|1[0-5])", operands))
+        if mnemonic in ("lock xadd", "lock xaddl", "lock xaddq"):
+            # Exact ordinary XADD register -> base+displacement memory form.
+            # Both explicit operands exclude RSI above; XADD has no implicit
+            # integer-register inputs (flags are outputs, not inputs).
+            match = re.fullmatch(r"(%[a-z0-9]+),(-?0x[0-9a-f]+)?\((%[a-z0-9]+)\)", operands)
+            if match:
+                source, base = cls.register(match.group(1)), cls.register(match.group(3))
+                return bool(source and source[1] in (32, 64) and base and base[1] == 64)
+            return False
+        return mnemonic in ("push", "pop") and cls.register(operands) is not None
+
+    def _literal_eh(self, insns, start, end):
+        frames = getattr(self, "frames", None)
+        if frames is None or frames.error:
+            return None
+        reason = frames.reason(start, end - start)
+        if reason is None:
+            return {"rows": [], "kind": "no-lsda"}
+        if reason != "EH LSDA equivalence unverified":
+            return None
+        signature = objdiff_eh.cleanup_signature(self.image, frames, start, end - start, insns)
+        if signature is None:
+            return None
+        return {"rows": signature[3], "kind": signature[0]}
+
+    def _callee_body(self, image, target, max_bytes=1024):
+        """Exact original STT_FUNC bounds, never reconstructed declarations."""
+        symbols = [s for s in list(image.symbols) + list(image.dynsyms)
+                   if s.defined and s.type == elfimage.STT_FUNC and s.value == target and s.size]
+        sizes = {s.size for s in symbols}
+        if len(sizes) != 1 or not 0 < next(iter(sizes)) <= max_bytes:
+            return None
+        size = next(iter(sizes))
+        section = image.section_at(target)
+        if not section or not section.flags & 4 or target + size > section.addr + section.size:
+            return None
+        try:
+            if hashlib.sha256(image.data).hexdigest() != image.sha256:
+                return None
+            raw = image.read(target, size)
+            # Decode the exact immutable snapshot whose bytes are hashed. Two
+            # hashes around a mutable path would not prevent replace-and-restore.
+            with tempfile.NamedTemporaryFile(prefix="otl-literal-body-", suffix=".elf") as snapshot:
+                snapshot.write(image.data)
+                snapshot.flush()
+                rows = parse_insns(run_objdump([snapshot.name, f"--start-address={target}",
+                                               f"--stop-address={target + size}"]))
+        except (OSError, ValueError, subprocess.CalledProcessError):
+            return None
+        pcs = [r[0] for r in rows]
+        if not pcs or pcs[0] != target or pcs != sorted(set(pcs)) or pcs[-1] >= target + size:
+            return None
+        return {"start": target, "size": size, "rows": rows,
+                "names": sorted({x.name for x in symbols}),
+                "body_sha256": hashlib.sha256(raw).hexdigest()}
+
+    def _pinned_literal_library(self):
+        # Each comparison session pins one read-only snapshot. A changed/missing
+        # backing input must not silently reuse a proof under a new cache key.
+        identity = getattr(self, "library_identity", None)
+        if identity != OGRE_LITERAL_SHA256 or literal_library_identity() != identity:
+            return None
+        if not hasattr(self, "_literal_library"):
+            try:
+                image = elfimage.load(literal_library_path(), require_original=False)
+            except (OSError, ValueError):
+                return None
+            if image.sha256 != identity:
+                return None
+            self._literal_library = image
+        return self._literal_library
+
+    def _nonobserving_callee(self, image, target, depth=0, active=()):
+        """May preserve RSI, but cannot observe its incoming value.
+
+        This is deliberately NOT a kill summary. Callers continue checking RSI
+        after the call, including a nullable wrapper's preserve-and-return path.
+        Apart from explicit standard/import ABI contracts, only original bodies,
+        supported cleanup EH and pinned library bytes are evidence. A callee name
+        alone is never sufficient for a local call.
+        """
+        if depth > 4 or target is None:
+            return None
+        name = image.plt.get(target, "").split("@")[0]
+        if name in (self.WSTRING_DTOR, self.STRING_DTOR):
+            # Explicit standard-library ABI contract, NOT a claim to have the
+            # original libstdc++ DSO. Complete char/wchar basic_string destruction
+            # has only `this` in RDI; the incoming volatile RSI is not an input.
+            return {"kind": "standard-library-abi-no-rsi-input", "callee": name,
+                    "contract": ("wstring-D1-this-only-v1" if name == self.WSTRING_DTOR
+                                 else "string-D1-this-only-v1"),
+                    "effect": "may-preserve-not-observe"}
+        if name in ("_ZdlPv", "_ZdaPv", "_Unwind_Resume"):
+            return {"kind": "known-import-no-rsi-argument", "callee": name,
+                    "effect": "may-preserve-not-observe"}
+        if name:
+            library = self._pinned_literal_library()
+            if library is None:
+                return None
+            candidates = {s.value for s in library.dynsyms
+                          if s.defined and s.type == elfimage.STT_FUNC and s.name.split("@")[0] == name}
+            if len(candidates) != 1:
+                return None
+            proof = self._nonobserving_callee(library, candidates.pop(), depth + 1, active)
+            if proof is None:
+                return None
+            return {"kind": "pinned-library-import", "callee": name,
+                    "library_sha256": library.sha256, "body": proof,
+                    "effect": "may-preserve-not-observe"}
+        if not getattr(image, "sha256", None) or (image.sha256, target) in active:
+            return None
+        body = self._callee_body(image, target)
+        if body is None:
+            return None
+        frames = objdiff_eh.inspect(image)
+        proxy = OriginalSide.__new__(OriginalSide)
+        proxy.image = image; proxy.frames = frames
+        eh = proxy._literal_eh(body["rows"], target, target + body["size"])
+        if eh is None:
+            return None
+        rows = body["rows"]; positions = {r[0]: i for i, r in enumerate(rows)}
+        pending, seen, calls, kills, returns = [0], set(), [], [], []
+        active = active + ((image.sha256, target),)
+        while pending:
+            i = pending.pop()
+            if i in seen:
+                continue
+            if not 0 <= i < len(rows):
+                return None
+            seen.add(i)
+            pc, op, args = rows[i]
+            args = args.split("#", 1)[0].strip()
+            if self._rsi_kill(op, args):
+                kills.append(pc)
+                continue
+            if op in ("ret", "retq", "repz ret", "repz retq") and not args:
+                returns.append(pc)
+                continue
+            if op in ("call", "callq") or op == "jmp" and self.direct_target(args) not in positions:
+                callee = self.direct_target(args)
+                proof = self._nonobserving_callee(image, callee, depth + 1, active)
+                if proof is None:
+                    return None
+                calls.append({"pc": pc, "target": callee, "proof": proof})
+                if op == "jmp" or proof.get("callee") == "_Unwind_Resume":
+                    continue
+                # Recursive summaries can preserve RSI, so never stop here.
+                pending.append(i + 1)
+                for begin, count, pad, _ in eh["rows"]:
+                    if begin <= pc - target < begin + count and pad:
+                        if target + pad not in positions:
+                            return None
+                        pending.append(positions[target + pad])
+            elif op.startswith("j"):
+                if op not in ("jmp", "je", "jne", "ja", "jae", "jb", "jbe", "jg", "jge", "jl", "jle", "js", "jns"):
+                    return None
+                dest = self.direct_target(args)
+                if dest not in positions:
+                    return None
+                pending.append(positions[dest])
+                if op != "jmp":
+                    pending.append(i + 1)
+            elif self._literal_independent_instruction(op, args):
+                pending.append(i + 1)
+            else:
+                return None
+        return {"kind": "original-body-no-rsi-observation", "effect": "may-preserve-not-observe",
+                "image_sha256": image.sha256, "start": target, "size": body["size"],
+                "body_sha256": body["body_sha256"], "names": body["names"],
+                "visited": sorted(rows[i][0] for i in seen), "kills": kills,
+                "preserving_returns": returns, "calls": calls, "eh": eh}
+
+    def _rsi_cleanup_dead(self, insns, entry, start, eh):
+        """No observation of old volatile RSI in supported cleanup-only code.
+
+        This is not a whole-program entry certificate. Traverse only continuations
+        of this call. Unknown calls/implicit effects are refused, not guessed.
+        """
+        positions = {row[0]: i for i, row in enumerate(insns)}
+        if entry not in positions:
+            return None
+        pending, seen, calls = [positions[entry]], set(), []
+        while pending:
+            i = pending.pop()
+            if i in seen:
+                continue
+            if not 0 <= i < len(insns):
+                return None
+            seen.add(i)
+            pc, op, args = insns[i]
+            if self._rsi_kill(op, args):
+                continue
+            if op in ("call", "callq"):
+                target = self.direct_target(args)
+                callee = self.image.plt.get(target, "").split("@")[0]
+                proof = self._nonobserving_callee(self.image, target)
+                if proof is None:
+                    return None
+                calls.append({"pc": pc, "callee": callee, "proof": proof})
+                if callee == "_Unwind_Resume":
+                    continue
+                # A cleanup delete may unwind too; follow its supported pad.
+                for begin, count, pad, _ in eh["rows"]:
+                    if begin <= pc - start < begin + count and pad:
+                        if start + pad not in positions:
+                            return None
+                        pending.append(positions[start + pad])
+                pending.append(i + 1)
+            elif op.startswith("j"):
+                if op not in ("jmp", "je", "jne", "ja", "jae", "jb", "jbe", "jg", "jge", "jl", "jle", "js", "jns"):
+                    return None
+                target = self.direct_target(args)
+                if target not in positions:
+                    return None
+                pending.append(positions[target])
+                if op != "jmp":
+                    pending.append(i + 1)
+            elif self._literal_independent_instruction(op, args):
+                pending.append(i + 1)
+            else:
+                return None
+        return {"entry": entry, "visited": sorted(insns[i][0] for i in seen), "calls": calls}
+
+    def _rsi_normal_dead(self, insns, entry, start, eh):
+        """Finite acyclic CFG: incoming RSI is never observed before kill/return.
+
+        RSI is not a SysV return register. A normal return ends this function's
+        obligation under the existing ABI-normalized comparator contract. Calls
+        may preserve RSI: their summaries never replace checking the continuation.
+        Backward layout edges are allowed; DFS gray-state edges reject actual cycles.
+        """
+        positions = {row[0]: i for i, row in enumerate(insns)}
+        if entry not in positions:
+            return None
+        pending, state, kills, returns, calls, cleanups = [(positions[entry], False)], {}, [], [], [], []
+        while pending:
+            i, leaving = pending.pop()
+            if leaving:
+                state[i] = 2
+                continue
+            if state.get(i) == 2:
+                continue
+            if state.get(i) == 1 or not 0 <= i < len(insns):
+                return None
+            state[i] = 1
+            pending.append((i, True))
+            pc, op, args = insns[i]
+            args = args.split("#", 1)[0].strip()
+            if self._rsi_kill(op, args):
+                kills.append(pc)
+            elif op in ("ret", "retq") and not args:
+                returns.append(pc)
+            elif op in ("call", "callq"):
+                target = self.direct_target(args)
+                proof = self._nonobserving_callee(self.image, target)
+                if proof is None:
+                    return None
+                calls.append({"pc": pc, "proof": proof})
+                for begin, count, pad, _ in eh["rows"]:
+                    if begin <= pc - start < begin + count and pad:
+                        cleanup = self._rsi_cleanup_dead(insns, start + pad, start, eh)
+                        if cleanup is None:
+                            return None
+                        cleanups.append(cleanup)
+                if self.image.plt.get(target, "").split("@")[0] != "_Unwind_Resume":
+                    pending.append((i + 1, False))
+            elif op.startswith("j"):
+                if op not in ("jmp", "je", "jne", "ja", "jae", "jb", "jbe", "jg", "jge", "jl", "jle", "js", "jns"):
+                    return None
+                target = self.direct_target(args)
+                if target not in positions:
+                    return None
+                pending.append((positions[target], False))
+                if op != "jmp":
+                    pending.append((i + 1, False))
+            elif self._literal_independent_instruction(op, args):
+                pending.append((i + 1, False))
+            else:
+                return None
+        return {"entry": entry, "visited": sorted(insns[i][0] for i in state),
+                "kills": sorted(kills), "returns": sorted(returns),
+                "calls": calls, "cleanup": cleanups, "cfg": "acyclic-dfs-v1"}
+
+    @classmethod
+    def _forward_independent_and(cls, mnemonic, operands):
+        """Exact scalar AND only before the selected imported consumer.
+
+        No earlier RSI copy/spill/use crosses the forward scan, so this
+        register-only effect cannot observe or create an alias of that load.
+        This supplies no value/provenance facts or branch predicate, and does
+        not extend the normal, cleanup, or callee instruction whitelist.
+        """
+        if mnemonic != "and":
+            return False
+        match = re.fullmatch(r"\$0x([0-9a-f]{1,8}),(%[a-z0-9]+)", operands)
+        reg = cls.register(match.group(2)) if match else None
+        return bool(reg and reg[1] == 32 and reg[0] not in ("si", "sp", "bp"))
+
+    def _forward_wide_literal_use(self, k, insns, start, end):
+        """Classify this executed load, not all possible entries to its consumer.
+
+        Under the existing symbol/ABI-normalized comparator contract, the exact
+        imported string/wstring constructor or wstring compare consumes a
+        NUL-terminated character sequence without retaining its source pointer. From this load there must be no alias,
+        escape, address observation or alternative consumer. The normal return
+        must not observe RSI before a full kill or ABI return; cleanups are also
+        checked. Incoming edges which skip the load do not execute this operand.
+        """
+        address, op, args = insns[k]
+        match = re.fullmatch(r"\$0x([0-9a-f]+),%(?:esi|rsi)", args)
+        if op not in ("mov", "movl", "movq", "movabs") or not match:
+            return None
+        if not insns or insns[0][0] != start or not start <= address < end:
+            return None
+        eh = self._literal_eh(insns, start, end)
+        if eh is None:
+            return None
+        for i in range(k + 1, len(insns)):
+            pc, mnemonic, operands = insns[i]
+            if mnemonic in ("call", "callq"):
+                target = self.direct_target(operands)
+                callee = self.image.plt.get(target, "").split("@")[0]
+                if callee not in (self.STRING_CTOR, self.WSTRING_CTOR, self.WSTRING_COMPARE):
+                    return None
+                break
+            if not (self._literal_independent_instruction(mnemonic, operands)
+                    or self._forward_independent_and(mnemonic, operands)):
+                return None
+        else:
+            return None
+        if i + 1 >= len(insns):
+            return None
+        normal = self._rsi_normal_dead(insns, insns[i + 1][0], start, eh)
+        if normal is None:
+            return None
+        kill = normal["kills"][0] if len(normal["kills"]) == 1 else None
+        cleanups = []
+        for begin, count, pad, _ in eh["rows"]:
+            if begin <= pc - start < begin + count and pad:
+                proof = self._rsi_cleanup_dead(insns, start + pad, start, eh)
+                if proof is None:
+                    return None
+                cleanups.append(proof)
+        return {"load": address, "call": pc, "callee": callee,
+                "argument": "rsi", "width": 1 if callee == self.STRING_CTOR else 4,
+                "literal": int(match.group(1), 16),
+                "model": "original-operand-forward-lifetime-v1",
+                "normal_kill": kill, "normal": normal, "cleanup": cleanups, "eh_kind": eh["kind"]}
+
+    def _saved_argument_wide_literal_use(self, k, insns, start, end):
+        """Conditional original RDX operand, bounded saved-alias copy closure.
+
+        The explicit C++/SysV object/import model forbids reading uninitialized
+        abandoned callee stack bytes. Normal and exceptional aliases are checked
+        separately; no callee address/name admits a local body without evidence.
+        """
+        if start is None or end is None or not insns or insns[0][0] != start:
+            return None
+        address, op, args = insns[k]
+        match = re.fullmatch(r"\$0x([0-9a-f]+),%(?:edx|rdx)", args)
+        if op not in ("mov", "movl", "movq", "movabs") or not match or not start <= address < end:
+            return None
+        eh = self._literal_eh(insns, start, end)
+        if eh is None:
+            return None
+        for i in range(k + 1, len(insns)):
+            pc, mnemonic, operands = insns[i]
+            if mnemonic in ("call", "callq"):
+                target = self.direct_target(operands)
+                if target is None or target in self.image.plt:
+                    return None
+                import objdiff_saved_argument
+                cached = getattr(self, "_saved_argument_engine", None)
+                if cached is None or cached[0] != self.image.sha256:
+                    cached = (self.image.sha256, objdiff_saved_argument.Engine(self))
+                    self._saved_argument_engine = cached
+                proof = cached[1].run(target, frozenset({"d"}), wrapper=True)
+                if proof is None:
+                    return None
+                break
+            if not self._literal_independent_instruction(mnemonic, operands, blocked={"d"}):
+                return None
+        else:
+            return None
+        normal_aliases = set(proof["normal_aliases"])
+        exception_aliases = set(proof["exception_aliases"])
+        if not (normal_aliases | exception_aliases) <= {"si"} or i + 1 >= len(insns):
+            return None
+        normal = {"aliases": []}
+        if normal_aliases:
+            normal = self._rsi_normal_dead(insns, insns[i + 1][0], start, eh)
+            if normal is None:
+                return None
+        cleanups = []
+        if exception_aliases:
+            for begin, count, pad, _ in eh["rows"]:
+                if begin <= pc - start < begin + count and pad:
+                    cleanup = self._rsi_cleanup_dead(insns, start + pad, start, eh)
+                    if cleanup is None:
+                        import objdiff_null_field
+                        cleanup = objdiff_null_field.certify(self, insns, k, i, start, end, eh, start + pad, cached[1])
+                    if cleanup is None:
+                        return None
+                    cleanups.append(cleanup)
+        return {"load": address, "call": pc, "argument": "rdx", "width": 4,
+                "literal": int(match.group(1), 16), "model": "original-saved-wide-argument-v1",
+                "consumer": proof, "normal": normal, "cleanup": cleanups, "eh_kind": eh["kind"]}
+
+    def wide_literal_use(self, k, insns, start=None, end=None):
+        # Historical entrypoint name; proofs now carry their consumer width.
+        proof = self._prefix_wide_literal_use(k, insns, start, end)
+        if proof is not None or start is None or end is None:
+            return proof
+        proof = self._forward_wide_literal_use(k, insns, start, end)
+        if proof is not None:
+            return proof
+        import objdiff_literal_flow
+        proof = objdiff_literal_flow.wide_literal_use(self, k, insns, start, end)
+        if proof is not None:
+            return proof
+        proof = self._saved_argument_wide_literal_use(k, insns, start, end)
+        if proof is not None:
+            return proof
+        import objdiff_wcslen_append
+        proof = objdiff_wcslen_append.certify(self, k, insns, start, end)
+        if proof is not None:
+            return proof
+        import objdiff_scanf_literal
+        return objdiff_scanf_literal.certify(self, k, insns, start, end)
+
+    def name_at(self, address, mnemonic, address_operand=False, literal_proof=None):
         if address in self.func_start:
             return self.func_start[address]
         if address in self.image.plt:
@@ -473,10 +1091,63 @@ class OriginalSide(Normalizer):
                 raw = self.image.read(address, available if address_operand else min(available, const_size(mnemonic)))
             except ValueError:
                 raw = b""
-            return self.data_token(raw, mnemonic, address_operand, string_width(section))
+            width = string_width(section)
+            if literal_proof is not None and address_operand:
+                try:
+                    proof_width = literal_proof.get("width")
+                    if (type(proof_width) is not int or proof_width not in (1, 4)
+                            or literal_proof.get("literal") != address):
+                        raise UnverifiedData("invalid use-site literal width/address")
+                    token = literal_token(raw, proof_width)
+                except UnverifiedData:
+                    pass  # Preserve a fail-closed diagnostic; never guess another width.
+                else:
+                    length = int(token.split(":n", 1)[1].split(":", 1)[0]) * proof_width + proof_width
+                    proof = dict(literal_proof, size=length,
+                                 end=address + length,
+                                 sha256=hashlib.sha256(raw[:length]).hexdigest())
+                    self.literal_proofs.append(proof)
+                    return token
+                # A malformed/unterminated proven use cannot fall back to a
+                # different width guessed from adjacent bytes.
+                self.unverified.append("invalid use-site literal payload")
+                return "unverified-data:invalid-use-site-literal"
+            return self.data_token(raw, mnemonic, address_operand, width)
         if section:
             return f"{section.name}:{address:#x}"
         return f"{address:#x}"
+
+    def immutable_loaded_range(self, address, size, executable=False):
+        """Both section attributes and actual ELF PT_LOAD permissions agree.
+
+        The existing static-image contract excludes runtime remapping or
+        self-modifying code. A successful ordinary store cannot alter a
+        non-writable mapped code/table range. Reject overlapping writable
+        mappings and incomplete or non-file-backed ranges.
+        """
+        section = self.image.section_at(address)
+        if not section or not self.readonly_section(section, address - section.addr, size, executable):
+            return False
+        covered = False
+        for kind, flags, offset, vaddr, paddr, filesz, memsz, align in self.image.segments:
+            if kind != 1:
+                continue
+            if (offset < 0 or filesz < 0 or memsz < filesz
+                    or offset + filesz > len(self.image.data)
+                    or (offset - vaddr) & 0xfff):
+                return False
+            if memsz <= 0:
+                continue
+            # x86-64 Linux maps PT_LOAD at 4 KiB page granularity. An
+            # overlapping writable page invalidates protection even when
+            # the declared segment byte intervals themselves are disjoint.
+            page_start = vaddr & ~0xfff
+            page_end = (vaddr + memsz + 0xfff) & ~0xfff
+            if flags & 2 and address < page_end and address + size > page_start:
+                return False
+            if vaddr <= address and address + size <= vaddr + filesz and flags & 4:
+                covered = covered or not executable or bool(flags & 1)
+        return covered
 
     def token(self, k, address, nxt, mnemonic, operands, start, end, offsets, insns):
         m = re.match(r"^([0-9a-f]+) <([^>]+)>$", operands)
@@ -505,17 +1176,21 @@ class OriginalSide(Normalizer):
                         yield "external:" + name.split("@")[0] if name else target
                     else:
                         yield target
-            return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns)
+            return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns,
+                                   guard_store_safe=lambda count: self.immutable_loaded_range(base, count * 8)
+                                   and self.immutable_loaded_range(start, end - start, executable=True))
 
         def rip(mm):
             target = nxt + int(mm.group(1), 16) * (-1 if mm.group(0).startswith("-") else 1)
             return f"[{self.name_at(target, memory_mnemonic(mnemonic, operands), mnemonic.startswith('lea'))}](%rip)"
         operands = re.sub(r"-?0x([0-9a-f]+)\(%rip\)", rip, operands)
 
+        literal_proof = self.wide_literal_use(k, insns, start, end)
+
         def absolute(mm):
             value = int(mm.group(2), 16)
             if self.low <= value < self.high:
-                return f"{mm.group(1)}[{self.name_at(value, memory_mnemonic(mnemonic, operands), mm.group(1) == '$' or mnemonic.startswith('lea'))}]"
+                return f"{mm.group(1)}[{self.name_at(value, memory_mnemonic(mnemonic, operands), mm.group(1) == '$' or mnemonic.startswith('lea'), literal_proof=literal_proof)}]"
             return mm.group(0)
         operands = re.sub(r"(\$|(?<![\w%]))0x([0-9a-f]+)(?=\b)", absolute, operands)
         return f"{mnemonic} {operands}".strip()
@@ -598,7 +1273,11 @@ class ObjectSide(Normalizer):
                         yield "external:" + token
                     else:
                         yield None
-            return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns)
+            return self.jump_table(k, entries(), table.group(2), start, end, offsets, insns,
+                                   guard_store_safe=lambda count: self.readonly_section(
+                                       self.obj.sections[symbol.shndx], base, count * 8)
+                                   and self.readonly_section(self.obj.sections[self.section_index],
+                                                             start, end - start, executable=True))
         m = re.match(r"^([0-9a-f]+) <([^>]+)>$", operands)
         if m and mnemonic.startswith(("j", "call", "loop")):
             if relocs:
@@ -707,6 +1386,10 @@ class Original:
         self.image = elfimage.load(elf or elfdb.default_elf())
         self.side = OriginalSide(self.image, self.db)
         self.frames = objdiff_eh.inspect(self.image)
+        self.side.frames = self.frames
+        self._normalization_key = _norm_key()
+        self._literal_library_identity = self._normalization_key[1]
+        self.side.library_identity = self._literal_library_identity
         self._lock = threading.RLock()  # the normalizer keeps per-function state
         self.by_name = {}
         for address, f in self.db["functions"].items():
@@ -786,15 +1469,25 @@ class Original:
         """Normalized original function; cached on disk (the original never changes)."""
         with self._lock:
             cache = self.__dict__.get("_norm_cache")
+            # Do not adopt disk proofs made with a different library snapshot.
+            if (hasattr(self, "_literal_library_identity")
+                    and self._literal_library_identity != literal_library_identity()):
+                cache = self.__dict__["_norm_cache"] = {}
+                self.side.library_identity = None
             if cache is None:
-                cache = self.__dict__["_norm_cache"] = _load_norm_cache()
+                if hasattr(self, "_normalization_key"):
+                    cache = _load_norm_cache(self._normalization_key)
+                else:
+                    cache = _load_norm_cache()
+                self._norm_cache = cache
             key = self.image.sha256 + ":" + f["address"]
             if key not in cache:
                 start = int(f["address"], 16)
                 end = start + f["size"]
                 insns = self._instructions(f)
                 norm = self.side.normalize(insns, start, end)
-                cache[key] = {"norm": norm, "metadata_reasons": list(dict.fromkeys(self.side.unverified))}
+                cache[key] = {"norm": norm, "metadata_reasons": list(dict.fromkeys(self.side.unverified)),
+                              "literal_proofs": list(self.side.literal_proofs)}
                 _NORM_DIRTY.add(key)
             return cache[key]["norm"]
 
@@ -837,16 +1530,19 @@ NORMALIZER_VERSION = 3
 def _norm_key():
     # Normalization depends on this file, the database and the ELF image reader.
     here = Path(__file__).resolve().parent
-    return [NORMALIZER_VERSION] + [hashlib.sha256(p.read_bytes()).hexdigest()
-                                   for p in (here / "objdiff.py", here / "elfimage.py", here / "objdiff_eh.py", here / "objdiff_disasm.py",
+    return [NORMALIZER_VERSION, literal_library_identity()] + [hashlib.sha256(p.read_bytes()).hexdigest()
+                                   for p in (here / "objdiff.py", here / "elfimage.py", here / "objdiff_eh.py", here / "objdiff_disasm.py", here / "objdiff_literal_flow.py",
+                                             here / "objdiff_saved_argument.py", here / "objdiff_literal_frames.py",
+                                             here / "objdiff_null_field.py", here / "objdiff_wcslen_append.py",
+                                             here / "objdiff_scanf_literal.py",
                                              NORM_CACHE.parent / "elfdb.json") if p.exists()]
 
 
-def _load_norm_cache():
+def _load_norm_cache(expected_key=None):
     import pickle
     try:
         data = pickle.loads(NORM_CACHE.read_bytes())
-        if data.get("key") == _norm_key():
+        if data.get("key") == (expected_key if expected_key is not None else _norm_key()):
             return data["functions"]
     except (OSError, ValueError, EOFError, pickle.UnpicklingError, AttributeError):
         pass
@@ -854,10 +1550,22 @@ def _load_norm_cache():
 
 
 def save_norm_cache(original):
+    # A mid-session library change cannot relabel old proofs with the new key.
+    if (hasattr(original, "_literal_library_identity")
+            and original._literal_library_identity != literal_library_identity()):
+        return
     import pickle
     cache = original.__dict__.get("_norm_cache")
     if cache and _NORM_DIRTY:
-        payload = pickle.dumps({"key": _norm_key(), "functions": cache})
+        # Freeze the label with the session, rather than hashing a dependency
+        # again after checking it (which could relabel A proofs with a B key).
+        key = getattr(original, "_normalization_key", None)
+        if key is None:
+            key = _norm_key()
+        if (hasattr(original, "_literal_library_identity")
+                and key[1] != original._literal_library_identity):
+            return
+        payload = pickle.dumps({"key": key, "functions": cache})
         temporary = None
         try:
             with tempfile.NamedTemporaryFile(dir=NORM_CACHE.parent,
