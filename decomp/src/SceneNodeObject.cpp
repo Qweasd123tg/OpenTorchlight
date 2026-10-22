@@ -118,7 +118,8 @@ void CSceneNodeObject::setResourceManager(CResourceManager* resourceManager)
         return;
 
     m_pResourceManager = resourceManager;
-    if (m_pResourceManager != NULL && m_pSceneManager == NULL)
+    unsigned char hasManager = m_pResourceManager != NULL;
+    if (m_pSceneManager == NULL && hasManager)
         m_pSceneManager = m_pResourceManager->getSceneManager();
     if (m_pResourceManager != NULL)
     {
