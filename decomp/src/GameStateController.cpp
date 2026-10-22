@@ -29,20 +29,25 @@ void CGameStateController::broadcastPlayerHPThreshholdEvents(float maximum, floa
         76, 77, 78, 79, 80, 81, 82, 83, 84
     };
 
-    if (!(maximum > 0.0f))
-        return;
+    if (maximum > 0.0f)
+    {
+        const float newHP = oldHP + change;
+        const float oldPercentage = oldHP / maximum;
+        const float newPercentage = newHP / maximum;
 
-    const float newHP = oldHP + change;
-    const float oldPercentage = oldHP / maximum;
-    const float newPercentage = newHP / maximum;
+        if (oldPercentage == 0.0f)
+            return;
 
-    if (oldPercentage != 0.0f) {
-        for (unsigned int i = 0; i < 9; ++i) {
+        for (unsigned int i = 0; i < 9; ++i)
+        {
             if (oldPercentage > eventsByPct[i] &&
-                newPercentage <= eventsByPct[i]) {
+                newPercentage <= eventsByPct[i])
+            {
                 BroadcastEvent(eventsBelowBroadCast[i]);
-            } else if (oldPercentage < eventsByPct[i] &&
-                       newPercentage >= eventsByPct[i]) {
+            }
+            else if (oldPercentage < eventsByPct[i] &&
+                     newPercentage >= eventsByPct[i])
+            {
                 BroadcastEvent(eventsAboveBroadCast[i]);
             }
         }
