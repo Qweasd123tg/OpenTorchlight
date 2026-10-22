@@ -88,23 +88,20 @@ float CAstarPathfinder::getNextNodeY()
 
 CAstarPathfinder::CAstarNode* CAstarPathfinder::reverseNodes(CAstarNode* pNode)
 {
-    if (pNode)
+    if (!pNode)
+        return pNode;
+    CAstarNode* pCurrent = pNode;
+    CAstarNode* pPrevious = NULL;
+    CAstarNode* pNext;
+    while (pCurrent->m_pParent)
     {
-        CAstarNode* pPrevious = NULL;
-        CAstarNode* pNext = pNode->m_pParent;
-        if (pNext)
-        {
-            do
-            {
-                pNode->m_pParent = pPrevious;
-                pPrevious = pNode;
-                pNode = pNext;
-                pNext = pNode->m_pParent;
-            } while (pNext);
-        }
-        pNode->m_pParent = pPrevious;
+        pNext = pCurrent->m_pParent;
+        pCurrent->m_pParent = pPrevious;
+        pPrevious = pCurrent;
+        pCurrent = pNext;
     }
-    return pNode;
+    pCurrent->m_pParent = pPrevious;
+    return pCurrent;
 }
 
 CAstarPathfinder::CAstarNode* CAstarPathfinder::returnBestNode()
