@@ -553,6 +553,14 @@ class OriginalSide(Normalizer):
         if any(cls.register(r) and cls.register(r)[0] in blocked
                for r in re.findall(r"%\w+", operands)):
             return False
+        if mnemonic in ("seta", "setae", "setb", "setbe", "setc", "sete", "setg", "setge",
+                        "setl", "setle", "setna", "setnae", "setnb", "setnbe", "setnc",
+                        "setne", "setng", "setnge", "setnl", "setnle", "setno", "setnp",
+                        "setns", "setnz", "seto", "setp", "setpe", "setpo", "sets", "setz"):
+            # Exact legacy SETcc reads flags and writes one byte, not a full GPR.
+            # Blocked register families were excluded above; this never kills
+            # a raw alias or supplies a branch predicate. No memory/prefix/SP.
+            return bool(re.fullmatch(r"%(?:[abcd][lh]|[sd]il|bpl|r(?:[89]|1[0-5])b)", operands))
         if mnemonic in ("mov", "movb", "movw", "movl", "movq", "movabs", "lea",
                         "xor", "xorl", "xorq", "or", "orl", "orq", "test", "testl", "testq", "cmp", "cmpl", "cmpq",
                         "add", "addl", "addq", "sub", "subl", "subq", "shl", "shr", "sar"):
