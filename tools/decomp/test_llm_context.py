@@ -2613,6 +2613,59 @@ class UIExactContextPins(TestCase):
                     self.assertEqual(method(row, scope), set())
 
 
+class TimelineOwningListContextPins(TestCase):
+    def setUp(self):
+        temp = TemporaryDirectory(prefix="otl-timeline-list-context-")
+        self.addCleanup(temp.cleanup)
+        self.index = ContextIndex.__new__(ContextIndex)
+        self.index.root = Path(temp.name).resolve()
+        self.index.sources = {}
+        include = self.index.root / "decomp/include"
+        include.mkdir(parents=True)
+        for header in ContextIndex.TIMELINE_POINT_LIST_HEADER_SHA256:
+            raw = (HERE.parent / "decomp/include" / header).read_bytes()
+            (include / header).write_bytes(raw)
+            self.index.sources[header] = raw.decode("utf-8")
+        self.row = function(0x7cd010, "CLList<CTimelineProperty::CTimelinePoint*>",
+                            "destroy", size=79, kind="inline_or_template", bind=["weak"])
+        self.row["mangled"] = "_ZN6CLListIPN17CTimelineProperty14CTimelinePointEE7destroyEv"
+        self.row["names"] = [self.row["mangled"]]
+        self.index.elf_weak_functions = {(0x7cd010, self.row["mangled"], 79)}
+
+    def headers(self, row=None, scope=None):
+        row = self.row if row is None else row
+        return self.index._timeline_point_list_headers(row, row["scope"] if scope is None else scope)
+
+    def test_exact_owning_list_supplies_body_and_both_layouts(self):
+        self.assertEqual(self.headers(), {"CLList.h", "TLinkedList.h", "TimelineProperty.h"})
+
+    def test_owning_list_rejects_changed_function_identity(self):
+        for delta in [{"address": "0x7cd011"}, {"size": 80}, {"bind": ["global"]},
+                      {"kind": "function"}, {"method": "clear"}, {"params": "int"},
+                      {"cv": "const"}, {"qualified": "CLList<int>::destroy"},
+                      {"mangled": self.row["mangled"] + "x"}, {"names": []},
+                      {"names": [self.row["mangled"], "extra"]}]:
+            with self.subTest(delta=delta):
+                self.assertEqual(self.headers(dict(self.row, **delta)), set())
+        self.assertEqual(self.headers(scope="CLList<CEditorBaseObject*>"), set())
+        self.index.elf_weak_functions.clear()
+        self.assertEqual(self.headers(), set())
+
+    def test_owning_list_requires_every_unchanged_header(self):
+        for header in ContextIndex.TIMELINE_POINT_LIST_HEADER_SHA256:
+            with self.subTest(header=header):
+                path = self.index._path("include", header)
+                raw = path.read_bytes()
+                path.write_bytes(raw + b"// changed\n")
+                self.assertEqual(self.headers(), set())
+                path.write_bytes(raw)
+                source = self.index.sources.pop(header)
+                self.assertEqual(self.headers(), set())
+                self.index.sources[header] = source + "// stale index\n"
+                self.assertEqual(self.headers(), set())
+                self.index.sources[header] = source
+
+
 class UIScalarInitializers(TestCase):
  def scan(self,text):
   from llm_context import _scan

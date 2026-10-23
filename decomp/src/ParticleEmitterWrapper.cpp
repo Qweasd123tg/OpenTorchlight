@@ -6,23 +6,9 @@
 #include "ParticlePropertyConversions.h"
 #include "ParticleWrapper.h"
 
-namespace ParticleUniverse {
-class ParticleRenderer { public: void setSorted(bool); };
-class ParticleTechnique {
-public:
-    void setFlipbookWidthHeight(int, int);
-    void setKeepLocal(bool);
-    ParticleRenderer* getRenderer() const;
-};
-class RibbonTrailRenderer {
-public:
-    void setTrailLocal(bool);
-    void setMaxChainElements(unsigned long);
-    void setTrailLength(float);
-    void setTrailWidth(float);
-};
-class ParticleEmitter { public: void setKeepLocal(bool); };
-}
+#include "ParticleUniverseEmitter.h"
+#include "ParticleUniverseSystemManager.h"
+#include "ParticleUniverseTechnique.h"
 
 void CParticleEmitterWrapper::starting()
 {
@@ -307,4 +293,89 @@ void CParticleEmitterWrapper::setParentGuid(long long guid)
             guid = parent->getParentGuid();
         }
     }
+}
+
+#include "MasterResourceManager.h"
+#include "ParticleEmitterWrapperDescriptorNames.h"
+#include "StringUtilities.h"
+
+namespace
+{
+    // Native Runic emitter flag at +0x25b; the SDK keeps it protected.
+    struct EmitterFlagAccess : ParticleUniverse::ParticleEmitter
+    {
+        void clearRunicFlag() { mRunicFlag25b = false; }
+    };
+}
+
+CParticleEmitterWrapper::CParticleEmitterWrapper(CResourceManager* resources)
+    : CPositionableObject(resources, NULL), m_pParticleTechWrapper(NULL), m_pEmitter(NULL),
+      m_fRadius(1.0f), m_fMinLineIncrement(0.0f), m_fMaxLineIncrement(0.0f), m_fMaxLineDeviation(0.0f),
+      m_iEmitterType(0), m_fBoxWidth(1.0f), m_fBoxHeight(1.0f), m_fBoxDepth(1.0f),
+      m_bEnabled(true), m_bCircleFixedSize(true), m_PositionEnd(0.0f, 0.0f, 0.0f),
+      m_pUnknown148(NULL), m_pUnknown150(NULL), m_pUnknown158(NULL), m_pUnknown160(NULL)
+{
+    m_pEmitter = CMasterResourceManager::getSingleton()->m_pParticleSystemManager->createEmitter("Point");
+    float emissionRate[2] = { 0.0f, 15.0f };
+    float angle[2] = { 0.0f, 45.0f };
+    float velocity[2] = { 0.0f, 15.0f };
+    float timeToLive[3] = { 1.0f, 5.0f, 10.0f };
+    float dimensions[3] = { 0.0f, 1.0f, 1.0f };
+    float duration[2] = { 0.0f, 1.0f };
+    m_pEmitter->setNumberOfLoops(-1);
+    Ogre::Vector3 direction(0.0f, 1.0f, 0.0f);
+    m_pEmitter->setParticleDirection(direction);
+    m_pEmitter->setDynEmissionRate(getDynPropFromArray(emissionRate, 2));
+    m_pEmitter->setDynParticleWidth(getDynPropFromArray(dimensions, 3));
+    m_pEmitter->setDynParticleHeight(getDynPropFromArray(dimensions, 3));
+    m_pEmitter->setDynParticleDepth(getDynPropFromArray(dimensions, 3));
+    m_pEmitter->setDynAngle(getDynPropFromArray(angle, 2));
+    m_pEmitter->setDynVelocity(getDynPropFromArray(velocity, 2));
+    m_pEmitter->setDynTotalTimeToLive(getDynPropFromArray(timeToLive, 3));
+    m_pEmitter->setDynDuration(getDynPropFromArray(duration, 2));
+    float radius[2] = { 0.0f, 3.0f };
+    float degrees[2] = { 0.0f, 0.0f };
+    float step[2] = { 0.0f, 0.1f };
+    setMinRadius(radius, 2);
+    setMaxRadius(radius, 2);
+    setCircleDegrees(degrees, 2);
+    setCircleStep(step, 2);
+    m_bEnabled = true;
+    static_cast<EmitterFlagAccess*>(m_pEmitter)->clearRunicFlag();
+    CSceneNodeObject::setVisible(true);
+    m_pEmitter->setEmitsType(ParticleUniverse::Particle::PT_VISUAL);
+}
+
+void CParticleEmitterWrapper::setEmitterType(int type)
+{
+    if (m_iEmitterType == type)
+        return;
+    m_iEmitterType = type;
+    ParticleUniverse::ParticleEmitter* emitter = CMasterResourceManager::getSingleton()->m_pParticleSystemManager->createEmitter(
+        STRINGS::StringConvertToNarrow(gEMITTER_TYPES[type].c_str()));
+    CParticleTechWrapper* technique = m_pParticleTechWrapper;
+    setParentTechniqueWrapper(NULL);
+    if (m_pEmitter) {
+        std::string emitterType = emitter->getEmitterType();
+        m_pEmitter->copyAttributesTo(emitter);
+        emitter->setEmitterType(emitterType);
+        destroyEmitter();
+    }
+    m_pEmitter = emitter;
+    setParentTechniqueWrapper(technique);
+    setRadius(m_fRadius);
+    positionUpdated(getPosition(false));
+    setMinLineIncrement(m_fMinLineIncrement);
+    setMaxLineIncrement(m_fMaxLineIncrement);
+    setMaxLineDeviation(m_fMaxLineDeviation);
+    setPositionEnd(m_PositionEnd);
+    setBoxDepth(m_fBoxDepth);
+    setBoxHeight(m_fBoxHeight);
+    setBoxWidth(m_fBoxWidth);
+    unsigned int count = 0;
+    setCircleFixedSize(m_bCircleFixedSize);
+    setMinRadius(getArrayFromDynProp(static_cast<ParticleUniverse::DynamicAttribute*>(m_pUnknown148), count), count);
+    setMaxRadius(getArrayFromDynProp(static_cast<ParticleUniverse::DynamicAttribute*>(m_pUnknown150), count), count);
+    setCircleDegrees(getArrayFromDynProp(static_cast<ParticleUniverse::DynamicAttribute*>(m_pUnknown158), count), count);
+    setCircleStep(getArrayFromDynProp(static_cast<ParticleUniverse::DynamicAttribute*>(m_pUnknown160), count), count);
 }

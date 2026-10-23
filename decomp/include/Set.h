@@ -1,22 +1,36 @@
 #ifndef SET_H
 #define SET_H
 #include <string>
+#include "Affix.h"
 #include "TArrayList.h"
 class CAffix;
 class CDataGroup;
 class CEffectGroupManager;
 // The 0x18-byte unnamed set-bonus record allocated by CSet::load at 0xe0ea1b.
-struct CSetAffix
+struct CSetAffix : public Ogre::GeneralAllocatedObject
 {
+    CSetAffix() : m_pAffix(NULL) {}
+    ~CSetAffix()
+    {
+        if (m_pAffix != NULL)
+        {
+            delete m_pAffix;
+            m_pAffix = NULL;
+        }
+    }
+
     CAffix* m_pAffix;
     std::wstring m_sAffixName;
     unsigned int m_iLevel;
     int m_iRequiredCount;
 };
 // Partial. CSet::load writes names at +0x20/+0x28 and bonuses at +0x08.
-class CSet
+class CSet : public Ogre::GeneralAllocatedObject
 {
 public:
+    CSet() : m_Affixes(10) {}
+    ~CSet() { m_Affixes.deleteAll(); }
+
     void load(CDataGroup* group, CEffectGroupManager* effectGroupManager);
     unsigned char m_SetData00[8];
     TArrayList<CSetAffix*> m_Affixes;

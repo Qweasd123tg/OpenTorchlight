@@ -49,7 +49,11 @@ private:
     std::map<std::wstring, unsigned int> m_intIndices; // +0xa0
     std::map<std::wstring, unsigned int> m_floatIndices; // +0xd0
     std::map<std::wstring, unsigned int> m_stringIndices; // +0x100
-    unsigned char m_Unrecovered130[4];
+    union
+    {
+        bool m_loaded; // +0x130
+        unsigned char m_Unrecovered130[4]; // Existing byte view includes padding.
+    };
 public:
     int m_lastFileError; // +0x134
 private:

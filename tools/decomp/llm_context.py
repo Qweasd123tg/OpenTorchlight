@@ -1494,6 +1494,38 @@ class ContextIndex:
 
     QUADTREE_HEADER_SHA256 = "8379f5116bc6783f18f65ab09f6f4192aca7f728ade2bb9c62196678d4618172"
 
+    TIMELINE_POINT_LIST_HEADER_SHA256 = {
+        "CLList.h": "10a8558c0ef3930219e89e4ac45dce08042f6d3413640dac4b64aa91fa4bde2c",
+        "TLinkedList.h": "7c12caa049a58f25b901f4ed89483fd2290ff6e49f4a8e09c042c9b32e5c2c18",
+        "TimelineProperty.h": "c2e09d293d02572ba0b67f2784c6543b933e975a67e193c1206056a8cd26d92a",
+    }
+
+    def _timeline_point_list_headers(self, callee, scope):
+        """One reviewed owning-list method, not a generic template exemption.
+
+        Native destroy walks 24-byte nodes, unlinks and deletes their payloads,
+        frees each node with Ogre's allocator, and clears the one-pointer owner.
+        Authenticate the exact weak function and all three layout/body headers.
+        """
+        name = "_ZN6CLListIPN17CTimelineProperty14CTimelinePointEE7destroyEv"
+        if (scope != "CLList<CTimelineProperty::CTimelinePoint*>"
+                or callee.get("kind") != "inline_or_template"
+                or set(callee.get("bind", ())) != {"weak"}
+                or _address(callee["address"]) != 0x7cd010 or callee.get("size") != 79
+                or callee.get("method") != "destroy"
+                or callee.get("qualified") != scope + "::destroy"
+                or callee.get("params") != "" or callee.get("cv", "")
+                or callee.get("mangled") != name or set(callee.get("names", ())) != {name}
+                or (0x7cd010, name, 79) not in self.elf_weak_functions):
+            return set()
+        for header, digest in self.TIMELINE_POINT_LIST_HEADER_SHA256.items():
+            if header not in self.sources:
+                return set()
+            raw = self._path("include", header).read_bytes()
+            if hashlib.sha256(raw).hexdigest() != digest or raw.decode("utf-8") != self.sources[header]:
+                return set()
+        return set(self.TIMELINE_POINT_LIST_HEADER_SHA256)
+
     def _quadtree_headers(self, callee, scope):
         """Two reviewed native instantiations, with the real complete template.
 
@@ -1694,6 +1726,7 @@ class ContextIndex:
             pinned_destructor_headers = self._pinned_destructor_headers(callee, scope)
             pinned_insert_headers = self._pinned_insert_headers(callee, scope)
             quadtree_headers = self._quadtree_headers(callee, scope)
+            timeline_list_headers = self._timeline_point_list_headers(callee, scope)
             if matched_headers:
                 wanted.update(matched_headers | matched_dependencies)
             elif implicit_headers:
@@ -1728,6 +1761,11 @@ class ContextIndex:
                 wanted.update(quadtree_headers)
                 notes.append(f"{address:#x}: exact reviewed native Quadtree<unsigned> method identity; "
                              f"complete existing template declaration; Quadtree.h SHA256 {self.QUADTREE_HEADER_SHA256}. "
+                              "No specialization or prototype synthesized.")
+            elif timeline_list_headers:
+                wanted.update(timeline_list_headers)
+                notes.append(f"{address:#x}: exact reviewed weak CLList timeline-point destroy identity; "
+                             "complete owning-list, node and pointee layout headers authenticated by SHA256. "
                              "No specialization or prototype synthesized.")
             elif scope in local_types and ("::" in scope or self._tu(callee, None) == tu):
                 local_names.add(scope)

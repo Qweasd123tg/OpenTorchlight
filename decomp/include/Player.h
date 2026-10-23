@@ -17,6 +17,7 @@ class CDynamicLine;
 class CPlayer : public CCharacter
 {
     friend class CSpawnClassData;
+    friend class CSharedStash;
     friend class CConsole;
     friend class CMainMenu;
     friend class CWaypointMenu;
