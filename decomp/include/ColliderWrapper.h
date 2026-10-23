@@ -13,7 +13,7 @@ public:
     virtual ~CColliderWrapper();
     CColliderWrapper(CResourceManager*, std::string);
 
-    unsigned char m_padding11A[6];
-};
+    bool m_bCollider11A;
+} __attribute__((aligned(8)));
 
 #endif

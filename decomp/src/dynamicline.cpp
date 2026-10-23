@@ -46,6 +46,33 @@ void CDynamicLine::createVertexDeclaration()
     mRenderOp.vertexData->vertexDeclaration->addElement(0, 0, Ogre::VET_FLOAT3, Ogre::VES_POSITION, 0);
 }
 
+void CDynamicLine::fillHardwareBuffers()
+{
+    int count = m_points.size();
+    prepareHardwareBuffers(count, 0);
+    if (count == 0)
+    {
+        mBox.setExtents(Ogre::Vector3::ZERO, Ogre::Vector3::ZERO);
+        m_dirty = false;
+        return;
+    }
+    Ogre::Vector3 minimum = m_points[0];
+    Ogre::HardwareVertexBufferSharedPtr buffer = mRenderOp.vertexData->vertexBufferBinding->getBuffer(0);
+    float* position = static_cast<float*>(buffer->lock(Ogre::HardwareBuffer::HBL_DISCARD));
+    Ogre::Vector3 maximum = minimum;
+    for (int i = 0; i < count; ++i)
+    {
+        *position++ = m_points[i].x;
+        *position++ = m_points[i].y;
+        *position++ = m_points[i].z;
+        minimum.makeFloor(m_points[i]);
+        maximum.makeCeil(m_points[i]);
+    }
+    buffer->unlock();
+    mBox.setExtents(minimum, maximum);
+    m_dirty = false;
+}
+
 void CDynamicLine::addPoint(float x, float y, float z)
 {
     m_points.push_back(Ogre::Vector3(x, y, z));

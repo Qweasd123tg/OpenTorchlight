@@ -690,6 +690,7 @@ class RepairWorkflow(unittest.TestCase):
                          'units': [{'tu': 'Probe.cpp', 'unknown': [], 'object_digest': 'a' * 64,
                                     'functions': [self.row]}]}
         self.write_progress()
+        (self.root / 'decomp/include/Probe.h').write_text('class CProbe { public: int work(); int keep(); };\n')
         self.stage = publication.Stage(self.root)
         self.loop.work = self.stage.path / 'build-decomp/llm-loop/Probe.cpp'
         self.loop.work.mkdir(parents=True)
@@ -860,6 +861,229 @@ class RepairWorkflow(unittest.TestCase):
             f.update(params=params.replace('std::allocator<wchar_t>', custom))
             cp['repair'] = self.snapshot()
             with self.subTest(custom=custom), self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def signature_checkpoint(self, params='CProbe::Node*', actual='Node* node', *,
+                             header='class CProbe { public: class Node {}; int work(Node*); };\n',
+                             cv='', source_cv='', extra='', scope='CProbe'):
+        cp = self.prepared_checkpoint()
+        f = self.loop.funcs[0]
+        f.update(params=params, cv=cv, scope=scope, demangled=scope + '::work(' + params + ')' + cv)
+        text = self.original_source.replace('CProbe::work()', scope + '::work(' + actual + ')' + source_cv) + extra
+        for root in (self.root, self.stage.path):
+            (root / 'decomp/src/Probe.cpp').write_text(text)
+            (root / 'decomp/include/Probe.h').write_text(header)
+        cp['settings']['selected'] = [f]
+        cp['existing'] = text
+        cp['repair'] = self.snapshot()
+        self.stage.baseline.update(publication.tree_state(self.root))
+        cp['tree'] = publication.tree_state(self.stage.path)
+        return cp
+
+    def test_repair_queue_defaults_allow_only_body_change(self):
+        wide = 'std::basic_string<wchar_t, std::char_traits<wchar_t>, std::allocator<wchar_t> >'
+        full = 'std::queue<' + wide + ', std::deque<' + wide + ', std::allocator<' + wide + '> > >*'
+        cp = self.signature_checkpoint(full, 'std::queue<std::wstring>* tokens',
+            header='#include <queue>\n#include <string>\nclass CProbe { public: int work(std::queue<std::wstring>*); };\n')
+        text = cp['existing']
+        self.loop.source.write_text(text.replace('return 1', 'return 3'))
+        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        for changed in (text.replace('tokens', 'renamed'), text.replace('return 2', 'return 8'),
+                        text.replace('std::queue<std::wstring>', 'std::queue<std::wstring, std::deque<std::wstring> >')):
+            self.loop.source.write_text(changed)
+            with self.assertRaisesRegex(RuntimeError, 'outside assigned bodies'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_queue_custom_container_and_qualifiers_rejected(self):
+        cp = self.signature_checkpoint('std::queue<int, std::deque<int, std::allocator<int> > >*',
+            'std::queue<int>* tokens', header='class CProbe { public: int work(std::queue<int>*); };\n')
+        for params in ('std::queue<int, std::vector<int> >*',
+                       'std::queue<int, std::deque<int, OtherAllocator<int> > >*',
+                       'std::queue<int, std::deque<int> > const*',
+                       'std::queue<int, std::deque<int> >&',
+                       'std::queue<int, std::deque<int> >*, int'):
+            self.loop.funcs[0].update(params=params)
+            with self.subTest(params=params), self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_nested_scope_uses_nearest_complete_type_not_outer_short_name(self):
+        cp = self.signature_checkpoint('CProbe::Inner::Node*', scope='CProbe::Inner',
+            header='class CProbe { public: class Node {}; class Inner { public: class Node {}; int work(Node*); }; };\n')
+        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        self.loop.funcs[0].update(params='CProbe::Node*')
+        with self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+            llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_nested_typedef_cannot_be_skipped_for_outer_named_type(self):
+        cp = self.signature_checkpoint(scope='CProbe::Inner',
+            header='class CProbe { public: class Node {}; class Inner { public: typedef int Node; int work(Node*); }; };\n')
+        with self.assertRaises(RuntimeError):
+            llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_scoped_identity_retains_demangled_member_cv_fallback(self):
+        cp = self.signature_checkpoint(cv=' const', source_cv=' const',
+            header='class CProbe { public: class Node {}; int work(Node*) const; };\n')
+        self.loop.funcs[0].pop('cv')
+        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        self.loop.funcs[0]['cv'] = None
+        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_scoped_node_identity_allows_only_assigned_body(self):
+        cp = self.signature_checkpoint()
+        text = cp['existing']
+        self.loop.source.write_text(text.replace('return 1', 'return 3'))
+        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        # Lookup normalization must never permit an actual signature edit, or
+        # alter any unassigned body/include/declaration byte in the full TU.
+        for changed in (text.replace('Node* node', 'CProbe::Node* node'),
+                        text.replace('return 2', 'return 9'),
+                        '#include "Other.h"\n' + text,
+                        text + 'int unassigned;\n'):
+            with self.subTest(changed=changed):
+                self.loop.source.write_text(changed)
+                with self.assertRaisesRegex(RuntimeError, 'outside assigned bodies'):
+                    llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_scoped_node_identity_preserves_types_pointers_and_cv(self):
+        cp = self.signature_checkpoint()
+        f = self.loop.funcs[0]
+        for params, cv in (('Node*', ''), ('Other::Node*', ''), ('CProbe::Node', ''),
+                           ('CProbe::Node**', ''), ('CProbe::Node&', ''),
+                           ('CProbe::Node const*', ''), ('CProbe::Node* const', ''),
+                           ('CProbe::Node*', ' const'), ('CProbe::Node*', ' volatile')):
+            f.update(params=params, cv=cv, demangled='CProbe::work(' + params + ')' + cv)
+            with self.subTest(params=params, cv=cv), \
+                    self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_scoped_node_identity_requires_lexical_declaration(self):
+        cp = self.signature_checkpoint()
+        for header in ('class Node {}; class CProbe {};\n',
+                       'class Other { public: class Node {}; }; class CProbe {};\n',
+                       'namespace Other { class CProbe { public: class Node {}; }; }\n',
+                       'class CProbe { public: typedef int Node; };\n'):
+            for root in (self.root, self.stage.path):
+                (root / 'decomp/include/Probe.h').write_text(header)
+            self.stage.baseline.update(publication.tree_state(self.root))
+            cp['tree'] = publication.tree_state(self.stage.path)
+            with self.subTest(header=header), \
+                    self.assertRaisesRegex(RuntimeError, 'exact unique source signature|unresolved scoped typedef'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_same_arity_overload_is_preserved_and_duplicates_rejected(self):
+        overload = 'int CProbe::work(int value) { return 7; }\n'
+        cp = self.signature_checkpoint(extra=overload)
+        text = cp['existing']
+        self.loop.source.write_text(text.replace('return 1', 'return 3'))
+        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        self.loop.source.write_text(text.replace('return 7', 'return 9'))
+        with self.assertRaisesRegex(RuntimeError, 'outside assigned bodies'):
+            llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        for params in ('Node* again', 'CProbe::Node* again'):
+            self.loop.source.write_text(text + 'int CProbe::work(' + params + ') { return 8; }\n')
+            with self.subTest(params=params), \
+                    self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_scoped_identity_retains_unsupported_declarator_gate(self):
+        cp = self.signature_checkpoint()
+        f = self.loop.funcs[0]
+        for params in ('CProbe::Node* = 0', 'CProbe::Node (*)()', 'CProbe::Node[2]',
+                       'CProbe::Node (&)[2]'):
+            f.update(params=params)
+            with self.subTest(params=params), \
+                    self.assertRaisesRegex(RuntimeError, 'unsupported declarator'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_stdio_alias_requires_unshadowed_pinned_owning_header(self):
+        cp = self.signature_checkpoint('_IO_FILE*', 'FILE* stream',
+            header='#include <cstdio>\nclass CProbe { public: int work(FILE*); };\n')
+        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        for header in ('class CProbe { public: int work(FILE*); };\n',
+                       '#include <cstdio>\ntypedef int FILE; class CProbe {};\n',
+                       '#include <stdio.h>\nclass CProbe { public: class FILE {}; };\n'):
+            for root in (self.root, self.stage.path):
+                (root / 'decomp/include/Probe.h').write_text(header)
+            self.stage.baseline.update(publication.tree_state(self.root))
+            cp['tree'] = publication.tree_state(self.stage.path)
+            with self.subTest(header=header), \
+                    self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_header_evidence_must_match_both_pins_and_actual_bytes(self):
+        import copy
+        cp = self.signature_checkpoint()
+        name = 'decomp/include/Probe.h'
+        for root in (self.root, self.stage.path):
+            path = root / name
+            original = path.read_bytes()
+            for mutation in ('changed', 'missing', 'redirected'):
+                with self.subTest(root=root, mutation=mutation):
+                    if mutation == 'changed':
+                        path.write_bytes(original + b'// changed evidence\n')
+                    else:
+                        path.unlink()
+                        if mutation == 'redirected':
+                            other = root / 'identical-header'
+                            other.write_bytes(original)
+                            path.symlink_to(other)
+                    with self.assertRaisesRegex(RuntimeError, 'repair declaration header'):
+                        llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+                    path.unlink(missing_ok=True)
+                    path.write_bytes(original)
+        for mutation in ('missing', 'changed', 'new'):
+            modified = copy.deepcopy(cp)
+            if mutation == 'missing': modified['tree'].pop(name)
+            elif mutation == 'changed': modified['tree'][name] = '0' * 64
+            else: modified['tree']['decomp/include/New.h'] = '0' * 64
+            with self.subTest(checkpoint=mutation), \
+                    self.assertRaisesRegex(RuntimeError, 'headers differ from Stage baseline'):
+                llm_loop.validate_repair_snapshot(self.stage, modified, ['0x2'], self.loop.db)
+
+    def test_repair_new_or_deleted_shadow_headers_cannot_change_alias_authority(self):
+        cp = self.signature_checkpoint('_IO_FILE*', 'FILE* stream',
+            header='#include <cstdio>\nclass CProbe { public: int work(FILE*); };\n')
+        name = 'decomp/include/Shadow.h'
+        # New evidence fails even when a modified checkpoint pretends to pin it.
+        for root in (self.root, self.stage.path):
+            path = root / name
+            path.write_text('typedef int FILE;\n')
+            with self.subTest(root=root), self.assertRaisesRegex(RuntimeError, 'headers missing, new'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+            path.unlink()
+        for root in (self.root, self.stage.path):
+            (root / name).write_text('typedef int FILE;\n')
+        cp['tree'] = publication.tree_state(self.stage.path)
+        with self.assertRaisesRegex(RuntimeError, 'headers differ from Stage baseline'):
+            llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        self.stage.baseline.update(publication.tree_state(self.root))
+        with self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
+            llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+        (self.stage.path / name).unlink()
+        with self.assertRaisesRegex(RuntimeError, 'headers missing, new'):
+            llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_owning_header_mapping_must_resolve_to_pinned_basename(self):
+        cp = self.signature_checkpoint()
+        for mapping in ({}, {'CProbe': '../include/Probe.h'}, {'CProbe': '/Probe.h'},
+                        {'CProbe': 'Missing.h'}, {'CProbe': ['Probe.h']}):
+            cp['headers'] = mapping
+            with self.subTest(mapping=mapping), \
+                    self.assertRaisesRegex(RuntimeError, 'owning declaration header is unavailable'):
+                llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
+
+    def test_repair_mapping_to_other_pinned_header_cannot_grant_alias_authority(self):
+        cp = self.signature_checkpoint('_IO_FILE*', 'FILE* stream',
+            header='class CProbe { public: int work(FILE*); };\n')
+        for declaration in ('class Other { public: int work(FILE*); };\n',
+                            'class CProbe { public: int work(int); };\n'):
+            for root in (self.root, self.stage.path):
+                (root / 'decomp/include/Stdio.h').write_text('#include <cstdio>\n' + declaration)
+            self.stage.baseline.update(publication.tree_state(self.root))
+            cp['tree'] = publication.tree_state(self.stage.path)
+            cp['headers']['CProbe'] = 'Stdio.h'
+            with self.subTest(declaration=declaration), \
+                    self.assertRaisesRegex(RuntimeError, 'exact unique source signature'):
                 llm_loop.validate_repair_snapshot(self.stage, cp, ['0x2'], self.loop.db)
 
     def test_protected_target_or_alias_in_accepted_or_stale_receipt(self):

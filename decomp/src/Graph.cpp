@@ -3,6 +3,7 @@
 #include "Graph.h"
 #include "DataGroup.h"
 #include "StringUtilities.h"
+#include "ParticleUniverseTechnique.h"
 #include <algorithm>
 
 CGraph::CGraph(const std::wstring& filename)
@@ -35,13 +36,23 @@ float CGraph::getValue(float x, unsigned int line) const
 {
     if (m_bInferPastEnd && x > m_fLastX)
     {
-        if (line != 0)
-            return (x - m_fLastX) * m_fOtherSlope + m_fOtherMax;
-        return (x - m_fLastX) * m_fFirstSlope + m_fFirstMax;
+        float slope;
+        float maximum;
+        if (line == 0)
+        {
+            slope = m_fFirstSlope;
+            maximum = m_fFirstMax;
+        }
+        else
+        {
+            slope = m_fOtherSlope;
+            maximum = m_fOtherMax;
+        }
+        return (x - m_fLastX) * slope + maximum;
     }
-    if (line < m_Lines.size() && m_Lines[line] != NULL)
-        return m_Lines[line]->getValue(NULL, x);
-    return 0;
+    if (line >= m_Lines.size() || m_Lines[line] == NULL)
+        return 0;
+    return m_Lines[line]->getValue(NULL, x);
 }
 
 void CGraph::processPoints()
@@ -68,10 +79,19 @@ void CGraph::clear(unsigned int line)
 
 void CGraph::addGraphLine(EGRAPH_TYPES type)
 {
-    if (type == GRAPH_CURVED)
-        m_Lines.add(new ParticleUniverse::DynamicAttributeCurved(ParticleUniverse::IT_SPLINE));
-    else
-        m_Lines.add(new ParticleUniverse::DynamicAttributeCurved(ParticleUniverse::IT_LINEAR));
+    switch (type)
+    {
+        default:
+        {
+            m_Lines.add(new ParticleUniverse::DynamicAttributeCurved(ParticleUniverse::IT_LINEAR));
+            break;
+        }
+        case GRAPH_CURVED:
+        {
+            m_Lines.add(new ParticleUniverse::DynamicAttributeCurved(ParticleUniverse::IT_SPLINE));
+            break;
+        }
+    }
     m_iLineCount = m_Lines.size();
 }
 
@@ -98,29 +118,39 @@ void CGraph::loadGraphLine(CDataGroup* data)
     for (unsigned int i = 0; i < data->GetNumberOfDataGroups(); ++i)
     {
         CDataGroup* point = data->GetDataGroup(i);
-        float x = point->GetDataValue(L"X", 0.0f);
-        float first, other;
         if (m_Lines.size() == 1)
         {
-            first = other = point->GetDataValue(L"Y", 0.0f);
-            addValue(x, first, 0);
+            float x = point->GetDataValue(L"X", 0.0f);
+            float y = point->GetDataValue(L"Y", 0.0f);
+            addValue(x, y, 0);
+            if (i == data->GetNumberOfDataGroups() - 1)
+            {
+                m_fFirstSlope = y - lastFirst;
+                m_fOtherSlope = y - lastOther;
+            }
+            else
+            {
+                lastFirst = y;
+                lastOther = y;
+            }
         }
         else
         {
-            first = point->GetDataValue(L"MINY", 0.0f);
-            other = point->GetDataValue(L"MAXY", 0.0f);
+            float x = point->GetDataValue(L"X", 0.0f);
+            float first = point->GetDataValue(L"MINY", 0.0f);
+            float other = point->GetDataValue(L"MAXY", 0.0f);
             addValue(x, first, 0);
             addValue(x, other, 1);
-        }
-        if (i == data->GetNumberOfDataGroups() - 1)
-        {
-            m_fFirstSlope = first - lastFirst;
-            m_fOtherSlope = other - lastOther;
-        }
-        else
-        {
-            lastFirst = first;
-            lastOther = other;
+            if (i == data->GetNumberOfDataGroups() - 1)
+            {
+                m_fFirstSlope = first - lastFirst;
+                m_fOtherSlope = other - lastOther;
+            }
+            else
+            {
+                lastFirst = first;
+                lastOther = other;
+            }
         }
     }
 }

@@ -40,3 +40,6 @@ ParticleNativeOwners particleNativeOwners(unsigned profile){
     ParticleNativeOwners result={p->controls.resources,p->services.scene,p->services.scene->getCamera("PlayerCam"),p};
     return result;
 }
+void particleNativeSetEditorMode(const ParticleNativeOwners& owners, bool editor){
+    static_cast<Owners*>(owners.owner)->controls.editor->m_iFlags=editor?2:0;
+}

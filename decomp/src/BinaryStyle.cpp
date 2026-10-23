@@ -185,3 +185,46 @@ void CBinaryStyle::Load(std::ifstream& stream, CDataGroup* group,
         Load(stream, child, names, version, timers);
     }
 }
+
+#include "FileSystem.h"
+
+int CBinaryStyle::LoadDataGroupToFile(const std::wstring& fileName, CDataGroup* dataGroup,
+                                      CTimerStatics* timers)
+{
+    if (fileName == EMPTY_WSTRING || !dataGroup)
+        return 0;
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(fileName, info, false, true, false);
+    if (timers)
+        timers->m_times.add(static_cast<unsigned int>(timers->m_timer.getMicroseconds()));
+    std::string path = STRINGS::StringConvertToUTF8(info.m_sPath);
+    std::ifstream stream(path.c_str(), std::ios::binary);
+    if (timers)
+        timers->popTime(L"TIME TO LOAD OFF DISK");
+    if (!stream.is_open())
+        return 0;
+    unsigned int version = Get32BitData(stream);
+    TRepository<std::wstring>* repository = dataGroup->m_pRepository;
+    std::map<unsigned int, unsigned int> names;
+    if (!repository)
+        return 0;
+    unsigned int count = Get32BitData(stream);
+    if (timers)
+        timers->m_times.add(static_cast<unsigned int>(timers->m_timer.getMicroseconds()));
+    for (unsigned int i = 0; i < count; ++i) {
+        unsigned int id = Get32BitData(stream);
+        unsigned int length = Get32BitData(stream);
+        std::wstring value = GetWChar16ArrayAsString(stream, length);
+        names[id] = repository->addItem(value);
+    }
+    if (timers) {
+        timers->popTime(L"TIME TO PARSE STRINGS");
+        timers->m_times.add(static_cast<unsigned int>(timers->m_timer.getMicroseconds()));
+        timers->m_times.add(static_cast<unsigned int>(timers->m_timer.getMicroseconds()));
+    }
+    Load(stream, dataGroup, names, version, timers);
+    if (timers)
+        timers->popTime(L"TIME TO PARSE DATAGROUP");
+    stream.close();
+    return 1;
+}

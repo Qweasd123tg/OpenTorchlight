@@ -11,7 +11,7 @@ class CColorWrapper : public CAffectorWrapper
 public:
     virtual ~CColorWrapper();
 
-    void setColors(const float* colors, unsigned int numberOfColors);
+    void setColors(float* colors, unsigned int numberOfColors);
     float* getColors(unsigned int& numberOfColors);
 
     explicit CColorWrapper(CResourceManager* resourceManager);

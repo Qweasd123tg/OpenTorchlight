@@ -15,7 +15,7 @@ class iDataFileSaveAndLoad
 public:
     virtual ~iDataFileSaveAndLoad() {}
     virtual int SaveDataGroupToFile(const std::wstring& file, CDataGroup* group) = 0;
-    virtual void LoadDataGroupToFile(const std::wstring& file, CDataGroup* group, CTimerStatics* timers) = 0;
+    virtual int LoadDataGroupToFile(const std::wstring& file, CDataGroup* group, CTimerStatics* timers) = 0;
 };
 
 class CBinaryStyle : public iDataFileSaveAndLoad
@@ -29,7 +29,7 @@ public:
     CBinaryStyle();
     virtual ~CBinaryStyle();
     virtual int SaveDataGroupToFile(const std::wstring& file, CDataGroup* group);
-    virtual void LoadDataGroupToFile(const std::wstring& file, CDataGroup* group, CTimerStatics* timers);
+    virtual int LoadDataGroupToFile(const std::wstring& file, CDataGroup* group, CTimerStatics* timers);
     void Save64BitDataValue(std::basic_ofstream<char, std::char_traits<char> >& stream, const UNIONDATA64BIT& value);
     void SaveUInt32BitDataValue(std::basic_ofstream<char, std::char_traits<char> >& stream, unsigned int value);
     void SaveDataValues(std::basic_ofstream<char, std::char_traits<char> >& stream, CDataGroup* group);

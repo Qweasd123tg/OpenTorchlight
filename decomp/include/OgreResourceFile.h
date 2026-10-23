@@ -17,7 +17,7 @@ public:
 
     virtual int SaveDataGroupToFile(const std::wstring& fileName,
                                       CDataGroup* dataGroup);
-    virtual void LoadDataGroupToFile(const std::wstring& fileName,
+    virtual int LoadDataGroupToFile(const std::wstring& fileName,
                                       CDataGroup* dataGroup,
                                       CTimerStatics* timerStatics);
 

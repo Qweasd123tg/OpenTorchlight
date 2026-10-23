@@ -25,4 +25,23 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define PARTICLE_DYNAMIC_ATTRIBUTE_H
 // The historical SDK declarations carry the verified Runic Particle* ABI.
 #include "ParticleUniverseDynamicAttribute.h"
+
+namespace ParticleUniverse {
+// Runic extension absent from the upstream 2008 SDK headers.
+class DynamicAttributeRandomCurved : public DynamicAttribute {
+public:
+    DynamicAttributeRandomCurved(InterpolationType);
+    virtual ~DynamicAttributeRandomCurved();
+    virtual float getValue(Particle*, float);
+    virtual void copyAttributesTo(DynamicAttribute*);
+    virtual void addControlPoint(float, float, float);
+    void processControlPoints();
+    InterpolationType getInterpolationType() const;
+    unsigned int getNumControlPoints() const;
+    void getControlPointValues(unsigned int, float&, float&, float&);
+private:
+    DynamicAttributeCurved* m_minimum;
+    DynamicAttributeCurved* m_maximum;
+};
+}
 #endif

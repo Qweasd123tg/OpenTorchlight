@@ -118,3 +118,50 @@ void COgreResourceFile::Load(COgreReader* reader, CDataGroup* group,
         Load(reader, child, indexes, reserved, timers);
     }
 }
+
+#include "FileSystem.h"
+#include "TRepository.h"
+#include "TimerStatics.h"
+
+int COgreResourceFile::LoadDataGroupToFile(const std::wstring& fileName,
+                                          CDataGroup* dataGroup,
+                                          CTimerStatics* timers)
+{
+    if (fileName == EMPTY_WSTRING || !dataGroup)
+        return 0;
+    if (timers)
+        timers->m_times.add(static_cast<unsigned int>(timers->m_timer.getMicroseconds()));
+    CFileInfo info;
+    CFileSystem::getSingleton()->getFileInfo(fileName, info, false, true, false);
+    if (!info.m_bExists)
+        return 0;
+    COgreReader reader;
+    reader.ReadFile(info);
+    if (!reader.m_iSize)
+        return 0;
+    if (timers)
+        timers->popTime(L"TIME TO LOAD OFF DISK");
+    unsigned int version = Get32BitData(&reader);
+    TRepository<std::wstring>* repository = dataGroup->m_pRepository;
+    std::map<unsigned int, unsigned int> names;
+    if (!repository)
+        return 0;
+    unsigned int count = Get32BitData(&reader);
+    if (timers)
+        timers->m_times.add(static_cast<unsigned int>(timers->m_timer.getMicroseconds()));
+    for (unsigned int i = 0; i < count; ++i) {
+        unsigned int id = Get32BitData(&reader);
+        unsigned int length = Get32BitData(&reader);
+        std::wstring value = GetWChar16ArrayAsString(&reader, length);
+        names[id] = repository->addItem(value);
+    }
+    if (timers) {
+        timers->popTime(L"TIME TO PARSE STRINGS");
+        timers->m_times.add(static_cast<unsigned int>(timers->m_timer.getMicroseconds()));
+        timers->m_times.add(static_cast<unsigned int>(timers->m_timer.getMicroseconds()));
+    }
+    Load(&reader, dataGroup, names, version, timers);
+    if (timers)
+        timers->popTime(L"TIME TO PARSE DATAGROUP");
+    return 1;
+}

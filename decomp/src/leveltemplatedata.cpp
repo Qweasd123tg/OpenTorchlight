@@ -8,6 +8,25 @@
 #include "LevelTemplateData.h"
 #include "Utilities.h"
 
+void CLevelTemplateData::deleteLayouts()
+{
+    for (unsigned int i = 0; i < m_baseLayouts.size(); ++i)
+        m_layouts.remove(m_baseLayouts[i]);
+
+    m_layouts.deleteAll();
+    if (m_layoutRandomizer)
+        m_layoutRandomizer->clear();
+    else
+        m_layoutRandomizer = new CRandomizer(RANDOMIZER_NORMAL);
+
+    m_randomLayoutGenerated = false;
+    for (unsigned int i = 0; i < m_baseLayouts.size(); ++i)
+    {
+        m_layouts.add(m_baseLayouts[i]);
+        m_layoutRandomizer->addChoice(i, 1);
+    }
+}
+
 CChunk* CLevelTemplateData::getRandomChunk(unsigned int index)
 {
     return m_chunks[m_chunkRandomizers[index]->getRandom()];
@@ -839,4 +858,31 @@ int CLevelTemplateData::createRandomLayout(int seed)
         chunks.clear();
     }
     return seed;
+}
+
+#include "ResourceManager.h"
+#include "SpawnClass.h"
+#include "SpawnClassData.h"
+
+void CLevelTemplateData::chooseUnitSpawners(CResourceManager* resourceManager)
+{
+    for (unsigned int i = 0; i < 11; ++i) {
+        if (m_useSpawnClass[i]) {
+            CSpawnClass* spawnClass = resourceManager->getSpawnClassByName(m_unitSpawnerNames[i]);
+            if (spawnClass != NULL) {
+                CRandomizer randomizer(RANDOMIZER_NORMAL);
+                for (unsigned int j = 0; j < spawnClass->m_entries.size(); ++j) {
+                    if (spawnClass->m_entries[j]->spawnClassData->m_pSpawnClass != NULL) {
+                        int odds = spawnClass->m_entries[j]->data->m_odds;
+                        randomizer.addChoice(j, odds > 0 ? odds : 100);
+                    }
+                }
+                m_selectedUnitSpawners[i] = spawnClass->m_entries[randomizer.getRandom()]->spawnClassData->m_pSpawnClass->m_name;
+            } else {
+                m_selectedUnitSpawners[i] = m_unitSpawnerNames[i];
+            }
+        } else {
+            m_selectedUnitSpawners[i] = m_unitSpawnerNames[i];
+        }
+    }
 }

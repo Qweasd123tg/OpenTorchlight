@@ -145,3 +145,101 @@ CLevelState::~CLevelState()
     }
     m_lCharacters.clear();
 }
+
+#include "FileUtilities.h"
+
+void CLogicNodeState::load(FILE* file, unsigned int version)
+{
+    unsigned short length;
+    fread(&length, 2, 1, file);
+    m_wstrName = FILESYSTEM::ReadWString(file, length);
+    unsigned char flag;
+    fread(&flag, 1, 1, file);
+    m_bActive = flag != 0;
+    fread(&flag, 1, 1, file);
+    m_bEnabled = flag != 0;
+    fread(&flag, 1, 1, file);
+    m_bFinished = flag != 0;
+    fread(&flag, 1, 1, file);
+    m_bFailed = flag != 0;
+    fread(&m_nNodeId, 4, 1, file);
+    fread(&m_nParentNodeId, 4, 1, file);
+    fread(&m_nStateFlags, 4, 1, file);
+    fread(&m_nCurrentState, 4, 1, file);
+    fread(&m_guid, 8, 1, file);
+    fread(&m_parentGuid, 8, 1, file);
+    if (version > 16)
+        fread(&m_parentHierarchyHash, 8, 1, file);
+    else if (version == 16) {
+        unsigned int unused = 0;
+        fread(&unused, 4, 1, file);
+    }
+    fread(&m_position, 12, 1, file);
+    fread(&flag, 1, 1, file);
+    m_bPersistent = flag != 0;
+    fread(&m_nStateVersion, 4, 1, file);
+}
+
+void CLevelState::load(FILE* file, unsigned int version)
+{
+    fread(&m_iLevelId, 4, 1, file);
+    fread(&m_iStateVersion, 4, 1, file);
+    for (int i = 0; i < m_iAutomapWidth * m_iAutomapHeight; ++i) {
+        unsigned char flag;
+        fread(&flag, 1, 1, file);
+        static_cast<float*>(m_pAutomapData)[i] = flag ? 1.0f : 0.0f;
+    }
+    unsigned short length;
+    fread(&length, 2, 1, file);
+    m_sLevelName = FILESYSTEM::ReadWString(file, length);
+    unsigned char flag;
+    fread(&flag, 1, 1, file);
+    m_bUnknownB0 = flag != 0;
+    if (version > 21)
+        fread(&m_bUnknownB1, 1, 1, file);
+    fread(&m_iAutomapWidth, 4, 1, file);
+    fread(&m_iAutomapHeight, 4, 1, file);
+    if (m_iAutomapWidth > 0) {
+        m_pAutomapData = new float[m_iAutomapWidth * m_iAutomapHeight];
+        fread(m_pAutomapData,
+              static_cast<long>(m_iAutomapWidth) * m_iAutomapHeight * 4,
+              1, file);
+    }
+    unsigned int count = m_lCharacters.size();
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i) {
+        CCharacterSaveState* state = new CCharacterSaveState;
+        state->load(file, version);
+        m_lCharacters.push_back(state);
+    }
+    count = m_lItems.size();
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i) {
+        CItemSaveState* state = new CItemSaveState;
+        state->load(file, version);
+        m_lItems.push_back(state);
+    }
+    count = m_lLogicStates.size();
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i) {
+        CLogicNodeState* state = new CLogicNodeState();
+        state->load(file, version);
+        if (version <= 14 && state->m_wstrName == L"Timeline")
+            state->m_bPersistent = true;
+        m_lLogicStates.push_back(state);
+    }
+    count = m_lLevelStrings.size();
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i) {
+        fread(&length, 2, 1, file);
+        std::wstring text = FILESYSTEM::ReadWString(file, length);
+        m_lLevelStrings.push_back(text);
+    }
+    count = m_lFormations.size();
+    fread(&count, 4, 1, file);
+    for (unsigned int i = 0; i < count; ++i) {
+        CFormationNodeSaveAndLoad* formation = new CFormationNodeSaveAndLoad(NULL);
+        formation->loadFormationNode(file);
+        m_lFormations.add(formation);
+    }
+}

@@ -274,7 +274,11 @@ CPathController::CPathController(CResourceManager* resources)
 CPathController::~CPathController()
 {
     m_pathNodes.clear();
-    m_units.deleteAll();
+    for (unsigned int i=0;i<m_units.size();++i) {
+        OGRE_DELETE_T(m_units[i],TSafePointer<CCharacter>,Ogre::MEMCATEGORY_GENERAL);
+        m_units[i]=NULL;
+    }
+    m_units.clear();
     m_pUnitInteractDataGroup=NULL;
 }
 
@@ -318,7 +322,7 @@ void CPathController::setEnabled(bool enabled)
             CPlayer*player=m_pResourceManager->getGameClient()->getPlayer();
             if (!player) return;
             player->setAIState(AISTATE_IDLE);
-            TSafePointer<CCharacter>*safe=new TSafePointer<CCharacter>;
+            TSafePointer<CCharacter>*safe=OGRE_NEW_T(TSafePointer<CCharacter>,Ogre::MEMCATEGORY_GENERAL)();
             safe->setObject(player);
             m_units.add(safe);
         } else {
@@ -327,7 +331,7 @@ void CPathController::setEnabled(bool enabled)
             for (unsigned int i=0;i<units.size();++i) {
                 CCharacter*unit=dynamic_cast<CCharacter*>(units[i]);
                 if (unit) {
-                    TSafePointer<CCharacter>*safe=new TSafePointer<CCharacter>;
+                    TSafePointer<CCharacter>*safe=OGRE_NEW_T(TSafePointer<CCharacter>,Ogre::MEMCATEGORY_GENERAL)();
                     safe->setObject(unit);
                     m_units.add(safe);
                 }

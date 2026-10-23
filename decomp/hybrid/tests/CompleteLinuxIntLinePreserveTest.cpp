@@ -63,4 +63,4 @@ int run(const tlhybrid_host* host,unsigned operation,const char* name,uint64_t a
     unlink(path);coverage.report(host);return 0;
 }
 }
-TL_TEST(mass_linux_int_line){return run(host,3,"mass_linux_int_line",(uint64_t)(uintptr_t)oldIntLine);}
+TL_TEST(preserve_linux_int_line){return run(host,3,"preserve_linux_int_line",(uint64_t)(uintptr_t)oldIntLine);}

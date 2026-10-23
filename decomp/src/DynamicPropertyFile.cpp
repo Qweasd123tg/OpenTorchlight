@@ -194,3 +194,156 @@ CDynamicPropertyFile::CDynamicPropertyFile(std::wstring directory, std::wstring 
     for (unsigned int i = 4; i < 8; ++i)
         m_Unrecovered130[i] = 0;
 }
+
+#include <cstdio>
+#include <cwchar>
+#include <queue>
+#include "FileReader.h"
+#include "LinuxUtils.h"
+#include "UTFConversion.h"
+
+bool CDynamicPropertyFile::saveSettings(const std::wstring& file, bool nonLocal)
+{
+    std::wstring fileName = file.compare(L"") == 0 ? m_file : file;
+    if (nonLocal)
+        fileName = m_secondaryFile;
+    FILE* output = NULL;
+    utf16string text;
+    m_lastFileError = _wfopen_s(&output, (m_directory + L"/" + fileName).c_str(), L"w");
+    unsigned short byteOrderMark = 0xfeff;
+    fwrite(&byteOrderMark, 2, 1, output);
+    if (!output)
+        return false;
+
+    unsigned int index = 0;
+    std::map<std::wstring, unsigned int>::iterator it = m_intIndices.begin();
+    while (index < m_intValues.size() && it != m_intIndices.end())
+    {
+        unsigned int property = it->second;
+        if (property == index)
+        {
+            if (isNonLocalVariable(it->first) == nonLocal)
+            {
+                wchar_t buffer[200];
+                std::wstring format = it->first + L" :%i\n";
+                swprintf(buffer, 200, format.c_str(), m_intValues[property]);
+                text = UTF32ToUTF16(std::wstring(buffer));
+                fwrite(text.c_str(), text.length() * 2, 1, output);
+            }
+            index = property + 1;
+            it = m_intIndices.begin();
+        }
+        else
+            ++it;
+    }
+
+    index = 0;
+    it = m_floatIndices.begin();
+    while (index < m_floatValues.size() && it != m_floatIndices.end())
+    {
+        unsigned int property = it->second;
+        if (property == index)
+        {
+            if (isNonLocalVariable(it->first) == nonLocal)
+            {
+                wchar_t buffer[200];
+                std::wstring format = it->first + L" :%f\n";
+                swprintf(buffer, 200, format.c_str(), GetFloat(property));
+                text = UTF32ToUTF16(std::wstring(buffer));
+                fwrite(text.c_str(), text.length() * 2, 1, output);
+            }
+            index = property + 1;
+            it = m_floatIndices.begin();
+        }
+        else
+            ++it;
+    }
+
+    index = 0;
+    it = m_stringIndices.begin();
+    while (index < m_stringValues.size() && it != m_stringIndices.end())
+    {
+        unsigned int property = it->second;
+        if (property == index)
+        {
+            if (isNonLocalVariable(it->first) == nonLocal)
+            {
+                std::wstring line = it->first + L" :" + m_stringValues[property] + L"\n";
+                text = UTF32ToUTF16(line);
+                fwrite(text.c_str(), text.length() * 2, 1, output);
+            }
+            index = property + 1;
+            it = m_stringIndices.begin();
+        }
+        else
+            ++it;
+    }
+    fclose(output);
+    return true;
+}
+
+bool CDynamicPropertyFile::loadSettings(const std::wstring& file)
+{
+    m_loaded = false;
+    std::wstring fileName = file.compare(L"") == 0 ? m_file : file;
+    CFileReader reader;
+    if (reader.ReadFile(m_directory + L"/" + fileName))
+    {
+        std::queue<std::wstring> tokens;
+        int lines = 0;
+        while (!reader.EndOfFile())
+        {
+            std::wstring line = reader.ReadLine();
+            {
+                const wchar_t* separators = L" :";
+                std::wstring separator(separators);
+                size_t position = line.find(separators);
+                if (position != std::wstring::npos)
+                {
+                    size_t start = 0;
+                    do
+                    {
+                        std::wstring token = line.substr(start, position - start);
+                        tokens.push(token);
+                        start = position + separator.length();
+                        position = line.find(separators, start);
+                    } while (position != std::wstring::npos);
+                    if (start < line.length())
+                    {
+                        std::wstring token = line.substr(start, line.length() - start);
+                        tokens.push(token);
+                    }
+                }
+                if (tokens.empty() && line.length() != 0)
+                {
+                    unsigned int last = 0;
+                    for (unsigned int i = 0; i < line.length(); ++i)
+                    {
+                        if (line.c_str()[i] == separators[0])
+                        {
+                            std::wstring token = line.substr(last, i);
+                            tokens.push(token);
+                            last = i + 1;
+                        }
+                    }
+                }
+            }
+            if (tokens.size() != 0)
+            {
+                std::wstring name = tokens.front();
+                tokens.pop();
+                if (tokens.size() != 0)
+                {
+                    std::wstring value = tokens.front();
+                    SetSetting(name, value);
+                }
+                ++lines;
+            }
+            while (!tokens.empty())
+                tokens.pop();
+        }
+        m_callbacks.resize(lines);
+        m_loaded = true;
+    }
+    return m_loaded;
+}

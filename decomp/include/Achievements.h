@@ -10,6 +10,8 @@
 #include "GameEnums.h"
 #include "RunicCore.h"
 class CAchievement;
+class CAchievements;
+extern CAchievements* m_gAchievementsObject;
 
 class CAchievements : public CRunicCore
 {

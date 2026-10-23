@@ -17,9 +17,14 @@ public:
         virtual ~CRoomPieceCoreData();
         std::wstring m_name;                      // 0x10
         long long m_guid;                         // 0x18
-        unsigned char m_unknown20[0x10];
-        bool m_scalable;                         // 0x30
-        unsigned char m_padding31[7];
+        unsigned char m_unknown20[4];
+        int m_queryMask;                          // 0x24, OGRE_UTILITIES::EQUERYMASK
+        bool m_postRender;                        // 0x28
+        bool m_preRender;                         // 0x29
+        int m_automapLayer;                       // 0x2c
+        bool m_scalable;                          // 0x30
+        bool m_fixedVariation;                    // 0x31
+        unsigned char m_padding32[6];
         TArrayList<float> m_snapRotation;         // 0x38
         TArrayList<float> m_snapPosition;         // 0x50
         TArrayList<float> m_snapScale;            // 0x68

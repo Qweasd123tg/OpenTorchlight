@@ -3,6 +3,12 @@
 
 CAchievements* m_gAchievementsObject = NULL;
 
+CAchievements::~CAchievements()
+{
+    m_achievements.deleteAll();
+    m_gAchievementsObject = NULL;
+}
+
 CAchievements* CAchievements::getSingleton()
 {
     return m_gAchievementsObject;

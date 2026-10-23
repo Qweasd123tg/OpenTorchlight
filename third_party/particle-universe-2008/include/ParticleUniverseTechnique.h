@@ -547,6 +547,7 @@ namespace ParticleUniverse
 
 			/** 
 			*/
+			unsigned int getParticlesUpdating(void);
 			size_t getNumberOfEmittedParticles(void);
 
 			/** 

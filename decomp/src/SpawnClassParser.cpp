@@ -5,6 +5,12 @@
 
 static CSpawnClassParser* m_gSpawnClassParser = NULL;
 
+CSpawnClassParser::CSpawnClassParser()
+{
+    m_gSpawnClassParser = this;
+    reloadFromDirectory(L"media/SpawnClasses/");
+}
+
 CSpawnClassParser* CSpawnClassParser::getSingleton()
 {
     return m_gSpawnClassParser;
@@ -137,4 +143,54 @@ void CSpawnClassParser::fillEmptySpawnClass(CDataGroup* group)
                 spawnClass->addSpawnClassData(group->GetDataGroup(i), data);
         }
     }
+}
+
+
+#include "FileSystem.h"
+#include "MasterResourceManager.h"
+
+CSpawnClassData* CSpawnClassParser::createSpawnClassDataByUnitType(const std::wstring& type,
+                                                                CDataGroup* group)
+{
+    std::wstring key = Ogre::UTFString("UNITTYPE:") + Ogre::UTFString(type);
+    CSpawnClassData* data = getSpawnClassDataByName(key);
+    if (data)
+        return data;
+
+    TArrayList<CDataGroup*> units(1000);
+    unsigned int unitType = CMasterResourceManager::getSingleton()->m_pHierarchy->getTypeIDByName(type);
+    if (unitType != static_cast<unsigned int>(-1)) {
+        if (unitType != 22)
+            CUnitResourceList::getSingleton()->getDataGroupsByUnitType(unitType, units);
+        if (unitType == 22 || units.size() != 0) {
+            data = createSpawnClass(key, group);
+            data->addUnitDataObjects(units);
+            m_spawnClassData[data->m_sName] = data;
+            if (unitType == 22)
+                data->m_bIsInitialized = true;
+        }
+    }
+    return data;
+}
+
+
+
+bool CSpawnClassParser::reloadFromDirectory(const wchar_t* path)
+{
+    clear();
+    TArrayList<std::wstring> files(10);
+    CFileSystem::getSingleton()->getFileList(path, files, L"*.dat", true, true, false, false);
+    TArrayList<CDataGroup*> groups(files.size());
+    for (unsigned int i = 0; i < files.size(); ++i) {
+        CDataGroup* group = new CDataGroup(files[i], NULL, 20, 10, NULL);
+        group->LoadFile(files[i], NULL);
+        groups.add(group);
+    }
+    for (unsigned int i = 0; i < groups.size(); ++i)
+        createEmptySpawnClass(groups[i]);
+    for (unsigned int i = 0; i < groups.size(); ++i)
+        fillEmptySpawnClass(groups[i]);
+    files.clear();
+    groups.deleteAll();
+    return !m_spawnClassData.empty();
 }

@@ -9,6 +9,11 @@
 #include "Level.h"
 #include "ResourceManager.h"
 
+CEditorBaseObject* CUnitSpawnerDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CUnitSpawner(scene->getResourceManager());
+}
+
 CUnitSpawnerDescriptor::CUnitSpawnerDescriptor()
     : CShapeDescriptor(L"Unit Spawner", L"Spawns units in differnt formations", L"spawn", true, true, true)
 {
@@ -127,4 +132,88 @@ void CUnitSpawnerDescriptor::DescriptorObjectHasBeenInited(CEditorBaseObject* ob
 {
     CUnitSpawner* spawner = dynamic_cast<CUnitSpawner*>(object);
     if (spawner) spawner->reset();
+}
+
+#include "SpawnClassParser.h"
+#include "MasterResourceManager.h"
+#include "Hierarchy.h"
+#include "MissilePreloader.h"
+#include "FileSystem.h"
+#include "UnitResourceList.h"
+
+std::wstring CUnitSpawnerDescriptor::GetResourceStringByID(
+    CEditorScene*, CEditorBaseObject* object, unsigned int index, void*)
+{
+    if (index == 0 || object == NULL)
+        return EMPTY_WSTRING;
+    CUnitSpawner* spawner = dynamic_cast<CUnitSpawner*>(object);
+    if (spawner == NULL)
+        return EMPTY_WSTRING;
+    CResourceManager* resources = spawner->getResourceManager();
+    if (resources == NULL)
+        return EMPTY_WSTRING;
+
+    --index;
+    if (std::wstring(spawner->m_category) == gSPAWN_TYPE_NAMES[3]) {
+        std::map<std::wstring, CSpawnClass*>& classes =
+            CSpawnClassParser::getSingleton()->m_spawnClasses;
+        for (std::map<std::wstring, CSpawnClass*>::iterator it = classes.begin();
+             it != classes.end(); ++it) {
+            if (index == 0)
+                return it->first;
+            --index;
+        }
+        return EMPTY_WSTRING;
+    }
+
+    CHierarchy* hierarchy = CMasterResourceManager::getSingleton()->m_pHierarchy;
+    if (std::wstring(spawner->m_category) == gSPAWN_TYPE_NAMES[5]) {
+        unsigned int type = index < hierarchy->m_types.size()
+            ? hierarchy->m_types[index] : 0;
+        if (type == static_cast<unsigned int>(-1))
+            type = 0;
+        return hierarchy->getTypeName(type);
+    }
+    if (std::wstring(spawner->m_category) == gSPAWN_TYPE_NAMES[4]) {
+        if (gMissileFiles.size() == 0)
+            CMissilePreloader::getSinglelton()->getMissileNames(gMissileFiles);
+        if (index > 0 && index < gMissileFiles.size())
+            return gMissileFiles[index];
+        if (gMissileFiles.size() != 0) {
+            std::wstring first = gMissileFiles[0];
+            gMissileFiles.clear();
+            return first;
+        }
+        return EMPTY_WSTRING;
+    }
+    if (std::wstring(spawner->m_category) == gSPAWN_TYPE_NAMES[2]) {
+        const std::wstring directory(L"media/particles/");
+        if (gParticleFiles.size() == 0)
+            CFileSystem::getSingleton()->getFileList(
+                directory, gParticleFiles, L"*.layout", true, true, false, false);
+        if (gParticleFiles.size() == 0)
+            return EMPTY_WSTRING;
+        if (index > 0 && index < gParticleFiles.size())
+            return gParticleFiles[index].substr(directory.length(),
+                gParticleFiles[index].length() - directory.length());
+        return gParticleFiles[0].substr(directory.length(),
+            gParticleFiles[0].length() - directory.length());
+    }
+
+    std::map<long long, CDataGroup*>* groups;
+    if (std::wstring(spawner->m_category) == gSPAWN_TYPE_NAMES[0])
+        groups = resources->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[1]);
+    else if (std::wstring(spawner->m_category) == gSPAWN_TYPE_NAMES[6])
+        groups = resources->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[3]);
+    else if (std::wstring(spawner->m_category) == gSPAWN_TYPE_NAMES[1])
+        groups = resources->getMasterResourceList()->getGroupByName(gRESOURCE_GROUP_NAMES[0]);
+    else
+        return EMPTY_WSTRING;
+    for (std::map<long long, CDataGroup*>::iterator it = groups->begin();
+         it != groups->end(); ++it) {
+        if (index == 0)
+            return it->second->GetDataValue(L"NAME", EMPTY_WSTRING);
+        --index;
+    }
+    return EMPTY_WSTRING;
 }

@@ -11,7 +11,7 @@ public:
 
     void setEnabled(bool bEnabled);
     CSkipCutscene(CResourceManager* pResourceManager);
-    float update(float fDeltaTime);
+    void update(float fDeltaTime);
 
     bool m_bEnabled;
     bool m_bSkipRequested;

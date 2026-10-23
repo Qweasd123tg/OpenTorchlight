@@ -21,8 +21,7 @@ public:
 
 	CPlaneColliderWrapper(CResourceManager* resourceManager);
 
-	float mPlaneDistance;
-	int mPlaneFlags;
+	Ogre::Vector3 m_vNormal;
 };
 
 #endif

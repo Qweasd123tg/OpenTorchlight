@@ -14,6 +14,20 @@ CAnimationSet::CAnimationSet()
     m_nUnknown = 0;
 }
 
+CAnimationSet::~CAnimationSet()
+{
+    for (unsigned int i = 0; i < m_lAnimationGroups.size(); ++i) {
+        for (unsigned int j = 0; j < m_lAnimationGroups[i].size(); ++j) {
+            if (m_lAnimationGroups[i][j]) {
+                delete m_lAnimationGroups[i][j];
+                m_lAnimationGroups[i][j] = NULL;
+            }
+        }
+        m_lAnimationGroups[i].clear();
+    }
+    m_lAnimationGroups.clear();
+}
+
 
 // Imported source candidates; historical status is not fresh acceptance.
 void CAnimationSet::clear()

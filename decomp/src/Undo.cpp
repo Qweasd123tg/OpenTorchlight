@@ -91,6 +91,27 @@ void CUndo::AddNewObject(CEditorBaseObject* object)
     data->m_action = 2;
     m_undoData.add(data);
 }
+
+void CUndo::AddObjectDeleted(CEditorBaseObject* object)
+{
+    if (!object || !object->getSceneOwner() || !object->getDescriptor())
+        return;
+    object->AddBaseObjectFlag(static_cast<EEDITOROBJECT_FLAG>(1));
+    object->AddBaseObjectFlag(static_cast<EEDITOROBJECT_FLAG>(2));
+    object->AddBaseObjectFlag(static_cast<EEDITOROBJECT_FLAG>(8));
+    CUndoData* data = new CUndoData;
+    data->m_property = ~0u;
+    data->m_objectGuid = -1;
+    data->m_data = NULL;
+    data->m_count = 0;
+    data->m_action = 1;
+    data->m_object = object;
+    CSceneNodeObject* positionable = dynamic_cast<CSceneNodeObject*>(object);
+    if (positionable)
+        positionable->setVisible(false);
+    gEditor->getObjectManager()->EditorObjectDeleted(object);
+    m_undoData.add(data);
+}
 void CUndo::DoUndoOnProperty(CUndoData* data, CUndo* undo)
 {
     if (!data || data->m_property == ~0u) return;

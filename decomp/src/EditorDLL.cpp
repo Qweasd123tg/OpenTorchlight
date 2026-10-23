@@ -2096,3 +2096,140 @@ wchar_t* EditorGetListOfItems(unsigned int sceneID, long long guid, unsigned int
     }
     return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
 }
+
+#include "RoomPieceData.h"
+
+bool convertRoomPieces(CDataGroup* group,
+    TArrayList<CRoomPieceDataInformation::CRoomPieceCoreData*>& pieces)
+{
+    if(!group) return false;
+    CRoomPieceData room;
+    room.m_coreData=NULL;
+    room.m_guid=-1;
+    bool changed=false;
+    for(unsigned int i=0;i<group->GetNumberOfDataGroups();++i) {
+        CDataGroup* child=group->GetDataGroup(i);
+        if(!child) continue;
+        if(child->GetDataValue(L"DESCRIPTOR",EMPTY_WSTRING)==L"Room Piece") {
+            const std::wstring& guid=child->GetDataValue(L"GUID",EMPTY_WSTRING);
+            if(guid==EMPTY_WSTRING) continue;
+            room.m_guid=STRINGS::GetInt64(guid);
+            if(room.m_guid!=-1)
+                room.m_coreData=CRoomPieceDataInformation::getSingleton()->_GetRoomPieceCoreDataByGuid(room.m_guid);
+            if(!room.m_coreData) continue;
+            for(unsigned int j=0;j<pieces.size();++j) {
+                if(pieces[j]->m_name==room.m_coreData->m_name) {
+                    const std::wstring replacement=STRINGS::GetValueAsWString(pieces[j]->m_guid);
+                    child->SetDataValue(L"GUID",replacement.c_str(),false);
+                    changed=true;
+                    break;
+                }
+            }
+        }
+        changed=convertRoomPieces(child,pieces) || changed;
+    }
+    return changed;
+}
+
+
+#include "GameUI.h"
+
+const wchar_t* EditorGetIconSheets()
+{
+    std::string result("");
+    if (!gEditor->isActive())
+        return STRINGS::StringConvertToWide(result).c_str();
+    if (gEditor->getGameClient() && gEditor->getGameClient()->getGameUI()) {
+        CGameUI* ui = gEditor->getGameClient()->getGameUI();
+        std::string files("");
+        for (unsigned int i = 0; i < ui->m_itemIconFiles.size(); ++i)
+            files += STRINGS::StringConvertToNarrow(ui->m_itemIconFiles[i].c_str()) + ",";
+        result = files;
+    }
+    STRINGS::StringCopyWCharArray(sEditorString, 1000,
+                                  STRINGS::StringConvertToWide(result).c_str());
+    return sEditorString;
+}
+
+#include <OgreUTFString.h>
+#include "SkillDefines.h"
+
+wchar_t* EditorGetSkillTypes()
+{
+    *reinterpret_cast<unsigned int*>(sEditorTmpMemory) = 0;
+    if (!gEditor->isActive()) return NULL;
+    std::wstring result(EMPTY_WSTRING);
+    for (unsigned int i = 0; i < 4; ++i)
+        result += static_cast<std::wstring>(Ogre::UTFString(gSKILL_TYPE_NAMES[i]) + Ogre::UTFString(","));
+    unsigned int count = result.size();
+    if (count < 2000000) {
+        unsigned int bytes = count * 2;
+        std::memcpy(sEditorTmpMemory, result.c_str(), bytes);
+        *reinterpret_cast<wchar_t*>(sEditorTmpMemory + bytes) = 0;
+    }
+    return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
+}
+
+wchar_t* EditorGetSkillTargetTypes()
+{
+    *reinterpret_cast<unsigned int*>(sEditorTmpMemory) = 0;
+    if (!gEditor->isActive()) return NULL;
+    std::wstring result(EMPTY_WSTRING);
+    for (unsigned int i = 0; i < 12; ++i)
+        result += static_cast<std::wstring>(Ogre::UTFString(gSKILL_TARGET_TYPE_NAMES[i]) + Ogre::UTFString(","));
+    unsigned int count = result.size();
+    if (count < 2000000) {
+        unsigned int bytes = count * 2;
+        std::memcpy(sEditorTmpMemory, result.c_str(), bytes);
+        *reinterpret_cast<wchar_t*>(sEditorTmpMemory + bytes) = 0;
+    }
+    return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
+}
+
+wchar_t* EditorGetSkillEventTypes()
+{
+    *reinterpret_cast<unsigned int*>(sEditorTmpMemory) = 0;
+    if (!gEditor->isActive()) return NULL;
+    std::wstring result(EMPTY_WSTRING);
+    for (unsigned int i = 0; i < 11; ++i)
+        result += static_cast<std::wstring>(Ogre::UTFString(gSKILL_EVENT_TYPE_NAMES[i]) + Ogre::UTFString(","));
+    unsigned int count = result.size();
+    if (count < 2000000) {
+        unsigned int bytes = count * 2;
+        std::memcpy(sEditorTmpMemory, result.c_str(), bytes);
+        *reinterpret_cast<wchar_t*>(sEditorTmpMemory + bytes) = 0;
+    }
+    return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
+}
+
+wchar_t* EditorGetSkillEffectAndAffixTargetTypes()
+{
+    *reinterpret_cast<unsigned int*>(sEditorTmpMemory) = 0;
+    if (!gEditor->isActive()) return NULL;
+    std::wstring result(EMPTY_WSTRING);
+    for (unsigned int i = 0; i < 5; ++i)
+        result += static_cast<std::wstring>(Ogre::UTFString(gSKILL_EFFECT_AND_AFFIXES_TARGET_NAMES[i]) + Ogre::UTFString(","));
+    unsigned int count = result.size();
+    if (count < 2000000) {
+        unsigned int bytes = count * 2;
+        std::memcpy(sEditorTmpMemory, result.c_str(), bytes);
+        *reinterpret_cast<wchar_t*>(sEditorTmpMemory + bytes) = 0;
+    }
+    return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
+}
+
+wchar_t* EditorGetSkillActivationTypes()
+{
+    *reinterpret_cast<unsigned int*>(sEditorTmpMemory) = 0;
+    if (!gEditor->isActive()) return NULL;
+    std::wstring result(EMPTY_WSTRING);
+    for (unsigned int i = 0; i < 5; ++i)
+        result += static_cast<std::wstring>(Ogre::UTFString(gSKILL_ACTIVATION_TYPE_NAMES[i]) + Ogre::UTFString(","));
+    unsigned int count = result.size();
+    if (count < 2000000) {
+        unsigned int bytes = count * 2;
+        std::memcpy(sEditorTmpMemory, result.c_str(), bytes);
+        *reinterpret_cast<wchar_t*>(sEditorTmpMemory + bytes) = 0;
+    }
+    return reinterpret_cast<wchar_t*>(sEditorTmpMemory);
+}

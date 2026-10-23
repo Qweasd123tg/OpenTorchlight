@@ -53,4 +53,4 @@ void execute(void*raw,autotest::Capture&out,bool ours){
 void original(void*p,autotest::Capture&o){execute(p,o,false);}void candidate(void*p,autotest::Capture&o){execute(p,o,true);}
 int run(const tlhybrid_host*host){nativegame::Services services;if(!services.ready())return 1;scene=services.scene;autotest::Coverage coverage("level_character_view",(uintptr_t)&cvOld);for(unsigned i=0;i<3072;++i){autotest::Outcome a,b;autotest::runChild(original,&i,a);autotest::runChild(candidate,&i,b);if(coverage.observe(host,a,b)){host->log("    character view seed%u issue%u/%u exit%d/%d bytes%lu/%lu\n",i,a.capture.issue,b.capture.issue,a.childStatus,b.childStatus,(unsigned long)a.capture.length,(unsigned long)b.capture.length);if(a.capture.length==b.capture.length){for(unsigned j=0;j<a.capture.length;++j)if(a.capture.data[j]!=b.capture.data[j]){host->log("    first different byte%u native%u candidate%u\n",j,a.capture.data[j],b.capture.data[j]);break;}}coverage.report(host);return 1;}}coverage.report(host);return 0;}
 }
-TL_TEST(level_character_view){return systems_fixture::isolated(&run,host);}
+TL_TEST(level_character_view){return systems_fixture::isolated(&run,host,180);}

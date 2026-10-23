@@ -1,4 +1,6 @@
 #include "RoomPiece.h"
+#include "CameraControl.h"
+#include <OgreAxisAlignedBox.h>
 
 void CRoomPiece::setHighlighted(bool highlighted)
 {
@@ -11,6 +13,17 @@ bool CRoomPiece::getRoomPieceIsAnimated()
     if (m_pGenericModel)
         return m_pGenericModel->getAnimationCount() != 0;
     return false;
+}
+
+void CRoomPiece::updateAnimation(float elapsed)
+{
+    if (getRoomPieceIsAnimated()) {
+        Ogre::Vector3 position = getPosition(true);
+        Ogre::AxisAlignedBox bounds(m_pGenericModel->m_boundsMinimum + position,
+                                   m_pGenericModel->m_boundsMaximum + position);
+        if (m_pResourceManager->getCameraControl()->m_cameras[0]->isVisible(bounds, NULL))
+            m_pGenericModel->updateAnimation(elapsed, false);
+    }
 }
 
 #include "EditorScene.h"
@@ -138,4 +151,95 @@ void CRoomPiece::setCollisionMeshFilePath(const std::wstring& path)
         if(!m_pResourceManager->getEditorIsRunning() && !m_bCollisionEnabled) m_meshFile=EMPTY_WSTRING;
         if(m_meshFile!=EMPTY_WSTRING) m_collisionModel=CMasterResourceManager::getSingleton()->addCollisionModel(path);
     }
+}
+
+#include <OgreEntity.h>
+// m_collisionMeshFile (+0x128) holds the visual mesh path here; m_meshFile is the collision path.
+void CRoomPiece::setMeshFilePath(const std::wstring& path)
+{
+    if (m_collisionMeshFile == path)
+        return;
+    sceneNodeDetachEntity();
+    if (m_pGenericModel) {
+        if (m_bUnknown154) {
+            CMasterResourceManager::getSingleton()->removeBatchModel(m_pGenericModel);
+            m_pGenericModel = NULL;
+        } else {
+            delete m_pGenericModel;
+            m_pGenericModel = NULL;
+        }
+    }
+    m_collisionMeshFile = path;
+    m_pEntity = NULL;
+    if (path.empty())
+        return;
+    bool batch = m_bIsBakeable && m_bVisible;
+    if (batch) {
+        m_bUnknown154 = true;
+        bool shared;
+        m_pGenericModel = CMasterResourceManager::getSingleton()->addBatchModel(m_pResourceManager, NULL, path, shared);
+        if (!shared)
+            m_bUnknown154 = false;
+    } else {
+        m_bUnknown154 = false;
+        m_pGenericModel = new CGenericModel(m_pResourceManager, NULL, path, EMPTY_WSTRING, false);
+    }
+    if (m_pGenericModel) {
+        m_pGenericModel->setVisible(false);
+        if (!m_bUnknown154)
+            m_pGenericModel->sceneNodeDetachEntity();
+        if (m_bUnknown151)
+            m_pGenericModel->getEntity()->setRenderQueueGroup(60);
+        if (getRoomPieceIsAnimated())
+            m_pGenericModel->playAnimation("IDLE", true, 1.0f, -1.0f);
+        if (!m_bUnknown154)
+            sceneNodeAttachEntity(m_pGenericModel->getEntity());
+    }
+}
+
+#include "Settings.h"
+void CRoomPiece::initRoomPiece()
+{
+    if (m_iVisualIndex_140 == -1)
+        return;
+    unsigned int index = m_iVisualIndex;
+    unsigned int count = getVisualMeshCountInRoomPiece();
+    if (index >= count) {
+        index = 0;
+        if (count != 1)
+            index = UTILITIES::randomIntegerBetween(0, getVisualMeshCountInRoomPiece() - 1);
+    }
+    m_bUnknown151 = m_pRoomPieceData->m_coreData->m_postRender;
+    m_bUnknown152 = m_pRoomPieceData->m_coreData->m_preRender;
+    m_iUnknown158 = m_pRoomPieceData->m_coreData->m_automapLayer;
+    if (m_pRoomPieceData->m_coreData->m_fixedVariation)
+        m_iVisualIndex = index;
+    if (m_bCollisionEnabled && CMasterResourceManager::getSingleton()->m_pSettings->GetInt(KSETTINGS_DISPLAY_COLLISION)) {
+        if (m_pRoomPieceData->m_coreData->m_collisionMeshFiles.size() != 0) {
+            if (m_pRoomPieceData->m_coreData->m_collisionMeshFiles.size() == m_pRoomPieceData->m_coreData->m_visualMeshFiles.size()) {
+                setMeshFilePath(m_pRoomPieceData->m_coreData->m_collisionMeshFiles[index]);
+                setCollisionMeshFilePath(m_pRoomPieceData->m_coreData->m_collisionMeshFiles[index]);
+            } else {
+                setMeshFilePath(m_pRoomPieceData->m_coreData->m_collisionMeshFiles[0]);
+                setCollisionMeshFilePath(m_pRoomPieceData->m_coreData->m_collisionMeshFiles[0]);
+            }
+        } else {
+            setMeshFilePath(m_pRoomPieceData->m_coreData->m_visualMeshFiles[index]);
+            setCollisionMeshFilePath(EMPTY_WSTRING);
+        }
+    } else {
+        if (index < m_pRoomPieceData->m_coreData->m_visualMeshFiles.size())
+            setMeshFilePath(m_pRoomPieceData->m_coreData->m_visualMeshFiles[index]);
+        else
+            setMeshFilePath(EMPTY_WSTRING);
+        if (m_pRoomPieceData->m_coreData->m_collisionMeshFiles.size() != 0) {
+            if (m_pRoomPieceData->m_coreData->m_collisionMeshFiles.size() == m_pRoomPieceData->m_coreData->m_visualMeshFiles.size())
+                setCollisionMeshFilePath(m_pRoomPieceData->m_coreData->m_collisionMeshFiles[index]);
+            else
+                setCollisionMeshFilePath(m_pRoomPieceData->m_coreData->m_collisionMeshFiles[0]);
+        } else
+            setCollisionMeshFilePath(EMPTY_WSTRING);
+    }
+    if (m_pGenericModel)
+        m_pGenericModel->setQueryMask((OGRE_UTILITIES::EQUERYMASK)m_pRoomPieceData->m_coreData->m_queryMask);
 }

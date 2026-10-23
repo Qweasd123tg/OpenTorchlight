@@ -81,6 +81,96 @@ CRandomGroup::~CRandomGroup()
 }
 
 #include "EditorScene.h"
+#include "Layout.h"
+#include "Randomizer.h"
+#include "Utilities.h"
+
+void CRandomGroup::calculateChildren()
+{
+    if (!getSceneOwner() || !m_pResourceManager || !m_bIsDynamicGroup)
+        return;
+
+    TArrayList<CLayout*> layouts(10);
+    std::map<long long, CEditorBaseObject*>& objects = getSceneOwner()->getObjects();
+    for (std::map<long long, CEditorBaseObject*>::iterator i = objects.begin(); i != objects.end(); ++i) {
+        if (!i->second->isChildOfObject(getGuid()))
+            continue;
+        CPositionableObject* object = dynamic_cast<CPositionableObject*>(i->second);
+        if (object) {
+            CLayout* layout = dynamic_cast<CLayout*>(object);
+            if (layout)
+                layouts.add(layout);
+            m_children.add(object);
+        }
+    }
+
+    for (unsigned int i = 0; i < layouts.size(); ++i) {
+        for (unsigned int j = 0; j < m_children.size(); ++j) {
+            if (layouts[i] && m_children[j]->isChildOfObject(layouts[i]->getGuid())) {
+                m_children.removeAt(j);
+                --j;
+            }
+        }
+    }
+
+    if (!m_pResourceManager->getEditorIsRunning()) {
+        Ogre::Vector3 position = getPosition(false);
+        for (unsigned int i = 0; i < m_children.size(); ++i) {
+            m_children[i]->CPositionableObject::setPosition(m_children[i]->getPosition(false) - position);
+            m_children[i]->setParentPositionableObject(this);
+        }
+        m_children.clear();
+    }
+}
+
+void CRandomGroup::chooseChildrenByRandomChoice(
+    TArrayList<CRandomGroup*>& randomGroups,
+    TArrayList<CEditorBaseObject*>& editorObjects)
+{
+    if (randomGroups.size() == 0 || !getGroupCanBeCreated())
+        return;
+
+    unsigned int type = m_iRandomType;
+    if (type != 0 && !m_pResourceManager->m_bFlag3) {
+        CRandomizer randomizer(RANDOMIZER_NORMAL);
+        int picks = m_iNumberOfPicks;
+        for (unsigned int i = 0; i < randomGroups.size(); ++i) {
+            CRandomGroup* group = randomGroups[i];
+            if (group) {
+                int weight = group->GetRandomWeight();
+                if (type == 1) {
+                    if (weight > 0)
+                        randomizer.addChoice(i, weight);
+                    else
+                        editorObjects.add(group);
+                } else {
+                    if (weight > 0 && weight < 100) {
+                        if (weight >= UTILITIES::randomBetween(1.0f, 100.0f)) {
+                            editorObjects.add(group);
+                            if (--picks == 0)
+                                break;
+                        }
+                    } else {
+                        editorObjects.add(group);
+                    }
+                }
+            }
+        }
+
+        if (type == 1) {
+            for (unsigned int i = 0; i < static_cast<unsigned int>(picks); ++i) {
+                int choice = randomizer.getRandom();
+                editorObjects.add(randomGroups[choice]);
+                randomizer.removeChoice(choice);
+                if (randomizer.getChoiceCount() == 0)
+                    break;
+            }
+        }
+    } else {
+        for (unsigned int i = 0; i < randomGroups.size(); ++i)
+            editorObjects.add(randomGroups[i]);
+    }
+}
 
 void CRandomGroup::setVisible(bool visible)
 {

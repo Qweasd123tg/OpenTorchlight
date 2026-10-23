@@ -11,4 +11,5 @@ struct ParticleNativeOwners {
 // The implementation uses the existing native owners in a separate TU. This
 // keeps the unused Graph/Player declarations out of the PU SDK test TU.
 ParticleNativeOwners particleNativeOwners(unsigned profile);
+void particleNativeSetEditorMode(const ParticleNativeOwners& owners, bool editor);
 #endif

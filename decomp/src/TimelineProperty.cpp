@@ -74,6 +74,34 @@ int CTimelineProperty::GetFreeIDForPoint()
     return id;
 }
 
+CTimelineProperty::CTimelineProperty(CTimeline *timeline, CEditorScene *editorScene,
+                                   CDescriptor *descriptor, CDescriptorProp *descriptorProperty,
+                                   long long objectID)
+    : CRunicCore()
+{
+    m_objectID = objectID;
+    m_propertyID = -1;
+    m_inputEvent = false;
+    m_lastTimePercent = -0.01f;
+    m_editorScene = editorScene;
+    m_descriptor = descriptor;
+    m_descriptorProperty = descriptorProperty;
+    m_timelinePoints = NULL;
+    m_interpolationType = 7;
+    m_spline = NULL;
+    m_timeline = timeline;
+    m_updating = false;
+    m_propertyID = descriptor->GetPropertyID(descriptorProperty->m_sName);
+}
+
+CTimelineProperty::~CTimelineProperty()
+{
+    if (m_spline != NULL)
+        delete m_spline;
+    m_spline = NULL;
+    m_timelinePoints.destroy();
+}
+
 int CTimelineProperty::GetTimelinePointIDByIndex(int index)
 {
     if (index < 0)

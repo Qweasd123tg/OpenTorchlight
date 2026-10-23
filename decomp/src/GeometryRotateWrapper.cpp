@@ -23,7 +23,14 @@ class GeometryRotator
 {
 public:
     DynamicAttribute* getRotationSpeed() const;
+    void setRotationSpeed(DynamicAttribute* speed);
 };
+}
+
+void CGeometryRotateWrapper::setDynamicPropRotationSpeed(const float* values, unsigned int count)
+{
+    ParticleUniverse::DynamicAttribute* speed = getDynPropFromArray(values, count);
+    reinterpret_cast<ParticleUniverse::GeometryRotator*>(m_pAffector)->setRotationSpeed(speed);
 }
 
 void CGeometryRotateWrapper::getDynamicPropRotationSpeed(unsigned int& count)

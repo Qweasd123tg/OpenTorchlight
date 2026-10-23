@@ -2,6 +2,9 @@
 #define REFMANAGERINTERPRETERFUNC_H
 
 #include <string>
+#include <map>
+
+static std::map<std::wstring, unsigned int> g_MeshFilesByName;
 
 #include "EditorScene.h"
 #include "RunicCore.h"

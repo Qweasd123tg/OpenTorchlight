@@ -50,9 +50,14 @@ std::wstring CFileReader::ReadLine(wchar_t ignore)
 {
     std::wstring line;
     wchar_t character = ReadWChar();
-    while (character != L'\n' && character != 0 && !EndOfFile())
+    while (character != 0 && character != L'\n' && !EndOfFile())
     {
-        if (character > L'\r' && character != ignore)
+        if (character == ignore)
+        {
+            character = ReadWChar();
+            continue;
+        }
+        if (character > L'\r')
             line += character;
         character = ReadWChar();
     }
@@ -71,7 +76,8 @@ void CFileReader::ReadLineTokenize(std::queue<std::wstring>* tokens, const wchar
         while (start != std::wstring::npos)
         {
             end = line.find_first_of(separators, start);
-            tokens->push(line.substr(start, end - start));
+            std::wstring token = line.substr(start, end - start);
+            tokens->push(token);
             start = line.find_first_not_of(separators, end);
         }
     }

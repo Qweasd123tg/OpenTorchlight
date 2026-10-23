@@ -220,3 +220,92 @@ CAutomap::~CAutomap()
     m_pStaticTileSceneNode->detachObject(m_pStaticTileBillboardSet);
     m_pSceneManager->destroyBillboardSet(m_pStaticTileBillboardSet);
 }
+
+#include <algorithm>
+#include <cmath>
+
+Ogre::Billboard* CAutomap::addTile(int type, const Ogre::Vector3& position,
+                                  const Ogre::Vector3& direction,
+                                  bool animated, bool npc)
+{
+    Ogre::Billboard* billboard = m_pTileBillboardSet->createBillboard(position, Ogre::ColourValue::White);
+    m_minimumX = std::min(position.x, m_minimumX);
+    m_maximumX = std::max(position.x, m_maximumX);
+    m_minimumZ = std::min(position.z, m_minimumZ);
+    m_maximumZ = std::max(position.z, m_maximumZ);
+    --type;
+    if (type >= 34)
+        type = 5;
+    float top = KAutomapTileY[type] * 0.001953125f;
+    float left = KAutomapTileX[type] * 0.001953125f;
+    float size = KAutomapSize[type];
+    float extent = size * 0.001953125f;
+    billboard->setTexcoordRect(left + 0.005f, top + 0.005f,
+                               left + extent - 0.005f, top + extent - 0.005f);
+    float rotation = static_cast<float>(std::atan2(static_cast<double>(direction.x),
+                                                  static_cast<double>(direction.z)));
+    rotation += static_cast<float>(KAutomapTileRotation[type] * 0.01745329252);
+    billboard->setRotation(Ogre::Radian(rotation));
+    float dimension = 4.0f * KAutomapTileScale[type] * size * 0.03125f;
+    billboard->setDimensions(dimension, dimension);
+    if (npc) {
+        m_vNPCBillboards.push_back(billboard);
+        if (animated) {
+            billboard->setColour(Ogre::ColourValue(0.0f, 0.0f, 0.0f, 0.0f));
+            m_vNPCRevealValues.push_back(0.0f);
+        } else {
+            m_vNPCRevealValues.push_back(1.0f);
+        }
+    } else if (animated) {
+        billboard->setColour(Ogre::ColourValue(0.0f, 0.0f, 0.0f, 0.0f));
+        m_vMapTileBillboards.push_back(billboard);
+        m_vMapTileRevealValues.push_back(0.0f);
+    }
+    return billboard;
+}
+
+#include "FileSystem.h"
+#include <OgreMaterialManager.h>
+#include <OgreTechnique.h>
+#include <OgrePass.h>
+#include <OgreTextureUnitState.h>
+#include <OgreResourceGroupManager.h>
+
+void CAutomap::setFullMap(std::wstring textureName, float width, float height,
+                          Ogre::Vector3& position, Ogre::Vector3& direction,
+                          float angle)
+{
+    m_bFullMap = true;
+    if (Ogre::MaterialManager::getSingleton().resourceExists("AutomapStatic")) {
+        Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName("AutomapStatic");
+        CFileInfo info;
+        CFileSystem::getSingleton()->getFileInfo(textureName, info, false, true, false);
+        material->getTechnique(0)->getPass(0)->getTextureUnitState(0)->setTextureName(info.m_sResourceName, Ogre::TEX_TYPE_2D);
+    } else {
+        Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().create("AutomapStatic", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+        material->setReceiveShadows(false);
+        material->setLightingEnabled(false);
+        Ogre::Pass* pass = material->getTechnique(0)->getPass(0);
+        pass->setDepthCheckEnabled(true);
+        pass->setSelfIllumination(0.0f, 0.0f, 0.0f);
+        pass->setDepthWriteEnabled(false);
+        material->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+        material->setCullingMode(Ogre::CULL_NONE);
+        CFileInfo info;
+        CFileSystem::getSingleton()->getFileInfo(textureName, info, false, true, false);
+        pass->createTextureUnitState(info.m_sResourceName)->setTextureFiltering(Ogre::FO_LINEAR, Ogre::FO_LINEAR, Ogre::FO_NONE);
+    }
+    m_pStaticTileBillboardSet->setMaterialName("AutomapStatic");
+    m_pStaticTileBillboardSet->setDefaultWidth(width);
+    m_pStaticTileBillboardSet->setDefaultHeight(height);
+    Ogre::Billboard* billboard = m_pStaticTileBillboardSet->createBillboard(position, Ogre::ColourValue::White);
+    billboard->setTexcoordRect(1.0f, 0.0f, 0.0f, 1.0f);
+    billboard->setDimensions(width, height);
+    float rotation = static_cast<float>(std::atan2(static_cast<double>(direction.x), static_cast<double>(direction.z)));
+    rotation += static_cast<float>(angle * 0.01745329252);
+    billboard->setRotation(Ogre::Radian(rotation));
+    billboard->setColour(Ogre::ColourValue(1.0f, 1.0f, 1.0f, 1.0f));
+    m_vMapTileBillboards.push_back(billboard);
+    m_vMapTileRevealValues.push_back(100.0f);
+    m_bTilesChanged = true;
+}

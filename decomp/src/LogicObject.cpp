@@ -214,3 +214,79 @@ void CLogicObject::loadLogicObjectByDataGroup(CLogicGroup* group, CDataGroup* da
         if (function && output) AddLogicLink(output, input, function);
     }
 }
+
+#include "UTFConversion.h"
+#include <cstring>
+
+void CLogicObject::loadAndRelinkObjectInFromBinaryFile(CLogicGroup* group,
+    COgreReader* reader,CDescriptorLoadConfiguration*,std::map<int,int>& remappedIDs)
+{
+    unsigned int count=0;
+    reader->read(&count,4);
+    for(unsigned int i=0;i<count;++i) {
+        int id=0;
+        reader->read(&id,4);
+        int length=0;
+        reader->read(&length,4);
+        std::memset(m_gStringTEMP,0,sizeof(m_gStringTEMP));
+        std::memset(m_gStringTEMP1,0,sizeof(m_gStringTEMP1));
+        reader->read(m_gStringTEMP1,length*2);
+        ReadUTF16ToUTF32(m_gStringTEMP1,m_gStringTEMP,length);
+        const std::wstring outputName(m_gStringTEMP);
+        reader->read(&length,4);
+        std::memset(m_gStringTEMP,0,sizeof(m_gStringTEMP));
+        std::memset(m_gStringTEMP1,0,sizeof(m_gStringTEMP1));
+        reader->read(m_gStringTEMP1,length*2);
+        ReadUTF16ToUTF32(m_gStringTEMP1,m_gStringTEMP,length);
+        const std::wstring inputName(m_gStringTEMP);
+        std::map<int,int>::iterator found=remappedIDs.find(id);
+        if(found==remappedIDs.end()) continue;
+        id=found->second;
+        CLogicObject* input=group->GetLogicObjectByIndex(id);
+        if(!input) continue;
+        CDescriptor* inputDescriptor=input->m_pLinkedDescriptor;
+        if(!inputDescriptor || !m_pLinkedDescriptor) continue;
+        const unsigned int outputIndex=m_pLinkedDescriptor->GetOutputLogicWrapperIndex(outputName);
+        const unsigned int inputIndex=inputDescriptor->GetInputLogicWrapperIndex(inputName);
+        CLogicWrapper* output=NULL;
+        if(outputIndex!=~0u) output=m_pLinkedDescriptor->GetOutputLogicWrapper(outputIndex);
+        CLogicWrapper* function=NULL;
+        if(inputIndex!=~0u) function=inputDescriptor->GetInputLogicWrapper(inputIndex);
+        if(function && output) AddLogicLink(output,input,function);
+    }
+}
+
+#include "DynamicPropertyFile.h"
+#include "Settings.h"
+#include "StringUtilities.h"
+#include <OgreLogManager.h>
+
+bool CLogicObject::Invoke(unsigned int event)
+{
+    CEditorBaseObject* object = GetObject();
+    if (!object || !m_pLinkedDescriptor || event == ~0u) {
+        if (getSceneOwner()->getSettings()->GetInt(KSETTINGS_DEBUG_LOGIC) > 0) {
+            std::wstring message;
+            if (!object)
+                message = L"Unable to invoke logic message because object invoking on was null.";
+            else if (!m_pLinkedDescriptor)
+                message = L"Unable to invoke logic message because descriptor was null for object.";
+            else
+                // The original builds this diagnostic without assigning it.
+                L"ERROR INVOKING MESSAGE. Message is invalid for object " +
+                    object->getName() + L" of type " + m_pLinkedDescriptor->getName();
+            Ogre::LogManager::getSingleton().logMessage(
+                STRINGS::StringConvertToUTF8(message), Ogre::LML_CRITICAL);
+        }
+    }
+    if (getSceneOwner()->getSettings()->GetInt(KSETTINGS_DEBUG_LOGIC) > 0) {
+        std::wstring message = L"FIRING->" + gOUTPUT_EVENTS_NAMES[event] +
+            L" for object " + object->getName() + L" of type " +
+            object->getDescriptor()->m_sName;
+        Ogre::LogManager::getSingleton().logMessage(
+            STRINGS::StringConvertToUTF8(message), Ogre::LML_CRITICAL);
+    }
+    for (unsigned int i = 0; i < m_Links.size(); ++i)
+        if (m_Links[i]) m_Links[i]->InitiateInputEvent(event, object);
+    return true;
+}

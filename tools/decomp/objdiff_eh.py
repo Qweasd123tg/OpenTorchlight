@@ -335,7 +335,8 @@ def cleanup_signature(image, frames, start, size, insns, section=None):
     if (not offsets or offsets[0] != 0 or tuple(sorted(set(offsets))) != offsets
             or offsets[-1] >= size):
         return None
-    boundaries = set(offsets) | {size}
+    instruction_boundaries = set(offsets)
+    boundaries = instruction_boundaries | {size}
     try:
         reader = Reader(data, offset, bound)
         if reader.number(1) != 255 or reader.number(1) != 255:
@@ -352,7 +353,7 @@ def cleanup_signature(image, frames, start, size, insns, section=None):
             begin, count, pad, action = (reader.leb() for _ in range(4))
             if (action != 0 or count <= 0 or begin < previous_end
                     or begin not in boundaries or begin + count not in boundaries
-                    or begin + count > size or (pad and pad not in set(offsets))):
+                    or begin + count > size or (pad and pad not in instruction_boundaries)):
                 return None
             rows.append((begin, count, pad, 0))
             previous_end = begin + count

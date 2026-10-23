@@ -14,9 +14,18 @@ class CSpawningData : public CRunicCore
 {
 public:
     virtual ~CSpawningData();
+    int m_odds; // +0x10; non-positive weights use 100 in layout selection.
+    int m_rarityOverride;
+    int m_flags;
+    int m_minCount;
+    int m_maxCount;
+    int m_levelBonus;
+    float m_magicFind;
 private:
-    unsigned char m_unrecovered10[0x20];
+    unsigned char m_unrecovered2c[4];
 };
+
+typedef char check_spawning_data_size[sizeof(CSpawningData) == 0x30 ? 1 : -1];
 
 // Source name for the original unnamed 16-byte pair in addSpawnClassData.
 struct SpawnClassEntry

@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "DungeonCreationNames.h"
 #include "Randomizer.h"
 #include "RunicCore.h"
 #include "TArrayList.h"
