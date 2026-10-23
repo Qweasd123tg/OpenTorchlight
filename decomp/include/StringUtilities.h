@@ -7,6 +7,8 @@
 // Partial: declarations from StringUtilities.cpp used by recovered TUs.
 namespace STRINGS
 {
+    unsigned int GetArrayValueFloat(const std::string& text, float* output, unsigned int count, std::string separators);
+    unsigned int GetArrayValueFloat(const std::wstring& text, float* output, unsigned int count, std::wstring separators);
     unsigned int StringSizeOfWCharArray(const wchar_t* text, unsigned int maximum);
     unsigned int StringSizeOfCharArray(const char* text, unsigned int maximum);
     int StringConvertToWide(const std::string& text, wchar_t* output, int capacity);

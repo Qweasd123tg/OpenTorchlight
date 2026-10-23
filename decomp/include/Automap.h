@@ -21,6 +21,22 @@ namespace Ogre
     class Viewport;
 }
 
+static const float KAutomapSize[34] = {
+    32.0f, 32.0f, 32.0f, 32.0f, 32.0f, 32.0f, 32.0f, 96.0f, 96.0f, 96.0f, 96.0f, 96.0f, 32.0f, 96.0f, 32.0f, 32.0f, 32.0f, 160.0f, 96.0f, 32.0f, 32.0f, 32.0f, 32.0f, 32.0f, 32.0f, 32.0f, 0.0f, 32.0f, 32.0f, 32.0f, 32.0f, 32.0f, 32.0f, 32.0f
+};
+static const float KAutomapTileRotation[34] = {
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 90.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 270.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f
+};
+static const float KAutomapTileScale[34] = {
+    1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.5f, 1.5f, 1.0f, 1.0f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.0f, 1.0f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f
+};
+static const float KAutomapTileX[34] = {
+    0.0f, 32.0f, 64.0f, 96.0f, 128.0f, 160.0f, 192.0f, 0.0f, 64.0f, -32.0f, 64.0f, 0.0f, 224.0f, 160.0f, 192.0f, 192.0f, 224.0f, 0.0f, 160.0f, 256.0f, 288.0f, 320.0f, 352.0f, 384.0f, 416.0f, 448.0f, 0.0f, 0.0f, 480.0f, 384.0f, 416.0f, 448.0f, 480.0f, 320.0f
+};
+static const float KAutomapTileY[34] = {
+    0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 32.0f, 32.0f, 32.0f, 32.0f, 128.0f, 0.0f, 128.0f, 32.0f, 224.0f, 224.0f, 256.0f, 384.0f, 224.0f, 224.0f, 224.0f, 224.0f, 224.0f, 224.0f, 224.0f, 0.0f, 0.0f, 224.0f, 256.0f, 256.0f, 256.0f, 256.0f, 256.0f
+};
+
 class CAutomap : public CRunicCore
 {
 public:

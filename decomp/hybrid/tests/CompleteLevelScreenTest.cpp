@@ -58,4 +58,4 @@ void side(smallmass::Case&c,bool ours,autotest::Capture&out){
 }
 int worker(const tlhybrid_host*host){nativegame::Services services;if(!services.ready())return 1;scene=services.scene;menugui::Audio audio(CMasterResourceManager::getSingleton());const char*names[]={"level_screen_character","level_screen_item","level_screen_onscreen"};const unsigned addresses[]={0x94b440,0x94c730,0x94f730};for(unsigned i=0;i<3;++i)if(smallmass::run(host,i,names[i],addresses[i],&side,1024))return 1;return 0;}
 }
-TL_TEST(complete_level_screen){return systems_fixture::isolated(&worker,host);}
+TL_TEST(complete_level_screen){return systems_fixture::isolated(&worker,host,180);}

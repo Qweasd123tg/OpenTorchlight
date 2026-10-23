@@ -317,19 +317,20 @@ def _standard_string_aliases(text):
     return re.sub(pattern, lambda m: "std::wstring" if m[1] == "wchar_t" else "std::string", text)
 
 
-def _standard_vector_defaults(text, depth=0):
-    """Erase only the pinned std::vector<T, std::allocator<T> > default.
+def _standard_sequence_defaults(text, depth=0):
+    """Erase only pinned vector/deque allocator and queue container defaults.
 
     Balanced arguments and token identities preserve nested types and word
     boundaries. Custom allocators/namespaces and element qualifiers stay distinct.
     This is lookup text only; no declaration or general signature parser changes.
     """
     if depth > 32:
-        raise ValueError("vector template nesting exceeds lookup limit")
-    pattern = re.compile(r"(?<![\w:])std\s*::\s*vector\s*<")
+        raise ValueError("sequence template nesting exceeds lookup limit")
+    pattern = re.compile(r"(?<![\w:])std\s*::\s*(vector|deque|queue)\s*<")
     out, cursor = [], 0
     for_match = pattern.search(text, cursor)
     while for_match:
+        kind = for_match[1]
         start, opening = for_match.start(), for_match.end() - 1
         if re.search(r"::\s*$", text[:start]):
             cursor = for_match.end()
@@ -350,20 +351,21 @@ def _standard_vector_defaults(text, depth=0):
                 args.append(text[part:i].strip())
                 part = i + 1
         if end is None or len(args) not in (1, 2) or any(not a for a in args):
-            raise ValueError("malformed vector template arguments")
-        args = [_standard_vector_defaults(a, depth + 1) for a in args]
+            raise ValueError("malformed sequence template arguments")
+        args = [_standard_sequence_defaults(a, depth + 1) for a in args]
         def tokens(value):
             # Do not equate 'unsigned int' with 'unsignedint' or accept expressions.
             token = r"[A-Za-z_]\w*|::|[<>,*&]|[0-9]+"
             if re.sub(token + r"|\s+", "", value):
-                raise ValueError("unsupported vector template argument")
+                raise ValueError("unsupported sequence template argument")
             return re.findall(token, value)
         element = tokens(args[0])
-        if len(args) == 2 and tokens(args[1]) == ['std', '::', 'allocator', '<', *element, '>']:
+        default = 'deque' if kind == 'queue' else 'allocator'
+        if len(args) == 2 and tokens(args[1]) == ['std', '::', default, '<', *element, '>']:
             args.pop()
         # Preserve everything before this occurrence, including skipped namespaces.
         out.append(text[:start])
-        spelling = 'std::vector<' + ', '.join(args) + '>'
+        spelling = 'std::' + kind + '<' + ', '.join(args) + '>'
         if depth == 0:
             # parameter_key later removes whitespace. Keep element word boundaries
             # in this lookup-only spelling: unsigned int must not become unsignedint.
@@ -374,6 +376,11 @@ def _standard_vector_defaults(text, depth=0):
         for_match = pattern.search(text)
     out.append(text)
     return ''.join(out)
+
+
+def _standard_vector_defaults(text, depth=0):
+    # Historical entry point shared with smallmatch; keep one canonicalizer.
+    return _standard_sequence_defaults(text, depth)
 
 
 def _callback_aliases(sources):
@@ -1610,6 +1617,48 @@ class ContextIndex:
         found = {h for h in candidates if scope in self.header_classes.get(h, ())}
         return found if len(found) == 1 else set()
 
+    def _target_local_initializer(self, obj, f, tu):
+        """Expose complete original bytes, not an inferred source declaration/type.
+
+        A named local static has no external header dependency. Require exact
+        target/function/file identity and reject storage whose bytes are not a
+        complete immutable initializer. This is packet evidence, never acceptance.
+        """
+        raw, name = obj.get("name", ""), obj.get("demangled", "")
+        prefix = f.get("demangled", "") + "::"
+        if not name.startswith(prefix):
+            return None
+        local = name[len(prefix):]
+        if not re.fullmatch(r"[A-Za-z_][A-Za-z_0-9]*", local):
+            return None
+        symbols = f.get("names", [f.get("mangled", "")])
+        if not any(raw == "_ZZ" + symbol[2:] + "E" + str(len(local)) + local
+                   for symbol in symbols if symbol.startswith("_Z")):
+            return None
+        base, size = _address(obj["address"]), obj.get("size", 0)
+        identity = (base, raw, size, obj.get("file"))
+        if (obj.get("bind") != "local" or obj.get("file") != tu
+                or identity not in self.local_object_names or not 0 < size <= 8192):
+            return None
+        section, available = self._available(base, [obj])
+        if section is None or section.flags != 2 or available < size:
+            return None
+        # Do not present relocation-dependent pointers as final initialized bytes.
+        if any(base - 7 <= offset < base + size
+               for offset in getattr(self.image, "relocs", {})):
+            return None
+        if any(other is not obj and _address(other["address"]) < base + size
+               and _address(other["address"]) + other.get("size", 0) > base
+               for other in self.objects):
+            return None
+        payload = self._read_bytes(base, size)
+        return (f"{base:#x}: target function-local readonly initialized storage; "
+                f"exact ELF local STT_OBJECT, matching mangled function identity and STT_FILE. "
+                f"Complete initializer ({size} bytes): {payload.hex(' ')}; "
+                f"SHA256 {hashlib.sha256(payload).hexdigest()}. "
+                "No external header declaration needed; C++ type is not inferred; "
+                "initializer bytes are context, not behavior acceptance.")
+
     def _available(self, address, objects):
         section = self.image.section_at(address)
         # ELF section flags, not names or a guessed memory map. No bss, text, GOT, RELRO.
@@ -1839,6 +1888,10 @@ class ContextIndex:
                     notes.append(f"{address:#x}: target function-local static storage; exact ELF local STT_OBJECT, "
                                  "matching mangled function identity and STT_FILE; SHT_NOBITS zero initialization. "
                                  "No external header declaration needed; C++ type is not inferred.")
+                    continue
+                initializer = self._target_local_initializer(obj, f, tu)
+                if initializer:
+                    notes.append(initializer)
                     continue
                 matches = self._matching(name, "data")
                 if not matches:

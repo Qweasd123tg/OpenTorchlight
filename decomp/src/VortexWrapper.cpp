@@ -12,6 +12,7 @@ class VortexAffector
 {
 public:
     DynamicAttribute* getRotationSpeed() const;
+    void setRotationSpeed(DynamicAttribute* speed);
     void setRotationVector(const Ogre::Vector3& rotation);
 };
 }
@@ -28,4 +29,10 @@ void CVortexWrapper::getDynamicPropRotationSpeed(unsigned int& count)
     getArrayFromDynProp(
         reinterpret_cast<ParticleUniverse::VortexAffector*>(m_pAffector)->getRotationSpeed(),
         count);
+}
+
+void CVortexWrapper::setDynamicPropRotationSpeed(const float* values, unsigned int count)
+{
+    ParticleUniverse::DynamicAttribute* speed = getDynPropFromArray(values, count);
+    reinterpret_cast<ParticleUniverse::VortexAffector*>(m_pAffector)->setRotationSpeed(speed);
 }

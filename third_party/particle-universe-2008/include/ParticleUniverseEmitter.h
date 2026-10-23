@@ -235,6 +235,7 @@ namespace ParticleUniverse
 
 		public:
 			void setNumberOfLoops(int loops);
+			int getRemainingLoops(void) const {return mRemainingLoops;};
 			bool isNonExpiring(void) const;
 			void setNonExpiring(bool value);
 			void setDynChanceToEmit(DynamicAttribute* value);

@@ -39,6 +39,11 @@ extern float ToPlaneZ;
 
 namespace MATH
 {
+
+    void setMeshInformation(Ogre::Mesh*, unsigned long, Ogre::Vector3*&, Ogre::Vector3*&, Ogre::Vector3*&, unsigned long, unsigned long*&, unsigned long, unsigned long, unsigned int*&, std::vector<std::string>&, unsigned long, Ogre::VertexBoneAssignment_s*&);
+    void getSubMeshInformation(const Ogre::SubMesh*, bool, unsigned long&, Ogre::Vector3*&, Ogre::Vector3*&, Ogre::Vector3*&, unsigned long&, unsigned long*&, unsigned long&, unsigned long&, Ogre::VertexBoneAssignment_s*&, const Ogre::Vector3&, const Ogre::Quaternion&, const Ogre::Vector3&);
+    void getMeshInformation(const Ogre::Mesh*, unsigned long&, Ogre::Vector3*&, Ogre::Vector3*&, Ogre::Vector3*&, unsigned long&, unsigned long*&, unsigned long&, unsigned long&, unsigned int*&, std::vector<std::string>&, unsigned long&, Ogre::VertexBoneAssignment_s*&, const Ogre::Vector3&, const Ogre::Quaternion&, const Ogre::Vector3&);
+
     unsigned long vectorToRGB(const Ogre::Vector3& vector);
 
     bool boundsContains(const Ogre::Vector3& minimum, const Ogre::Vector3& maximum, const Ogre::Vector3& innerMinimum,

@@ -15,7 +15,7 @@ public:
     void ResetFile();
     bool EndOfFile();
     std::wstring ReadLine(wchar_t ignore = 0);
-    void ReadLineTokenize(std::queue<std::wstring>* tokens, const wchar_t* separators, wchar_t comment);
+    void ReadLineTokenize(std::queue<std::wstring, std::deque<std::wstring, std::allocator<std::wstring> > >* tokens, const wchar_t* separators, wchar_t comment);
     bool ReadFile(FILE* file);
     bool ReadFile(const std::wstring& filename);
     bool ConvertFileToUnicode(FILE* file, const std::wstring& filename);

@@ -36,3 +36,34 @@ float CCmdLineParser::GetFloatParam(const std::wstring& name, float defaultValue
         return STRINGS::GetFloat(m_params[name][0]);
     return defaultValue;
 }
+
+#include <queue>
+
+CCmdLineParser::CCmdLineParser(const std::wstring& text)
+{
+    std::queue<std::wstring> arguments;
+    STRINGS::TokenizeString(&arguments, text, L" ");
+    if (arguments.size() == 0 && text.size() > 0)
+        arguments.push(text);
+    std::queue<std::wstring> values;
+    while (arguments.size() > 0) {
+        std::wstring argument = arguments.front();
+        arguments.pop();
+        if (argument != L"") {
+            STRINGS::TokenizeString(&values, argument, L"=");
+            if (values.size() == 0)
+                STRINGS::TokenizeString(&values, argument, L",");
+            if (values.size() == 0) {
+                m_params[argument] = std::vector<std::wstring>();
+            } else {
+                std::wstring name = values.front();
+                values.pop();
+                m_params[name] = std::vector<std::wstring>();
+                while (values.size() > 0) {
+                    m_params[name].push_back(values.front());
+                    values.pop();
+                }
+            }
+        }
+    }
+}

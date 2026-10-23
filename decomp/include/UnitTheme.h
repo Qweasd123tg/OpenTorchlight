@@ -12,6 +12,7 @@ public:
     long long getGuid() const { return m_iGuid; }
 private:
     friend class CCharacter;
+    friend class CUnitThemes;
     TArrayList<CUnitThemeParticle*> m_particles; // +0x10
     std::wstring m_sName;
     long long m_iGuid;

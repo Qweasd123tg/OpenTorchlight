@@ -518,3 +518,81 @@ int CEditorScene::loadObject(CDataGroup* data, CDescriptorLoadConfiguration* con
     }
     return loadObjects(object,data,configuration)+1;
 }
+
+#include "OgreReader.h"
+#include "RandomGroup.h"
+
+bool loadObjectByCompressedFile(CEditorScene* scene,
+    CDescriptorLoadConfiguration& configuration, COgreReader& reader,
+    CEditorBaseObject*, bool group)
+{
+    if (reader.m_iPosition == reader.m_iSize)
+        return true;
+    unsigned int index = static_cast<unsigned int>(-1);
+    reader.read(&index, sizeof(index));
+    if (index == static_cast<unsigned int>(-1))
+        return true;
+    CDescriptor* descriptor = scene->getDescriptorManager()->GetDescriptorByCreated(index, true);
+    if (!descriptor)
+        return false;
+    CEditorBaseObject* object = scene->CreateObjectByDescriptor(descriptor, NULL, NULL, true);
+    if (!object)
+        return false;
+    if (configuration.m_createdObjects)
+        configuration.m_createdObjects->add(object);
+    if (!descriptor->loadObjectFromBinaryFile(reader, object, configuration))
+        return false;
+    unsigned int count = 0;
+    unsigned int begin = 0;
+    unsigned int end = 0;
+    if (group) {
+        reader.read(&count, sizeof(count));
+        reader.read(&begin, sizeof(begin));
+        reader.read(&end, sizeof(end));
+        CRandomGroup* randomGroup = static_cast<CRandomGroup*>(object);
+        randomGroup->m_iChildSpawnLimit = count;
+        randomGroup->m_iMinimumChildren = begin;
+        randomGroup->m_iMaximumChildren = end;
+    } else {
+        reader.read(&count, sizeof(count));
+        for (unsigned int i = 0; i < count; ++i)
+            if (!loadObjectByCompressedFile(scene, configuration, reader, object, false))
+                return false;
+    }
+    return true;
+}
+
+void rollRandomGroups(CDescriptor* descriptor, TArrayList<CEditorBaseObject*>& objects,
+                      bool keepAll, CDescriptorLoadConfiguration&)
+{
+    if (!descriptor)
+        return;
+    objects.setGrowBy(descriptor->getObjectCount() + 1);
+    for (unsigned int i = 0; i < descriptor->getObjectCount(); ++i)
+        objects.add(descriptor->getObject(i));
+    if (keepAll)
+        return;
+    TArrayList<CRandomGroup*> rejected(20);
+    for (unsigned int i = 0; i < descriptor->getObjectCount(); ++i) {
+        CRandomGroup* group = static_cast<CRandomGroup*>(descriptor->getObject(i));
+        if (rejected.find(group) != -1)
+            continue;
+        if (group->getGroupCanBeCreated())
+            rollGroup(group, objects, rejected);
+        else
+            rejected.add(group);
+    }
+    for (unsigned int i = 0; i < rejected.size(); ++i) {
+        for (unsigned int j = 0; j < objects.size(); ++j) {
+            if (objects[j] == rejected[i] ||
+                objects[j]->isChildOfObject(rejected[i]->getOriginalGuid())) {
+                CRandomGroup* group = static_cast<CRandomGroup*>(objects[j]);
+                if (rejected.find(group) == -1)
+                    rejected.add(group);
+                objects.removeAt(j);
+                i = 0;
+                j = 0;
+            }
+        }
+    }
+}

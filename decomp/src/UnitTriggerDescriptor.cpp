@@ -9,6 +9,62 @@
 #include "StringUtilities.h"
 #include "Quest.h"
 
+CEditorBaseObject* CUnitTriggerDescriptor::CreateObject(CEditorScene* scene)
+{
+    return new CTriggerUnit(scene->getResourceManager());
+}
+
+void CUnitTriggerDescriptor::descriptorSceneActivated(CEditorScene* scene)
+{
+    if (!scene->getResourceManager()->getEditorIsRunning())
+    {
+        for (unsigned int i = 0; i < m_Objects.size(); ++i)
+        {
+            CTriggerUnit* unit = dynamic_cast<CTriggerUnit*>(m_Objects[i]);
+            if (unit)
+                unit->m_bSaveFlag191 = true;
+        }
+    }
+}
+
+void CUnitTriggerDescriptor::InputLogicEvent(CEditorBaseObject* object, unsigned int event, CEditorBaseObject*)
+{
+    CTriggerUnit* unit = dynamic_cast<CTriggerUnit*>(object);
+    if (!unit)
+        return;
+    switch (event)
+    {
+    case INPUT_EVENT_ENABLE:
+        unit->setEnabled(true);
+        unit->BroadcastEvent(OUTPUT_EVENT_ENABLED);
+        break;
+    case INPUT_EVENT_DISABLE:
+        unit->setEnabled(false);
+        unit->BroadcastEvent(OUTPUT_EVENT_DISABLED);
+        break;
+    case INPUT_EVENT_RESET:
+        unit->resetTrigger();
+        break;
+    case INPUT_EVENT_SET_STATE_ONE:
+        unit->setTriggerState(TRIGGER_STATE_ZERO, true, false, true);
+        break;
+    case INPUT_EVENT_SET_STATE_TWO:
+        unit->setTriggerState(TRIGGER_STATE_ONE, true, false, true);
+        break;
+    case INPUT_EVENT_TRIGGER:
+        unit->trigger(NULL);
+        break;
+    case INPUT_EVENT_COLLIDABLE:
+        unit->m_bBlocksPath = true;
+        unit->addToAvoidanceMap(*unit->getLevel());
+        break;
+    case INPUT_EVENT_NOT_COLLIDABLE:
+        unit->m_bBlocksPath = false;
+        unit->removeFromAvoidanceMap(*unit->getLevel());
+        break;
+    }
+}
+
 void CUnitTriggerDescriptor::update(float value)
 {
 }

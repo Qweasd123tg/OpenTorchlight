@@ -170,3 +170,37 @@ void CMissilePreloader::cacheMissile(CMissile* missile)
     m_cachedMissiles[std::wstring(missile->m_sMissileName)] = list;
     cacheMissile(missile);
 }
+
+#include "Layout.h"
+#include "Descriptor.h"
+#include <OgreLogManager.h>
+
+void CMissilePreloader::loadMissile(const std::wstring& layoutName)
+{
+    CLayout layout(m_pResourceManager, static_cast<ELAYOUT_TYPES>(0));
+    layout.loadLayoutFile(layoutName, true, NULL, false, false, 0);
+    TArrayList<CEditorBaseObject*>* objects = layout.GetObjectsCreatedByADescriptor(L"Missile");
+    if (objects && objects->size()) {
+        for (unsigned int i = 0; i < objects->size(); ++i) {
+            CEditorBaseObject* object = (*objects)[i];
+            if (!object)
+                continue;
+            CMissile* missile = dynamic_cast<CMissile*>(object);
+            if (!missile)
+                continue;
+            std::wstring name = missile->m_sMissileName;
+            if (name == EMPTY_WSTRING)
+                continue;
+            if (m_missilesToLoad.find(name) == m_missilesToLoad.end()) {
+                missile->getDescriptor()->getSceneOwner()->RemoveObjectInScene(missile);
+                m_missilesToLoad[STRINGS::StringUpper(std::wstring(missile->m_sMissileName))] = missile;
+            } else {
+                std::string message = "The missile with name: " +
+                    STRINGS::StringConvertToNarrow(std::wstring(missile->m_sMissileName).c_str()) +
+                    "\n is already created. This missile will not load from location : " +
+                    STRINGS::StringConvertToNarrow(layoutName.c_str());
+                Ogre::LogManager::getSingleton().logMessage(message.c_str(), Ogre::LML_CRITICAL, false);
+            }
+        }
+    }
+}

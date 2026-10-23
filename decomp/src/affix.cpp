@@ -245,3 +245,52 @@ CAffix::~CAffix()
     clearEffectsFromOwner();
     m_Effects.deleteAll();
 }
+
+#include "DataGroup.h"
+#include "StringUtilities.h"
+
+void CAffix::parseAffixGroup()
+{
+    CDataGroup data(L"AFFIX", NULL, 20, 10, NULL);
+    data.LoadFile(m_sAffixFileName, NULL);
+    m_sDisplayName = STRINGS::StringUpper(data.GetDataValue(L"NAME", L"NA"));
+    m_iMinSpawnRange = data.GetDataValue(L"MIN_SPAWN_RANGE", 0);
+    m_iMaxSpawnRange = data.GetDataValue(L"MAX_SPAWN_RANGE", 999999);
+    m_iWeight = data.GetDataValue(L"WEIGHT", 1);
+    m_fDuration = data.GetDataValue(L"DURATION", -1.0f);
+    m_sPrefix = data.GetDataValue(L"PREFIX", EMPTY_WSTRING);
+    m_sSuffix = data.GetDataValue(L"SUFFIX", EMPTY_WSTRING);
+    m_iRank = data.GetDataValue(L"RANK", 1);
+    m_iSlotsOccupy = data.GetDataValue(L"SLOTS_OCCUPY", 1);
+    if (m_fDuration == -999.0f)
+    {
+        m_fDuration = -1.0f;
+        m_bHasDuration = true;
+    }
+    else if (m_fDuration <= 0.0f)
+    {
+        m_fDuration = -1.0f;
+        m_bHasDuration = false;
+    }
+    else
+        m_bHasDuration = true;
+    m_cLevelPercent = 100;
+    CHierarchy* hierarchy = CMasterResourceManager::getSingleton()->m_pHierarchy;
+    m_ApplicableUnitTypes.setGrowBy(5);
+    m_Effects.setGrowBy(data.GetNumberOfDataGroups() + 1);
+    for (unsigned int i = 0; i < data.GetNumberOfDataGroups(); ++i)
+    {
+        CDataGroup* group = data.GetDataGroup(i);
+        if (group->GetGroupName() == L"EFFECT")
+            m_Effects.add(new CEffect(group, NULL));
+        else if (group->GetGroupName() == L"UNITTYPES")
+        {
+            for (unsigned int j = 0; j < group->GetNumberOfDataValues(); ++j)
+            {
+                unsigned int type = hierarchy->getTypeIDByName(group->GetDataValue(j)->GetValueString(true));
+                if (type != static_cast<unsigned int>(-1))
+                    m_ApplicableUnitTypes.add(type);
+            }
+        }
+    }
+}

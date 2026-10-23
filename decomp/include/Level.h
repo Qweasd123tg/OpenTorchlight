@@ -218,6 +218,7 @@ private:
     friend class CQuestUnitData;
     friend class CCharacter;
     friend class CPlayer;
+    friend class CWaypointActivator;
     friend class CMonster;
     friend class CDamageShape;
     friend class CResourceManager;

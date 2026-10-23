@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include "AutoTest.h"
 #include "tests/Detour.h"
+#include "tests/CharacterLibraryBoundary.h"
 #include <OgreRoot.h>
 TL_ORIGINAL(void, systemsGameCtor,(CGame*,std::string,CSettings*,bool),"_ZN5CGameC1ESsP9CSettingsb")
 TL_ORIGINAL(void, systemsGameDtor,(CGame*),"_ZN5CGameD1Ev")
@@ -28,7 +29,8 @@ public:
  SystemsNativeGame(Ogre::Root*r,CSettings*s):ownsRoot(false),ownsSettings(false),root(r),settings(s),game(NULL){construct();}
  void construct(){std::string empty;
   game=static_cast<CGame*>(Ogre::NedAllocImpl::allocBytes(sizeof(CGame),0,0,0));
-  detour::Set d;d.redirect(reinterpret_cast<char*>(&SDL_VideoInit),reinterpret_cast<char*>(&SDL_VideoInit),&systems_game::videoInit);d.redirect(reinterpret_cast<char*>(&SDL_GetNumVideoDisplays),reinterpret_cast<char*>(&SDL_GetNumVideoDisplays),&systems_game::numDisplays);d.redirect(reinterpret_cast<char*>(&SDL_GetDesktopDisplayMode),reinterpret_cast<char*>(&SDL_GetDesktopDisplayMode),&systems_game::desktopMode);if(d.failed())_exit(64);
+  CharacterLibraryBoundary video(characterLibraryEntry(NULL,"SDL_VideoInit"),&systems_game::videoInit),displays(characterLibraryEntry(NULL,"SDL_GetNumVideoDisplays"),&systems_game::numDisplays),desktop(characterLibraryEntry(NULL,"SDL_GetDesktopDisplayMode"),&systems_game::desktopMode);
+  if(video.failed()||displays.failed()||desktop.failed())_exit(64);
   systemsGameCtor(game,empty,settings,false);
  }
  ~SystemsNativeGame(){

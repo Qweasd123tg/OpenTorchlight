@@ -66,4 +66,6 @@ extern int gEFFECT_TYPE_MAX_VALUES[145];
 extern int gEFFECT_TYPE_BONUS[145];
 
 
+void parseEffects();
+
 #endif

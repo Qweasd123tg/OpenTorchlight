@@ -39,7 +39,7 @@ import promote  # noqa: E402
 import toolchain  # noqa: E402
 import llm_definitions as definitions  # noqa: E402
 from llm_model import Model  # noqa: E402
-from llm_context import ContextIndex, _standard_string_aliases  # noqa: E402
+from llm_context import ContextIndex, DeclarationIdentity, _scan  # noqa: E402
 from llm_packet import DEFAULT_MAX_CHARS, build_prompt  # noqa: E402
 
 ROOT = elfdb.ROOT
@@ -360,6 +360,46 @@ def repair_snapshot(root, tu, functions, db, compare_rows):
             "protected_thunks": [protected_thunks[a] for a in sorted(protected_thunks)]}
 
 
+def _repair_header_sources(stage, checkpoint):
+    """Only unchanged, unredirected hand headers can prove parameter identities.
+
+    Pin the whole shallow declaration corpus, not only the owning header: a
+    missing or newly supplied header could hide/add a shadowing declaration.
+    Generated headers never gain authority from a checkpoint alone.
+    """
+    def hand_headers(tree):
+        return {name: digest for name, digest in tree.items()
+                if Path(name).parent == Path("decomp/include") and Path(name).suffix == ".h"}
+
+    expected = hand_headers(stage.baseline)
+    if hand_headers(checkpoint.get("tree", {})) != expected:
+        raise RuntimeError("repair declaration headers differ from Stage baseline")
+    sources = {}
+    for root in (stage.root, stage.path):
+        root = Path(root).resolve()
+        base = root / "decomp/include"
+        paths = sorted(base.glob("*.h"))
+        if (base.resolve() != base
+                or {p.relative_to(root).as_posix() for p in paths} != set(expected)):
+            raise RuntimeError("repair declaration headers missing, new or redirected")
+        for path in paths:
+            name = path.relative_to(root).as_posix()
+            if path.resolve() != path:
+                raise RuntimeError("redirected repair declaration header: " + name)
+            try:
+                raw = path.read_bytes()
+                if hashlib.sha256(raw).hexdigest() != expected[name]:
+                    raise RuntimeError("repair declaration header changed: " + name)
+                sources[path.name] = raw.decode("utf-8")
+            except (OSError, UnicodeError) as error:
+                raise RuntimeError("unreadable repair declaration header: " + name) from error
+    mapping = checkpoint.get("headers", {})
+    if (not isinstance(mapping, dict)
+            or any(not isinstance(name, str) or name not in sources for name in mapping.values())):
+        raise RuntimeError("repair owning declaration header is unavailable")
+    return sources
+
+
 def validate_repair_snapshot(stage, checkpoint, targets, db):
     """Recheck admission and non-target bytes, without restoring validation authority."""
     selected = checkpoint["settings"]["selected"]
@@ -380,7 +420,11 @@ def validate_repair_snapshot(stage, checkpoint, targets, db):
             or hashlib.sha256(checkpoint["existing"].encode()).hexdigest() != current["source_sha256"]):
         raise RuntimeError("repair source/protection inputs changed; prepare a new attempt")
     import mutate
-    def parameter_identity(parameter, named=False):
+    sources = _repair_header_sources(stage, checkpoint)
+    declaration_identity = DeclarationIdentity(sources)
+    declarations = {name: _scan(sources[name])[0] for name in set(checkpoint.get("headers", {}).values())}
+
+    def parameter_identity(parameter, named=False, scope=(), header=None, declaration_proven=True):
         p = parameter.strip()
         if any(c in p for c in "()[]=;"):
             raise RuntimeError("repair source signature uses unsupported declarator")
@@ -390,7 +434,27 @@ def validate_repair_snapshot(stage, checkpoint, targets, db):
                         "void", "const", "volatile", "unsigned", "signed"}
             if name and name.group(2) not in keywords:
                 p = p[:name.start(2)].strip()
-        p = ghidra_cpp.cxx_type(_standard_string_aliases(p))
+        # This narrow grammar does not resolve arbitrary typedef pointees. Do
+        # not skip a nearer typedef and accidentally qualify an outer class.
+        for token in re.findall(r"(?<![\w:])[A-Za-z_]\w*(?![\w:])", p) if scope else ():
+            for depth in range(len(scope), 0, -1):
+                qualified = "::".join([*scope[:depth], token])
+                if qualified in declaration_identity.typedef_names:
+                    raise RuntimeError("repair source signature has unresolved scoped typedef")
+                if qualified in declaration_identity.types:
+                    break
+        try:
+            contextual = declaration_identity.parameter(p, scope=scope, header=header)
+            if not declaration_proven and contextual != declaration_identity.parameter(p):
+                raise RuntimeError("repair requires exact unique source signature from owning declaration")
+            p = contextual
+        except ValueError as error:
+            raise RuntimeError("repair source signature identity is unresolved") from error
+        # Shared lookup also knows callbacks/array references. Body-only repair
+        # deliberately retains its narrower declarator grammar.
+        if any(c in p for c in "()[]=;"):
+            raise RuntimeError("repair source signature uses unsupported declarator")
+        p = ghidra_cpp.cxx_type(p)
         p = re.sub(r"(?<=\w)\s+(?=\w)", "|", p)
         return re.sub(r"\s+", "", p)
 
@@ -398,12 +462,22 @@ def validate_repair_snapshot(stage, checkpoint, targets, db):
         masked = mutate.mask(text)
         spans = []
         for f in selected:
+            qual = f["demangled"].split("(")[0]
+            scope = tuple((f.get("scope") or "").split("::")) if f.get("scope") else ()
+            header = checkpoint.get("headers", {}).get(scope[0]) if scope else None
+            if scope and header not in sources:
+                raise RuntimeError("repair owning declaration header is unavailable")
+            callee = dict(f, qualified=qual, method=qual.rsplit("::", 1)[-1],
+                          params=f.get("params") or "", cv=ghidra_cpp.cv_suffix(f).strip())
+            # A mapping to some other pinned header cannot grant lexical/FILE
+            # aliases. Context-free exact spellings retain the old path.
+            declaration_proven = any(declaration_identity.matches(d, callee, header)
+                                     for d in declarations.get(header, ()) if d.kind == "function")
             # mutate.definition deliberately tolerates arity-only draft matches.
             # Admission needs the exact qualified signature instead.
             wanted = [parameter_identity(p) for p in ghidra_cpp.split_args(f.get("params") or "")
                       if p != "void"]
             found = []
-            qual = f["demangled"].split("(")[0]
             for match in re.finditer(r"(?m)^[\w:<>,*&\s]*?(?<![\w:])(?P<qualified>" +
                                      re.escape(qual) + r")\s*\(", masked):
                 prefix = masked[:match.start("qualified")]
@@ -418,7 +492,8 @@ def validate_repair_snapshot(stage, checkpoint, targets, db):
                 suffix = " ".join(masked[close + 1:brace].strip().split())
                 if f.get("kind") == "ctor" and suffix.startswith(":"):
                     suffix = ""
-                actual = [parameter_identity(p, named=True)
+                actual = [parameter_identity(p, named=True, scope=scope, header=header,
+                                             declaration_proven=declaration_proven)
                           for p in ghidra_cpp.split_args(masked[match.end():close].strip())
                           if p and p != "void"]
                 if actual == wanted and suffix == ghidra_cpp.cv_suffix(f).strip():
@@ -1000,8 +1075,7 @@ class Loop:
             metadata = json.loads((ROOT / "stage.json").read_text())
             from types import SimpleNamespace
             stage = SimpleNamespace(root=Path(metadata["root"]), path=ROOT, baseline=metadata["baseline"])
-            prepared = {"settings": self.settings, "repair": self.repair, "existing": self.existing,
-                        "accepted": self.accepted, "round": self.round_no}
+            prepared = json.loads((self.work / "checkpoint.json").read_text())
             validate_repair_snapshot(stage, prepared, self.settings["repair_addresses"], self.db)
             # Repair is external-only; keep the full TU intact and merely prepare packets.
             for f in self.funcs:

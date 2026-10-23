@@ -9,6 +9,43 @@
 #include "ParticleUniverseEmitter.h"
 #include "ParticleUniverseSystemManager.h"
 #include "ParticleUniverseTechnique.h"
+#include "MasterResourceManager.h"
+
+bool CParticleEmitterWrapper::getIsDoneEmitting()
+{
+    return m_pEmitter->getRemainingLoops() >= 0 && !m_pEmitter->isEnabled();
+}
+
+void CParticleEmitterWrapper::setParentTechniqueWrapper(CParticleTechWrapper* parent)
+{
+    if (m_pParticleTechWrapper)
+        m_pParticleTechWrapper->removeEmitter(this);
+    if (m_pEmitter->getParentTechnique())
+        m_pEmitter->getParentTechnique()->removeEmitter(m_pEmitter);
+    m_pParticleTechWrapper = parent;
+    if (parent)
+    {
+        parent->addEmitter(this);
+        ParticleUniverse::ParticleEmitter* emitter = m_pEmitter;
+        ParticleUniverse::ParticleTechnique* technique = m_pParticleTechWrapper->m_technique;
+        if (emitter->getParentTechnique() != technique)
+            technique->addEmitter(emitter);
+    }
+}
+
+void CParticleEmitterWrapper::destroyEmitter()
+{
+    if (m_pSceneNode)
+        sceneNodeDetachEntity();
+    if (m_pEmitter)
+    {
+        setParentTechniqueWrapper(NULL);
+        ParticleUniverse::ParticleEmitter* emitter = m_pEmitter;
+        CMasterResourceManager::getSingleton()->m_pParticleSystemManager->destroyEmitter(emitter);
+    }
+    m_pParticleTechWrapper = NULL;
+    m_pEmitter = NULL;
+}
 
 void CParticleEmitterWrapper::starting()
 {

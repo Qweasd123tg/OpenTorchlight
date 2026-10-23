@@ -349,3 +349,222 @@ Ogre::Vector3 screenToWorldRay(Ogre::Camera* camera, float x, float y, float wid
 
 }
 
+#include <cstdlib>
+#include <OgreMesh.h>
+#include <OgreSubMesh.h>
+#include <OgreHardwareBufferManager.h>
+
+namespace MATH
+{
+void setMeshInformation(Ogre::Mesh* mesh, unsigned long vertexCount,
+    Ogre::Vector3*& vertices, Ogre::Vector3*& normals, Ogre::Vector3*& texcoords,
+    unsigned long, unsigned long*& indices, unsigned long triangleCount,
+    unsigned long, unsigned int*& triangleMaterials, std::vector<std::string>& materials,
+    unsigned long boneCount, Ogre::VertexBoneAssignment*& bones)
+{
+    for (unsigned short s=0;s<mesh->getNumSubMeshes();++s) {
+        Ogre::SubMesh* sub=mesh->getSubMesh(s);
+        unsigned long count=0;
+        for (unsigned int t=0;t<triangleCount;++t)
+            if (triangleMaterials[t]==s) ++count;
+        sub->indexData->indexCount=count*3;
+        mesh->sharedVertexData->vertexCount=vertexCount;
+    }
+    Ogre::VertexData* data=mesh->sharedVertexData;
+    Ogre::HardwareVertexBufferSharedPtr buffer=Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(
+        data->vertexDeclaration->getVertexSize(0),data->vertexCount,Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY,false);
+    data->vertexBufferBinding->setBinding(0,buffer);
+    float* target=static_cast<float*>(buffer->lock(Ogre::HardwareBuffer::HBL_DISCARD));
+    for (unsigned short v=0;v<vertexCount;++v) {
+        *target++=vertices[v].x;*target++=vertices[v].y;*target++=vertices[v].z;
+        *target++=normals[v].x;*target++=normals[v].y;*target++=normals[v].z;
+    }
+    buffer->unlock();
+    buffer=Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(
+        data->vertexDeclaration->getVertexSize(1),data->vertexCount,Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY,false);
+    data->vertexBufferBinding->setBinding(1,buffer);
+    target=static_cast<float*>(buffer->lock(Ogre::HardwareBuffer::HBL_DISCARD));
+    for (unsigned short v=0;v<vertexCount;++v) {
+        *target++=texcoords[v].x;*target++=texcoords[v].y;
+    }
+    buffer->unlock();
+    for (unsigned short s=0;s<mesh->getNumSubMeshes();++s) {
+        Ogre::SubMesh* sub=mesh->getSubMesh(s);
+        sub->setMaterialName(materials[s]);
+        Ogre::HardwareIndexBufferSharedPtr indexBuffer=Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(
+            Ogre::HardwareIndexBuffer::IT_16BIT,sub->indexData->indexCount,Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY,false);
+        sub->indexData->indexBuffer=indexBuffer;
+        unsigned short* dest=static_cast<unsigned short*>(indexBuffer->lock(Ogre::HardwareBuffer::HBL_DISCARD));
+        for (unsigned int t=0;t<triangleCount;++t) {
+            if (triangleMaterials[t]==s) {
+                *dest++=static_cast<unsigned short>(indices[t*3]);
+                *dest++=static_cast<unsigned short>(indices[t*3+1]);
+                *dest++=static_cast<unsigned short>(indices[t*3+2]);
+            }
+        }
+        indexBuffer->unlock();
+    }
+    for (unsigned int b=0;b<boneCount;++b) mesh->addBoneAssignment(bones[b]);
+    mesh->_compileBoneAssignments();
+}
+
+void getSubMeshInformation(const Ogre::SubMesh* sub, bool collectBones,
+    unsigned long& vertexCount, Ogre::Vector3*& vertices, Ogre::Vector3*& normals, Ogre::Vector3*& texcoords,
+    unsigned long& indexCount, unsigned long*& indices, unsigned long& triangleCount,
+    unsigned long& boneCount, Ogre::VertexBoneAssignment*& bones, const Ogre::Vector3& position,
+    const Ogre::Quaternion& orientation, const Ogre::Vector3& scale)
+{
+    const unsigned long oldVertices=vertexCount, oldIndices=indexCount, oldBones=boneCount;
+    Ogre::VertexData* data=sub->vertexData;
+    vertexCount+=data->vertexCount;
+    indexCount+=sub->indexData->indexCount;
+    triangleCount+=sub->indexData->indexCount/3;
+    if (vertices) {
+        vertices=static_cast<Ogre::Vector3*>(std::realloc(vertices,vertexCount*sizeof(Ogre::Vector3)));
+        normals=static_cast<Ogre::Vector3*>(std::realloc(normals,vertexCount*sizeof(Ogre::Vector3)));
+        texcoords=static_cast<Ogre::Vector3*>(std::realloc(texcoords,vertexCount*sizeof(Ogre::Vector3)));
+        indices=static_cast<unsigned long*>(std::realloc(indices,indexCount*sizeof(unsigned long)));
+    } else {
+        vertices=static_cast<Ogre::Vector3*>(std::malloc(vertexCount*sizeof(Ogre::Vector3)));
+        normals=static_cast<Ogre::Vector3*>(std::malloc(vertexCount*sizeof(Ogre::Vector3)));
+        texcoords=static_cast<Ogre::Vector3*>(std::malloc(vertexCount*sizeof(Ogre::Vector3)));
+        indices=static_cast<unsigned long*>(std::malloc(indexCount*sizeof(unsigned long)));
+    }
+    const Ogre::VertexElement* element=data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION);
+    Ogre::HardwareVertexBufferSharedPtr buffer=data->vertexBufferBinding->getBuffer(element->getSource());
+    unsigned char* source=static_cast<unsigned char*>(buffer->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+    for (unsigned long v=0;v<data->vertexCount;++v) {
+        float* value; element->baseVertexPointerToElement(source,&value);
+        vertices[oldVertices+v]=orientation*(Ogre::Vector3(value[0],value[1],value[2])*scale)+position;
+        source+=buffer->getVertexSize();
+    }
+    buffer->unlock();
+    element=data->vertexDeclaration->findElementBySemantic(Ogre::VES_NORMAL);
+    if (buffer!=data->vertexBufferBinding->getBuffer(element->getSource()))
+        buffer=data->vertexBufferBinding->getBuffer(element->getSource());
+    source=static_cast<unsigned char*>(buffer->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+    for (unsigned long v=0;v<data->vertexCount;++v) {
+        float* value; element->baseVertexPointerToElement(source,&value);
+        normals[oldVertices+v]=Ogre::Vector3(value[0],value[1],value[2]);source+=buffer->getVertexSize();
+    }
+    buffer->unlock();
+    element=data->vertexDeclaration->findElementBySemantic(Ogre::VES_TEXTURE_COORDINATES);
+    if (element) {
+        if (buffer!=data->vertexBufferBinding->getBuffer(element->getSource()))
+            buffer=data->vertexBufferBinding->getBuffer(element->getSource());
+        source=static_cast<unsigned char*>(buffer->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+        for (unsigned long v=0;v<data->vertexCount;++v) {
+            float* value;element->baseVertexPointerToElement(source,&value);
+            texcoords[oldVertices+v]=Ogre::Vector3(value[0],value[1],0.0f);source+=buffer->getVertexSize();
+        }
+        buffer->unlock();
+    }
+    if (collectBones) {
+        boneCount+=const_cast<Ogre::SubMesh*>(sub)->getBoneAssignments().size();
+        if (bones) bones=static_cast<Ogre::VertexBoneAssignment*>(std::realloc(bones,boneCount*sizeof(Ogre::VertexBoneAssignment)));
+        else bones=new Ogre::VertexBoneAssignment[const_cast<Ogre::SubMesh*>(sub)->getBoneAssignments().size()];
+        Ogre::SubMesh::BoneAssignmentIterator i=const_cast<Ogre::SubMesh*>(sub)->getBoneAssignmentIterator();
+        unsigned long n=oldBones;
+        while (i.hasMoreElements()) {
+            const Ogre::VertexBoneAssignment& bone=i.getNext();
+            bones[n].vertexIndex=bone.vertexIndex+oldVertices;
+            bones[n].boneIndex=bone.boneIndex;bones[n].weight=bone.weight;++n;
+        }
+    }
+    Ogre::HardwareIndexBufferSharedPtr indexBuffer=sub->indexData->indexBuffer;
+    void* indexSource=indexBuffer->lock(Ogre::HardwareBuffer::HBL_READ_ONLY);
+    if (indexBuffer->getType()==Ogre::HardwareIndexBuffer::IT_32BIT) {
+        // The original Linux build reads these entries at unsigned-long width.
+        unsigned long* values=static_cast<unsigned long*>(indexSource);
+        for (unsigned long i=0;i<sub->indexData->indexCount/3*3;++i) indices[oldIndices+i]=oldVertices+values[i];
+    } else {
+        unsigned short* values=static_cast<unsigned short*>(indexSource);
+        for (unsigned long i=0;i<sub->indexData->indexCount/3*3;++i) indices[oldIndices+i]=oldVertices+values[i];
+    }
+    indexBuffer->unlock();
+}
+
+void getMeshInformation(const Ogre::Mesh* mesh, unsigned long& vertexCount,
+    Ogre::Vector3*& vertices, Ogre::Vector3*& normals, Ogre::Vector3*& texcoords,
+    unsigned long& indexCount, unsigned long*& indices, unsigned long& triangleCount,
+    unsigned long& materialCount, unsigned int*& triangleMaterials, std::vector<std::string>& materials,
+    unsigned long& boneCount, Ogre::VertexBoneAssignment*& bones, const Ogre::Vector3& position,
+    const Ogre::Quaternion& orientation, const Ogre::Vector3& scale)
+{
+    vertexCount=indexCount=triangleCount=materialCount=0;
+    bool shared=false;
+    for (unsigned short s=0;s<mesh->getNumSubMeshes();++s) {
+        Ogre::SubMesh* sub=mesh->getSubMesh(s);
+        if (sub->useSharedVertices) {
+            if (!shared) {vertexCount+=mesh->sharedVertexData->vertexCount;shared=true;}
+        } else vertexCount+=sub->vertexData->vertexCount;
+        indexCount+=sub->indexData->indexCount;
+    }
+    triangleCount=indexCount/3;
+    vertices=new Ogre::Vector3[vertexCount];normals=new Ogre::Vector3[vertexCount];texcoords=new Ogre::Vector3[vertexCount];
+    indices=new unsigned long[indexCount];triangleMaterials=new unsigned int[triangleCount];
+    unsigned long offset=0,nextOffset=0,sharedOffset=0,indexOffset=0;
+    int triangleOffset=0;shared=false;
+    for (unsigned short s=0;s<mesh->getNumSubMeshes();++s) {
+        Ogre::SubMesh* sub=mesh->getSubMesh(s);
+        std::string material=sub->getMaterialName();
+        unsigned int materialID=material.find("nocollide")!=std::string::npos?100:s;
+        materials.push_back(sub->getMaterialName());++materialCount;
+        Ogre::VertexData* data=sub->useSharedVertices?mesh->sharedVertexData:sub->vertexData;
+        if (!sub->useSharedVertices || !shared) {
+            if (sub->useSharedVertices) {shared=true;sharedOffset=offset;}
+            const Ogre::VertexElement* element=data->vertexDeclaration->findElementBySemantic(Ogre::VES_POSITION);
+            Ogre::HardwareVertexBufferSharedPtr buffer=data->vertexBufferBinding->getBuffer(element->getSource());
+            unsigned char* source=static_cast<unsigned char*>(buffer->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+            for (unsigned long v=0;v<data->vertexCount;++v) {
+                float* value;element->baseVertexPointerToElement(source,&value);
+                vertices[offset+v]=orientation*(Ogre::Vector3(value[0],value[1],value[2])*scale)+position;
+                source+=buffer->getVertexSize();
+            }
+            buffer->unlock();nextOffset+=data->vertexCount;
+            element=data->vertexDeclaration->findElementBySemantic(Ogre::VES_NORMAL);
+            if (buffer!=data->vertexBufferBinding->getBuffer(element->getSource()))
+                buffer=data->vertexBufferBinding->getBuffer(element->getSource());
+            source=static_cast<unsigned char*>(buffer->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+            for (unsigned long v=0;v<data->vertexCount;++v) {
+                float* value;element->baseVertexPointerToElement(source,&value);
+                normals[offset+v]=Ogre::Vector3(value[0],value[1],value[2]);source+=buffer->getVertexSize();
+            }
+            buffer->unlock();
+            element=data->vertexDeclaration->findElementBySemantic(Ogre::VES_TEXTURE_COORDINATES);
+            if (element) {
+                if (buffer!=data->vertexBufferBinding->getBuffer(element->getSource()))
+                    buffer=data->vertexBufferBinding->getBuffer(element->getSource());
+                source=static_cast<unsigned char*>(buffer->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+                for (unsigned long v=0;v<data->vertexCount;++v) {
+                    float* value;element->baseVertexPointerToElement(source,&value);
+                    texcoords[offset+v]=Ogre::Vector3(value[0],value[1],0.0f);source+=buffer->getVertexSize();
+                }
+                buffer->unlock();
+            }
+        }
+        if (mesh->hasSkeleton()) {
+            boneCount=mesh->getBoneAssignments().size();bones=new Ogre::VertexBoneAssignment[boneCount];
+            Ogre::Mesh::BoneAssignmentIterator i=const_cast<Ogre::Mesh*>(mesh)->getBoneAssignmentIterator();
+            unsigned long n=0;
+            while (i.hasMoreElements()) {
+                const Ogre::VertexBoneAssignment& bone=i.getNext();
+                bones[n].vertexIndex=bone.vertexIndex;bones[n].boneIndex=bone.boneIndex;bones[n].weight=bone.weight;++n;
+            }
+        }
+        Ogre::HardwareIndexBufferSharedPtr buffer=sub->indexData->indexBuffer;
+        void* source=buffer->lock(Ogre::HardwareBuffer::HBL_READ_ONLY);
+        unsigned long count=sub->indexData->indexCount/3;
+        unsigned long start=sub->useSharedVertices?sharedOffset:offset;
+        for (unsigned long t=0;t<count;++t) triangleMaterials[triangleOffset+t]=materialID;
+        if (buffer->getType()==Ogre::HardwareIndexBuffer::IT_32BIT) {
+            unsigned long* values=static_cast<unsigned long*>(source);
+            for (unsigned long i=0;i<count*3;++i) indices[indexOffset+i]=start+values[i];
+        } else {
+            unsigned short* values=static_cast<unsigned short*>(source);
+            for (unsigned long i=0;i<count*3;++i) indices[indexOffset+i]=start+values[i];
+        }
+        indexOffset+=count*3;buffer->unlock();triangleOffset+=count;offset=nextOffset;
+    }
+}
+}

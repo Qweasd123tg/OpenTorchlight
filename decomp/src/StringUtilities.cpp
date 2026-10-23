@@ -538,3 +538,48 @@ void STRINGS::TokenizeString(std::queue<std::wstring>* result, const std::wstrin
             }
     }
 }
+
+unsigned int STRINGS::GetArrayValueFloat(const std::string& text, float* output,
+                                         unsigned int count, std::string separators)
+{
+    if (output == NULL)
+        return 0;
+
+    std::queue<std::string> tokens;
+    TokenizeString(&tokens, text, separators.c_str());
+    unsigned int length = tokens.size();
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        // The narrow overload compares against the shrinking queue.
+        if (i < tokens.size())
+        {
+            output[i] = GetFloat(tokens.front());
+            tokens.pop();
+        }
+        else
+            output[i] = 0.0f;
+    }
+    return length;
+}
+
+unsigned int STRINGS::GetArrayValueFloat(const std::wstring& text, float* output,
+                                         unsigned int count, std::wstring separators)
+{
+    if (output == NULL)
+        return 0;
+
+    std::queue<std::wstring> tokens;
+    TokenizeString(&tokens, text, separators.c_str());
+    unsigned int length = tokens.size();
+    for (unsigned int i = 0; i < count; ++i)
+    {
+        if (i < length)
+        {
+            output[i] = GetFloat(tokens.front());
+            tokens.pop();
+        }
+        else
+            output[i] = 0.0f;
+    }
+    return length;
+}

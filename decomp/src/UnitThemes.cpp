@@ -18,48 +18,9 @@ CUnitThemes::~CUnitThemes()
 
 CUnitThemes::CUnitThemes(const wchar_t *fileName)
 {
-    typedef TArrayList<int> TUnitThemesList;
-
-    std::wstring *file = new (reinterpret_cast<void *>(
-        reinterpret_cast<char *>(this) + 0x10)) std::wstring(fileName);
-
-    TUnitThemesList *unitThemes;
-    try
-    {
-        unitThemes = new (reinterpret_cast<void *>(
-            reinterpret_cast<char *>(this) + 0x18)) TUnitThemesList(10);
-    }
-    catch (...)
-    {
-        file->~basic_string();
-        throw;
-    }
-
-    class Cleanup
-    {
-    public:
-        Cleanup(TUnitThemesList *unitThemes_, std::wstring *file_)
-            : m_unitThemes(unitThemes_), m_file(file_)
-        {
-        }
-
-        ~Cleanup()
-        {
-            m_unitThemes->~TUnitThemesList();
-            m_file->~basic_string();
-        }
-
-    private:
-        TUnitThemesList *m_unitThemes;
-        std::wstring *m_file;
-    };
-
-    Cleanup cleanup(unitThemes, file);
-
-    extern void reloadUnitThemes(CUnitThemes *) __asm__(
-        "_ZN11CUnitThemes6reloadEv");
-
-    reloadUnitThemes(this);
+    m_sFilename.assign(fileName);
+    m_Themes.setGrowBy(10);
+    reload();
     if (g_pUnitThemes == NULL)
         g_pUnitThemes = this;
 }
@@ -77,4 +38,44 @@ void CUnitThemeParticle::load(CDataGroup* group)
     m_wstrBone = group->GetDataValue(L"BONE", EMPTY_WSTRING);
     m_bAttaches = group->GetDataValue(L"ATTACHES", true);
     m_bFollows = group->GetDataValue(L"FOLLOWS", !m_bAttaches);
+}
+
+#include "FileSystem.h"
+#include "StringUtilities.h"
+#include "Utilities.h"
+#include <vector>
+
+void CUnitThemes::reload()
+{
+    m_Themes.deleteAll();
+    TArrayList<std::wstring> files(25);
+    CFileSystem::getSingleton()->getFileList(m_sFilename, files, L"*.dat", false, true, false, false);
+    m_Themes.setGrowBy(files.size() + 1);
+    for (unsigned int i = 0; i < files.size(); ++i) {
+        CDataGroup group(EMPTY_WSTRING, NULL, 20, 10, NULL);
+        group.LoadFile(files[i], NULL);
+        std::wstring name = STRINGS::StringUpper(group.GetDataValue(L"NAME", EMPTY_WSTRING));
+        long long guid = group.GetDataValue(L"GUID", static_cast<long long>(-1));
+        if (name == EMPTY_WSTRING) continue;
+        CUnitTheme* theme = new CUnitTheme;
+        theme->m_particles.setGrowBy(10);
+        if (guid == -1) {
+            guid = UTILITIES::createUniqueGuid();
+            group.SetDataValue(L"GUID", guid);
+            group.SaveToFile(files[i]);
+        }
+        theme->m_iGuid = guid;
+        theme->m_sName = name;
+        std::vector<CDataGroup*> particles;
+        group.GetDataGroupsMatchingName(L"PARTICLE", &particles);
+        for (unsigned int j = 0; j < particles.size(); ++j) {
+            CUnitThemeParticle* particle = new CUnitThemeParticle;
+            particle->m_iCount = 0;
+            particle->m_bAttaches = false;
+            particle->m_bFollows = false;
+            particle->load(particles[j]);
+            theme->m_particles.add(particle);
+        }
+        m_Themes.add(theme);
+    }
 }

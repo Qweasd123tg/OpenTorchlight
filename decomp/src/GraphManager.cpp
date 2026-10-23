@@ -3,6 +3,7 @@
 #include "FileSystem.h"
 #include "FileUtilities.h"
 #include "StringUtilities.h"
+#include "ParticleUniverseTechnique.h"
 
 static CGraphManager* g_pGraphManager = NULL;
 

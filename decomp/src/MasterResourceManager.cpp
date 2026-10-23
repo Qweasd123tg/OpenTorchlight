@@ -298,3 +298,131 @@ void CMasterResourceManager::addResourceLocation(const std::wstring& path, const
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation(location, "FileSystem", group.empty() ? Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME : group, true);
     Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup(group.empty() ? Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME : group);
 }
+
+#include "Settings.h"
+#include "ResourceSettings.h"
+#include "FileSystem.h"
+#include "StringTranslate.h"
+#include "SteamStats.h"
+#include "Achievements.h"
+#include "Achievement.h"
+#include "EffectDefines.h"
+#include "Hierarchy.h"
+#include "UnitThemes.h"
+#include "Recipes.h"
+#include "Sets.h"
+#include "RoomPieceDataInformation.h"
+#include "Cinematics.h"
+#include "RandomNames.h"
+#include "GameGlobals.h"
+#include "UnitResourceList.h"
+#include "DungeonManager.h"
+#include "GameSpeed.h"
+#include "ParticleUniversePlugin.h"
+#include <OgreRoot.h>
+#include <ParticleUniverseSystemManager.h>
+
+CMasterResourceManager::CMasterResourceManager(CSettings* settings)
+    : m_translate(NULL), m_globals(NULL), m_unitThemes(NULL), m_recipes(NULL),
+      m_sets(NULL), m_cinematics(NULL), m_randomNames(NULL), m_pGraphManager(NULL),
+      m_dungeons(NULL), m_effectGroups(NULL), m_missilePreloader(NULL),
+      m_resourceSettings(NULL), m_skillParser(NULL), m_pSpawnClassParser(NULL),
+      m_pHierarchy(NULL), m_pSettings(settings), m_pSoundManager(NULL),
+      m_console(NULL), m_gameSpeed(NULL), m_fileSystem(NULL),
+      m_loadingResources(false), m_flagC1(true), m_pDefaultSceneManager(NULL),
+      m_pRoomPieceInformation(NULL), m_pParticleSystemManager(NULL),
+      m_pParticlePreloader(NULL), m_pSoundBankDataInformation(NULL),
+      m_experienceGraph(NULL), m_fameGraph(NULL), m_stash(NULL),
+      m_steamStats(NULL), m_achievements(NULL)
+{
+    m_pMasterResourceManager = this;
+    m_fileSystem = new CFileSystem(m_pSettings->m_pCmdLineParser->GetStringParam(L"COMPRESS", EMPTY_WSTRING) != EMPTY_WSTRING);
+    m_resourceSettings = new CResourceSettings;
+    m_resourceSettings->LoadSettings(L"");
+    m_translate = new CStringTranslate(m_resourceSettings->GetString(KRESOURCESETTING_S_TRANSLATE_FILE));
+    m_steamStats = new CSteamStats;
+    m_achievements = new CAchievements;
+    parseEffects();
+    m_pHierarchy = new CHierarchy(L"media/unittypes.hie");
+    m_unitThemes = new CUnitThemes(L"media/unitthemes/");
+    m_recipes = new CRecipes(L"media/recipes/");
+    m_cinematics = new CCinematics(L"media/cinematics/");
+    m_randomNames = OGRE_NEW_T(CRandomNames, Ogre::MEMCATEGORY_GENERAL)(L"media/randomnames.dat");
+    m_globals = new CGameGlobals(L"media/globals.dat");
+    m_unitResourceList = new CUnitResourceList;
+    m_unitResourceList->InitUnitResourceList(m_resourceSettings, m_pHierarchy);
+    m_pGraphManager = new CGraphManager(m_resourceSettings->GetString(KRESOURCESETTING_S_GRAPH_MANAGER));
+    m_experienceGraph = m_pGraphManager->getGraph(L"EXPERIENCEGATE");
+    m_fameGraph = m_pGraphManager->getGraph(L"FAMEGATE");
+    m_effectGroups = new CEffectGroupManager(m_resourceSettings->GetString(KRESOURCESETTING_S_AFFIXES_FOLDER).c_str());
+    m_sets = new CSets(L"media/sets/", m_effectGroups);
+    m_pRoomPieceInformation = new CRoomPieceDataInformation(m_resourceSettings);
+    m_pSoundBankDataInformation = new CSoundBankDataInformation(m_resourceSettings);
+    m_dungeons = new CDungeonManager(L"media/dungeons/");
+    m_skillParser = new CSkillParser(m_resourceSettings);
+    m_missilePreloader = new CMissilePreloader(m_resourceSettings);
+    m_pSpawnClassParser = new CSpawnClassParser;
+    m_gameSpeed = new CGameSpeed(L"media/graphs/camerashakes/DecelerateGameSpeed.dat", L"media/graphs/camerashakes/DecelerateGameSpeed.dat");
+    m_stash = new CSharedStash(L"sharedstash.bin", L"sharedstashh.bin");
+    m_steamStats->update(0.0f);
+    m_steamStats->update(0.0f);
+    if (m_fileSystem->getNumberOfMods())
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(26))->forceComplete();
+    if (m_fileSystem->getNumberOfMods() > 4)
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(27))->forceComplete();
+    if (m_fileSystem->getNumberOfMods() > 9)
+        CAchievements::getSingleton()->getAchievement(static_cast<EACHIEVEMENTS>(28))->forceComplete();
+    ParticleUniverse::ParticleUniversePlugin* plugin = new ParticleUniverse::ParticleUniversePlugin;
+    Ogre::Root::getSingleton().installPlugin(plugin);
+    m_pParticleSystemManager = ParticleUniverse::ParticleSystemManager::getSingletonPtr();
+}
+
+CMasterResourceManager::~CMasterResourceManager()
+{
+    for (unsigned int i = 0; i < m_collisionModels.size(); ++i) {
+        if (m_collisionModels[i]) {
+            delete m_collisionModels[i];
+            m_collisionModels[i] = NULL;
+        }
+    }
+    for (unsigned int i = 0; i < m_batchModels.size(); ++i) {
+        if (m_batchModels[i]) {
+            delete m_batchModels[i];
+            m_batchModels[i] = NULL;
+        }
+    }
+    for (unsigned int i = 0; i < m_animationSets.size(); ++i) {
+        if (m_animationSets[i]) {
+            delete m_animationSets[i];
+            m_animationSets[i] = NULL;
+        }
+    }
+    m_animationSets.clear();
+    if (m_achievements) { delete m_achievements; m_achievements = NULL; }
+    if (m_steamStats) { delete m_steamStats; m_steamStats = NULL; }
+    if (m_stash) { delete m_stash; m_stash = NULL; }
+    if (m_missilePreloader) { delete m_missilePreloader; m_missilePreloader = NULL; }
+    if (m_pParticlePreloader) { delete m_pParticlePreloader; m_pParticlePreloader = NULL; }
+    if (m_pHierarchy) { delete m_pHierarchy; m_pHierarchy = NULL; }
+    if (m_unitResourceList) { delete m_unitResourceList; m_unitResourceList = NULL; }
+    if (m_resourceSettings) {
+        m_resourceSettings->SaveSettings(L"");
+        if (m_resourceSettings) { delete m_resourceSettings; m_resourceSettings = NULL; }
+    }
+    if (m_pRoomPieceInformation) { delete m_pRoomPieceInformation; m_pRoomPieceInformation = NULL; }
+    if (m_pSoundBankDataInformation) { delete m_pSoundBankDataInformation; m_pSoundBankDataInformation = NULL; }
+    if (m_pSpawnClassParser) { delete m_pSpawnClassParser; m_pSpawnClassParser = NULL; }
+    if (m_pGraphManager) { delete m_pGraphManager; m_pGraphManager = NULL; }
+    if (m_skillParser) { delete m_skillParser; m_skillParser = NULL; }
+    if (m_effectGroups) { delete m_effectGroups; m_effectGroups = NULL; }
+    if (m_gameSpeed) { delete m_gameSpeed; m_gameSpeed = NULL; }
+    if (m_unitThemes) { delete m_unitThemes; m_unitThemes = NULL; }
+    if (m_recipes) { delete m_recipes; m_recipes = NULL; }
+    if (m_cinematics) { delete m_cinematics; m_cinematics = NULL; }
+    if (m_sets) { delete m_sets; m_sets = NULL; }
+    if (m_randomNames) { OGRE_DELETE_T(m_randomNames, CRandomNames, Ogre::MEMCATEGORY_GENERAL); m_randomNames = NULL; }
+    if (m_translate) { delete m_translate; m_translate = NULL; }
+    if (m_globals) { delete m_globals; m_globals = NULL; }
+    if (m_fileSystem) { delete m_fileSystem; m_fileSystem = NULL; }
+    m_pMasterResourceManager = NULL;
+}

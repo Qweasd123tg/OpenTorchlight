@@ -224,3 +224,99 @@ void CLayout::editorObjectCreated(CEditorBaseObject* object)
         }
     }
 }
+
+#include "CameraControl.h"
+#include "ParticleUniverseSystem.h"
+
+void CLayout::callFunctionOnObjects(ELAYOUT_FUNCTION_TYPES functionType,
+                                    bool stopImmediately)
+{
+    if (m_pParticle) {
+        switch (functionType) {
+        case LAYOUT_FUNCTION_START:
+        case LAYOUT_FUNCTION_START_BACKWARDS:
+            m_pParticle->Start(); BroadcastEvent(31); break;
+        case LAYOUT_FUNCTION_STOP:
+            m_pParticle->Stop(stopImmediately); BroadcastEvent(32); break;
+        case LAYOUT_FUNCTION_PAUSE:
+            m_pParticle->Pause(); BroadcastEvent(33); break;
+        case LAYOUT_FUNCTION_RESUME:
+            m_pParticle->Resume(); BroadcastEvent(34); break;
+        }
+        return;
+    }
+    for (unsigned int i = 0; i < m_Unknown1D0.size(); ++i) {
+        if (m_Unknown1B8 == 1) {
+            CParticleTechWrapper* technique = dynamic_cast<CParticleTechWrapper*>(m_Unknown1D0[i]);
+            if (technique) {
+                switch (functionType) {
+                case LAYOUT_FUNCTION_START:
+                case LAYOUT_FUNCTION_START_BACKWARDS:
+                    technique->setActivated(true); break;
+                case LAYOUT_FUNCTION_STOP:
+                    technique->setActivated(false); break;
+                case LAYOUT_FUNCTION_PAUSE:
+                    if (technique->m_pParticleSystem) technique->m_pParticleSystem->pause();
+                    break;
+                case LAYOUT_FUNCTION_RESUME:
+                    if (technique->m_pParticleSystem) technique->m_pParticleSystem->resume();
+                    break;
+                }
+                continue;
+            }
+        } else if (m_Unknown1B8 == 2) {
+            CTimeline* timeline = dynamic_cast<CTimeline*>(m_Unknown1D0[i]);
+            if (timeline && timeline->m_bLayoutCanControl) {
+                switch (functionType) {
+                case LAYOUT_FUNCTION_START:
+                    timeline->Reset_To_Beginning(); timeline->SetEnabled(false); timeline->Play(true); break;
+                case LAYOUT_FUNCTION_STOP:
+                    timeline->Stop(); break;
+                case LAYOUT_FUNCTION_PAUSE:
+                    timeline->Pause(); break;
+                case LAYOUT_FUNCTION_RESUME:
+                    timeline->Play(true); break;
+                case LAYOUT_FUNCTION_START_BACKWARDS:
+                    timeline->Reset_To_End(); timeline->SetEnabled(false); timeline->Play_Backwards(); break;
+                }
+                continue;
+            }
+        } else {
+            continue;
+        }
+        CSoundObject* sound = dynamic_cast<CSoundObject*>(m_Unknown1D0[i]);
+        if (sound) {
+            switch (functionType) {
+            case LAYOUT_FUNCTION_START:
+                if (sound->m_bSoundStartsOnActivated) sound->play();
+                break;
+            case LAYOUT_FUNCTION_STOP:
+                if (sound->isLooping()) sound->stop();
+                break;
+            case LAYOUT_FUNCTION_PAUSE:
+                sound->pause(); break;
+            case LAYOUT_FUNCTION_RESUME:
+                sound->resume(); break;
+            }
+        } else if (m_Unknown1B8 == 1) {
+            CCameraShake* shake = dynamic_cast<CCameraShake*>(m_Unknown1D0[i]);
+            if (shake && functionType == LAYOUT_FUNCTION_START) {
+                Ogre::Vector3 position = getPosition(true);
+                shake->m_fCameraPositionX = position.x;
+                shake->m_fCameraPositionY = position.y;
+                shake->m_fCameraPositionZ = position.z;
+                shake->m_bCameraShakeActive = true;
+                CCameraControl* camera = m_pResourceManager->getCameraControl();
+                TSafePointer<CCameraShake>* reference =
+                    OGRE_NEW_T(TSafePointer<CCameraShake>, Ogre::MEMCATEGORY_GENERAL)();
+                try {
+                    reference->setObject(shake);
+                } catch (...) {
+                    OGRE_DELETE_T(reference, TSafePointer<CCameraShake>, Ogre::MEMCATEGORY_GENERAL);
+                    throw;
+                }
+                camera->m_cameraShakesSecondary.add(reference);
+            }
+        }
+    }
+}

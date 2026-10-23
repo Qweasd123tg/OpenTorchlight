@@ -227,6 +227,7 @@ private:
     friend class CNewGameMenu;
     friend class CWaypointMenu;
     friend struct CGameUILayoutAudit;
+    friend const wchar_t* EditorGetIconSheets();
     Ogre::Camera* m_camera; // +0x10
     Ogre::SceneManager* m_mainScene; // +0x18
     Ogre::SceneManager* m_inventoryScene; // +0x20

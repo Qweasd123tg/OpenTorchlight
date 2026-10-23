@@ -37,6 +37,7 @@ enum EBASEUNIT_TYPE
 // virtual methods that recovered code does not call are not verified yet.
 class CBaseUnit : public CPositionableObject
 {
+    friend class CPropertyNode;
     friend class CQuestRequirements;
     friend class CSkillEvent;
     friend class CEffect;
@@ -46,6 +47,7 @@ class CBaseUnit : public CPositionableObject
     friend class CQuestDialog;
     friend class CMonsterDescriptor;
     friend class CItemDescriptor;
+    friend class CUnitTriggerDescriptor;
 
     friend class CLevel;
     friend class CMissile;

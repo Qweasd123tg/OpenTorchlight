@@ -17,6 +17,10 @@ class CDescriptorLoadConfiguration;
 // Partial: LogicObject.cpp. Node of a logic graph that wraps an editor object
 // and forwards its output events along the logic links. Layout from the
 // constructor; field names are provisional.
+// Shared UTF-32/UTF-16 scratch buffers, each a 0x100-byte ELF BSS symbol.
+extern wchar_t m_gStringTEMP[64];
+extern unsigned short m_gStringTEMP1[128];
+
 class CLogicObject : public CEditorBaseObject
 {
 public:
@@ -48,7 +52,7 @@ public:
     void setObjectID(long long objectID);
     bool RemoveLinksToLogicObject(CLogicObject* object);
     bool RemoveLogicLinksRefingObjectID(long long objectID);
-    void Invoke(unsigned int event);
+    bool Invoke(unsigned int event);
     bool RemoveLinkByIndex(unsigned int linkIndex);
 
 private:

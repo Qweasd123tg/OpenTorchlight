@@ -43,6 +43,7 @@ class CCameraControl;
 class CResourceManager : public CRunicCore
 {
     friend class CGameClient;
+    friend class CSkipCutscene;
     friend class CEditor;
     friend class CGenericModel;
     friend class CLevel;

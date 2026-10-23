@@ -9,12 +9,14 @@ class CDataGroup;
 class CSpawnClass;
 class CSpawnClassData;
 
+CSpawnClassData* createSpawnClass(const std::wstring& name, CDataGroup* group);
+
 // RTTI gives the base; named _Rb_tree calls establish both member maps.
 // Only declarations needed by the recovered functions are included here.
 class CSpawnClassParser : public CRunicCore
 {
 public:
-    void reloadFromDirectory(const wchar_t* path);
+    bool reloadFromDirectory(const wchar_t* path);
     void createEmptySpawnClass(CDataGroup* group);
     CSpawnClassData* createSpawnClassDataByUnitType(const std::wstring& type, CDataGroup* group);
     CSpawnClassData* createSpawnClassDataRefSpawnClass(const std::wstring& name, CDataGroup* group);

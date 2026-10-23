@@ -52,6 +52,7 @@ public:
 private:
     friend class CEffectManager;
     friend class CCharacterSaveState;
+    friend class CItemSaveState;
     friend class CDamageShape;
     friend class CUnitSpawner;
     unsigned int m_iLevel;

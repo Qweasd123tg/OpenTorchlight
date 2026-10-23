@@ -335,3 +335,57 @@ void CShape::calculateOrientation(const Ogre::Vector3& position, Ogre::Vector3& 
     default: break;
     }
 }
+
+std::pair<bool, float> CShape::positionIntersectsAngle(float percent, const Ogre::Vector3& position, float radius)
+{
+    Ogre::Vector3 direction(position.x, 0.0f, position.z);
+    Ogre::Vector3 origin = getPosition(true);
+    direction.x -= origin.x;
+    direction.z -= origin.z;
+    float distance = direction.normalise();
+    float maximumRadius = getMaxRadiusAtPercent(percent);
+    if (distance == 0.0f || distance > maximumRadius + radius)
+        return std::pair<bool, float>(false, distance);
+    if (getMinRadiusAtPercent(percent) - radius > distance)
+        return std::pair<bool, float>(false, distance);
+    float release = getAngleOfReleaseAtPercent(percent);
+    if (release >= 360.0f)
+        return std::pair<bool, float>(true, distance);
+
+    const float toDegrees = 180.0f / 3.14159f;
+    Ogre::Vector3 forward = getForwardAbsolute();
+    float forwardAngle = static_cast<float>(::atan2(forward.x, forward.z)) * toDegrees;
+    float angle = static_cast<float>(::atan2(direction.x, direction.z)) * toDegrees;
+    if (forwardAngle < 0.0f) forwardAngle += 360.0f;
+    if (angle < 0.0f) angle += 360.0f;
+    angle -= forwardAngle;
+    float offset = getAngleOffsetAtPercent(percent);
+    float end = release + offset;
+    const float& maximum = offset > end ? offset : end;
+    const float& minimum = end > offset ? offset : end;
+    if ((angle >= minimum && maximum >= angle) ||
+        (angle >= minimum + 360.0f && maximum + 360.0f >= angle) ||
+        (angle >= minimum - 360.0f && maximum - 360.0f >= angle))
+        return std::pair<bool, float>(true, distance);
+
+    Ogre::Vector3 side = direction.crossProduct(Ogre::Vector3::UNIT_Y) * radius;
+    Ogre::Vector3 first((position.x + side.x) - origin.x, 0.0f,
+                        (position.z + side.z) - origin.z);
+    Ogre::Vector3 second((position.x - side.x) - origin.x, 0.0f,
+                         (position.z - side.z) - origin.z);
+    float firstDistance = first.normalise();
+    float secondDistance = second.normalise();
+    float firstAngle = static_cast<float>(::atan2(first.x, first.z)) * toDegrees;
+    float secondAngle = static_cast<float>(::atan2(second.x, second.z)) * toDegrees;
+    if (firstAngle < 0.0f) firstAngle += 360.0f;
+    if (secondAngle < 0.0f) secondAngle += 360.0f;
+    if ((firstAngle >= minimum && maximum >= firstAngle) ||
+        (firstAngle >= minimum + 360.0f && maximum + 360.0f >= firstAngle) ||
+        (firstAngle >= minimum - 360.0f && maximum - 360.0f >= firstAngle))
+        return std::pair<bool, float>(true, firstDistance);
+    if ((secondAngle >= minimum && maximum >= secondAngle) ||
+        (secondAngle >= minimum + 360.0f && maximum + 360.0f >= secondAngle) ||
+        (secondAngle >= minimum - 360.0f && maximum - 360.0f >= secondAngle))
+        return std::pair<bool, float>(true, secondDistance);
+    return std::pair<bool, float>(false, distance);
+}

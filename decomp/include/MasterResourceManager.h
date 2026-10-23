@@ -14,6 +14,20 @@ class CResourceSettings;
 class CGraph;
 class CSharedStash;
 class CRoomPieceDataInformation;
+class CStringTranslate;
+class CGameGlobals;
+class CUnitThemes;
+class CRecipes;
+class CSets;
+class CCinematics;
+class CRandomNames;
+class CDungeonManager;
+class CSkillParser;
+class CUnitResourceList;
+class CGameSpeed;
+class CFileSystem;
+class CSteamStats;
+class CAchievements;
 // Partial state reached through +0xf0 by the editor particle controls.
 struct CEditorParticlePreviewState { unsigned char unknown[0x540]; bool paused; };
 
@@ -67,17 +81,23 @@ public:
     CGenericModel* addBatchModel(CResourceManager* resources, Ogre::SceneManager* sceneManager, std::wstring name, bool& shared);
 
 private:
-    unsigned char m_Unrecovered10[0x48-0x10];
+    CStringTranslate* m_translate; // +0x10
+    CGameGlobals* m_globals;
+    CUnitThemes* m_unitThemes;
+    CRecipes* m_recipes;
+    CSets* m_sets;
+    CCinematics* m_cinematics;
+    CRandomNames* m_randomNames;
 public:
     CGraphManager* m_pGraphManager;
 private:
-    unsigned char m_Unrecovered50[8];
+    CDungeonManager* m_dungeons;
 public:
     CEffectGroupManager* m_effectGroups;
     CMissilePreloader* m_missilePreloader; // +0x60
 private:
     CResourceSettings* m_resourceSettings;
-    unsigned char m_Unrecovered70[8];
+    CSkillParser* m_skillParser;
 public:
     CSpawnClassParser* m_pSpawnClassParser; // +0x78
 private:
@@ -86,7 +106,7 @@ public:
     CHierarchy* m_pHierarchy;
 
 private:
-    unsigned char m_Unrecovered88[0x8];
+    CUnitResourceList* m_unitResourceList;
 
 public:
     CSettings* m_pSettings;
@@ -95,15 +115,16 @@ private:
 public:
     CConsole* m_console; // +0xa0, native playSound addTextNoHistory receiver
 private:
-    unsigned char m_UnrecoveredA8[8];
+    CGameSpeed* m_gameSpeed;
 public:
     Ogre::RenderTarget* m_renderTarget; // +0xb0; add/removeViewport calls
 private:
-    unsigned char m_UnrecoveredB8[8];
+    CFileSystem* m_fileSystem;
 public:
     bool m_loadingResources; // +0xc0, CGame::frameStarted
 private:
-    unsigned char m_UnrecoveredC1[7];
+    bool m_flagC1;
+    unsigned char m_paddingC2[6];
 public:
     Ogre::SceneManager* m_pDefaultSceneManager; // +0xc8, ResourceManager constructor fallback
 private:
@@ -131,7 +152,8 @@ private:
     CGraph* m_experienceGraph;
     CGraph* m_fameGraph;
     CSharedStash* m_stash;
-    unsigned char m_gap180[0x10];
+    CSteamStats* m_steamStats;
+    CAchievements* m_achievements;
 };
 
 #endif
