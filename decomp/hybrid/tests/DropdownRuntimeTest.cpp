@@ -26,7 +26,11 @@ int sound(CSoundBank*p,int id,Ogre::SceneNode*n,float a,float b,bool c){unsigned
 void snapshot(autotest::Capture&out,CEGUI::Window*w){std::string s=tlheadless::snapshot(*w);unsigned n=s.size();out.add(&n,4);out.add(s.data(),n);}
 struct Drop {
  CDropdownMenu* p;
- explicit Drop(menugui::Fixture&f,unsigned flags){p=static_cast<CDropdownMenu*>(Ogre::NedAllocImpl::allocBytes(sizeof(CDropdownMenu),0,0,0));detour::Set setup;TL_REDIRECT(setup,mgDropdownCreate,&menugui::skipDropdown);if(setup.failed())std::abort();uiDropCtor(p,*f.ui,*settings,f.nativeClient.scenes[0],f.root,&f.resources,flags);}
+ explicit Drop(menugui::Fixture&f,unsigned flags){p=static_cast<CDropdownMenu*>(Ogre::NedAllocImpl::allocBytes(sizeof(CDropdownMenu),0,0,0));detour::Set setup;TL_REDIRECT(setup,mgDropdownCreate,&menugui::skipDropdown);if(setup.failed())std::abort();uiDropCtor(p,*f.ui,*settings,f.nativeClient.scenes[0],f.root,&f.resources,flags);
+  // Native C1 leaves +18/+20 to createMenus, which this fixture skips.
+  // Map/title do not create that owned window tree before common cleanup.
+  p->m_pUnknown18=NULL;p->m_pUnknown20=NULL;
+ }
  ~Drop(){uiDropDtor(p);Ogre::NedAllocImpl::deallocBytes(p);}
 };
 void side(smallmass::Case&c,bool ours,autotest::Capture&out){

@@ -46,13 +46,56 @@ tooling #185: 308 TU, 54 MISSING, unknown [] и compile errors [], все 10691
 
 - `python3 -m unittest discover -s tools/decomp -p 'test_*.py'`: 1333 tests,
   OK (50.112 s; полный процесс 51.043 s).
-- Полный `python3 tools/decomp/check.py` на окончательном объединённом дереве:
-  PENDING, идёт нативный самотест. Статическая часть и сборка гибрида завершены
+- Полный `python3 tools/decomp/check.py` на коде `ced9bb7`: **FAIL**, returncode 1,
+  2424 tests / 4 failed, 11047.805 s. Статическая часть и сборка гибрида завершены
   без compile errors и unknown references; инвентарь — 54 MISSING.
+  Статически MATCH 3225 из 5247 игровых функций и 993 compiler-generated
+  initializers/destructors вне этого счёта. Из-за общего FAIL checker не принял
+  новые DIFF по этому полному прогону; новый общий accepted-процент не заявляется.
+- Сбои: `complete_ui_dropdown_map`, `complete_ui_dropdown_title`,
+  `complete_trigger_action`, `compressed_object_native`. Все четыре повторно
+  проходят отдельно на том же неизменённом бинарнике. Это не отменяет полный FAIL.
 
-Прежние адресные PASS и исправленные worker timeout не выдаются за новый
-полный PASS. Во время общего прогона исходники, заголовки, инструменты и
-third_party не меняются.
+Обе последние игровые функции прошли и в этом полном прогоне:
+automap_full_native (0x92b4b0) — 256 completed пар;
+random_groups_native и random_groups_observed (0x74c900) — 480 + 480.
+Различий и incomplete нет.
+
+У loader-фикстуры найден неинициализированный optional output-list pointer:
+родной CDescriptorLoadConfiguration C1 по 0x701e20 имеет MATCH и оставляет +0x38
+неопределённым; тест теперь явно задаёт m_createdObjects = NULL до вариаций
+created-list. У dropdown-фикстуры родной C1 оставляет +0x18/+0x20 для createMenus,
+который fixture намеренно пропускает; эти два указателя теперь явно NULL.
+Диагностическое заполнение только этих двух raw slots значениями 1/2 перед
+настоящим C1 воспроизвело падение прежней фикстуры в CEGUI destroyWindow.
+Исправленная фикстура при таком же заполнении прошла map 32 и title 24 пары.
+Это диагностика причины, а не замена обычных завершённых native-сравнений.
+Игровые функции, заголовки и инструменты после `ced9bb7` не менялись.
+Сверка двух hybrid manifests также подтвердила одинаковые SHA256 всех 312
+production source files и всех 312 production objects до и после fixture repair.
+
+После этих двух исправлений полный текущий гибрид адресно проверен:
+compressed native/observed — 2 tests / 480 completed пар и 2 completed negative
+controls; dropdown ctor/map/title/open/update/create — 6 tests / 272 пары;
+trigger modes/skills с настоящим teardown — 1 test / 1152 пары. Итого 9 tests /
+1904 completed пары, 0 different, 0 incomplete, PASS. Причина единственного
+падения trigger worker в полном порядке не установлена. Ограниченный повтор
+45 предшествующих тестов соответствующего shard на старом canonical blob также
+прошёл: 25999 completed сравнений в 49 coverage rows, 0 different, 0 incomplete;
+trigger worker и настоящий teardown завершились штатно. Диагностическое
+заполнение трёх native CGameClient allocations перед их настоящими C1 также
+не воспроизвело сбой. Необоснованных изменений trigger fixture не внесено.
+Адресные повторы не заменяют завершённый полный gate; после fixture repair
+нового полного PASS нет. **MERGE HOLD сохраняется.**
+
+SHA256 лога ограниченного повтора порядка:
+`43a68276d4c23076381f3062f63423939a8a1d348b6acc10313601c4f668dc26`.
+
+Во время полного прогона исходники, заголовки, инструменты и third_party не
+менялись; его артефакты сохранены до адресных повторов. SHA256 полного лога:
+`82556e6041f40263b790f9b4075731622fe6465c9a2f24f1f4c342d4a843e2cf`;
+progress snapshot:
+`290f3423a6129ac7956a7380faa912a908a332168e932b4ed0a94923405a09d6`.
 
 В #185 сохранено ограничение: RunicCore D1/D2 по 0xd79920 остаётся DIFF с
 неподтверждённой EH LSDA equivalence в исходном frozen comparator. Отдельный

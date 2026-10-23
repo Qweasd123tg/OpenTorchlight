@@ -84,7 +84,8 @@ void side(void* raw,autotest::Capture& out,bool ours){
  for(unsigned i=0;i<2;++i){descriptors[i]->m_iID=800+i;scene.AddDescriptor(descriptors[i]);}
  CEditorBaseObject* roots[4];
  for(unsigned i=0;i<4;++i){roots[i]=compressedCreateOld(&scene,descriptors[i%2],NULL,NULL,false);if(!roots[i])std::abort();roots[i]->SetName(i&1?L"Объект Ω":L"");roots[i]->setOriginalGuid(10000+i);roots[i]->setParentGuid(i?roots[0]->getGuid():-1);}
- CDescriptorLoadConfiguration cfg;configuration=&cfg;cfg.m_iVersion=37;cfg.m_Remaps[771]=991;cfg.m_iParentGuid=seed%2?3333:-1;
+ // Native C1 leaves the optional output-list slot unspecified; callers own it.
+ CDescriptorLoadConfiguration cfg;cfg.m_createdObjects=NULL;configuration=&cfg;cfg.m_iVersion=37;cfg.m_Remaps[771]=991;cfg.m_iParentGuid=seed%2?3333:-1;
  TArrayList<CEditorBaseObject*> created(seed%3+1),other(2);alternate=&other;
  for(unsigned i=0;i<seed/3%10;++i)created.add(i&1?roots[i%4]:NULL);
  if(seed/20%2)cfg.m_createdObjects=&created;
